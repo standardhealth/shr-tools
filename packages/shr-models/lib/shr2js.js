@@ -48,25 +48,25 @@ class SHR2JS extends SHRParserListener {
 
     exitDescriptionProp(ctx) {
         let d = stripStringToken(ctx.STRING());
-        this._currentDef.setDescription(d);
+        this._currentDef.description = d;
     }
 
     pushCurrentDefinition() {
-        this._nsMap[this._currentNs].push(this._currentDef);
+        this._nsMap[this._currentNs].addElement(this._currentDef);
         this._currentDef = null;
     }
 
-    toSchemas() {
-        let schemas = []
+    namespaces() {
+        let namespaces = []
         for (let key of Object.keys(this._nsMap)) {
-            schemas.push(this._nsMap[key].toSchema())
+            namespaces.push(this._nsMap[key])
         }
-        return schemas;
+        return namespaces;
     }
 }
 
 function stripStringToken(tkn) {
-    str = tkn.getText()
+    let str = tkn.getText()
     // TODO: Also fix escaped double-quotes, but right now, the parser seems to be screwing those up.
     return str.substr(1,str.length -2)
 }
