@@ -1,14 +1,14 @@
 class Namespace {
     constructor(namespace) {
         this._namespace = namespace;
-        this._elements = [];
+        this._elementMap = {};
     }
 
     get namespace() { return this._namespace; }
 
-    get elements() { return this._elements; }
+    get elements() { return Object.keys(this._elementMap).map(key => this._elementMap[key]); }
     addElement(element) {
-        this._elements.push(element)
+        this._elementMap[element.name] = element
     }
 }
 
