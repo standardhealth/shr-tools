@@ -1,32 +1,27 @@
-function namespaceToSchema(ns) {
-    let nsPath = ns.namespace.replace(/\./g, '/');
-    let id = `http://standardhealthrecord.org/schemas/${nsPath}.schema.json`
+function namespaceToSchemas(ns) {
+    let schemas = []
+    for (const el of ns.elements) {
+        schemas.push(elementToSchema(el))
+    }
+    return schemas
+}
+
+function elementToSchema(el) {
     let schema = {
         "$schema": "http://standardhealthrecord.org/schemas/shr/extended-schema.schema.json",
-        id,
-        definitions: {}
+        id: buildSchemaRef(el.namespace, el.name),
+        description: el.description
     }
-    for (const el of ns.elements) {
-        schema.definitions[el.name] = elementToSchemaDefinition(el)
+
+    if (el.answers.length > 1) {
+        schema.oneOf = el.answers.map(a => answerToSchemaTypeObject(a, el.namespace));
+    } else if (el.answers.length == 1) {
+        Object.assign(schema, answerToSchemaTypeObject(el.answers[0], el.namespace));
     }
     return schema
 }
 
-function elementToSchemaDefinition(el) {
-    let description = el.description;
-    let definition = {
-        description
-    };
-
-    if (el.answers.length > 1) {
-        definition.oneOf = el.answers.map(a => answerToSchemaTypeObject(a));
-    } else if (el.answers.length == 1) {
-        Object.assign(definition, answerToSchemaTypeObject(el.answers[0]));
-    }
-    return definition
-}
-
-function answerToSchemaTypeObject(answer) {
+function answerToSchemaTypeObject(answer, defaultNS) {
     // TO CONSIDER: These could all be defined as separate (resusable) types in our types.schema.json.
     switch(answer) {
         case "boolean":
@@ -64,15 +59,17 @@ function answerToSchemaTypeObject(answer) {
     }
 
     // We fell through, so this is a reference to another data element or entry
-
-    // First break it into its namespace parts (if applicable)
-    let parts = answer.split(".")
-    if (parts.length == 1) {
-        return {"$ref": `#/definitions/${answer}`}
+    let lastDot = answer.lastIndexOf('.');
+    if (lastDot == -1) {
+        // not a fully qualified name, so use the default namespace
+        return {"$ref": buildSchemaRef(defaultNS, answer)}
     }
-    let name = parts.pop()
-    let nsPath = parts.join("/")
-    return {"$ref": `http://standardhealthrecord.org/schemas/${nsPath}/${name}.schema.json`}
+    return {"$ref": buildSchemaRef(answer.substr(0, lastDot), answer.substr(lastDot))}
+}
+
+function buildSchemaRef(namespace, name) {
+    let nsPath = namespace.replace(/\./g, '/');
+    return `http://standardhealthrecord.org/schemas/${nsPath}/${name}.schema.json`
 }
 
 function assertNoOverwrite(property, object, propName, newValue) {
@@ -81,4 +78,4 @@ function assertNoOverwrite(property, object, propName, newValue) {
     }
 }
 
-module.exports = {namespaceToSchema};
+module.exports = {namespaceToSchemas};
