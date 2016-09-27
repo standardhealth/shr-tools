@@ -33,6 +33,12 @@ class DataElement {
         this._answers.push(identifier)
     }
 
+    get valueset() { return this._valueset }
+    set valueset(valueset) {
+        assertNoOverwrite(this._valueset, this, 'valueset', valueset)
+        this._valueset = valueset
+    }
+
     get components() { return this._components }
     addComponent(quantifiedIdentifier) {
         // TODO: enforce that this must be a QuantifiedIdentifier?

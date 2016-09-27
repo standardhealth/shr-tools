@@ -42,13 +42,17 @@ class SHR2JS extends SHRParserListener {
         this.pushCurrentDefinition();
     }
 
+    exitDescriptionProp(ctx) {
+        let d = stripStringToken(ctx.STRING());
+        this._currentDef.description = d;
+    }
+
     exitAnswer(ctx) {
         this._currentDef.addAnswer(this.resolveToIdentifier(ctx.getText()));
     }
 
-    exitDescriptionProp(ctx) {
-        let d = stripStringToken(ctx.STRING());
-        this._currentDef.description = d;
+    exitValuesetProp(ctx) {
+        this._currentDef.valueset = ctx.URL().getText();
     }
 
     exitCountedThing(ctx) {
