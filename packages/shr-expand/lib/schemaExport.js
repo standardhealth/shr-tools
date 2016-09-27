@@ -9,10 +9,15 @@ function namespaceToSchemas(ns) {
 function elementToSchema(el) {
     let schema = {
         "$schema": "http://standardhealthrecord.org/schemas/shr/extended-schema.schema.json",
-        id: buildSchemaRef(el.identifier),
-        description: el.description
+        id: buildSchemaRef(el.identifier)
+    }
+    if (typeof el.description != 'undefined') {
+        schema.description = el.description
     }
     encodeTypesInSchema(el, schema);
+    if (typeof el.valueset != 'undefined') {
+        schema.valueset = el.valueset
+    }
 
     return schema
 }
