@@ -1,7 +1,7 @@
 const antlr4 = require('antlr4/index');
 const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserListener} = require('./parsers/SHRParserListener');
-const {Namespace, DataElement, Entry} = require('./models')
+const {Namespace, DataElement, Entry, Component, Identifier, PrimitiveIdentifier, QuantifiedIdentifier, PRIMITIVES} = require('./models')
 
 class SHR2JS extends SHRParserListener {
     constructor() {
@@ -24,7 +24,7 @@ class SHR2JS extends SHRParserListener {
 
     exitDataElementName(ctx) {
         if (ctx.parentCtx instanceof SHRParser.DataElementHeaderContext) {
-            this._currentDef = new DataElement(this._currentNs, ctx.getText());
+            this._currentDef = new DataElement(new Identifier(this._currentNs, ctx.getText()));
         }
     }
 
@@ -34,7 +34,7 @@ class SHR2JS extends SHRParserListener {
 
     exitEntryName(ctx) {
         if (ctx.parentCtx instanceof SHRParser.EntryHeaderContext) {
-            this._currentDef = new Entry(this._currentNs, ctx.getText());
+            this._currentDef = new Entry(new Identifier(this._currentNs, ctx.getText()));
         }
     }
 
@@ -43,12 +43,37 @@ class SHR2JS extends SHRParserListener {
     }
 
     exitAnswer(ctx) {
-        this._currentDef.addAnswer(ctx.getText());
+        this._currentDef.addAnswer(this.resolveToIdentifier(ctx.getText()));
     }
 
     exitDescriptionProp(ctx) {
         let d = stripStringToken(ctx.STRING());
         this._currentDef.description = d;
+    }
+
+    exitCountedThing(ctx) {
+        if (ctx.parentCtx && ctx.parentCtx.parentCtx instanceof SHRParser.HasPropContext) {
+            let min = parseInt(ctx.WHOLE_NUMBER()[0].getText(), 10);
+            var max;
+            if (ctx.WHOLE_NUMBER().length > 1) {
+                max = parseInt(ctx.WHOLE_NUMBER()[1].getText(), 10);
+            }
+            let identifier = this.resolveToIdentifier(ctx.dataElementName().getText())
+            this._currentDef.addComponent(new QuantifiedIdentifier(identifier, min, max))
+        }
+    }
+
+    resolveToIdentifier(ref) {
+        let lastDot = ref.lastIndexOf(".");
+        if (lastDot != -1) {
+            return new Identifier(ref.substr(0, lastDot), ref.substr(lastDot))
+        }
+
+        // No specified namespace -- is either primitive or in this namespace
+        if (PRIMITIVES.includes(ref)) {
+            return new PrimitiveIdentifier(ref)
+        }
+        return new Identifier(this._currentNs, ref)
     }
 
     pushCurrentDefinition() {
@@ -57,11 +82,7 @@ class SHR2JS extends SHRParserListener {
     }
 
     namespaces() {
-        let namespaces = []
-        for (let key of Object.keys(this._nsMap)) {
-            namespaces.push(this._nsMap[key])
-        }
-        return namespaces;
+        return Object.keys(this._nsMap).map(key => this._nsMap[key]);
     }
 }
 
