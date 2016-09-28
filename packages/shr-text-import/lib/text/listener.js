@@ -1,9 +1,9 @@
 const antlr4 = require('antlr4/index');
 const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserListener} = require('./parsers/SHRParserListener');
-const {Namespace, DataElement, Entry, Component, Identifier, PrimitiveIdentifier, QuantifiedIdentifier, PRIMITIVES} = require('./models')
+const {Namespace, DataElement, Entry, Component, Identifier, PrimitiveIdentifier, QuantifiedIdentifier, PRIMITIVES} = require('../models')
 
-class SHR2JS extends SHRParserListener {
+class Importer extends SHRParserListener {
     constructor() {
         super();
         // The map of namespace to elements
@@ -96,4 +96,4 @@ function stripStringToken(tkn) {
     return str.substr(1,str.length -2)
 }
 
-exports.SHR2JS = SHR2JS;
+module.exports = {Importer};
