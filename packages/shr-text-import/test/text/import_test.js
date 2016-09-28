@@ -1,11 +1,11 @@
 const {expect} = require('chai');
-const {importFromFilePath} = require('../../lib/text/import')
-const {Namespace, DataElement, Entry} = require('../../lib/models')
+const {importFromFilePath} = require('../../lib/text/import');
+const {Namespace, DataElement, Entry} = require('../../lib/models');
 
 describe('#importFromFilePath()', () => {
   it('should correctly import a simple entry', () => {
     let results = importFixture('simpleEntry');
-    let simple = expectAndGetSingleElement(results, 'shr.test', 'Simple');
+    let simple = expectAndGetSingleElement(results, 'shr.test', 'Simple', Entry);
     expect(simple.description).to.equal('It is a simple entry');
     expectSingleAnswer(simple, 'primitive', 'date');
     expect(simple.valueset).to.be.undefined;
@@ -56,16 +56,16 @@ describe('#importFromFilePath()', () => {
   });
 });
 
-function expectAndGetSingleElement(results, expectedNamespace, expectedName) {
+function expectAndGetSingleElement(results, expectedNamespace, expectedName, expectedClass=DataElement) {
   expect(results).to.have.length(1);
 
   let ns = results[0];
   expect(ns).to.be.instanceof(Namespace);
-  expect(ns.namespace).to.equal(expectedNamespace)
+  expect(ns.namespace).to.equal(expectedNamespace);
   expect(ns.elements).to.have.length(1);
 
   let element = ns.elements[0];
-  expect(element).to.be.instanceof(DataElement);
+  expect(element).to.be.instanceof(expectedClass);
   expect(element.identifier.namespace).to.equal(expectedNamespace);
   expect(element.identifier.name).to.equal(expectedName);
 
@@ -96,5 +96,5 @@ function expectComponent(element, componentIndex, expectedNamespace, expectedNam
 }
 
 function importFixture(name) {
-  return importFromFilePath(`${__dirname}/fixtures/${name}.txt`)
+  return importFromFilePath(`${__dirname}/fixtures/${name}.txt`);
 }
