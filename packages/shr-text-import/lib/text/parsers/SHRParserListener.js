@@ -272,6 +272,24 @@ SHRParserListener.prototype.exitHasProp = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRParser#dataElementRef.
+SHRParserListener.prototype.enterDataElementRef = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#dataElementRef.
+SHRParserListener.prototype.exitDataElementRef = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#entryRef.
+SHRParserListener.prototype.enterEntryRef = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#entryRef.
+SHRParserListener.prototype.exitEntryRef = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRParser#primitive.
 SHRParserListener.prototype.enterPrimitive = function(ctx) {
 };

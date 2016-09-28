@@ -157,6 +157,16 @@ SHRParserVisitor.prototype.visitHasProp = function(ctx) {
 };
 
 
+// Visit a parse tree produced by SHRParser#dataElementRef.
+SHRParserVisitor.prototype.visitDataElementRef = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#entryRef.
+SHRParserVisitor.prototype.visitEntryRef = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRParser#primitive.
 SHRParserVisitor.prototype.visitPrimitive = function(ctx) {
 };

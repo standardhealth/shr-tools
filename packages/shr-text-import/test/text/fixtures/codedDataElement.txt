@@ -1,0 +1,6 @@
+Namespace:      shr.test
+
+DataElement:    coded
+Description:    "It is a coded data element"
+Answer:         code
+ValueSet:       http://standardhealthrecord.org/test/vs/coded

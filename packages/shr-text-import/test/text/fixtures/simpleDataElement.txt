@@ -1,0 +1,5 @@
+Namespace:      shr.test
+
+DataElement:    simple
+Description:    "It is a simple data element"
+Answer:         string

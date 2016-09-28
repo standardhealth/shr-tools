@@ -1,0 +1,5 @@
+Namespace:      shr.test
+
+DataElement:    choice
+Description:    "It is a data element with a choice"
+Answer:         date, other.ns.period, simple

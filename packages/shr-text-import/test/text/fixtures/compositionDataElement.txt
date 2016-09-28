@@ -1,0 +1,8 @@
+Namespace:      shr.test
+
+DataElement:    composition
+Description:    "It is a composition data element"
+0..1    simple
+0..*    coded
+1..*    Simple
+1..1    other.ns.thing

@@ -62,7 +62,8 @@ class Importer extends SHRParserListener {
             if (ctx.WHOLE_NUMBER().length > 1) {
                 max = parseInt(ctx.WHOLE_NUMBER()[1].getText(), 10);
             }
-            let identifier = this.resolveToIdentifier(ctx.dataElementName().getText())
+            let rule = ctx.dataElementRef() ? ctx.dataElementRef() : ctx.entryRef()
+            let identifier = this.resolveToIdentifier(rule.getText())
             this._currentDef.addComponent(new QuantifiedIdentifier(identifier, min, max))
         }
     }
@@ -70,7 +71,7 @@ class Importer extends SHRParserListener {
     resolveToIdentifier(ref) {
         let lastDot = ref.lastIndexOf(".");
         if (lastDot != -1) {
-            return new Identifier(ref.substr(0, lastDot), ref.substr(lastDot))
+            return new Identifier(ref.substr(0, lastDot), ref.substr(lastDot+1))
         }
 
         // No specified namespace -- is either primitive or in this namespace
