@@ -54,22 +54,48 @@ describe('#importFromFilePath()', () => {
     expectComponent(simple, 2, 'shr.test', 'Simple', 1);
     expectComponent(simple, 3, 'other.ns', 'thing', 1, 1);
   });
+
+  it('should correctly import multiple elements in a single namespace', () => {
+    let results = importFixture('multipleElements');
+    expect(results).to.have.length(1);
+    let ns = expectAndGetNamespace(results, 0, 'shr.test');
+
+    let simple = expectAndGetElement(ns, 0, 'Simple', Entry);
+    expect(simple.description).to.equal('It is a simple entry');
+    expectSingleAnswer(simple, 'primitive', 'date');
+    expect(simple.valueset).to.be.undefined;
+    expect(simple.components).to.be.empty;
+
+    let coded = expectAndGetElement(ns, 1, 'coded');
+    expect(coded.description).to.equal('It is a coded data element');
+    expectSingleAnswer(coded, 'primitive', 'code');
+    expect(coded.valueset).to.equal('http://standardhealthrecord.org/test/vs/coded');
+    expect(coded.components).to.be.empty;
+  });
 });
+
+function expectAndGetNamespace(results, namespaceIndex, expectedNamespace) {
+  let ns = results[namespaceIndex];
+  expect(ns).to.be.instanceof(Namespace);
+  expect(ns.namespace).to.equal(expectedNamespace);
+
+  return ns;
+}
+
+function expectAndGetElement(namespace, elementIndex, expectedName, expectedClass=DataElement) {
+  let element = namespace.elements[elementIndex];
+  expect(element).to.be.instanceof(expectedClass);
+  expect(element.identifier.namespace).to.equal(namespace.namespace);
+  expect(element.identifier.name).to.equal(expectedName);
+
+  return element;
+}
 
 function expectAndGetSingleElement(results, expectedNamespace, expectedName, expectedClass=DataElement) {
   expect(results).to.have.length(1);
 
-  let ns = results[0];
-  expect(ns).to.be.instanceof(Namespace);
-  expect(ns.namespace).to.equal(expectedNamespace);
-  expect(ns.elements).to.have.length(1);
-
-  let element = ns.elements[0];
-  expect(element).to.be.instanceof(expectedClass);
-  expect(element.identifier.namespace).to.equal(expectedNamespace);
-  expect(element.identifier.name).to.equal(expectedName);
-
-  return element;
+  let ns = expectAndGetNamespace(results, 0, expectedNamespace)
+  return expectAndGetElement(ns, 0, expectedName, expectedClass)
 }
 
 function expectAnswer(element, answerIndex, expectedNamespace, expectedName) {

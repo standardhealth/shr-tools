@@ -1,0 +1,10 @@
+Namespace:      shr.test
+
+Entry:          Simple
+Description:    "It is a simple entry"
+Answer:         date
+
+DataElement:    coded
+Description:    "It is a coded data element"
+Answer:         code
+ValueSet:       http://standardhealthrecord.org/test/vs/coded
