@@ -94,8 +94,8 @@ function expectAndGetElement(namespace, elementIndex, expectedName, expectedClas
 function expectAndGetSingleElement(results, expectedNamespace, expectedName, expectedClass=DataElement) {
   expect(results).to.have.length(1);
 
-  let ns = expectAndGetNamespace(results, 0, expectedNamespace)
-  return expectAndGetElement(ns, 0, expectedName, expectedClass)
+  let ns = expectAndGetNamespace(results, 0, expectedNamespace);
+  return expectAndGetElement(ns, 0, expectedName, expectedClass);
 }
 
 function expectAnswer(element, answerIndex, expectedNamespace, expectedName) {
