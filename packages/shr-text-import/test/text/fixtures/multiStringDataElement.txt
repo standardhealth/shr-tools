@@ -1,0 +1,5 @@
+Namespace:      shr.test
+
+DataElement:    MultiString
+Description:    "It is a multi-string data element"
+Value:          1..* string

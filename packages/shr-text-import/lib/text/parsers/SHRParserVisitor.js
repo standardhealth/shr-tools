@@ -42,6 +42,16 @@ SHRParserVisitor.prototype.visitVocabularyDef = function(ctx) {
 };
 
 
+// Visit a parse tree produced by SHRParser#sectionDef.
+SHRParserVisitor.prototype.visitSectionDef = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#sectionHeader.
+SHRParserVisitor.prototype.visitSectionHeader = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRParser#dataElementDef.
 SHRParserVisitor.prototype.visitDataElementDef = function(ctx) {
 };
@@ -49,11 +59,6 @@ SHRParserVisitor.prototype.visitDataElementDef = function(ctx) {
 
 // Visit a parse tree produced by SHRParser#dataElementHeader.
 SHRParserVisitor.prototype.visitDataElementHeader = function(ctx) {
-};
-
-
-// Visit a parse tree produced by SHRParser#dataElementName.
-SHRParserVisitor.prototype.visitDataElementName = function(ctx) {
 };
 
 
@@ -67,18 +72,23 @@ SHRParserVisitor.prototype.visitDataElementProp = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#entryDef.
-SHRParserVisitor.prototype.visitEntryDef = function(ctx) {
+// Visit a parse tree produced by SHRParser#groupDef.
+SHRParserVisitor.prototype.visitGroupDef = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#entryHeader.
-SHRParserVisitor.prototype.visitEntryHeader = function(ctx) {
+// Visit a parse tree produced by SHRParser#groupHeader.
+SHRParserVisitor.prototype.visitGroupHeader = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#entryName.
-SHRParserVisitor.prototype.visitEntryName = function(ctx) {
+// Visit a parse tree produced by SHRParser#groupProps.
+SHRParserVisitor.prototype.visitGroupProps = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#groupProp.
+SHRParserVisitor.prototype.visitGroupProp = function(ctx) {
 };
 
 
@@ -127,43 +137,58 @@ SHRParserVisitor.prototype.visitDescriptionProp = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#answerProp.
-SHRParserVisitor.prototype.visitAnswerProp = function(ctx) {
+// Visit a parse tree produced by SHRParser#valueProp.
+SHRParserVisitor.prototype.visitValueProp = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#answers.
-SHRParserVisitor.prototype.visitAnswers = function(ctx) {
+// Visit a parse tree produced by SHRParser#values.
+SHRParserVisitor.prototype.visitValues = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#answer.
-SHRParserVisitor.prototype.visitAnswer = function(ctx) {
+// Visit a parse tree produced by SHRParser#value.
+SHRParserVisitor.prototype.visitValue = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#valuesetProp.
-SHRParserVisitor.prototype.visitValuesetProp = function(ctx) {
+// Visit a parse tree produced by SHRParser#valueset.
+SHRParserVisitor.prototype.visitValueset = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#bindingProp.
-SHRParserVisitor.prototype.visitBindingProp = function(ctx) {
+// Visit a parse tree produced by SHRParser#defaultProp.
+SHRParserVisitor.prototype.visitDefaultProp = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#hasProp.
-SHRParserVisitor.prototype.visitHasProp = function(ctx) {
+// Visit a parse tree produced by SHRParser#defaultValue.
+SHRParserVisitor.prototype.visitDefaultValue = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#dataElementRef.
-SHRParserVisitor.prototype.visitDataElementRef = function(ctx) {
+// Visit a parse tree produced by SHRParser#simpleName.
+SHRParserVisitor.prototype.visitSimpleName = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#entryRef.
-SHRParserVisitor.prototype.visitEntryRef = function(ctx) {
+// Visit a parse tree produced by SHRParser#fullyQualifiedName.
+SHRParserVisitor.prototype.visitFullyQualifiedName = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#simpleOrFQName.
+SHRParserVisitor.prototype.visitSimpleOrFQName = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#ref.
+SHRParserVisitor.prototype.visitRef = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#codeFromValueset.
+SHRParserVisitor.prototype.visitCodeFromValueset = function(ctx) {
 };
 
 
@@ -172,13 +197,18 @@ SHRParserVisitor.prototype.visitPrimitive = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#countedThings.
-SHRParserVisitor.prototype.visitCountedThings = function(ctx) {
+// Visit a parse tree produced by SHRParser#count.
+SHRParserVisitor.prototype.visitCount = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#countedThing.
-SHRParserVisitor.prototype.visitCountedThing = function(ctx) {
+// Visit a parse tree produced by SHRParser#countedElements.
+SHRParserVisitor.prototype.visitCountedElements = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#countedElement.
+SHRParserVisitor.prototype.visitCountedElement = function(ctx) {
 };
 
 

@@ -1,6 +1,5 @@
 Namespace:      shr.test
 
-DataElement:    coded
+DataElement:    Coded
 Description:    "It is a coded data element"
-Answer:         code
-ValueSet:       http://standardhealthrecord.org/test/vs/coded
+Value:          code from http://standardhealthrecord.org/test/vs/Coded

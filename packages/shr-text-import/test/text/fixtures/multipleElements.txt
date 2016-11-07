@@ -1,10 +1,9 @@
 Namespace:      shr.test
 
-Entry:          Simple
-Description:    "It is a simple entry"
-Answer:         date
+DataElement:    SimpleDate
+Description:    "It is a simple date data element"
+Value:          date
 
-DataElement:    coded
+DataElement:    Coded
 Description:    "It is a coded data element"
-Answer:         code
-ValueSet:       http://standardhealthrecord.org/test/vs/coded
+Value:          code from http://standardhealthrecord.org/test/vs/Coded

@@ -1,5 +1,8 @@
 Namespace:      shr.test
 
-DataElement:    simple
+Vocabulary:     FOO = http://foo.org
+
+DataElement:    Simple
+Concept:        FOO #bar
 Description:    "It is a simple data element"
-Answer:         string
+Value:          string

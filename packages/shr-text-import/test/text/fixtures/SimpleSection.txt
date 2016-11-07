@@ -1,0 +1,6 @@
+Namespace:      shr.test
+
+Section:	SimpleSection
+1..*  Simple
+1..1  Coded
+0..3  GroupOfThings

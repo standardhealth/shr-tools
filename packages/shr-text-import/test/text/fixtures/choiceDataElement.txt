@@ -1,5 +1,5 @@
 Namespace:      shr.test
 
-DataElement:    choice
+DataElement:    Choice
 Description:    "It is a data element with a choice"
-Answer:         date, other.ns.period, simple
+Value:          date or other.ns.Period or Simple

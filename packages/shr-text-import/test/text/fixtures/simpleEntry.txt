@@ -1,5 +1,0 @@
-Namespace:      shr.test
-
-Entry:          Simple
-Description:    "It is a simple entry"
-Answer:         date

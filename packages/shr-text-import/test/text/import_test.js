@@ -1,124 +1,199 @@
 const {expect} = require('chai');
 const {importFromFilePath} = require('../../lib/text/import');
-const {Namespace, DataElement, Entry} = require('../../lib/models');
+const {Namespace, Section, DataElement, Group, Value, CodeValue, RefValue, OrValues, QuantifiedValue, PrimitiveIdentifier} = require('../../lib/models');
 
 describe('#importFromFilePath()', () => {
-  it('should correctly import a simple entry', () => {
-    let results = importFixture('simpleEntry');
-    let simple = expectAndGetSingleElement(results, 'shr.test', 'Simple', Entry);
-    expect(simple.description).to.equal('It is a simple entry');
-    expectSingleAnswer(simple, 'primitive', 'date');
-    expect(simple.valueset).to.be.undefined;
-    expect(simple.components).to.be.empty;
-  });
-
   it('should correctly import a simple data element', () => {
-    let results = importFixture('simpleDataElement');
-    let simple = expectAndGetSingleElement(results, 'shr.test', 'simple');
+    const results = importFixture('simpleDataElement');
+    const simple = expectAndGetSingleElement(results, 'shr.test', 'Simple');
+    expect(simple.concepts).to.have.length(1);
+    expectConcept(simple.concepts[0], 'http://foo.org', 'bar');
     expect(simple.description).to.equal('It is a simple data element');
-    expectSingleAnswer(simple, 'primitive', 'string');
-    expect(simple.valueset).to.be.undefined;
-    expect(simple.components).to.be.empty;
+    expectPrimitiveValue(simple.value, 'string');
   });
 
   it('should correctly import a coded data element', () => {
-    let results = importFixture('codedDataElement');
-    let coded = expectAndGetSingleElement(results, 'shr.test', 'coded');
+    const results = importFixture('CodedDataElement');
+    const coded = expectAndGetSingleElement(results, 'shr.test', 'Coded');
     expect(coded.description).to.equal('It is a coded data element');
-    expectSingleAnswer(coded, 'primitive', 'code');
-    expect(coded.valueset).to.equal('http://standardhealthrecord.org/test/vs/coded');
-    expect(coded.components).to.be.empty;
+    expectCodeValue(coded.value, 'http://standardhealthrecord.org/test/vs/Coded');
+  });
+
+  it('should correctly import a reference to simple data element', () => {
+    const results = importFixture('simpleReferenceDataElement');
+    const simple = expectAndGetSingleElement(results, 'shr.test', 'SimpleReference');
+    expect(simple.description).to.equal('It is a reference to a simple data element');
+    expectRefValue(simple.value, 'shr.test', 'Simple');
+  });
+
+  it('should correctly import a data element with list value', () => {
+    const results = importFixture('multiStringDataElement');
+    const simple = expectAndGetSingleElement(results, 'shr.test', 'MultiString');
+    expect(simple.description).to.equal('It is a multi-string data element');
+    expectMinMax(simple.value, 1);
+    expectPrimitiveValue(simple.value.value, 'string');
   });
 
   it('should correctly import a choice data element', () => {
-    let results = importFixture('choiceDataElement');
-    let simple = expectAndGetSingleElement(results, 'shr.test', 'choice');
-    expect(simple.description).to.equal('It is a data element with a choice');
-    expect(simple.answers).to.have.length(3);
-    expectAnswer(simple, 0, 'primitive', 'date');
-    expectAnswer(simple, 1, 'other.ns', 'period');
-    expectAnswer(simple, 2, 'shr.test', 'simple');
-    expect(simple.valueset).to.be.undefined;
-    expect(simple.components).to.be.empty;
+    const results = importFixture('ChoiceDataElement');
+    const choice = expectAndGetSingleElement(results, 'shr.test', 'Choice');
+    expect(choice.description).to.equal('It is a data element with a choice');
+    expectOrValues(choice.value, 3);
+    expectOrValue(choice.value, 0, 'primitive', 'date');
+    expectOrValue(choice.value, 1, 'other.ns', 'Period');
+    expectOrValue(choice.value, 2, 'shr.test', 'Simple');
   });
 
-  it('should correctly import a composition', () => {
-    let results = importFixture('compositionDataElement');
-    let simple = expectAndGetSingleElement(results, 'shr.test', 'composition');
-    expect(simple.description).to.equal('It is a composition data element');
-    expect(simple.answers).to.be.empty;
-    expect(simple.valueset).to.be.undefined;
-    expect(simple.components).to.have.length(4);
-    expectComponent(simple, 0, 'shr.test', 'simple', 0, 1);
-    expectComponent(simple, 1, 'shr.test', 'coded', 0);
-    expectComponent(simple, 2, 'shr.test', 'Simple', 1);
-    expectComponent(simple, 3, 'other.ns', 'thing', 1, 1);
+  it('should correctly import a complex choice data element', () => {
+    const results = importFixture('ComplexChoiceDataElement');
+    const choice = expectAndGetSingleElement(results, 'shr.test', 'ComplexChoice');
+    expect(choice.description).to.equal('It is a data element with a complex choice');
+    expectMinMax(choice.value, 1, 2);
+    const or = choice.value.value;
+    expectOrValues(or, 2);
+    const or0 = or.values[0];
+    expectMinMax(or0, 3, 4);
+    expectOrValues(or0.value, 2);
+    expectOrValue(or0.value, 0, 'primitive', 'date');
+    expectOrValue(or0.value, 1, 'other.ns', 'Period');
+    const or1 = or.values[1];
+    expectMinMax(or1, 5, 6);
+    expectValue(or1.value, 'shr.test', 'Simple');
+  });
+
+  it('should correctly import a group', () => {
+    const results = importFixture('GroupDataElement');
+    const simple = expectAndGetSingleElement(results, 'shr.test', 'SimpleGroup', Group);
+    expect(simple.concepts).to.have.length(3);
+    expectConcept(simple.concepts[0], 'http://foo.org', 'bar');
+    expectConcept(simple.concepts[1], 'http://boo.org', 'far');
+    expectConcept(simple.concepts[2], 'ZOO', 'bear');
+    expect(simple.description).to.equal('It is a group data element');
+    expect(simple.elements).to.have.length(4);
+    expectGroupElement(simple, 0, 'shr.test', 'Simple', 0, 1);
+    expectGroupElement(simple, 1, 'shr.test', 'Coded', 0);
+    expectGroupElement(simple, 2, 'shr.test', 'Simple', 1);
+    expectGroupElement(simple, 3, 'other.ns', 'Thing', 1, 1);
+  });
+
+  it('should correctly import a section', () => {
+    const results = importFixture('SimpleSection');
+    const namespace = expectAndGetNamespace(results, 0, 'shr.test');
+    expect(namespace.sections).to.have.length(1);
+    const section = namespace.sections[0];
+    expect(section).to.be.instanceof(Section);
+    expect(section.identifier.namespace).to.equal('shr.test');
+    expect(section.identifier.name).to.equal('SimpleSection');
+    expect(section.entries).to.have.length(3);
+    expectSectionEntry(section, 0, 'shr.test', 'Simple', 1);
+    expectSectionEntry(section, 1, 'shr.test', 'Coded', 1, 1);
+    expectSectionEntry(section, 2, 'shr.test', 'GroupOfThings', 0, 3);
   });
 
   it('should correctly import multiple elements in a single namespace', () => {
-    let results = importFixture('multipleElements');
+    const results = importFixture('MultipleElements');
     expect(results).to.have.length(1);
-    let ns = expectAndGetNamespace(results, 0, 'shr.test');
+    const ns = expectAndGetNamespace(results, 0, 'shr.test');
 
-    let simple = expectAndGetElement(ns, 0, 'Simple', Entry);
-    expect(simple.description).to.equal('It is a simple entry');
-    expectSingleAnswer(simple, 'primitive', 'date');
-    expect(simple.valueset).to.be.undefined;
-    expect(simple.components).to.be.empty;
+    const simple = expectAndGetElement(ns, 0, 'SimpleDate');
+    expect(simple.description).to.equal('It is a simple date data element');
+    expectPrimitiveValue(simple.value, 'date');
 
-    let coded = expectAndGetElement(ns, 1, 'coded');
+    const coded = expectAndGetElement(ns, 1, 'Coded');
     expect(coded.description).to.equal('It is a coded data element');
-    expectSingleAnswer(coded, 'primitive', 'code');
-    expect(coded.valueset).to.equal('http://standardhealthrecord.org/test/vs/coded');
-    expect(coded.components).to.be.empty;
+    expectCodeValue(coded.value, 'http://standardhealthrecord.org/test/vs/Coded');
   });
 });
 
 function expectAndGetNamespace(results, namespaceIndex, expectedNamespace) {
-  let ns = results[namespaceIndex];
+  const ns = results[namespaceIndex];
   expect(ns).to.be.instanceof(Namespace);
   expect(ns.namespace).to.equal(expectedNamespace);
-
   return ns;
 }
 
-function expectAndGetElement(namespace, elementIndex, expectedName, expectedClass=DataElement) {
-  let element = namespace.elements[elementIndex];
-  expect(element).to.be.instanceof(expectedClass);
-  expect(element.identifier.namespace).to.equal(namespace.namespace);
-  expect(element.identifier.name).to.equal(expectedName);
-
-  return element;
+function expectAndGetElement(namespace, defIndex, expectedName, expectedClass=DataElement) {
+  const def = namespace.definitions[defIndex];
+  expect(def).to.be.instanceof(expectedClass);
+  expect(def.identifier.namespace).to.equal(namespace.namespace);
+  expect(def.identifier.name).to.equal(expectedName);
+  return def;
 }
 
 function expectAndGetSingleElement(results, expectedNamespace, expectedName, expectedClass=DataElement) {
   expect(results).to.have.length(1);
-
-  let ns = expectAndGetNamespace(results, 0, expectedNamespace);
+  const ns = expectAndGetNamespace(results, 0, expectedNamespace);
   return expectAndGetElement(ns, 0, expectedName, expectedClass);
 }
 
-function expectAnswer(element, answerIndex, expectedNamespace, expectedName) {
-  expect(element.answers[answerIndex].namespace).to.equal(expectedNamespace);
-  expect(element.answers[answerIndex].name).to.equal(expectedName);
+function expectValue(value, expectedNamespace, expectedName) {
+  expect(value).to.be.instanceof(Value);
+  expect(value.identifier.namespace).to.equal(expectedNamespace);
+  expect(value.identifier.name).to.equal(expectedName);
 }
 
-function expectSingleAnswer(element, expectedNamespace, expectedName) {
-  expect(element.answers).to.have.length(1);
-  expectAnswer(element, 0, expectedNamespace, expectedName);
+function expectPrimitiveValue(value, expectedName) {
+  expect(value).to.be.instanceof(Value);
+  expect(value.identifier).to.be.instanceof(PrimitiveIdentifier);
+  expect(value.identifier.namespace).to.equal('primitive');
+  expect(value.identifier.name).to.equal(expectedName);
 }
 
-function expectComponent(element, componentIndex, expectedNamespace, expectedName, expectedMin, expectedMax) {
-  expect(element.components[componentIndex].namespace).to.equal(expectedNamespace);
-  expect(element.components[componentIndex].name).to.equal(expectedName);
-  expect(element.components[componentIndex].min).to.equal(expectedMin);
-  if (typeof expectedMax != 'undefined') {
-    expect(element.components[componentIndex].max).to.equal(expectedMax);
-    expect(element.components[componentIndex].isMaxUnbounded()).to.be.false;
+function expectCodeValue(value, expectedValueset) {
+  expect(value).to.be.instanceof(CodeValue);
+  expect(value.identifier).to.be.instanceof(PrimitiveIdentifier);
+  expect(value.identifier.namespace).to.equal('primitive');
+  expect(value.identifier.name).to.equal('code');
+  expect(value.valueset).to.equal('http://standardhealthrecord.org/test/vs/Coded');
+}
+
+function expectRefValue(value, expectedNamespace, expectedName) {
+  expect(value).to.be.instanceof(RefValue);
+  expect(value.identifier.namespace).to.equal(expectedNamespace);
+  expect(value.identifier.name).to.equal(expectedName);
+}
+
+function expectOrValues(value, size) {
+  expect(value).to.be.instanceof(OrValues);
+  expect(value.values).to.have.length(size);
+}
+
+function expectMinMax(quantifiedValue, expectedMin, expectedMax) {
+  expect(quantifiedValue).to.be.instanceof(QuantifiedValue);
+  expect(quantifiedValue.min).to.equal(expectedMin);
+  if (typeof quantifiedValue.max != 'undefined') {
+    expect(quantifiedValue.max).to.equal(expectedMax);
+    expect(quantifiedValue.isMaxUnbounded()).to.be.false;
   } else {
-    expect(element.components[componentIndex].max).to.be.undefined;
-    expect(element.components[componentIndex].isMaxUnbounded()).to.be.true;
+    expect(quantifiedValue.max).to.be.undefined;
+    expect(quantifiedValue.isMaxUnbounded()).to.be.true;
   }
+}
+
+function expectOrValue(or, componentIndex, expectedNamespace, expectedName, expectedMin, expectedMax) {
+  let value = or.values[componentIndex];
+  if (typeof expectedMin != 'undefined') {
+    expectMinMax(value, expectedMin, expectedMax);
+    value = value.value;
+  }
+  expectValue(value, expectedNamespace, expectedName);
+}
+
+function expectGroupElement(group, elementIndex, expectedNamespace, expectedName, expectedMin, expectedMax) {
+  const element = group.elements[elementIndex];
+  expectMinMax(element, expectedMin, expectedMax);
+  expectValue(element.value, expectedNamespace, expectedName);
+}
+
+function expectSectionEntry(section, sectionIndex, expectedNamespace, expectedName, expectedMin, expectedMax) {
+  const entry = section.entries[sectionIndex];
+  expectMinMax(entry, expectedMin, expectedMax);
+  expectValue(entry.value, expectedNamespace, expectedName);
+}
+
+function expectConcept(concept, codesystem, code) {
+  expect(concept.codesystem).equals(codesystem);
+  expect(concept.code).equals(code);
 }
 
 function importFixture(name) {
