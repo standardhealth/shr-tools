@@ -1,17 +1,11 @@
 class Namespace {
   constructor(namespace) {
     this._namespace = namespace; // string
-    this._sections = []; // Section[]
     this._definitionIdentifiers = []; // Identifier[] (keeping track in an array allows us to preserve order)
     this._definitionMap = {}; // obj[string]=DataElement|Group
   }
 
   get namespace() { return this._namespace; }
-
-  get sections() { return this._sections; }
-  addSection(section) {
-    this._sections.push(section);
-  }
 
   // a definition might be a DataElement or a Group
   get definitions() { return this._definitionIdentifiers.map(id => this._definitionMap[id]); }
@@ -39,26 +33,20 @@ class Identifiable {
   get identifier() { return this._identifier; }
 }
 
-class Section extends Identifiable {
-  constructor(identifier) {
-    super(identifier);
-    this._entries = []; // QuantifiedValue[]
-  }
-
-  // an entry must be a QuantifiedValue referencing a DataElement or Group (no primitives)
-  get entries() { return this._entries; }
-  addEntry(quantifiedValue) {
-    this._entries.push(quantifiedValue);
-  }
-}
-
 class BaseElement extends Identifiable {
-  constructor(identifier) {
+  constructor(identifier, isEntry=false) {
     super(identifier);
     this._concepts = [];
+    this._isEntry = isEntry;
     if (this.constructor === BaseElement) {
       throw new TypeError('Abstract class "BaseElement" cannot be instantiated directly.');
     }
+  }
+
+  // isEntry is a boolean flag indicating if this element is an entry
+  get isEntry() { return this._isEntry; }
+  set isEntry(isEntry) {
+    this._isEntry = isEntry;
   }
 
   // concepts are an array of Concept
@@ -79,8 +67,8 @@ class BaseElement extends Identifiable {
 }
 
 class DataElement extends BaseElement {
-  constructor(identifier) {
-    super(identifier);
+  constructor(identifier, isEntry=false) {
+    super(identifier, isEntry);
   }
 
   // a value might be a Value, subclass of Value, QuantifiedValue, or OrValues
@@ -92,8 +80,8 @@ class DataElement extends BaseElement {
 }
 
 class Group extends BaseElement {
-  constructor(identifier) {
-    super(identifier);
+  constructor(identifier, isEntry=false) {
+    super(identifier, isEntry);
     this._elements = []; // QuantifiedValue[]
   }
 
@@ -105,13 +93,15 @@ class Group extends BaseElement {
 }
 
 class Concept {
-  constructor(codesystem, code) {
+  constructor(codesystem, code, label) {
     this._codesystem = codesystem;
     this._code = code;
+    this._label = label;
   }
 
   get codesystem() { return this._codesystem; }
   get code() { return this._code; }
+  get label() { return this._label; }
 }
 
 class Identifier {
@@ -141,14 +131,30 @@ class Value extends Identifiable {
   }
 }
 
-// CodeValue assumes identifier PrimitiveIdentifier('code'), so it only takes a valueset
+// CodeValue assumes identifier PrimitiveIdentifier('code')
+// In practice, it's normally instantiated as a subclass (CodeFromValueSetValue, CodeFromAncestorValue)
 class CodeValue extends Value {
-  constructor(valueset) {
+  constructor() {
     super(new PrimitiveIdentifier('code'));
+  }
+}
+
+class CodeFromValueSetValue extends CodeValue {
+  constructor(valueset) {
+    super();
     this._valueset = valueset; // string in url form
   }
 
   get valueset() { return this._valueset; }
+}
+
+class CodeFromAncestorValue extends CodeValue {
+  constructor(ancestor) {
+    super();
+    this._ancestor = ancestor; // Concept
+  }
+
+  get ancestor() { return this._ancestor; }
 }
 
 class RefValue extends Value {
@@ -197,4 +203,4 @@ function assertNoOverwrite(property, element, propName, newValue) {
   }
 }
 
-module.exports = {Namespace, Section, DataElement, Group, Concept, Identifier, PrimitiveIdentifier, Value, CodeValue, RefValue, QuantifiedValue, OrValues, PRIMITIVE_NS, PRIMITIVES};
+module.exports = {Namespace, DataElement, Group, Concept, Identifier, PrimitiveIdentifier, Value, CodeValue, CodeFromValueSetValue, CodeFromAncestorValue, RefValue, QuantifiedValue, OrValues, PRIMITIVE_NS, PRIMITIVES};
