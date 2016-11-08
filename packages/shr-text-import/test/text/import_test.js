@@ -1,6 +1,6 @@
 const {expect} = require('chai');
 const {importFromFilePath} = require('../../lib/text/import');
-const {Namespace, Section, DataElement, Group, Value, CodeValue, RefValue, OrValues, QuantifiedValue, PrimitiveIdentifier} = require('../../lib/models');
+const {Namespace, DataElement, Group, Value, CodeFromValueSetValue, RefValue, OrValues, QuantifiedValue, PrimitiveIdentifier} = require('../../lib/models');
 
 describe('#importFromFilePath()', () => {
   it('should correctly import a simple data element', () => {
@@ -76,20 +76,6 @@ describe('#importFromFilePath()', () => {
     expectGroupElement(simple, 3, 'other.ns', 'Thing', 1, 1);
   });
 
-  it('should correctly import a section', () => {
-    const results = importFixture('SimpleSection');
-    const namespace = expectAndGetNamespace(results, 0, 'shr.test');
-    expect(namespace.sections).to.have.length(1);
-    const section = namespace.sections[0];
-    expect(section).to.be.instanceof(Section);
-    expect(section.identifier.namespace).to.equal('shr.test');
-    expect(section.identifier.name).to.equal('SimpleSection');
-    expect(section.entries).to.have.length(3);
-    expectSectionEntry(section, 0, 'shr.test', 'Simple', 1);
-    expectSectionEntry(section, 1, 'shr.test', 'Coded', 1, 1);
-    expectSectionEntry(section, 2, 'shr.test', 'GroupOfThings', 0, 3);
-  });
-
   it('should correctly import multiple elements in a single namespace', () => {
     const results = importFixture('MultipleElements');
     expect(results).to.have.length(1);
@@ -140,7 +126,7 @@ function expectPrimitiveValue(value, expectedName) {
 }
 
 function expectCodeValue(value, expectedValueset) {
-  expect(value).to.be.instanceof(CodeValue);
+  expect(value).to.be.instanceof(CodeFromValueSetValue);
   expect(value.identifier).to.be.instanceof(PrimitiveIdentifier);
   expect(value.identifier.namespace).to.equal('primitive');
   expect(value.identifier.name).to.equal('code');
@@ -183,12 +169,6 @@ function expectGroupElement(group, elementIndex, expectedNamespace, expectedName
   const element = group.elements[elementIndex];
   expectMinMax(element, expectedMin, expectedMax);
   expectValue(element.value, expectedNamespace, expectedName);
-}
-
-function expectSectionEntry(section, sectionIndex, expectedNamespace, expectedName, expectedMin, expectedMax) {
-  const entry = section.entries[sectionIndex];
-  expectMinMax(entry, expectedMin, expectedMax);
-  expectValue(entry.value, expectedNamespace, expectedName);
 }
 
 function expectConcept(concept, codesystem, code) {

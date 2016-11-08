@@ -1,6 +1,6 @@
 const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserListener} = require('./parsers/SHRParserListener');
-const {Namespace, Section, DataElement, Concept, Identifier, Group, Value, CodeValue, RefValue, PrimitiveIdentifier, QuantifiedValue, OrValues, PRIMITIVES} = require('../models');
+const {Namespace, DataElement, Concept, Identifier, Group, Value, CodeFromValueSetValue, RefValue, PrimitiveIdentifier, QuantifiedValue, OrValues, PRIMITIVES} = require('../models');
 
 class Importer extends SHRParserListener {
   constructor() {
@@ -9,12 +9,15 @@ class Importer extends SHRParserListener {
     this._nsMap = {};
     // The currently active namespace
     this._currentNs = '';
-    // The currently active definition (DataElement, Group, Section)
+    // The currently active definition (DataElement, Group)
     this._currentDef = null;
     // The stack of parenthetical scopes
     this._scopeStack = [];
     // The vocabulary, mapping aliases to urls (string -> string)
     this._vocabMap = {};
+    // Temp stuff to keep track of what are entries (to be removed w/ grammar v3)
+    this._inSectionDef = false;
+    this._entryIDs = [];
   }
 
   exitNamespace(ctx) {
@@ -47,12 +50,12 @@ class Importer extends SHRParserListener {
     this.pushCurrentDefinition();
   }
 
-  exitSectionHeader(ctx) {
-    this._currentDef = new Section(new Identifier(this._currentNs, ctx.simpleName().getText()));
+  enterSectionDef(ctx) {
+    this._inSectionDef = true;
   }
 
   exitSectionDef(ctx) {
-    this.pushCurrentDefinition();
+    this._inSectionDef = false;
   }
 
   exitDescriptionProp(ctx) {
@@ -98,7 +101,7 @@ class Importer extends SHRParserListener {
       if (valueCtx.primitive()) {
         value = new Value(new PrimitiveIdentifier(valueCtx.getText()));
       } else if (valueCtx.codeFromValueset()) {
-        value = new CodeValue(valueCtx.codeFromValueset().valueset().getText());
+        value = new CodeFromValueSetValue(valueCtx.codeFromValueset().valueset().getText());
       } else if (valueCtx.ref()) {
         value = new RefValue(this.resolveToIdentifier(valueCtx.ref().simpleOrFQName().getText()));
       } else if (valueCtx.simpleOrFQName()) {
@@ -120,8 +123,8 @@ class Importer extends SHRParserListener {
     const qValue = new QuantifiedValue(new Value(identifier), min, max);
     if (this._currentDef instanceof Group) {
       this._currentDef.addElement(qValue);
-    } else if (this._currentDef instanceof Section) {
-      this._currentDef.addEntry(qValue);
+    } else if (this._inSectionDef) {
+      this._entryIDs.push(identifier);
     }
   }
 
@@ -138,6 +141,17 @@ class Importer extends SHRParserListener {
         }
       });
       def.concepts = concepts;
+    }
+
+    // Update the entries to have the isEntry flag set (temp fix until grammar v3)
+    for (const id of this._entryIDs) {
+      const ns = this._nsMap[id.namespace];
+      if (ns) {
+        const def = ns.lookup(id.name);
+        if (def) {
+          def.isEntry = true;
+        }
+      }
     }
   }
 
@@ -180,11 +194,7 @@ class Importer extends SHRParserListener {
   }
 
   pushCurrentDefinition() {
-    if (this._currentDef instanceof Section) {
-      this._nsMap[this._currentNs].addSection(this._currentDef);
-    } else {
-      this._nsMap[this._currentNs].addDefinition(this._currentDef);
-    }
+    this._nsMap[this._currentNs].addDefinition(this._currentDef);
     this._currentDef = null;
   }
 
