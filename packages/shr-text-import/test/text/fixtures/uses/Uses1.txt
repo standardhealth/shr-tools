@@ -1,0 +1,9 @@
+DataDefinitions:  shr.test.one
+Uses:             shr.test.two, shr.test.three
+
+Vocabulary:     FOO = http://foo.org
+
+Entry:          One
+Concept:        FOO #bar, MOO #car
+Description:    "It is an entry that uses other namespaces"
+1..1            Two

@@ -1,0 +1,5 @@
+DataDefinitions:  shr.test
+
+Entry:          CodedFromValueSet
+Description:    "It is a coded entry"
+1..1            code from http://standardhealthrecord.org/test/vs/Coded

@@ -1,0 +1,22 @@
+DataDefinitions:  shr.test
+
+Vocabulary:     FOO = http://foo.org
+Vocabulary:     BOO = http://boo.org
+Vocabulary:     ZOO = http://zoo.org
+
+Element:      SimpleGroup
+Concept:      FOO #bar, BOO #far, ZOO #bear
+Description:  "It is a group element"
+0..1    Simple
+0..*    Coded
+1..*    Simple2
+1..1    other.ns.Thing
+
+Element:        Simple
+1..1            string
+
+Element:        Coded
+1..1            code
+
+Element:        Simple2
+1..1            string

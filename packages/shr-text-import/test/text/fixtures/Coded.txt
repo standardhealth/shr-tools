@@ -1,0 +1,5 @@
+DataDefinitions:  shr.test
+
+Entry:          Coded
+Description:    "It is a coded entry"
+1..1            code

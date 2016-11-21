@@ -1,0 +1,5 @@
+DataDefinitions:  shr.test.three
+
+Vocabulary:     MOO = http://moo.org
+Vocabulary:     ZOO = http://zoo.org
+

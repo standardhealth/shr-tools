@@ -1,0 +1,4 @@
+DataDefinitions:  other.ns
+
+Element:        Period
+1..1            date

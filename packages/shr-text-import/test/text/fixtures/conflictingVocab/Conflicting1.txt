@@ -1,0 +1,10 @@
+DataDefinitions:  shr.test.one
+Uses:             shr.test.two
+
+Vocabulary:     FOO = http://foo.org
+Vocabulary:     MOO = http://moo.org
+
+Entry:          Conflicting
+Concept:        FOO #bar, MOO #car
+Description:    "It is an entry that uses a conflicting vocab reference"
+1..1            string

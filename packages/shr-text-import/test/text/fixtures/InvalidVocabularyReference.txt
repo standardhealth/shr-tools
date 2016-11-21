@@ -1,0 +1,8 @@
+DataDefinitions:  shr.test
+
+Vocabulary:     FOO = http://foo.org
+
+Entry:          Simple
+Concept:        ZOO #bear
+Description:    "It is a simple entry with invalid vocab"
+1..1            string

@@ -1,0 +1,4 @@
+DataDefinitions:  shr.test.two
+
+Vocabulary:     FOO = http://foo.net
+Vocabulary:     MOO = http://moo.org

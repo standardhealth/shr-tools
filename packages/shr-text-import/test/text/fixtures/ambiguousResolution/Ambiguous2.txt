@@ -1,0 +1,5 @@
+DataDefinitions:  shr.test.two
+
+Entry:          Foo
+Description:    "It is a Foo from shr.test.two"
+1..1            string

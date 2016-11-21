@@ -1,5 +1,0 @@
-Namespace:      shr.test
-
-DataElement:    SimpleReference
-Description:    "It is a reference to a simple data element"
-Value:          ref(Simple)

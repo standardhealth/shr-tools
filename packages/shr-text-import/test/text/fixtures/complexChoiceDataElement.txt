@@ -1,5 +1,0 @@
-Namespace:      shr.test
-
-DataElement:    ComplexChoice
-Description:    "It is a data element with a complex choice"
-Value:          1..2 (3..4 (date or other.ns.Period) or 5..6 Simple)
