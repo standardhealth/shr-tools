@@ -102,6 +102,9 @@ class Concept {
   get codesystem() { return this._codesystem; }
   get code() { return this._code; }
   get label() { return this._label; }
+  set label(label) {
+    this._label = label;
+  }
 }
 
 class Identifier {
