@@ -33,20 +33,26 @@ class Identifiable {
   get identifier() { return this._identifier; }
 }
 
-class BaseElement extends Identifiable {
+class DataElement extends Identifiable {
   constructor(identifier, isEntry=false) {
     super(identifier);
-    this._concepts = [];
-    this._isEntry = isEntry;
-    if (this.constructor === BaseElement) {
-      throw new TypeError('Abstract class "BaseElement" cannot be instantiated directly.');
-    }
+    this._isEntry = isEntry; // boolean
+    this._basedOn = [];      // Identifier[]
+    this._concepts = [];     // Concept[]
+    this._elements = [];     // QuantifiedValue[]
   }
 
   // isEntry is a boolean flag indicating if this element is an entry
   get isEntry() { return this._isEntry; }
   set isEntry(isEntry) {
     this._isEntry = isEntry;
+  }
+
+  // basedOn is an array of identifiers that the data element is based on.  This means that it takes on the value
+  // and elements of any data element it is based on, and can potentially override/constrain it.
+  get basedOn() { return this._basedOn; }
+  addBasedOn(basedOn) {
+    this._basedOn.push(basedOn);
   }
 
   // concepts are an array of Concept
@@ -64,28 +70,17 @@ class BaseElement extends Identifiable {
     assertNoOverwrite(this._description, this, 'description', description);
     this._description = description;
   }
-}
 
-class DataElement extends BaseElement {
-  constructor(identifier, isEntry=false) {
-    super(identifier, isEntry);
-  }
-
-  // a value might be a Value, subclass of Value, QuantifiedValue, or OrValues
+  // Data elements should have a value, or a set of elements, or both a value and set of elements.  If a value exists,
+  // it will always be a Field (usually with a cardinality: 1..1).
   get value() { return this._value; }
   set value(value) {
     assertNoOverwrite(this._value, this, 'value', value);
     this._value = value;
   }
-}
 
-class Group extends BaseElement {
-  constructor(identifier, isEntry=false) {
-    super(identifier, isEntry);
-    this._elements = []; // QuantifiedValue[]
-  }
-
-  // an element must be a QuantifiedValue referencing a DataElement or Group (no primitives)
+  // Data elements should have a value, or a set of elements, or both a value and set of elements.  Each element in the
+  // set of elements will be a Field and the Field.value must NOT be a primitive value.
   get elements() { return this._elements; }
   addElement(quantifiedValue) {
     this._elements.push(quantifiedValue);
@@ -93,17 +88,17 @@ class Group extends BaseElement {
 }
 
 class Concept {
-  constructor(codesystem, code, label) {
-    this._codesystem = codesystem;
+  constructor(system, code, display) {
+    this._system = system;
     this._code = code;
-    this._label = label;
+    this._display = display;
   }
 
-  get codesystem() { return this._codesystem; }
+  get system() { return this._system; }
   get code() { return this._code; }
-  get label() { return this._label; }
-  set label(label) {
-    this._label = label;
+  get display() { return this._display; }
+  set display(display) {
+    this._display = display;
   }
 }
 
@@ -135,34 +130,30 @@ class Value extends Identifiable {
 }
 
 // CodeValue assumes identifier PrimitiveIdentifier('code')
-// In practice, it's normally instantiated as a subclass (CodeFromValueSetValue, CodeFromAncestorValue)
 class CodeValue extends Value {
-  constructor() {
-    super(new PrimitiveIdentifier('code'));
-  }
-}
-
-class CodeFromValueSetValue extends CodeValue {
   constructor(valueset) {
-    super();
+    super(new PrimitiveIdentifier('code'));
     this._valueset = valueset; // string in url form
   }
 
   get valueset() { return this._valueset; }
 }
 
-class CodeFromAncestorValue extends CodeValue {
-  constructor(ancestor) {
-    super();
-    this._ancestor = ancestor; // Concept
-  }
-
-  get ancestor() { return this._ancestor; }
-}
-
 class RefValue extends Value {
   constructor(identifier) {
     super(identifier);
+  }
+}
+
+class ChoiceValue {
+  constructor() {
+    this._options = []; // QuantifiedValue[]
+  }
+
+  // Each option in the choice must be a QuantifiedValue
+  get options() { return this._options; }
+  addOption(option) {
+    this._options.push(option);
   }
 }
 
@@ -185,20 +176,33 @@ class QuantifiedValue {
   }
 }
 
-class OrValues {
-  constructor() {
-    this._values = []; // (Value|QuantifiedValue|OrValues)[]
+class Field extends QuantifiedValue {
+  constructor(value, min, max) {
+    super(value, min, max);
+    this._isConstrained = false;
   }
 
-  get values() { return this._values; }
-  addValue(value) {
-    this._values.push(value);
+  // base is an Identifier that indicates the base data element this field came from.  If the field did not come from
+  // a base data element, then the base value is undefined.
+  get base() { return this._base; }
+  set base(base) {
+    this._base = base;
+  }
+
+  // indicates if the field came from a base (value is true) or is defined only by this data element (value is false)
+  get isFromBase() { return this._base instanceof Identifier; }
+
+  // indicates if this data element constrained the field from the base data element.  If the field was not defined in
+  // a base data element (e.g., isFromBase is false), then isConstrained is false.
+  get isConstrained() { return this._isConstraint; }
+  set isConstrained(isConstrained) {
+    this._isConstrained = isConstrained;
   }
 }
 
 const PRIMITIVE_NS = 'primitive';
 const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'code', 'id',
-                    'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time'];
+  'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time'];
 
 function assertNoOverwrite(property, element, propName, newValue) {
   if (typeof property !== 'undefined') {
@@ -206,4 +210,4 @@ function assertNoOverwrite(property, element, propName, newValue) {
   }
 }
 
-module.exports = {Namespace, DataElement, Group, Concept, Identifier, PrimitiveIdentifier, Value, CodeValue, CodeFromValueSetValue, CodeFromAncestorValue, RefValue, QuantifiedValue, OrValues, PRIMITIVE_NS, PRIMITIVES};
+module.exports = {Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Field, QuantifiedValue, Value, CodeValue, RefValue, ChoiceValue, PRIMITIVE_NS, PRIMITIVES};
