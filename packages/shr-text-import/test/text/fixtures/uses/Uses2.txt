@@ -1,7 +1,7 @@
 DataDefinitions:  shr.test.two
 Uses:             shr.test.three
 
-Entry:          Two
+EntryElement:   Two
 Concept:        ZOO #bear
 Description:    "It is an entry that uses other namespaces too"
-1..1            string
+Value:          string

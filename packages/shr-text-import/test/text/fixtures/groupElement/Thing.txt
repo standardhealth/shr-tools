@@ -1,4 +1,4 @@
 DataDefinitions:  other.ns
 
 Element:        Thing
-1..1            boolean
+Value:          boolean

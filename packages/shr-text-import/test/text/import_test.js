@@ -1,6 +1,6 @@
 const {expect} = require('chai');
 const {importFromFilePath} = require('../../lib/text/import');
-const {Namespace, DataElement, Group, Concept, Value, CodeFromValueSetValue, CodeFromAncestorValue, RefValue, OrValues, QuantifiedValue, PrimitiveIdentifier} = require('../../lib/models');
+const {Namespace, DataElement, Value, CodeValue, RefValue, ChoiceValue, QuantifiedValue, PrimitiveIdentifier} = require('../../lib/models');
 
 describe('#importFromFilePath()', () => {
   it('should correctly import a simple entry', () => {
@@ -10,7 +10,8 @@ describe('#importFromFilePath()', () => {
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'http://foo.org', 'bar', 'Foobar');
     expect(simple.description).to.equal('It is a simple entry');
-    expectPrimitiveValue(simple.value, 'string');
+    expectMinMax(simple.value, 1, 1);
+    expectPrimitiveValue(simple.value.value, 'string');
   });
 
   it('should correctly import a simple element', () => {
@@ -20,7 +21,8 @@ describe('#importFromFilePath()', () => {
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'http://foo.org', 'bar');
     expect(simple.description).to.equal('It is a simple element');
-    expectPrimitiveValue(simple.value, 'string');
+    expectMinMax(simple.value, 1, 1);
+    expectPrimitiveValue(simple.value.value, 'string');
   });
 
   it('should correctly import a coded entry', () => {
@@ -28,7 +30,8 @@ describe('#importFromFilePath()', () => {
     expect(errors).is.empty;
     const coded = expectAndGetSingleEntry(namespaces, 'shr.test', 'Coded');
     expect(coded.description).to.equal('It is a coded entry');
-    expectCodeValue(coded.value);
+    expectMinMax(coded.value, 1, 1);
+    expectCodeValue(coded.value.value);
   });
 
   it('should correctly import an entry with a code from a valueset', () => {
@@ -36,15 +39,8 @@ describe('#importFromFilePath()', () => {
     expect(errors).is.empty;
     const coded = expectAndGetSingleEntry(namespaces, 'shr.test', 'CodedFromValueSet');
     expect(coded.description).to.equal('It is a coded entry');
-    expectCodeValue(coded.value, 'http://standardhealthrecord.org/test/vs/Coded');
-  });
-
-  it('should correctly import an entry with a code descending from a concept', () => {
-    const {namespaces, errors} = importFixture('CodedDescendent');
-    expect(errors).is.empty;
-    const coded = expectAndGetSingleEntry(namespaces, 'shr.test', 'CodedDescendent');
-    expect(coded.description).to.equal('It is a coded entry');
-    expectCodeValue(coded.value, 'http://standardhealthrecord.org/test/vs/Coded', 'grandpa', 'Grandfather');
+    expectMinMax(coded.value, 1, 1);
+    expectCodeValue(coded.value.value, 'http://standardhealthrecord.org/test/vs/Coded');
   });
 
   it('should correctly import a reference to simple element', () => {
@@ -53,7 +49,8 @@ describe('#importFromFilePath()', () => {
     const ns = expectAndGetNamespace(namespaces, 0, 'shr.test');
     const simple = expectAndGetEntry(ns, 0, 'SimpleReference');
     expect(simple.description).to.equal('It is a reference to a simple element');
-    expectRefValue(simple.value, 'shr.test', 'Simple');
+    expectMinMax(simple.value, 1, 1);
+    expectRefValue(simple.value.value, 'shr.test', 'Simple');
   });
 
   it('should correctly import an entry with a list value', () => {
@@ -71,62 +68,66 @@ describe('#importFromFilePath()', () => {
     const ns = expectAndGetNamespace(namespaces, 0, 'shr.test');
     const choice = expectAndGetEntry(ns, 0, 'Choice');
     expect(choice.description).to.equal('It is an entry with a choice');
-    expectOrValues(choice.value, 3);
-    expectOrValue(choice.value, 0, 'primitive', 'date');
-    expectOrValue(choice.value, 1, 'other.ns', 'Period');
-    expectOrValue(choice.value, 2, 'shr.test', 'Simple');
+    expectMinMax(choice.value, 1, 1);
+    expectChoiceValue(choice.value.value, 3);
+    expectChoiceOption(choice.value.value, 0, 'primitive', 'date');
+    expectChoiceOption(choice.value.value, 1, 'other.ns', 'Period');
+    expectChoiceOption(choice.value.value, 2, 'shr.test', 'Simple');
   });
 
+  /* Not currently supported by grammar, but maybe it should be?
   it('should correctly import a complex choice entry', () => {
     const {namespaces, errors} = importFixtureFolder('complexChoice');
     expect(errors).is.empty;
     const ns = expectAndGetNamespace(namespaces, 0, 'shr.test');
     const choice = expectAndGetEntry(ns, 0, 'ComplexChoice');
     expect(choice.description).to.equal('It is an entry with a complex choice');
-    const or = choice.value;
-    expectOrValues(or, 2);
-    const or0 = or.values[0];
-    expectMinMax(or0, 1, 2);
-    expectOrValues(or0.value, 2);
-    expectOrValue(or0.value, 0, 'primitive', 'date');
-    expectOrValue(or0.value, 1, 'other.ns', 'Period');
-    const or1 = or.values[1];
-    expectMinMax(or1, 3, 4);
-    expectValue(or1.value, 'shr.test', 'Simple');
+    expectMinMax(choice.value, 1, 1);
+    const option = choice.value.value;
+    expectChoiceValue(option, 2);
+    const option0 = option.values[0];
+    expectMinMax(option0, 1, 2);
+    expectChoiceValue(option0.value, 2);
+    expectChoiceOption(option0.value, 0, 'primitive', 'date');
+    expectChoiceOption(option0.value, 1, 'other.ns', 'Period');
+    const option1 = option.values[1];
+    expectMinMax(option1, 3, 4);
+    expectValue(option1.value, 'shr.test', 'Simple');
   });
+  */
 
   it('should correctly import a group entry', () => {
     const {namespaces, errors} = importFixtureFolder('group');
     expect(errors).is.empty;
     const ns = expectAndGetNamespace(namespaces, 0, 'shr.test');
-    const group = expectAndGetEntry(ns, 0, 'SimpleGroup', Group);
+    const group = expectAndGetEntry(ns, 0, 'SimpleGroup');
     expect(group.concepts).to.have.length(3);
     expectConcept(group.concepts[0], 'http://foo.org', 'bar');
     expectConcept(group.concepts[1], 'http://boo.org', 'far');
     expectConcept(group.concepts[2], 'http://zoo.org', 'bear');
     expect(group.description).to.equal('It is a group entry');
     expect(group.elements).to.have.length(4);
-    expectGroupElement(group, 0, 'shr.test', 'Simple', 0, 1);
-    expectGroupElement(group, 1, 'shr.test', 'Coded', 0);
-    expectGroupElement(group, 2, 'shr.test', 'Simple2', 1);
-    expectGroupElement(group, 3, 'other.ns', 'Thing', 1, 1);
+    expectSupportingElement(group, 0, 'shr.test', 'Simple', 0, 1);
+    expectSupportingElement(group, 1, 'shr.test', 'Coded', 0);
+    expectSupportingElement(group, 2, 'shr.test', 'Simple2', 1);
+    expectSupportingElement(group, 3, 'other.ns', 'Thing', 1, 1);
   });
 
   it('should correctly import a group element', () => {
     const {namespaces, errors} = importFixtureFolder('groupElement');
     expect(errors).is.empty;
     const ns = expectAndGetNamespace(namespaces, 0, 'shr.test');
-    const group = expectAndGetElement(ns, 0, 'SimpleGroup', Group);
+    const group = expectAndGetElement(ns, 0, 'SimpleGroup');
     expect(group.concepts).to.have.length(3);
     expectConcept(group.concepts[0], 'http://foo.org', 'bar');
     expectConcept(group.concepts[1], 'http://boo.org', 'far');
     expectConcept(group.concepts[2], 'http://zoo.org', 'bear');
     expect(group.description).to.equal('It is a group element');
     expect(group.elements).to.have.length(4);
-    expectGroupElement(group, 0, 'shr.test', 'Simple', 0, 1);
-    expectGroupElement(group, 1, 'shr.test', 'Coded', 0);
-    expectGroupElement(group, 2, 'shr.test', 'Simple2', 1);
-    expectGroupElement(group, 3, 'other.ns', 'Thing', 1, 1);
+    expectSupportingElement(group, 0, 'shr.test', 'Simple', 0, 1);
+    expectSupportingElement(group, 1, 'shr.test', 'Coded', 0);
+    expectSupportingElement(group, 2, 'shr.test', 'Simple2', 1);
+    expectSupportingElement(group, 3, 'other.ns', 'Thing', 1, 1);
   });
 
   it('should correctly import multiple elements in a single namespace', () => {
@@ -137,11 +138,13 @@ describe('#importFromFilePath()', () => {
 
     const simple = expectAndGetEntry(ns, 0, 'SimpleDate');
     expect(simple.description).to.equal('It is a simple date entry');
-    expectPrimitiveValue(simple.value, 'date');
+    expectMinMax(simple.value, 1, 1);
+    expectPrimitiveValue(simple.value.value, 'date');
 
     const coded = expectAndGetElement(ns, 1, 'Coded');
     expect(coded.description).to.equal('It is a coded element');
-    expectCodeValue(coded.value, 'http://standardhealthrecord.org/test/vs/Coded');
+    expectMinMax(coded.value, 1, 1);
+    expectCodeValue(coded.value.value, 'http://standardhealthrecord.org/test/vs/Coded');
   });
 
   it('should correctly resolve elements and vocabularies from other namespaces', () => {
@@ -156,7 +159,8 @@ describe('#importFromFilePath()', () => {
     expectConcept(one.concepts[0], 'http://foo.org', 'bar');
     expectConcept(one.concepts[1], 'http://moo.org', 'car');
     expect(one.description).to.equal('It is an entry that uses other namespaces');
-    expectValue(one.value, 'shr.test.two', 'Two');
+    expectMinMax(one.value, 1, 1);
+    expectValue(one.value.value, 'shr.test.two', 'Two');
 
     const ns2 = expectAndGetNamespace(namespaces, 1, 'shr.test.two');
     expect(ns2.definitions).to.have.length(1);
@@ -164,7 +168,8 @@ describe('#importFromFilePath()', () => {
     expect(two.concepts).to.have.length(1);
     expectConcept(two.concepts[0], 'http://zoo.org', 'bear');
     expect(two.description).to.equal('It is an entry that uses other namespaces too');
-    expectPrimitiveValue(two.value, 'string');
+    expectMinMax(two.value, 1, 1);
+    expectPrimitiveValue(two.value.value, 'string');
 
     const ns3 = expectAndGetNamespace(namespaces, 2, 'shr.test.three');
     expect(ns3.definitions).to.have.length(0);
@@ -177,7 +182,8 @@ describe('#importFromFilePath()', () => {
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'ZOO', 'bear'); // Defaults to vocabulary alias
     expect(simple.description).to.equal('It is a simple entry with invalid vocab');
-    expectPrimitiveValue(simple.value, 'string');
+    expectMinMax(simple.value, 1, 1);
+    expectPrimitiveValue(simple.value.value, 'string');
   });
 
   it('should return errors when there are invalid element references', () => {
@@ -187,7 +193,8 @@ describe('#importFromFilePath()', () => {
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'http://foo.org', 'bar');
     expect(simple.description).to.equal('It is a simple entry with invalid element reference');
-    expectValue(simple.value, 'shr.test', 'Complex'); // Defaults to current namespace
+    expectMinMax(simple.value, 1, 1);
+    expectValue(simple.value.value, 'shr.test', 'Complex'); // Defaults to current namespace
   });
 
   it('should return errors when there are invalid fully qualified element references', () => {
@@ -197,7 +204,8 @@ describe('#importFromFilePath()', () => {
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'http://foo.org', 'bar');
     expect(simple.description).to.equal('It is a simple entry with invalid fully qualified element reference');
-    expectValue(simple.value, 'other.ns', 'Complex'); // Defaults to current namespace
+    expectMinMax(simple.value, 1, 1);
+    expectValue(simple.value.value, 'other.ns', 'Complex'); // Defaults to current namespace
   });
 
   it('should return errors when there are ambiguous element references', () => {
@@ -208,7 +216,8 @@ describe('#importFromFilePath()', () => {
     const amb = expectAndGetEntry(ns1, 0, 'Ambiguous');
     expect(amb.concepts).to.be.empty;
     expect(amb.description).to.equal('It is an entry that uses an ambiguous reference');
-    expectValue(amb.value, 'shr.test.two', 'Foo'); // Defaults to first encountered namespace
+    expectMinMax(amb.value, 1, 1);
+    expectValue(amb.value.value, 'shr.test.two', 'Foo'); // Defaults to first encountered namespace
   });
 
   it('should return errors when there are conflicting vocab references', () => {
@@ -225,7 +234,8 @@ describe('#importFromFilePath()', () => {
     expectConcept(conflicting.concepts[0], 'http://foo.org', 'bar'); // Default to the first encountered vocab
     expectConcept(conflicting.concepts[1], 'http://moo.org', 'car');
     expect(conflicting.description).to.equal('It is an entry that uses a conflicting vocab reference');
-    expectPrimitiveValue(conflicting.value, 'string');
+    expectMinMax(conflicting.value, 1, 1);
+    expectPrimitiveValue(conflicting.value.value, 'string');
   });
 });
 
@@ -236,36 +246,36 @@ function expectAndGetNamespace(results, namespaceIndex, expectedNamespace) {
   return ns;
 }
 
-function expectAndGetElement(namespace, defIndex, expectedName, expectedClass=DataElement) {
-  return expectAndGetBaseElement(namespace, defIndex, expectedName, expectedClass, false);
+function expectAndGetElement(namespace, defIndex, expectedName) {
+  return expectAndGetDataElement(namespace, defIndex, expectedName, false);
 }
 
-function expectAndGetEntry(namespace, defIndex, expectedName, expectedClass=DataElement) {
-  return expectAndGetBaseElement(namespace, defIndex, expectedName, expectedClass, true);
+function expectAndGetEntry(namespace, defIndex, expectedName) {
+  return expectAndGetDataElement(namespace, defIndex, expectedName, true);
 }
 
-function expectAndGetBaseElement(namespace, defIndex, expectedName, expectedClass, isEntry) {
+function expectAndGetDataElement(namespace, defIndex, expectedName, isEntry) {
   const def = namespace.definitions[defIndex];
-  expect(def).to.be.instanceof(expectedClass);
+  expect(def).to.be.instanceof(DataElement);
   expect(def.isEntry).to.equal(isEntry);
   expect(def.identifier.namespace).to.equal(namespace.namespace);
   expect(def.identifier.name).to.equal(expectedName);
   return def;
 }
 
-function expectAndGetSingleElement(results, expectedNamespace, expectedName, expectedClass=DataElement) {
-  return expectAndGetSingleBaseElement(results, expectedNamespace, expectedName, expectedClass, false);
+function expectAndGetSingleElement(results, expectedNamespace, expectedName) {
+  return expectAndGetSingleDataElement(results, expectedNamespace, expectedName, false);
 }
 
-function expectAndGetSingleEntry(results, expectedNamespace, expectedName, expectedClass=DataElement) {
-  return expectAndGetSingleBaseElement(results, expectedNamespace, expectedName, expectedClass, true);
+function expectAndGetSingleEntry(results, expectedNamespace, expectedName) {
+  return expectAndGetSingleDataElement(results, expectedNamespace, expectedName, true);
 }
 
-function expectAndGetSingleBaseElement(results, expectedNamespace, expectedName, expectedClass, isEntry) {
+function expectAndGetSingleDataElement(results, expectedNamespace, expectedName, isEntry) {
   expect(results).to.have.length(1);
   const ns = expectAndGetNamespace(results, 0, expectedNamespace);
   expect(ns.definitions).to.have.length(1);
-  return expectAndGetBaseElement(ns, 0, expectedName, expectedClass, isEntry);
+  return expectAndGetDataElement(ns, 0, expectedName, isEntry);
 }
 
 function expectValue(value, expectedNamespace, expectedName) {
@@ -281,16 +291,13 @@ function expectPrimitiveValue(value, expectedName) {
   expect(value.identifier.name).to.equal(expectedName);
 }
 
-function expectCodeValue(value, expectedUrl, expectedAncestor, expectedLabel) {
+function expectCodeValue(value, expectedUrl, expectedLabel) {
   if (typeof expectedUrl == 'undefined') {
     expect(value).to.be.instanceof(Value);
     expect(value.valueset).to.be.undefined;
-  } else if (typeof expectedAncestor == 'undefined') {
-    expect(value).to.be.instanceof(CodeFromValueSetValue);
-    expect(value.valueset).to.equal(expectedUrl);
   } else {
-    expect(value).to.be.instanceof(CodeFromAncestorValue);
-    expectConcept(value.ancestor, expectedUrl, expectedAncestor, expectedLabel);
+    expect(value).to.be.instanceof(CodeValue);
+    expect(value.valueset).to.equal(expectedUrl);
   }
   expect(value.identifier).to.be.instanceof(PrimitiveIdentifier);
   expect(value.identifier.namespace).to.equal('primitive');
@@ -303,9 +310,9 @@ function expectRefValue(value, expectedNamespace, expectedName) {
   expect(value.identifier.name).to.equal(expectedName);
 }
 
-function expectOrValues(value, size) {
-  expect(value).to.be.instanceof(OrValues);
-  expect(value.values).to.have.length(size);
+function expectChoiceValue(value, size) {
+  expect(value).to.be.instanceof(ChoiceValue);
+  expect(value.options).to.have.length(size);
 }
 
 function expectMinMax(quantifiedValue, expectedMin, expectedMax) {
@@ -320,25 +327,22 @@ function expectMinMax(quantifiedValue, expectedMin, expectedMax) {
   }
 }
 
-function expectOrValue(or, componentIndex, expectedNamespace, expectedName, expectedMin, expectedMax) {
-  let value = or.values[componentIndex];
-  if (typeof expectedMin != 'undefined') {
-    expectMinMax(value, expectedMin, expectedMax);
-    value = value.value;
-  }
-  expectValue(value, expectedNamespace, expectedName);
+function expectChoiceOption(choice, optionIndex, expectedNamespace, expectedName, expectedMin=1, expectedMax=1) {
+  let option = choice.options[optionIndex];
+  expectMinMax(option, expectedMin, expectedMax);
+  expectValue(option.value, expectedNamespace, expectedName);
 }
 
-function expectGroupElement(group, elementIndex, expectedNamespace, expectedName, expectedMin, expectedMax) {
-  const element = group.elements[elementIndex];
-  expectMinMax(element, expectedMin, expectedMax);
-  expectValue(element.value, expectedNamespace, expectedName);
+function expectSupportingElement(element, supportingIndex, expectedNamespace, expectedName, expectedMin, expectedMax) {
+  const sptEl = element.elements[supportingIndex];
+  expectMinMax(sptEl, expectedMin, expectedMax);
+  expectValue(sptEl.value, expectedNamespace, expectedName);
 }
 
-function expectConcept(concept, codesystem, code, label) {
-  expect(concept.codesystem).equals(codesystem);
+function expectConcept(concept, system, code, display) {
+  expect(concept.system).equals(system);
   expect(concept.code).equals(code);
-  expect(concept.label).equals(label);
+  expect(concept.display).equals(display);
 }
 
 function importFixture(name) {

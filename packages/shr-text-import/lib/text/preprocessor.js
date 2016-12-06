@@ -18,6 +18,18 @@ class Preprocessor extends SHRParserVisitor {
 
   visitDataDefsDoc(ctx) {
     const ns = ctx.dataDefsHeader().namespace().getText();
+    if (ctx.vocabularyDefs()) {
+      for (const def of ctx.vocabularyDefs().vocabularyDef()) {
+        const name = def.ALL_CAPS().getText();
+        var url;
+        if (typeof def.URL() != 'undefined') {
+          url = def.URL().getText();
+        } else if (typeof def.URN_OID() != 'undefined') {
+          url = def.URN_OID().getText();
+        }
+        this._data.registerVocabulary(ns, name, url);
+      }
+    }
     for (const def of ctx.dataDefs().dataDef()) {
       if (def.entryDef()) {
         const name = def.entryDef().entryHeader().simpleName().getText();
@@ -25,10 +37,6 @@ class Preprocessor extends SHRParserVisitor {
       } else if (def.elementDef()) {
         const name = def.elementDef().elementHeader().simpleName().getText();
         this._data.registerDefinition(ns, name);
-      } else if (def.vocabularyDef()) {
-        const name = def.vocabularyDef().ALL_CAPS().getText();
-        const url = def.vocabularyDef().URL().getText();
-        this._data.registerVocabulary(ns, name, url);
       }
     }
   }

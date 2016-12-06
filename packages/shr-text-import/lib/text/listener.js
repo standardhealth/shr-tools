@@ -1,6 +1,6 @@
 //const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserListener} = require('./parsers/SHRParserListener');
-const {Namespace, DataElement, Concept, Identifier, Group, Value, CodeFromValueSetValue, CodeFromAncestorValue, RefValue, PrimitiveIdentifier, QuantifiedValue, OrValues, PRIMITIVES} = require('../models');
+const {Namespace, DataElement, Concept, Identifier, Field, Value, CodeValue, RefValue, PrimitiveIdentifier, QuantifiedValue, ChoiceValue, PRIMITIVES} = require('../models');
 
 class Importer extends SHRParserListener {
   constructor(preprocessedData) {
@@ -44,11 +44,7 @@ class Importer extends SHRParserListener {
 
   enterElementDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.elementHeader().simpleName().getText());
-    if (ctx.singleValue()) {
-      this._currentDef = new DataElement(id);
-    } else {
-      this._currentDef = new Group(id);
-    }
+    this._currentDef = new DataElement(id);
   }
 
   exitElementDef(ctx) {
@@ -57,11 +53,7 @@ class Importer extends SHRParserListener {
 
   enterEntryDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.entryHeader().simpleName().getText());
-    if (ctx.singleValue()) {
-      this._currentDef = new DataElement(id, true);
-    } else {
-      this._currentDef = new Group(id, true);
-    }
+    this._currentDef = new DataElement(id, true);
   }
 
   exitEntryDef(ctx) {
@@ -78,55 +70,51 @@ class Importer extends SHRParserListener {
     }
   }
 
-  enterSingleValue(ctx) {
-    if (ctx.countedType().length > 1) {
-      const or = new OrValues();
-      for (const ct of ctx.countedType()) {
-        or.addValue(this.processCountedType(ct));
-      }
-      this._currentDef.value = or;
+  enterValue(ctx) {
+    let min = 1, max = 1;
+    var subCtx;
+    if (ctx.countedValue()) {
+      subCtx = ctx.countedValue();
+      [min, max] = this.getMinMax(subCtx.count());
     } else {
-      const value = this.processCountedType(ctx.countedType()[0]);
-      if (value.max == 1) {
-        this._currentDef.value = value.value; // no need for QuantifiedValue here
-      } else {
-        this._currentDef.value = value;
-      }
+      subCtx = ctx.uncountedValue();
     }
-  }
 
-  processCountedType(ctx) {
-    return this.processCountAndTypes(ctx.count(), ctx.types().type());
-  }
-
-  enterMultiValue(ctx) {
-    for (const ce of ctx.countedElements()) {
-      this._currentDef.addElement(this.processCountedElements(ce));
-    }
-  }
-
-  processCountedElements(ctx) {
-    if (ctx.countedElement().length > 1) {
-      const or = new OrValues();
-      for (const ce of ctx.countedElement()) {
-        or.addValue(this.processCountedElement(ce));
+    if (subCtx.valueType().length > 1) {
+      const choice = new ChoiceValue();
+      for (const ct of subCtx.valueType()) {
+        choice.addOption(new QuantifiedValue(this.processType(ct), 1, 1));
       }
-      return or;
+      this._currentDef.value = new Field(choice, min, max);
     } else {
-      return this.processCountedElement(ctx.countedElement()[0]);
+      const value = this.processType(subCtx.valueType()[0]);
+      this._currentDef.value = new Field(value, min, max);
     }
   }
 
-  processCountedElement(ctx) {
-    return this.processCountAndTypes(ctx.count(), ctx.elements().element());
+  enterSupportingValue(ctx) {
+    if (ctx.countedSupportingValue().length > 1) {
+      const choice = new ChoiceValue();
+      for (const csv of ctx.countedSupportingValue()) {
+        choice.addOption(this.processCountedSupportingValue(csv));
+      }
+      this._currentDef.addElement(new Field(choice, 1, 1));
+      return;
+    }
+    const qv = this.processCountedSupportingValue(ctx.countedSupportingValue()[0]);
+    this._currentDef.addElement(new Field(qv.value, qv.min, qv.max));
+  }
+
+  processCountedSupportingValue(ctx) {
+    return this.processCountAndTypes(ctx.count(), ctx.supportingValueType());
   }
 
   processCountAndTypes(countCtx, typeCtxArr) {
     var value;
     if (typeCtxArr.length > 1) {
-      value = new OrValues();
+      value = new ChoiceValue();
       for (const t of typeCtxArr) {
-        value.addValue(this.processType(t));
+        value.addOption(new QuantifiedValue(this.processType(t), 1, 1));
       }
     } else {
       value = this.processType(typeCtxArr[0]);
@@ -142,14 +130,9 @@ class Importer extends SHRParserListener {
       return new RefValue(this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText()));
     } else if (ctx.primitive()) {
       return new Value(new PrimitiveIdentifier(ctx.getText()));
-    } else if (ctx.codeConstraint()) {
-      if (ctx.codeConstraint().codeFromValueset()) {
-        const vs = ctx.codeConstraint().codeFromValueset().valueset().getText();
-        return new CodeFromValueSetValue(vs);
-      } else {
-        const fqn = ctx.codeConstraint().codeDescendent().fullyQualifiedCode();
-        return new CodeFromAncestorValue(this.processFullyQualifiedCode(fqn));
-      }
+    } else if (ctx.codeFromVS()) {
+      const vs = ctx.codeFromVS().valueset().getText();
+      return new CodeValue(vs);
     }
   }
 
@@ -165,8 +148,8 @@ class Importer extends SHRParserListener {
     }
     const code = ctx.code().CODE().getText().substr(1); // substr to skip the '#'
     const concept = new Concept(cs, code);
-    if (ctx.code().EXTRA_INFO()) {
-      concept.label = stripDelimitersFromToken(ctx.code().EXTRA_INFO());
+    if (ctx.code().STRING()) {
+      concept.display = stripDelimitersFromToken(ctx.code().STRING());
     }
     return concept;
   }
@@ -224,7 +207,7 @@ class Importer extends SHRParserListener {
 
 function stripDelimitersFromToken(tkn) {
   const str = tkn.getText();
-  // TODO: Also fix escaped double-quotes or brackets, but right now, the parser seems to be screwing those up.
+  // TODO: Also fix escaped double-quotes, but right now, the parser seems to be screwing those up.
   return str.substr(1,str.length -2);
 }
 

@@ -47,6 +47,51 @@ SHRParserListener.prototype.exitUsesStatement = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRParser#pathDefs.
+SHRParserListener.prototype.enterPathDefs = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#pathDefs.
+SHRParserListener.prototype.exitPathDefs = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#defaultPathDef.
+SHRParserListener.prototype.enterDefaultPathDef = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#defaultPathDef.
+SHRParserListener.prototype.exitDefaultPathDef = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#pathDef.
+SHRParserListener.prototype.enterPathDef = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#pathDef.
+SHRParserListener.prototype.exitPathDef = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#vocabularyDefs.
+SHRParserListener.prototype.enterVocabularyDefs = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#vocabularyDefs.
+SHRParserListener.prototype.exitVocabularyDefs = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#vocabularyDef.
+SHRParserListener.prototype.enterVocabularyDef = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#vocabularyDef.
+SHRParserListener.prototype.exitVocabularyDef = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRParser#dataDefs.
 SHRParserListener.prototype.enterDataDefs = function(ctx) {
 };
@@ -62,15 +107,6 @@ SHRParserListener.prototype.enterDataDef = function(ctx) {
 
 // Exit a parse tree produced by SHRParser#dataDef.
 SHRParserListener.prototype.exitDataDef = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#vocabularyDef.
-SHRParserListener.prototype.enterVocabularyDef = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#vocabularyDef.
-SHRParserListener.prototype.exitVocabularyDef = function(ctx) {
 };
 
 
@@ -128,84 +164,84 @@ SHRParserListener.prototype.exitElementProp = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#singleValue.
-SHRParserListener.prototype.enterSingleValue = function(ctx) {
+// Enter a parse tree produced by SHRParser#values.
+SHRParserListener.prototype.enterValues = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#singleValue.
-SHRParserListener.prototype.exitSingleValue = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#countedType.
-SHRParserListener.prototype.enterCountedType = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#countedType.
-SHRParserListener.prototype.exitCountedType = function(ctx) {
+// Exit a parse tree produced by SHRParser#values.
+SHRParserListener.prototype.exitValues = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#types.
-SHRParserListener.prototype.enterTypes = function(ctx) {
+// Enter a parse tree produced by SHRParser#value.
+SHRParserListener.prototype.enterValue = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#types.
-SHRParserListener.prototype.exitTypes = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#type.
-SHRParserListener.prototype.enterType = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#type.
-SHRParserListener.prototype.exitType = function(ctx) {
+// Exit a parse tree produced by SHRParser#value.
+SHRParserListener.prototype.exitValue = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#multiValue.
-SHRParserListener.prototype.enterMultiValue = function(ctx) {
+// Enter a parse tree produced by SHRParser#uncountedValue.
+SHRParserListener.prototype.enterUncountedValue = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#multiValue.
-SHRParserListener.prototype.exitMultiValue = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#countedElements.
-SHRParserListener.prototype.enterCountedElements = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#countedElements.
-SHRParserListener.prototype.exitCountedElements = function(ctx) {
+// Exit a parse tree produced by SHRParser#uncountedValue.
+SHRParserListener.prototype.exitUncountedValue = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#countedElement.
-SHRParserListener.prototype.enterCountedElement = function(ctx) {
+// Enter a parse tree produced by SHRParser#countedValue.
+SHRParserListener.prototype.enterCountedValue = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#countedElement.
-SHRParserListener.prototype.exitCountedElement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#elements.
-SHRParserListener.prototype.enterElements = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#elements.
-SHRParserListener.prototype.exitElements = function(ctx) {
+// Exit a parse tree produced by SHRParser#countedValue.
+SHRParserListener.prototype.exitCountedValue = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#element.
-SHRParserListener.prototype.enterElement = function(ctx) {
+// Enter a parse tree produced by SHRParser#valueType.
+SHRParserListener.prototype.enterValueType = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#element.
-SHRParserListener.prototype.exitElement = function(ctx) {
+// Exit a parse tree produced by SHRParser#valueType.
+SHRParserListener.prototype.exitValueType = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#supportingValue.
+SHRParserListener.prototype.enterSupportingValue = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#supportingValue.
+SHRParserListener.prototype.exitSupportingValue = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#countedSupportingValue.
+SHRParserListener.prototype.enterCountedSupportingValue = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#countedSupportingValue.
+SHRParserListener.prototype.exitCountedSupportingValue = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#supportingValueType.
+SHRParserListener.prototype.enterSupportingValueType = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#supportingValueType.
+SHRParserListener.prototype.exitSupportingValueType = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#basedOnProp.
+SHRParserListener.prototype.enterBasedOnProp = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#basedOnProp.
+SHRParserListener.prototype.exitBasedOnProp = function(ctx) {
 };
 
 
@@ -299,6 +335,51 @@ SHRParserListener.prototype.exitValuesetValue = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRParser#valuesetInlineValue.
+SHRParserListener.prototype.enterValuesetInlineValue = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#valuesetInlineValue.
+SHRParserListener.prototype.exitValuesetInlineValue = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#valuesetDescendingFrom.
+SHRParserListener.prototype.enterValuesetDescendingFrom = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#valuesetDescendingFrom.
+SHRParserListener.prototype.exitValuesetDescendingFrom = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#valuesetFrom.
+SHRParserListener.prototype.enterValuesetFrom = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#valuesetFrom.
+SHRParserListener.prototype.exitValuesetFrom = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#valuesetProps.
+SHRParserListener.prototype.enterValuesetProps = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#valuesetProps.
+SHRParserListener.prototype.exitValuesetProps = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#valuesetProp.
+SHRParserListener.prototype.enterValuesetProp = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#valuesetProp.
+SHRParserListener.prototype.exitValuesetProp = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRParser#namespace.
 SHRParserListener.prototype.enterNamespace = function(ctx) {
 };
@@ -362,30 +443,66 @@ SHRParserListener.prototype.exitFullyQualifiedCode = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#codeConstraint.
-SHRParserListener.prototype.enterCodeConstraint = function(ctx) {
+// Enter a parse tree produced by SHRParser#codeFromVS.
+SHRParserListener.prototype.enterCodeFromVS = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#codeConstraint.
-SHRParserListener.prototype.exitCodeConstraint = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#codeFromValueset.
-SHRParserListener.prototype.enterCodeFromValueset = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#codeFromValueset.
-SHRParserListener.prototype.exitCodeFromValueset = function(ctx) {
+// Exit a parse tree produced by SHRParser#codeFromVS.
+SHRParserListener.prototype.exitCodeFromVS = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#codeDescendent.
-SHRParserListener.prototype.enterCodeDescendent = function(ctx) {
+// Enter a parse tree produced by SHRParser#elementWithConstraint.
+SHRParserListener.prototype.enterElementWithConstraint = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#codeDescendent.
-SHRParserListener.prototype.exitCodeDescendent = function(ctx) {
+// Exit a parse tree produced by SHRParser#elementWithConstraint.
+SHRParserListener.prototype.exitElementWithConstraint = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#elementConstraint.
+SHRParserListener.prototype.enterElementConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#elementConstraint.
+SHRParserListener.prototype.exitElementConstraint = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#elementCodeVSConstraint.
+SHRParserListener.prototype.enterElementCodeVSConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#elementCodeVSConstraint.
+SHRParserListener.prototype.exitElementCodeVSConstraint = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#elementCodeValueConstraint.
+SHRParserListener.prototype.enterElementCodeValueConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#elementCodeValueConstraint.
+SHRParserListener.prototype.exitElementCodeValueConstraint = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#elementTypeConstraint.
+SHRParserListener.prototype.enterElementTypeConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#elementTypeConstraint.
+SHRParserListener.prototype.exitElementTypeConstraint = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#quantityWithUnits.
+SHRParserListener.prototype.enterQuantityWithUnits = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#quantityWithUnits.
+SHRParserListener.prototype.exitQuantityWithUnits = function(ctx) {
 };
 
 

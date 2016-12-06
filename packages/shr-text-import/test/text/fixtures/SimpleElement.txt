@@ -5,4 +5,4 @@ Vocabulary:     FOO = http://foo.org
 Element:        Simple
 Concept:        FOO #bar
 Description:    "It is a simple element"
-1..1            string
+Value:          string

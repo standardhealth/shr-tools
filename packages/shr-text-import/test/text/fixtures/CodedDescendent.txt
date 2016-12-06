@@ -1,7 +1,0 @@
-DataDefinitions:  shr.test
-
-Vocabulary:     CODED = http://standardhealthrecord.org/test/vs/Coded
-
-Entry:          CodedDescendent
-Description:    "It is a coded entry"
-1..1            code descending from CODED #grandpa [Grandfather]

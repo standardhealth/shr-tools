@@ -1,9 +1,9 @@
 DataDefinitions: shr.test
 
-Entry:          SimpleDate
+EntryElement:   SimpleDate
 Description:    "It is a simple date entry"
-1..1            date
+Value:          date
 
 Element:        Coded
 Description:    "It is a coded element"
-1..1            code from http://standardhealthrecord.org/test/vs/Coded
+Value:          code from http://standardhealthrecord.org/test/vs/Coded

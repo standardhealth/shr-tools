@@ -13,10 +13,10 @@ Description:  "It is a group element"
 1..1    other.ns.Thing
 
 Element:        Simple
-1..1            string
+Value:          string
 
 Element:        Coded
-1..1            code
+Value:          code
 
 Element:        Simple2
-1..1            string
+Value:          string

@@ -1,8 +1,8 @@
 DataDefinitions:  shr.test
 
-Entry:          Choice
+EntryElement:   Choice
 Description:    "It is an entry with a choice"
-1..1            (date or other.ns.Period or Simple)
+Value:          (date or other.ns.Period or Simple)
 
 Element:        Simple
-1..1            string
+Value:          string

@@ -1,5 +1,5 @@
 DataDefinitions:  shr.test
 
-Entry:          MultiString
+EntryElement:   MultiString
 Description:    "It is a multi-string entry"
-1..*            string
+Value:          1..* string

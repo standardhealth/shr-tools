@@ -1,5 +1,5 @@
 DataDefinitions:  shr.test.three
 
-Entry:          Foo
+EntryElement:   Foo
 Description:    "It is a Foo from shr.test.three"
-1..1            string
+Value:          string

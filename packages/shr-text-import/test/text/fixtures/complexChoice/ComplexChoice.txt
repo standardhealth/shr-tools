@@ -1,8 +1,8 @@
 DataDefinitions:  shr.test
 
-Entry:          ComplexChoice
+EntryElement:   ComplexChoice
 Description:    "It is an entry with a complex choice"
-1..2 (date or other.ns.Period) or 3..4 Simple
+Value:          1..2 (date or other.ns.Period) or 3..4 Simple
 
 Element:        Simple
-1..1            string
+Value:          string

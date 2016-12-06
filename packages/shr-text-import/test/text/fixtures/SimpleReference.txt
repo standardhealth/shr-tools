@@ -1,8 +1,8 @@
 DataDefinitions:  shr.test
 
-Entry:          SimpleReference
+EntryElement:   SimpleReference
 Description:    "It is a reference to a simple element"
-1..1            ref(Simple)
+Value:          ref(Simple)
 
 Element:        Simple
-1..1            string
+Value:          string
