@@ -129,10 +129,10 @@ class Value extends Identifiable {
   }
 }
 
-// CodeValue assumes identifier PrimitiveIdentifier('code')
+// CodeValue may be a primitive 'code' or a 'Coding'
 class CodeValue extends Value {
-  constructor(valueset) {
-    super(new PrimitiveIdentifier('code'));
+  constructor(identifier, valueset) {
+    super(identifier);
     this._valueset = valueset; // string in url form
   }
 
