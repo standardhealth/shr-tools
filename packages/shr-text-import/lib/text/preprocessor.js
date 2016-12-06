@@ -18,6 +18,24 @@ class Preprocessor extends SHRParserVisitor {
 
   visitDataDefsDoc(ctx) {
     const ns = ctx.dataDefsHeader().namespace().getText();
+    if (ctx.pathDefs()) {
+      const removeTrailingSlash = function(url) {
+        while (url.endsWith('/')) { url = url.substring(0, url.length - 1); }
+        return url;
+      };
+      if (ctx.pathDefs().defaultPathDef()) {
+        const url = removeTrailingSlash(ctx.pathDefs().defaultPathDef().URL().getText());
+        this._data.registerPath(ns, 'default', url);
+      }
+      for (const def of ctx.pathDefs().pathDef()) {
+        const name = def.ALL_CAPS().getText();
+        let url = removeTrailingSlash(def.URL().getText());
+        while (url.endsWith('/')) {
+          url = url.substring(0, url.length - 1);
+        }
+        this._data.registerPath(ns, name, url);
+      }
+    }
     if (ctx.vocabularyDefs()) {
       for (const def of ctx.vocabularyDefs().vocabularyDef()) {
         const name = def.ALL_CAPS().getText();
@@ -44,8 +62,18 @@ class Preprocessor extends SHRParserVisitor {
 
 class PreprocessedData {
   constructor() {
+    this._paths = {}; //map[namespace]map[name]url
     this._vocabularies = {}; // map[namespace]map[name]url
     this._definitions = {}; // map[namespace]map[name]boolean
+  }
+
+  registerPath(namespace, name, url) {
+    let ns = this._paths[namespace];
+    if (typeof ns == 'undefined') {
+      ns = {};
+      this._paths[namespace] = ns;
+    }
+    ns[name] = url;
   }
 
   registerVocabulary(namespace, name, url) {
@@ -64,6 +92,44 @@ class PreprocessedData {
       this._definitions[namespace] = ns;
     }
     ns[name] = true;
+  }
+
+  resolvePath(name, ...namespace) {
+    // First ensure namespaces were passed in
+    if (namespace.length == 0) {
+      return { error: `Cannot resolve path without namespaces` };
+    }
+
+    // Special handling for default paths
+    if (name == 'default') {
+      const ns = namespace[0];
+      if (this._paths[ns] && this._paths[ns]['default']) {
+        return { url: this._paths[ns]['default'] };
+      }
+      // Fell through -- didn't find default
+      return { error: `No default path found in namespace: ${ns}` };
+    }
+
+    // Attempt to resolve specific path
+    const result = {};
+    const foundNamespaces = [];
+    let conflict = false;
+    for (const ns of namespace) {
+      if (this._paths[ns] && this._paths[ns][name]) {
+        if (!result.hasOwnProperty('url')) {
+          result['url'] = this._paths[ns][name];
+        } else if (result.url != this._paths[ns][name]) {
+          conflict = true;
+        }
+        foundNamespaces.push(ns);
+      }
+    }
+    if (!result.hasOwnProperty('url')) {
+      result['error'] = `Failed to resolve path for ${name}.`;
+    } else if (conflict) {
+      result['error'] = `Found conflicting path for ${name} in multiple namespaces: ${foundNamespaces}`;
+    }
+    return result;
   }
 
   resolveVocabulary(name, ...namespace) {

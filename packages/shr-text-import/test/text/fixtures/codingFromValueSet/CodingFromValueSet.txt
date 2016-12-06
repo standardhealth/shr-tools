@@ -1,0 +1,7 @@
+DataDefinitions:  shr.test
+Uses:             shr.core
+Vocabulary:       MTH = http://uts.nlm.nih.gov/metathesaurus
+
+EntryElement:   CodingFromValueSet
+Description:    "It is a coded entry with Coding"
+Value:          Coding from http://standardhealthrecord.org/test/vs/Coded

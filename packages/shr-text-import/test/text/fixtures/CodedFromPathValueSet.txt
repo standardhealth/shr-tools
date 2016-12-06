@@ -1,0 +1,7 @@
+DataDefinitions:  shr.test
+
+Path: TESTVS = http://standardhealthrecord.org/test/vs
+
+EntryElement:   CodedFromPathValueSet
+Description:    "It is a coded entry that uses a valueset with a path"
+Value:          code from TESTVS/Coded

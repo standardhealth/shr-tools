@@ -60,6 +60,10 @@ class Importer extends SHRParserListener {
     this.pushCurrentDefinition();
   }
 
+  enterBasedOnProp(ctx) {
+    this._currentDef.addBasedOn(this.resolveToIdentifier(ctx.simpleOrFQName().getText()));
+  }
+
   enterDescriptionProp(ctx) {
     this._currentDef.description = stripDelimitersFromToken(ctx.STRING());
   }
@@ -131,8 +135,28 @@ class Importer extends SHRParserListener {
     } else if (ctx.primitive()) {
       return new Value(new PrimitiveIdentifier(ctx.getText()));
     } else if (ctx.codeFromVS()) {
-      const vs = ctx.codeFromVS().valueset().getText();
-      return new CodeValue(vs);
+      let codeIdentifier = new PrimitiveIdentifier('code');
+      if (ctx.codeFromVS().KW_CODING_FROM()) {
+        codeIdentifier = this.resolveToIdentifier('Coding');
+      }
+      let vs = ctx.codeFromVS().valueset().getText();
+      if (ctx.codeFromVS().valueset().PATH_URL() || ctx.codeFromVS().valueset().simpleName()) {
+        var path, name;
+        if (ctx.codeFromVS().valueset().PATH_URL()) {
+          [path, name] =  ctx.codeFromVS().valueset().PATH_URL().getText().split('/', 2);
+        } else {
+          path = 'default';
+          name = ctx.codeFromVS().valueset().simpleName().getText();
+        }
+        const resolution = this._preprocessedData.resolvePath(path, this._currentNs, ...this._usesNs);
+        if (resolution.error) {
+          this.addError(resolution.error);
+        }
+        if (resolution.url) {
+          vs = `${resolution.url}/${name}`;
+        }
+      }
+      return new CodeValue(codeIdentifier, vs);
     }
   }
 

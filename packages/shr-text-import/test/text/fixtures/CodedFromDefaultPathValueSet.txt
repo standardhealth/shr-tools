@@ -1,0 +1,8 @@
+DataDefinitions:  shr.test
+
+Path: http://standardhealthrecord.org/test/vs
+Path: OTHERVS = http://standardhealthrecord.org/test/other/vs
+
+EntryElement:   CodedFromDefaultPathValueSet
+Description:    "It is a coded entry that uses a valueset with a default path"
+Value:          code from Coded

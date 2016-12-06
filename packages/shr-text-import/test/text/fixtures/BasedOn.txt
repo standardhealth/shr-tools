@@ -2,16 +2,18 @@ DataDefinitions:  shr.test
 
 Vocabulary:     FOO = http://foo.org
 Vocabulary:     BOO = http://boo.org
-Vocabulary:     ZOO = http://zoo.org
 
-EntryElement: SimpleGroup
-Concept:      FOO #bar, BOO #far, ZOO #bear
-Description:  "It is a group entry with a code value"
-Value:        code
-0..1    Simple
+EntryElement: SimpleBasedOn
+BasedOn:      SimpleBase
+Concept:      FOO #bar
+Description:  "It is a simple definition based on SimpleBase"
+Value:        Simple
+
+Element:      SimpleBase
+Concept:      BOO #far
+Description:  "It is a base for SimpleBasedOn"
 0..*    Coded
 1..*    Simple2
-1..1    other.ns.Thing
 
 Element:        Simple
 Value:          string

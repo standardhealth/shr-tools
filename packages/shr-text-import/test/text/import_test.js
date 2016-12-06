@@ -1,6 +1,6 @@
 const {expect} = require('chai');
 const {importFromFilePath} = require('../../lib/text/import');
-const {Namespace, DataElement, Value, CodeValue, RefValue, ChoiceValue, QuantifiedValue, PrimitiveIdentifier} = require('../../lib/models');
+const {Namespace, DataElement, Value, CodeValue, RefValue, ChoiceValue, QuantifiedValue, Identifier, PrimitiveIdentifier} = require('../../lib/models');
 
 describe('#importFromFilePath()', () => {
   it('should correctly import a simple entry', () => {
@@ -41,6 +41,34 @@ describe('#importFromFilePath()', () => {
     expect(coded.description).to.equal('It is a coded entry');
     expectMinMax(coded.value, 1, 1);
     expectCodeValue(coded.value.value, 'http://standardhealthrecord.org/test/vs/Coded');
+  });
+
+  it('should correctly import an entry with a code from a valueset using a path', () => {
+    const {namespaces, errors} = importFixture('CodedFromPathValueSet');
+    expect(errors).is.empty;
+    const coded = expectAndGetSingleEntry(namespaces, 'shr.test', 'CodedFromPathValueSet');
+    expect(coded.description).to.equal('It is a coded entry that uses a valueset with a path');
+    expectMinMax(coded.value, 1, 1);
+    expectCodeValue(coded.value.value, 'http://standardhealthrecord.org/test/vs/Coded');
+  });
+
+  it('should correctly import an entry with a code from a valueset using a default path', () => {
+    const {namespaces, errors} = importFixture('CodedFromDefaultPathValueSet');
+    expect(errors).is.empty;
+    const coded = expectAndGetSingleEntry(namespaces, 'shr.test', 'CodedFromDefaultPathValueSet');
+    expect(coded.description).to.equal('It is a coded entry that uses a valueset with a default path');
+    expectMinMax(coded.value, 1, 1);
+    expectCodeValue(coded.value.value, 'http://standardhealthrecord.org/test/vs/Coded');
+  });
+
+  it('should correctly import an entry with a Coding from a valueset', () => {
+    const {namespaces, errors} = importFixtureFolder('codingFromValueSet');
+    expect(errors).is.empty;
+    const ns = expectAndGetNamespace(namespaces, 1, 'shr.test');
+    const codingFromVS = expectAndGetEntry(ns, 0, 'CodingFromValueSet');
+    expect(codingFromVS.description).to.equal('It is a coded entry with Coding');
+    expectMinMax(codingFromVS.value, 1, 1);
+    expectCodingValue(codingFromVS.value.value, 'http://standardhealthrecord.org/test/vs/Coded');
   });
 
   it('should correctly import a reference to simple element', () => {
@@ -96,7 +124,7 @@ describe('#importFromFilePath()', () => {
   });
   */
 
-  it('should correctly import a group entry', () => {
+  it('should correctly import a group entry with a code value', () => {
     const {namespaces, errors} = importFixtureFolder('group');
     expect(errors).is.empty;
     const ns = expectAndGetNamespace(namespaces, 0, 'shr.test');
@@ -105,7 +133,9 @@ describe('#importFromFilePath()', () => {
     expectConcept(group.concepts[0], 'http://foo.org', 'bar');
     expectConcept(group.concepts[1], 'http://boo.org', 'far');
     expectConcept(group.concepts[2], 'http://zoo.org', 'bear');
-    expect(group.description).to.equal('It is a group entry');
+    expect(group.description).to.equal('It is a group entry with a code value');
+    expectMinMax(group.value, 1, 1);
+    expectPrimitiveValue(group.value.value, 'code');
     expect(group.elements).to.have.length(4);
     expectSupportingElement(group, 0, 'shr.test', 'Simple', 0, 1);
     expectSupportingElement(group, 1, 'shr.test', 'Coded', 0);
@@ -128,6 +158,23 @@ describe('#importFromFilePath()', () => {
     expectSupportingElement(group, 1, 'shr.test', 'Coded', 0);
     expectSupportingElement(group, 2, 'shr.test', 'Simple2', 1);
     expectSupportingElement(group, 3, 'other.ns', 'Thing', 1, 1);
+  });
+
+  it('should correctly import an entry based on an element', () => {
+    const {namespaces, errors} = importFixture('BasedOn');
+    expect(errors).is.empty;
+    const ns = expectAndGetNamespace(namespaces, 0, 'shr.test');
+    const basedOn = expectAndGetEntry(ns, 0, 'SimpleBasedOn');
+    expect(basedOn.basedOn).to.have.length(1);
+    expect(basedOn.basedOn[0].namespace).to.equal('shr.test');
+    expect(basedOn.basedOn[0].name).to.equal('SimpleBase');
+    expect(basedOn.concepts).to.have.length(1);
+    expectConcept(basedOn.concepts[0], 'http://foo.org', 'bar');
+    expect(basedOn.description).to.equal('It is a simple definition based on SimpleBase');
+    expectMinMax(basedOn.value, 1, 1);
+    expectValue(basedOn.value.value, 'shr.test', 'Simple');
+
+    // TODO: Actually pull in the fields from the base
   });
 
   it('should correctly import multiple elements in a single namespace', () => {
@@ -292,6 +339,20 @@ function expectPrimitiveValue(value, expectedName) {
 }
 
 function expectCodeValue(value, expectedUrl, expectedLabel) {
+  expectCodedValue(value, expectedUrl, expectedLabel);
+  expect(value.identifier).to.be.instanceof(PrimitiveIdentifier);
+  expect(value.identifier.namespace).to.equal('primitive');
+  expect(value.identifier.name).to.equal('code');
+}
+
+function expectCodingValue(value, expectedUrl, expectedLabel) {
+  expectCodedValue(value, expectedUrl, expectedLabel);
+  expect(value.identifier).to.be.instanceof(Identifier);
+  expect(value.identifier.namespace).to.equal('shr.core');
+  expect(value.identifier.name).to.equal('Coding');
+}
+
+function expectCodedValue(value, expectedUrl, expectedLabel) {
   if (typeof expectedUrl == 'undefined') {
     expect(value).to.be.instanceof(Value);
     expect(value.valueset).to.be.undefined;
@@ -299,9 +360,6 @@ function expectCodeValue(value, expectedUrl, expectedLabel) {
     expect(value).to.be.instanceof(CodeValue);
     expect(value.valueset).to.equal(expectedUrl);
   }
-  expect(value.identifier).to.be.instanceof(PrimitiveIdentifier);
-  expect(value.identifier.namespace).to.equal('primitive');
-  expect(value.identifier.name).to.equal('code');
 }
 
 function expectRefValue(value, expectedNamespace, expectedName) {
