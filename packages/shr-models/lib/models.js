@@ -159,7 +159,7 @@ class ChoiceValue {
 
 class QuantifiedValue {
   constructor(value, min, max) {
-    this._value = value; // Value|OrValues
+    this._value = value; // Value|ChoiceValue
     this._min = min; // number
     this._max = max; // number|undefined
   }
