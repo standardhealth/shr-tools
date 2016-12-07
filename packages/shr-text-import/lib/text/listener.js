@@ -1,5 +1,6 @@
 //const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserListener} = require('./parsers/SHRParserListener');
+const {SHRParser} = require('./parsers/SHRParser');
 const {Namespace, DataElement, Concept, Identifier, Field, Value, CodeValue, RefValue, PrimitiveIdentifier, QuantifiedValue, ChoiceValue, PRIMITIVES} = require('../models');
 
 class Importer extends SHRParserListener {
@@ -65,10 +66,18 @@ class Importer extends SHRParserListener {
   }
 
   enterDescriptionProp(ctx) {
+    if (ctx.parentCtx instanceof SHRParser.ValuesetPropContext) {
+      // Skip this -- currently unsupported
+      return;
+    }
     this._currentDef.description = stripDelimitersFromToken(ctx.STRING());
   }
 
   enterConcepts(ctx) {
+    if (ctx.parentCtx.parentCtx instanceof SHRParser.ValuesetPropContext) {
+      // Skip this -- currently unsupported
+      return;
+    }
     for (const fqc of ctx.fullyQualifiedCode()) {
       this._currentDef.addConcept(this.processFullyQualifiedCode(fqc));
     }
@@ -130,6 +139,12 @@ class Importer extends SHRParserListener {
   processType(ctx) {
     if (ctx.simpleOrFQName()) {
       return new Value(this.resolveToIdentifier(ctx.simpleOrFQName().getText()));
+    } else if (ctx.elementWithConstraint()) {
+      let cst = ctx.elementWithConstraint();
+      if (cst.elementConstraint().elementTypeConstraint()) {
+        cst = cst.elementConstraint().elementTypeConstraint();
+      }
+      return new Value(this.resolveToIdentifier(cst.simpleOrFQName().getText()));
     } else if (ctx.ref()) {
       return new RefValue(this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText()));
     } else if (ctx.primitive()) {

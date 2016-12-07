@@ -40,9 +40,9 @@ class Preprocessor extends SHRParserVisitor {
       for (const def of ctx.vocabularyDefs().vocabularyDef()) {
         const name = def.ALL_CAPS().getText();
         var url;
-        if (typeof def.URL() != 'undefined') {
+        if (def.URL()) {
           url = def.URL().getText();
-        } else if (typeof def.URN_OID() != 'undefined') {
+        } else if (def.URN_OID()) {
           url = def.URN_OID().getText();
         }
         this._data.registerVocabulary(ns, name, url);
@@ -106,8 +106,9 @@ class PreprocessedData {
       if (this._paths[ns] && this._paths[ns]['default']) {
         return { url: this._paths[ns]['default'] };
       }
-      // Fell through -- didn't find default
-      return { error: `No default path found in namespace: ${ns}` };
+      // Didn't find default, so infer default from namespace
+      const parts = ns.split('.');
+      return 'http://standardhealthrecord.org/' + parts.join('/') + '/vs';
     }
 
     // Attempt to resolve specific path
