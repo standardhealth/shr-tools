@@ -1,7 +1,7 @@
 //const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserListener} = require('./parsers/SHRParserListener');
 const {SHRParser} = require('./parsers/SHRParser');
-const {Namespace, DataElement, Concept, Identifier, Field, Value, CodeValue, RefValue, PrimitiveIdentifier, QuantifiedValue, ChoiceValue, PRIMITIVES} = require('../models');
+const {Namespace, DataElement, Concept, Identifier, Field, Value, CodeValue, RefValue, PrimitiveIdentifier, QuantifiedValue, ChoiceValue, TBD, PRIMITIVES} = require('../models');
 
 class Importer extends SHRParserListener {
   constructor(preprocessedData) {
@@ -147,6 +147,11 @@ class Importer extends SHRParserListener {
       return new Value(this.resolveToIdentifier(cst.simpleOrFQName().getText()));
     } else if (ctx.ref()) {
       return new RefValue(this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText()));
+    } else if (ctx.tbd()) {
+      if (ctx.tbd().STRING()) {
+        return new TBD(stripDelimitersFromToken(ctx.tbd().STRING()));
+      }
+      return new TBD();
     } else if (ctx.primitive()) {
       return new Value(new PrimitiveIdentifier(ctx.getText()));
     } else if (ctx.codeFromVS()) {

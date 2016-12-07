@@ -282,8 +282,8 @@ SHRParserVisitor.prototype.visitElementTypeConstraint = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#quantityWithUnits.
-SHRParserVisitor.prototype.visitQuantityWithUnits = function(ctx) {
+// Visit a parse tree produced by SHRParser#elementWithUnitsConstraint.
+SHRParserVisitor.prototype.visitElementWithUnitsConstraint = function(ctx) {
 };
 
 
@@ -299,6 +299,11 @@ SHRParserVisitor.prototype.visitPrimitive = function(ctx) {
 
 // Visit a parse tree produced by SHRParser#count.
 SHRParserVisitor.prototype.visitCount = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#tbd.
+SHRParserVisitor.prototype.visitTbd = function(ctx) {
 };
 
 

@@ -36,7 +36,7 @@ KW_UNSIGNED_INT=35
 KW_POSITIVE_INT=36
 KW_CODE_FROM=37
 KW_CODING_FROM=38
-KW_QUANTITY_WITH_UNITS=39
+KW_UNITS=39
 DOT=40
 EQUAL=41
 COMMA=42
@@ -97,7 +97,7 @@ LINE_COMMENT=61
 'positiveInt'=36
 'code from'=37
 'Coding from'=38
-'Quantity with units'=39
+'units'=39
 '.'=40
 '='=41
 ','=42
