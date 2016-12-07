@@ -200,6 +200,14 @@ class Field extends QuantifiedValue {
   }
 }
 
+class TBD {
+  constructor(text) {
+    this._text = text;
+  }
+
+  get text() { return this._text; }
+}
+
 const PRIMITIVE_NS = 'primitive';
 const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'code', 'id',
   'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time'];
@@ -210,4 +218,4 @@ function assertNoOverwrite(property, element, propName, newValue) {
   }
 }
 
-module.exports = {Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Field, QuantifiedValue, Value, CodeValue, RefValue, ChoiceValue, PRIMITIVE_NS, PRIMITIVES};
+module.exports = {Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Field, QuantifiedValue, Value, CodeValue, RefValue, ChoiceValue, TBD, PRIMITIVE_NS, PRIMITIVES};
