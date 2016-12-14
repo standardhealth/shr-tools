@@ -2,12 +2,11 @@ class Namespace {
   constructor(namespace) {
     this._namespace = namespace; // string
     this._definitionIdentifiers = []; // Identifier[] (keeping track in an array allows us to preserve order)
-    this._definitionMap = {}; // obj[string]=DataElement|Group
+    this._definitionMap = {}; // obj[string]=DataElement
   }
 
   get namespace() { return this._namespace; }
 
-  // a definition might be a DataElement or a Group
   get definitions() { return this._definitionIdentifiers.map(id => this._definitionMap[id]); }
   addDefinition(definition) {
     if (typeof this.lookup(definition.identifier.name) === 'undefined') {
@@ -21,26 +20,18 @@ class Namespace {
   }
 }
 
-class Identifiable {
-  constructor(identifier) {
-    if (this.constructor === Identifiable) {
-      throw new TypeError('Abstract class "Identifiable" cannot be instantiated directly.');
-    }
-
-    this._identifier = identifier; // Identifier
-  }
-
-  get identifier() { return this._identifier; }
-}
-
-class DataElement extends Identifiable {
+class DataElement {
   constructor(identifier, isEntry=false) {
-    super(identifier);
+    this._identifier = identifier; // Identifier
     this._isEntry = isEntry; // boolean
     this._basedOn = [];      // Identifier[]
     this._concepts = [];     // Concept[]
-    this._elements = [];     // QuantifiedValue[]
+    this._fields = [];       // Value[] (and its subclasses) -- excluding primitive values
+    // also contains _value and _description
   }
+
+  // identifier is the unique Identifier (namespace+name) for the DataElement
+  get identifier() { return this._identifier; }
 
   // isEntry is a boolean flag indicating if this element is an entry
   get isEntry() { return this._isEntry; }
@@ -49,7 +40,7 @@ class DataElement extends Identifiable {
   }
 
   // basedOn is an array of identifiers that the data element is based on.  This means that it takes on the value
-  // and elements of any data element it is based on, and can potentially override/constrain it.
+  // and fields of any data element it is based on, and can potentially override/constrain it.
   get basedOn() { return this._basedOn; }
   addBasedOn(basedOn) {
     this._basedOn.push(basedOn);
@@ -71,19 +62,51 @@ class DataElement extends Identifiable {
     this._description = description;
   }
 
-  // Data elements should have a value, or a set of elements, or both a value and set of elements.  If a value exists,
-  // it will always be a Field (usually with a cardinality: 1..1).
+  // Data elements should have a value, or a set of fields, or both a value and set of fields.
   get value() { return this._value; }
   set value(value) {
     assertNoOverwrite(this._value, this, 'value', value);
     this._value = value;
   }
 
-  // Data elements should have a value, or a set of elements, or both a value and set of elements.  Each element in the
-  // set of elements will be a Field and the Field.value must NOT be a primitive value.
-  get elements() { return this._elements; }
-  addElement(quantifiedValue) {
-    this._elements.push(quantifiedValue);
+  // Data elements should have a value, or a set of fields, or both a value and set of fields.
+  // Fields cannot be primitive values.
+  get fields() { return this._fields; }
+
+  // addField contains special logic to handle IncompleteValues.  If an IncompleteValue matches an already existing
+  // field, it will just apply the constraints to that field.  If no matching field is found, it will be pushed
+  // to the fields as-is -- and when fields are added after, they will be checked against any IncompleteValues
+  // and resolved as appropriate.  Note that constraints on the Value can also be added by passing an IncompleteValue
+  // matching the value's identifier to this function.
+  addField(field) {
+    if (field instanceof IncompleteValue) {
+      // Search through the value and fields to see if this matches an already existing value or field
+      for (const el of [this.value, ...this._fields]) {
+        if (el && el.identifier && el.identifier.equals(field.identifier)) {
+          // Found a match!  Just add the constraints to the existing one!
+          for (const cst of field.constraints) {
+            el.addConstraint(cst);
+          }
+          return;
+        }
+      }
+    }
+
+    // Search through the fields to see if there are any IncompleteValues we can now resolve
+    for (let i=0; i < this._fields.length; i++) {
+      const el = this._fields[i];
+      if (el instanceof IncompleteValue && field.identifier && el.identifier.equals(field.identifier)) {
+        // Found a match!  Add the constraints to the field and replace the IncompleteValue
+        for (const cst of el.constraints) {
+          field.addConstraint(cst);
+        }
+        this._fields[i] = field;
+        return;
+      }
+    }
+
+    // If we got this far, it's just a normal add (no interplay with IncompleteValues)
+    this._fields.push(field);
   }
 }
 
@@ -112,8 +135,15 @@ class Identifier {
   get name() { return this._name; }
   get fqn() { return this.isPrimitive() ? this._name : `${this._namespace}.${this._name}`; }
 
-  isPrimitive() {
+  get isPrimitive() {
     return this._namespace == PRIMITIVE_NS;
+  }
+
+  equals(other) {
+    if (typeof other === 'undefined' || other == null || !(other instanceof Identifier)) {
+      return false;
+    }
+    return this.name == other.name && this.namespace == other.namespace;
   }
 }
 
@@ -123,80 +153,184 @@ class PrimitiveIdentifier extends Identifier {
   }
 }
 
-class Value extends Identifiable {
-  constructor(identifier) {
-    super(identifier);
+class Cardinality {
+  constructor(min, max) {
+    this._min = min; // number
+    this._max = max; // number|undefined
+  }
+
+  get min() { return this._min; }
+  get max() { return this._max; }
+  get isMaxUnbounded() {
+    return typeof this._max === 'undefined' || this._max == null;
+  }
+  get isExactlyOne() {
+    return this._min == 1 && this._max == 1;
+  }
+  get isZeroOrOne() {
+    return this._min == 0 && this._max == 1;
+  }
+  get isZeroedOut() {
+    return this._min == 0 && this._max == 0;
+  }
+  get isList() {
+    return this._max > 1 || this.isMaxUnbounded;
   }
 }
 
-// CodeValue may be a primitive 'code' or a 'Coding'
-class CodeValue extends Value {
-  constructor(identifier, valueset) {
-    super(identifier);
-    this._valueset = valueset; // string in url form
+class Constraint {
+  constructor(path = []) {
+    this._path = path;
   }
 
-  get valueset() { return this._valueset; }
-}
-
-class RefValue extends Value {
-  constructor(identifier) {
-    super(identifier);
+  get path() { return this._path; }
+  hasPath() {
+    return this._path.length > 0;
   }
 }
 
-class ChoiceValue {
+// ValueSetConstraint only makes sense on a code or Coding type value
+class ValueSetConstraint extends Constraint {
+  constructor(valueSet, path) {
+    super(path);
+    this._valueSet = valueSet;
+  }
+
+  get valueSet() { return this._valueSet; }
+}
+
+// CodeConstraint only makes sense on a code or Coding type value
+class CodeConstraint extends Constraint {
+  constructor(code, path) {
+    super(path);
+    this._code = code;
+  }
+
+  get code() { return this._code; }
+}
+
+class TypeConstraint extends Constraint {
+  constructor(isA, path) {
+    super(path);
+    this._isA = isA;
+  }
+
+  get isA() { return this._isA; }
+}
+
+class ChildCardConstraint extends Constraint {
+  constructor(card, path) {
+    super(path);
+    this._card = card;
+  }
+
+  get card() { return this._card; }
+}
+
+class ConstraintsFilter {
+  constructor(constraints = []) {
+    this._constraints = constraints;
+  }
+
+  get constraints() { return this._constraints; }
+  get hasConstraints() { return this._constraints.length > 0; }
+
+  get single() {
+    if (this._constraints.length == 1) {
+      return this._constraints[0];
+    } else if (this._constraints.length > 1) {
+      console.warn(`WARNING: Expecting single constraint but got ${this._constraints.length}`);
+    }
+  }
+
+  get own() {
+    return new ConstraintsFilter(this._constraints.filter(c => c.path.length == 0));
+  }
+
+  get child() {
+    return new ConstraintsFilter(this._constraints.filter(c => c.path.length > 0));
+  }
+
+  get valueSet() {
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof ValueSetConstraint));
+  }
+
+  get code() {
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof CodeConstraint));
+  }
+
+  get type() {
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof TypeConstraint));
+  }
+
+  get card() {
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof ChildCardConstraint));
+  }
+}
+
+class Value {
   constructor() {
-    this._options = []; // QuantifiedValue[]
+    this._constraints = [];
   }
 
-  // Each option in the choice must be a QuantifiedValue
+  // card is the Cardinality for the value.
+  get card() { return this._card; }
+  set card(card) {
+    this._card = card;
+  }
+  // setMinMax is a convenience funcion for setting cardinality
+  setMinMax(min, max) {
+    this._card = new Cardinality(min, max);
+  }
+
+  get constraints() { return this._constraints; }
+  addConstraint(constraint) {
+    this._constraints.push(constraint);
+  }
+  get hasConstraints() {
+    return this._constraints.length > 0;
+  }
+
+  get constraintsFilter() {
+    return new ConstraintsFilter(this._constraints);
+  }
+}
+
+class IdentifiableValue extends Value {
+  constructor(identifier) {
+    super();
+    this._identifier = identifier; // Identifier
+  }
+
+  get identifier() { return this._identifier; }
+}
+
+class RefValue extends IdentifiableValue {
+  constructor(identifier) {
+    super(identifier);
+  }
+}
+
+class ChoiceValue extends Value {
+  constructor() {
+    super();
+    this._options = []; // Value[]
+  }
+
+  // Each option in the choice must be a subclass of Value
   get options() { return this._options; }
   addOption(option) {
     this._options.push(option);
   }
 }
 
-class QuantifiedValue {
-  constructor(value, min, max) {
-    this._value = value; // Value|ChoiceValue
-    this._min = min; // number
-    this._max = max; // number|undefined
-  }
-
-  get value() { return this._value; }
-  set value(value) {
-    this._value = value;
-  }
-  get min() { return this._min; }
-  get max() { return this._max; }
-
-  isMaxUnbounded() {
-    return typeof this._max === 'undefined' || this._max == null;
-  }
-}
-
-class Field extends QuantifiedValue {
-  constructor(value, min, max) {
-    super(value, min, max);
-    this._isConstrained = false;
-  }
-
-  // base is an Identifier that indicates the base data element this field came from.  If the field did not come from
-  // a base data element, then the base value is undefined.
-  get base() { return this._base; }
-  set base(base) {
-    this._base = base;
-  }
-
-  // indicates if the field came from a base (value is true) or is defined only by this data element (value is false)
-  get isFromBase() { return this._base instanceof Identifier; }
-
-  // indicates if this data element constrained the field from the base data element.  If the field was not defined in
-  // a base data element (e.g., isFromBase is false), then isConstrained is false.
-  get isConstrained() { return this._isConstraint; }
-  set isConstrained(isConstrained) {
-    this._isConstrained = isConstrained;
+// IncompleteValue provides a place to put constraints when the full definition of the thing being constrained is
+// not yet known.  This can happen when putting a constraint on something from a "BasedOn" data element, or when a
+// constraint is applied without knowing the full context of the current data element (in the case of the importer).
+// If a data element is fully resolved, it should never contain an IncompleteValue.
+class IncompleteValue extends IdentifiableValue {
+  constructor(identifier) {
+    super(identifier);
   }
 }
 
@@ -218,4 +352,4 @@ function assertNoOverwrite(property, element, propName, newValue) {
   }
 }
 
-module.exports = {Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Field, QuantifiedValue, Value, CodeValue, RefValue, ChoiceValue, TBD, PRIMITIVE_NS, PRIMITIVES};
+module.exports = {Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, Cardinality, ValueSetConstraint, CodeConstraint, TypeConstraint, ChildCardConstraint, PRIMITIVE_NS, PRIMITIVES};
