@@ -1,0 +1,16 @@
+DataDefinitions:  shr.test
+
+EntryElement:   VSConstraintOnValueChild
+Description:    "It is an entry with a valueset constraint on the value's child"
+Value:          Complex
+1..2            Complex.CodedFromValueSet with code from http://standardhealthrecord.org/test/vs/Coded2
+
+Element:        Complex
+0..1            Simple
+1..*            CodedFromValueSet
+
+Element:        CodedFromValueSet
+Value:          code from http://standardhealthrecord.org/test/vs/Coded
+
+Element:        Simple
+Value:          string

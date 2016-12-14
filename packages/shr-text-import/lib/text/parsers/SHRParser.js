@@ -223,14 +223,14 @@ var ruleNames =  [ "shr", "dataDefsDoc", "dataDefsHeader", "usesStatement",
                    "vocabularyDef", "dataDefs", "dataDef", "elementDef", 
                    "elementHeader", "entryDef", "entryHeader", "elementProps", 
                    "elementProp", "values", "value", "uncountedValue", "countedValue", 
-                   "valueType", "supportingValue", "countedSupportingValue", 
-                   "supportingValueType", "basedOnProp", "conceptProp", 
-                   "concepts", "descriptionProp", "valuesetDefsDoc", "valuesetDefsHeader", 
-                   "valuesetDefs", "valuesetDef", "valuesetHeader", "valuesetValues", 
-                   "valuesetValue", "valuesetInlineValue", "valuesetDescendingFrom", 
-                   "valuesetFrom", "valuesetProps", "valuesetProp", "namespace", 
-                   "simpleName", "fullyQualifiedName", "simpleOrFQName", 
-                   "ref", "code", "fullyQualifiedCode", "codeFromVS", "elementWithConstraint", 
+                   "valueType", "field", "countedField", "fieldType", "basedOnProp", 
+                   "conceptProp", "concepts", "descriptionProp", "valuesetDefsDoc", 
+                   "valuesetDefsHeader", "valuesetDefs", "valuesetDef", 
+                   "valuesetHeader", "valuesetValues", "valuesetValue", 
+                   "valuesetInlineValue", "valuesetDescendingFrom", "valuesetFrom", 
+                   "valuesetProps", "valuesetProp", "namespace", "simpleName", 
+                   "fullyQualifiedName", "simpleOrFQName", "ref", "code", 
+                   "fullyQualifiedCode", "codeFromVS", "elementWithConstraint", 
                    "elementConstraint", "elementCodeVSConstraint", "elementCodeValueConstraint", 
                    "elementTypeConstraint", "elementWithUnitsConstraint", 
                    "valueset", "primitive", "count", "tbd" ];
@@ -338,9 +338,9 @@ SHRParser.RULE_value = 18;
 SHRParser.RULE_uncountedValue = 19;
 SHRParser.RULE_countedValue = 20;
 SHRParser.RULE_valueType = 21;
-SHRParser.RULE_supportingValue = 22;
-SHRParser.RULE_countedSupportingValue = 23;
-SHRParser.RULE_supportingValueType = 24;
+SHRParser.RULE_field = 22;
+SHRParser.RULE_countedField = 23;
+SHRParser.RULE_fieldType = 24;
 SHRParser.RULE_basedOnProp = 25;
 SHRParser.RULE_conceptProp = 26;
 SHRParser.RULE_concepts = 27;
@@ -1875,14 +1875,14 @@ ValuesContext.prototype.value = function() {
     return this.getTypedRuleContext(ValueContext,0);
 };
 
-ValuesContext.prototype.supportingValue = function(i) {
+ValuesContext.prototype.field = function(i) {
     if(i===undefined) {
         i = null;
     }
     if(i===null) {
-        return this.getTypedRuleContexts(SupportingValueContext);
+        return this.getTypedRuleContexts(FieldContext);
     } else {
-        return this.getTypedRuleContext(SupportingValueContext,i);
+        return this.getTypedRuleContext(FieldContext,i);
     }
 };
 
@@ -1929,7 +1929,7 @@ SHRParser.prototype.values = function() {
             _la = this._input.LA(1);
             while(_la===SHRParser.WHOLE_NUMBER) {
                 this.state = 220;
-                this.supportingValue();
+                this.field();
                 this.state = 225;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
@@ -1950,7 +1950,7 @@ SHRParser.prototype.values = function() {
             _la = this._input.LA(1);
             do {
                 this.state = 229;
-                this.supportingValue();
+                this.field();
                 this.state = 232; 
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
@@ -2496,7 +2496,7 @@ SHRParser.prototype.valueType = function() {
     return localctx;
 };
 
-function SupportingValueContext(parser, parent, invokingState) {
+function FieldContext(parser, parent, invokingState) {
 	if(parent===undefined) {
 	    parent = null;
 	}
@@ -2505,25 +2505,25 @@ function SupportingValueContext(parser, parent, invokingState) {
 	}
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
-    this.ruleIndex = SHRParser.RULE_supportingValue;
+    this.ruleIndex = SHRParser.RULE_field;
     return this;
 }
 
-SupportingValueContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
-SupportingValueContext.prototype.constructor = SupportingValueContext;
+FieldContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
+FieldContext.prototype.constructor = FieldContext;
 
-SupportingValueContext.prototype.countedSupportingValue = function(i) {
+FieldContext.prototype.countedField = function(i) {
     if(i===undefined) {
         i = null;
     }
     if(i===null) {
-        return this.getTypedRuleContexts(CountedSupportingValueContext);
+        return this.getTypedRuleContexts(CountedFieldContext);
     } else {
-        return this.getTypedRuleContext(CountedSupportingValueContext,i);
+        return this.getTypedRuleContext(CountedFieldContext,i);
     }
 };
 
-SupportingValueContext.prototype.KW_OR = function(i) {
+FieldContext.prototype.KW_OR = function(i) {
 	if(i===undefined) {
 		i = null;
 	}
@@ -2535,21 +2535,21 @@ SupportingValueContext.prototype.KW_OR = function(i) {
 };
 
 
-SupportingValueContext.prototype.enterRule = function(listener) {
+FieldContext.prototype.enterRule = function(listener) {
     if(listener instanceof SHRParserListener ) {
-        listener.enterSupportingValue(this);
+        listener.enterField(this);
 	}
 };
 
-SupportingValueContext.prototype.exitRule = function(listener) {
+FieldContext.prototype.exitRule = function(listener) {
     if(listener instanceof SHRParserListener ) {
-        listener.exitSupportingValue(this);
+        listener.exitField(this);
 	}
 };
 
-SupportingValueContext.prototype.accept = function(visitor) {
+FieldContext.prototype.accept = function(visitor) {
     if ( visitor instanceof SHRParserVisitor ) {
-        return visitor.visitSupportingValue(this);
+        return visitor.visitField(this);
     } else {
         return visitor.visitChildren(this);
     }
@@ -2558,17 +2558,17 @@ SupportingValueContext.prototype.accept = function(visitor) {
 
 
 
-SHRParser.SupportingValueContext = SupportingValueContext;
+SHRParser.FieldContext = FieldContext;
 
-SHRParser.prototype.supportingValue = function() {
+SHRParser.prototype.field = function() {
 
-    var localctx = new SupportingValueContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 44, SHRParser.RULE_supportingValue);
+    var localctx = new FieldContext(this, this._ctx, this.state);
+    this.enterRule(localctx, 44, SHRParser.RULE_field);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
         this.state = 287;
-        this.countedSupportingValue();
+        this.countedField();
         this.state = 292;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
@@ -2576,7 +2576,7 @@ SHRParser.prototype.supportingValue = function() {
             this.state = 288;
             this.match(SHRParser.KW_OR);
             this.state = 289;
-            this.countedSupportingValue();
+            this.countedField();
             this.state = 294;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
@@ -2595,7 +2595,7 @@ SHRParser.prototype.supportingValue = function() {
     return localctx;
 };
 
-function CountedSupportingValueContext(parser, parent, invokingState) {
+function CountedFieldContext(parser, parent, invokingState) {
 	if(parent===undefined) {
 	    parent = null;
 	}
@@ -2604,37 +2604,37 @@ function CountedSupportingValueContext(parser, parent, invokingState) {
 	}
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
-    this.ruleIndex = SHRParser.RULE_countedSupportingValue;
+    this.ruleIndex = SHRParser.RULE_countedField;
     return this;
 }
 
-CountedSupportingValueContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
-CountedSupportingValueContext.prototype.constructor = CountedSupportingValueContext;
+CountedFieldContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
+CountedFieldContext.prototype.constructor = CountedFieldContext;
 
-CountedSupportingValueContext.prototype.count = function() {
+CountedFieldContext.prototype.count = function() {
     return this.getTypedRuleContext(CountContext,0);
 };
 
-CountedSupportingValueContext.prototype.supportingValueType = function(i) {
+CountedFieldContext.prototype.fieldType = function(i) {
     if(i===undefined) {
         i = null;
     }
     if(i===null) {
-        return this.getTypedRuleContexts(SupportingValueTypeContext);
+        return this.getTypedRuleContexts(FieldTypeContext);
     } else {
-        return this.getTypedRuleContext(SupportingValueTypeContext,i);
+        return this.getTypedRuleContext(FieldTypeContext,i);
     }
 };
 
-CountedSupportingValueContext.prototype.OPEN_PAREN = function() {
+CountedFieldContext.prototype.OPEN_PAREN = function() {
     return this.getToken(SHRParser.OPEN_PAREN, 0);
 };
 
-CountedSupportingValueContext.prototype.CLOSE_PAREN = function() {
+CountedFieldContext.prototype.CLOSE_PAREN = function() {
     return this.getToken(SHRParser.CLOSE_PAREN, 0);
 };
 
-CountedSupportingValueContext.prototype.KW_OR = function(i) {
+CountedFieldContext.prototype.KW_OR = function(i) {
 	if(i===undefined) {
 		i = null;
 	}
@@ -2646,21 +2646,21 @@ CountedSupportingValueContext.prototype.KW_OR = function(i) {
 };
 
 
-CountedSupportingValueContext.prototype.enterRule = function(listener) {
+CountedFieldContext.prototype.enterRule = function(listener) {
     if(listener instanceof SHRParserListener ) {
-        listener.enterCountedSupportingValue(this);
+        listener.enterCountedField(this);
 	}
 };
 
-CountedSupportingValueContext.prototype.exitRule = function(listener) {
+CountedFieldContext.prototype.exitRule = function(listener) {
     if(listener instanceof SHRParserListener ) {
-        listener.exitCountedSupportingValue(this);
+        listener.exitCountedField(this);
 	}
 };
 
-CountedSupportingValueContext.prototype.accept = function(visitor) {
+CountedFieldContext.prototype.accept = function(visitor) {
     if ( visitor instanceof SHRParserVisitor ) {
-        return visitor.visitCountedSupportingValue(this);
+        return visitor.visitCountedField(this);
     } else {
         return visitor.visitChildren(this);
     }
@@ -2669,12 +2669,12 @@ CountedSupportingValueContext.prototype.accept = function(visitor) {
 
 
 
-SHRParser.CountedSupportingValueContext = CountedSupportingValueContext;
+SHRParser.CountedFieldContext = CountedFieldContext;
 
-SHRParser.prototype.countedSupportingValue = function() {
+SHRParser.prototype.countedField = function() {
 
-    var localctx = new CountedSupportingValueContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 46, SHRParser.RULE_countedSupportingValue);
+    var localctx = new CountedFieldContext(this, this._ctx, this.state);
+    this.enterRule(localctx, 46, SHRParser.RULE_countedField);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
@@ -2688,13 +2688,13 @@ SHRParser.prototype.countedSupportingValue = function() {
         case SHRParser.UPPER_WORD:
         case SHRParser.DOT_SEPARATED_UW:
             this.state = 296;
-            this.supportingValueType();
+            this.fieldType();
             break;
         case SHRParser.OPEN_PAREN:
             this.state = 297;
             this.match(SHRParser.OPEN_PAREN);
             this.state = 298;
-            this.supportingValueType();
+            this.fieldType();
             this.state = 303;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
@@ -2702,7 +2702,7 @@ SHRParser.prototype.countedSupportingValue = function() {
                 this.state = 299;
                 this.match(SHRParser.KW_OR);
                 this.state = 300;
-                this.supportingValueType();
+                this.fieldType();
                 this.state = 305;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
@@ -2727,7 +2727,7 @@ SHRParser.prototype.countedSupportingValue = function() {
     return localctx;
 };
 
-function SupportingValueTypeContext(parser, parent, invokingState) {
+function FieldTypeContext(parser, parent, invokingState) {
 	if(parent===undefined) {
 	    parent = null;
 	}
@@ -2736,44 +2736,44 @@ function SupportingValueTypeContext(parser, parent, invokingState) {
 	}
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
-    this.ruleIndex = SHRParser.RULE_supportingValueType;
+    this.ruleIndex = SHRParser.RULE_fieldType;
     return this;
 }
 
-SupportingValueTypeContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
-SupportingValueTypeContext.prototype.constructor = SupportingValueTypeContext;
+FieldTypeContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
+FieldTypeContext.prototype.constructor = FieldTypeContext;
 
-SupportingValueTypeContext.prototype.simpleOrFQName = function() {
+FieldTypeContext.prototype.simpleOrFQName = function() {
     return this.getTypedRuleContext(SimpleOrFQNameContext,0);
 };
 
-SupportingValueTypeContext.prototype.ref = function() {
+FieldTypeContext.prototype.ref = function() {
     return this.getTypedRuleContext(RefContext,0);
 };
 
-SupportingValueTypeContext.prototype.elementWithConstraint = function() {
+FieldTypeContext.prototype.elementWithConstraint = function() {
     return this.getTypedRuleContext(ElementWithConstraintContext,0);
 };
 
-SupportingValueTypeContext.prototype.tbd = function() {
+FieldTypeContext.prototype.tbd = function() {
     return this.getTypedRuleContext(TbdContext,0);
 };
 
-SupportingValueTypeContext.prototype.enterRule = function(listener) {
+FieldTypeContext.prototype.enterRule = function(listener) {
     if(listener instanceof SHRParserListener ) {
-        listener.enterSupportingValueType(this);
+        listener.enterFieldType(this);
 	}
 };
 
-SupportingValueTypeContext.prototype.exitRule = function(listener) {
+FieldTypeContext.prototype.exitRule = function(listener) {
     if(listener instanceof SHRParserListener ) {
-        listener.exitSupportingValueType(this);
+        listener.exitFieldType(this);
 	}
 };
 
-SupportingValueTypeContext.prototype.accept = function(visitor) {
+FieldTypeContext.prototype.accept = function(visitor) {
     if ( visitor instanceof SHRParserVisitor ) {
-        return visitor.visitSupportingValueType(this);
+        return visitor.visitFieldType(this);
     } else {
         return visitor.visitChildren(this);
     }
@@ -2782,12 +2782,12 @@ SupportingValueTypeContext.prototype.accept = function(visitor) {
 
 
 
-SHRParser.SupportingValueTypeContext = SupportingValueTypeContext;
+SHRParser.FieldTypeContext = FieldTypeContext;
 
-SHRParser.prototype.supportingValueType = function() {
+SHRParser.prototype.fieldType = function() {
 
-    var localctx = new SupportingValueTypeContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 48, SHRParser.RULE_supportingValueType);
+    var localctx = new FieldTypeContext(this, this._ctx, this.state);
+    this.enterRule(localctx, 48, SHRParser.RULE_fieldType);
     try {
         this.state = 314;
         var la_ = this._interp.adaptivePredict(this._input,30,this._ctx);

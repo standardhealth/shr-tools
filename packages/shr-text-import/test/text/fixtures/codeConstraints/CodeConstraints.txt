@@ -1,0 +1,30 @@
+DataDefinitions:  shr.test
+Uses:            shr.core
+
+Vocabulary:     FOO = http://foo.org
+
+EntryElement:   CodeConstraintOnValue
+Description:    "It is an entry with a code constraint on the value"
+Value:          Coding is FOO#bar "FooBar"
+
+EntryElement:   CodeConstraintOnValueChild
+Description:    "It is an entry with a code constraint on the value's child"
+Value:          CodedFromValueSet
+1..1            CodedFromValueSet.Coding is FOO#bar "FooBar"
+
+EntryElement:   CodeConstraintOnField
+Description:    "It is a group entry with a code constraint on a field"
+0..1            Simple
+0..1            Coding is FOO#bar "FooBar"
+
+EntryElement:   CodeConstraintOnFieldChild
+Description:    "It is a group entry with a code constraint on a field's child"
+0..1            Simple
+0..1            CodedFromValueSet
+1..1            CodedFromValueSet.Coding is FOO#bar "FooBar"
+
+Element:        Simple
+Value:          string
+
+Element:        CodedFromValueSet
+Value:          Coding from http://standardhealthrecord.org/test/vs/Coded

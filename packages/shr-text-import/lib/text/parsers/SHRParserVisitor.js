@@ -122,18 +122,18 @@ SHRParserVisitor.prototype.visitValueType = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#supportingValue.
-SHRParserVisitor.prototype.visitSupportingValue = function(ctx) {
+// Visit a parse tree produced by SHRParser#field.
+SHRParserVisitor.prototype.visitField = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#countedSupportingValue.
-SHRParserVisitor.prototype.visitCountedSupportingValue = function(ctx) {
+// Visit a parse tree produced by SHRParser#countedField.
+SHRParserVisitor.prototype.visitCountedField = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#supportingValueType.
-SHRParserVisitor.prototype.visitSupportingValueType = function(ctx) {
+// Visit a parse tree produced by SHRParser#fieldType.
+SHRParserVisitor.prototype.visitFieldType = function(ctx) {
 };
 
 

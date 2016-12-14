@@ -1,0 +1,8 @@
+DataDefinitions:  shr.test
+
+EntryElement:   VSConstraintOnValue
+Description:    "It is an entry with a valueset constraint on the value"
+Value:          CodedFromValueSet with code from http://standardhealthrecord.org/test/vs/Coded2
+
+Element:   CodedFromValueSet
+Value:     code from http://standardhealthrecord.org/test/vs/Coded

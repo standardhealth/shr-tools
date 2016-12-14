@@ -1,0 +1,30 @@
+DataDefinitions:  shr.test
+Uses:            shr.core
+
+Vocabulary:		  UCUM = http://unitsofmeasure.org
+
+EntryElement:   UnitConstraintOnValue
+Description:    "It is an entry with a unit constraint on the value"
+Value:          Quantity with units UCUM#dl "DeciLiter"
+
+EntryElement:   UnitConstraintOnValueChild
+Description:    "It is an entry with a unit constraint on the value's child"
+Value:          Volume
+1..1            Volume.Quantity with units UCUM#dl "DeciLiter"
+
+EntryElement:   UnitConstraintOnField
+Description:    "It is a group entry with a unit constraint on a field"
+0..1            Simple
+0..1            Quantity with units UCUM#dl "DeciLiter"
+
+EntryElement:   UnitConstraintOnFieldChild
+Description:    "It is a group entry with unit constraint on a field's child"
+0..1            Simple
+0..1            Volume
+1..1            Volume.Quantity with units UCUM#dl "DeciLiter"
+
+Element:        Simple
+Value:          string
+
+Element:        Volume
+Value:          Quantity

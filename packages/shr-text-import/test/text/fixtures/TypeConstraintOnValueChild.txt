@@ -1,0 +1,24 @@
+DataDefinitions:  shr.test
+
+EntryElement: TypeConstraintOnValueChild
+BasedOn:      ComplexBase
+Description:  "It is a simple element based on SimpleBase and specializing the value's child"
+Value:        Complex
+1..1          Complex.Simple is Simple2
+
+Element:      ComplexBase
+Value:        Complex
+
+Element:        Complex
+0..1            Simple
+1..*            CodedFromValueSet
+
+Element:        Simple
+Value:          string
+
+Element:        Simple2
+BasedOn:        Simple
+Value:          string
+
+Element:        CodedFromValueSet
+Value:          code from http://standardhealthrecord.org/test/vs/Coded

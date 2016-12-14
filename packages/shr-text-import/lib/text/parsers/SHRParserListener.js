@@ -209,30 +209,30 @@ SHRParserListener.prototype.exitValueType = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#supportingValue.
-SHRParserListener.prototype.enterSupportingValue = function(ctx) {
+// Enter a parse tree produced by SHRParser#field.
+SHRParserListener.prototype.enterField = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#supportingValue.
-SHRParserListener.prototype.exitSupportingValue = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#countedSupportingValue.
-SHRParserListener.prototype.enterCountedSupportingValue = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#countedSupportingValue.
-SHRParserListener.prototype.exitCountedSupportingValue = function(ctx) {
+// Exit a parse tree produced by SHRParser#field.
+SHRParserListener.prototype.exitField = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#supportingValueType.
-SHRParserListener.prototype.enterSupportingValueType = function(ctx) {
+// Enter a parse tree produced by SHRParser#countedField.
+SHRParserListener.prototype.enterCountedField = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#supportingValueType.
-SHRParserListener.prototype.exitSupportingValueType = function(ctx) {
+// Exit a parse tree produced by SHRParser#countedField.
+SHRParserListener.prototype.exitCountedField = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#fieldType.
+SHRParserListener.prototype.enterFieldType = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#fieldType.
+SHRParserListener.prototype.exitFieldType = function(ctx) {
 };
 
 
