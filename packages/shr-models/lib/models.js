@@ -14,6 +14,11 @@ class Namespace {
     }
     this._definitionMap[definition.identifier.name] = definition;
   }
+  // withDefinition is a convenience function for chaining
+  withDefinition(definition) {
+    this.addDefinition(definition);
+    return this;
+  }
 
   lookup(name) {
     return this._definitionMap[name];
@@ -56,6 +61,11 @@ class DataElement {
   addBasedOn(basedOn) {
     this._basedOn.push(basedOn);
   }
+  // withBasedOn is a convenience function for chaining
+  withBasedOn(basedOn) {
+    this.addBasedOn(basedOn);
+    return this;
+  }
 
   // concepts are an array of Concept
   get concepts() { return this._concepts; }
@@ -65,35 +75,60 @@ class DataElement {
   addConcept(concept) {
     this._concepts.push(concept);
   }
+  // withConcept is a convenience function for chaining
+  withConcept(concept) {
+    this.addConcept(concept);
+    return this;
+  }
 
   // a description is a string
   get description() { return this._description; }
   set description(description) {
-    assertNoOverwrite(this._description, this, 'description', description);
     this._description = description;
+  }
+  // withDescription is a convenience function for chaining
+  withDescription(description) {
+    this.description = description;
+    return this;
   }
 
   // Data elements should have a value, or a set of fields, or both a value and set of fields.
   get value() { return this._value; }
   set value(value) {
-    assertNoOverwrite(this._value, this, 'value', value);
     this._value = value;
+  }
+  // withValue is a convenience function for chaining
+  withValue(value) {
+    this.value = value;
+    return this;
   }
 
   // Data elements should have a value, or a set of fields, or both a value and set of fields.
   // Fields cannot be primitive values.
   get fields() { return this._fields; }
+  set fields(fields) {
+    this._fields = fields;
+  }
   addField(field) {
     this._fields.push(field);
+  }
+  // withField is a convenience function for chaining
+  withField(field) {
+    this.addField(field);
+    return this;
   }
 
   clone() {
     const clone = new DataElement(this._identifier.clone(), this._isEntry);
+    clone._description = this._description;
     for (const basedOn of this._basedOn) {
       clone._basedOn.push(basedOn.clone());
     }
     for (const concept of this._concepts) {
       clone._concepts.push(concept.clone());
+    }
+    if (this._value) {
+      clone._value = this._value.clone();
     }
     for (const field of this._fields) {
       clone._fields.push(field.clone());
@@ -129,7 +164,7 @@ class Identifier {
 
   get namespace() { return this._namespace; }
   get name() { return this._name; }
-  get fqn() { return this.isPrimitive() ? this._name : `${this._namespace}.${this._name}`; }
+  get fqn() { return this.isPrimitive ? this._name : `${this._namespace}.${this._name}`; }
 
   get isPrimitive() {
     return this._namespace == PRIMITIVE_NS;
@@ -345,9 +380,19 @@ class Value {
   set card(card) {
     this._card = card;
   }
+  // withCard is a convenience function for chaining
+  withCard(card) {
+    this.card = card;
+    return this;
+  }
   // setMinMax is a convenience funcion for setting cardinality
   setMinMax(min, max) {
     this._card = new Cardinality(min, max);
+  }
+  // withMinMax is a convenience function for chaining
+  withMinMax(min, max) {
+    this.setMinMax(min, max);
+    return this;
   }
 
   get effectiveCard() {
@@ -365,6 +410,11 @@ class Value {
   addConstraint(constraint) {
     this._constraints.push(constraint);
   }
+  // withConstraint is a convenience function for chaining
+  withConstraint(constraint) {
+    this.addConstraint(constraint);
+    return this;
+  }
   get hasConstraints() {
     return this._constraints.length > 0;
   }
@@ -373,7 +423,9 @@ class Value {
   }
 
   _clonePropertiesTo(clone) {
-    clone._card = this._card.clone();
+    if (this._card) {
+      clone._card = this._card.clone();
+    }
     for (const constraint of this._constraints) {
       clone._constraints.push(constraint.clone());
     }
@@ -439,6 +491,11 @@ class ChoiceValue extends Value {
   addOption(option) {
     this._options.push(option);
   }
+  // withOption is a convenience function for chaining
+  withOption(option) {
+    this.addOption(option);
+    return this;
+  }
 
   clone() {
     const clone = new ChoiceValue();
@@ -501,11 +558,5 @@ class TBD {
 const PRIMITIVE_NS = 'primitive';
 const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'code', 'id',
   'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time'];
-
-function assertNoOverwrite(property, element, propName, newValue) {
-  if (typeof property !== 'undefined') {
-    console.warn(`WARNING: Overwriting ${element.identifier.fqn}['${propName}']:\n\twas: ${property}\n\tnow: ${newValue}`);
-  }
-}
 
 module.exports = {Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint, PRIMITIVE_NS, PRIMITIVES};
