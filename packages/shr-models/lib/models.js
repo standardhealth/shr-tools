@@ -18,6 +18,17 @@ class Namespace {
   lookup(name) {
     return this._definitionMap[name];
   }
+
+  clone() {
+    const clone = new Namespace(this._namespace);
+    for (const id of this._definitionIdentifiers) {
+      clone._definitionIdentifiers.push(id.clone());
+    }
+    for (const name of this._definitionMap) {
+      clone._definitionMap[name] = this._definitionMap[name].clone();
+    }
+    return clone;
+  }
 }
 
 class DataElement {
@@ -72,41 +83,22 @@ class DataElement {
   // Data elements should have a value, or a set of fields, or both a value and set of fields.
   // Fields cannot be primitive values.
   get fields() { return this._fields; }
-
-  // addField contains special logic to handle IncompleteValues.  If an IncompleteValue matches an already existing
-  // field, it will just apply the constraints to that field.  If no matching field is found, it will be pushed
-  // to the fields as-is -- and when fields are added after, they will be checked against any IncompleteValues
-  // and resolved as appropriate.  Note that constraints on the Value can also be added by passing an IncompleteValue
-  // matching the value's identifier to this function.
   addField(field) {
-    if (field instanceof IncompleteValue) {
-      // Search through the value and fields to see if this matches an already existing value or field
-      for (const el of [this.value, ...this._fields]) {
-        if (el && el.identifier && el.identifier.equals(field.identifier)) {
-          // Found a match!  Just add the constraints to the existing one!
-          for (const cst of field.constraints) {
-            el.addConstraint(cst);
-          }
-          return;
-        }
-      }
-    }
-
-    // Search through the fields to see if there are any IncompleteValues we can now resolve
-    for (let i=0; i < this._fields.length; i++) {
-      const el = this._fields[i];
-      if (el instanceof IncompleteValue && field.identifier && el.identifier.equals(field.identifier)) {
-        // Found a match!  Add the constraints to the field and replace the IncompleteValue
-        for (const cst of el.constraints) {
-          field.addConstraint(cst);
-        }
-        this._fields[i] = field;
-        return;
-      }
-    }
-
-    // If we got this far, it's just a normal add (no interplay with IncompleteValues)
     this._fields.push(field);
+  }
+
+  clone() {
+    const clone = new DataElement(this._identifier.clone(), this._isEntry);
+    for (const basedOn of this._basedOn) {
+      clone._basedOn.push(basedOn.clone());
+    }
+    for (const concept of this._concepts) {
+      clone._concepts.push(concept.clone());
+    }
+    for (const field of this._fields) {
+      clone._fields.push(field.clone());
+    }
+    return clone;
   }
 }
 
@@ -122,6 +114,10 @@ class Concept {
   get display() { return this._display; }
   set display(display) {
     this._display = display;
+  }
+
+  clone() {
+    return new Concept(this._system, this._code, this._display);
   }
 }
 
@@ -144,6 +140,14 @@ class Identifier {
       return false;
     }
     return this.name == other.name && this.namespace == other.namespace;
+  }
+
+  clone() {
+    return new Identifier(this._namespace, this._name);
+  }
+
+  toString() {
+    return this.fqn;
   }
 }
 
@@ -176,6 +180,24 @@ class Cardinality {
   get isList() {
     return this._max > 1 || this.isMaxUnbounded;
   }
+
+  fitsWithinCardinality(other) {
+    const minFits = this.card.min <= other.card.min;
+    const maxFits = this.card.isMaxUnbounded || (!other.card.isMaxUnbounded && this.card.max > other.card.max);
+    return minFits && maxFits;
+  }
+
+  equals(other) {
+    return this.min == other.min && this.max == other.max;
+  }
+
+  clone() {
+    return new Cardinality(this._min, this._max);
+  }
+
+  toString() {
+    return `${this.min}..${this.isMaxUnbounded ? '*' : this.max}`
+  }
 }
 
 class Constraint {
@@ -187,6 +209,12 @@ class Constraint {
   hasPath() {
     return this._path.length > 0;
   }
+
+  _clonePropertiesTo(clone) {
+    for (const p of this._path) {
+      clone._path.push(p.clone());
+    }
+  }
 }
 
 // ValueSetConstraint only makes sense on a code or Coding type value
@@ -197,6 +225,12 @@ class ValueSetConstraint extends Constraint {
   }
 
   get valueSet() { return this._valueSet; }
+
+  clone() {
+    const clone = new ValueSetConstraint(this._valueset);
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
 }
 
 // CodeConstraint only makes sense on a code or Coding type value
@@ -207,6 +241,12 @@ class CodeConstraint extends Constraint {
   }
 
   get code() { return this._code; }
+
+  clone() {
+    const clone = new CodeConstraint(this._code.clone());
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
 }
 
 class TypeConstraint extends Constraint {
@@ -216,15 +256,27 @@ class TypeConstraint extends Constraint {
   }
 
   get isA() { return this._isA; }
+
+  clone() {
+    const clone = new TypeConstraint(this._isA.clone());
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
 }
 
-class ChildCardConstraint extends Constraint {
+class CardConstraint extends Constraint {
   constructor(card, path) {
     super(path);
     this._card = card;
   }
 
   get card() { return this._card; }
+
+  clone() {
+    const clone = new CardConstraint(this._card.clone());
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
 }
 
 class ConstraintsFilter {
@@ -264,7 +316,22 @@ class ConstraintsFilter {
   }
 
   get card() {
-    return new ConstraintsFilter(this._constraints.filter(c => c instanceof ChildCardConstraint));
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof CardConstraint));
+  }
+
+  withPath(path = []) {
+    const matches = this._concepts.filter(c => {
+      if (path.length != c.path.length) {
+        return false;
+      }
+      for (let i=0; i < path.length; i++) {
+        if (!path[i].equals(c.path[i])) {
+          return false;
+        }
+      }
+      return true;
+    });
+    return new ConstraintsFilter(matches);
   }
 }
 
@@ -283,16 +350,33 @@ class Value {
     this._card = new Cardinality(min, max);
   }
 
+  get effectiveCard() {
+    const cardConstraints = this.constraintsFilter.own.card.constraints;
+    if (cardConstraints.length > 0) {
+      return cardConstraints[cardConstraints.length - 1].card;
+    }
+    return this.card;
+  }
+
   get constraints() { return this._constraints; }
+  set constraints(constraints) {
+    this._constraints = constraints;
+  }
   addConstraint(constraint) {
     this._constraints.push(constraint);
   }
   get hasConstraints() {
     return this._constraints.length > 0;
   }
-
   get constraintsFilter() {
     return new ConstraintsFilter(this._constraints);
+  }
+
+  _clonePropertiesTo(clone) {
+    clone._card = this._card.clone();
+    for (const constraint of this._constraints) {
+      clone._constraints.push(constraint.clone());
+    }
   }
 }
 
@@ -303,11 +387,44 @@ class IdentifiableValue extends Value {
   }
 
   get identifier() { return this._identifier; }
+
+  get effectiveIdentifier() {
+    const typeConstraints = this.constraintsFilter.own.type.constraints;
+    if (typeConstraints.length > 0) {
+      return typeConstraints[typeConstraints.length - 1].type;
+    }
+    return this.identifier;
+  }
+
+  clone() {
+    const clone = new IdentifiableValue(this._identifier);
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
+
+  _clonePropertiesTo(clone) {
+    super._clonePropertiesTo(clone);
+    clone._identifier = this._identifier.clone();
+  }
+
+  toString() {
+    return `IdentifiableValue<${this.identifier.fqn}>`;
+  }
 }
 
 class RefValue extends IdentifiableValue {
   constructor(identifier) {
     super(identifier);
+  }
+
+  clone() {
+    const clone = new RefValue();
+    super._clonePropertiesTo(clone);
+    return clone;
+  }
+
+  toString() {
+    return `RefValue<${this.identifier.fqn}>`;
   }
 }
 
@@ -322,6 +439,27 @@ class ChoiceValue extends Value {
   addOption(option) {
     this._options.push(option);
   }
+
+  clone() {
+    const clone = new ChoiceValue();
+    super._clonePropertiesTo(clone);
+    for (const option of this._options) {
+      clone._options.push(option);
+    }
+    return clone;
+  }
+
+  toString() {
+    let str = 'ChoiceValue<';
+    for (let i=0; i < this._options.length; i++) {
+      str += this._options[i].toString();
+      if ((i+1) < this._options.length) {
+        str += '|';
+      }
+    }
+    str += '>';
+    return str;
+  }
 }
 
 // IncompleteValue provides a place to put constraints when the full definition of the thing being constrained is
@@ -332,6 +470,16 @@ class IncompleteValue extends IdentifiableValue {
   constructor(identifier) {
     super(identifier);
   }
+
+  clone() {
+    const clone = new IncompleteValue();
+    super._clonePropertiesTo(clone);
+    return clone;
+  }
+
+  toString() {
+    return `IncompleteValue<${this.identifier.fqn}>`;
+  }
 }
 
 class TBD {
@@ -340,6 +488,14 @@ class TBD {
   }
 
   get text() { return this._text; }
+
+  clone() {
+    return new TBD(this._text);
+  }
+
+  toString() {
+    return `TBD<${this._text}>`;
+  }
 }
 
 const PRIMITIVE_NS = 'primitive';
@@ -352,4 +508,4 @@ function assertNoOverwrite(property, element, propName, newValue) {
   }
 }
 
-module.exports = {Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, Cardinality, ValueSetConstraint, CodeConstraint, TypeConstraint, ChildCardConstraint, PRIMITIVE_NS, PRIMITIVES};
+module.exports = {Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint, PRIMITIVE_NS, PRIMITIVES};
