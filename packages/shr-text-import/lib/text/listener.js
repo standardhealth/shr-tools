@@ -1,7 +1,7 @@
 //const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserListener} = require('./parsers/SHRParserListener');
 const {SHRParser} = require('./parsers/SHRParser');
-const {Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, TypeConstraint, ChildCardConstraint, TBD, PRIMITIVES} = require('../models');
+const {Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint, TBD, PRIMITIVES} = require('../models');
 
 class Importer extends SHRParserListener {
   constructor(preprocessedData) {
@@ -112,11 +112,45 @@ class Importer extends SHRParserListener {
         choice.addOption(this.processCountedField(csv));
       }
       choice.setMinMax(1, 1);
-      this._currentDef.addField(choice);
+      this.addFieldToCurrentDef(choice);
       return;
     }
     const val = this.processCountedField(ctx.countedField()[0]);
-    this._currentDef.addField(val);
+    this.addFieldToCurrentDef(val);
+  }
+
+  // addFieldToCurrentDef contains special logic to handle IncompleteValues.  If an IncompleteValue matches an already
+  // existing field, it will just apply the constraints to that field.  If no matching field is found, it will be pushed
+  // to the fields as-is -- and when fields are added after, they will be checked against any IncompleteValues
+  // and resolved as appropriate.  Note that constraints on the Value can also be added by passing an IncompleteValue
+  // matching the value's identifier to this function.
+  addFieldToCurrentDef(field) {
+    if (field instanceof IncompleteValue) {
+      // Search through the current def's value and fields to see if this matches an already existing value or field
+      for (const el of [this._currentDef.value, ...this._currentDef.fields]) {
+        if (el && el.identifier && el.identifier.equals(field.identifier)) {
+          // Found a match!  Just add the constraints to the existing one!
+          for (const cst of field.constraints) {
+            el.addConstraint(cst);
+          }
+          return;
+        }
+      }
+    }
+
+    // Search through the fields to see if there are any IncompleteValues we can now resolve
+    for (let i=0; i < this._currentDef.fields.length; i++) {
+      const el = this._currentDef.fields[i];
+      if (el instanceof IncompleteValue && field.identifier && el.identifier.equals(field.identifier)) {
+        // Found a match!  Add the constraints to the field and replace the IncompleteValue
+        for (const cst of el.constraints) {
+          field.addConstraint(cst);
+        }
+        this._currentDef.fields[i] = field;
+        return;
+      }
+    }
+    this._currentDef.addField(field);
   }
 
   processCountedField(ctx) {
@@ -145,7 +179,7 @@ class Importer extends SHRParserListener {
         // This is a dotted path constraint -- so we must use an IncompleteValue
         path = ewc.simpleName().map(ctx => this.resolveToIdentifier(ctx.getText()));
         value = new IncompleteValue(value.identifier);
-        value.addConstraint(new ChildCardConstraint(new Cardinality(min, max), path));
+        value.addConstraint(new CardConstraint(new Cardinality(min, max), path));
       } else {
         value.setMinMax(min, max);
       }

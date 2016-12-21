@@ -1,6 +1,6 @@
 const {expect, assert} = require('chai');
 const {importFromFilePath} = require('../../lib/text/import');
-const {Namespace, DataElement, Value, RefValue, ChoiceValue, Identifier, PrimitiveIdentifier, Cardinality, ValueSetConstraint, CodeConstraint, TypeConstraint, ChildCardConstraint} = require('../../lib/models');
+const {Namespace, DataElement, Value, RefValue, ChoiceValue, Identifier, PrimitiveIdentifier, Cardinality, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint} = require('../../lib/models');
 
 describe('#importFromFilePath()', () => {
   it('should correctly import a simple entry', () => {
@@ -209,7 +209,7 @@ describe('#importFromFilePath()', () => {
     expectCardOne(entry.value);
     expectValue(entry.value, 'shr.test', 'Complex');
     expect(entry.value.constraints).to.have.length(2);
-    expect(entry.value.constraints[0]).to.be.instanceof(ChildCardConstraint);
+    expect(entry.value.constraints[0]).to.be.instanceof(CardConstraint);
     expect(entry.value.constraints[0].path).to.eql([id('shr.test', 'CodedFromValueSet')]);
     expect(entry.value.constraints[0].card.min).to.equal(1);
     expect(entry.value.constraints[0].card.max).to.equal(2);
@@ -251,7 +251,7 @@ describe('#importFromFilePath()', () => {
     expectField(group, 1, 'shr.test', 'Complex', 0, 1);
     const cmplx = group.fields[1];
     expect(cmplx.constraints).to.have.length(2);
-    expect(cmplx.constraints[0]).to.be.instanceof(ChildCardConstraint);
+    expect(cmplx.constraints[0]).to.be.instanceof(CardConstraint);
     expect(cmplx.constraints[0].path).to.eql([id('shr.test', 'CodedFromValueSet')]);
     expect(cmplx.constraints[0].card.min).to.equal(1);
     expect(cmplx.constraints[0].card.max).to.equal(2);
@@ -285,7 +285,7 @@ describe('#importFromFilePath()', () => {
     expectCardOne(entry.value);
     expectValue(entry.value, 'shr.test', 'CodedFromValueSet');
     expect(entry.value.constraints).to.have.length(2);
-    expect(entry.value.constraints[0]).to.be.instanceof(ChildCardConstraint);
+    expect(entry.value.constraints[0]).to.be.instanceof(CardConstraint);
     expect(entry.value.constraints[0].path).to.eql([id('shr.core', 'Coding')]);
     expect(entry.value.constraints[0].card.min).to.equal(1);
     expect(entry.value.constraints[0].card.max).to.equal(1);
@@ -328,7 +328,7 @@ describe('#importFromFilePath()', () => {
     expectField(group, 1, 'shr.test', 'CodedFromValueSet', 0, 1);
     const el = group.fields[1];
     expect(el.constraints).to.have.length(2);
-    expect(el.constraints[0]).to.be.instanceof(ChildCardConstraint);
+    expect(el.constraints[0]).to.be.instanceof(CardConstraint);
     expect(el.constraints[0].path).to.eql([id('shr.core','Coding')]);
     expect(el.constraints[0].card.min).to.equal(1);
     expect(el.constraints[0].card.max).to.equal(1);
@@ -363,7 +363,7 @@ describe('#importFromFilePath()', () => {
     expectCardOne(entry.value);
     expectValue(entry.value, 'shr.test', 'Volume');
     expect(entry.value.constraints).to.have.length(2);
-    expect(entry.value.constraints[0]).to.be.instanceof(ChildCardConstraint);
+    expect(entry.value.constraints[0]).to.be.instanceof(CardConstraint);
     expect(entry.value.constraints[0].path).to.eql([id('shr.core', 'Quantity')]);
     expect(entry.value.constraints[0].card.min).to.equal(1);
     expect(entry.value.constraints[0].card.max).to.equal(1);
@@ -406,7 +406,7 @@ describe('#importFromFilePath()', () => {
     expectField(group, 1, 'shr.test', 'Volume', 0, 1);
     const el = group.fields[1];
     expect(el.constraints).to.have.length(2);
-    expect(el.constraints[0]).to.be.instanceof(ChildCardConstraint);
+    expect(el.constraints[0]).to.be.instanceof(CardConstraint);
     expect(el.constraints[0].path).to.eql([id('shr.core','Quantity')]);
     expect(el.constraints[0].card.min).to.equal(1);
     expect(el.constraints[0].card.max).to.equal(1);
@@ -443,7 +443,7 @@ describe('#importFromFilePath()', () => {
     expectCardOne(basedOn.value);
     expectValue(basedOn.value, 'shr.test', 'Complex');
     expect(basedOn.value.constraints).to.have.length(2);
-    expect(basedOn.value.constraints[0]).to.be.instanceof(ChildCardConstraint);
+    expect(basedOn.value.constraints[0]).to.be.instanceof(CardConstraint);
     expect(basedOn.value.constraints[0].path).to.eql([id('shr.test', 'Simple')]);
     expect(basedOn.value.constraints[0].card.min).to.equal(1);
     expect(basedOn.value.constraints[0].card.max).to.equal(1);
@@ -483,7 +483,7 @@ describe('#importFromFilePath()', () => {
     expectField(group, 1, 'shr.test', 'Complex', 0, 1);
     const cmplx = group.fields[1];
     expect(cmplx.constraints).to.have.length(2);
-    expect(cmplx.constraints[0]).to.be.instanceof(ChildCardConstraint);
+    expect(cmplx.constraints[0]).to.be.instanceof(CardConstraint);
     expect(cmplx.constraints[0].path).to.eql([id('shr.test', 'Simple')]);
     expect(cmplx.constraints[0].card.min).to.equal(1);
     expect(cmplx.constraints[0].card.max).to.equal(2);
