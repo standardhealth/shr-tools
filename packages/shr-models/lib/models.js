@@ -120,7 +120,9 @@ class DataElement {
 
   clone() {
     const clone = new DataElement(this._identifier.clone(), this._isEntry);
-    clone._description = this._description;
+    if (this._description) {
+      clone._description = this._description;
+    }
     for (const basedOn of this._basedOn) {
       clone._basedOn.push(basedOn.clone());
     }
@@ -216,9 +218,9 @@ class Cardinality {
     return this._max > 1 || this.isMaxUnbounded;
   }
 
-  fitsWithinCardinality(other) {
-    const minFits = this.card.min <= other.card.min;
-    const maxFits = this.card.isMaxUnbounded || (!other.card.isMaxUnbounded && this.card.max > other.card.max);
+  fitsWithinCardinalityOf(other) {
+    const minFits = other.min <= this.min;
+    const maxFits = other.isMaxUnbounded || (!this.isMaxUnbounded && other.max >= this.max);
     return minFits && maxFits;
   }
 
@@ -231,7 +233,7 @@ class Cardinality {
   }
 
   toString() {
-    return `${this.min}..${this.isMaxUnbounded ? '*' : this.max}`
+    return `${this.min}..${this.isMaxUnbounded ? '*' : this.max}`;
   }
 }
 
@@ -262,7 +264,7 @@ class ValueSetConstraint extends Constraint {
   get valueSet() { return this._valueSet; }
 
   clone() {
-    const clone = new ValueSetConstraint(this._valueset);
+    const clone = new ValueSetConstraint(this._valueSet);
     this._clonePropertiesTo(clone);
     return clone;
   }
@@ -355,7 +357,7 @@ class ConstraintsFilter {
   }
 
   withPath(path = []) {
-    const matches = this._concepts.filter(c => {
+    const matches = this._constraints.filter(c => {
       if (path.length != c.path.length) {
         return false;
       }
