@@ -51,10 +51,11 @@ class Expander {
   constructor(namespaces) {
     this._errors = [];
     this._unexpanded = new Dictionary();
+    this._expanded = new Dictionary();
     for (const ns of namespaces) {
       this._unexpanded.registerNamespace(ns);
+      this._expanded.registerNamespace(new models.Namespace(ns.namespace));
     }
-    this._expanded = new Dictionary();
   }
 
   get errors() { return this._errors; }
@@ -115,17 +116,25 @@ class Expander {
   // are completely incompatible, it will record an error and abandon the merge.  For less significant errors
   // (cardinalities that don't fit, etc), it will record the error, skip that part of the merge, and continue.
   mergeValue(element, oldValue, newValue) {
-    const mergedValue = oldValue.clone();
+    let mergedValue = oldValue.clone();
 
-    // Check that the class types match (or the new one is IncompleteValue).  An error abandons the merge.
-    if (!(newValue instanceof models.IncompleteValue) && newValue.constructor.name != oldValue.constructor.name) {
+    // Check that the class types match (except when new one is IncompleteValue or old one is a choice).  An error abandons the merge.
+    if (!(newValue instanceof models.IncompleteValue) && !(oldValue instanceof models.ChoiceValue) && newValue.constructor.name != oldValue.constructor.name) {
       this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot override ${oldValue.toString()} with ${newValue.toString()}`));
       return;
     }
 
     // Check that the identifiers match.  An error abandons the merge.
     if (newValue instanceof models.IdentifiableValue) {
-      if (!newValue.identifier.equals(oldValue.identifier)) {
+      if (oldValue instanceof models.ChoiceValue) {
+        // The newValue must be one of the choices
+        const match = this.findMatchingOption(oldValue, newValue);
+        if (!match) {
+          this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot override ${oldValue.toString()} with ${newValue.toString()} since it is not one of the options`));
+          return;
+        }
+        mergedValue = match.clone(); // TODO: Should this take on the choice's cardinality?
+      } else if (!newValue.identifier.equals(oldValue.identifier)) {
         this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot override ${oldValue.toString()} with ${newValue.toString()}`));
         return;
       }
@@ -145,19 +154,27 @@ class Expander {
     return mergedValue;
   }
 
+  findMatchingOption(choice, value) {
+    for (const option of choice.options) {
+      if (option instanceof models.ChoiceValue) {
+        const result = this.findMatchingOption(option, value);
+        if (result) {
+          return result;
+        }
+      } else if (option instanceof models.IdentifiableValue && option.constructor.name == value.constructor.name && option.identifier.equals(value.identifier)) {
+        return option;
+      }
+    }
+  }
+
   consolidateConstraints(element, value) {
     let consolidated = [];
     for (const constraint of value.constraints) {
       const targetLabel = [value.toString(), ...(constraint.path.map(p => p.name))].join('.');
       let target = value;
       if (constraint.path.length > 0) {
-        const leafId = constraint.path[constraint.path.length - 1];
-        if (leafId.isPrimitive) {
-          // Special case to handle primitives in a consistent way
-          target = new models.IdentifiableValue(leafId);
-        } else {
-          target = this._unexpanded.lookup(leafId);
-        }
+        // TODO: Actually extract the real value (w/ constraints) by following the path from element
+        target = new models.IdentifiableValue(constraint.path[constraint.path.length - 1]);
       }
       if (!target) {
         this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot resolve target of constraint on ${targetLabel}`));
