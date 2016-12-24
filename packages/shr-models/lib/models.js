@@ -329,6 +329,7 @@ class ConstraintsFilter {
       return this._constraints[0];
     } else if (this._constraints.length > 1) {
       console.warn(`WARNING: Expecting single constraint but got ${this._constraints.length}`);
+      return this._constraints[0];
     }
   }
 
@@ -541,8 +542,9 @@ class IncompleteValue extends IdentifiableValue {
   }
 }
 
-class TBD {
+class TBD extends Value{
   constructor(text) {
+    super();
     this._text = text;
   }
 
