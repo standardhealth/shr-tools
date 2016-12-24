@@ -328,8 +328,8 @@ class ConstraintsFilter {
     if (this._constraints.length == 1) {
       return this._constraints[0];
     } else if (this._constraints.length > 1) {
-      console.warn(`WARNING: Expecting single constraint but got ${this._constraints.length}`);
-      return this._constraints[0];
+      console.warn(`WARNING: Expecting single constraint but got ${this._constraints.length}. Using last constraint.`);
+      return this._constraints[this._constraints.length-1];
     }
   }
 
