@@ -446,7 +446,7 @@ class IdentifiableValue extends Value {
   get effectiveIdentifier() {
     const typeConstraints = this.constraintsFilter.own.type.constraints;
     if (typeConstraints.length > 0) {
-      return typeConstraints[typeConstraints.length - 1].type;
+      return typeConstraints[typeConstraints.length - 1].isA;
     }
     return this.identifier;
   }
@@ -504,7 +504,7 @@ class ChoiceValue extends Value {
     const clone = new ChoiceValue();
     super._clonePropertiesTo(clone);
     for (const option of this._options) {
-      clone._options.push(option);
+      clone._options.push(option.clone());
     }
     return clone;
   }
@@ -551,7 +551,9 @@ class TBD extends Value{
   get text() { return this._text; }
 
   clone() {
-    return new TBD(this._text);
+    const clone = new TBD(this._text);
+    super._clonePropertiesTo(clone);
+    return clone;
   }
 
   toString() {

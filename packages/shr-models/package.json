@@ -1,12 +1,12 @@
 {
-  "name": "shr_models",
+  "name": "shr-models",
   "version": "3.0.0",
   "description": "Models used to represent SHR namespaces and data elements for import/export",
   "author": "",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git@github.com:standardhealth/shr_models.git"
+    "url": "git@github.com:standardhealth/shr-models.git"
   },
   "main": "index.js",
   "scripts": {
