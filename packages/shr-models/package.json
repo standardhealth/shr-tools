@@ -1,12 +1,12 @@
 {
-  "name": "shr2js",
-  "version": "1.0.0",
-  "description": "Converts Standard Health Record (SHR) elements from their custom grammar to JSON",
+  "name": "shr_models",
+  "version": "3.0.0",
+  "description": "Models used to represent SHR namespaces and data elements for import/export",
   "author": "",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git@github.com:standardhealth/shr2js.git"
+    "url": "git@github.com:standardhealth/shr_models.git"
   },
   "main": "index.js",
   "scripts": {
@@ -15,10 +15,6 @@
     "test:debug": "./node_modules/.bin/mocha --inspect --debug-brk --reporter spec --recursive",
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint . --fix"
-  },
-  "dependencies": {
-    "antlr4": "^4.5.3",
-    "markdown-it": "^8.1.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

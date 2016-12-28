@@ -1,10 +1,10 @@
-# SHR Conversion Tools
+# SHR Models
 
 The Standard Health Record (SHR) initiative is working to create a single, high-quality health record for every individual in the United States.  For more information, see [standardhealthrecord.org](http://standardhealthrecord.org/).
 
-This GitHub repository contains Node.js tools for parsing SHR text definitions and exporting them as JSON schemas and FHIR structure definitions.  Most code is standard ES6 (not requiring Node.js packages) and _should_ be able to be adapted for use in a browser.
+This GitHub repository contains ES6 models for representing SHR namespaces and data elements.  These models are used in ES6-based SHR importers and exporters for converting SHR definitions between formats or views.
 
-The SHR text definitions and grammar files can be found in the [shr_spec](https://github.com/standardhealth/shr_spec) repo.  As the SHR text format (and content files) are still evolving, so is this toolset.
+The SHR text definitions and grammar files can be found in the [shr_spec](https://github.com/standardhealth/shr_spec) repo.  As the SHR text format (and content files) are still evolving, so are these models.
 
 # Setting Up the Environment
 
@@ -13,18 +13,9 @@ This project has been developed and tested with Node.js 6.6, although other vers
 $ npm install
 ```
 
-# Running the Conversion
-
-After installing the dependencies with npm, you can use node to convert a file or folder of files from SHR text format to JSON schemas and FHIR structure definitions:
-```
-$ node index.js /path/to/shr_spec/spec ./out
-```
-
-The last argument is the path where the exported files should be written.  If it does not exist, a new folder will be created.  If the last argument is not provided, it will default to a folder called _out_ in the current directory.
-
 # Running the Tests
 
-This project contains unit tests for testing the SHR text importer, JSON schema exporter, and FHIR StructureDefinition exporter.  To run the tests, execute the following command:
+This project contains unit tests for testing the basic capabilities of the models.  To run the tests, execute the following command:
 ```
 $ npm test
 ```
