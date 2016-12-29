@@ -1,7 +1,7 @@
 const {expect} = require('chai');
 const mdl = require('shr-models');
 
-function commonTests(expectedFn, exportFn) {
+function commonExportTests(expectedFn, exportFn) {
   const wrappedExpectedFn = function(name, testCase) {
     try {
       return expectedFn(name);
@@ -299,4 +299,4 @@ function pid(name) {
   return new mdl.PrimitiveIdentifier(name);
 }
 
-module.exports = {commonTests};
+module.exports = {commonExportTests};
