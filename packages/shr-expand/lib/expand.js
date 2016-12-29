@@ -1,4 +1,4 @@
-const models = require('../models');
+const models = require('shr-models');
 
 function expand(namespaces) {
   const expander = new Expander(namespaces);

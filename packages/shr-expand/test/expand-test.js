@@ -1,6 +1,6 @@
 const {expect} = require('chai');
-const {expand} = require('../../lib/expander/expand');
-const models = require('../../lib/models');
+const {expand} = require('../index');
+const models = require('shr-models');
 
 describe('#expand()', () => {
   it('should not modify the passed in namespaces or data elements, but instead return new ones', () => {
