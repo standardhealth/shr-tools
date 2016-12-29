@@ -1,7 +1,7 @@
 //const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserListener} = require('./parsers/SHRParserListener');
 const {SHRParser} = require('./parsers/SHRParser');
-const {Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint, TBD, PRIMITIVES} = require('../models');
+const {Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint, TBD, PRIMITIVES} = require('shr-models');
 
 class Importer extends SHRParserListener {
   constructor(preprocessedData) {

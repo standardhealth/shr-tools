@@ -1,12 +1,12 @@
 {
-  "name": "shr2js",
-  "version": "1.0.0",
-  "description": "Converts Standard Health Record (SHR) elements from their custom grammar to JSON",
+  "name": "shr-text-import",
+  "version": "3.0.0",
+  "description": "Imports Standard Health Record (SHR) elements from their custom grammar to the SHR models",
   "author": "",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git@github.com:standardhealth/shr2js.git"
+    "url": "git@github.com:standardhealth/shr-text-import.git"
   },
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "antlr4": "^4.5.3",
-    "markdown-it": "^8.1.0"
+    "shr-models": "^3.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

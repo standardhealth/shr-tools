@@ -1,10 +1,10 @@
-# SHR Conversion Tools
+# SHR Text Import
 
 The Standard Health Record (SHR) initiative is working to create a single, high-quality health record for every individual in the United States.  For more information, see [standardhealthrecord.org](http://standardhealthrecord.org/).
 
-This GitHub repository contains Node.js tools for parsing SHR text definitions and exporting them as JSON schemas and FHIR structure definitions.  Most code is standard ES6 (not requiring Node.js packages) and _should_ be able to be adapted for use in a browser.
+This GitHub repository contains an ES6 library for parsing SHR text definitions into the SHR models.  It also contains a simple Node.js script that imports a folder of SHR text files and prints out any errors.
 
-The SHR text definitions and grammar files can be found in the [shr_spec](https://github.com/standardhealth/shr_spec) repo.  As the SHR text format (and content files) are still evolving, so is this toolset.
+The SHR text definitions and grammar files can be found in the [shr_spec](https://github.com/standardhealth/shr_spec) repo.  As the SHR text format (and content files) are still evolving, so is this import tool.
 
 # Setting Up the Environment
 
@@ -13,14 +13,12 @@ This project has been developed and tested with Node.js 6.6, although other vers
 $ npm install
 ```
 
-# Running the Conversion
+# Running the Import
 
-After installing the dependencies with npm, you can use node to convert a file or folder of files from SHR text format to JSON schemas and FHIR structure definitions:
+After installing the dependencies with npm, you can use node to import a file or folder of files from SHR text format and print out any errors:
 ```
-$ node index.js /path/to/shr_spec/spec ./out
+$ node run.js /path/to/shr_spec/spec
 ```
-
-The last argument is the path where the exported files should be written.  If it does not exist, a new folder will be created.  If the last argument is not provided, it will default to a folder called _out_ in the current directory.
 
 # Running the Tests
 

@@ -1,6 +1,6 @@
 const {expect, assert} = require('chai');
-const {importFromFilePath} = require('../../lib/text/import');
-const {Namespace, DataElement, Value, RefValue, ChoiceValue, Identifier, PrimitiveIdentifier, Cardinality, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint} = require('../../lib/models');
+const {importFromFilePath} = require('../index');
+const {Namespace, DataElement, Value, RefValue, ChoiceValue, Identifier, PrimitiveIdentifier, Cardinality, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint} = require('shr-models');
 
 describe('#importFromFilePath()', () => {
   it('should correctly import a simple entry', () => {
