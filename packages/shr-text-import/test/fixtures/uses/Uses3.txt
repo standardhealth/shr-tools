@@ -1,5 +1,6 @@
-DataDefinitions:  shr.test.three
+Grammar:    DataElement 4.0
+Namespace:  shr.test.three
 
-Vocabulary:     MOO = http://moo.org
-Vocabulary:     ZOO = http://zoo.org
+CodeSystem:     MOO = http://moo.org
+CodeSystem:     ZOO = http://zoo.org
 

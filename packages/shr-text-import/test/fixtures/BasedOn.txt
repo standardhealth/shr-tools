@@ -1,10 +1,11 @@
-DataDefinitions:  shr.test
+Grammar:   DataElement 4.0
+Namespace: shr.test
 
-Vocabulary:     FOO = http://foo.org
-Vocabulary:     BOO = http://boo.org
+CodeSystem:     FOO = http://foo.org
+CodeSystem:     BOO = http://boo.org
 
 EntryElement: SimpleBasedOn
-BasedOn:      SimpleBase
+Based on:     SimpleBase
 Concept:      FOO #bar
 Description:  "It is a simple definition based on SimpleBase"
 Value:        Simple

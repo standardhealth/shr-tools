@@ -1,7 +1,8 @@
-DataDefinitions:  shr.test.one
-Uses:             shr.test.two, shr.test.three
+Grammar:    DataElement 4.0
+Namespace:  shr.test.one
+Uses:       shr.test.two, shr.test.three
 
-Vocabulary:     FOO = http://foo.org
+CodeSystem:     FOO = http://foo.org
 
 EntryElement:   One
 Concept:        FOO #bar, MOO #car

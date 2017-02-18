@@ -1,0 +1,61 @@
+Grammar:    DataElement 4.0
+Namespace:  shr.test
+
+EntryElement: TypeConstraintOnValue
+Based on:     SimpleBase
+Description:  "It is a simple element based on SimpleBase and specializing the value"
+Value:        Simple is type Simple2
+
+EntryElement: TypeConstraintOnValueChild
+Based on:     ComplexBase
+Description:  "It is a simple element based on SimpleBase and specializing the value's child"
+Value:        Complex
+1..1          Complex.Simple is type Simple2
+
+EntryElement: TypeConstraintOnField
+Description:  "It is a group entry with a type constraint on a field"
+Based on:     GroupBase
+              Simple is type Simple2
+
+EntryElement: TypeConstraintOnFieldChild
+Description:  "It is a group entry with a type constraint on a field's child"
+0..1    Simple
+0..1    Complex
+1..2    Complex.Simple is type Simple2
+
+EntryElement: TypeConstraintOnFieldValue
+Based on:     Group2
+Description:  "It is a group entry with a type constraint on a field's value"
+              HasSimpleValue value is type Simple2
+
+Element:      SimpleBase
+Value:        Simple
+
+Element:      Simple
+Value:        string
+
+Element:      Simple2
+Based on:     Simple
+Value:        string
+
+Element:      ComplexBase
+Value:        Complex
+
+Element:      Complex
+0..1          Simple
+1..*          CodedFromValueSet
+
+Element:      CodedFromValueSet
+Value:        code from http://standardhealthrecord.org/test/vs/Coded
+
+Element:      GroupBase
+0..1          Simple
+0..1          CodedFromValueSet with code from http://standardhealthrecord.org/test/vs/Coded2
+
+Element:      HasSimpleValue
+Value:        Simple
+
+Element:      Group2
+0..1          HasSimpleValue
+0..1          CodedFromValueSet with code from http://standardhealthrecord.org/test/vs/Coded2
+

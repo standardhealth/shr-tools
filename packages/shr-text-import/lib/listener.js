@@ -1,7 +1,7 @@
 //const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserListener} = require('./parsers/SHRParserListener');
 const {SHRParser} = require('./parsers/SHRParser');
-const {Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint, TBD, PRIMITIVES} = require('shr-models');
+const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, TBD, PRIMITIVES} = require('shr-models');
 
 class Importer extends SHRParserListener {
   constructor(preprocessedData) {
@@ -10,12 +10,14 @@ class Importer extends SHRParserListener {
     this._currentFile = '';
     // The preprocessed data indicating valid elements and vocabularies
     this._preprocessedData = preprocessedData;
-    // The map of namespace to elements
-    this._nsMap = {};
+    // The specifications it collects
+    this._specs = new Specifications();
     // The currently active namespace
     this._currentNs = '';
     // The external namespaces it "uses"
     this._usesNs = [];
+    // The currently active grammar version
+    this._currentGrammarVersion = '';
     // The currently active definition (DataElement)
     this._currentDef = null;
     // The accumulated errors
@@ -26,17 +28,30 @@ class Importer extends SHRParserListener {
   get errors() { return this._errors; }
 
   enterDataDefsDoc(ctx) {
+    // Process the namespace
     const ns = ctx.dataDefsHeader().namespace().getText();
     this._currentNs = ns;
-    if (typeof this._nsMap[ns] == 'undefined') {
-      this._nsMap[ns] = new Namespace(ns);
+    let nsDef = this._specs.namespaces.find(ns);
+    if (typeof nsDef === 'undefined') {
+      nsDef = new Namespace(ns);
+      this._specs.namespaces.add(nsDef);
     }
+    if (ctx.descriptionProp() && typeof nsDef.description === 'undefined') {
+      nsDef.description = stripDelimitersFromToken(ctx.descriptionProp().STRING());
+    }
+
+    // Process the version
+    const version = ctx.dataDefsHeader().version();
+    const major = parseInt(version.WHOLE_NUMBER()[0], 10);
+    const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
+    this._currentGrammarVersion = new Version(major, minor);
   }
 
   exitDataDefsDoc(ctx) {
-    // clear current namespace and uses namespaces
+    // clear current namespace, uses namespaces, and grammar version
     this._currentNs = '';
     this._usesNs = [];
+    this._currentGrammarVersion = null;
   }
 
   enterUsesStatement(ctx) {
@@ -45,7 +60,7 @@ class Importer extends SHRParserListener {
 
   enterElementDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.elementHeader().simpleName().getText());
-    this._currentDef = new DataElement(id);
+    this._currentDef = new DataElement(id).withGrammarVersion(this._currentGrammarVersion);
   }
 
   exitElementDef(ctx) {
@@ -54,7 +69,7 @@ class Importer extends SHRParserListener {
 
   enterEntryDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.entryHeader().simpleName().getText());
-    this._currentDef = new DataElement(id, true);
+    this._currentDef = new DataElement(id, true).withGrammarVersion(this._currentGrammarVersion);
   }
 
   exitEntryDef(ctx) {
@@ -62,12 +77,15 @@ class Importer extends SHRParserListener {
   }
 
   enterBasedOnProp(ctx) {
-    this._currentDef.addBasedOn(this.resolveToIdentifier(ctx.simpleOrFQName().getText()));
+    this._currentDef.addBasedOn(this.resolveToIdentifierOrTBD(ctx));
   }
 
   enterDescriptionProp(ctx) {
     if (ctx.parentCtx instanceof SHRParser.ValuesetPropContext) {
       // Skip this -- currently unsupported
+      return;
+    } else if (ctx.parentCtx instanceof SHRParser.DataDefsDocContext) {
+      // Skip this -- already handled elsewhere
       return;
     }
     this._currentDef.description = stripDelimitersFromToken(ctx.STRING());
@@ -158,13 +176,18 @@ class Importer extends SHRParserListener {
   }
 
   processCountAndTypes(countCtx, typeCtxArr) {
-    const [min, max] = this.getMinMax(countCtx);
+    let min, max;
+    if (countCtx) {
+      [min, max] = this.getMinMax(countCtx);
+    }
     if (typeCtxArr.length > 1) {
       const value = new ChoiceValue();
       for (const t of typeCtxArr) {
         value.addOption(this.processType(t, 1, 1));
       }
-      value.setMinMax(min, max);
+      if (typeof min !== 'undefined') {
+        value.setMinMax(min, max);
+      }
       return value;
     }
     return this.processType(typeCtxArr[0], min, max);
@@ -173,37 +196,64 @@ class Importer extends SHRParserListener {
   processType(ctx, min, max) {
     if (ctx.elementWithConstraint()) {
       const ewc = ctx.elementWithConstraint();
-      let value = new IdentifiableValue(this.resolveToIdentifier(ewc.simpleOrFQName().getText()));
+      let value;
       let path = [];
-      if (ewc.simpleName().length > 0) {
-        // This is a dotted path constraint -- so we must use an IncompleteValue
-        path = ewc.simpleName().map(ctx => this.resolveToIdentifier(ctx.getText()));
-        value = new IncompleteValue(value.identifier);
-        value.addConstraint(new CardConstraint(new Cardinality(min, max), path));
+      if (ewc.simpleOrFQName()) {
+        value = new IdentifiableValue(this.resolveToIdentifier(ewc.simpleOrFQName().getText()));
+        if (typeof min !== 'undefined') {
+          value.setMinMax(min, max);
+        }
+      } else if (ewc.primitive()) {
+        value = new IdentifiableValue(new PrimitiveIdentifier(ewc.primitive().getText()));
+        if (typeof min !== 'undefined') {
+          value.setMinMax(min, max);
+        }
       } else {
-        value.setMinMax(min, max);
+        // This is a dotted path constraint -- so we must use an IncompleteValue
+        const ep = ewc.elementPath();
+        value = new IncompleteValue(this.resolveToIdentifier(ep.simpleOrFQName().getText()));
+        if (ep.simpleName()) {
+          path = ep.simpleName().map(ctx => this.resolveToIdentifier(ctx.getText()));
+        }
+        if (ep.primitive()) {
+          path.push(new PrimitiveIdentifier(ep.primitive().getText()));
+        }
+        if (typeof min !== 'undefined') {
+          value.addConstraint(new CardConstraint(new Cardinality(min, max), path));
+        }
       }
-      const cst = ewc.elementConstraint();
-      // TODO: Handle other constraint types
-      if (cst.elementTypeConstraint()) {
-        const newIdentifier = this.resolveToIdentifier(cst.elementTypeConstraint().simpleOrFQName().getText());
-        value.addConstraint(new TypeConstraint(newIdentifier, path));
-      } else if (cst.elementCodeVSConstraint()) {
-        const codeFromVS = cst.elementCodeVSConstraint().codeFromVS();
-        const codeIdentifier = this.resolveCodeFromVSIdentifier(codeFromVS);
-        const vs = this.resolveCodeFromVSValueSet(codeFromVS);
-        value.addConstraint(new ValueSetConstraint(vs, [...path, codeIdentifier]));
-      } else if (cst.elementCodeValueConstraint()) {
-        const code = this.processFullyQualifiedCode(cst.elementCodeValueConstraint().fullyQualifiedCode());
-        value.addConstraint(new CodeConstraint(code, path));
-      } else if (cst.elementWithUnitsConstraint()) {
-        const code = this.processFullyQualifiedCode(cst.elementWithUnitsConstraint().fullyQualifiedCode());
-        value.addConstraint(new CodeConstraint(code, [...path, new Identifier('shr.core', 'UnitOfMeasure'), new Identifier('shr.core', 'Coding')]));
+
+      if (ewc.elementConstraint()) {
+        const cst = ewc.elementConstraint();
+        if (cst.elementTypeConstraint()) {
+          const newIdentifier = this.resolveToIdentifierOrTBD(cst.elementTypeConstraint());
+          const onValue = cst.elementTypeConstraint().KW_VALUE_IS_TYPE() ? true : false;
+          value.addConstraint(new TypeConstraint(newIdentifier, path, onValue));
+        } else if (cst.elementCodeVSConstraint()) {
+          const codeFromVS = cst.elementCodeVSConstraint().codeFromVS();
+          const codeIdentifier = this.resolveCodeFromVSIdentifier(codeFromVS);
+          const vs = this.resolveCodeFromVSValueSet(codeFromVS);
+          value.addConstraint(new ValueSetConstraint(vs, [...path, codeIdentifier]));
+        } else if (cst.elementCodeValueConstraint()) {
+          const code = this.processCodeOrFQCode(cst.elementCodeValueConstraint().codeOrFQCode());
+          value.addConstraint(new CodeConstraint(code, path));
+        } else if (cst.elementWithUnitsConstraint()) {
+          const code = this.processFullyQualifiedCode(cst.elementWithUnitsConstraint().fullyQualifiedCode());
+          value.addConstraint(new CodeConstraint(code, [...path, new Identifier('shr.core', 'UnitOfMeasure'), new Identifier('shr.core', 'Coding')]));
+        } else if (cst.elementIncludesCodeValueConstraint()) {
+          for (const codeOrFQCode of cst.elementIncludesCodeValueConstraint().codeOrFQCode()) {
+            const code = this.processCodeOrFQCode(codeOrFQCode);
+            value.addConstraint(new IncludesCodeConstraint(code, path));
+          }
+        } else if (cst.elementBooleanConstraint()) {
+          const b = cst.elementBooleanConstraint().KW_TRUE() ? true : false;
+          value.addConstraint(new BooleanConstraint(b, path));
+        }
       }
       return value;
     }
 
-    var value;
+    let value;
     if (ctx.simpleOrFQName()) {
       value = new IdentifiableValue(this.resolveToIdentifier(ctx.simpleOrFQName().getText()));
     } else if (ctx.ref()) {
@@ -222,7 +272,9 @@ class Importer extends SHRParserListener {
       value = new IdentifiableValue(codeIdentifier);
       value.addConstraint(new ValueSetConstraint(vs));
     }
-    value.setMinMax(min, max);
+    if (typeof min !== 'undefined') {
+      value.setMinMax(min, max);
+    }
     return value;
   }
 
@@ -250,26 +302,53 @@ class Importer extends SHRParserListener {
       if (resolution.url) {
         vs = `${resolution.url}/${name}`;
       }
+    } else if (codeFromVS.valueset().tbd()) {
+      if (codeFromVS.valueset().tbd().STRING()) {
+        vs = stripDelimitersFromToken(codeFromVS.valueset().tbd().STRING());
+      } else {
+        vs = 'TBD';
+      }
     }
     return vs;
   }
 
+  processCodeOrFQCode(ctx) {
+    var code;
+    if (ctx.fullyQualifiedCode()) {
+      code = this.processFullyQualifiedCode(ctx.fullyQualifiedCode());
+    } else if (ctx.code()) {
+      code = new Concept(null, ctx.code().CODE().getText().substr(1)); // substr to skip the '#'
+      if (ctx.code().STRING()) {
+        code.display = stripDelimitersFromToken(ctx.code().STRING());
+      }
+    }
+    return code;
+  }
+
   processFullyQualifiedCode(ctx) {
-    var cs;
-    const csAlias = ctx.ALL_CAPS().getText();
-    const resolution = this._preprocessedData.resolveVocabulary(csAlias, this._currentNs, ...this._usesNs);
-    if (resolution.error) {
-      this.addError(resolution.error);
-      cs = resolution.url ? resolution.url : csAlias;
-    } else {
-      cs = resolution.url;
+    if (ctx.ALL_CAPS()) {
+      let cs;
+      const csAlias = ctx.ALL_CAPS().getText();
+      const resolution = this._preprocessedData.resolveVocabulary(csAlias, this._currentNs, ...this._usesNs);
+      if (resolution.error) {
+        this.addError(resolution.error);
+        cs = resolution.url ? resolution.url : csAlias;
+      } else {
+        cs = resolution.url;
+      }
+      const code = ctx.code().CODE().getText().substr(1); // substr to skip the '#'
+      const concept = new Concept(cs, code);
+      if (ctx.code().STRING()) {
+        concept.display = stripDelimitersFromToken(ctx.code().STRING());
+      }
+      return concept;
+    } else if (ctx.tbdCode()) {
+      const concept = new Concept('urn:tbd', 'TBD');
+      if (ctx.tbdCode().STRING()) {
+        concept.display = stripDelimitersFromToken(ctx.tbdCode().STRING());
+      }
+      return concept;
     }
-    const code = ctx.code().CODE().getText().substr(1); // substr to skip the '#'
-    const concept = new Concept(cs, code);
-    if (ctx.code().STRING()) {
-      concept.display = stripDelimitersFromToken(ctx.code().STRING());
-    }
-    return concept;
   }
 
   getMinMax(countCtx) {
@@ -280,6 +359,16 @@ class Importer extends SHRParserListener {
       max = parseInt(cards[1].getText(), 10);
     }
     return [min, max];
+  }
+
+  resolveToIdentifierOrTBD(ctx) {
+    if (ctx.simpleOrFQName()) {
+      return this.resolveToIdentifier(ctx.simpleOrFQName().getText());
+    } else if (ctx.tbd() && ctx.tbd().STRING()) {
+      return new TBD(stripDelimitersFromToken(ctx.tbd().STRING()));
+    } else {
+      return new TBD();
+    }
   }
 
   resolveToIdentifier(ref) {
@@ -302,7 +391,7 @@ class Importer extends SHRParserListener {
     const resolution = this._preprocessedData.resolveDefinition(ref, this._currentNs, ...this._usesNs);
     if (resolution.error) {
       this.addError(resolution.error);
-      ns = resolution.namespace ? resolution.namespace: this._currentNs;
+      ns = resolution.namespace ? resolution.namespace: 'unknown';
     } else {
       ns = resolution.namespace;
     }
@@ -310,7 +399,7 @@ class Importer extends SHRParserListener {
   }
 
   pushCurrentDefinition() {
-    this._nsMap[this._currentNs].addDefinition(this._currentDef);
+    this._specs.dataElements.add(this._currentDef);
     this._currentDef = null;
   }
 
@@ -318,8 +407,8 @@ class Importer extends SHRParserListener {
     this._errors.push(`${this._currentFile}: ${err}`);
   }
 
-  namespaces() {
-    return Object.keys(this._nsMap).map(key => this._nsMap[key]);
+  specifications() {
+    return this._specs;
   }
 }
 

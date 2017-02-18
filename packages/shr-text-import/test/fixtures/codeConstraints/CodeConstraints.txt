@@ -1,7 +1,8 @@
-DataDefinitions:  shr.test
-Uses:            shr.core
+Grammar:   DataElement 4.0
+Namespace: shr.test
+Uses:      shr.core
 
-Vocabulary:     FOO = http://foo.org
+CodeSystem:     FOO = http://foo.org
 
 EntryElement:   CodeConstraintOnValue
 Description:    "It is an entry with a code constraint on the value"
@@ -10,7 +11,7 @@ Value:          Coding is FOO#bar "FooBar"
 EntryElement:   CodeConstraintOnValueChild
 Description:    "It is an entry with a code constraint on the value's child"
 Value:          CodedFromValueSet
-1..1            CodedFromValueSet.Coding is FOO#bar "FooBar"
+                CodedFromValueSet.Coding is FOO#bar "FooBar"
 
 EntryElement:   CodeConstraintOnField
 Description:    "It is a group entry with a code constraint on a field"
@@ -21,7 +22,12 @@ EntryElement:   CodeConstraintOnFieldChild
 Description:    "It is a group entry with a code constraint on a field's child"
 0..1            Simple
 0..1            CodedFromValueSet
-1..1            CodedFromValueSet.Coding is FOO#bar "FooBar"
+                CodedFromValueSet.Coding is FOO#bar "FooBar"
+
+EntryElement:   SystemlessCodeConstraintOnValue
+Description:    "It is an entry with a system-less code constraint on the value"
+Based on:       CodedFromValueSet
+Value:          Coding is #bar
 
 Element:        Simple
 Value:          string

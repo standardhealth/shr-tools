@@ -1,4 +1,5 @@
-DataDefinitions:  other.ns
+Grammar:   DataElement 4.0
+Namespace: other.ns
 
 Element:        Period
 Value:          date

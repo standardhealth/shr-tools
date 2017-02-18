@@ -1,11 +1,22 @@
 const {SHRParserVisitor} = require('./parsers/SHRParserVisitor');
+const {Version} = require('shr-models');
+
+const VERSION = new Version(4, 0, 0);
+const GRAMMAR_VERSION = new Version(4, 0, 0);
 
 class Preprocessor extends SHRParserVisitor {
   constructor() {
     super();
+    // The current file being parsed -- useful for error messages
+    this._currentFile = '';
+    // The preprocessed data
     this._data = new PreprocessedData();
+    // Errors during parsing
+    this._errors = []; // errors
   }
 
+  set currentFile(file) { this._currentFile = file; }
+  get errors() { return this._errors; }
   get data() { return this._data; }
 
   visitShr(ctx) {
@@ -17,6 +28,10 @@ class Preprocessor extends SHRParserVisitor {
   }
 
   visitDataDefsDoc(ctx) {
+    if (!this.checkVersion(ctx.dataDefsHeader().version())) {
+      return;
+    }
+    this._data.files.push(this._currentFile);
     const ns = ctx.dataDefsHeader().namespace().getText();
     if (ctx.pathDefs()) {
       const removeTrailingSlash = function(url) {
@@ -44,6 +59,8 @@ class Preprocessor extends SHRParserVisitor {
           url = def.URL().getText();
         } else if (def.URN_OID()) {
           url = def.URN_OID().getText();
+        } else if (def.URN()) {
+          url = def.URN().getText();
         }
         this._data.registerVocabulary(ns, name, url);
       }
@@ -58,14 +75,31 @@ class Preprocessor extends SHRParserVisitor {
       }
     }
   }
+
+  checkVersion(version) {
+    const major = parseInt(version.WHOLE_NUMBER()[0], 10);
+    const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
+    if (GRAMMAR_VERSION.major != major || GRAMMAR_VERSION.minor < minor) {
+      this.addError(`Unsupported grammar version: ${major}.${minor}`);
+      return false;
+    }
+    return true;
+  }
+
+  addError(err) {
+    this._errors.push(`${this._currentFile}: ${err}`);
+  }
 }
 
 class PreprocessedData {
   constructor() {
+    this._files = []; // file paths of supported files
     this._paths = {}; //map[namespace]map[name]url
     this._vocabularies = {}; // map[namespace]map[name]url
     this._definitions = {}; // map[namespace]map[name]boolean
   }
+
+  get files() { return this._files; }
 
   registerPath(namespace, name, url) {
     let ns = this._paths[namespace];
@@ -175,4 +209,4 @@ class PreprocessedData {
   }
 }
 
-module.exports = { Preprocessor, PreprocessedData };
+module.exports = { Preprocessor, PreprocessedData, VERSION, GRAMMAR_VERSION };

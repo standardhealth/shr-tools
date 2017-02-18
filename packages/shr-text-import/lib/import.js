@@ -5,30 +5,22 @@ const {ParseTreeWalker} = require('antlr4/tree');
 const {ErrorListener} = require('antlr4/error');
 const {SHRLexer} = require('./parsers/SHRLexer');
 const {SHRParser} = require('./parsers/SHRParser');
-const {Preprocessor} = require('./preprocessor');
+const {Preprocessor, VERSION, GRAMMAR_VERSION} = require('./preprocessor');
 const {Importer} = require('./listener');
 
 function importFromFilePath(filePath) {
   const preprocessor = new Preprocessor();
   preprocessPath(filePath, preprocessor);
   const importer = new Importer(preprocessor.data);
-  processPath(filePath, importer);
+  processData(preprocessor.data, importer);
   return {
-    namespaces: importer.namespaces(),
-    errors: importer.errors
+    specifications: importer.specifications(),
+    errors: preprocessor.errors.concat(importer.errors)
   };
 }
 
-function processPath(filePath, importer) {
-  const stats = fs.statSync(filePath);
-  if (stats.isDirectory()) {
-    const files = fs.readdirSync(filePath);
-    for (const file of files) {
-      if (file.endsWith('.txt') && !file.endsWith('_cp.txt')) {
-        processPath(path.join(filePath, file), importer);
-      }
-    }
-  } else {
+function processData(preprocessedData, importer) {
+  for (const filePath of preprocessedData.files) {
     const errListener = new SHRErrorListener(filePath);
     const chars = new FileStream(filePath);
     const lexer = new SHRLexer(chars);
@@ -52,7 +44,7 @@ function preprocessPath(filePath, preprocessor) {
   if (stats.isDirectory()) {
     const files = fs.readdirSync(filePath);
     for (const file of files) {
-      if (file.endsWith('.txt') && !file.endsWith('_cp.txt')) {
+      if (file.endsWith('.txt') && !file.endsWith('_cp.txt') && !file.endsWith('_map.txt')) {
         preprocessPath(path.join(filePath, file), preprocessor);
       }
     }
@@ -65,6 +57,7 @@ function preprocessPath(filePath, preprocessor) {
     parser.removeErrorListeners();
     parser.buildParseTrees = true;
     const tree = parser.shr();
+    preprocessor.currentFile = filePath;
     preprocessor.visitShr(tree);
   }
 }
@@ -85,4 +78,4 @@ class SHRErrorListener extends ErrorListener {
   }
 }
 
-module.exports = {importFromFilePath};
+module.exports = {importFromFilePath, VERSION, GRAMMAR_VERSION};

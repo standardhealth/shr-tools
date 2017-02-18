@@ -1,5 +1,6 @@
-DataDefinitions:  shr.test.two
-Uses:             shr.test.three
+Grammar:    DataElement 4.0
+Namespace:  shr.test.two
+Uses:       shr.test.three
 
 EntryElement:   Two
 Concept:        ZOO #bear

@@ -1,8 +1,9 @@
-DataDefinitions:  shr.test.one
-Uses:             shr.test.two
+Grammar:   DataElement 4.0
+Namespace: shr.test.one
+Uses:      shr.test.two
 
-Vocabulary:     FOO = http://foo.org
-Vocabulary:     MOO = http://moo.org
+CodeSystem:     FOO = http://foo.org
+CodeSystem:     MOO = http://moo.org
 
 EntryElement:   Conflicting
 Concept:        FOO #bar, MOO #car

@@ -1,4 +1,5 @@
-DataDefinitions:  shr.test.two
+Grammar:   DataElement 4.0
+Namespace: shr.test.two
 
 EntryElement:   Foo
 Description:    "It is a Foo from shr.test.two"

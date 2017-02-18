@@ -1,6 +1,8 @@
-DataDefinitions:  shr.test
+Grammar:     DataElement 4.0
+Namespace:   shr.test
+Description: "The SHR test namespace"
 
-Vocabulary:     FOO = http://foo.org
+CodeSystem:     FOO = http://foo.org
 
 EntryElement:   Simple
 Concept:        FOO #bar "Foobar"

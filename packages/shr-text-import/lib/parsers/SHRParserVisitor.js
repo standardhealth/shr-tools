@@ -217,6 +217,81 @@ SHRParserVisitor.prototype.visitValuesetProp = function(ctx) {
 };
 
 
+// Visit a parse tree produced by SHRParser#mappingsDoc.
+SHRParserVisitor.prototype.visitMappingsDoc = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#mappingsHeader.
+SHRParserVisitor.prototype.visitMappingsHeader = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#targetStatement.
+SHRParserVisitor.prototype.visitTargetStatement = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#mappingDefs.
+SHRParserVisitor.prototype.visitMappingDefs = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#mappingDef.
+SHRParserVisitor.prototype.visitMappingDef = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#mappingDefHeader.
+SHRParserVisitor.prototype.visitMappingDefHeader = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#fieldMapping.
+SHRParserVisitor.prototype.visitFieldMapping = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#fieldToFieldMapping.
+SHRParserVisitor.prototype.visitFieldToFieldMapping = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#source.
+SHRParserVisitor.prototype.visitSource = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#sourcePart.
+SHRParserVisitor.prototype.visitSourcePart = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#target.
+SHRParserVisitor.prototype.visitTarget = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#targetPart.
+SHRParserVisitor.prototype.visitTargetPart = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#urlMapping.
+SHRParserVisitor.prototype.visitUrlMapping = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#cardMapping.
+SHRParserVisitor.prototype.visitCardMapping = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#version.
+SHRParserVisitor.prototype.visitVersion = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRParser#namespace.
 SHRParserVisitor.prototype.visitNamespace = function(ctx) {
 };
@@ -252,6 +327,11 @@ SHRParserVisitor.prototype.visitFullyQualifiedCode = function(ctx) {
 };
 
 
+// Visit a parse tree produced by SHRParser#codeOrFQCode.
+SHRParserVisitor.prototype.visitCodeOrFQCode = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRParser#codeFromVS.
 SHRParserVisitor.prototype.visitCodeFromVS = function(ctx) {
 };
@@ -259,6 +339,11 @@ SHRParserVisitor.prototype.visitCodeFromVS = function(ctx) {
 
 // Visit a parse tree produced by SHRParser#elementWithConstraint.
 SHRParserVisitor.prototype.visitElementWithConstraint = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#elementPath.
+SHRParserVisitor.prototype.visitElementPath = function(ctx) {
 };
 
 
@@ -274,6 +359,16 @@ SHRParserVisitor.prototype.visitElementCodeVSConstraint = function(ctx) {
 
 // Visit a parse tree produced by SHRParser#elementCodeValueConstraint.
 SHRParserVisitor.prototype.visitElementCodeValueConstraint = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#elementIncludesCodeValueConstraint.
+SHRParserVisitor.prototype.visitElementIncludesCodeValueConstraint = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#elementBooleanConstraint.
+SHRParserVisitor.prototype.visitElementBooleanConstraint = function(ctx) {
 };
 
 
@@ -304,6 +399,11 @@ SHRParserVisitor.prototype.visitCount = function(ctx) {
 
 // Visit a parse tree produced by SHRParser#tbd.
 SHRParserVisitor.prototype.visitTbd = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#tbdCode.
+SHRParserVisitor.prototype.visitTbdCode = function(ctx) {
 };
 
 

@@ -1,6 +1,7 @@
-DataDefinitions:  shr.test
-Uses:             shr.core
-Vocabulary:       MTH = http://uts.nlm.nih.gov/metathesaurus
+Grammar:    DataElement 4.0
+Namespace:  shr.test
+Uses:       shr.core
+CodeSystem: MTH = http://uts.nlm.nih.gov/metathesaurus
 
 EntryElement:   CodingFromValueSet
 Description:    "It is a coded entry with Coding"

@@ -1,0 +1,31 @@
+Grammar:    DataElement 4.0
+Namespace:  shr.test
+Uses:       shr.core
+
+CodeSystem:     FOO = http://foo.org
+
+EntryElement:   IncludesCodeConstraintOnValue
+Description:    "It is an entry with an includes code constraint on the value"
+Value:          1..* Coding includes FOO#bar "FooBar"
+
+EntryElement:   IncludesCodeConstraintOnValueChild
+Description:    "It is an entry with an includes code constraint on the value's child"
+Value:          MultiCodedFromValueSet
+                MultiCodedFromValueSet.Coding includes FOO#bar "FooBar"
+
+EntryElement:   IncludesCodeConstraintOnField
+Description:    "It is a group entry with an includes code constraint on a field"
+0..1            Simple
+1..*            Coding includes FOO#bar "FooBar"
+
+EntryElement:   IncludesCodeConstraintOnFieldChild
+Description:    "It is a group entry with an includes code constraint on a field's child"
+0..1            Simple
+0..1            MultiCodedFromValueSet
+                MultiCodedFromValueSet.Coding includes FOO#bar "FooBar"
+
+Element:        Simple
+Value:          string
+
+Element:        MultiCodedFromValueSet
+Value:          1..* Coding from http://standardhealthrecord.org/test/vs/Coded

@@ -1,6 +1,7 @@
-DataDefinitions:  shr.test
+Grammar:    DataElement 4.0
+Namespace:  shr.test
 
-Vocabulary:     FOO = http://foo.org
+CodeSystem:     FOO = http://foo.org
 
 Element:        Simple
 Concept:        FOO #bar
