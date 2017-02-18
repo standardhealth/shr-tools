@@ -1,38 +1,125 @@
+class Specifications {
+  constructor() {
+    this._namespaces = new NamespaceSpecifications();
+    this._dataElements = new DataElementSpecifications();
+    /* For later
+    this._valueSets = new ValueSetSpecifications();
+    this._maps = new MapSpecifications();
+    */
+  }
+
+  get namespaces() { return this._namespaces; }
+  get dataElements() { return this._dataElements; }
+  /* For later
+  get valueSets() { return this._valueSets; }
+  get maps() { return this._maps; }
+  */
+}
+
+class NamespaceSpecifications {
+  constructor() {
+    this._nsMap = new Map();
+  }
+
+  add(namespace) {
+    this._nsMap.set(namespace.namespace, namespace);
+  }
+
+  get all() { return Array.from(this._nsMap.values()); }
+
+  find(namespace) {
+    return this._nsMap.get(namespace);
+  }
+}
+
+class DataElementSpecifications {
+  constructor() {
+    this._nsMap = new Map();
+    this._grammarVersions = new Map();
+  }
+
+  get grammarVersions() { return Array.from(this._grammarVersions.values()); }
+  get namespaces() { return Array.from(this._nsMap.keys()); }
+
+  add(dataElement) {
+    const id = dataElement.identifier;
+    if (!this._nsMap.has(id.namespace)) {
+      this._nsMap.set(id.namespace, new Map());
+    }
+    this._nsMap.get(id.namespace).set(id.name, dataElement);
+    if (typeof dataElement.grammarVersion !== 'undefined') {
+      this._grammarVersions.set(dataElement.grammarVersion.toString(), dataElement.grammarVersion);
+    }
+  }
+
+  get all() {
+    const all = [];
+    for (const ns of this._nsMap.values()) {
+      all.push(...ns.values());
+    }
+    return all;
+  }
+
+  get entries() {
+    return this.all.filter(de => de.isEntry);
+  }
+
+  byNamespace(namespace) {
+    if (this._nsMap.has(namespace)) {
+      return Array.from(this._nsMap.get(namespace).values());
+    }
+    return [];
+  }
+
+  entriesByNamespace(namespace) {
+    if (this._nsMap.has(namespace)) {
+      return this.byNamespace(namespace).filter(de => de.isEntry);
+    }
+    return [];
+  }
+
+  find(namespace, name) {
+    if (this._nsMap.has(namespace)) {
+      return this._nsMap.get(namespace).get(name);
+    }
+  }
+
+  findByIdentifier(identifier) {
+    return this.find(identifier.namespace, identifier.name);
+  }
+}
+
+/* For later
+class ValueSetSpecifications {
+
+}
+
+class MapSpecifications {
+
+}
+*/
+
 class Namespace {
-  constructor(namespace) {
+  constructor(namespace, description) {
     this._namespace = namespace; // string
-    this._definitionIdentifiers = []; // Identifier[] (keeping track in an array allows us to preserve order)
-    this._definitionMap = {}; // obj[string]=DataElement
+    this._description = description; // string
   }
 
   get namespace() { return this._namespace; }
 
-  get definitions() { return this._definitionIdentifiers.map(id => this._definitionMap[id]); }
-  addDefinition(definition) {
-    if (typeof this.lookup(definition.identifier.name) === 'undefined') {
-      this._definitionIdentifiers.push(definition.identifier.name);
-    }
-    this._definitionMap[definition.identifier.name] = definition;
+  // a description is a string
+  get description() { return this._description; }
+  set description(description) {
+    this._description = description;
   }
-  // withDefinition is a convenience function for chaining
-  withDefinition(definition) {
-    this.addDefinition(definition);
+  // withDescription is a convenience function for chaining
+  withDescription(description) {
+    this.description = description;
     return this;
   }
 
-  lookup(name) {
-    return this._definitionMap[name];
-  }
-
   clone() {
-    const clone = new Namespace(this._namespace);
-    for (const id of this._definitionIdentifiers) {
-      clone._definitionIdentifiers.push(id.clone());
-    }
-    for (const name of this._definitionMap) {
-      clone._definitionMap[name] = this._definitionMap[name].clone();
-    }
-    return clone;
+    return new Namespace(this._namespace, this._description);
   }
 }
 
@@ -43,7 +130,7 @@ class DataElement {
     this._basedOn = [];      // Identifier[]
     this._concepts = [];     // Concept[]
     this._fields = [];       // Value[] (and its subclasses) -- excluding primitive values
-    // also contains _value and _description
+    // also contains _value, _description, and _grammarVersion
   }
 
   // identifier is the unique Identifier (namespace+name) for the DataElement
@@ -118,6 +205,17 @@ class DataElement {
     return this;
   }
 
+  // the Version of the grammar used to define this element
+  get grammarVersion() { return this._grammarVersion; }
+  set grammarVersion(grammarVersion) {
+    this._grammarVersion = grammarVersion;
+  }
+  // withGrammarVersion is a convenience function for chaining
+  withGrammarVersion(grammarVersion) {
+    this.grammarVersion = grammarVersion;
+    return this;
+  }
+
   clone() {
     const clone = new DataElement(this._identifier.clone(), this._isEntry);
     if (this._description) {
@@ -134,6 +232,9 @@ class DataElement {
     }
     for (const field of this._fields) {
       clone._fields.push(field.clone());
+    }
+    if (this._grammarVersion) {
+      clone._grammarVersion = this._grammarVersion;
     }
     return clone;
   }
@@ -286,16 +387,60 @@ class CodeConstraint extends Constraint {
   }
 }
 
+// IncludesCodeConstraint only makes sense on an array of code or Coding
+class IncludesCodeConstraint extends Constraint {
+  constructor(code, path) {
+    super(path);
+    this._code = code;
+  }
+
+  get code() { return this._code; }
+
+  clone() {
+    const clone = new IncludesCodeConstraint(this._code.clone());
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
+}
+
+// BooleanConstraint only makes sense on a boolean
+class BooleanConstraint extends Constraint {
+  constructor(value, path) {
+    super(path);
+    this._value = value;
+  }
+
+  get value() { return this._value; }
+
+  clone() {
+    const clone = new BooleanConstraint(this._value);
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
+}
+
 class TypeConstraint extends Constraint {
-  constructor(isA, path) {
+  constructor(isA, path, onValue = false) {
     super(path);
     this._isA = isA;
+    this._onValue = onValue;
   }
 
   get isA() { return this._isA; }
 
+  get onValue() { return this._onValue; }
+  set onValue(onValue) {
+    this._onValue = onValue;
+  }
+  // withOnValue is a convenience function for chaining
+  withOnValue(onValue) {
+    this.onValue = onValue;
+    return this;
+  }
+
   clone() {
     const clone = new TypeConstraint(this._isA.clone());
+    clone.onValue = this._onValue;
     this._clonePropertiesTo(clone);
     return clone;
   }
@@ -347,6 +492,14 @@ class ConstraintsFilter {
 
   get code() {
     return new ConstraintsFilter(this._constraints.filter(c => c instanceof CodeConstraint));
+  }
+
+  get includesCode() {
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof IncludesCodeConstraint));
+  }
+
+  get boolean() {
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof BooleanConstraint));
   }
 
   get type() {
@@ -561,8 +714,26 @@ class TBD extends Value{
   }
 }
 
+class Version {
+  constructor(major, minor = 0, patch = 0) {
+    this._major = major;
+    this._minor = minor;
+    this._patch = patch;
+  }
+
+  get major() { return this._major; }
+  get minor() { return this._minor; }
+  get patch() { return this._patch; }
+
+  toString() {
+    return `${this.major}.${this.minor}.${this.patch}`;
+  }
+}
+
+const VERSION = new Version(4, 0, 0);
+const GRAMMAR_VERSION = new Version(4, 0, 0);
 const PRIMITIVE_NS = 'primitive';
 const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'code', 'id',
   'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time'];
 
-module.exports = {Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, TypeConstraint, CardConstraint, PRIMITIVE_NS, PRIMITIVES};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION};
