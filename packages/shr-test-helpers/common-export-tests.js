@@ -13,123 +13,105 @@ function commonExportTests(expectedFn, exportFn) {
   };
 
   return () => {
+    let _specs;
+    let checkExpected = function(expected) {
+      expect(exportFn(_specs)).to.eql(expected);
+    };
+
     // Note: using ES5 function syntax instead of () => due to bug in mocha that doesn't preserve context of 'this'
+    beforeEach(function() {
+      _specs = new mdl.Specifications();
+    });
+
+    afterEach(function() {
+      _specs = null;
+    });
+
     it('should correctly export a simple entry', function() {
-      const ns = new mdl.Namespace('shr.test');
-      addSimpleElement(ns);
+      addSimpleElement(_specs, 'shr.test');
       const expected = wrappedExpectedFn('Simple', this);
-      const actual = exportFn(ns);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export a simple entry in a different namespace', function() {
-      const otherNS = new mdl.Namespace('shr.other.test');
-      addSimpleElement(otherNS);
+      addSimpleElement(_specs, 'shr.other.test');
       const expected = wrappedExpectedFn('ForeignSimple', this);
-      const actual = exportFn(otherNS);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export a coded entry', function() {
-      const ns = new mdl.Namespace('shr.test');
-      addCodedElement(ns);
+      addCodedElement(_specs, 'shr.test');
       const expected = wrappedExpectedFn('Coded', this);
-      const actual = exportFn(ns);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export a reference entry', function() {
-      const ns = new mdl.Namespace('shr.test');
-      addSimpleReference(ns);
+      addSimpleReference(_specs, 'shr.test');
       const expected = wrappedExpectedFn('SimpleReference', this);
-      const actual = exportFn(ns);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export an entry with an element value', function() {
       // NOTE: This is an entry where the value is not a primitive, e.g. "Value: SomeOtherDataElement"
-      const ns = new mdl.Namespace('shr.test');
-      addElementValue(ns);
+      addElementValue(_specs, 'shr.test');
       const expected = wrappedExpectedFn('ElementValue', this);
-      const actual = exportFn(ns);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export an entry with an element value in a different namespace', function() {
       // NOTE: This is an entry where the value is not a primitive, e.g. "Value: SomeOtherDataElement"
-      const ns = new mdl.Namespace('shr.test');
-      const otherNS = new mdl.Namespace('shr.other.test');
-      addForeignElementValue(ns, otherNS);
+      addForeignElementValue(_specs, 'shr.test', 'shr.other.test');
       const expected = wrappedExpectedFn('ForeignElementValue', this);
-      const actual = exportFn(ns, otherNS);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export an entry with two-deep element value', function() {
       // NOTE: This is an entry where the value is a non-primitive, that itself has a value that is a non-primitive
-      const ns = new mdl.Namespace('shr.test');
-      addTwoDeepElementValue(ns);
+      addTwoDeepElementValue(_specs, 'shr.test');
       const expected = wrappedExpectedFn('TwoDeepElementValue', this);
-      const actual = exportFn(ns);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export a choice', function() {
-      const ns = new mdl.Namespace('shr.test');
-      addChoice(ns);
+      addChoice(_specs, 'shr.test');
       const expected = wrappedExpectedFn('Choice');
-      const actual = exportFn(ns);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export a choice containing a choice', function() {
-      const ns = new mdl.Namespace('shr.test');
-      addChoiceOfChoice(ns);
+      addChoiceOfChoice(_specs, 'shr.test');
       const expected = wrappedExpectedFn('ChoiceOfChoice', this);
-      const actual = exportFn(ns);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export a group', function() {
-      const ns = new mdl.Namespace('shr.test');
-      const otherNS = new mdl.Namespace('shr.other.test');
-      addGroup(ns, otherNS);
+      addGroup(_specs, 'shr.test', 'shr.other.test');
       const expected = wrappedExpectedFn('Group', this);
-      const actual = exportFn(ns, otherNS);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export a group with a choice containing a choice', function() {
-      const ns = new mdl.Namespace('shr.test');
-      const otherNS = new mdl.Namespace('shr.other.test');
-      addGroupWithChoiceOfChoice(ns, otherNS);
+      addGroupWithChoiceOfChoice(_specs, 'shr.test', 'shr.other.test');
       const expected = wrappedExpectedFn('GroupWithChoiceOfChoice', this);
-      const actual = exportFn(ns, otherNS);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export a group with name clashes', function() {
-      const ns = new mdl.Namespace('shr.test');
-      const otherNS = new mdl.Namespace('shr.other.test');
-      addGroupPathClash(ns, otherNS);
+      addGroupPathClash(_specs, 'shr.test', 'shr.other.test');
       const expected = wrappedExpectedFn('GroupPathClash', this);
-      const actual = exportFn(ns, otherNS);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
 
     it('should correctly export an element based on a group element', function() {
-      const ns = new mdl.Namespace('shr.test');
-      const otherNS = new mdl.Namespace('shr.other.test');
-      addGroupDerivative(ns, otherNS);
+      addGroupDerivative(_specs, 'shr.test', 'shr.other.test');
       const expected = wrappedExpectedFn('GroupDerivative', this);
-      const actual = exportFn(ns, otherNS);
-      expect(actual).to.eql(expected);
+      checkExpected(expected);
     });
   };
 }
 
-function addGroup(ns, otherNS, addSubElements=true) {
-  let gr = new mdl.DataElement(id(ns.namespace, 'Group'), true)
+function addGroup(specs, ns, otherNS, addSubElements=true) {
+  let gr = new mdl.DataElement(id(ns, 'Group'), true)
     .withDescription('It is a group of elements')
     .withConcept(new mdl.Concept('http://foo.org', 'bar', 'Foobar'))
     .withConcept(new mdl.Concept('http://boo.org', 'far', 'Boofar'))
@@ -140,19 +122,19 @@ function addGroup(ns, otherNS, addSubElements=true) {
       .withOption(new mdl.IdentifiableValue(id('shr.test', 'ForeignElementValue')).withMinMax(1))
     )
     .withField(new mdl.IdentifiableValue(id('shr.test', 'ElementValue')).withMinMax(0));
-  ns.addDefinition(gr);
+  add(specs, gr);
   if (addSubElements) {
-    addSimpleElement(ns);
-    addCodedElement(ns);
-    addSimpleElement(otherNS);
-    addForeignElementValue(ns, otherNS);
-    addElementValue(ns);
+    addSimpleElement(specs, ns);
+    addCodedElement(specs, ns);
+    addSimpleElement(specs, otherNS);
+    addForeignElementValue(specs, ns, otherNS);
+    addElementValue(specs, ns);
   }
   return gr;
 }
 
-function addGroupWithChoiceOfChoice(ns, otherNS, addSubElements=true) {
-  let gr = new mdl.DataElement(id(ns.namespace, 'GroupWithChoiceOfChoice'), true)
+function addGroupWithChoiceOfChoice(specs, ns, otherNS, addSubElements=true) {
+  let gr = new mdl.DataElement(id(ns, 'GroupWithChoiceOfChoice'), true)
     .withDescription('It is a group of elements with a choice containing a choice')
     .withField(new mdl.IdentifiableValue(id('shr.test', 'Simple')).withMinMax(1, 1))
     .withField(new mdl.IdentifiableValue(id('shr.test', 'Coded')).withMinMax(0, 1))
@@ -163,102 +145,102 @@ function addGroupWithChoiceOfChoice(ns, otherNS, addSubElements=true) {
         .withOption(new mdl.IdentifiableValue(id('shr.test', 'ElementValue')).withMinMax(1))
       )
     );
-  ns.addDefinition(gr);
+  add(specs, gr);
   if (addSubElements) {
-    addSimpleElement(ns);
-    addCodedElement(ns);
-    addSimpleElement(otherNS);
-    addForeignElementValue(ns, otherNS);
-    addElementValue(ns);
+    addSimpleElement(specs, ns);
+    addCodedElement(specs, ns);
+    addSimpleElement(specs, otherNS);
+    addForeignElementValue(specs, ns, otherNS);
+    addElementValue(specs, ns);
   }
   return gr;
 }
 
-function addGroupPathClash(ns, nsOther, addSubElements=true) {
-  let gr = new mdl.DataElement(id(ns.namespace, 'GroupPathClash'), true)
+function addGroupPathClash(specs, ns, nsOther, addSubElements=true) {
+  let gr = new mdl.DataElement(id(ns, 'GroupPathClash'), true)
     .withDescription('It is a group of elements with clashing names')
     .withField(new mdl.IdentifiableValue(id('shr.test', 'Simple')).withMinMax(1, 1))
     .withField(new mdl.IdentifiableValue(id('shr.other.test', 'Simple')).withMinMax(0, 1));
-  ns.addDefinition(gr);
+  add(specs, gr);
   if (addSubElements) {
-    addSimpleElement(ns);
-    addSimpleElement(nsOther);
+    addSimpleElement(specs, ns);
+    addSimpleElement(specs, nsOther);
   }
   return gr;
 }
 
-function addGroupDerivative(ns, otherNS, addSubElements=true) {
-  let gd = new mdl.DataElement(id(ns.namespace, 'GroupDerivative'), true)
+function addGroupDerivative(specs, ns, otherNS, addSubElements=true) {
+  let gd = new mdl.DataElement(id(ns, 'GroupDerivative'), true)
     .withBasedOn(id('shr.test', 'Group'))
     .withDescription('It is a derivative of a group of elements')
     .withValue(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1));
-  ns.addDefinition(gd);
+  add(specs, gd);
   if (addSubElements) {
-    addGroup(ns, otherNS, addSubElements);
+    addGroup(specs, ns, otherNS, addSubElements);
   }
   return gd;
 }
 
-function addSimpleElement(ns) {
-  let de = new mdl.DataElement(id(ns.namespace, 'Simple'), true)
+function addSimpleElement(specs, ns) {
+  let de = new mdl.DataElement(id(ns, 'Simple'), true)
     .withDescription('It is a simple element')
     .withConcept(new mdl.Concept('http://foo.org', 'bar', 'Foobar'))
     .withValue(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1));
-  ns.addDefinition(de);
+  add(specs, de);
   return de;
 }
 
-function addCodedElement(ns) {
-  let de = new mdl.DataElement(id(ns.namespace, 'Coded'), true)
+function addCodedElement(specs, ns) {
+  let de = new mdl.DataElement(id(ns, 'Coded'), true)
     .withDescription('It is a coded element')
     .withValue(new mdl.IdentifiableValue(pid('code')).withMinMax(1, 1)
       .withConstraint(new mdl.ValueSetConstraint('http://standardhealthrecord.org/test/vs/Coded'))
     );
-  ns.addDefinition(de);
+  add(specs, de);
   return de;
 }
 
-function addSimpleReference(ns) {
-  let de = new mdl.DataElement(id(ns.namespace, 'SimpleReference'), true)
+function addSimpleReference(specs, ns) {
+  let de = new mdl.DataElement(id(ns, 'SimpleReference'), true)
     .withDescription('It is a reference to a simple element')
-    .withValue(new mdl.RefValue(id(ns.namespace, 'Simple')).withMinMax(1, 1));
-  ns.addDefinition(de);
+    .withValue(new mdl.RefValue(id(ns, 'Simple')).withMinMax(1, 1));
+  add(specs, de);
   return de;
 }
 
-function addTwoDeepElementValue(ns, addSubElement=true) {
-  let de = new mdl.DataElement(id(ns.namespace, 'TwoDeepElementValue'), true)
+function addTwoDeepElementValue(specs, ns, addSubElement=true) {
+  let de = new mdl.DataElement(id(ns, 'TwoDeepElementValue'), true)
     .withDescription('It is an element with a two-deep element value')
-    .withValue(new mdl.IdentifiableValue(id(ns.namespace, 'ElementValue')).withMinMax(1, 1));
-  ns.addDefinition(de);
+    .withValue(new mdl.IdentifiableValue(id(ns, 'ElementValue')).withMinMax(1, 1));
+  add(specs, de);
   if (addSubElement) {
-    addElementValue(ns, true);
+    addElementValue(specs, ns, true);
   }
   return de;
 }
 
-function addElementValue(ns, addSubElement=true) {
-  let de = new mdl.DataElement(id(ns.namespace, 'ElementValue'), true)
+function addElementValue(specs, ns, addSubElement=true) {
+  let de = new mdl.DataElement(id(ns, 'ElementValue'), true)
     .withDescription('It is an element with an element value')
-    .withValue(new mdl.IdentifiableValue(id(ns.namespace, 'Simple')).withMinMax(1, 1));
-  ns.addDefinition(de);
+    .withValue(new mdl.IdentifiableValue(id(ns, 'Simple')).withMinMax(1, 1));
+  add(specs, de);
   if (addSubElement) {
-    addSimpleElement(ns);
+    addSimpleElement(specs, ns);
   }
   return de;
 }
 
-function addForeignElementValue(ns, otherNS) {
-  let de = new mdl.DataElement(id(ns.namespace, 'ForeignElementValue'), true)
+function addForeignElementValue(specs, ns, otherNS) {
+  let de = new mdl.DataElement(id(ns, 'ForeignElementValue'), true)
     .withDescription('It is an element with a foreign element value')
-    .withValue(new mdl.IdentifiableValue(id(otherNS.namespace, 'Simple')).withMinMax(1, 1));
-  ns.addDefinition(de);
-  addSimpleElement(otherNS);
+    .withValue(new mdl.IdentifiableValue(id(otherNS, 'Simple')).withMinMax(1, 1));
+  add(specs, de);
+  addSimpleElement(specs, otherNS);
   return de;
 }
 
-function addChoice(ns, addSubElements=true) {
-  let ch = new mdl.DataElement(id(ns.namespace, 'Choice'), true)
+function addChoice(specs, ns, addSubElements=true) {
+  let ch = new mdl.DataElement(id(ns, 'Choice'), true)
     .withDescription('It is an element with a choice')
     .withValue(new mdl.ChoiceValue().withMinMax(1, 1)
       .withOption(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1))
@@ -267,15 +249,15 @@ function addChoice(ns, addSubElements=true) {
       )
       .withOption(new mdl.IdentifiableValue(id('shr.test', 'Coded')).withMinMax(1, 1))
     );
-  ns.addDefinition(ch);
+  add(specs, ch);
   if (addSubElements) {
-    addCodedElement(ns);
+    addCodedElement(specs, ns);
   }
   return ch;
 }
 
-function addChoiceOfChoice(ns) {
-  let de = new mdl.DataElement(id(ns.namespace, 'ChoiceOfChoice'), true)
+function addChoiceOfChoice(specs, ns) {
+  let de = new mdl.DataElement(id(ns, 'ChoiceOfChoice'), true)
     .withDescription('It is an element with a choice containing a choice')
     .withValue(new mdl.ChoiceValue().withMinMax(1, 1)
       .withOption(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1))
@@ -287,8 +269,15 @@ function addChoiceOfChoice(ns) {
         .withConstraint(new mdl.ValueSetConstraint('http://standardhealthrecord.org/test/vs/CodeChoice'))
       )
     );
-  ns.addDefinition(de);
+  add(specs, de);
   return de;
+}
+
+function add(specs, ...dataElements) {
+  for (const de of dataElements) {
+    specs.namespaces.add(new mdl.Namespace(de.identifier.namespace));
+    specs.dataElements.add(de);
+  }
 }
 
 function id(namespace, name) {
