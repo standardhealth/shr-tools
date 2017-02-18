@@ -805,9 +805,9 @@ shelljs@^0.7.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shr-models@~3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-3.0.0.tgz#fb9e5e4c293c999db8db1b108fc6cada0bc8979b"
+shr-models@~4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-4.0.0.tgz#2e506a1e9731d536ab1268b634d3a4767ca4cbf1"
 
 slice-ansi@0.0.4:
   version "0.0.4"

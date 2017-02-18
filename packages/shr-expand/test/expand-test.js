@@ -2,57 +2,70 @@ const {expect} = require('chai');
 const {expand} = require('../index');
 const models = require('shr-models');
 
+let _specs, _result;
+
 describe('#expand()', () => {
+  beforeEach(function() {
+    _specs = new models.Specifications();
+    // The SHR test namespace used by most tests
+    _specs.namespaces.add(new models.Namespace('shr.core'));
+    // A core namespace and Coding data element needed by some tests
+    _specs.namespaces.add(new models.Namespace('shr.core'));
+    _specs.dataElements.add(new models.DataElement(id('shr.core', 'Coding'), false));
+  });
+
+  afterEach(function() {
+    _specs = null;
+    _result = null;
+  });
+
   it('should not modify the passed in namespaces or data elements, but instead return new ones', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    const a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'));
-    ns.addDefinition(subA);
-    ns.addDefinition(simpleDE(ns.namespace, 'SubAFieldA'));
+    const subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'));
+    add(a, subA, simpleDE('shr.test', 'SubAFieldA'));
 
     // Get clones of the originals
     const aClone = a.clone();
     const subAClone = subA.clone();
 
     // Do the expansion
-    const result = expand([ns]);
+    doExpand();
+
+    // No errors
+    expect(errors()).to.be.empty;
 
     // Originals should be the same as they were
     expect(a).to.eql(aClone);
     expect(subA).to.eql(subAClone);
 
     // Expanded A should be the same value (expansion doesn't affect it) but not the same exact instance
-    const eA = result.namespaces[0].lookup('A');
+    const eA = findExpanded('shr.test', 'A');
     expect(eA).to.eql(aClone);
     expect(eA).to.eql(a);
     expect(eA).not.to.equal(a);
 
     // Expanded SubA should be a different value (due to expansion)
-    const eSubA = result.namespaces[0].lookup('SubA');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA).not.to.eql(subAClone);
     expect(eSubA).not.to.eql(subA);
     expect(eSubA).not.to.equal(subA);
   });
 
   it('should not copy metadata from based on classes to child classes', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withDescription('It is A.')
       .withConcept(new models.Concept('http://foo.org', 'bar'))
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'));
-    ns.addDefinition(subA);
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'));
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.description).to.be.undefined;
@@ -62,23 +75,20 @@ describe('#expand()', () => {
   });
 
   it('should retain metadata in the child class', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withDescription('It is A.')
       .withConcept(new models.Concept('http://foo.org', 'bar'))
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withDescription('It is SubA.')
       .withConcept(new models.Concept('http://foo.org', 'baz'));
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.description).to.equal('It is SubA.');
@@ -88,21 +98,17 @@ describe('#expand()', () => {
   });
 
   it('should correctly merge in value from a basedOn element when it doesn\'t define its own value', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'SubAFieldA')).withMinMax(1, 1));
-    ns.addDefinition(subA);
-    ns.addDefinition(simpleDE(ns.namespace, 'SubAFieldA'));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(new models.IdentifiableValue(id('shr.test', 'SubAFieldA')).withMinMax(1, 1));
+    add(a, subA, simpleDE('shr.test', 'SubAFieldA'));
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
@@ -112,20 +118,17 @@ describe('#expand()', () => {
   });
 
   it('should correctly retain its value when it\'s the same as the basedOn value', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
@@ -133,44 +136,37 @@ describe('#expand()', () => {
   });
 
   it('should report an error if the value identifier is changed', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(new models.IdentifiableValue(pid('decimal')).withMinMax(1, 1));
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('override').and.to.contain('string').and.to.contain('decimal');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('override').and.to.contain('string').and.to.contain('decimal');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
-    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.value).to.be.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
     expect(eSubA.fields).to.be.empty;
   });
 
   it('should correctly merge in unique fields from a basedOn element', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'AFieldA')).withMinMax(1, 1));
-    ns.addDefinition(a);
-    ns.addDefinition(simpleDE(ns.namespace, 'AFieldA'));
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'SubAFieldA')).withMinMax(1, 1));
-    ns.addDefinition(subA);
-    ns.addDefinition(simpleDE(ns.namespace, 'SubAFieldA'));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1, 1));
+    add(simpleDE('shr.test', 'AFieldA'));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(new models.IdentifiableValue(id('shr.test', 'SubAFieldA')).withMinMax(1, 1));
+    add(a, subA, simpleDE('shr.test', 'SubAFieldA'));
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -183,20 +179,17 @@ describe('#expand()', () => {
   // Valid Cardinality Constraints
 
   it('should correctly add cardinality constraints when overriding cardinality of a value', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
@@ -207,20 +200,17 @@ describe('#expand()', () => {
   });
 
   it('should correctly add cardinality constraints when overriding cardinality of a field', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'AFieldA')).withMinMax(0, 5));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'AFieldA')).withMinMax(1, 3));
-    ns.addDefinition(subA);
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 5));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1, 3));
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -230,24 +220,45 @@ describe('#expand()', () => {
     ]);
   });
 
+  it('should correctly fall back to based on cardinality when no cardinality is supplied', () => {
+    let aFieldA = new models.DataElement(id('shr.test', 'AFieldA'), true)
+      .withValue(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1, 1));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 5));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA'))
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'Coding')]))
+      );
+    add(aFieldA, a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([
+      new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 5)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'Coding')]))
+    ]);
+  });
   // Invalid Cardinality Constraints
 
   it('should report an error when widening cardinality of a value', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 2));
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('cardinality').and.to.contain('0..1').and.to.contain('1..2');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('cardinality').and.to.contain('0..1').and.to.contain('1..2');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
@@ -260,27 +271,23 @@ describe('#expand()', () => {
   it('should report an error when widening cardinality of a value\'s value', function() {
     this.skip('Doesn\'t currently validate cardinalities of subpath in the context of their path');
 
-    let ns = new models.Namespace('shr.test');
-    let aVal = new models.DataElement(id(ns.namespace, 'AVal'), true)
+    let aVal = new models.DataElement(id('shr.test', 'AVal'), true)
       .withValue(new models.IdentifiableValue(pid('decimal')).withMinMax(1, 1));
-    ns.addDefinition(aVal);
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(aVal.identifier).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(
         new models.IdentifiableValue(aVal.identifier).withMinMax(0, 1)
           .withConstraint(new models.CardConstraint(new models.Cardinality(1), [pid('decimal')]))
       );
-    ns.addDefinition(subA);
+    add(aVal, a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('cardinality').and.to.contain('0..1').and.to.contain('1..2');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('cardinality').and.to.contain('0..1').and.to.contain('1..2');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
@@ -290,29 +297,26 @@ describe('#expand()', () => {
   });
 
   it('should report an error when widening cardinality from a previous constraint on a value\'s value', () => {
-    let ns = new models.Namespace('shr.test');
-    let aVal = new models.DataElement(id(ns.namespace, 'AVal'), true)
+    let aVal = new models.DataElement(id('shr.test', 'AVal'), true)
       .withValue(new models.IdentifiableValue(pid('decimal')).withMinMax(1));
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(
         new models.IdentifiableValue(aVal.identifier).withMinMax(0, 1)
           .withConstraint(new models.CardConstraint(new models.Cardinality(1, 1), [pid('decimal')]))
       );
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(
         new models.IdentifiableValue(aVal.identifier).withMinMax(0, 1)
           .withConstraint(new models.CardConstraint(new models.Cardinality(1), [pid('decimal')]))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('cardinality').and.to.contain('1..1').and.to.contain('1..*');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('cardinality').and.to.contain('1..1').and.to.contain('1..*');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
@@ -323,22 +327,18 @@ describe('#expand()', () => {
   });
 
   it('should report an error when widening cardinality of a field', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'AFieldA')).withMinMax(1, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'AFieldA')).withMinMax(0, 1));
-    ns.addDefinition(subA);
-    ns.addDefinition(simpleDE(ns.namespace, 'AFieldA'));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1));
+    add(a, subA, simpleDE('shr.test', 'AFieldA'));
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('cardinality').and.to.contain('1..1').and.to.contain('0..1');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('cardinality').and.to.contain('1..1').and.to.contain('0..1');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -351,27 +351,23 @@ describe('#expand()', () => {
   it('should report an error when widening cardinality of a fields\'s field', function() {
     this.skip('Doesn\'t currently validate cardinalities of subpath in the context of their path');
 
-    let ns = new models.Namespace('shr.test');
-    let aField = new models.DataElement(id(ns.namespace, 'AField'), true)
+    let aField = new models.DataElement(id('shr.test', 'AField'), true)
       .withField(new models.IdentifiableValue(pid('decimal')).withMinMax(1, 1));
-    ns.addDefinition(aField);
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withField(new models.IdentifiableValue(aField.identifier).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withField(
         new models.IdentifiableValue(aField.identifier).withMinMax(0, 1)
           .withConstraint(new models.CardConstraint(new models.Cardinality(1), [pid('decimal')]))
       );
-    ns.addDefinition(subA);
+    add(aField, a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('cardinality').and.to.contain('0..1').and.to.contain('1..2');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('cardinality').and.to.contain('0..1').and.to.contain('1..2');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -381,29 +377,26 @@ describe('#expand()', () => {
   });
 
   it('should report an error when widening cardinality from a previous constraint on a field\'s field', () => {
-    let ns = new models.Namespace('shr.test');
-    let aVal = new models.DataElement(id(ns.namespace, 'AField'), true)
+    let aVal = new models.DataElement(id('shr.test', 'AField'), true)
       .withField(new models.IdentifiableValue(pid('decimal')).withMinMax(1));
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withField(
         new models.IdentifiableValue(aVal.identifier).withMinMax(0, 1)
           .withConstraint(new models.CardConstraint(new models.Cardinality(1, 1), [pid('decimal')]))
       );
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withField(
         new models.IdentifiableValue(aVal.identifier).withMinMax(0, 1)
           .withConstraint(new models.CardConstraint(new models.Cardinality(1), [pid('decimal')]))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('cardinality').and.to.contain('1..1').and.to.contain('1..*');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('cardinality').and.to.contain('1..1').and.to.contain('1..*');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -416,29 +409,24 @@ describe('#expand()', () => {
   // Valid Type Constraints
 
   it('should keep valid type constraints on values', () => {
-    let ns = new models.Namespace('shr.test');
-    let b = new models.DataElement(id(ns.namespace, 'B'), true)
+    let b = new models.DataElement(id('shr.test', 'B'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(b);
-    let subB = new models.DataElement(id(ns.namespace, 'SubB'), true)
-      .withBasedOn(id(ns.namespace, 'B'));
-    ns.addDefinition(subB);
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
-      .withValue(new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subB = new models.DataElement(id('shr.test', 'SubB'), true)
+      .withBasedOn(id('shr.test', 'B'));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(
-        new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1)
-          .withConstraint(new models.TypeConstraint(id(ns.namespace, 'SubB')))
+        new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')))
       );
-    ns.addDefinition(subA);
+    add(b, subB, a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
@@ -448,30 +436,80 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.be.empty;
   });
 
-  it('should keep valid type constraints on fields', () => {
-    let ns = new models.Namespace('shr.test');
-    let b = new models.DataElement(id(ns.namespace, 'B'), true)
-      .withField(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(b);
-    let subB = new models.DataElement(id(ns.namespace, 'SubB'), true)
-      .withBasedOn(id(ns.namespace, 'B'));
-    ns.addDefinition(subB);
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
-      .withField(
-        new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1)
-          .withConstraint(new models.TypeConstraint(id(ns.namespace, 'SubB')))
+  it('should make \'value type\' constraints on value explicit', () => {
+    let b = new models.DataElement(id('shr.test', 'B'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
+    let subB = new models.DataElement(id('shr.test', 'SubB'), true)
+      .withBasedOn(id('shr.test', 'B'));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')).withOnValue(true))
       );
-    ns.addDefinition(subA);
+    add(b, subB, a, x);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB'), [id('shr.test', 'B')], false))
+    );
+    expect(eX.fields).to.be.empty;
+  });
+
+  it('should allow \'value type\' constraints to narrow a choice', function() {
+    this.skip('Doesn\'t currently support narrowing choices like this.  May require new constraint type.');
+    let a = new models.DataElement(id('shr.test', 'A'), true);
+    let b = new models.DataElement(id('shr.test', 'B'), true);
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.ChoiceValue().withMinMax(0, 1)
+          .withOption(new models.IdentifiableValue(id('shr.test', 'A')))
+          .withOption(new models.IdentifiableValue(id('shr.test', 'B')))
+      );
+    let y = new models.DataElement(id('shr.test', 'Y'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'B')).withOnValue(true))
+      );
+    add(a, b, x, y);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eY = findExpanded('shr.test', 'Y');
+    expect(eY.identifier).to.eql(id('shr.test', 'Y'));
+    expect(eY.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+        .withConstraint(new models.TypeConstraint(id('shr.test', 'B'), true))
+    );
+    expect(eY.fields).to.be.empty;
+  });
+
+  it('should keep valid type constraints on fields', () => {
+    let b = new models.DataElement(id('shr.test', 'B'), true)
+      .withField(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
+    let subB = new models.DataElement(id('shr.test', 'SubB'), true)
+      .withBasedOn(id('shr.test', 'B'));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')))
+      );
+    add(b, subB, a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -481,33 +519,54 @@ describe('#expand()', () => {
     ]);
   });
 
+  it('should make \'value type\' constraints on fields explicit', () => {
+    let b = new models.DataElement(id('shr.test', 'B'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
+    let subB = new models.DataElement(id('shr.test', 'SubB'), true)
+      .withBasedOn(id('shr.test', 'B'));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')).withOnValue(true))
+      );
+    add(b, subB, a, x);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.be.undefined;
+    expect(eX.fields).to.eql([
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB'), [id('shr.test', 'B')], false))
+    ]);
+  });
+
   // Invalid Type Constraints
 
   it('should report an error when new value type isn\'t based on constrained type', () => {
-    let ns = new models.Namespace('shr.test');
-    let b = new models.DataElement(id(ns.namespace, 'B'), true)
+    let b = new models.DataElement(id('shr.test', 'B'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(b);
-    let notSubB = new models.DataElement(id(ns.namespace, 'NotSubB'), true)
+    let notSubB = new models.DataElement(id('shr.test', 'NotSubB'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(notSubB);
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
-      .withValue(new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(
-        new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1)
-          .withConstraint(new models.TypeConstraint(id(ns.namespace, 'NotSubB')))
+        new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'NotSubB')))
       );
-    ns.addDefinition(subA);
+    add(b, notSubB, a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('type').and.to.contain('shr.test.B').and.to.contain('shr.test.NotSubB');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('type').and.to.contain('shr.test.B').and.to.contain('shr.test.NotSubB');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
@@ -516,70 +575,59 @@ describe('#expand()', () => {
   });
 
   it('should report an error when new value type isn\'t based on type from a previous constraint on a value\'s value', () => {
-    let ns = new models.Namespace('shr.test');
-    let b = new models.DataElement(id(ns.namespace, 'B'), true)
+    let b = new models.DataElement(id('shr.test', 'B'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(b);
-    let subB = new models.DataElement(id(ns.namespace, 'SubB'), true)
-      .withBasedOn(id(ns.namespace, 'B'));
-    ns.addDefinition(subB);
-    let subB2 = new models.DataElement(id(ns.namespace, 'SubB2'), true)
-      .withBasedOn(id(ns.namespace, 'B'));
-    ns.addDefinition(subB2);
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let subB = new models.DataElement(id('shr.test', 'SubB'), true)
+      .withBasedOn(id('shr.test', 'B'));
+    let subB2 = new models.DataElement(id('shr.test', 'SubB2'), true)
+      .withBasedOn(id('shr.test', 'B'));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(
-        new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1)
-          .withConstraint(new models.TypeConstraint(id(ns.namespace, 'SubB')))
+        new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')))
       );
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(
-        new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1)
-          .withConstraint(new models.TypeConstraint(id(ns.namespace, 'SubB2')))
+        new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB2')))
       );
-    ns.addDefinition(subA);
+    add(b, subB, subB2, a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('type').and.to.contain('shr.test.SubB').and.to.contain('shr.test.SubB2');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('type').and.to.contain('shr.test.SubB').and.to.contain('shr.test.SubB2');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
-        .withConstraint(new models.TypeConstraint(id(ns.namespace, 'SubB'))) // Original constraint
+        .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB'))) // Original constraint
     );
     expect(eSubA.fields).to.be.empty;
   });
 
   it('should report an error when new field type isn\'t based on constrained type', () => {
-    let ns = new models.Namespace('shr.test');
-    let b = new models.DataElement(id(ns.namespace, 'B'), true)
+    let b = new models.DataElement(id('shr.test', 'B'), true)
       .withField(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(b);
-    let notSubB = new models.DataElement(id(ns.namespace, 'NotSubB'), true)
+    let notSubB = new models.DataElement(id('shr.test', 'NotSubB'), true)
       .withField(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(notSubB);
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withField(
-        new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1)
-          .withConstraint(new models.TypeConstraint(id(ns.namespace, 'NotSubB')))
+        new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'NotSubB')))
       );
-    ns.addDefinition(subA);
+    add(b, notSubB, a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('type').and.to.contain('shr.test.B').and.to.contain('shr.test.NotSubB');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('type').and.to.contain('shr.test.B').and.to.contain('shr.test.NotSubB');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -590,65 +638,56 @@ describe('#expand()', () => {
   });
 
   it('should report an error when new field type isn\'t based on type from a previous constraint on a field\'s field', () => {
-    let ns = new models.Namespace('shr.test');
-    let b = new models.DataElement(id(ns.namespace, 'B'), true)
+    let b = new models.DataElement(id('shr.test', 'B'), true)
       .withField(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(b);
-    let subB = new models.DataElement(id(ns.namespace, 'SubB'), true)
-      .withBasedOn(id(ns.namespace, 'B'));
-    ns.addDefinition(subB);
-    let subB2 = new models.DataElement(id(ns.namespace, 'SubB2'), true)
-      .withBasedOn(id(ns.namespace, 'B'));
-    ns.addDefinition(subB2);
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let subB = new models.DataElement(id('shr.test', 'SubB'), true)
+      .withBasedOn(id('shr.test', 'B'));
+    let subB2 = new models.DataElement(id('shr.test', 'SubB2'), true)
+      .withBasedOn(id('shr.test', 'B'));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withField(
-        new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1)
-          .withConstraint(new models.TypeConstraint(id(ns.namespace, 'SubB')))
+        new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')))
       );
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withField(
-        new models.IdentifiableValue(id(ns.namespace, 'B')).withMinMax(0, 1)
-          .withConstraint(new models.TypeConstraint(id(ns.namespace, 'SubB2')))
+        new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB2')))
       );
-    ns.addDefinition(subA);
+    add(b, subB, subB2, a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('type').and.to.contain('shr.test.SubB').and.to.contain('shr.test.SubB2');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('type').and.to.contain('shr.test.SubB').and.to.contain('shr.test.SubB2');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
-        .withConstraint(new models.TypeConstraint(id(ns.namespace, 'SubB'))) // Original constraint
+        .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB'))) // Original constraint
     ]);
   });
 
   // Valid ValueSet Constraints
 
   it('should keep valid valueset constraints on values', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://foo.org'))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns, dummyCoreNS()]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(2);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
@@ -659,26 +698,23 @@ describe('#expand()', () => {
   });
 
   it('should allow valueset constraints to override prior valueset constraints on values', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://foo.org'))
       );
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://bar.org'))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns, dummyCoreNS()]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(2);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
@@ -688,27 +724,24 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.be.empty;
   });
 
-  it('should allow valueset constraints to override prior valueset constraints on values', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+  it('should allow valueset constraints to override prior valueset constraints on fields', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withField(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://foo.org'))
       );
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withField(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://bar.org'))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns, dummyCoreNS()]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(2);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -719,23 +752,20 @@ describe('#expand()', () => {
   });
 
   it('should keep valid valueset constraints on fields', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withField(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withField(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://foo.org'))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns, dummyCoreNS()]);
+    doExpand();
 
-    expect(result.errors).to.be.empty;
-    expect(result.namespaces).to.have.length(2);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -748,24 +778,21 @@ describe('#expand()', () => {
   // Invalid ValueSet Constraints
 
   it('should report an error when putting a valueset constraint on a non-code value', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(
         new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://foo.org'))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('valueset').and.to.contain('string');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('valueset').and.to.contain('string');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(0, 1)); // No constraint
@@ -773,27 +800,24 @@ describe('#expand()', () => {
   });
 
   it('should report an error when putting a valueset constraint on a value already constrained to a code', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
       );
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withValue(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://bar.org'))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns, dummyCoreNS()]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('valueset').and.to.contain('Coding').and.to.contain('code');
-    expect(result.namespaces).to.have.length(2);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('valueset').and.to.contain('Coding').and.to.contain('code');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
@@ -804,53 +828,47 @@ describe('#expand()', () => {
   });
 
   it('should report an error when putting a valueset constraint on a non-code field', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
-      .withField(new models.IdentifiableValue(id(ns.namespace, 'AFieldA')).withMinMax(0, 1));
-    ns.addDefinition(a);
-    ns.addDefinition(simpleDE(ns.namespace, 'AFieldA'));
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1));
+    add(simpleDE('shr.test', 'AFieldA'));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withField(
-        new models.IdentifiableValue(id(ns.namespace, 'AFieldA')).withMinMax(0, 1)
+        new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://foo.org'))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('valueset').and.to.contain('AFieldA');
-    expect(result.namespaces).to.have.length(1);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('valueset').and.to.contain('AFieldA');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
-    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id(ns.namespace, 'AFieldA')).withMinMax(0, 1)]); // No constraint
+    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1)]); // No constraint
   });
 
   it('should report an error when putting a valueset constraint on a field already constrained to a code', () => {
-    let ns = new models.Namespace('shr.test');
-    let a = new models.DataElement(id(ns.namespace, 'A'), true)
+    let a = new models.DataElement(id('shr.test', 'A'), true)
       .withField(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
       );
-    ns.addDefinition(a);
-    let subA = new models.DataElement(id(ns.namespace, 'SubA'), true)
-      .withBasedOn(id(ns.namespace, 'A'))
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
       .withField(
         new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
           .withConstraint(new models.ValueSetConstraint('http://bar.org'))
       );
-    ns.addDefinition(subA);
+    add(a, subA);
 
-    const result = expand([ns, dummyCoreNS()]);
+    doExpand();
 
-    expect(result.errors).to.have.length(1);
-    expect(result.errors[0].message).to.contain('valueset').and.to.contain('Coding').and.to.contain('code');
-    expect(result.namespaces).to.have.length(2);
-    const eSubA = result.namespaces[0].lookup('SubA');
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('valueset').and.to.contain('Coding').and.to.contain('code');
+    const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
@@ -858,6 +876,633 @@ describe('#expand()', () => {
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
     ]);
+  });
+
+  // Valid Code Constraints
+
+  it('should keep valid code constraints on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should make implicit value code constraints explicit on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, x);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'Coding')]))
+    );
+    expect(eX.fields).to.be.empty;
+  });
+
+  it('should allow code constraints to override prior code constraints on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should consolidate code constraints on value specifying the same code', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should keep valid code constraints on fields', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+    ]);
+  });
+
+  it('should make implicit value code constraints explicit on fields', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, x);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.be.undefined;
+    expect(eX.fields).to.eql([
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'Coding')]))
+    ]);
+  });
+
+  it('should allow code constraints to override prior code constraints on fields', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+    ]);
+  });
+
+  it('should consolidate code constraints on a field specifying the same code', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+    ]);
+  });
+
+  // Invalid Code Constraints
+
+  it('should report an error when putting a code constraint on a non-code value', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('code').and.to.contain('string');
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(0, 1)); // No constraint
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should report an error when putting a code constraint on a non-code field', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1));
+    add(simpleDE('shr.test', 'AFieldA'));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('code').and.to.contain('AFieldA');
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1)]); // No constraint
+  });
+
+    // Valid Includes Code Constraints
+
+  it('should keep valid includes code constraints on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should make implicit value includes code constraints explicit on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, x);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'Coding')]))
+    );
+    expect(eX.fields).to.be.empty;
+  });
+
+  it('should allow multiple includes code constraints on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should consolidate includes code constraints on value specifying the same code', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should keep valid includes code constraints on fields', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+    ]);
+  });
+
+  it('should make implicit value includes code constraints explicit on fields', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, x);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.be.undefined;
+    expect(eX.fields).to.eql([
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'Coding')]))
+    ]);
+  });
+
+  it('should allow multiple includes code constraints on fields', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+    ]);
+  });
+
+  it('should consolidate includes code constraints on a field specifying the same code', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([
+      new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+    ]);
+  });
+
+  // Invalid Includes Code Constraints
+
+  it('should report an error when putting an includes code constraint on a non-code value', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('string')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('code').and.to.contain('string');
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1)); // No constraint
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should report an error when putting an includes code constraint on a non-code field', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1));
+    add(simpleDE('shr.test', 'AFieldA'));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('code').and.to.contain('AFieldA');
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1)]); // No constraint
+  });
+
+  // Valid Boolean Constraints
+
+  it('should keep valid boolean constraints on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+          .withConstraint(new models.BooleanConstraint(true))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+        .withConstraint(new models.BooleanConstraint(true))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should make implicit value boolean constraints explicit on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.BooleanConstraint(true))
+      );
+    add(a, x);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.BooleanConstraint(true, [pid('boolean')]))
+    );
+    expect(eX.fields).to.be.empty;
+  });
+
+  it('should consolidate boolean constraints on value specifying the same value', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+          .withConstraint(new models.BooleanConstraint(false))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+          .withConstraint(new models.BooleanConstraint(false))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+        .withConstraint(new models.BooleanConstraint(false))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  // Invalid Code Constraints
+
+  it('should report an error when overriding prior boolean constraint with different value', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+          .withConstraint(new models.BooleanConstraint(true))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+          .withConstraint(new models.BooleanConstraint(false))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('boolean').and.to.contain('value');
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+        .withConstraint(new models.BooleanConstraint(true))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should report an error when putting a boolean constraint on a non-boolean value', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.BooleanConstraint(true)))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.have.length(1);
+    expect(errors()[0].message).to.contain('code').and.to.contain('string');
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(0, 1)); // No constraint
+    expect(eSubA.fields).to.be.empty;
   });
 });
 
@@ -877,145 +1522,22 @@ function simpleDE(namespace, name, isEntry=true) {
     .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
 }
 
-// Creates a dummy core namespace with just enough definition to make things work
-function dummyCoreNS() {
-  const ns = new models.Namespace('shr.core');
-  ns.addDefinition(new models.DataElement(id('shr.core', 'Coding'), false));
-  return ns;
-}
-
-/*
-function expectAndGetNamespace(results, namespaceIndex, expectedNamespace) {
-  const ns = results[namespaceIndex];
-  expect(ns).to.be.instanceof(Namespace);
-  expect(ns.namespace).to.equal(expectedNamespace);
-  return ns;
-}
-
-function expectAndGetNamespaceByName(results, namespace) {
-  for (const ns of results) {
-    expect(ns).to.be.instanceof(Namespace);
-    if (ns.namespace == namespace) {
-      return ns;
-    }
-  }
-  assert.fail('', namespace, `Namespace ${namespace} not found`);
-}
-
-function expectAndGetElement(namespace, defIndex, expectedName) {
-  return expectAndGetDataElement(namespace, defIndex, expectedName, false);
-}
-
-function expectAndGetEntry(namespace, defIndex, expectedName) {
-  return expectAndGetDataElement(namespace, defIndex, expectedName, true);
-}
-
-function expectAndGetDataElement(namespace, defIndex, expectedName, isEntry) {
-  const def = namespace.definitions[defIndex];
-  expect(def).to.be.instanceof(DataElement);
-  expect(def.isEntry).to.equal(isEntry);
-  expectIdentifier(def.identifier, namespace.namespace, expectedName);
-  return def;
-}
-
-function expectAndGetSingleElement(results, expectedNamespace, expectedName) {
-  return expectAndGetSingleDataElement(results, expectedNamespace, expectedName, false);
-}
-
-function expectAndGetSingleEntry(results, expectedNamespace, expectedName) {
-  return expectAndGetSingleDataElement(results, expectedNamespace, expectedName, true);
-}
-
-function expectAndGetSingleDataElement(results, expectedNamespace, expectedName, isEntry) {
-  expect(results).to.have.length(1);
-  const ns = expectAndGetNamespace(results, 0, expectedNamespace);
-  expect(ns.definitions).to.have.length(1);
-  return expectAndGetDataElement(ns, 0, expectedName, isEntry);
-}
-
-function expectValue(value, expectedNamespace, expectedName) {
-  expect(value).to.be.instanceof(Value);
-  expectIdentifier(value.identifier, expectedNamespace, expectedName);
-}
-
-function expectPrimitiveValue(value, expectedName) {
-  expect(value).to.be.instanceof(Value);
-  expectPrimitiveIdentifier(value.identifier, expectedName);
-}
-
-function expectRefValue(value, expectedNamespace, expectedName) {
-  expect(value).to.be.instanceof(RefValue);
-  expectIdentifier(value.identifier, expectedNamespace, expectedName);
-}
-
-function expectChoiceValue(value, size) {
-  expect(value).to.be.instanceof(ChoiceValue);
-  expect(value.options).to.have.length(size);
-}
-
-function expectMinMax(value, expectedMin, expectedMax) {
-  expect(value).to.be.instanceof(Value);
-  const card = value.card;
-  expect(card).to.be.instanceof(Cardinality);
-  expect(card.min).to.equal(expectedMin);
-  if (typeof card.max != 'undefined') {
-    expect(card.max).to.equal(expectedMax);
-    expect(card.isMaxUnbounded).to.be.false;
-  } else {
-    expect(card.max).to.be.undefined;
-    expect(card.isMaxUnbounded).to.be.true;
+// Adds a data elements to the specs, for use in the test case
+function add(...dataElements) {
+  for (const de of dataElements) {
+    _specs.dataElements.add(de);
   }
 }
 
-function expectCardOne(value) {
-  expect(value.card.isExactlyOne).to.be.true;
+// Expands the current specs and stores results in _result
+function doExpand() {
+  _result = expand(_specs);
 }
 
-function expectChoiceOption(choice, optionIndex, expectedNamespace, expectedName, expectedMin=1, expectedMax=1) {
-  let option = choice.options[optionIndex];
-  expectMinMax(option, expectedMin, expectedMax);
-  expectValue(option, expectedNamespace, expectedName);
+function findExpanded(namespace, name) {
+  return _result.specifications.dataElements.find(namespace, name);
 }
 
-function expectField(element, fieldIndex, expectedNamespace, expectedName, expectedMin, expectedMax) {
-  const sptEl = element.fields[fieldIndex];
-  expectMinMax(sptEl, expectedMin, expectedMax);
-  expectValue(sptEl, expectedNamespace, expectedName);
+function errors() {
+  return _result.errors;
 }
-
-function expectConcept(concept, system, code, display) {
-  expect(concept.system).equals(system);
-  expect(concept.code).equals(code);
-  expect(concept.display).equals(display);
-}
-
-function expectIdentifier(identifier, expectedNamespace, expectedName) {
-  expect(identifier).to.be.instanceof(Identifier);
-  expect(identifier.namespace).to.equal(expectedNamespace);
-  expect(identifier.name).to.equal(expectedName);
-}
-
-function expectPrimitiveIdentifier(identifier, expectedName) {
-  expect(identifier).to.be.instanceof(PrimitiveIdentifier);
-  expect(identifier.namespace).to.equal('primitive');
-  expect(identifier.name).to.equal(expectedName);
-}
-
-function expectNoConstraints(value) {
-  if (Array.isArray(value)) {
-    for (const v of value) {
-      expectNoConstraints(v);
-    }
-  } else {
-    expect(value.hasConstraints).to.be.false;
-  }
-}
-
-function importFixture(name) {
-  return importFromFilePath(`${__dirname}/fixtures/${name}.txt`);
-}
-
-function importFixtureFolder(name) {
-  return importFromFilePath(`${__dirname}/fixtures/${name}`);
-}
-*/
