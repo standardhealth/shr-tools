@@ -21,20 +21,16 @@
 <!-- ============CONTENT CONTENT=============== -->
 
 <ul class="nav nav-tabs">
-  <li class="active"><a href="#">Content</a></li>
+  <li><a href="{{[type]}}-{{[id]}}.html">Content</a></li>
+  <li><a href="{{[type]}}-{{[id]}}-definitions.html">Detailed Descriptions</a></li>
   <li><a href="{{[type]}}-{{[id]}}.xml.html">XML</a></li>
   <li><a href="{{[type]}}-{{[id]}}.json.html">JSON</a></li>
   <li><a href="{{[type]}}-{{[id]}}.ttl.html">Turtle</a></li>
 </ul>
 
-{% include {{[type]}}-{{[id]}}-content.xhtml %}
+<h2>{{[title]}}</h2>
 
-Downloads: <a href="{{[type]}}-{{[id]}}.xml" download>XML</a>, <a href="{{[type]}}-{{[id]}}.json" download>JSON</a>, <a href="{{[type]}}-{{[id]}}.ttl" download>Turtle</a>
-
-<p></p>
-
-This code system is used in the following value sets:
-{% include {{[type]}}-{{[id]}}-xref.xhtml %}
+{% include {{[type]}}-{{[name]}}.xhtml %}
 
 <!-- ==============END CONTENT END CONTENT=================== -->
 
