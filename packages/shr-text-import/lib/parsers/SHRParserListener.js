@@ -434,21 +434,21 @@ SHRParserListener.prototype.exitMappingDefHeader = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRParser#mappingRule.
+SHRParserListener.prototype.enterMappingRule = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#mappingRule.
+SHRParserListener.prototype.exitMappingRule = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRParser#fieldMapping.
 SHRParserListener.prototype.enterFieldMapping = function(ctx) {
 };
 
 // Exit a parse tree produced by SHRParser#fieldMapping.
 SHRParserListener.prototype.exitFieldMapping = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#fieldToFieldMapping.
-SHRParserListener.prototype.enterFieldToFieldMapping = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#fieldToFieldMapping.
-SHRParserListener.prototype.exitFieldToFieldMapping = function(ctx) {
 };
 
 
@@ -470,30 +470,12 @@ SHRParserListener.prototype.exitSourcePart = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#target.
-SHRParserListener.prototype.enterTarget = function(ctx) {
+// Enter a parse tree produced by SHRParser#sourceWord.
+SHRParserListener.prototype.enterSourceWord = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#target.
-SHRParserListener.prototype.exitTarget = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#targetPart.
-SHRParserListener.prototype.enterTargetPart = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#targetPart.
-SHRParserListener.prototype.exitTargetPart = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRParser#urlMapping.
-SHRParserListener.prototype.enterUrlMapping = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRParser#urlMapping.
-SHRParserListener.prototype.exitUrlMapping = function(ctx) {
+// Exit a parse tree produced by SHRParser#sourceWord.
+SHRParserListener.prototype.exitSourceWord = function(ctx) {
 };
 
 

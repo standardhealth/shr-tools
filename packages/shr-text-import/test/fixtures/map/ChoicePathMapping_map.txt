@@ -1,0 +1,8 @@
+Grammar:	Map 4.0
+Namespace:	shr.test
+Target:		TEST
+
+A maps to B:
+	C.D[F] maps to c.d.f
+	G.H[J] maps to http://test.org/ghj
+	constrain k.l.m to 1..*

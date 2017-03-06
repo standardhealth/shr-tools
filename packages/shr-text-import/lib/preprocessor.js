@@ -1,3 +1,6 @@
+const {FileStream, CommonTokenStream} = require('antlr4/index');
+const {SHRLexer} = require('./parsers/SHRLexer');
+const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserVisitor} = require('./parsers/SHRParserVisitor');
 const {Version} = require('shr-models');
 
@@ -15,15 +18,26 @@ class Preprocessor extends SHRParserVisitor {
     this._errors = []; // errors
   }
 
-  set currentFile(file) { this._currentFile = file; }
   get errors() { return this._errors; }
   get data() { return this._data; }
+
+  preprocessFile(file) {
+    this._currentFile = file;
+    const chars = new FileStream(file);
+    const lexer = new SHRLexer(chars);
+    lexer.removeErrorListeners();
+    const tokens  = new CommonTokenStream(lexer);
+    const parser = new SHRParser(tokens);
+    parser.removeErrorListeners();
+    parser.buildParseTrees = true;
+    const tree = parser.shr();
+    this.visitShr(tree);
+    this._currentFile = '';
+  }
 
   visitShr(ctx) {
     if (ctx.dataDefsDoc()) {
       return this.visitDataDefsDoc(ctx.dataDefsDoc());
-    } else {
-      return this.visitValuesetDefsDoc(ctx.valuesetDefsDoc());
     }
   }
 

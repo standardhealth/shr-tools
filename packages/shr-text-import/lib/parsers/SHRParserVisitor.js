@@ -247,13 +247,13 @@ SHRParserVisitor.prototype.visitMappingDefHeader = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#fieldMapping.
-SHRParserVisitor.prototype.visitFieldMapping = function(ctx) {
+// Visit a parse tree produced by SHRParser#mappingRule.
+SHRParserVisitor.prototype.visitMappingRule = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#fieldToFieldMapping.
-SHRParserVisitor.prototype.visitFieldToFieldMapping = function(ctx) {
+// Visit a parse tree produced by SHRParser#fieldMapping.
+SHRParserVisitor.prototype.visitFieldMapping = function(ctx) {
 };
 
 
@@ -267,18 +267,8 @@ SHRParserVisitor.prototype.visitSourcePart = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#target.
-SHRParserVisitor.prototype.visitTarget = function(ctx) {
-};
-
-
-// Visit a parse tree produced by SHRParser#targetPart.
-SHRParserVisitor.prototype.visitTargetPart = function(ctx) {
-};
-
-
-// Visit a parse tree produced by SHRParser#urlMapping.
-SHRParserVisitor.prototype.visitUrlMapping = function(ctx) {
+// Visit a parse tree produced by SHRParser#sourceWord.
+SHRParserVisitor.prototype.visitSourceWord = function(ctx) {
 };
 
 

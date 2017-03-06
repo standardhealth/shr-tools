@@ -5,7 +5,7 @@ const {Version, DataElement, Value, RefValue, ChoiceValue, Identifier, Primitive
 describe('#importFromFilePath()', () => {
   it('should correctly import a namespace definition', () => {
     const {specifications, errors} = importFixture('Simple');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const ns = specifications.namespaces.find('shr.test');
     expect(ns.namespace).to.equal('shr.test');
     expect(ns.description).to.equal('The SHR test namespace');
@@ -13,8 +13,8 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a simple entry', () => {
     const {specifications, errors} = importFixture('Simple');
-    expect(errors).is.empty;
-    const simple = expectAndGetSingleEntry(specifications, 'shr.test', 'Simple');
+    expect(errors).to.eql([]);
+    const simple = expectAndGetEntry(specifications, 'shr.test', 'Simple');
     expect(simple.grammarVersion).to.eql(new Version(4, 0));
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'http://foo.org', 'bar', 'Foobar');
@@ -26,8 +26,8 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a simple element', () => {
     const {specifications, errors} = importFixture('SimpleElement');
-    expect(errors).is.empty;
-    const simple = expectAndGetSingleElement(specifications, 'shr.test', 'Simple');
+    expect(errors).to.eql([]);
+    const simple = expectAndGetElement(specifications, 'shr.test', 'Simple');
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'http://foo.org', 'bar');
     expect(simple.description).to.equal('It is a simple element');
@@ -38,8 +38,8 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a coded entry', () => {
     const {specifications, errors} = importFixture('Coded');
-    expect(errors).is.empty;
-    const coded = expectAndGetSingleEntry(specifications, 'shr.test', 'Coded');
+    expect(errors).to.eql([]);
+    const coded = expectAndGetEntry(specifications, 'shr.test', 'Coded');
     expect(coded.description).to.equal('It is a coded entry');
     expectCardOne(coded.value);
     expectPrimitiveValue(coded.value, 'code');
@@ -48,8 +48,8 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a code from a valueset', () => {
     const {specifications, errors} = importFixture('CodedFromValueSet');
-    expect(errors).is.empty;
-    const coded = expectAndGetSingleEntry(specifications, 'shr.test', 'CodedFromValueSet');
+    expect(errors).to.eql([]);
+    const coded = expectAndGetEntry(specifications, 'shr.test', 'CodedFromValueSet');
     expect(coded.description).to.equal('It is a coded entry');
     expectCardOne(coded.value);
     expectPrimitiveValue(coded.value, 'code');
@@ -60,8 +60,8 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a code from a valueset using a path', () => {
     const {specifications, errors} = importFixture('CodedFromPathValueSet');
-    expect(errors).is.empty;
-    const coded = expectAndGetSingleEntry(specifications, 'shr.test', 'CodedFromPathValueSet');
+    expect(errors).to.eql([]);
+    const coded = expectAndGetEntry(specifications, 'shr.test', 'CodedFromPathValueSet');
     expect(coded.description).to.equal('It is a coded entry that uses a valueset with a path');
     expectCardOne(coded.value);
     expectPrimitiveValue(coded.value, 'code');
@@ -72,19 +72,19 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a code from a valueset using a default path', () => {
     const {specifications, errors} = importFixture('CodedFromDefaultPathValueSet');
-    expect(errors).is.empty;
-    const coded = expectAndGetSingleEntry(specifications, 'shr.test', 'CodedFromDefaultPathValueSet');
+    expect(errors).to.eql([]);
+    const coded = expectAndGetEntry(specifications, 'shr.test', 'CodedFromDefaultPathValueSet');
     expect(coded.description).to.equal('It is a coded entry that uses a valueset with a default path');
     expectCardOne(coded.value);
     expectPrimitiveValue(coded.value, 'code');
     expect(coded.value.constraints).to.have.length(1);
     expect(coded.value.constraints[0]).to.be.instanceof(ValueSetConstraint);
-    expect(coded.value.constraints[0].valueSet).to.equal('http://standardhealthrecord.org/test/vs/Coded');
+    expect(coded.value.constraints[0].valueSet).to.equal('http://standardhealthrecord.org/test/vs/shr-test-Coded');
   });
 
   it('should correctly import an entry with a Coding from a valueset', () => {
     const {specifications, errors} = importFixtureFolder('codingFromValueSet');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const codingFromVS = expectAndGetEntry(specifications, 'shr.test', 'CodingFromValueSet');
     expect(codingFromVS.description).to.equal('It is a coded entry with Coding');
     expectCardOne(codingFromVS.value);
@@ -94,9 +94,21 @@ describe('#importFromFilePath()', () => {
     expect(codingFromVS.value.constraints[0].valueSet).to.equal('http://standardhealthrecord.org/test/vs/Coded');
   });
 
+  it('should correctly import an entry with a CodeableConcept from a valueset', () => {
+    const {specifications, errors} = importFixtureFolder('codeableConceptFromValueSet');
+    expect(errors).to.eql([]);
+    const codingFromVS = expectAndGetEntry(specifications, 'shr.test', 'CodeableConceptFromValueSet');
+    expect(codingFromVS.description).to.equal('It is a coded entry with CodeableConcept');
+    expectCardOne(codingFromVS.value);
+    expectValue(codingFromVS.value, 'shr.core', 'CodeableConcept');
+    expect(codingFromVS.value.constraints).to.have.length(1);
+    expect(codingFromVS.value.constraints[0]).to.be.instanceof(ValueSetConstraint);
+    expect(codingFromVS.value.constraints[0].valueSet).to.equal('http://standardhealthrecord.org/test/vs/Coded');
+  });
+
   it('should correctly import a reference to simple element', () => {
     const {specifications, errors} = importFixture('SimpleReference');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const simple = expectAndGetEntry(specifications, 'shr.test', 'SimpleReference');
     expect(simple.description).to.equal('It is a reference to a simple element');
     expectCardOne(simple.value);
@@ -106,8 +118,8 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a list value', () => {
     const {specifications, errors} = importFixture('MultiString');
-    expect(errors).is.empty;
-    const simple = expectAndGetSingleEntry(specifications, 'shr.test', 'MultiString');
+    expect(errors).to.eql([]);
+    const simple = expectAndGetEntry(specifications, 'shr.test', 'MultiString');
     expect(simple.description).to.equal('It is a multi-string entry');
     expectMinMax(simple.value, 1);
     expectPrimitiveValue(simple.value, 'string');
@@ -116,7 +128,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a choice entry', () => {
     const {specifications, errors} = importFixtureFolder('choice');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const choice = expectAndGetEntry(specifications, 'shr.test', 'Choice');
     expect(choice.description).to.equal('It is an entry with a choice');
     expectCardOne(choice.value);
@@ -131,7 +143,7 @@ describe('#importFromFilePath()', () => {
   /* Not currently supported by grammar, but maybe it should be?
   it('should correctly import a complex choice entry', () => {
     const {specifications, errors} = importFixtureFolder('complexChoice');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const ns = expectAndGetNamespace(namespaces, 0, 'shr.test');
     const choice = expectAndGetEntry(ns, 0, 'ComplexChoice');
     expect(choice.description).to.equal('It is an entry with a complex choice');
@@ -150,7 +162,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group entry with a code value', () => {
     const {specifications, errors} = importFixtureFolder('group');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications,'shr.test', 'SimpleGroup');
     expect(group.concepts).to.have.length(3);
     expectConcept(group.concepts[0], 'http://foo.org', 'bar');
@@ -170,7 +182,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group element without a value', () => {
     const {specifications, errors} = importFixtureFolder('groupElement');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetElement(specifications, 'shr.test', 'SimpleGroup');
     expect(group.concepts).to.have.length(3);
     expectConcept(group.concepts[0], 'http://foo.org', 'bar');
@@ -190,7 +202,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a valueset constraint on the value', () => {
     const {specifications, errors} = importFixture('VSConstraintOnValue');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'VSConstraintOnValue');
     expect(entry.description).to.equal('It is an entry with a valueset constraint on the value');
     expectCardOne(entry.value);
@@ -204,7 +216,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a valueset constraint on the value\' child', () => {
     const {specifications, errors} = importFixture('VSConstraintOnValueChild');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'VSConstraintOnValueChild');
     expect(entry.description).to.equal('It is an entry with a valueset constraint on the value\'s child');
     expectCardOne(entry.value);
@@ -222,7 +234,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with a valueset constraint on a field', () => {
     const {specifications, errors} = importFixture('VSConstraintOnField');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'VSConstraintOnField');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with a valueset constraint on a field');
@@ -240,7 +252,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with a valueset constraint on a field\'s child', () => {
     const {specifications, errors} = importFixture('VSConstraintOnFieldChild');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'VSConstraintOnFieldChild');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with a valueset constraint on a field\'s child');
@@ -261,7 +273,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a code constraint on the value', () => {
     const {specifications, errors} = importFixtureFolder('codeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'CodeConstraintOnValue');
     expect(entry.description).to.equal('It is an entry with a code constraint on the value');
     expectCardOne(entry.value);
@@ -274,7 +286,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a code constraint on the value\'s child', () => {
     const {specifications, errors} = importFixtureFolder('codeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'CodeConstraintOnValueChild');
     expect(entry.description).to.equal('It is an entry with a code constraint on the value\'s child');
     expectCardOne(entry.value);
@@ -287,7 +299,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with a code constraint on a field', () => {
     const {specifications, errors} = importFixtureFolder('codeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'CodeConstraintOnField');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with a code constraint on a field');
@@ -305,7 +317,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with a code constraint on a field\'s child', () => {
     const {specifications, errors} = importFixtureFolder('codeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'CodeConstraintOnFieldChild');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with a code constraint on a field\'s child');
@@ -322,7 +334,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a system-less code constraint on the value', () => {
     const {specifications, errors} = importFixtureFolder('codeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'SystemlessCodeConstraintOnValue');
     expect(entry.description).to.equal('It is an entry with a system-less code constraint on the value');
     expect(entry.basedOn).to.have.length(1);
@@ -339,33 +351,33 @@ describe('#importFromFilePath()', () => {
   // NOTE: Quantity with unit constraints are just syntactic sugar for a code constraint!
   it('should correctly import an entry with a unit constraint on the value', () => {
     const {specifications, errors} = importFixtureFolder('unitConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'UnitConstraintOnValue');
     expect(entry.description).to.equal('It is an entry with a unit constraint on the value');
     expectCardOne(entry.value);
     expectValue(entry.value, 'shr.core', 'Quantity');
     expect(entry.value.constraints).to.have.length(1);
     expect(entry.value.constraints[0]).to.be.instanceof(CodeConstraint);
-    expect(entry.value.constraints[0].path).to.eql([id('shr.core','UnitOfMeasure'), id('shr.core','Coding')]);
+    expect(entry.value.constraints[0].path).to.eql([id('shr.core','Units'), id('shr.core','Coding')]);
     expectConcept(entry.value.constraints[0].code, 'http://unitsofmeasure.org', 'dl', 'DeciLiter');
   });
 
   it('should correctly import an entry with a unit constraint on the value\'s child', () => {
     const {specifications, errors} = importFixtureFolder('unitConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'UnitConstraintOnValueChild');
     expect(entry.description).to.equal('It is an entry with a unit constraint on the value\'s child');
     expectCardOne(entry.value);
     expectValue(entry.value, 'shr.test', 'Volume');
     expect(entry.value.constraints).to.have.length(1);
     expect(entry.value.constraints[0]).to.be.instanceof(CodeConstraint);
-    expect(entry.value.constraints[0].path).to.eql([id('shr.core', 'Quantity'), id('shr.core', 'UnitOfMeasure'), id('shr.core', 'Coding')]);
+    expect(entry.value.constraints[0].path).to.eql([id('shr.core', 'Quantity'), id('shr.core', 'Units'), id('shr.core', 'Coding')]);
     expectConcept(entry.value.constraints[0].code, 'http://unitsofmeasure.org', 'dl', 'DeciLiter');
   });
 
   it('should correctly import a group with a unit constraint on a field', () => {
     const {specifications, errors} = importFixtureFolder('unitConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'UnitConstraintOnField');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with a unit constraint on a field');
@@ -377,13 +389,13 @@ describe('#importFromFilePath()', () => {
     const el = group.fields[1];
     expect(el.constraints).to.have.length(1);
     expect(el.constraints[0]).to.be.instanceof(CodeConstraint);
-    expect(el.constraints[0].path).to.eql([id('shr.core','UnitOfMeasure'), id('shr.core','Coding')]);
+    expect(el.constraints[0].path).to.eql([id('shr.core','Units'), id('shr.core','Coding')]);
     expectConcept(el.constraints[0].code, 'http://unitsofmeasure.org', 'dl', 'DeciLiter');
   });
 
   it('should correctly import a group with a unit constraint on a field\'s child', () => {
     const {specifications, errors} = importFixtureFolder('unitConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'UnitConstraintOnFieldChild');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with unit constraint on a field\'s child');
@@ -394,13 +406,13 @@ describe('#importFromFilePath()', () => {
     const el = group.fields[1];
     expect(el.constraints).to.have.length(1);
     expect(el.constraints[0]).to.be.instanceof(CodeConstraint);
-    expect(el.constraints[0].path).to.eql([id('shr.core', 'Quantity'), id('shr.core', 'UnitOfMeasure'), id('shr.core', 'Coding')]);
+    expect(el.constraints[0].path).to.eql([id('shr.core', 'Quantity'), id('shr.core', 'Units'), id('shr.core', 'Coding')]);
     expectConcept(el.constraints[0].code, 'http://unitsofmeasure.org', 'dl', 'DeciLiter');
   });
 
   it('should correctly import an entry with an includes code constraint on the value', () => {
     const {specifications, errors} = importFixtureFolder('includesCodeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'IncludesCodeConstraintOnValue');
     expect(entry.description).to.equal('It is an entry with an includes code constraint on the value');
     expectMinMax(entry.value, 1);
@@ -411,9 +423,22 @@ describe('#importFromFilePath()', () => {
     expectConcept(entry.value.constraints[0].code, 'http://foo.org', 'bar', 'FooBar');
   });
 
+  it('should correctly import an entry with an includes code constraint (using CodeableConcept) on the value', () => {
+    const {specifications, errors} = importFixtureFolder('includesCodeConstraintsUsingCodeableConcept');
+    expect(errors).to.eql([]);
+    const entry = expectAndGetEntry(specifications, 'shr.test', 'IncludesCodeConstraintOnValue');
+    expect(entry.description).to.equal('It is an entry with an includes code constraint on the value');
+    expectMinMax(entry.value, 1);
+    expectValue(entry.value, 'shr.core', 'CodeableConcept');
+    expect(entry.value.constraints).to.have.length(1);
+    expect(entry.value.constraints[0]).to.be.instanceof(IncludesCodeConstraint);
+    expect(entry.value.constraints[0].path).to.be.empty;
+    expectConcept(entry.value.constraints[0].code, 'http://foo.org', 'bar', 'FooBar');
+  });
+
   it('should correctly import an entry with an includes code constraint on the value\'s child', () => {
     const {specifications, errors} = importFixtureFolder('includesCodeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'IncludesCodeConstraintOnValueChild');
     expect(entry.description).to.equal('It is an entry with an includes code constraint on the value\'s child');
     expectCardOne(entry.value);
@@ -426,7 +451,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with an includes code constraint on a field', () => {
     const {specifications, errors} = importFixtureFolder('includesCodeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'IncludesCodeConstraintOnField');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with an includes code constraint on a field');
@@ -444,7 +469,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with an includes code constraint on a field\'s child', () => {
     const {specifications, errors} = importFixtureFolder('includesCodeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'IncludesCodeConstraintOnFieldChild');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with an includes code constraint on a field\'s child');
@@ -461,7 +486,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a boolean constraint on the value', () => {
     const {specifications, errors} = importFixture('BooleanConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'BooleanConstraintOnValue');
     expect(entry.description).to.equal('It is an entry with a boolean constraint on the value');
     expectCardOne(entry.value);
@@ -474,7 +499,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a boolean constraint on the value\'s child', () => {
     const {specifications, errors} = importFixture('BooleanConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'BooleanConstraintOnValueChild');
     expect(entry.description).to.equal('It is an entry with a boolean constraint on the value\'s child');
     expectCardOne(entry.value);
@@ -487,7 +512,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with a boolean constraint on a field\'s child', () => {
     const {specifications, errors} = importFixture('BooleanConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'BooleanConstraintOnFieldChild');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with a boolean constraint on a field\'s child');
@@ -504,7 +529,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry based on an element and specializing the value', () => {
     const {specifications, errors} = importFixture('TypeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const basedOn = expectAndGetEntry(specifications, 'shr.test', 'TypeConstraintOnValue');
     expect(basedOn.basedOn).to.have.length(1);
     expect(basedOn.basedOn[0].namespace).to.equal('shr.test');
@@ -521,7 +546,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry based on an element and specializing the value\'s child', () => {
     const {specifications, errors} = importFixture('TypeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const basedOn = expectAndGetEntry(specifications, 'shr.test', 'TypeConstraintOnValueChild');
     expect(basedOn.basedOn).to.have.length(1);
     expectIdentifier(basedOn.basedOn[0], 'shr.test', 'ComplexBase');
@@ -541,7 +566,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with a type constraint on a field', () => {
     const {specifications, errors} = importFixture('TypeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'TypeConstraintOnField');
     expect(group.basedOn).to.have.length(1);
     expectIdentifier(group.basedOn[0], 'shr.test', 'GroupBase');
@@ -559,7 +584,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with a type constraint on a field\'s child', () => {
     const {specifications, errors} = importFixture('TypeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'TypeConstraintOnFieldChild');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with a type constraint on a field\'s child');
@@ -581,7 +606,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with a type constraint on a field\'s value', () => {
     const {specifications, errors} = importFixture('TypeConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'TypeConstraintOnFieldValue');
     expect(group.basedOn).to.have.length(1);
     expectIdentifier(group.basedOn[0], 'shr.test', 'Group2');
@@ -599,7 +624,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry with a card constraint on the value\'s child', () => {
     const {specifications, errors} = importFixture('CardConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const entry = expectAndGetEntry(specifications, 'shr.test', 'CardConstraintOnValueChild');
     expect(entry.description).to.equal('It is an entry with a card constraint on the value\'s child');
     expectCardOne(entry.value);
@@ -613,7 +638,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import a group with a card constraint on a field\'s child', () => {
     const {specifications, errors} = importFixture('CardConstraints');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const group = expectAndGetEntry(specifications, 'shr.test', 'CardConstraintOnFieldChild');
     expect(group.concepts).to.be.empty;
     expect(group.description).to.equal('It is a group entry with a card constraint on a field\'s child');
@@ -631,7 +656,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import an entry based on an element', () => {
     const {specifications, errors} = importFixture('BasedOn');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
     const basedOn = expectAndGetEntry(specifications, 'shr.test', 'SimpleBasedOn');
     expect(basedOn.basedOn).to.have.length(1);
     expect(basedOn.basedOn[0].namespace).to.equal('shr.test');
@@ -646,7 +671,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly import multiple elements in a single namespace', () => {
     const {specifications, errors} = importFixture('MultipleElementNamespace');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
 
     const simple = expectAndGetEntry(specifications, 'shr.test', 'SimpleDate');
     expect(simple.description).to.equal('It is a simple date entry');
@@ -665,7 +690,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly resolve URL, URN, and URN OID vocabularies', () => {
     const {specifications, errors} = importFixture('Vocabularies');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
 
     const simple = expectAndGetEntry(specifications, 'shr.test', 'Simple');
     expect(simple.concepts).to.have.length(3);
@@ -676,7 +701,7 @@ describe('#importFromFilePath()', () => {
 
   it('should correctly resolve elements and vocabularies from other namespaces', () => {
     const {specifications, errors} = importFixtureFolder('uses');
-    expect(errors).is.empty;
+    expect(errors).to.eql([]);
 
     const one = expectAndGetEntry(specifications, 'shr.test.one', 'One');
     expect(one.concepts).to.have.length(2);
@@ -701,7 +726,7 @@ describe('#importFromFilePath()', () => {
   it('should return errors when there are invalid vocabulary references', () => {
     const {specifications, errors} = importFixture('InvalidVocabularyReference');
     expect(errors).has.length(1);
-    const simple = expectAndGetSingleEntry(specifications, 'shr.test', 'Simple');
+    const simple = expectAndGetEntry(specifications, 'shr.test', 'Simple');
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'ZOO', 'bear'); // Defaults to vocabulary alias
     expect(simple.description).to.equal('It is a simple entry with invalid vocab');
@@ -713,7 +738,7 @@ describe('#importFromFilePath()', () => {
   it('should return errors when there are invalid element references', () => {
     const {specifications, errors} = importFixture('InvalidElementReference');
     expect(errors).has.length(1);
-    const simple = expectAndGetSingleEntry(specifications, 'shr.test', 'Simple');
+    const simple = expectAndGetEntry(specifications, 'shr.test', 'Simple');
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'http://foo.org', 'bar');
     expect(simple.description).to.equal('It is a simple entry with invalid element reference');
@@ -725,7 +750,7 @@ describe('#importFromFilePath()', () => {
   it('should return errors when there are invalid fully qualified element references', () => {
     const {specifications, errors} = importFixture('InvalidFQElementReference');
     expect(errors).has.length(1);
-    const simple = expectAndGetSingleEntry(specifications, 'shr.test', 'Simple');
+    const simple = expectAndGetEntry(specifications, 'shr.test', 'Simple');
     expect(simple.concepts).to.have.length(1);
     expectConcept(simple.concepts[0], 'http://foo.org', 'bar');
     expect(simple.description).to.equal('It is a simple entry with invalid fully qualified element reference');
@@ -750,7 +775,6 @@ describe('#importFromFilePath()', () => {
     expect(errors).to.have.length(1);
     expect(errors[0]).to.contain('FOO');
     expect(errors[0]).to.not.contain('MOO');
-    expect(specifications.namespaces.all).to.have.length(2);
 
     const conflicting = expectAndGetEntry(specifications, 'shr.test.one', 'Conflicting');
     expect(conflicting.concepts).to.have.length(2);
@@ -772,24 +796,6 @@ function id(namespace, name) {
 function pid(name) {
   return new PrimitiveIdentifier(name);
 }
-/*
-function expectAndGetNamespace(results, namespaceIndex, expectedNamespace) {
-  const ns = results[namespaceIndex];
-  expect(ns).to.be.instanceof(Namespace);
-  expect(ns.namespace).to.equal(expectedNamespace);
-  return ns;
-}
-
-function expectAndGetNamespaceByName(results, namespace) {
-  for (const ns of results) {
-    expect(ns).to.be.instanceof(Namespace);
-    if (ns.namespace == namespace) {
-      return ns;
-    }
-  }
-  assert.fail('', namespace, `Namespace ${namespace} not found`);
-}
-*/
 
 function expectAndGetElement(specs, expectedNamespace, expectedName) {
   return expectAndGetDataElement(specs, expectedNamespace, expectedName, false);
@@ -805,19 +811,6 @@ function expectAndGetDataElement(specs, expectedNamespace, expectedName, isEntry
   expect(def.isEntry).to.equal(isEntry);
   expectIdentifier(def.identifier, expectedNamespace, expectedName);
   return def;
-}
-
-function expectAndGetSingleElement(specs, expectedNamespace, expectedName) {
-  return expectAndGetSingleDataElement(specs, expectedNamespace, expectedName, false);
-}
-
-function expectAndGetSingleEntry(specs, expectedNamespace, expectedName) {
-  return expectAndGetSingleDataElement(specs, expectedNamespace, expectedName, true);
-}
-
-function expectAndGetSingleDataElement(specs, expectedNamespace, expectedName, isEntry) {
-  expect(specs.dataElements.all).to.have.length(1);
-  return expectAndGetDataElement(specs, expectedNamespace, expectedName, isEntry);
 }
 
 function expectValue(value, expectedNamespace, expectedName) {
@@ -903,9 +896,17 @@ function expectNoConstraints(value) {
 }
 
 function importFixture(name) {
-  return importFromFilePath(`${__dirname}/fixtures/${name}.txt`);
+  const {specifications, errors} = importFromFilePath(`${__dirname}/fixtures/dataElement/_dependencies`);
+  if (errors.length > 0) {
+    console.error("ERRORS", errors);
+  }
+  return importFromFilePath(`${__dirname}/fixtures/dataElement/${name}.txt`, specifications);
 }
 
 function importFixtureFolder(name) {
-  return importFromFilePath(`${__dirname}/fixtures/${name}`);
+  const {specifications, errors} = importFromFilePath(`${__dirname}/fixtures/dataElement/_dependencies`);
+  if (errors.length > 0) {
+    console.error("ERRORS", errors);
+  }
+  return importFromFilePath(`${__dirname}/fixtures/dataElement/${name}`, specifications);
 }

@@ -1,6 +1,6 @@
 {
   "name": "shr-text-import",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Imports Standard Health Record (SHR) elements from their custom grammar to the SHR models",
   "author": "",
   "license": "Apache-2.0",
@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "antlr4": "~4.5.3",
-    "shr-models": "~4.0.0"
+    "shr-models": "~4.1.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

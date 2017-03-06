@@ -1,0 +1,8 @@
+Grammar:    DataElement 4.0
+Namespace:  shr.test
+Uses:       shr.core
+CodeSystem: MTH = http://uts.nlm.nih.gov/metathesaurus
+
+EntryElement:   CodeableConceptFromValueSet
+Description:    "It is a coded entry with CodeableConcept"
+Value:          CodeableConcept from http://standardhealthrecord.org/test/vs/Coded

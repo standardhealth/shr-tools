@@ -1,0 +1,28 @@
+Grammar:    DataElement 4.0
+Namespace:  shr.core
+CodeSystem: MTH = http://uts.nlm.nih.gov/metathesaurus
+
+// These are just dummy (incomplete) definitions to satisfy common dependencies
+
+Element:		Coding
+Value:			code
+0..1			Vocabulary
+0..1			DisplayText
+
+Element:		CodeableConcept
+0..*			Coding
+1..1			DisplayText
+
+Element:		Vocabulary
+Value:			uri
+
+Element:		DisplayText
+Value:			string
+
+Element:		Quantity
+Description:	"A quantity with Units."
+Value:			decimal
+0..1			Units
+
+Element:		Units
+Value:			Coding from http://hl7.org/fhir/ValueSet/ucum-units

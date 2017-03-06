@@ -1,0 +1,8 @@
+Grammar:	Map 4.0
+Namespace:	shr.test
+Target:		TEST
+
+A maps to B:
+	X maps to testX
+	Y maps to http://test.org/y
+	constrain z to 0..0

@@ -1,17 +1,20 @@
-//const {SHRParser} = require('./parsers/SHRParser');
-const {SHRParserListener} = require('./parsers/SHRParserListener');
+const {FileStream, CommonTokenStream} = require('antlr4/index');
+const {ParseTreeWalker} = require('antlr4/tree');
+const {SHRLexer} = require('./parsers/SHRLexer');
 const {SHRParser} = require('./parsers/SHRParser');
+const {SHRParserListener} = require('./parsers/SHRParserListener');
+const {SHRErrorListener} = require('./common.js');
 const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, TBD, PRIMITIVES} = require('shr-models');
 
 class Importer extends SHRParserListener {
-  constructor(preprocessedData) {
+  constructor(preprocessedData, specifications = new Specifications()) {
     super();
     // The current file being parsed -- useful for error messages
     this._currentFile = '';
     // The preprocessed data indicating valid elements and vocabularies
     this._preprocessedData = preprocessedData;
     // The specifications it collects
-    this._specs = new Specifications();
+    this._specs = specifications;
     // The currently active namespace
     this._currentNs = '';
     // The external namespaces it "uses"
@@ -24,8 +27,26 @@ class Importer extends SHRParserListener {
     this._errors = [];
   }
 
-  set currentFile(file) { this._currentFile = file; }
   get errors() { return this._errors; }
+  get specifications() { return this._specs; }
+
+  importFile(file) {
+    const errListener = new SHRErrorListener(file);
+    const chars = new FileStream(file);
+    const lexer = new SHRLexer(chars);
+    lexer.removeErrorListeners();
+    lexer.addErrorListener(errListener);
+    const tokens  = new CommonTokenStream(lexer);
+    const parser = new SHRParser(tokens);
+    parser.removeErrorListeners();
+    parser.addErrorListener(errListener);
+    parser.buildParseTrees = true;
+    const tree = parser.shr();
+    const walker = new ParseTreeWalker();
+    this._currentFile = file;
+    walker.walk(this, tree);
+    this._currentFile = '';
+  }
 
   enterDataDefsDoc(ctx) {
     // Process the namespace
@@ -239,7 +260,7 @@ class Importer extends SHRParserListener {
           value.addConstraint(new CodeConstraint(code, path));
         } else if (cst.elementWithUnitsConstraint()) {
           const code = this.processFullyQualifiedCode(cst.elementWithUnitsConstraint().fullyQualifiedCode());
-          value.addConstraint(new CodeConstraint(code, [...path, new Identifier('shr.core', 'UnitOfMeasure'), new Identifier('shr.core', 'Coding')]));
+          value.addConstraint(new CodeConstraint(code, [...path, new Identifier('shr.core', 'Units'), new Identifier('shr.core', 'Coding')]));
         } else if (cst.elementIncludesCodeValueConstraint()) {
           for (const codeOrFQCode of cst.elementIncludesCodeValueConstraint().codeOrFQCode()) {
             const code = this.processCodeOrFQCode(codeOrFQCode);
@@ -281,20 +302,16 @@ class Importer extends SHRParserListener {
   resolveCodeFromVSIdentifier(codeFromVS) {
     if (codeFromVS.KW_CODING_FROM()) {
       return this.resolveToIdentifier('Coding');
+    } else if (codeFromVS.KW_CODEABLECONCEPT_FROM()) {
+      return this.resolveToIdentifier('CodeableConcept');
     }
     return new PrimitiveIdentifier('code');
   }
 
   resolveCodeFromVSValueSet(codeFromVS) {
     let vs = codeFromVS.valueset().getText();
-    if (codeFromVS.valueset().PATH_URL() || codeFromVS.valueset().simpleName()) {
-      var path, name;
-      if (codeFromVS.valueset().PATH_URL()) {
-        [path, name] =  codeFromVS.valueset().PATH_URL().getText().split('/', 2);
-      } else {
-        path = 'default';
-        name = codeFromVS.valueset().simpleName().getText();
-      }
+    if (codeFromVS.valueset().PATH_URL()) {
+      const [path, name] =  codeFromVS.valueset().PATH_URL().getText().split('/', 2);
       const resolution = this._preprocessedData.resolvePath(path, this._currentNs, ...this._usesNs);
       if (resolution.error) {
         this.addError(resolution.error);
@@ -302,11 +319,27 @@ class Importer extends SHRParserListener {
       if (resolution.url) {
         vs = `${resolution.url}/${name}`;
       }
+    } else if (codeFromVS.valueset().simpleName()) {
+      const name = codeFromVS.valueset().simpleName().getText();
+      // Look it up in this namespace's value set definitions
+      let found = false;
+      for (const ns of [this._currentNs, ...this._usesNs]) {
+        const vsDef = this._specs.valueSets.find(ns, name);
+        if (typeof vsDef !== 'undefined') {
+          vs = vsDef.url;
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        this.addError(`Unable to resolve ValueSet reference ${name} used in element ${this._currentDef.identifier.name}`);
+        vs = `urn:tbd:${name}`;
+      }
     } else if (codeFromVS.valueset().tbd()) {
       if (codeFromVS.valueset().tbd().STRING()) {
-        vs = stripDelimitersFromToken(codeFromVS.valueset().tbd().STRING());
+        vs = `urn:tbd:${stripDelimitersFromToken(codeFromVS.valueset().tbd().STRING())}`;
       } else {
-        vs = 'TBD';
+        vs = 'urn:tbd';
       }
     }
     return vs;
@@ -376,7 +409,7 @@ class Importer extends SHRParserListener {
     if (lastDot != -1) {
       const ns = ref.substr(0, lastDot);
       const name = ref.substr(lastDot+1);
-      const resolution = this._preprocessedData.resolveDefinition(name, ns);
+      const resolution = this.resolveDefinition(name, ns);
       if (resolution.error) {
         this.addError(resolution.error);
       }
@@ -388,7 +421,7 @@ class Importer extends SHRParserListener {
       return new PrimitiveIdentifier(ref);
     }
     var ns;
-    const resolution = this._preprocessedData.resolveDefinition(ref, this._currentNs, ...this._usesNs);
+    const resolution = this.resolveDefinition(ref, this._currentNs, ...this._usesNs);
     if (resolution.error) {
       this.addError(resolution.error);
       ns = resolution.namespace ? resolution.namespace: 'unknown';
@@ -398,6 +431,36 @@ class Importer extends SHRParserListener {
     return new Identifier(ns, ref);
   }
 
+  resolveDefinition(name, ...namespace) {
+    // First try in the specifications (in case specifications were passed into the listener)
+    const result = {};
+    const foundNamespaces = [];
+    for (const ns of namespace) {
+      if (this._specs._dataElements.find(ns, name)) {
+        if (!result.hasOwnProperty('namespace')) {
+          result['namespace'] = ns;
+        }
+        foundNamespaces.push(ns);
+      }
+    }
+    if (foundNamespaces.length > 0) {
+      // We found it in specifications, but should be sure it's not also lurking in other namespaces that were preprocessed
+      const otherNamespaces = namespace.filter(ns => foundNamespaces.some(ns2 => ns != ns2));
+      for (const otherNS of otherNamespaces) {
+        const resolution = this._preprocessedData.resolveDefinition(name, otherNS);
+        if (typeof resolution.namespace !== 'undefined') {
+          foundNamespaces.push(resolution.ns);
+        }
+      }
+      if (foundNamespaces.length > 1) {
+        result['error'] = `Found conflicting definitions for ${name} in multiple namespaces: ${foundNamespaces}`;
+      }
+      return result;
+    }
+    // Didn't find it in specifications, so use the preprocessed data
+    return this._preprocessedData.resolveDefinition(name, ...namespace);
+  }
+
   pushCurrentDefinition() {
     this._specs.dataElements.add(this._currentDef);
     this._currentDef = null;
@@ -405,10 +468,6 @@ class Importer extends SHRParserListener {
 
   addError(err) {
     this._errors.push(`${this._currentFile}: ${err}`);
-  }
-
-  specifications() {
-    return this._specs;
   }
 }
 
