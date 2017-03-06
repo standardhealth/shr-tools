@@ -4,8 +4,8 @@ const {SHRParser} = require('./parsers/SHRParser');
 const {SHRParserVisitor} = require('./parsers/SHRParserVisitor');
 const {Version} = require('shr-models');
 
-const VERSION = new Version(4, 0, 0);
-const GRAMMAR_VERSION = new Version(4, 0, 0);
+const VERSION = new Version(4, 1, 1);
+const GRAMMAR_VERSION = new Version(4, 1, 0);
 
 class Preprocessor extends SHRParserVisitor {
   constructor() {

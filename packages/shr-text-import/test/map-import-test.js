@@ -6,7 +6,7 @@ describe('#importFromFilePath()', () => {
   it('should correctly import a simple mapping', () => {
     const {specifications, errors} = importFixture('SimpleMapping');
     expect(errors).is.empty;
-    expectVersions(specifications, new mdls.Version(4));
+    expectVersions(specifications, new mdls.Version(4,1));
     expectTargets(specifications, 'TEST');
     const s = getAndExpect(specifications, 'shr.test', 'A', 'TEST', 'B');
     expect(s.rules).to.eql([
@@ -19,7 +19,7 @@ describe('#importFromFilePath()', () => {
   it('should correctly import a mapping with deep paths', () => {
     const {specifications, errors} = importFixture('DeepPathMapping');
     expect(errors).is.empty;
-    expectVersions(specifications, new mdls.Version(4));
+    expectVersions(specifications, new mdls.Version(4,1));
     expectTargets(specifications, 'TEST');
     const s = getAndExpect(specifications, 'shr.test', 'A', 'TEST', 'B');
     expect(s.rules).to.eql([
@@ -32,7 +32,7 @@ describe('#importFromFilePath()', () => {
   it('should correctly import a mapping with paths and choices', () => {
     const {specifications, errors} = importFixture('ChoicePathMapping');
     expect(errors).is.empty;
-    expectVersions(specifications, new mdls.Version(4));
+    expectVersions(specifications, new mdls.Version(4,1));
     expectTargets(specifications, 'TEST');
     const s = getAndExpect(specifications, 'shr.test', 'A', 'TEST', 'B');
     expect(s.rules).to.eql([
