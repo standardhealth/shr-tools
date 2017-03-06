@@ -2,18 +2,16 @@ class Specifications {
   constructor() {
     this._namespaces = new NamespaceSpecifications();
     this._dataElements = new DataElementSpecifications();
-    /* For later
     this._valueSets = new ValueSetSpecifications();
+    this._codeSystems = new CodeSystemSpecifications();
     this._maps = new MapSpecifications();
-    */
   }
 
   get namespaces() { return this._namespaces; }
   get dataElements() { return this._dataElements; }
-  /* For later
   get valueSets() { return this._valueSets; }
+  get codeSystems() { return this._codeSystems; }
   get maps() { return this._maps; }
-  */
 }
 
 class NamespaceSpecifications {
@@ -89,15 +87,207 @@ class DataElementSpecifications {
   }
 }
 
-/* For later
 class ValueSetSpecifications {
+  constructor() {
+    this._nsMap = new Map();
+    this._urlMap = new Map();
+    this._grammarVersions = new Map();
+  }
 
+  get namespaces() { return Array.from(this._nsMap.keys()); }
+  get urls() { return Array.from(this._urlMap.keys()); }
+  get grammarVersions() { return Array.from(this._grammarVersions.values()); }
+
+  add(valueSet) {
+    const id = valueSet.identifier;
+    if (!this._nsMap.has(id.namespace)) {
+      this._nsMap.set(id.namespace, new Map());
+    }
+    this._nsMap.get(id.namespace).set(id.name, valueSet);
+    this._urlMap.set(valueSet.url, valueSet);
+    if (typeof valueSet.grammarVersion !== 'undefined') {
+      this._grammarVersions.set(valueSet.grammarVersion.toString(), valueSet.grammarVersion);
+    }
+  }
+
+  get all() {
+    return Array.from(this._urlMap.values());
+  }
+
+  byNamespace(namespace) {
+    if (this._nsMap.has(namespace)) {
+      return Array.from(this._nsMap.get(namespace).values());
+    }
+    return [];
+  }
+
+  find(namespace, name) {
+    if (this._nsMap.has(namespace)) {
+      return this._nsMap.get(namespace).get(name);
+    }
+  }
+
+  findByIdentifier(identifier) {
+    return this.find(identifier.namespace, identifier.name);
+  }
+
+  findByURL(url) {
+    return this._urlMap.get(url);
+  }
+}
+
+class CodeSystemSpecifications {
+  constructor() {
+    this._nsMap = new Map();
+    this._urlMap = new Map();
+    this._grammarVersions = new Map();
+  }
+
+  get namespaces() { return Array.from(this._nsMap.keys()); }
+  get urls() { return Array.from(this._urlMap.keys()); }
+  get grammarVersions() { return Array.from(this._grammarVersions.values()); }
+
+  add(codeSystem) {
+    const id = codeSystem.identifier;
+    if (!this._nsMap.has(id.namespace)) {
+      this._nsMap.set(id.namespace, new Map());
+    }
+    this._nsMap.get(id.namespace).set(id.name, codeSystem);
+    this._urlMap.set(codeSystem.url, codeSystem);
+    if (typeof codeSystem.grammarVersion !== 'undefined') {
+      this._grammarVersions.set(codeSystem.grammarVersion.toString(), codeSystem.grammarVersion);
+    }
+  }
+
+  get all() {
+    return Array.from(this._urlMap.values());
+  }
+
+  byNamespace(namespace) {
+    if (this._nsMap.has(namespace)) {
+      return Array.from(this._nsMap.get(namespace).values());
+    }
+    return [];
+  }
+
+  find(namespace, name) {
+    if (this._nsMap.has(namespace)) {
+      return this._nsMap.get(namespace).get(name);
+    }
+  }
+
+  findByIdentifier(identifier) {
+    return this.find(identifier.namespace, identifier.name);
+  }
+
+  findByURL(url) {
+    return this._urlMap.get(url);
+  }
 }
 
 class MapSpecifications {
+  constructor() {
+    this._targetMap = new Map();
+    this._grammarVersions = new Map();
+  }
 
+  get grammarVersions() {
+    const gMap = new Map();
+    for (const target of this._targetMap.values()) {
+      for (const version of target.grammarVersions) {
+        gMap.set(version.toString(), version);
+      }
+    }
+    return Array.from(gMap.values());
+  }
+  get targets() { return Array.from(this._targetMap.keys()); }
+
+  getTargetMapSpecifications(target) {
+    return this._targetMap.get(target);
+  }
+
+  add(mapping) {
+    const target = mapping.targetSpec;
+    if (!this._targetMap.has(target)) {
+      this._targetMap.set(target, new TargetMapSpecifications(target));
+    }
+    this._targetMap.get(target).add(mapping);
+  }
+
+  byTarget(target) {
+    if (this._targetMap.has(target)) {
+      return Array.from(this._targetMap.get(target).all);
+    }
+    return [];
+  }
+
+  byTargetAndNamespace(target, namespace) {
+    if (this._targetMap.has(target)) {
+      return Array.from(this._targetMap.get(target).byNamespace(namespace));
+    }
+    return [];
+  }
+
+  find(target, namespace, name) {
+    if (this._targetMap.has(target)) {
+      return this._targetMap.get(target).find(namespace, name);
+    }
+  }
+
+  findByTargetAndIdentifier(target, identifier) {
+    if (this._targetMap.has(target)) {
+      return this._targetMap.get(target).findByIdentifier(identifier);
+    }
+  }
 }
-*/
+
+class TargetMapSpecifications {
+  constructor(target) {
+    this._target = target;
+    this._nsMap = new Map();
+    this._grammarVersions = new Map();
+  }
+
+  get target() { return this._target; }
+  get grammarVersions() { return Array.from(this._grammarVersions.values()); }
+  get namespaces() { return Array.from(this._nsMap.keys()); }
+
+  add(mapping) {
+    const id = mapping.identifier;
+    if (!this._nsMap.has(id.namespace)) {
+      this._nsMap.set(id.namespace, new Map());
+    }
+    this._nsMap.get(id.namespace).set(id.name, mapping);
+    if (typeof mapping.grammarVersion !== 'undefined') {
+      this._grammarVersions.set(mapping.grammarVersion.toString(), mapping.grammarVersion);
+    }
+  }
+
+  get all() {
+    const all = [];
+    for (const ns of this._nsMap.values()) {
+      all.push(...ns.values());
+    }
+    return all;
+  }
+
+  byNamespace(namespace) {
+    if (this._nsMap.has(namespace)) {
+      return Array.from(this._nsMap.get(namespace).values());
+    }
+    return [];
+  }
+
+  find(namespace, name) {
+    if (this._nsMap.has(namespace)) {
+      return this._nsMap.get(namespace).get(name);
+    }
+  }
+
+  findByIdentifier(identifier) {
+    return this.find(identifier.namespace, identifier.name);
+  }
+}
 
 class Namespace {
   constructor(namespace, description) {
@@ -234,7 +424,7 @@ class DataElement {
       clone._fields.push(field.clone());
     }
     if (this._grammarVersion) {
-      clone._grammarVersion = this._grammarVersion;
+      clone._grammarVersion = this._grammarVersion.clone();
     }
     return clone;
   }
@@ -344,9 +534,16 @@ class Constraint {
   }
 
   get path() { return this._path; }
+  set path(path) { this._path = path; }
+  // withPath is a convenience function for chaining
+  withPath(path) {
+    this.path = path;
+    return this;
+  }
   hasPath() {
     return this._path.length > 0;
   }
+
 
   _clonePropertiesTo(clone) {
     for (const p of this._path) {
@@ -644,6 +841,17 @@ class ChoiceValue extends Value {
 
   // Each option in the choice must be a subclass of Value
   get options() { return this._options; }
+  get aggregateOptions() {
+    const options = [];
+    for (const opt of this._options) {
+      if (opt instanceof ChoiceValue) {
+        options.push(opt.aggregateOptions);
+      } else {
+        options.push(opt);
+      }
+    }
+    return options;
+  }
   addOption(option) {
     this._options.push(option);
   }
@@ -703,6 +911,10 @@ class TBD extends Value{
 
   get text() { return this._text; }
 
+  equals(other) {
+    return this._text == other.text;
+  }
+
   clone() {
     const clone = new TBD(this._text);
     super._clonePropertiesTo(clone);
@@ -711,6 +923,410 @@ class TBD extends Value{
 
   toString() {
     return `TBD<${this._text}>`;
+  }
+}
+
+class ValueSet  {
+  constructor(identifier, url) {
+    this._identifier = identifier;
+    this._url = url;
+    this._concepts = []; // Concept[] -- indicating the *defitional* concept that describes the value set
+    this._rules = [];    // Dynamic rules for inclusion/exclusion of codes in a value set
+  }
+
+  get identifier() { return this._identifier; }
+  get url() { return this._url; }
+
+  // a description is a string
+  get description() { return this._description; }
+  set description(description) {
+    this._description = description;
+  }
+  // withDescription is a convenience function for chaining
+  withDescription(description) {
+    this.description = description;
+    return this;
+  }
+
+  // concepts are an array of Concept
+  get concepts() { return this._concepts; }
+  set concepts(concepts) {
+    this._concepts = concepts;
+  }
+  addConcept(concept) {
+    this._concepts.push(concept);
+  }
+  // withConcept is a convenience function for chaining
+  withConcept(concept) {
+    this.addConcept(concept);
+    return this;
+  }
+
+  // rules are ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, or ValueSetIncludesFromCodeRule
+  get rules() { return this._rules; }
+  set rules(rules) {
+    this._rules = rules;
+  }
+  addRule(rule) {
+    this._rules.push(rule);
+  }
+  // withRule is a convenience function for chaining
+  withRule(rule) {
+    this.addRule(rule);
+    return this;
+  }
+
+  get rulesFilter() {
+    return new ValueSetRulesFilter(this._rules);
+  }
+
+  addValueSetIncludesCodeRule(code) {
+    this._rules.push(new ValueSetIncludesCodeRule(code));
+  }
+  // withValueSetIncludesCodeRule is a convenience function for chaining
+  withValueSetIncludesCodeRule(code) {
+    this.addValueSetIncludesCodeRule(code);
+    return this;
+  }
+
+  addValueSetIncludesDescendentsRule(code) {
+    this._rules.push(new ValueSetIncludesDescendentsRule(code));
+  }
+  // withValueSetIncludesDescendentsRule is a convenience function for chaining
+  withValueSetIncludesDescendentsRule(code) {
+    this.addValueSetIncludesDescendentsRule(code);
+    return this;
+  }
+
+  addValueSetExcludesDescendentsRule(code) {
+    this._rules.push(new ValueSetExcludesDescendentsRule(code));
+  }
+  // withValueSetExcludesDescendentsRule is a convenience function for chaining
+  withValueSetExcludesDescendentsRule(code) {
+    this.addValueSetExcludesDescendentsRule(code);
+    return this;
+  }
+
+  addValueSetIncludesFromCodeRule(code) {
+    this._rules.push(new ValueSetIncludesFromCodeRule(code));
+  }
+  // withValueSetIncludesFromCodeRule is a convenience function for chaining
+  withValueSetIncludesFromCodeRule(code) {
+    this.addValueSetIncludesFromCodeRule(code);
+    return this;
+  }
+
+  // the Version of the grammar used to define this value set
+  get grammarVersion() { return this._grammarVersion; }
+  set grammarVersion(grammarVersion) {
+    this._grammarVersion = grammarVersion;
+  }
+  // withGrammarVersion is a convenience function for chaining
+  withGrammarVersion(grammarVersion) {
+    this.grammarVersion = grammarVersion;
+    return this;
+  }
+
+  clone() {
+    const clone = new ValueSet(this._identifier, this._url);
+    if (this._description) {
+      clone._description = this._description;
+    }
+    for (const concept of this._concepts) {
+      clone._concepts.push(concept.clone());
+    }
+    for (const rule of this._rules) {
+      clone.addRule(rule.clone());
+    }
+    if (this._grammarVersion) {
+      clone._grammarVersion = this._grammarVersion.clone();
+    }
+    return clone;
+  }
+}
+
+// Note -- this should be consider abstract.  Do not instantiate!
+class ValueSetRule {
+  constructor(code) {
+    this._code = code;
+  }
+
+  get code() { return this._code; }
+}
+
+// ValueSetIncludesCodeRule indicates that the given code should be directly included in the value set
+class ValueSetIncludesCodeRule extends ValueSetRule {
+  constructor(code) {
+    super(code);
+  }
+
+  clone() {
+    return new ValueSetIncludesCodeRule(this._code.clone());
+  }
+}
+
+// ValueSetIncludesDescendentsRule indicates that the given code and it's descendents (in SNOMED-CT) should be included in the value set
+class ValueSetIncludesDescendentsRule extends ValueSetRule {
+  constructor(code) {
+    super(code);
+  }
+
+  clone() {
+    return new ValueSetIncludesDescendentsRule(this._code.clone());
+  }
+}
+
+// ValueSetExcludesDescendentsRule indicates that the given code and it's descendents (in SNOMED-CT) should be excluded from the value set
+class ValueSetExcludesDescendentsRule extends ValueSetRule {
+  constructor(code) {
+    super(code);
+  }
+
+  clone() {
+    return new ValueSetExcludesDescendentsRule(this._code.clone());
+  }
+}
+
+// ValueSetIncludesFromCodeRule indicates that codes referenced by the given code should be included in the value set
+class ValueSetIncludesFromCodeRule extends ValueSetRule {
+  constructor(code) {
+    super(code);
+  }
+
+  clone() {
+    return new ValueSetIncludesFromCodeRule(this._code.clone());
+  }
+}
+
+class ValueSetRulesFilter {
+  constructor(rules = []) {
+    this._rules = rules;
+  }
+
+  get rules() { return this._rules; }
+  get hasRules() { return this._rules.length > 0; }
+
+  get includesCode() {
+    return new ValueSetRulesFilter(this._rules.filter(c => c instanceof ValueSetIncludesCodeRule));
+  }
+
+  get includesDescendents() {
+    return new ValueSetRulesFilter(this._rules.filter(c => c instanceof ValueSetIncludesDescendentsRule));
+  }
+
+  get excludesDescendents() {
+    return new ValueSetRulesFilter(this._rules.filter(c => c instanceof ValueSetExcludesDescendentsRule));
+  }
+
+  get includesFromCode() {
+    return new ValueSetRulesFilter(this._rules.filter(c => c instanceof ValueSetIncludesFromCodeRule));
+  }
+}
+
+class CodeSystem  {
+  constructor(identifier, url) {
+    this._identifier = identifier;
+    this._url = url;
+    this._codes = []; // Concept[] -- codes in the code system
+  }
+
+  get identifier() { return this._identifier; }
+  get url() { return this._url; }
+
+  // a description is a string
+  get description() { return this._description; }
+  set description(description) {
+    this._description = description;
+  }
+  // withDescription is a convenience function for chaining
+  withDescription(description) {
+    this.description = description;
+    return this;
+  }
+
+  // codes are an array of Concept
+  get codes() { return this._codes; }
+  set codes(codes) {
+    this._codes = codes;
+  }
+  addCode(code) {
+    this._codes.push(code);
+  }
+  // withCode is a convenience function for chaining
+  withCode(code) {
+    this.addCode(code);
+    return this;
+  }
+
+  // the Version of the grammar used to define this code system
+  get grammarVersion() { return this._grammarVersion; }
+  set grammarVersion(grammarVersion) {
+    this._grammarVersion = grammarVersion;
+  }
+  // withGrammarVersion is a convenience function for chaining
+  withGrammarVersion(grammarVersion) {
+    this.grammarVersion = grammarVersion;
+    return this;
+  }
+
+  clone() {
+    const clone = new CodeSystem(this._identifier, this._url);
+    if (this._description) {
+      clone._description = this._description;
+    }
+    for (const code of this._codes) {
+      clone._codes.push(code.clone());
+    }
+    if (this._grammarVersion) {
+      clone._grammarVersion = this._grammarVersion.clone();
+    }
+    return clone;
+  }
+}
+
+
+class ElementMapping {
+  constructor(identifier, targetSpec, targetItem) {
+    this._identifier = identifier;
+    this._targetSpec = targetSpec;
+    this._targetItem = targetItem;
+    this._rules = [];
+  }
+
+  get identifier() { return this._identifier; }
+  get targetSpec() { return this._targetSpec; }
+
+  get targetItem() { return this._targetItem; }
+  set targetItem(targetItem) {
+    this._targetItem = targetItem;
+  }
+
+  // rules are FieldMappingRule or CardinalityMappingRule
+  get rules() { return this._rules; }
+  set rules(rules) {
+    this._rules = rules;
+  }
+  addRule(rule) {
+    this._rules.push(rule);
+  }
+  // withRule is a convenience function for chaining
+  withRule(rule) {
+    this.addRule(rule);
+    return this;
+  }
+
+  get rulesFilter() {
+    return new MappingRulesFilter(this._rules);
+  }
+
+  addFieldMappingRule(sourcePath, targetPath) {
+    this._rules.push(new FieldMappingRule(sourcePath, targetPath));
+  }
+  // withFieldMappingRule is a convenience function for chaining
+  withFieldMappingRule(sourcePath, targetPath) {
+    this.addFieldMappingRule(sourcePath, targetPath);
+    return this;
+  }
+
+  addCardinalityMappingRule(targetPath, cardinality) {
+    this._rules.push(new CardinalityMappingRule(targetPath, cardinality));
+  }
+  // withCardinalityMappingRule is a convenience function for chaining
+  withCardinalityMappingRule(targetPath, cardinality) {
+    this.addCardinalityMappingRule(targetPath, cardinality);
+    return this;
+  }
+
+  // the Version of the grammar used to define this mapping
+  get grammarVersion() { return this._grammarVersion; }
+  set grammarVersion(grammarVersion) {
+    this._grammarVersion = grammarVersion;
+  }
+  // withGrammarVersion is a convenience function for chaining
+  withGrammarVersion(grammarVersion) {
+    this.grammarVersion = grammarVersion;
+    return this;
+  }
+
+  clone() {
+    const clone = new ElementMapping(this._identifier, this._targetSpec, this._targetItem);
+    for (const rule of this._rules) {
+      clone.addRule(rule.clone());
+    }
+    if (this._grammarVersion) {
+      clone._grammarVersion = this._grammarVersion.clone();
+    }
+
+    return clone;
+  }
+}
+
+class FieldMappingRule {
+  constructor(sourcePath = [], target = '') {
+    this._sourcePath = sourcePath; // array of identifiers
+    this._target = target; // string
+  }
+
+  get sourcePath() { return this._sourcePath; }
+  get target() { return this._target; }
+
+  clone() {
+    const clonedSP = this._sourcePath.map(p => p.clone());
+    return new FieldMappingRule(clonedSP, this._target);
+  }
+}
+
+class CardinalityMappingRule {
+  constructor(target = '', cardinality) {
+    this._target = target;   // string
+    this._cardinality = cardinality; // Cardinality
+  }
+
+  get target() { return this._target; }
+  get cardinality() { return this._cardinality; }
+
+  clone() {
+    return new CardinalityMappingRule(this._target, this._cardinality.clone());
+  }
+}
+
+class MappingRulesFilter {
+  constructor(rules = []) {
+    this._rules = rules;
+  }
+
+  get rules() { return this._rules; }
+  get hasRules() { return this._rules.length > 0; }
+
+  get field() {
+    return new MappingRulesFilter(this._rules.filter(c => c instanceof FieldMappingRule));
+  }
+
+  get cardinality() {
+    return new MappingRulesFilter(this._rules.filter(c => c instanceof CardinalityMappingRule));
+  }
+
+  withSourcePath(path = []) {
+    const matches = this._rules.filter(r => {
+      if (typeof r.sourcePath === 'undefined') {
+        return false;
+      }
+      if (path.length != r.sourcePath.length) {
+        return false;
+      }
+      for (let i=0; i < path.length; i++) {
+        if (!path[i].equals(r.sourcePath[i])) {
+          return false;
+        }
+      }
+      return true;
+    });
+    return new MappingRulesFilter(matches);
+  }
+
+  withTarget(target = '') {
+    const matches = this._rules.filter(r => r.target == target);
+    return new MappingRulesFilter(matches);
   }
 }
 
@@ -728,12 +1344,16 @@ class Version {
   toString() {
     return `${this.major}.${this.minor}.${this.patch}`;
   }
+
+  clone() {
+    return new Version(this._major, this._minor, this._patch);
+  }
 }
 
 const VERSION = new Version(4, 0, 0);
 const GRAMMAR_VERSION = new Version(4, 0, 0);
 const PRIMITIVE_NS = 'primitive';
 const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'code', 'id',
-  'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time'];
+  'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time', 'xhtml'];
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION};
