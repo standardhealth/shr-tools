@@ -9,9 +9,10 @@ describe('#expand()', () => {
     _specs = new models.Specifications();
     // The SHR test namespace used by most tests
     _specs.namespaces.add(new models.Namespace('shr.core'));
-    // A core namespace and Coding data element needed by some tests
+    // A core namespace and Coding / CodeableConcept data elements needed by some tests
     _specs.namespaces.add(new models.Namespace('shr.core'));
     _specs.dataElements.add(new models.DataElement(id('shr.core', 'Coding'), false));
+    _specs.dataElements.add(new models.DataElement(id('shr.core', 'CodeableConcept'), false));
   });
 
   afterEach(function() {
@@ -724,6 +725,33 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.be.empty;
   });
 
+  it('should allow valueset constraints to override prior valueset constraints on values (using CodeableConcept)', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1)
+          .withConstraint(new models.ValueSetConstraint('http://foo.org'))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1)
+          .withConstraint(new models.ValueSetConstraint('http://bar.org'))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1)
+        .withConstraint(new models.ValueSetConstraint('http://bar.org'))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
   it('should allow valueset constraints to override prior valueset constraints on fields', () => {
     let a = new models.DataElement(id('shr.test', 'A'), true)
       .withField(
@@ -926,6 +954,28 @@ describe('#expand()', () => {
     expect(eX.fields).to.be.empty;
   });
 
+  it('should make implicit value code constraints explicit on values (using CodeableConcept)', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, x);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'CodeableConcept')]))
+    );
+    expect(eX.fields).to.be.empty;
+  });
+
   it('should allow code constraints to override prior code constraints on values', () => {
     let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(
@@ -948,6 +998,33 @@ describe('#expand()', () => {
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
+        .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should allow code constraints to override prior code constraints on values (using CodeableConcept)', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1)
+          .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
     );
     expect(eSubA.fields).to.be.empty;
@@ -1175,6 +1252,28 @@ describe('#expand()', () => {
     expect(eX.fields).to.be.empty;
   });
 
+  it('should make implicit value includes code constraints explicit on values (using CodeableConcept)', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    add(a, x);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'CodeableConcept')]))
+    );
+    expect(eX.fields).to.be.empty;
+  });
+
   it('should allow multiple includes code constraints on values', () => {
     let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(
@@ -1197,6 +1296,34 @@ describe('#expand()', () => {
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should allow multiple includes code constraints on values (using CodeableConcept)', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(1)
+          .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(errors()).to.be.empty;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(1)
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
     );
