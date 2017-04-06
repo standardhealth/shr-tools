@@ -1,12 +1,21 @@
 const {expect} = require('chai');
+const err = require('./errors.js');
 const mdl = require('shr-models');
 
-function commonExportTests(expectedFn, exportFn) {
-  const wrappedExpectedFn = function(name, testCase) {
+function commonExportTests(exportFn, expectedFn, expectedErrorsFn) {
+  if (typeof expectedErrorsFn === 'undefined') {
+    // default to expecting no errors
+    expectedErrorsFn = function() { return []; };
+  }
+
+  const wrappedExpectedFns = function(name, testCase) {
     try {
-      return expectedFn(name);
+      return {
+        result: expectedFn(name),
+        errors: expectedErrorsFn(name)
+      };
     } catch (e) {
-      const msg = `Skipping ${name} test.  Failed to load expected values: ${e}`;
+      const msg = `Skipping ${name} test.  Failed to load expected values/errors: ${e}`;
       console.warn(msg);
       testCase.skip(msg);
     }
@@ -15,12 +24,22 @@ function commonExportTests(expectedFn, exportFn) {
   return () => {
     let _specs;
     let checkExpected = function(expected) {
-      expect(exportFn(_specs)).to.eql(expected);
+      expect(exportFn(_specs)).to.eql(expected.result);
+      expect(err.errors().length).to.equal(expected.errors.length);
+      for (let i=0; i < expected.errors.length; i++) {
+        const expErr = expected.errors[i];
+        const actErr = err.errors()[i];
+        // The expErr will be a subset of the actErr, so just check the keys in expErr
+        for (const key of Object.keys(expErr)) {
+          expect(actErr[key]).to.eql(expErr[key]);
+        }
+      }
     };
 
     // Note: using ES5 function syntax instead of () => due to bug in mocha that doesn't preserve context of 'this'
     beforeEach(function() {
       _specs = new mdl.Specifications();
+      err.clear();
     });
 
     afterEach(function() {
@@ -29,82 +48,82 @@ function commonExportTests(expectedFn, exportFn) {
 
     it('should correctly export a simple entry', function() {
       addSimpleElement(_specs, 'shr.test');
-      const expected = wrappedExpectedFn('Simple', this);
+      const expected = wrappedExpectedFns('Simple', this);
       checkExpected(expected);
     });
 
     it('should correctly export a simple entry in a different namespace', function() {
       addSimpleElement(_specs, 'shr.other.test');
-      const expected = wrappedExpectedFn('ForeignSimple', this);
+      const expected = wrappedExpectedFns('ForeignSimple', this);
       checkExpected(expected);
     });
 
     it('should correctly export a coded entry', function() {
       addCodedElement(_specs, 'shr.test');
-      const expected = wrappedExpectedFn('Coded', this);
+      const expected = wrappedExpectedFns('Coded', this);
       checkExpected(expected);
     });
 
     it('should correctly export a reference entry', function() {
       addSimpleReference(_specs, 'shr.test');
-      const expected = wrappedExpectedFn('SimpleReference', this);
+      const expected = wrappedExpectedFns('SimpleReference', this);
       checkExpected(expected);
     });
 
     it('should correctly export an entry with an element value', function() {
       // NOTE: This is an entry where the value is not a primitive, e.g. "Value: SomeOtherDataElement"
       addElementValue(_specs, 'shr.test');
-      const expected = wrappedExpectedFn('ElementValue', this);
+      const expected = wrappedExpectedFns('ElementValue', this);
       checkExpected(expected);
     });
 
     it('should correctly export an entry with an element value in a different namespace', function() {
       // NOTE: This is an entry where the value is not a primitive, e.g. "Value: SomeOtherDataElement"
       addForeignElementValue(_specs, 'shr.test', 'shr.other.test');
-      const expected = wrappedExpectedFn('ForeignElementValue', this);
+      const expected = wrappedExpectedFns('ForeignElementValue', this);
       checkExpected(expected);
     });
 
     it('should correctly export an entry with two-deep element value', function() {
       // NOTE: This is an entry where the value is a non-primitive, that itself has a value that is a non-primitive
       addTwoDeepElementValue(_specs, 'shr.test');
-      const expected = wrappedExpectedFn('TwoDeepElementValue', this);
+      const expected = wrappedExpectedFns('TwoDeepElementValue', this);
       checkExpected(expected);
     });
 
     it('should correctly export a choice', function() {
       addChoice(_specs, 'shr.test');
-      const expected = wrappedExpectedFn('Choice');
+      const expected = wrappedExpectedFns('Choice');
       checkExpected(expected);
     });
 
     it('should correctly export a choice containing a choice', function() {
       addChoiceOfChoice(_specs, 'shr.test');
-      const expected = wrappedExpectedFn('ChoiceOfChoice', this);
+      const expected = wrappedExpectedFns('ChoiceOfChoice', this);
       checkExpected(expected);
     });
 
     it('should correctly export a group', function() {
       addGroup(_specs, 'shr.test', 'shr.other.test');
-      const expected = wrappedExpectedFn('Group', this);
+      const expected = wrappedExpectedFns('Group', this);
       checkExpected(expected);
     });
 
     it('should correctly export a group with a choice containing a choice', function() {
       addGroupWithChoiceOfChoice(_specs, 'shr.test', 'shr.other.test');
-      const expected = wrappedExpectedFn('GroupWithChoiceOfChoice', this);
+      const expected = wrappedExpectedFns('GroupWithChoiceOfChoice', this);
       checkExpected(expected);
     });
 
     it('should correctly export a group with name clashes', function() {
       addGroupPathClash(_specs, 'shr.test', 'shr.other.test');
-      const expected = wrappedExpectedFn('GroupPathClash', this);
+      const expected = wrappedExpectedFns('GroupPathClash', this);
       checkExpected(expected);
     });
 
     it('should correctly export an element based on a group element', function() {
       addGroupDerivative(_specs, 'shr.test', 'shr.other.test');
-      const expected = wrappedExpectedFn('GroupDerivative', this);
+      const expected = wrappedExpectedFns('GroupDerivative', this);
       checkExpected(expected);
     });
   };

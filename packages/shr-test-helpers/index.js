@@ -1,1 +1,4 @@
-module.exports = require('./common-export-tests');
+module.exports = {
+  errors: require('./errors'),
+  export: require('./export')
+};
