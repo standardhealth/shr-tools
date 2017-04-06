@@ -1,3 +1,4 @@
+const bunyan = require('bunyan');
 const {FileStream, CommonTokenStream} = require('antlr4/index');
 const {ParseTreeWalker} = require('antlr4/tree');
 const {SHRLexer} = require('./parsers/SHRLexer');
@@ -6,11 +7,15 @@ const {SHRParserListener} = require('./parsers/SHRParserListener');
 const {SHRErrorListener} = require('./common.js');
 const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, TBD, PRIMITIVES} = require('shr-models');
 
+var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
+var logger = rootLogger;
+function setLogger(bunyanLogger) {
+  rootLogger = logger = bunyanLogger;
+}
+
 class Importer extends SHRParserListener {
   constructor(preprocessedData, specifications = new Specifications()) {
     super();
-    // The current file being parsed -- useful for error messages
-    this._currentFile = '';
     // The preprocessed data indicating valid elements and vocabularies
     this._preprocessedData = preprocessedData;
     // The specifications it collects
@@ -23,29 +28,33 @@ class Importer extends SHRParserListener {
     this._currentGrammarVersion = '';
     // The currently active definition (DataElement)
     this._currentDef = null;
-    // The accumulated errors
-    this._errors = [];
   }
 
-  get errors() { return this._errors; }
   get specifications() { return this._specs; }
 
   importFile(file) {
-    const errListener = new SHRErrorListener(file);
-    const chars = new FileStream(file);
-    const lexer = new SHRLexer(chars);
-    lexer.removeErrorListeners();
-    lexer.addErrorListener(errListener);
-    const tokens  = new CommonTokenStream(lexer);
-    const parser = new SHRParser(tokens);
-    parser.removeErrorListeners();
-    parser.addErrorListener(errListener);
-    parser.buildParseTrees = true;
-    const tree = parser.shr();
-    const walker = new ParseTreeWalker();
-    this._currentFile = file;
-    walker.walk(this, tree);
-    this._currentFile = '';
+    // Setup a child logger to associate logs with the current file
+    const lastLogger = logger;
+    logger = rootLogger.child({ file: file });
+    logger.debug('Start importing data elements file');
+    try {
+      const errListener = new SHRErrorListener(logger);
+      const chars = new FileStream(file);
+      const lexer = new SHRLexer(chars);
+      lexer.removeErrorListeners();
+      lexer.addErrorListener(errListener);
+      const tokens  = new CommonTokenStream(lexer);
+      const parser = new SHRParser(tokens);
+      parser.removeErrorListeners();
+      parser.addErrorListener(errListener);
+      parser.buildParseTrees = true;
+      const tree = parser.shr();
+      const walker = new ParseTreeWalker();
+      walker.walk(this, tree);
+    } finally {
+      logger.debug('Done importing data elements file');
+      this.logger = lastLogger;
+    }
   }
 
   enterDataDefsDoc(ctx) {
@@ -66,10 +75,13 @@ class Importer extends SHRParserListener {
     const major = parseInt(version.WHOLE_NUMBER()[0], 10);
     const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
     this._currentGrammarVersion = new Version(major, minor);
+
+    logger.debug({shrId: ns, version: this._currentGrammarVersion.toString()}, 'Start importing data element namespace');
   }
 
   exitDataDefsDoc(ctx) {
     // clear current namespace, uses namespaces, and grammar version
+    logger.debug({shrId: this._currentNs}, 'Done importing data element namespace');
     this._currentNs = '';
     this._usesNs = [];
     this._currentGrammarVersion = null;
@@ -82,10 +94,21 @@ class Importer extends SHRParserListener {
   enterElementDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.elementHeader().simpleName().getText());
     this._currentDef = new DataElement(id).withGrammarVersion(this._currentGrammarVersion);
+
+    // Setup a child logger to associate logs with the current element
+    const lastLogger = logger;
+    logger = logger.child({ shrId: id.fqn });
+    logger.parent = lastLogger;
+    logger.debug('Start importing data element');
   }
 
   exitElementDef(ctx) {
-    this.pushCurrentDefinition();
+    try {
+      this.pushCurrentDefinition();
+    } finally {
+      logger.debug('Done importing data element');
+      logger = logger.parent;
+    }
   }
 
   enterEntryDef(ctx) {
@@ -314,7 +337,7 @@ class Importer extends SHRParserListener {
       const [path, name] =  codeFromVS.valueset().PATH_URL().getText().split('/', 2);
       const resolution = this._preprocessedData.resolvePath(path, this._currentNs, ...this._usesNs);
       if (resolution.error) {
-        this.addError(resolution.error);
+        logger.error(resolution.error);
       }
       if (resolution.url) {
         vs = `${resolution.url}/${name}`;
@@ -332,7 +355,7 @@ class Importer extends SHRParserListener {
         }
       }
       if (!found) {
-        this.addError(`Unable to resolve ValueSet reference ${name} used in element ${this._currentDef.identifier.name}`);
+        logger.error('Unable to resolve value set reference: %s', name);
         vs = `urn:tbd:${name}`;
       }
     } else if (codeFromVS.valueset().tbd()) {
@@ -364,7 +387,7 @@ class Importer extends SHRParserListener {
       const csAlias = ctx.ALL_CAPS().getText();
       const resolution = this._preprocessedData.resolveVocabulary(csAlias, this._currentNs, ...this._usesNs);
       if (resolution.error) {
-        this.addError(resolution.error);
+        logger.error(resolution.error);
         cs = resolution.url ? resolution.url : csAlias;
       } else {
         cs = resolution.url;
@@ -411,7 +434,7 @@ class Importer extends SHRParserListener {
       const name = ref.substr(lastDot+1);
       const resolution = this.resolveDefinition(name, ns);
       if (resolution.error) {
-        this.addError(resolution.error);
+        logger.error(resolution.error);
       }
       return new Identifier(ns, name);
     }
@@ -423,7 +446,7 @@ class Importer extends SHRParserListener {
     var ns;
     const resolution = this.resolveDefinition(ref, this._currentNs, ...this._usesNs);
     if (resolution.error) {
-      this.addError(resolution.error);
+      logger.error(resolution.error);
       ns = resolution.namespace ? resolution.namespace: 'unknown';
     } else {
       ns = resolution.namespace;
@@ -465,10 +488,6 @@ class Importer extends SHRParserListener {
     this._specs.dataElements.add(this._currentDef);
     this._currentDef = null;
   }
-
-  addError(err) {
-    this._errors.push(`${this._currentFile}: ${err}`);
-  }
 }
 
 function stripDelimitersFromToken(tkn) {
@@ -477,4 +496,4 @@ function stripDelimitersFromToken(tkn) {
   return str.substr(1,str.length -2);
 }
 
-module.exports = {Importer};
+module.exports = {Importer, setLogger};

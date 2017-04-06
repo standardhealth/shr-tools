@@ -1,3 +1,4 @@
+const bunyan = require('bunyan');
 const {FileStream, CommonTokenStream} = require('antlr4/index');
 const {ParseTreeWalker} = require('antlr4/tree');
 const {SHRLexer} = require('./parsers/SHRLexer');
@@ -6,13 +7,17 @@ const {SHRParserListener} = require('./parsers/SHRParserListener');
 const {SHRErrorListener} = require('./common.js');
 const {Specifications, Version, ElementMapping, Cardinality, Identifier, PrimitiveIdentifier, TBD} = require('shr-models');
 
+var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
+var logger = rootLogger;
+function setLogger(bunyanLogger) {
+  rootLogger = logger = bunyanLogger;
+}
+
 class MappingImporter extends SHRParserListener {
   constructor(specifications = new Specifications) {
     super();
     // The specifications container to put the mappings into
     this._specs = specifications;
-    // The current file being parsed -- useful for error messages
-    this._currentFile = '';
     // The currently active target spec
     this._currentTargetSpec = '';
     // The currently active namespace
@@ -21,28 +26,31 @@ class MappingImporter extends SHRParserListener {
     this._currentGrammarVersion = '';
     // The currently active definition (ElementMapping)
     this._currentDef = null;
-    // The accumulated errors
-    this._errors = [];
   }
 
-  get errors() { return this._errors; }
-
   importFile(file) {
-    const errListener = new SHRErrorListener(file);
-    const chars = new FileStream(file);
-    const lexer = new SHRLexer(chars);
-    lexer.removeErrorListeners();
-    lexer.addErrorListener(errListener);
-    const tokens  = new CommonTokenStream(lexer);
-    const parser = new SHRParser(tokens);
-    parser.removeErrorListeners();
-    parser.addErrorListener(errListener);
-    parser.buildParseTrees = true;
-    const tree = parser.shr();
-    const walker = new ParseTreeWalker();
-    this._currentFile = file;
-    walker.walk(this, tree);
-    this._currentFile = '';
+    // Setup a child logger to associate logs with the current file
+    const lastLogger = logger;
+    logger = rootLogger.child({ file: file });
+    logger.debug('Start importing mapping file');
+    try {
+      const errListener = new SHRErrorListener(logger);
+      const chars = new FileStream(file);
+      const lexer = new SHRLexer(chars);
+      lexer.removeErrorListeners();
+      lexer.addErrorListener(errListener);
+      const tokens  = new CommonTokenStream(lexer);
+      const parser = new SHRParser(tokens);
+      parser.removeErrorListeners();
+      parser.addErrorListener(errListener);
+      parser.buildParseTrees = true;
+      const tree = parser.shr();
+      const walker = new ParseTreeWalker();
+      walker.walk(this, tree);
+    } finally {
+      logger.debug('Done importing mapping file');
+      this.logger = lastLogger;
+    }
   }
 
   enterMappingsDoc(ctx) {
@@ -57,10 +65,23 @@ class MappingImporter extends SHRParserListener {
     const major = parseInt(version.WHOLE_NUMBER()[0], 10);
     const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
     this._currentGrammarVersion = new Version(major, minor);
+
+    const info = {
+      shrId: this._currentNs,
+      targetSpec: this._currentTargetSpec,
+      version: this._currentGrammarVersion.toString()
+    };
+    logger.debug(info, 'Start importing namespace mapping');
   }
 
   exitMappingsDoc(ctx) {
     // clear current namespace, target spec, and grammar version
+    const info = {
+      shrId: this._currentNs,
+      targetSpec: this._currentTargetSpec,
+      version: this._currentGrammarVersion.toString()
+    };
+    logger.debug(info, 'Done importing namespace mapping');
     this._currentNs = '';
     this._currentTargetSpec = '';
     this._currentGrammarVersion = null;
@@ -75,10 +96,21 @@ class MappingImporter extends SHRParserListener {
     }
     this._currentDef = new ElementMapping(source, this._currentTargetSpec, target);
     this._currentDef.grammarVersion = this._currentGrammarVersion;
+
+    // Setup a child logger to associate logs with the current element mapping
+    const lastLogger = logger;
+    logger = logger.child({ shrId: source.fqn, target: target });
+    logger.parent = lastLogger;
+    logger.debug('Start importing element mapping');
   }
 
   exitMappingDef(ctx) {
-    this.pushCurrentDefinition();
+    try {
+      this.pushCurrentDefinition();
+    } finally {
+      logger.debug('Done importing element mapping');
+      logger = logger.parent;
+    }
   }
 
   enterFieldMapping(ctx) {
@@ -88,7 +120,7 @@ class MappingImporter extends SHRParserListener {
   }
 
   enterCardMapping(ctx) {
-    const target = ctx.TARGET_PHRASE().getText();
+    const target = ctx.TARGET_WORD().getText();
     const cardinality = this.processCardinality(ctx.count());
     this._currentDef.addCardinalityMappingRule(target, cardinality);
   }
@@ -109,7 +141,7 @@ class MappingImporter extends SHRParserListener {
             sourcePath.push(new TBD());
           }
         } else {
-          this.addError(`Error parsing mapping for ${this._currentDef.identifier.fqn}`);
+          logger.error('Error parsing source path: %s', c.source().getText());
         }
       }
     }
@@ -141,10 +173,6 @@ class MappingImporter extends SHRParserListener {
     this._currentDef = null;
   }
 
-  addError(err) {
-    this._errors.push(`${this._currentFile}: ${err}`);
-  }
-
   specifications() {
     return this._specs;
   }
@@ -156,4 +184,4 @@ function stripDelimitersFromToken(tkn) {
   return str.substr(1,str.length -2);
 }
 
-module.exports = {MappingImporter};
+module.exports = {MappingImporter, setLogger};

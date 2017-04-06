@@ -202,8 +202,13 @@ SHRParserVisitor.prototype.visitValuesetDescendingFrom = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRParser#valuesetFrom.
-SHRParserVisitor.prototype.visitValuesetFrom = function(ctx) {
+// Visit a parse tree produced by SHRParser#valuesetFromCodeSystem.
+SHRParserVisitor.prototype.visitValuesetFromCodeSystem = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRParser#valuesetFromCode.
+SHRParserVisitor.prototype.visitValuesetFromCode = function(ctx) {
 };
 
 

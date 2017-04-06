@@ -1,10 +1,20 @@
 const fs = require('fs');
 const path = require('path');
+const bunyan = require('bunyan');
 const {Specifications} = require('shr-models');
 const {Preprocessor, VERSION, GRAMMAR_VERSION} = require('./preprocessor');
 const {Importer} = require('./listener');
 const {ValueSetImporter} = require('./valueSetListener');
 const {MappingImporter} = require('./mappingListener');
+
+var logger = bunyan.createLogger({name: 'shr-text-import'});
+function setLogger(bunyanLogger) {
+  logger = bunyanLogger;
+  require('./preprocessor').setLogger(logger);
+  require('./listener').setLogger(logger);
+  require('./valueSetListener').setLogger(logger);
+  require('./mappingListener').setLogger(logger);
+}
 
 function importFromFilePath(filePath, specifications = new Specifications()) {
   const filesByType = processPath(filePath);
@@ -24,10 +34,7 @@ function importFromFilePath(filePath, specifications = new Specifications()) {
   for (const file of filesByType.map) {
     mappingImporter.importFile(file);
   }
-  return {
-    specifications,
-    errors: preprocessor.errors.concat(importer.errors).concat(valueSetimporter.errors).concat(mappingImporter.errors)
-  };
+  return specifications;
 }
 
 function processPath(filePath, filesByType = new FilesByType()) {
@@ -70,4 +77,4 @@ class FilesByType {
   }
 }
 
-module.exports = {importFromFilePath, VERSION, GRAMMAR_VERSION};
+module.exports = {importFromFilePath, VERSION, GRAMMAR_VERSION, setLogger};

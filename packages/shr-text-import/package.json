@@ -1,6 +1,6 @@
 {
   "name": "shr-text-import",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Imports Standard Health Record (SHR) elements from their custom grammar to the SHR models",
   "author": "",
   "license": "Apache-2.0",
@@ -17,12 +17,14 @@
     "lint:fix": "./node_modules/.bin/eslint . --fix"
   },
   "dependencies": {
-    "antlr4": "~4.5.3",
-    "shr-models": "~4.1.0"
+    "antlr4": "~4.6.0",
+    "bunyan": "^1.8.9",
+    "shr-models": "4.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "shr-test-helpers": "4.2.0"
   }
 }

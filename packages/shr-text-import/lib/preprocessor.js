@@ -1,3 +1,4 @@
+const bunyan = require('bunyan');
 const {FileStream, CommonTokenStream} = require('antlr4/index');
 const {SHRLexer} = require('./parsers/SHRLexer');
 const {SHRParser} = require('./parsers/SHRParser');
@@ -7,32 +8,40 @@ const {Version} = require('shr-models');
 const VERSION = new Version(4, 1, 1);
 const GRAMMAR_VERSION = new Version(4, 1, 0);
 
+var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
+var logger = rootLogger;
+function setLogger(bunyanLogger) {
+  rootLogger = logger = bunyanLogger;
+}
+
 class Preprocessor extends SHRParserVisitor {
   constructor() {
     super();
-    // The current file being parsed -- useful for error messages
-    this._currentFile = '';
     // The preprocessed data
     this._data = new PreprocessedData();
-    // Errors during parsing
-    this._errors = []; // errors
   }
 
-  get errors() { return this._errors; }
   get data() { return this._data; }
 
   preprocessFile(file) {
-    this._currentFile = file;
-    const chars = new FileStream(file);
-    const lexer = new SHRLexer(chars);
-    lexer.removeErrorListeners();
-    const tokens  = new CommonTokenStream(lexer);
-    const parser = new SHRParser(tokens);
-    parser.removeErrorListeners();
-    parser.buildParseTrees = true;
-    const tree = parser.shr();
-    this.visitShr(tree);
-    this._currentFile = '';
+    // Setup a child logger to associate logs with the current file
+    const lastLogger = logger;
+    logger = rootLogger.child({ file: file });
+    logger.debug('Start preprocessing data elements file');
+    try {
+      const chars = new FileStream(file);
+      const lexer = new SHRLexer(chars);
+      lexer.removeErrorListeners(); // Only log errors during the import
+      const tokens  = new CommonTokenStream(lexer);
+      const parser = new SHRParser(tokens);
+      parser.removeErrorListeners(); // Only log errors during the import
+      parser.buildParseTrees = true;
+      const tree = parser.shr();
+      this.visitShr(tree);
+    } finally {
+      logger.debug('Done preprocessing data elements file');
+      this.logger = lastLogger;
+    }
   }
 
   visitShr(ctx) {
@@ -45,75 +54,73 @@ class Preprocessor extends SHRParserVisitor {
     if (!this.checkVersion(ctx.dataDefsHeader().version())) {
       return;
     }
-    this._data.files.push(this._currentFile);
     const ns = ctx.dataDefsHeader().namespace().getText();
-    if (ctx.pathDefs()) {
-      const removeTrailingSlash = function(url) {
-        while (url.endsWith('/')) { url = url.substring(0, url.length - 1); }
-        return url;
-      };
-      if (ctx.pathDefs().defaultPathDef()) {
-        const url = removeTrailingSlash(ctx.pathDefs().defaultPathDef().URL().getText());
-        this._data.registerPath(ns, 'default', url);
-      }
-      for (const def of ctx.pathDefs().pathDef()) {
-        const name = def.ALL_CAPS().getText();
-        let url = removeTrailingSlash(def.URL().getText());
-        while (url.endsWith('/')) {
-          url = url.substring(0, url.length - 1);
+    logger.debug({shrId: ns}, 'Start preprocessing namespace');
+
+    try {
+      if (ctx.pathDefs()) {
+        const removeTrailingSlash = function(url) {
+          while (url.endsWith('/')) { url = url.substring(0, url.length - 1); }
+          return url;
+        };
+        if (ctx.pathDefs().defaultPathDef()) {
+          const url = removeTrailingSlash(ctx.pathDefs().defaultPathDef().URL().getText());
+          this._data.registerPath(ns, 'default', url);
         }
-        this._data.registerPath(ns, name, url);
-      }
-    }
-    if (ctx.vocabularyDefs()) {
-      for (const def of ctx.vocabularyDefs().vocabularyDef()) {
-        const name = def.ALL_CAPS().getText();
-        var url;
-        if (def.URL()) {
-          url = def.URL().getText();
-        } else if (def.URN_OID()) {
-          url = def.URN_OID().getText();
-        } else if (def.URN()) {
-          url = def.URN().getText();
+        for (const def of ctx.pathDefs().pathDef()) {
+          const name = def.ALL_CAPS().getText();
+          let url = removeTrailingSlash(def.URL().getText());
+          while (url.endsWith('/')) {
+            url = url.substring(0, url.length - 1);
+          }
+          this._data.registerPath(ns, name, url);
         }
-        this._data.registerVocabulary(ns, name, url);
       }
-    }
-    for (const def of ctx.dataDefs().dataDef()) {
-      if (def.entryDef()) {
-        const name = def.entryDef().entryHeader().simpleName().getText();
-        this._data.registerDefinition(ns, name);
-      } else if (def.elementDef()) {
-        const name = def.elementDef().elementHeader().simpleName().getText();
-        this._data.registerDefinition(ns, name);
+      if (ctx.vocabularyDefs()) {
+        for (const def of ctx.vocabularyDefs().vocabularyDef()) {
+          const name = def.ALL_CAPS().getText();
+          var url;
+          if (def.URL()) {
+            url = def.URL().getText();
+          } else if (def.URN_OID()) {
+            url = def.URN_OID().getText();
+          } else if (def.URN()) {
+            url = def.URN().getText();
+          }
+          this._data.registerVocabulary(ns, name, url);
+        }
       }
+      for (const def of ctx.dataDefs().dataDef()) {
+        if (def.entryDef()) {
+          const name = def.entryDef().entryHeader().simpleName().getText();
+          this._data.registerDefinition(ns, name);
+        } else if (def.elementDef()) {
+          const name = def.elementDef().elementHeader().simpleName().getText();
+          this._data.registerDefinition(ns, name);
+        }
+      }
+    } finally {
+      logger.debug({shrId: ns}, 'Done preprocessing namespace');
     }
   }
 
   checkVersion(version) {
     const major = parseInt(version.WHOLE_NUMBER()[0], 10);
-    const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
+    const minor = parseInt(version.WHOLE_NUMBER()[2], 10);
     if (GRAMMAR_VERSION.major != major || GRAMMAR_VERSION.minor < minor) {
-      this.addError(`Unsupported grammar version: ${major}.${minor}`);
+      logger.error('Unsupported grammar version: %s.%s', major, minor);
       return false;
     }
     return true;
-  }
-
-  addError(err) {
-    this._errors.push(`${this._currentFile}: ${err}`);
   }
 }
 
 class PreprocessedData {
   constructor() {
-    this._files = []; // file paths of supported files
     this._paths = {}; //map[namespace]map[name]url
     this._vocabularies = {}; // map[namespace]map[name]url
     this._definitions = {}; // map[namespace]map[name]boolean
   }
-
-  get files() { return this._files; }
 
   registerPath(namespace, name, url) {
     let ns = this._paths[namespace];
@@ -223,4 +230,4 @@ class PreprocessedData {
   }
 }
 
-module.exports = { Preprocessor, PreprocessedData, VERSION, GRAMMAR_VERSION };
+module.exports = { Preprocessor, PreprocessedData, VERSION, GRAMMAR_VERSION, setLogger };

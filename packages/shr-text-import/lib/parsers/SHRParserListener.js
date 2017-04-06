@@ -353,12 +353,21 @@ SHRParserListener.prototype.exitValuesetDescendingFrom = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRParser#valuesetFrom.
-SHRParserListener.prototype.enterValuesetFrom = function(ctx) {
+// Enter a parse tree produced by SHRParser#valuesetFromCodeSystem.
+SHRParserListener.prototype.enterValuesetFromCodeSystem = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRParser#valuesetFrom.
-SHRParserListener.prototype.exitValuesetFrom = function(ctx) {
+// Exit a parse tree produced by SHRParser#valuesetFromCodeSystem.
+SHRParserListener.prototype.exitValuesetFromCodeSystem = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRParser#valuesetFromCode.
+SHRParserListener.prototype.enterValuesetFromCode = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRParser#valuesetFromCode.
+SHRParserListener.prototype.exitValuesetFromCode = function(ctx) {
 };
 
 

@@ -1,11 +1,18 @@
 const {expect} = require('chai');
-const {importFromFilePath} = require('../index');
+const {importFromFilePath, setLogger} = require('../index');
 const mdls = require('shr-models');
+const err = require('shr-test-helpers/errors');
+
+// Set the logger -- this is needed for detecting and checking errors
+setLogger(err.logger());
 
 describe('#importFromFilePath()', () => {
+  beforeEach(function() {
+    err.clear();
+  });
+
   it('should correctly import a simple mapping', () => {
-    const {specifications, errors} = importFixture('SimpleMapping');
-    expect(errors).is.empty;
+    const specifications =  importFixture('SimpleMapping');
     expectVersions(specifications, new mdls.Version(4,1));
     expectTargets(specifications, 'TEST');
     const s = getAndExpect(specifications, 'shr.test', 'A', 'TEST', 'B');
@@ -17,8 +24,7 @@ describe('#importFromFilePath()', () => {
   });
 
   it('should correctly import a mapping with deep paths', () => {
-    const {specifications, errors} = importFixture('DeepPathMapping');
-    expect(errors).is.empty;
+    const specifications =  importFixture('DeepPathMapping');
     expectVersions(specifications, new mdls.Version(4,1));
     expectTargets(specifications, 'TEST');
     const s = getAndExpect(specifications, 'shr.test', 'A', 'TEST', 'B');
@@ -30,8 +36,7 @@ describe('#importFromFilePath()', () => {
   });
 
   it('should correctly import a mapping with paths and choices', () => {
-    const {specifications, errors} = importFixture('ChoicePathMapping');
-    expect(errors).is.empty;
+    const specifications =  importFixture('ChoicePathMapping');
     expectVersions(specifications, new mdls.Version(4,1));
     expectTargets(specifications, 'TEST');
     const s = getAndExpect(specifications, 'shr.test', 'A', 'TEST', 'B');
@@ -71,10 +76,7 @@ function getAndExpect(specs, namespace, name, targetSpec, targetItem) {
 }
 
 function importFixture(name) {
-  return importFromFilePath(`${__dirname}/fixtures/map/${name}_map.txt`);
+  const specifications = importFromFilePath(`${__dirname}/fixtures/map/${name}_map.txt`);
+  expect(err.hasErrors()).to.be.false;
+  return specifications;
 }
-/*
-function importFixtureFolder(name) {
-  return importFromFilePath(`${__dirname}/fixtures/map/${name}`);
-}
-*/
