@@ -438,7 +438,13 @@ class Concept {
   }
 
   get system() { return this._system; }
+  set system(system) {
+    this._system = system;
+  }
   get code() { return this._code; }
+  set code(code) {
+    this._code = code;
+  }
   get display() { return this._display; }
   set display(display) {
     this._display = display;
@@ -1007,6 +1013,15 @@ class ValueSet  {
     return this;
   }
 
+  addValueSetIncludesFromCodeSystemRule(code) {
+    this._rules.push(new ValueSetIncludesFromCodeSystemRule(code));
+  }
+  // withValueSetIncludesFromCodeSystemRule is a convenience function for chaining
+  withValueSetIncludesFromCodeSystemRule(code) {
+    this.addValueSetIncludesFromCodeSystemRule(code);
+    return this;
+  }
+
   addValueSetIncludesFromCodeRule(code) {
     this._rules.push(new ValueSetIncludesFromCodeRule(code));
   }
@@ -1046,7 +1061,7 @@ class ValueSet  {
 }
 
 // Note -- this should be consider abstract.  Do not instantiate!
-class ValueSetRule {
+class ValueSetCodeRule {
   constructor(code) {
     this._code = code;
   }
@@ -1055,7 +1070,7 @@ class ValueSetRule {
 }
 
 // ValueSetIncludesCodeRule indicates that the given code should be directly included in the value set
-class ValueSetIncludesCodeRule extends ValueSetRule {
+class ValueSetIncludesCodeRule extends ValueSetCodeRule {
   constructor(code) {
     super(code);
   }
@@ -1066,7 +1081,7 @@ class ValueSetIncludesCodeRule extends ValueSetRule {
 }
 
 // ValueSetIncludesDescendentsRule indicates that the given code and it's descendents (in SNOMED-CT) should be included in the value set
-class ValueSetIncludesDescendentsRule extends ValueSetRule {
+class ValueSetIncludesDescendentsRule extends ValueSetCodeRule {
   constructor(code) {
     super(code);
   }
@@ -1077,7 +1092,7 @@ class ValueSetIncludesDescendentsRule extends ValueSetRule {
 }
 
 // ValueSetExcludesDescendentsRule indicates that the given code and it's descendents (in SNOMED-CT) should be excluded from the value set
-class ValueSetExcludesDescendentsRule extends ValueSetRule {
+class ValueSetExcludesDescendentsRule extends ValueSetCodeRule {
   constructor(code) {
     super(code);
   }
@@ -1087,8 +1102,21 @@ class ValueSetExcludesDescendentsRule extends ValueSetRule {
   }
 }
 
+// ValueSetIncludesFromCodeSystemRule indicates that all codes in the given code system should be included in the value set
+class ValueSetIncludesFromCodeSystemRule {
+  constructor(system) {
+    this._system = system;
+  }
+
+  get system() { return this._system; }
+
+  clone() {
+    return new ValueSetIncludesFromCodeSystemRule(this._system);
+  }
+}
+
 // ValueSetIncludesFromCodeRule indicates that codes referenced by the given code should be included in the value set
-class ValueSetIncludesFromCodeRule extends ValueSetRule {
+class ValueSetIncludesFromCodeRule extends ValueSetCodeRule {
   constructor(code) {
     super(code);
   }
@@ -1116,6 +1144,10 @@ class ValueSetRulesFilter {
 
   get excludesDescendents() {
     return new ValueSetRulesFilter(this._rules.filter(c => c instanceof ValueSetExcludesDescendentsRule));
+  }
+
+  get includesFromCodeSystem() {
+    return new ValueSetRulesFilter(this._rules.filter(c => c instanceof ValueSetIncludesFromCodeSystemRule));
   }
 
   get includesFromCode() {
@@ -1270,6 +1302,13 @@ class FieldMappingRule {
   get sourcePath() { return this._sourcePath; }
   get target() { return this._target; }
 
+  toString() {
+    const sp = this._sourcePath.map(p => {
+      return p instanceof TBD ? `<TBD "${p.text}">` : p.name;
+    }).join('.');
+    return `${sp} maps to ${this._target}`;
+  }
+
   clone() {
     const clonedSP = this._sourcePath.map(p => p.clone());
     return new FieldMappingRule(clonedSP, this._target);
@@ -1284,6 +1323,10 @@ class CardinalityMappingRule {
 
   get target() { return this._target; }
   get cardinality() { return this._cardinality; }
+
+  toString() {
+    return `constrain ${this._target} to ${this._cardinality.toString()}`;
+  }
 
   clone() {
     return new CardinalityMappingRule(this._target, this._cardinality.clone());
@@ -1356,4 +1399,4 @@ const PRIMITIVE_NS = 'primitive';
 const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'code', 'id',
   'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time', 'xhtml'];
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION};
