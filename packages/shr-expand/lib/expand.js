@@ -1,11 +1,15 @@
+const bunyan = require('bunyan');
 const models = require('shr-models');
+
+var rootLogger = bunyan.createLogger({name: 'shr-fhir-export'});
+var logger = rootLogger;
+function setLogger(bunyanLogger) {
+  rootLogger = logger = bunyanLogger;
+}
 
 function expand(specifications) {
   const expander = new Expander(specifications);
-  return {
-    specifications: expander.expand(),
-    errors: expander.errors
-  };
+  return expander.expand();
 }
 
 const CODE = new models.PrimitiveIdentifier('code');
@@ -13,12 +17,9 @@ const BOOLEAN = new models.PrimitiveIdentifier('boolean');
 
 class Expander {
   constructor(specs) {
-    this._errors = [];
     this._unexpanded = specs;
     this._expanded = new models.Specifications();
   }
-
-  get errors() { return this._errors; }
 
   expand() {
     // First just copy over clones of the namespace, value set, and code system definitions (they don't need expansion)
@@ -48,67 +49,76 @@ class Expander {
       }
       // Report invalid mappings (attempts to map a data element that doesn't exist)
       for (const m of this._unexpanded.maps.byTarget(target).filter(um => typeof this._expanded.dataElements.findByIdentifier(um.identifier) === 'undefined')) {
-        this._errors.push(`${m.identifier.fqn}: Cannot find definition for ${m.identifier.fqn}.`);
+        logger.error({ shrId: m.identifier.fqn, targetSpec: target}, 'Cannot resolve element definition.');
       }
     }
     return this._expanded;
   }
 
   expandElement(element) {
-    const hierarchy = [];
-    for (const baseID of element.basedOn) {
-      if (baseID instanceof models.TBD) {
-        continue;
+    // Setup a child logger to associate logs with the current element
+    const lastLogger = logger;
+    logger = rootLogger.child({ shrId: element.identifier.fqn });
+    logger.debug('Start expanding element');
+    try {
+      const hierarchy = [];
+      for (const baseID of element.basedOn) {
+        if (baseID instanceof models.TBD) {
+          continue;
+        }
+        const base = this.lookup(baseID);
+        if (typeof base === 'undefined') {
+          logger.error('Reference to non-existing base: %s', baseID.fqn);
+          continue;
+        }
+        hierarchy.push(base);
       }
-      const base = this.lookup(baseID);
-      if (typeof base === 'undefined') {
-        this._errors.push(`${element.identifier.fqn}: Reference to non-existing base: ${baseID.fqn}`);
-        continue;
-      }
-      hierarchy.push(base);
-    }
-    hierarchy.push(element);
+      hierarchy.push(element);
 
-    var mergedValue;
-    const mergedFields = [];
-    for (const node of hierarchy) {
-      if (node.value) {
-        if (mergedValue) {
-          mergedValue = this.mergeValue(node, mergedValue, node.value);
-        } else {
-          mergedValue = node.value.clone();
-          // Still need to process the cardinality and constraints to ensure they are valid
-          // (test for node == element to ensure we only report out the error on the root element)
-          if (typeof mergedValue.effectiveCard === 'undefined' && node == element) {
-            this._errors.push(`${element.identifier.fqn}: No cardinality found for value: ${mergedValue.toString()}`);
+      var mergedValue;
+      const mergedFields = [];
+      for (const node of hierarchy) {
+        if (node.value) {
+          if (mergedValue) {
+            mergedValue = this.mergeValue(node, mergedValue, node.value);
+          } else {
+            mergedValue = node.value.clone();
+            // Still need to process the cardinality and constraints to ensure they are valid
+            // (test for node == element to ensure we only report out the error on the root element)
+            if (typeof mergedValue.effectiveCard === 'undefined' && node == element) {
+              logger.error('No cardinality found for value: %s', mergedValue.toString());
+            }
+            mergedValue.constraints = this.consolidateConstraints(node, mergedValue);
           }
-          mergedValue.constraints = this.consolidateConstraints(node, mergedValue);
+        }
+        for (const field of node.fields) {
+          const i = mergedFields.findIndex(item => {
+            return item instanceof models.IdentifiableValue && (item.identifier.equals(field.identifier) || item.effectiveIdentifier.equals(field.identifier));
+          });
+          if (i >= 0) {
+            mergedFields[i] = this.mergeValue(node, mergedFields[i], field);
+          } else {
+            const f = field.clone();
+            // Still need to process the cardinality and constraints to ensure they are valid
+            // (test for node == element to ensure we only report out the error on the root element)
+            if (typeof f.effectiveCard === 'undefined' && node == element) {
+              logger.error('No cardinality found for field: %s', f.toString());
+            }
+            f.constraints = this.consolidateConstraints(node, f);
+            mergedFields.push(f);
+          }
         }
       }
-      for (const field of node.fields) {
-        const i = mergedFields.findIndex(item => {
-          return item instanceof models.IdentifiableValue && (item.identifier.equals(field.identifier) || item.effectiveIdentifier.equals(field.identifier));
-        });
-        if (i >= 0) {
-          mergedFields[i] = this.mergeValue(node, mergedFields[i], field);
-        } else {
-          const f = field.clone();
-          // Still need to process the cardinality and constraints to ensure they are valid
-          // (test for node == element to ensure we only report out the error on the root element)
-          if (typeof f.effectiveCard === 'undefined' && node == element) {
-            this._errors.push(`${element.identifier.fqn}: No cardinality found for field: ${f.toString()}`);
-          }
-          f.constraints = this.consolidateConstraints(node, f);
-          mergedFields.push(f);
-        }
-      }
-    }
 
-    const expanded = element.clone();
-    expanded.value = mergedValue;
-    expanded.fields = mergedFields;
-    this._expanded.dataElements.add(expanded);
-    return expanded;
+      const expanded = element.clone();
+      expanded.value = mergedValue;
+      expanded.fields = mergedFields;
+      this._expanded.dataElements.add(expanded);
+      return expanded;
+    } finally {
+      logger.debug('Done expanding element');
+      this.logger = lastLogger;
+    }
   }
 
   // mergeValue does a best attempt at merging the values, recording errors as it encounters them.  If the values
@@ -119,7 +129,7 @@ class Expander {
 
     // Check that the class types match (except when new one is IncompleteValue or old one is a choice).  An error abandons the merge.
     if (!(newValue instanceof models.IncompleteValue) && !(oldValue instanceof models.ChoiceValue) && newValue.constructor.name != oldValue.constructor.name) {
-      this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot override ${oldValue.toString()} with ${newValue.toString()}`));
+      logger.error('Cannot override %s with %s', oldValue.toString(), newValue.toString());
       return mergedValue;
     }
 
@@ -129,16 +139,16 @@ class Expander {
         // The newValue must be one of the choices
         const match = this.findMatchingOption(oldValue, newValue);
         if (!match) {
-          this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot override ${oldValue.toString()} with ${newValue.toString()} since it is not one of the options`));
+          logger.error('Cannot override %s with %s since it is not one of the options', oldValue.toString(), newValue.toString());
           return mergedValue;
         }
         mergedValue = match.clone(); // TODO: Should this take on the choice's cardinality?
       } else if (!newValue.identifier.equals(oldValue.identifier) && !newValue.identifier.equals(oldValue.effectiveIdentifier)) {
-        this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot override ${oldValue.toString()} with ${newValue.toString()}`));
+        logger.error('Cannot override %s with %s', oldValue.toString(), newValue.toString());
         return mergedValue;
       }
     } else if (newValue instanceof models.ChoiceValue) {
-      this._errors.push(`${element.identifier.fqn}: Cannot override ${oldValue.toString()} with ${newValue.toString()} since overriding ChoiceValue not supported.`);
+      logger.error('Cannot override %s with %s since overriding ChoiceValue is not supported', oldValue.toString(), newValue.toString());
       return mergedValue;
     }
 
@@ -184,7 +194,7 @@ class Expander {
       } else if (constraint instanceof models.BooleanConstraint) {
         consolidateFn = this.consolidateBooleanConstraint;
       } else {
-        this._errors.push(new MergeError(`${element.identifier.fqn}: Unsupported constraint type: ${constraint.constructor.name}`));
+        logger.error('Unsupported constraint type: %s', constraint.constructor.name);
         continue;
       }
       consolidated = consolidateFn.call(this, element, value, constraint, consolidated);
@@ -199,13 +209,13 @@ class Expander {
     // TODO: Use effectiveCardinality?  (complex since we must look at all constraints down the path)
     let constraints = previousConstraints;
     if (target.card && !constraint.card.fitsWithinCardinalityOf(target.card)) {
-      this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain cardinality of ${targetLabel} from ${target.card.toString()} to ${constraint.card.toString()}`));
+      logger.error('Cannot constrain cardinality of %s from %s to %s', targetLabel, target.card.toString(), constraint.card.toString());
       return constraints;
     }
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).card.constraints;
     for (const previous of filtered) {
       if (!constraint.card.fitsWithinCardinalityOf(previous.card)) {
-        this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot further constrain cardinality of ${targetLabel} from ${previous.card.toString()} to ${constraint.card.toString()}`));
+        logger.error('Cannot further constrain cardinality of %s from %s to %s', targetLabel, previous.card.toString(), constraint.card.toString());
         return constraints;
       }
       // Remove the previous card constraint since this one supercedes it
@@ -232,7 +242,7 @@ class Expander {
         }
         if (!isValidOption) {
           const targetLabel = this.constraintTargetLabel(value, constraint.path);
-          this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain type of ${targetLabel} to ${constraint.isA.toString()}`));
+          logger.error('Cannot constrain type of %s to %s', targetLabel, constraint.isA.toString());
           return previousConstraints;
         }
         skipCheck = true; // We already checked it
@@ -244,7 +254,7 @@ class Expander {
           constraint.path.push(valID);
         } else {
           const targetLabel = this.constraintTargetLabel(value, constraint.path);
-          this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot resolve target of value type constraint on ${targetLabel}`));
+          logger.format('Cannot resolve target of value type constraint on %s', targetLabel);
           return previousConstraints;
         }
       }
@@ -257,10 +267,10 @@ class Expander {
     if (skipCheck) {
       // It's a choice, we already checked it
     } else if (!(target instanceof models.IdentifiableValue)) {
-      this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain type of ${targetLabel} since it has no identifier`));
+      logger.error('Cannot constrain type of %s since it has no identifier', targetLabel);
       return constraints;
     } else if (!this.checkHasBaseType(constraint.isA, target.identifier)) {
-      this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain type of ${targetLabel} to ${constraint.isA.toString()}`));
+      logger.error('Cannot constrain type of %s to %s', targetLabel, constraint.isA.toString());
       return constraints;
     }
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).type.constraints;
@@ -269,7 +279,7 @@ class Expander {
         continue;
       }
       if (!this.checkHasBaseType(constraint.isA, previous.isA)) {
-        this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot further constrain type of ${target.toString()} from ${previous.isA.toString()} to ${constraint.isA.toString()}`));
+        logger.error('Cannot further constrain type of %s from %s to %s', target.toString(), previous.isA.toString(), constraint.isA.toString());
         return constraints;
       }
       // Remove the previous type constraint since this one supercedes it
@@ -285,13 +295,13 @@ class Expander {
 
     let constraints = previousConstraints;
     if (!(target instanceof models.IdentifiableValue)) {
-      this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain valueset of ${targetLabel} since it has no identifier`));
+      logger.error('Cannot constrain valueset of %s since it has no identifier', targetLabel);
       return constraints;
     } else if (!this.supportsCodeConstraint(target.identifier)) {
-      this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain valueset of ${targetLabel} since it is not based on code, Coding, or CodeableConcept`));
+      logger.error('Cannot constrain valueset of %s since it is not based on code, Coding, or CodeableConcept', targetLabel);
       return constraints;
     } else if ((new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).code.hasConstraints) {
-      this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain valueset of ${targetLabel} since it is already constrained to a single code`));
+      logger.error('Cannot constrain valueset of %s since it is already constrained to a single code', targetLabel);
       return constraints;
     }
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).valueSet.constraints;
@@ -311,22 +321,30 @@ class Expander {
     constraint = constraint.clone();
     let target = this.constraintTarget(value, constraint.path);
     let targetLabel = this.constraintTargetLabel(value, constraint.path);
+    let targetConstraints = [];
 
     // Determine if the constraint is on the specific target or its value
     if (!this.supportsCodeConstraint(target.identifier)) {
       // Isn't directly a code/Coding/CodeableConcept, so try its value
       const valID = this.constraintTargetValueIdentifier(value, constraint.path);
       if (!this.supportsCodeConstraint(valID)) {
-        this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain code of ${targetLabel} since neither it nor its value is a code, based on a Coding, or based on CodeableConcept`));
+        logger.error('Cannot constrain code of %s since neither it nor its value is a code, based on a Coding, or based on CodeableConcept', targetLabel);
         return previousConstraints;
       }
+      // Populate the target constraints in case they are needed
+      targetConstraints = this.constraintTargetValue(value, constraint.path).constraints.map(c => {
+        const clone = c.clone();
+        clone.path.splice(0, 0, valID);
+        return clone;
+      });
       // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
       constraint.path.push(valID);
       target = this.constraintTarget(value, constraint.path);
       targetLabel = this.constraintTargetLabel(value, constraint.path);
     }
 
-    // TODO: If system is blank, figure it out based on allowed value set
+    // If the system is null, attempt to figure it out from any value set constraint that might exist
+    this.fixMissingCodeSystemInCodeConstraint(constraint, previousConstraints, targetConstraints);
 
     // We allow previous code constraints to be overridden (but there should never be more than one in play at a time).
     // We allow the override because the new constraint may be a code that is more specific than the old constraint
@@ -346,22 +364,30 @@ class Expander {
     constraint = constraint.clone();
     let target = this.constraintTarget(value, constraint.path);
     let targetLabel = this.constraintTargetLabel(value, constraint.path);
+    let targetConstraints = [];
 
     // Determine if the constraint is on the specific target or its value
     if (!this.supportsCodeConstraint(target.identifier)) {
       // Isn't directly a code/Coding/CodeableConcept, so try its value
       const valID = this.constraintTargetValueIdentifier(value, constraint.path);
       if (!this.supportsCodeConstraint(valID)) {
-        this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain included code of ${targetLabel} since neither it nor its value is a code, based on a Coding, or based on CodeableConcept`));
+        logger.error('Cannot constrain included code of %s since neither it nor its value is a code, based on a Coding, or based on CodeableConcept', targetLabel);
         return previousConstraints;
       }
+      // Populate the target constraints in case they are needed
+      targetConstraints = this.constraintTargetValue(value, constraint.path).constraints.map(c => {
+        const clone = c.clone();
+        clone.path.splice(0, 0, valID);
+        return clone;
+      });
       // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
       constraint.path.push(valID);
       target = this.constraintTarget(value, constraint.path);
       targetLabel = this.constraintTargetLabel(value, constraint.path);
     }
 
-    // TODO: If system is blank, figure it out based on allowed value set
+    // If the system is null, attempt to figure it out from any value set constraint that might exist
+    this.fixMissingCodeSystemInCodeConstraint(constraint, previousConstraints, targetConstraints);
 
     let constraints = previousConstraints;
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).includesCode.constraints;
@@ -379,6 +405,24 @@ class Expander {
     return constraints;
   }
 
+  fixMissingCodeSystemInCodeConstraint(constraint, previousConstraints, targetConstraints) {
+    if (typeof constraint.code.system == 'undefined' || constraint.code.system == null) {
+      let constraints = previousConstraints.slice(0).concat(targetConstraints);
+      const filteredVS = (new models.ConstraintsFilter(constraints)).withPath(constraint.path).valueSet.constraints;
+      for (const vsCst of filteredVS) {
+        const vs = this._expanded.valueSets.findByURL(vsCst.valueSet);
+        if (typeof vs !== 'undefined') {
+          for (const icRule of vs.rulesFilter.includesCode.rules) {
+            if (icRule.code.code == constraint.code.code) {
+              constraint.code.system = icRule.code.system;
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
+
   consolidateBooleanConstraint(element, value, constraint, previousConstraints) {
     constraint = constraint.clone();
     let target = this.constraintTarget(value, constraint.path);
@@ -389,7 +433,7 @@ class Expander {
       // Isn't directly a boolean, so try its value
       const valID = this.constraintTargetValueIdentifier(value, constraint.path);
       if (!this.supportsBooleanConstraint(valID)) {
-        this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain boolean value of ${targetLabel} since neither it nor its value is a boolean`));
+        logger.error('Cannot constrain boolean value of %s since neither it nor its value is a boolean', targetLabel);
         return previousConstraints;
       }
       // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
@@ -403,7 +447,7 @@ class Expander {
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).boolean.constraints;
     for (const previous of filtered) {
       if (previous.value != constraint.value) {
-        this._errors.push(new MergeError(`${element.identifier.fqn}: Cannot constrain boolean value of ${targetLabel} to ${constraint.value} since a previous constraint constrains it to ${previous.value}`));
+        logger.error('Cannot constrain boolean value of %s to %s since a previous constraint constrains it to %s', targetLabel, constraint.value, previous.value);
         return previousConstraints;
       }
       // Remove the previous type constraint since this one supercedes it
@@ -488,7 +532,7 @@ class Expander {
     // We haven't processed it, so look it up
     const element = this._unexpanded.dataElements.findByIdentifier(identifier);
     if (typeof element === 'undefined') {
-      this._errors.push(new MergeError(`Couldn't find definition for ${identifier.fqn}`));
+      logger.error('Cannot resolve element definition for %s', identifier.fqn);
       return alreadyProcessed;
     }
     // Add it to the already processed list (again, to avoid circular dependencies)
@@ -516,115 +560,127 @@ class Expander {
   }
 
   expandMappingForTargetAndIdentifier(target, identifier) {
-    let map = this._unexpanded.maps.findByTargetAndIdentifier(target, identifier);
+    // Setup a child logger to associate logs with the current mapping
+    const lastLogger = logger;
+    logger = rootLogger.child({ shrId: identifier.fqn, targetSpec: target });
+    logger.debug('Start expanding mapping');
+    try {
+      let map = this._unexpanded.maps.findByTargetAndIdentifier(target, identifier);
 
-    const de = this._expanded.dataElements.findByIdentifier(identifier);
-    if (typeof de === 'undefined') {
-      this._errors.push(new MappingError(`${identifier.fqn}: Cannot find data element definition`));
-      return;
-    }
+      const de = this._expanded.dataElements.findByIdentifier(identifier);
+      if (typeof de === 'undefined') {
+        logger.error('Cannot resolve element definition for %s', identifier.fqn);
+        return;
+      }
 
-    // If this doesn't have its own mapping, use a based on mapping
-    if (typeof map === 'undefined') {
+      // If this doesn't have its own mapping, use a based on mapping
+      if (typeof map === 'undefined') {
+        for (const baseID of de.basedOn) {
+          if (baseID instanceof models.TBD) {
+            continue;
+          }
+          const baseMap = this.lookupMapping(target, baseID);
+          if (typeof baseMap !== 'undefined') {
+            map = new models.ElementMapping(identifier.clone(), target, baseMap.targetItem);
+            for (const rule of baseMap.rules) {
+              map.rules.push(rule.clone());
+            }
+            this._expanded.maps.add(map);
+            return map;
+          }
+        }
+        // Didn't have its own mapping, nor did its based ons have any mappings, so just return
+        return;
+      }
+
+      // It had its own mapping, so continue with rest of logic to expand it
+      let targetItem = map.targetItem;
+      // Put the target item into the logger for all future logging statements
+      logger.fields.target = targetItem;
+
+      // Need to start by building up the rules from the mappings for based on elements
+      const allRules = [];
       for (const baseID of de.basedOn) {
         if (baseID instanceof models.TBD) {
           continue;
         }
-        const baseMap = this.lookupMapping(target, baseID);
-        if (typeof baseMap !== 'undefined') {
-          map = new models.ElementMapping(identifier.clone(), target, baseMap.targetItem);
-          for (const rule of baseMap.rules) {
-            map.rules.push(rule.clone());
+        const base = this.lookupMapping(map.targetSpec, baseID);
+        if (typeof base !== 'undefined') {
+          if (typeof targetItem === 'undefined' && typeof base.targetItem !== 'undefined') {
+            targetItem = base.targetItem;
+            // Also adjust the target item in the logger
+            logger.fields.target = targetItem;
+          } else if (targetItem != base.targetItem) {
+            logger.warn('Potentially mismatched targets. Based on class (%s) maps to %s.', base.identifier.fqn, base.targetItem);
           }
-          this._expanded.maps.add(map);
-          return map;
+          // Push the rules onto our list, but clone them first (just for safety)
+          allRules.push(...(base.rules.map(r => r.clone())));
         }
       }
-      // Didn't have its own mapping, nor did its based ons have any mappings, so just return
-      return;
-    }
 
-    // It had its own mapping, so continue with rest of logic to expand it
-
-    let targetItem = map.targetItem;
-
-    // Need to start by building up the rules from the mappings for based on elements
-    const allRules = [];
-    for (const baseID of de.basedOn) {
-      if (baseID instanceof models.TBD) {
-        continue;
+      // If we still don't have a target item, bail
+      if (typeof targetItem === 'undefined') {
+        logger.error('Cannot determine target item');
+        return;
       }
-      const base = this.lookupMapping(map.targetSpec, baseID);
-      if (typeof base !== 'undefined') {
-        if (typeof targetItem === 'undefined' && typeof base.targetItem !== 'undefined') {
-          targetItem = base.targetItem;
-        } else if (targetItem != base.targetItem) {
-          this._errors.push(new MappingWarning(`${map.identifier.fqn}: maps to ${targetItem}, but based on class ${base.identifier.fqn} maps to ${base.targetItem}`));
-        }
-        // Push the rules onto our list, but clone them first (just for safety)
-        allRules.push(...(base.rules.map(r => r.clone())));
-      }
-    }
 
-    // If we still don't have a target item, bail
-    if (typeof targetItem === 'undefined') {
-      this._errors.push(new MappingError(`${map.identifier.fqn}: Cannot determine target item`));
-      return;
-    }
-
-    // Go through this mappings rules, resolve the identifiers, and add them to the big rules list
-    for (const mappingRule of map.rules) {
-      const rule = mappingRule.clone();
-      let valid = true;
-      if (rule instanceof models.FieldMappingRule) {
-        let currentDE = de;
-        for (let i=0; i < rule.sourcePath.length; i++) {
-          const match = this.findMatchInDataElement(currentDE, rule.sourcePath[i]);
-          if (match) {
-            rule.sourcePath[i] = match;
-            if (i < (rule.sourcePath.length-1) && !(match instanceof models.TBD)) {
-              currentDE = this._expanded.dataElements.findByIdentifier(match);
-              if (typeof de === 'undefined') {
-                this._errors.push(new MappingError(`${de.identifier.fqn}: Cannot find data element definition from path: ${this.highlightPartInPath(rule.sourcePath, i)}`));
-                valid = false;
-                break;
+      // Go through this mappings rules, resolve the identifiers, and add them to the big rules list
+      for (const mappingRule of map.rules) {
+        const rule = mappingRule.clone();
+        let valid = true;
+        if (rule instanceof models.FieldMappingRule) {
+          let currentDE = de;
+          for (let i=0; i < rule.sourcePath.length; i++) {
+            const match = this.findMatchInDataElement(currentDE, rule.sourcePath[i]);
+            if (match) {
+              rule.sourcePath[i] = match;
+              if (i < (rule.sourcePath.length-1) && !(match instanceof models.TBD)) {
+                currentDE = this._expanded.dataElements.findByIdentifier(match);
+                if (typeof de === 'undefined') {
+                  logger.error('Cannot resolve data element definition from path: %s', this.highlightPartInPath(rule.sourcePath, i));
+                  valid = false;
+                  break;
+                }
               }
+            } else {
+              if (rule.sourcePath[i].namespace || rule.sourcePath[i].name != 'Value') {
+                logger.error('Cannot resolve data element definition from path: %s', this.highlightPartInPath(rule.sourcePath, i));
+              }
+              valid = false;
+              break;
             }
-          } else {
-            if (rule.sourcePath[i].namespace || rule.sourcePath[i].name != 'Value') {
-              this._errors.push(new MappingError(`${de.identifier.fqn}: Cannot resolve element from path: ${this.highlightPartInPath(rule.sourcePath, i)}`));
-            }
-            valid = false;
-            break;
           }
         }
-      }
-      if (valid) {
-        allRules.push(rule);
-      }
-    }
-
-    // Now merge the rules
-    const mergedRules = [];
-    for (const rule of allRules) {
-      const i = mergedRules.findIndex(item => {
-        if (rule instanceof models.CardinalityMappingRule && item instanceof models.CardinalityMappingRule) {
-          return rule.target ==item.target;
+        if (valid) {
+          allRules.push(rule);
         }
-        return rule.sourcePath && item.sourcePath && this.equalSourcePaths(rule.sourcePath, item.sourcePath);
-      });
-      if (i >= 0) {
-        mergedRules[i] = rule;
-      } else {
-        mergedRules.push(rule);
       }
-    }
 
-    const merged = map.clone();
-    merged.targetItem = targetItem;
-    merged.rules = mergedRules;
-    this._expanded.maps.add(merged);
-    return merged;
+      // Now merge the rules
+      const mergedRules = [];
+      for (const rule of allRules) {
+        const i = mergedRules.findIndex(item => {
+          if (rule instanceof models.CardinalityMappingRule && item instanceof models.CardinalityMappingRule) {
+            return rule.target ==item.target;
+          }
+          return rule.sourcePath && item.sourcePath && this.equalSourcePaths(rule.sourcePath, item.sourcePath);
+        });
+        if (i >= 0) {
+          mergedRules[i] = rule;
+        } else {
+          mergedRules.push(rule);
+        }
+      }
+
+      const merged = map.clone();
+      merged.targetItem = targetItem;
+      merged.rules = mergedRules;
+      this._expanded.maps.add(merged);
+      return merged;
+    } finally {
+      logger.debug('Done expanding mapping');
+      this.logger = lastLogger;
+    }
   }
 
   findMatchInDataElement(de, idToMatch) {
@@ -638,9 +694,9 @@ class Expander {
       if (de.value instanceof models.IdentifiableValue) {
         result = de.value.identifier;
       } else if (typeof de.value === 'undefined') {
-        this._errors.push(new MappingError(`${de.identifier.fqn}: maps Value but value is undefined`));
+        logger.error('Cannot map Value since element does not define a value');
       } else {
-        this._errors.push(new MappingError(`${de.identifier.fqn}: maps Value but value is unsupported type: ${de.value.constructor.name}`));
+        logger.error('Cannot map Value since it is unsupported type: %s', de.value.constructor.name);
       }
     // Special case logic for "Entry"
     } else if ((!idToMatch.namespace || idToMatch.namespace == 'shr.base') && idToMatch.name == 'Entry') {
@@ -650,7 +706,7 @@ class Expander {
         if (value) {
           const match = this.findMatchInValue(value, idToMatch);
           if (match && result) {
-            this._errors.push(new MappingError(`${de.identifier.fqn}: Found multiple matches for field ${idToMatch.name}`));
+            logger.error('Found multiple matches for field %s', idToMatch.name);
           } else if (match) {
             result = match;
           }
@@ -715,28 +771,4 @@ class Expander {
   }
 }
 
-class MergeError extends Error {
-  constructor(message = 'Merge error') {
-    super(message);
-    this.message = message;   // from Error
-    this.name = 'MergeError'; // from Error
-  }
-}
-
-class MappingError extends Error {
-  constructor(message = 'Mapping error') {
-    super(message);
-    this.message = message;   // from Error
-    this.name = 'MappingError'; // from Error
-  }
-}
-
-class MappingWarning extends Error {
-  constructor(message = 'Mapping warning') {
-    super(message);
-    this.message = message;   // from Error
-    this.name = 'MappingWarning'; // from Error
-  }
-}
-
-module.exports = { expand, MergeError };
+module.exports = { expand, setLogger };

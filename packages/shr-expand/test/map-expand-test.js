@@ -1,11 +1,16 @@
 const {expect} = require('chai');
-const {expand} = require('../index');
+const {expand, setLogger} = require('../index');
 const models = require('shr-models');
+const err = require('shr-test-helpers/errors');
+
+// Set the logger -- this is needed for detecting and checking errors
+setLogger(err.logger('warn'));
 
 let _specs, _result;
 
 describe('#expandMap()', () => {
   beforeEach(function() {
+    err.clear();
     _specs = new models.Specifications();
     // The SHR test namespace used by most tests
     _specs.namespaces.add(new models.Namespace('shr.core'));
@@ -37,7 +42,7 @@ describe('#expandMap()', () => {
     doExpand();
 
     // No errors
-    expect(errors()).to.be.empty;
+    expect(err.hasErrors()).to.be.false;
 
     // Original should be the same as it was
     expect(ma).to.eql(maClone);
@@ -64,7 +69,7 @@ describe('#expandMap()', () => {
 
     doExpand();
 
-    expect(errors()).to.be.empty;
+    expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -91,7 +96,7 @@ describe('#expandMap()', () => {
 
     doExpand();
 
-    expect(errors()).to.be.empty;
+    expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -113,7 +118,7 @@ describe('#expandMap()', () => {
 
     doExpand();
 
-    expect(errors()).to.be.empty;
+    expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -146,7 +151,7 @@ describe('#expandMap()', () => {
 
     doExpand();
 
-    expect(errors()).to.be.empty;
+    expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -192,7 +197,7 @@ describe('#expandMap()', () => {
 
     doExpand();
 
-    expect(errors()).to.be.empty;
+    expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -226,8 +231,9 @@ describe('#expandMap()', () => {
 
     doExpand();
 
-    expect(errors()).to.have.length(1);
-    expect(errors()[0].message).to.contain('shr.test.A').and.to.contain('Z');
+    expect(err.errors()).to.have.length(1);
+    expect(err.errors()[0].shrId).to.equal('shr.test.A');
+    expect(err.errors()[0].msg).to.contain('Z');
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -251,8 +257,9 @@ describe('#expandMap()', () => {
 
     doExpand();
 
-    expect(errors()).to.have.length(1);
-    expect(errors()[0].message).to.contain('shr.test.A').and.to.contain('X');
+    expect(err.errors()).to.have.length(1);
+    expect(err.errors()[0].shrId).to.equal('shr.test.A');
+    expect(err.errors()[0].msg).to.contain('X');
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -277,8 +284,11 @@ describe('#expandMap()', () => {
 
     doExpand();
 
-    expect(errors()).to.have.length(1);
-    expect(errors()[0].message).to.contain('shr.test.A2').and.to.contain('a2').and.to.contain('shr.test.A').and.to.contain('a');
+    expect(err.errors()).to.have.length(1);
+    expect(err.errors()[0].level).to.equal(40); // WARN
+    expect(err.errors()[0].shrId).to.equal('shr.test.A2');
+    expect(err.errors()[0].target).to.equal('a2');
+    expect(err.errors()[0].msg).to.contain('shr.test.A').and.to.contain('a');
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -326,9 +336,5 @@ function doExpand() {
 }
 
 function findExpanded(targetSpec, namespace, name) {
-  return _result.specifications.maps.find(targetSpec, namespace, name);
-}
-
-function errors() {
-  return _result.errors;
+  return _result.maps.find(targetSpec, namespace, name);
 }
