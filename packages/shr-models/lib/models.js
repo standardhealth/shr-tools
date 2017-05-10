@@ -928,7 +928,7 @@ class TBD extends Value{
   }
 
   toString() {
-    return `TBD<${this._text}>`;
+    return this._text ? `TBD<${this._text}>` : 'TBD';
   }
 }
 
