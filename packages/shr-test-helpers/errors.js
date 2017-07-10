@@ -10,7 +10,8 @@ function logger(level='error') {
 }
 
 function errors() {
-  return rb.records;
+  // Return a clone of the array so that clear() doesn't clear the result
+  return [...rb.records];
 }
 
 function hasErrors() {
