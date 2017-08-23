@@ -1,0 +1,126 @@
+{
+  "label": "SHR",
+  "type": "SHR",
+  "children": [
+    {
+      "label": "Namespaces",
+      "type": "Namespaces",
+      "children": [
+        {
+      "label": "shr.test",
+      "type": "Namespace",
+      "children": [
+		{
+		  "type": "DataElement",
+		  "label": "GroupPathClash",
+			"isEntry": true, 
+			"isAbstract": false,
+		  "concepts": [],
+		  "description": "It is a group of elements with clashing names",
+		  "children": [
+            {
+				"constraints": [],
+      			"identifier": {
+      				"label": "Simple",
+					"namespace": "shr.test",
+      				"type": "Identifier"
+      			},
+      			"label": "shr.test:Simple",
+				"max": 1,
+				"min": 1,
+      			"type": "IdentifiableValue"
+            },
+            {
+      			"constraints": [],
+      			"identifier": {
+      				"label": "Simple",
+      				"namespace": "shr.other.test",
+      				"type": "Identifier"
+      			},
+      			"label": "shr.other.test:Simple",
+				"max": 1,
+				"min": 0,
+				"type": "IdentifiableValue"
+            }
+		  ]
+		},
+		{
+		  "type": "DataElement",
+		  "label": "Simple",
+			"isEntry": true, 
+			"isAbstract": false,
+		  "children" : [],
+		  "concepts": [
+			{
+			  "label": "Foobar (http://foo.org:bar)",
+			  "type": "Concept",
+			  "display": "Foobar",
+			  "system": "http://foo.org",
+			  "code": "bar",
+			  "url": "http://foo.org/bar"
+			}
+
+		  ],
+		  "description": "It is a simple element",
+		  "value": {
+  			"constraints": [],
+			"label": "primitive:string",
+			"identifier": {
+			  "label": "string",
+			  "type": "Identifier",
+			  "namespace": "primitive"
+			},
+      		"max": 1,
+      		"min": 1,
+      		"type": "IdentifiableValue"
+ 		  }
+		}
+	  ]
+	},
+    {
+      "label": "shr.other.test",
+      "type": "Namespace",
+      "children": [
+		{
+		  "type": "DataElement",
+		  "label": "Simple",
+			"isEntry": true, 
+			"isAbstract": false,
+		  "children" : [],
+		  "concepts": [
+			{
+			  "label": "Foobar (http://foo.org:bar)",
+			  "type": "Concept",
+			  "display": "Foobar",
+			  "system": "http://foo.org",
+			  "code": "bar",
+			  "url": "http://foo.org/bar"
+			}
+
+		  ],
+		  "description": "It is a simple element",
+		  "value": {
+  			"constraints": [],
+			"label": "primitive:string",
+			"max": 1,
+      		"min": 1,
+      		"type": "IdentifiableValue",
+			"identifier": {
+			  "label": "string",
+			  "type": "Identifier",
+			  "namespace": "primitive"
+			}
+		  }
+		}
+	  ]
+	}
+	]
+	},
+	{ "label": "Value Sets",
+	  "type" : "ValueSets",
+	  "children": []},
+	{ "label": "Code Systems",
+	  "type" : "CodeSystems",
+	  "children": []}
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "label": "SHR",
+  "type": "SHR",
+  "children": [
+    {
+      "label": "Namespaces",
+      "type": "Namespaces",
+      "children": [
+        {
+      "label": "shr.test",
+      "type": "Namespace",
+      "children": [
+        {
+          "type": "DataElement",
+          "label": "Coded",
+          "isEntry": true,
+          "isAbstract": false,
+		  "children" : [],
+          "concepts": [],
+          "description": "It is a coded element",
+          "value": {
+      		"constraints": [
+      			{
+							"path": "",
+							"bindingStrength": "REQUIRED",
+							"type": "ValueSetConstraint",
+							"valueset": "http://standardhealthrecord.org/test/vs/Coded"
+      			}
+      		],
+      		"identifier": {
+      			"label": "code",
+      			"namespace": "primitive",
+      			"type": "Identifier"
+      		},
+			"label": "primitive:code",
+      		"max": 1,
+			"min": 1,
+			"type": "IdentifiableValue"
+          }
+        },
+		{
+		  "type": "DataElement",
+		  "label": "ElementValue",
+			"isEntry": true, 
+			"isAbstract": false,
+		  "children" : [],
+		  "concepts": [],
+		  "description": "It is an element with an element value",
+		  "value": {
+			"label": "shr.test:Simple",
+			"max" : 1,
+			"min" : 1,
+			"type": "IdentifiableValue",
+			"constraints" : [],
+			"identifier": {
+			  "label": "Simple",
+			  "type": "Identifier",
+			  "namespace": "shr.test"
+			}
+		  }
+		},
+		{
+		  "type": "DataElement",
+		  "label": "ForeignElementValue",
+			"isEntry": true, 
+			"isAbstract": false,
+		  "children" : [],
+		  "concepts": [],
+		  "description": "It is an element with a foreign element value",
+		  "value": {
+			"label": "shr.other.test:Simple",
+			"max" : 1,
+			"min" : 1,
+			"type": "IdentifiableValue",
+			"constraints" : [],
+			"identifier": {
+			  "label": "Simple",
+			  "type": "Identifier",
+			  "namespace": "shr.other.test"
+			}
+		  }
+		},
+		{
+		  "type": "DataElement",
+		  "label": "GroupWithChoiceOfChoice",
+			"isEntry": true, 
+			"isAbstract": false,
+		  "concepts": [],
+		  "description": "It is a group of elements with a choice containing a choice",
+		  "children": [
+            {
+      			"constraints": [],
+      			"identifier": {
+      				"label": "Simple",
+					"namespace": "shr.test",
+					"type": "Identifier"
+      			},
+				"label": "shr.test:Simple",
+				"max": 1,
+				"min": 1,
+				"type": "IdentifiableValue"
+            },
+            {
+      			"constraints": [],
+      			"identifier": {
+      				"label": "Coded",
+					"namespace": "shr.test",
+      				"type": "Identifier"
+      			},
+				"label": "shr.test:Coded",
+				"max": 1,
+				"min": 0,
+				"type": "IdentifiableValue"
+            },
+            {
+      			"constraints": [],
+				"max": 2,
+				"min": 0,
+      			"type": "ChoiceValue",
+      			"value": [
+					{
+						"constraints": [],
+      					"identifier": {
+      						"label": "Simple",
+      						"namespace": "shr.other.test",
+							"type": "Identifier"
+						},
+						"label": "shr.other.test:Simple",
+						"max": 1,
+      					"min": 1,
+      					"type": "IdentifiableValue"
+ 					},
+      				{
+      					"constraints": [],
+      					"min": 1,
+      					"max": 1,
+						"type": "ChoiceValue",
+      					"value": [
+      						{
+      							"constraints": [],
+      							"identifier": {
+									"label": "ForeignElementValue",
+      								"namespace": "shr.test",
+      								"type": "Identifier"
+      							},
+      							"label": "shr.test:ForeignElementValue",
+      							"min": 1,
+      							"type": "IdentifiableValue"
+      						},
+      						{
+      							"constraints": [],
+      							"identifier": {
+      								"label": "ElementValue",
+      								"namespace": "shr.test",
+      								"type": "Identifier"
+      							},
+      							"label": "shr.test:ElementValue",
+      							"min": 1,
+      							"type": "IdentifiableValue"
+      						}
+      					]
+      				}
+      			]
+            }
+		  ]
+		},
+		{
+		  "type": "DataElement",
+		  "label": "Simple",
+			"isEntry": true, 
+			"isAbstract": false,
+		  "children" : [],
+		  "concepts": [
+			{
+			  "label": "Foobar (http://foo.org:bar)",
+			  "type": "Concept",
+			  "display" : "Foobar",
+			  "system": "http://foo.org",
+			  "code": "bar",
+			  "url": "http://foo.org/bar"
+			}
+
+		  ],
+		  "description": "It is a simple element",
+		  "value": {
+		    "constraints": [],
+			"label": "primitive:string",
+			"max": 1,
+      		"min": 1,
+      		"type": "IdentifiableValue",
+			"identifier": {
+			  "label": "string",
+			  "type": "Identifier",
+			  "namespace": "primitive"
+			}
+		  }
+		}
+	  ]
+	},
+    {
+      "label": "shr.other.test",
+      "type": "Namespace",
+      "children": [
+		{
+		  "type": "DataElement",
+		  "label": "Simple",
+			"isEntry": true, 
+			"isAbstract": false,
+		  "children" : [],
+		  "concepts": [
+			{
+			  "label": "Foobar (http://foo.org:bar)",
+			  "type": "Concept",
+			  "display" : "Foobar",
+			  "system": "http://foo.org",
+			  "code": "bar",
+			  "url": "http://foo.org/bar"
+			}
+
+		  ],
+		  "description": "It is a simple element",
+		  "value": {
+		  	"constraints": [],
+			"label": "primitive:string",
+      		"max": 1,
+      		"min": 1,
+			"type": "IdentifiableValue",
+			"identifier": {
+			  "label": "string",
+			  "type": "Identifier",
+			  "namespace": "primitive"
+			}
+		  }
+		}
+	  ]
+	}
+	]
+	},
+	{ "label": "Value Sets",
+	  "type" : "ValueSets",
+	  "children": []},
+	{ "label": "Code Systems",
+	  "type" : "CodeSystems",
+	  "children": []}
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "label": "SHR",
+  "type": "SHR",
+  "children": [
+    {
+      "label": "Namespaces",
+      "type": "Namespaces",
+      "children": [
+        {
+      "label": "shr.test",
+      "type": "Namespace",
+      "children": [
+{
+  "type": "DataElement",
+  "label": "SimpleReference",
+  "isEntry": true,
+  "isAbstract": false,
+  "children" : [],
+  "concepts": [],
+  "description": "It is a reference to a simple element",
+  "value": {
+  	"constraints": [],
+    "label": "reference to shr.test:Simple",
+ 	"max": 1,
+    "min": 1,
+ 	"type": "RefValue",
+	"identifier": {
+	  "label": "Simple",
+	  "type": "Identifier",
+	  "namespace": "shr.test"
+	}
+  }
+}
+	  ]
+	}
+	]
+	},
+	{ "label": "Value Sets",
+	  "type" : "ValueSets",
+	  "children": []},
+	{ "label": "Code Systems",
+	  "type" : "CodeSystems",
+	  "children": []}
+  ]
+}

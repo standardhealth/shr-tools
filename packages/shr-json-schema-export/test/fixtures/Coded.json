@@ -1,0 +1,52 @@
+{
+  "label": "SHR",
+  "type": "SHR",
+  "children": [
+    {
+      "label": "Namespaces",
+      "type": "Namespaces",
+      "children": [
+        {
+      "label": "shr.test",
+      "type": "Namespace",
+      "children": [
+       {
+       	  "children": [],
+          "concepts": [],
+          "description": "It is a coded element",
+          "isEntry": true,
+          "isAbstract": false,
+          "label": "Coded",
+          "type": "DataElement",
+          "value": {
+          	"constraints" : [
+          		{
+                "path": "",
+                "bindingStrength": "REQUIRED",
+                "type": "ValueSetConstraint",
+                "valueset": "http://standardhealthrecord.org/test/vs/Coded"
+              }
+            ],
+            "identifier": {
+              "label": "code",
+                "namespace": "primitive",
+                "type": "Identifier"
+             },
+             "label": "primitive:code",
+             "max": 1,
+             "min": 1,
+             "type": "IdentifiableValue"
+          }
+        }
+	  ]
+	}
+	]
+	},
+	{ "label": "Value Sets",
+	  "type" : "ValueSets",
+	  "children": []},
+	{ "label": "Code Systems",
+	  "type" : "CodeSystems",
+	  "children": []}
+  ]
+}
