@@ -1,0 +1,7 @@
+/.vscode
+/.project
+/node_modules
+/out
+/.settings
+/.idea
+/*.iml
