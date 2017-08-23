@@ -1,19 +1,25 @@
 const fs = require('fs');
 const err = require('shr-test-helpers/errors');
+const Ajv = require('ajv');
 const {commonExportTests} = require('shr-test-helpers/export');
 const {exportToJSONSchema, setLogger} = require('../lib/export');
 
 // Set the logger -- this is needed for detecting and checking errors
 setLogger(err.logger());
 
+
 describe('#exportToJSONSchema()', commonExportTests(exportSpecifications, importFixture, importErrorsFixture));
 
 function exportSpecifications(specifications) {
-  return exportToJSONSchema(specifications);
+  const schemata = exportToJSONSchema(specifications);
+  validateSchemata(schemata);
+  return schemata;
 }
 
 function importFixture(name, ext='.schema.json') {
-  return JSON.parse(fs.readFileSync(`${__dirname}/fixtures/${name}${ext}`, 'utf8'));
+  const fixture = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/${name}${ext}`, 'utf8'));
+  validateSchemata(fixture);
+  return fixture;
 }
 
 function importErrorsFixture(name, ext='.schema.json') {
@@ -24,4 +30,10 @@ function importErrorsFixture(name, ext='.schema.json') {
     // default to no expected _errors
     return [];
   }
+}
+
+function validateSchemata(schemata) {
+  const schemaValidator = new Ajv();
+  schemaValidator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
+  schemaValidator.addSchema(schemata);
 }
