@@ -6,7 +6,13 @@
 	"definitions": {
 	  "Simple": {
 		"description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
-		"type": "string"
+		"type": "object",
+		"properties": {
+		  "Value": {
+			"type": "string"
+		  }
+		},
+		"required": ["Value"]
 	  }
 	}
   }

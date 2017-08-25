@@ -4,6 +4,16 @@
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
     "definitions": {
+      "ElementValue": {
+        "description": "It is an element with an element value",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "$ref": "#Simple"
+          }
+        },
+        "required": ["Value"]
+      },
       "Simple": {
         "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
         "type": "object",

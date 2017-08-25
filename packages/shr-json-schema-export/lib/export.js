@@ -29,61 +29,55 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/" + ns.namespace.replace(/\./g, '/'),
     "title": "TODO: Figure out what the title should be.",
-//  let de = new mdl.DataElement(id(ns, 'Simple'), true)
-//  .withDescription('It is a simple element')
-//  .withConcept(new mdl.Concept('http://foo.org', 'bar', 'Foobar'))
-//  .withValue(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1));
-//  add(specs, de);
-    "definitions": {
-    }
+    "definitions": {}
   };
 
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
   for (const def of defs) {
-    let schemaDef = {};
-    if (def.fields.length) {
-      console.error('Fields: ', def.fields);
-      schemaDef.type = 'object';
-      if (def.value) {
-
-      }
-    } else if (def.value) {
+    let schemaDef = {
+      type: 'object',
+      properties: {}
+    };
+    let required = [];
+    if (def.value) {
+      required.push('Value');
+      const value = schemaDef.properties.Value = {};
       // TODO: Is this really the best way to identify a type in ES6?
       logger.debug('Value type: %s', def.value.constructor.name);
-      if (def.value.constructor.name === "ChoiceValue") {
+      if (def.value.constructor.name === 'ChoiceValue') {
         logger.error('Unsupported ChoiceValue');
-      } else if (def.value.constructor.name === "RefValue") {
+      } else if (def.value.constructor.name === 'RefValue') {
         logger.error('Unsupported RefValue');
-      } else if (def.value.constructor.name === "IdentifiableValue") {
+      } else if (def.value.constructor.name === 'IdentifiableValue') {
         const id = def.value.effectiveIdentifier;
         if (id.isPrimitive) {
           switch (id.name) {
             case 'boolean':
             case 'string':
             case 'integer':
-              schemaDef.type = id.name;
+              value.type = id.name;
               break;
             case 'unsignedInt':
-              schemaDef.type = 'integer';
-              schemaDef.minimum = 0;
+              value.type = 'integer';
+              value.minimum = 0;
               break;
             case 'positiveInt':
-              schemaDef.type = 'integer';
-              schemaDef.minimum = 1;
+              value.type = 'integer';
+              value.minimum = 1;
               break;
             case 'decimal':
-              schemaDef.type = 'number';
+              value.type = 'number';
               break;
             case 'uri':
-              schemaDef.type = 'string';
-              schemaDef.format = 'uri';
+              value.type = 'string';
+              value.format = 'uri';
               break;
             case 'base64Binary':
-              schemaDef.type = 'string';
+              value.type = 'string';
               break;
             case 'dateTime':
-              schemaDef.type = 'string';
-              schemaDef.format = 'dateTime';
+              value.type = 'string';
+              value.format = 'dateTime';
               break;
             case 'instant':
             case 'date':
@@ -93,26 +87,55 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
             case 'id':
             case 'markdown':
             case 'xhtml':
-              schemaDef.type = 'string';
+              value.type = 'string';
               break;
           }
         } else {
-          logger.error('Unsupported non-primitive identifier: ' + id);
+          if (id.namespace === ns.namespace) {
+            value['$ref'] = '#' + def.value.identifier.name;
+          } else {
+            value['$ref'] = "https://standardhealthrecord.org/test/" + def.value.identifier.namespace.replace(/\./g, '/') + '#definitions/' + def.value.identifier.name;
+          }
         }
-      } else if (value.constructor.name === "TBD") {
+      } else if (def.value.constructor.name === 'TBD') {
         logger.error('Unsupported TBD');
-      } else if (value.constructor.name === "IncompleteValue") {
+      } else if (def.value.constructor.name === 'IncompleteValue') {
         logger.error('Unsupported Incomplete');
       } else {
-        logger.error("Unknown type for value '%s'", value.constructor.name);
+        logger.error('Unknown type for value "%s"', def.value.constructor.name);
       }
-    } else {
+    }
+    if (def.fields.length) {
+      for (const field in def.fields) {
+        if (field.identifier.name === 'Value') {
+          logger.error('ERROR: Ignoring restricted field name: Value', field);
+          continue;
+        }
+        const card = field.effectiveCard;
+        if (card.isList) {
+          logger.error('List cardinality is unsupported. Field: "%s"', field.identifier.name);
+          continue;
+        } else if (card.min) {
+          required.push(field.identifier.name);
+        }
+        if (field.value && field.value.identifier) {
+          if (field.value.identifier.namespace.namespace === ns) {
+            schemaDef.properties[field.identifier.name] = { '$ref': '#' + field.value.identifier.name};
+          } else {
+            schemaDef.properties[field.identifier.name] = { '$ref': "https://standardhealthrecord.org/test/" + field.value.identifier.namespace.replace(/\./g, '/') + '#' + field.value.identifier.name};
+          }
+        }
+      }
+    } else if (!def.value) {
       schemaDef.type = 'object';
       schemaDef.description = 'Empty DataElement?';
     }
     schemaDef.description = def.description;
-    if (def.concepts) {
+    if (def.concepts.length) {
       schemaDef.description += '\nConcepts: ' + def.concepts.map((c) => { return conceptToString(c); }).join(',');
+    }
+    if (required.length) {
+      schemaDef.required = required;
     }
 
     schema.definitions[def.identifier.name] = schemaDef;
