@@ -38,6 +38,14 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
       type: 'object',
       properties: {}
     };
+    let wholeDef = schemaDef;
+    if (def.basedOn.length) {
+      wholeDef = { allOf: [] };
+      for (const supertypeId of def.basedOn) {
+        wholeDef.allOf.push({ $ref:  makeRef(supertypeId, ns)});
+      }
+      wholeDef.allOf.push(schemaDef);
+    }
 
     let requiredProperties = [];
     if (def.value) {
@@ -72,15 +80,15 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
       schemaDef.type = 'object';
       schemaDef.description = 'Empty DataElement?';
     }
-    schemaDef.description = def.description;
+    wholeDef.description = def.description;
     if (def.concepts.length) {
-      schemaDef.description += '\nConcepts: ' + def.concepts.map((c) => { return conceptToString(c); }).join(',');
+      wholeDef.description += '\nConcepts: ' + def.concepts.map((c) => { return conceptToString(c); }).join(',');
     }
     if (requiredProperties.length) {
       schemaDef.required = requiredProperties;
     }
 
-    schema.definitions[def.identifier.name] = schemaDef;
+    schema.definitions[def.identifier.name] = wholeDef;
   }
 
   return schema;
@@ -169,11 +177,7 @@ function convertDefinition(valueDef, enclosingNamespace) {
           break;
       }
     } else {
-      if (id.namespace === enclosingNamespace.namespace) {
-        value['$ref'] = '#' + valueDef.identifier.name;
-      } else {
-        value['$ref'] = "https://standardhealthrecord.org/test/" + valueDef.identifier.namespace.replace(/\./g, '/') + '#definitions/' + valueDef.identifier.name;
-      }
+      value['$ref'] = makeRef(valueDef.identifier, enclosingNamespace);
     }
   } else if (valueDef.constructor.name === 'TBD') {
     logger.error('Unsupported TBD');
@@ -213,6 +217,14 @@ function convertDefinition(valueDef, enclosingNamespace) {
   }
 
   return {value: retValue, required};
+}
+
+function makeRef(id, enclosingNamespace) {
+  if (id.namespace === enclosingNamespace.namespace) {
+    return '#' + id.name;
+  } else {
+    return "https://standardhealthrecord.org/test/" + id.namespace.replace(/\./g, '/') + '#definitions/' + id.name;
+  }
 }
 
 function conceptToString(concept) {
