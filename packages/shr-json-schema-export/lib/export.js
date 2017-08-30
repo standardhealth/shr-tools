@@ -27,7 +27,7 @@ function exportToJSONSchema(specifications) {
 function namespaceToSchema(ns, dataElements, grammarVersions) {
   let schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "https://standardhealthrecord.org/test/" + ns.namespace.replace(/\./g, '/'),
+    "id": "https://standardhealthrecord.org/test/" + namespaceToURLPathSegment(ns.namespace),
     "title": "TODO: Figure out what the title should be.",
     "definitions": {}
   };
@@ -57,13 +57,24 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
       schemaDef.properties.Value = value;
     }
     if (def.fields.length) {
+      let qualifiedFields = {};
+      let fieldNames = {};
       for (const field of def.fields) {
-        if (field.constructor.name === 'ChoiceValue') {
-          logger.error('ERROR: Ignoring field defined as a choice', field);
+        if (!isValidField(field)) {
           continue;
         }
-        if (field.identifier.name === 'Value') {
-          logger.error('ERROR: Ignoring restricted field name: Value', field);
+        const card = field.effectiveCard;
+        if (card.isZeroedOut) {
+          continue;
+        }
+        if (fieldNames[field.identifier.name]) {
+          qualifiedFields[field.identifier.name] = true;
+        } else {
+          fieldNames[field.identifier.name] = true;
+        }
+      }
+      for (const field of def.fields) {
+        if (!isValidField(field)) {
           continue;
         }
         const card = field.effectiveCard;
@@ -71,9 +82,13 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
           continue;
         }
         let {value, required} = convertDefinition(field, ns);
-        schemaDef.properties[field.identifier.name] = value;
+        let fieldName = field.identifier.name;
+        if (qualifiedFields[field.identifier.name]) {
+          fieldName = namespaceToURLPathSegment(field.identifier.namespace) + '/' + field.identifier.name;
+        }
+        schemaDef.properties[fieldName] = value;
         if (required) {
-          requiredProperties.push(field.identifier.name);
+          requiredProperties.push(fieldName);
         }
       }
     } else if (!def.value) {
@@ -92,6 +107,26 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
   }
 
   return schema;
+}
+
+function namespaceToURLPathSegment(namespace) {
+  return namespace.replace(/\./g, '/');
+};
+
+function isValidField(field) {
+  if (field instanceof ChoiceValue) {
+    logger.error('ERROR: Ignoring field defined as a choice', field);
+    return false;
+  }
+  if (field.identifier.name === 'Value') {
+    logger.error('ERROR: Ignoring restricted field name: Value', field);
+    return false;
+  }
+  if (!(field.identifier)) {
+    logger.error('ERROR: Ignoring name-less field: ', field);
+    return false;
+  }
+  return true;
 }
 
 function convertDefinition(valueDef, enclosingNamespace) {
@@ -223,7 +258,7 @@ function makeRef(id, enclosingNamespace) {
   if (id.namespace === enclosingNamespace.namespace) {
     return '#' + id.name;
   } else {
-    return "https://standardhealthrecord.org/test/" + id.namespace.replace(/\./g, '/') + '#definitions/' + id.name;
+    return "https://standardhealthrecord.org/test/" + namespaceToURLPathSegment(id.namespace) + '#definitions/' + id.name;
   }
 }
 

@@ -1,0 +1,47 @@
+[
+  {
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "https://standardhealthrecord.org/test/shr/test",
+	"title": "TODO: Figure out what the title should be.",
+	"definitions": {
+	  "GroupPathClash": {
+		"description": "It is a group of elements with clashing names",
+		"type": "object",
+		"properties": {
+		  "shr/test/Simple": { "$ref": "#Simple" },
+		  "shr/other/test/Simple": {
+			"$ref": "https://standardhealthrecord.org/test/shr/other/test#definitions/Simple"
+		  }
+		},
+		"required": ["shr/test/Simple"]
+	  },
+	  "Simple": {
+		"description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+		"type": "object",
+		"properties": {
+		  "Value": {
+			"type": "string"
+		  }
+		},
+		"required": ["Value"]
+	  }
+	}
+  },
+  {
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "https://standardhealthrecord.org/test/shr/other/test",
+	"title": "TODO: Figure out what the title should be.",
+	"definitions": {
+	  "Simple": {
+		"description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+		"type": "object",
+		"properties": {
+		  "Value": {
+			"type": "string"
+		  }
+		},
+		"required": ["Value"]
+	  }
+	}
+  }
+]
