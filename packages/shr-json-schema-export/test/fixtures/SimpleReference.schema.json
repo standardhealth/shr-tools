@@ -1,0 +1,25 @@
+[
+  {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "definitions": {
+      "SimpleReference": {
+        "description": "It is a reference to a simple element",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "object",
+            "properties": {
+              "ShrId": { "type": "string" },
+              "EntryType": { "type": "string", "format":"uri" },
+              "EntryId": { "type": "string" }
+            },
+            "required": ["ShrId", "EntryType", "EntryId"]
+          }
+        },
+        "required": ["Value"]
+      }
+    }
+  }
+]

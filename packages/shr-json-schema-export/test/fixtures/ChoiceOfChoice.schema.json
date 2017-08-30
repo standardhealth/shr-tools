@@ -1,0 +1,32 @@
+[
+  {
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "https://standardhealthrecord.org/test/shr/test",
+	"title": "TODO: Figure out what the title should be.",
+	"definitions": {
+	  "ChoiceOfChoice": {
+		"description": "It is an element with a choice containing a choice",
+		"type": "object",
+		"properties": {
+		  "Value": {
+			"oneOf": [
+			  { "type": "string" },
+			  {
+				"oneOf": [
+				  { "type": "integer" },
+				  { "type": "number" }
+				]
+			  },
+			  {
+				"description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/CodeChoice, REQUIRED",
+				"type": "array",
+				"items": { "type": "string" }
+			  }
+			]
+		  }
+		},
+		"required": ["Value"]
+	  }
+	}
+  }
+]
