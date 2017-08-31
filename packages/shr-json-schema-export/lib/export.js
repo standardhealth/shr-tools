@@ -39,30 +39,46 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
       properties: {}
     };
     let wholeDef = schemaDef;
+    const tbdParentDescriptions = [];
     if (def.basedOn.length) {
       wholeDef = { allOf: [] };
       for (const supertypeId of def.basedOn) {
-        wholeDef.allOf.push({ $ref:  makeRef(supertypeId, ns)});
+        if (supertypeId instanceof TBD) {
+          if (supertypeId.text) {
+            tbdParentDescriptions.push(supertypeId.text);
+          } else {
+            tbdParentDescriptions.push('TBD');
+          }
+        } else {
+          wholeDef.allOf.push({ $ref:  makeRef(supertypeId, ns)});
+        }
       }
       wholeDef.allOf.push(schemaDef);
     }
 
     let requiredProperties = [];
+    const tbdFieldDescriptions = [];
     if (def.value) {
-      let {value, required} = convertDefinition(def.value, ns);
+      let { value, required, tbd } = convertDefinition(def.value, ns);
       if (required) {
         requiredProperties.push('Value');
       }
       schemaDef.properties.Value = value;
+      if (tbd) {
+        schemaDef.properties.Value.description = def.value.text ? ('TBD: ' + def.value.text) : tbdValueToString(def.value);
+      }
     }
     if (def.fields.length) {
       let qualifiedFields = {};
       let fieldNames = {};
       for (const field of def.fields) {
-        if (!isValidField(field)) {
+        if ((field instanceof TBD) || !isValidField(field)) {
           continue;
         }
         const card = field.effectiveCard;
+        if (!card) {
+          continue;
+        }
         if (card.isZeroedOut) {
           continue;
         }
@@ -73,14 +89,19 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
         }
       }
       for (const field of def.fields) {
-        if (!isValidField(field)) {
+        if (!(field instanceof TBD) && !isValidField(field)) {
           continue;
         }
         const card = field.effectiveCard;
-        if (card.isZeroedOut) {
+        if (card && card.isZeroedOut) {
           continue;
         }
-        let {value, required} = convertDefinition(field, ns);
+        let {value, required, tbd} = convertDefinition(field, ns);
+        if (tbd) {
+          tbdFieldDescriptions.push(tbdValueToString(field));
+          continue;
+        }
+
         let fieldName = field.identifier.name;
         if (qualifiedFields[field.identifier.name]) {
           fieldName = namespaceToURLPathSegment(field.identifier.namespace) + '/' + field.identifier.name;
@@ -94,12 +115,20 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
       schemaDef.type = 'object';
       schemaDef.description = 'Empty DataElement?';
     }
-    const descriptionList = [];
+    let descriptionList = [];
     if (def.description) {
       descriptionList.push(def.description);
     }
     if (def.concepts.length) {
       descriptionList.push('Concepts: ' + def.concepts.map((c) => { return conceptToString(c); }).join(','));
+    }
+    if (tbdParentDescriptions.length) {
+      tbdParentDescriptions[0] = 'TBD Parents: ' + tbdParentDescriptions[0];
+      descriptionList = descriptionList.concat(tbdParentDescriptions);
+    }
+    if (tbdFieldDescriptions.length) {
+      tbdFieldDescriptions[0] = 'TBD Fields: ' + tbdFieldDescriptions[0];
+      descriptionList = descriptionList.concat(tbdFieldDescriptions);
     }
     if (descriptionList.length) {
       wholeDef.description = descriptionList.join('\n');
@@ -140,18 +169,20 @@ function convertDefinition(valueDef, enclosingNamespace) {
   const card = valueDef.effectiveCard;
   let required = false;
   let isCode = false;
-  if (card.isList) {
-    retValue.type = 'array';
-    if (card.min) {
-      retValue.minItems = card.min;
+  if (card) {
+    if (card.isList) {
+      retValue.type = 'array';
+      if (card.min) {
+        retValue.minItems = card.min;
+        required = true;
+      }
+      if (card.max) {
+        retValue.maxItems = card.max;
+      }
+      value = retValue.items = {};
+    } else if (card.min) {
       required = true;
     }
-    if (card.max) {
-      retValue.maxItems = card.max;
-    }
-    value = retValue.items = {};
-  } else if (card.min) {
-    required = true;
   }
 
   // TODO: Is this really the best way to identify a type in ES6?
@@ -220,7 +251,10 @@ function convertDefinition(valueDef, enclosingNamespace) {
       value['$ref'] = makeRef(valueDef.identifier, enclosingNamespace);
     }
   } else if (valueDef.constructor.name === 'TBD') {
-    logger.error('Unsupported TBD');
+    if (retValue.items != null) {
+      delete retValue.items;
+    }
+    return {value: retValue, required: required, tbd: true};
   } else if (valueDef.constructor.name === 'IncompleteValue') {
     logger.error('Unsupported Incomplete');
   } else {
@@ -256,7 +290,20 @@ function convertDefinition(valueDef, enclosingNamespace) {
     retValue.description = 'Constraints: ' + description.join('\n');
   }
 
-  return {value: retValue, required};
+  return {value: retValue, required, tbd: false};
+}
+
+function tbdValueToString(tbd) {
+  if (tbd.text) {
+    return tbd.text;
+  } else {
+    const card = tbd.effectiveCard;
+    if (card) {
+      return 'TBD with cardinality ' + card;
+    } else {
+      return 'TBD';
+    }
+  }
 }
 
 function makeRef(id, enclosingNamespace) {
@@ -268,7 +315,9 @@ function makeRef(id, enclosingNamespace) {
 }
 
 function conceptToString(concept) {
-  if (concept.display) {
+  if (concept instanceof TBD) {
+    return concept.text ? ('TBD: ' + concept.text) : 'TBD';
+  } else if (concept.display) {
     return `${concept.display} (${concept.system}:${concept.code})`;
   } else {
     return `${concept.system}:${concept.code}`;
