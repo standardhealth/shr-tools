@@ -50,10 +50,9 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
     let requiredProperties = [];
     if (def.value) {
       let {value, required} = convertDefinition(def.value, ns);
-      if (!required) {
-        logger.error('Internal error: Value was not required?', required);
+      if (required) {
+        requiredProperties.push('Value');
       }
-      requiredProperties.push('Value');
       schemaDef.properties.Value = value;
     }
     if (def.fields.length) {
