@@ -94,9 +94,15 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
       schemaDef.type = 'object';
       schemaDef.description = 'Empty DataElement?';
     }
-    wholeDef.description = def.description;
+    const descriptionList = [];
+    if (def.description) {
+      descriptionList.push(def.description);
+    }
     if (def.concepts.length) {
-      wholeDef.description += '\nConcepts: ' + def.concepts.map((c) => { return conceptToString(c); }).join(',');
+      descriptionList.push('Concepts: ' + def.concepts.map((c) => { return conceptToString(c); }).join(','));
+    }
+    if (descriptionList.length) {
+      wholeDef.description = descriptionList.join('\n');
     }
     if (requiredProperties.length) {
       schemaDef.required = requiredProperties;
