@@ -1,5 +1,5 @@
-[
-  {
+{
+  "https://standardhealthrecord.org/test/shr/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
@@ -9,7 +9,7 @@
         "type": "object",
         "properties": {
           "Value": {
-            "$ref": "#ElementValue"
+            "$ref": "#/definitions/ElementValue"
           }
         },
         "required": ["Value"]
@@ -19,7 +19,7 @@
         "type": "object",
         "properties": {
           "Value": {
-            "$ref": "#Simple"
+            "$ref": "#/definitions/Simple"
           }
         },
         "required": ["Value"]
@@ -36,4 +36,4 @@
       }
     }
   }
-]
+}

@@ -1,82 +1,82 @@
-[
-  {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "https://standardhealthrecord.org/test/shr/test",
-	"title": "TODO: Figure out what the title should be.",
-	"definitions": {
-	  "Group": {
-		"description": "It is a group of elements\nConcepts: Foobar (http://foo.org:bar),Boofar (http://boo.org:far)",
-		"type": "object",
-		"properties": {
-		  "Simple": { "$ref": "#Simple" },
-		  "Coded": { "$ref": "#Coded" },
-		  "ElementValue": {
-			"type": "array",
-			"items": {
-			  "$ref": "#ElementValue"
-			}
-		  }
-		},
-		"required": ["Simple"]
-	  },
-	  "Simple": {
-		"description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
-		"type": "object",
-		"properties": {
-		  "Value": {
-			"type": "string"
-		  }
-		},
-		"required": ["Value"]
-	  },
-	  "Coded": {
-		"description": "It is a coded element",
-		"type": "object",
-		"properties": {
-		  "Value": {
-			"description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/Coded, REQUIRED",
-			"type": "string"
-		  }
-		},
-		"required": ["Value"]
-	  },
-	  "ForeignElementValue": {
-		"description": "It is an element with a foreign element value",
-		"type": "object",
-		"properties": {
-		  "Value": {
-			"$ref": "https://standardhealthrecord.org/test/shr/other/test#definitions/Simple"
-		  }
-		},
-		"required": ["Value"]
-	  },
-	  "ElementValue": {
-		"description": "It is an element with an element value",
-		"type": "object",
-		"properties": {
-		  "Value": {
-			"$ref": "#Simple"
-		  }
-		},
-		"required": ["Value"]
-	  }
-	}
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "definitions": {
+      "Group": {
+        "description": "It is a group of elements\nConcepts: Foobar (http://foo.org:bar),Boofar (http://boo.org:far)",
+        "type": "object",
+        "properties": {
+          "Simple": { "$ref": "#/definitions/Simple" },
+          "Coded": { "$ref": "#/definitions/Coded" },
+          "ElementValue": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ElementValue"
+            }
+          }
+        },
+        "required": ["Simple"]
+      },
+      "Simple": {
+        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          }
+        },
+        "required": ["Value"]
+      },
+      "Coded": {
+        "description": "It is a coded element",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/Coded, REQUIRED",
+            "type": "string"
+          }
+        },
+        "required": ["Value"]
+      },
+      "ForeignElementValue": {
+        "description": "It is an element with a foreign element value",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple"
+          }
+        },
+        "required": ["Value"]
+      },
+      "ElementValue": {
+        "description": "It is an element with an element value",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "$ref": "#/definitions/Simple"
+          }
+        },
+        "required": ["Value"]
+      }
+    }
   },
-  {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "https://standardhealthrecord.org/test/shr/other/test",
-	"title": "TODO: Figure out what the title should be.",
-	"definitions": {
-	  "Simple": {
-		"description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
-		"type": "object",
-		"properties": {
-		  "Value": {
-			"type": "string"
-		  }
-		},
-		"required": ["Value"]
-	  }
-	}
+  "https://standardhealthrecord.org/test/shr/other/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/other/test",
+    "title": "TODO: Figure out what the title should be.",
+    "definitions": {
+      "Simple": {
+        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          }
+        },
+        "required": ["Value"]
+      }
+    }
   }
-]
+}

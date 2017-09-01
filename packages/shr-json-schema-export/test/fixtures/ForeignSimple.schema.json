@@ -1,19 +1,19 @@
-[
-  {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "https://standardhealthrecord.org/test/shr/other/test",
-	"title": "TODO: Figure out what the title should be.",
-	"definitions": {
-	  "Simple": {
-		"description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
-		"type": "object",
-		"properties": {
-		  "Value": {
-			"type": "string"
-		  }
-		},
-		"required": ["Value"]
-	  }
-	}
+{
+  "https://standardhealthrecord.org/test/shr/other/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/other/test",
+    "title": "TODO: Figure out what the title should be.",
+    "definitions": {
+      "Simple": {
+        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          }
+        },
+        "required": ["Value"]
+      }
+    }
   }
-]
+}

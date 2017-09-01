@@ -11,9 +11,9 @@ setLogger(err.logger());
 describe('#exportToJSONSchema()', commonExportTests(exportSpecifications, importFixture, importErrorsFixture));
 
 function exportSpecifications(specifications) {
-  const schemata = exportToJSONSchema(specifications);
-  validateSchemata(schemata);
-  return schemata;
+  const schemataDict = exportToJSONSchema(specifications);
+  validateSchemata(schemataDict);
+  return schemataDict;
 }
 
 function importFixture(name, ext='.schema.json') {
@@ -32,8 +32,12 @@ function importErrorsFixture(name, ext='.schema.json') {
   }
 }
 
-function validateSchemata(schemata) {
+function validateSchemata(schemataDict) {
   const schemaValidator = new Ajv();
   schemaValidator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
+  const schemata = [];
+  for (const id in schemataDict) {
+    schemata.push(schemataDict[id]);
+  }
   schemaValidator.addSchema(schemata);
 }

@@ -1,40 +1,40 @@
-[
-  {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "https://standardhealthrecord.org/test/shr/test",
-	"title": "TODO: Figure out what the title should be.",
-	"definitions": {
-	  "Choice": {
-		"description": "It is an element with a choice",
-		"type": "object",
-		"properties": {
-		  "Value": {
-			"oneOf": [
-			  { "type": "string" },
-			  {
-				"type": "array",
-				"description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/CodeChoice, REQUIRED",
-				"items": {
-				  "type": "string"
-				}
-			  },
-			  { "$ref": "#Coded" }
-			]
-		  }
-		},
-		"required": ["Value"]
-	  },
-	  "Coded": {
-		"description": "It is a coded element",
-		"type": "object",
-		"properties": {
-		  "Value": {
-			"description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/Coded, REQUIRED",
-			"type": "string"
-		  }
-		},
-		"required": ["Value"]
-	  }
-	}
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "definitions": {
+      "Choice": {
+        "description": "It is an element with a choice",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "array",
+                "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/CodeChoice, REQUIRED",
+                "items": {
+                  "type": "string"
+                }
+              },
+              { "$ref": "#/definitions/Coded" }
+            ]
+          }
+        },
+        "required": ["Value"]
+      },
+      "Coded": {
+        "description": "It is a coded element",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/Coded, REQUIRED",
+            "type": "string"
+          }
+        },
+        "required": ["Value"]
+      }
+    }
   }
-]
+}

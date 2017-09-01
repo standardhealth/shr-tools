@@ -1,5 +1,5 @@
-[
-  {
+{
+  "https://standardhealthrecord.org/test/shr/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
@@ -7,7 +7,7 @@
       "NotDoneDerivative": {
         "description": "It is an unfinished derivative element\nConcepts: TBD: Not sure of the concept\nTBD Parents: An undetermined parent.\nTBD\nTBD Fields: An undetermined singular field.",
         "allOf": [
-          { "$ref": "#ValuelessElement" },
+          { "$ref": "#/definitions/ValuelessElement" },
           {
             "type": "object",
             "properties": {
@@ -24,7 +24,7 @@
         "type": "object",
         "properties": {
           "Simple": {
-            "$ref": "#Simple"
+            "$ref": "#/definitions/Simple"
           }
         },
         "required": [ "Simple" ]
@@ -41,4 +41,4 @@
       }
     }
   }
-]
+}

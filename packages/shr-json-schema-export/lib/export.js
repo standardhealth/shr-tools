@@ -12,24 +12,37 @@ function setLogger(bunyanLogger) {
 }
 
 
+/**
+ * Converts a group of specifications into JSON Schema.
+ * @param {shr-models.Specifications} specifications - a Specifications object.
+ * @return {Object.<string, Object>} A mapping of schema ids to JSON Schema definitions.
+ */
 function exportToJSONSchema(specifications) {
-  const namespaceResults = [];
+  const namespaceResults = {};
   for (const ns of specifications.namespaces.all) {
-    namespaceResults.push(
-        namespaceToSchema(ns,
-            specifications.dataElements.byNamespace(ns.namespace),
-            specifications.dataElements.grammarVersions )); // *Namespace
+    const { schemaId, schema } = namespaceToSchema(ns,
+        specifications.dataElements.byNamespace(ns.namespace),
+        specifications.dataElements.grammarVersions );
+    namespaceResults[schemaId] = schema;
   }
 
   return namespaceResults;
 }
 
+/**
+ * Converts a namespace into a JSON Schema.
+ * @param {shr-models.Namespace} ns - the namespace of the schema.
+ * @param {shr-models.DataElement[]} dataElements - the elements in the namespace.
+ * @param {shr-models.Version[]} grammarVersions - the grammar versions defined by the elements in the namespace.
+ * @return {{schemaId: string, schema: Object}} The schema id and the JSON Schema definition.
+ */
 function namespaceToSchema(ns, dataElements, grammarVersions) {
+  const schemaId = "https://standardhealthrecord.org/test/" + namespaceToURLPathSegment(ns.namespace);
   let schema = {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "https://standardhealthrecord.org/test/" + namespaceToURLPathSegment(ns.namespace),
-    "title": "TODO: Figure out what the title should be.",
-    "definitions": {}
+    $schema: 'http://json-schema.org/draft-04/schema#',
+    id: schemaId,
+    title: "TODO: Figure out what the title should be.",
+    definitions: {}
   };
 
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
@@ -140,12 +153,12 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
     schema.definitions[def.identifier.name] = wholeDef;
   }
 
-  return schema;
+  return { schemaId, schema };
 }
 
 function namespaceToURLPathSegment(namespace) {
   return namespace.replace(/\./g, '/');
-};
+}
 
 function isValidField(field) {
   if (field instanceof ChoiceValue) {
@@ -308,9 +321,9 @@ function tbdValueToString(tbd) {
 
 function makeRef(id, enclosingNamespace) {
   if (id.namespace === enclosingNamespace.namespace) {
-    return '#' + id.name;
+    return '#/definitions/' + id.name;
   } else {
-    return "https://standardhealthrecord.org/test/" + namespaceToURLPathSegment(id.namespace) + '#definitions/' + id.name;
+    return `https://standardhealthrecord.org/test/${namespaceToURLPathSegment(id.namespace)}#/definitions/${id.name}`;
   }
 }
 
