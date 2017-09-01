@@ -185,6 +185,8 @@ class Expander {
         consolidateFn = this.consolidateCardConstraint;
       } else if (constraint instanceof models.TypeConstraint) {
         consolidateFn = this.consolidateTypeConstraint;
+      } else if (constraint instanceof models.IncludesTypeConstraint) {
+        consolidateFn = this.consolidateIncludesTypeConstraint;
       } else if (constraint instanceof models.ValueSetConstraint) {
         consolidateFn = this.consolidateValueSetConstraint;
       } else if (constraint instanceof models.CodeConstraint) {
@@ -285,25 +287,135 @@ class Expander {
       // Remove the previous type constraint since this one supercedes it
       constraints = constraints.filter(cst => cst !== previous);
     }
-    constraints.push(constraint);
+  constraints.push(constraint);
     return constraints;
   }
 
+  consolidateIncludesTypeConstraint(element, value, constraint, previousConstraints) {
+
+    var target = this.constraintTarget(value, constraint.path);
+    var targetLabel = this.constraintTargetLabel(value, constraint.path);
+
+    var targetIsValue = false; //constraint.isOnValue; //TODO NEEDS RENAME/LOGICAL CLEAR-UP
+
+    /* if (targetIsValue) {
+      let targetVal = this.lookup(value.identifier).value;
+      if (targetVal != null) {
+        target = targetVal;
+      } else {
+        logger.error("Includes Type Constraint Error: Cannot find target value");
+      }
+
+      let firstId = constraint.path[0];
+      constraint.path[0] = (firstId.name == "Value" && firstId.namespace == "unknown") ? targetVal.identifier : constraint.path[0];
+    } */
+
+    let constraints = previousConstraints;
+
+    if (!(target instanceof models.IdentifiableValue)) {
+      logger.error('Cannot constrain type of %s since it has no identifier', targetLabel);
+      return constraints;
+    } else if (!this.checkHasBaseType(constraint.isA, target.identifier)) {
+      logger.error('Cannot constrain element %s to %s since it is an invalid sub-type', constraint.isA.name, target.identifier.fqn);
+      return constraints;
+    }
+
+    /* const prevIncludes = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).includesType.hasConstraints;
+       if (prevIncludes) {
+           logger.error("Base Class %s already defines IncludesTypeConstraint", target.identifier.fqn)
+           return constraints;
+    } */
+
+    if (constraint.path.length == 0 || value.constraintsFilter.card.withPath(constraint.path).constraints.length > 0 || targetIsValue) { //e.g. Observation
+      if (target.effectiveCard != null) {
+        var targetCard = target.effectiveCard;
+      } else if (value.constraintsFilter.card.withPath(constraint.path).constraints.length > 0) {
+        var targetCard = value.constraintsFilter.card.withPath(constraint.path).constraints[0].card
+      }
+    } else if (constraint.path.length == 1) { //e.g. Panelmembers.Observation
+      let el = this.lookup(value.identifier).fields.filter(f => f.identifier.fqn == target.identifier.fqn)[0];
+      if (el == null) {
+        //Try Checking if on value
+        el = this.lookup(value.identifier).value;
+      }
+      var targetCard = el.effectiveCard;
+    } else if (constraint.path.length > 1 ) { //e.g. SomeElement1.SomeElement2.PanelMembers.Observation
+      let lastIndex = constraint.path.length - 1;
+      let finalEl = this.lookup(constraint.path[lastIndex - 1]).fields.filter(f => f.identifier.fqn == target.identifier.fqn)[0];
+      if (el == null) {
+        //Try Checking if on value
+        el = this.lookup(constraint.path[lastIndex - 1]).value;
+      }
+      var targetCard = finalEl.effectiveCard;
+    }
+
+    if (targetCard == null) {
+      logger.error("Cardinality of %s not found", target.identifier.fqn);
+      return constraints;
+    } else if (!constraint.card.fitsWithinCardinalityOf(targetCard)) {
+      logger.error('Cannot include cardinality on %s, cardinality of %s doesnt fit within %s', target.identifier.fqn, constraint.card.toString(), targetCard.toString());
+      return constraints;
+    }
+
+    constraints.push(constraint);
+    return constraints;
+}
+  getBottomMostCardinality(constraint) {
+    path = constraint.path;
+
+    var i = path.length;
+    previous = null;
+    for (var i = 0; i < path.length; i++) {
+      if (previous === null) {
+        previous = this.lookup(constraint[i])
+        continue;
+      }
+
+      let currentEl = path[i];
+      previous = this.lookup(previous.fields.filter(f => f.identifier.fqn == currentEl.identifier.fqn)[0]);
+    }
+
+    return;
+  }
+
   consolidateValueSetConstraint(element, value, constraint, previousConstraints) {
-    const target = this.constraintTarget(value, constraint.path);
-    const targetLabel = this.constraintTargetLabel(value, constraint.path);
+    constraint = constraint.clone();
+    let target = this.constraintTarget(value, constraint.path);
+    let targetLabel = this.constraintTargetLabel(value, constraint.path);
 
     let constraints = previousConstraints;
     if (!(target instanceof models.IdentifiableValue)) {
       logger.error('Cannot constrain valueset of %s since it has no identifier', targetLabel);
       return constraints;
     } else if (!this.supportsCodeConstraint(target.identifier)) {
-      logger.error('Cannot constrain valueset of %s since it is not based on code, Coding, or CodeableConcept', targetLabel);
-      return constraints;
-    } else if ((new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).code.hasConstraints) {
+      // Isn't directly a code/Coding/CodeableConcept, so try its value
+      const targetValue = this.constraintTargetValue(value, constraint.path);
+      let valID = this.valueIdentifier(targetValue);
+      if (typeof valID === 'undefined' && targetValue instanceof models.ChoiceValue) {
+        // It was a choice, so run through the choices looking for one that supports code constraints
+        for (const option of targetValue.aggregateOptions) {
+          if (this.supportsCodeConstraint(option.identifier)) {
+            valID = option.identifier;
+            break;
+          }
+        }
+      }
+
+      if (!this.supportsCodeConstraint(valID)) {
+        logger.error('Cannot constrain valueset of %s since neither it nor its value is a code, Coding, or CodeableConcept', targetLabel);
+        return constraints;
+      }
+      // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
+      constraint.path.push(valID);
+      target = this.constraintTarget(value, constraint.path);
+      targetLabel = this.constraintTargetLabel(value, constraint.path);
+    }
+
+    if ((new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).code.hasConstraints) {
       logger.error('Cannot constrain valueset of %s since it is already constrained to a single code', targetLabel);
       return constraints;
     }
+
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).valueSet.constraints;
     for (const previous of filtered) {
       // TODO: We may want to verify that the new valueset is a subset of the old valueset (or that the old valueset allows extension),
@@ -484,12 +596,16 @@ class Expander {
 
   constraintTargetValueIdentifier(value, path) {
     const targetValue = this.constraintTargetValue(value, path);
-    if (typeof targetValue !== 'undefined') {
+    return this.valueIdentifier(targetValue);
+  }
+
+  valueIdentifier(value) {
+    if (typeof value !== 'undefined') {
       // If target value is a choice, but all the options are the same identifier, return that identifier.
-      if (targetValue instanceof models.ChoiceValue) {
-        const identifier = targetValue.options[0].identifier;
+      if (value instanceof models.ChoiceValue) {
+        const identifier = value.options[0].identifier;
         if (typeof identifier !== 'undefined') {
-          for (const option of targetValue.options) {
+          for (const option of value.options) {
             if (!identifier.equals(option.identifier)) {
               // Mismatched identifiers in choice, so just return (undefined)
               return;
@@ -498,7 +614,7 @@ class Expander {
           return identifier;
         }
       }
-      return targetValue.identifier;
+      return value.identifier;
     }
   }
 
@@ -625,26 +741,44 @@ class Expander {
       }
 
       // Go through this mappings rules, resolve the identifiers, and add them to the big rules list
-      for (const mappingRule of map.rules) {
-        const rule = mappingRule.clone();
+      // First clone the rules into a new list because we will possibly insert new rules into it
+      const mappingRules = [...map.rules];
+      for (let i=0; i < mappingRules.length; i++) {
+        const rule = mappingRules[i].clone();
         let valid = true;
         if (rule instanceof models.FieldMappingRule) {
           let currentDE = de;
-          for (let i=0; i < rule.sourcePath.length; i++) {
-            const match = this.findMatchInDataElement(currentDE, rule.sourcePath[i]);
+          for (let j=0; j < rule.sourcePath.length; j++) {
+            let match = this.findMatchInDataElement(currentDE, rule.sourcePath[j]);
+            // If match is an array, then it means the path points to a Value that is a choice.
+            if (Array.isArray(match)) {
+              // We'll process the first of the choices now, but first add the rest of the choice
+              // options to the mappingRules array to be processed later.
+              for (let k=1; k < match.length; k++) {
+                // Get the new source path with the "Value" part replaced by the new match
+                const newSourcePath = rule.sourcePath.slice();
+                newSourcePath[j] = match[k];
+                // Create a clone of the rule with the new sourcepath in it
+                const newRule = new models.FieldMappingRule(newSourcePath, rule.target);
+                // Insert it into the mappingRules for processing later
+                mappingRules.splice(i+k, 0, newRule);
+              }
+              // Now reassign match to the first item in the choice options that matched
+              match = match[0];
+            }
             if (match) {
-              rule.sourcePath[i] = match;
-              if (i < (rule.sourcePath.length-1) && !(match instanceof models.TBD)) {
+              rule.sourcePath[j] = match;
+              if (j < (rule.sourcePath.length-1) && !(match instanceof models.TBD)) {
                 currentDE = this._expanded.dataElements.findByIdentifier(match);
                 if (typeof de === 'undefined') {
-                  logger.error('Cannot resolve data element definition from path: %s', this.highlightPartInPath(rule.sourcePath, i));
+                  logger.error('Cannot resolve data element definition from path: %s', this.highlightPartInPath(rule.sourcePath, j));
                   valid = false;
                   break;
                 }
               }
             } else {
-              if (rule.sourcePath[i].namespace || rule.sourcePath[i].name != 'Value') {
-                logger.error('Cannot resolve data element definition from path: %s', this.highlightPartInPath(rule.sourcePath, i));
+              if (rule.sourcePath[j].namespace || rule.sourcePath[j].name != 'Value') {
+                logger.error('Cannot resolve data element definition from path: %s', this.highlightPartInPath(rule.sourcePath, j));
               }
               valid = false;
               break;
@@ -661,7 +795,9 @@ class Expander {
       for (const rule of allRules) {
         const i = mergedRules.findIndex(item => {
           if (rule instanceof models.CardinalityMappingRule && item instanceof models.CardinalityMappingRule) {
-            return rule.target ==item.target;
+            return rule.target == item.target;
+          } else if (rule instanceof models.FixedValueMappingRule && item instanceof models.FixedValueMappingRule) {
+            return rule.target == item.target;
           }
           return rule.sourcePath && item.sourcePath && this.equalSourcePaths(rule.sourcePath, item.sourcePath);
         });
@@ -684,7 +820,6 @@ class Expander {
   }
 
   findMatchInDataElement(de, idToMatch) {
-    let result;
     // Special case logic for TBD (just return the TBD)
     if (idToMatch instanceof models.TBD) {
       return idToMatch.clone();
@@ -692,16 +827,27 @@ class Expander {
     // Special case logic for "Value"
     else if (!idToMatch.namespace && idToMatch.name == 'Value') {
       if (de.value instanceof models.IdentifiableValue) {
-        result = de.value.identifier;
+        return de.value.identifier;
       } else if (typeof de.value === 'undefined') {
         logger.error('Cannot map Value since element does not define a value');
+      } else if (de.value instanceof models.ChoiceValue) {
+        // Return all the possible choices
+        const results = [];
+        for (const opt of de.value.aggregateOptions) {
+          if (opt instanceof models.IdentifiableValue) {
+            results.push(opt.effectiveIdentifier);
+          }
+        }
+        return results;
       } else {
         logger.error('Cannot map Value since it is unsupported type: %s', de.value.constructor.name);
       }
     // Special case logic for "Entry"
     } else if ((!idToMatch.namespace || idToMatch.namespace == 'shr.base') && idToMatch.name == 'Entry') {
       return new models.Identifier('shr.base', 'Entry');
+    // "Normal" case
     } else {
+      let result;
       for (const value of [de.value, ...de.fields]) {
         if (value) {
           const match = this.findMatchInValue(value, idToMatch);
@@ -712,8 +858,8 @@ class Expander {
           }
         }
       }
+      return result;
     }
-    return result;
   }
 
   findMatchInValue(value, idToMatch) {
