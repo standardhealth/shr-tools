@@ -1,0 +1,17 @@
+Grammar:    DataElement 5.0
+Namespace:  shr.test
+
+EntryElement: RequiredVSConstraintOnField
+0..1    CodedThing must be from http://standardhealthrecord.org/test/vs/Coded2
+
+EntryElement: ExtensibleVSConstraintOnField
+0..1    CodedThing must be from http://standardhealthrecord.org/test/vs/Coded2 if covered
+
+EntryElement: PreferredVSConstraintOnField
+0..1    CodedThing should be from http://standardhealthrecord.org/test/vs/Coded2
+
+EntryElement: ExampleVSConstraintOnField
+0..1    CodedThing could be from http://standardhealthrecord.org/test/vs/Coded2
+
+Element:   CodedThing
+Value:     code

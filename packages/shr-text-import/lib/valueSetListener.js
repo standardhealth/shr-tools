@@ -1,10 +1,10 @@
 const bunyan = require('bunyan');
 const {FileStream, CommonTokenStream} = require('antlr4/index');
 const {ParseTreeWalker} = require('antlr4/tree');
-const {SHRLexer} = require('./parsers/SHRLexer');
-const {SHRParser} = require('./parsers/SHRParser');
-const {SHRParserListener} = require('./parsers/SHRParserListener');
-const {SHRErrorListener} = require('./common.js');
+const {SHRValueSetLexer} = require('./parsers/SHRValueSetLexer');
+const {SHRValueSetParser} = require('./parsers/SHRValueSetParser');
+const {SHRValueSetParserListener} = require('./parsers/SHRValueSetParserListener');
+const {SHRErrorListener} = require('./errorListener.js');
 const {Specifications, Version, ValueSet, CodeSystem, Concept, Identifier} = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
@@ -13,7 +13,7 @@ function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
 
-class ValueSetImporter extends SHRParserListener {
+class ValueSetImporter extends SHRValueSetParserListener {
   constructor(specifications = new Specifications) {
     super();
     // The specifications container to put the mappings into
@@ -40,15 +40,15 @@ class ValueSetImporter extends SHRParserListener {
     try {
       const errListener = new SHRErrorListener(logger);
       const chars = new FileStream(file);
-      const lexer = new SHRLexer(chars);
+      const lexer = new SHRValueSetLexer(chars);
       lexer.removeErrorListeners();
       lexer.addErrorListener(errListener);
       const tokens  = new CommonTokenStream(lexer);
-      const parser = new SHRParser(tokens);
+      const parser = new SHRValueSetParser(tokens);
       parser.removeErrorListeners();
       parser.addErrorListener(errListener);
       parser.buildParseTrees = true;
-      const tree = parser.shr();
+      const tree = parser.doc();
       const walker = new ParseTreeWalker();
       walker.walk(this, tree);
     } finally {
@@ -57,15 +57,15 @@ class ValueSetImporter extends SHRParserListener {
     }
   }
 
-  enterValuesetDefsDoc(ctx) {
+  enterDoc(ctx) {
     // Process the namespace
-    this._currentNs = ctx.valuesetDefsHeader().namespace().getText();
+    this._currentNs = ctx.docHeader().namespace().getText();
 
     // Create the default path based on the namespace
     this._currentPath = `http://standardhealthrecord.org/${this._currentNs.replace('.', '/')}/vs/`;
 
     // Process the version
-    const version = ctx.valuesetDefsHeader().version();
+    const version = ctx.docHeader().version();
     const major = parseInt(version.WHOLE_NUMBER()[0], 10);
     const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
     this._currentGrammarVersion = new Version(major, minor);
@@ -73,18 +73,11 @@ class ValueSetImporter extends SHRParserListener {
     logger.debug({shrId: this._currentNs, version: this._currentGrammarVersion.toString()}, 'Start importing value set namespace');
   }
 
-  exitValuesetDefsDoc(ctx) {
+  exitDoc(ctx) {
     // clear current namespace, target spec, and grammar version
     this._currentNs = '';
     this._currentGrammarVersion = null;
     logger.debug({shrId: this._currentNs}, 'Done importing value set namespace');
-  }
-
-  enterDefaultPathDef(ctx) {
-    this._currentPath = ctx.URL().getText();
-    if (!this._currentPath.endsWith('/')) {
-      this._currentPath += '/';
-    }
   }
 
   enterVocabularyDef(ctx) {
@@ -133,7 +126,7 @@ class ValueSetImporter extends SHRParserListener {
   }
 
   enterFullyQualifiedCode(ctx) {
-    if (ctx.parentCtx instanceof SHRParser.ValuesetValueContext) {
+    if (ctx.parentCtx instanceof SHRValueSetParser.ValuesetValueContext) {
       const concept = this.processFullyQualifiedCode(ctx);
       if (typeof concept === 'undefined') {
         return;
@@ -145,10 +138,10 @@ class ValueSetImporter extends SHRParserListener {
 
   enterValuesetInlineValue(ctx) {
     this.ensureCodeSystemDef();
-    const code = ctx.CODE().getText().substr(1); // substr to skip the '#'
+    const code = ctx.code().CODE().getText().substr(1); // substr to skip the '#'
     const concept = new Concept(this._currentCodeSystemDef.url, code);
-    if (ctx.STRING()) {
-      concept.display = stripDelimitersFromToken(ctx.STRING());
+    if (ctx.code().STRING()) {
+      concept.display = stripDelimitersFromToken(ctx.code().STRING());
     }
     this._currentCodeSystemDef.addCode(concept);
     this._currentDef.addValueSetIncludesCodeRule(concept.clone());

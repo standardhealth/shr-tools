@@ -1,9 +1,9 @@
-Grammar:   DataElement 4.0
+Grammar:   DataElement 5.0
 Namespace: shr.test
 
 EntryElement:   Choice
 Description:    "It is an entry with a choice"
-Value:          (date or other.ns.Period or Simple)
+Value:          date or other.ns.Period or Simple
 
 Element:        Simple
 Value:          string

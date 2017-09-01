@@ -1,9 +1,9 @@
-Grammar:    DataElement 4.0
+Grammar:    DataElement 5.0
 Namespace:  shr.test
 
 EntryElement:   VSConstraintOnValue
 Description:    "It is an entry with a valueset constraint on the value"
-Value:          CodedFromValueSet with code from http://standardhealthrecord.org/test/vs/Coded2
+Value:          CodedFromValueSet from http://standardhealthrecord.org/test/vs/Coded2
 
 Element:   CodedFromValueSet
 Value:     code from http://standardhealthrecord.org/test/vs/Coded

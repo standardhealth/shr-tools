@@ -1,7 +1,5 @@
-Grammar:    ValueSet 4.0
+Grammar:    ValueSet 5.0
 Namespace:  shr.test
-
-Path: http://standardhealthrecord.org/test/vs
 
 // These are just dummy value sets so that value set resolution works in the tests
 ValueSet:   Coded

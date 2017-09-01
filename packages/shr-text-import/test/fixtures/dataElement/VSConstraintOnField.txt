@@ -1,10 +1,10 @@
-Grammar:    DataElement 4.0
+Grammar:    DataElement 5.0
 Namespace:  shr.test
 
 EntryElement: VSConstraintOnField
 Description:  "It is a group entry with a valueset constraint on a field"
 0..1    Simple
-0..1    CodedFromValueSet with code from http://standardhealthrecord.org/test/vs/Coded2
+0..1    CodedFromValueSet from http://standardhealthrecord.org/test/vs/Coded2
 
 Element:        Simple
 Value:          string

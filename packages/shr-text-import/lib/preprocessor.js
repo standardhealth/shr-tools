@@ -1,12 +1,12 @@
 const bunyan = require('bunyan');
 const {FileStream, CommonTokenStream} = require('antlr4/index');
-const {SHRLexer} = require('./parsers/SHRLexer');
-const {SHRParser} = require('./parsers/SHRParser');
-const {SHRParserVisitor} = require('./parsers/SHRParserVisitor');
+const {SHRDataElementLexer} = require('./parsers/SHRDataElementLexer');
+const {SHRDataElementParser} = require('./parsers/SHRDataElementParser');
+const {SHRDataElementParserVisitor} = require('./parsers/SHRDataElementParserVisitor');
 const {Version} = require('shr-models');
 
 const VERSION = new Version(4, 1, 1);
-const GRAMMAR_VERSION = new Version(4, 1, 0);
+const GRAMMAR_VERSION = new Version(5, 0, 0);
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
 var logger = rootLogger;
@@ -14,7 +14,7 @@ function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
 
-class Preprocessor extends SHRParserVisitor {
+class Preprocessor extends SHRDataElementParserVisitor {
   constructor() {
     super();
     // The preprocessed data
@@ -30,31 +30,25 @@ class Preprocessor extends SHRParserVisitor {
     logger.debug('Start preprocessing data elements file');
     try {
       const chars = new FileStream(file);
-      const lexer = new SHRLexer(chars);
+      const lexer = new SHRDataElementLexer(chars);
       lexer.removeErrorListeners(); // Only log errors during the import
       const tokens  = new CommonTokenStream(lexer);
-      const parser = new SHRParser(tokens);
+      const parser = new SHRDataElementParser(tokens);
       parser.removeErrorListeners(); // Only log errors during the import
       parser.buildParseTrees = true;
-      const tree = parser.shr();
-      this.visitShr(tree);
+      const tree = parser.doc();
+      this.visitDoc(tree);
     } finally {
       logger.debug('Done preprocessing data elements file');
       this.logger = lastLogger;
     }
   }
 
-  visitShr(ctx) {
-    if (ctx.dataDefsDoc()) {
-      return this.visitDataDefsDoc(ctx.dataDefsDoc());
-    }
-  }
-
-  visitDataDefsDoc(ctx) {
-    if (!this.checkVersion(ctx.dataDefsHeader().version())) {
+  visitDoc(ctx) {
+    if (!this.checkVersion(ctx.docHeader().version())) {
       return;
     }
-    const ns = ctx.dataDefsHeader().namespace().getText();
+    const ns = ctx.docHeader().namespace().getText();
     logger.debug({shrId: ns}, 'Start preprocessing namespace');
 
     try {
@@ -63,10 +57,6 @@ class Preprocessor extends SHRParserVisitor {
           while (url.endsWith('/')) { url = url.substring(0, url.length - 1); }
           return url;
         };
-        if (ctx.pathDefs().defaultPathDef()) {
-          const url = removeTrailingSlash(ctx.pathDefs().defaultPathDef().URL().getText());
-          this._data.registerPath(ns, 'default', url);
-        }
         for (const def of ctx.pathDefs().pathDef()) {
           const name = def.ALL_CAPS().getText();
           let url = removeTrailingSlash(def.URL().getText());

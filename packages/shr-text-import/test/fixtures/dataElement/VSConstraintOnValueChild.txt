@@ -1,10 +1,10 @@
-Grammar:    DataElement 4.0
+Grammar:    DataElement 5.0
 Namespace:  shr.test
 
 EntryElement:   VSConstraintOnValueChild
 Description:    "It is an entry with a valueset constraint on the value's child"
 Value:          Complex
-1..2            Complex.CodedFromValueSet with code from http://standardhealthrecord.org/test/vs/Coded2
+1..2            Complex.CodedFromValueSet from http://standardhealthrecord.org/test/vs/Coded2
 
 Element:        Complex
 0..1            Simple

@@ -1,11 +1,11 @@
 const bunyan = require('bunyan');
 const {FileStream, CommonTokenStream} = require('antlr4/index');
 const {ParseTreeWalker} = require('antlr4/tree');
-const {SHRLexer} = require('./parsers/SHRLexer');
-const {SHRParser} = require('./parsers/SHRParser');
-const {SHRParserListener} = require('./parsers/SHRParserListener');
-const {SHRErrorListener} = require('./common.js');
-const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, TBD, PRIMITIVES} = require('shr-models');
+const {SHRDataElementLexer} = require('./parsers/SHRDataElementLexer');
+const {SHRDataElementParser} = require('./parsers/SHRDataElementParser');
+const {SHRDataElementParserListener} = require('./parsers/SHRDataElementParserListener');
+const {SHRErrorListener} = require('./errorListener.js');
+const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, TBD, PRIMITIVES, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
 var logger = rootLogger;
@@ -13,7 +13,7 @@ function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
 
-class Importer extends SHRParserListener {
+class DataElementImporter extends SHRDataElementParserListener {
   constructor(preprocessedData, specifications = new Specifications()) {
     super();
     // The preprocessed data indicating valid elements and vocabularies
@@ -40,15 +40,15 @@ class Importer extends SHRParserListener {
     try {
       const errListener = new SHRErrorListener(logger);
       const chars = new FileStream(file);
-      const lexer = new SHRLexer(chars);
+      const lexer = new SHRDataElementLexer(chars);
       lexer.removeErrorListeners();
       lexer.addErrorListener(errListener);
       const tokens  = new CommonTokenStream(lexer);
-      const parser = new SHRParser(tokens);
+      const parser = new SHRDataElementParser(tokens);
       parser.removeErrorListeners();
       parser.addErrorListener(errListener);
       parser.buildParseTrees = true;
-      const tree = parser.shr();
+      const tree = parser.doc();
       const walker = new ParseTreeWalker();
       walker.walk(this, tree);
     } finally {
@@ -57,9 +57,9 @@ class Importer extends SHRParserListener {
     }
   }
 
-  enterDataDefsDoc(ctx) {
+  enterDoc(ctx) {
     // Process the namespace
-    const ns = ctx.dataDefsHeader().namespace().getText();
+    const ns = ctx.docHeader().namespace().getText();
     this._currentNs = ns;
     let nsDef = this._specs.namespaces.find(ns);
     if (typeof nsDef === 'undefined') {
@@ -71,7 +71,7 @@ class Importer extends SHRParserListener {
     }
 
     // Process the version
-    const version = ctx.dataDefsHeader().version();
+    const version = ctx.docHeader().version();
     const major = parseInt(version.WHOLE_NUMBER()[0], 10);
     const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
     this._currentGrammarVersion = new Version(major, minor);
@@ -79,7 +79,7 @@ class Importer extends SHRParserListener {
     logger.debug({shrId: ns, version: this._currentGrammarVersion.toString()}, 'Start importing data element namespace');
   }
 
-  exitDataDefsDoc(ctx) {
+  exitDoc(ctx) {
     // clear current namespace, uses namespaces, and grammar version
     logger.debug({shrId: this._currentNs}, 'Done importing data element namespace');
     this._currentNs = '';
@@ -93,13 +93,15 @@ class Importer extends SHRParserListener {
 
   enterElementDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.elementHeader().simpleName().getText());
-    this._currentDef = new DataElement(id).withGrammarVersion(this._currentGrammarVersion);
+    this._currentDef = new DataElement(id, false, ctx.elementHeader().KW_ABSTRACT() != null).withGrammarVersion(this._currentGrammarVersion);
 
     // Setup a child logger to associate logs with the current element
     const lastLogger = logger;
     logger = logger.child({ shrId: id.fqn });
     logger.parent = lastLogger;
     logger.debug('Start importing data element');
+
+    if (ctx.elementHeader().simpleName().LOWER_WORD()) { logger.error("Element name '%s' should begin with a capital letter", ctx.elementHeader().simpleName().getText()); }
   }
 
   exitElementDef(ctx) {
@@ -114,6 +116,8 @@ class Importer extends SHRParserListener {
   enterEntryDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.entryHeader().simpleName().getText());
     this._currentDef = new DataElement(id, true).withGrammarVersion(this._currentGrammarVersion);
+    
+    if (ctx.entryHeader().simpleName().LOWER_WORD()) { logger.error("Element name '%s' should begin with a capital letter", ctx.entryHeader().simpleName().getText()); }
   }
 
   exitEntryDef(ctx) {
@@ -125,10 +129,7 @@ class Importer extends SHRParserListener {
   }
 
   enterDescriptionProp(ctx) {
-    if (ctx.parentCtx instanceof SHRParser.ValuesetPropContext) {
-      // Skip this -- currently unsupported
-      return;
-    } else if (ctx.parentCtx instanceof SHRParser.DataDefsDocContext) {
+    if (ctx.parentCtx instanceof SHRDataElementParser.DocContext) {
       // Skip this -- already handled elsewhere
       return;
     }
@@ -136,49 +137,22 @@ class Importer extends SHRParserListener {
   }
 
   enterConcepts(ctx) {
-    if (ctx.parentCtx.parentCtx instanceof SHRParser.ValuesetPropContext) {
-      // Skip this -- currently unsupported
-      return;
-    }
     for (const fqc of ctx.fullyQualifiedCode()) {
       this._currentDef.addConcept(this.processFullyQualifiedCode(fqc));
     }
   }
 
   enterValue(ctx) {
-    let min = 1, max = 1;
-    var subCtx;
-    if (ctx.countedValue()) {
-      subCtx = ctx.countedValue();
-      [min, max] = this.getMinMax(subCtx.count());
-    } else {
-      subCtx = ctx.uncountedValue();
+    const value = this.processCountAndTypes(ctx.count(), ctx.valueType());
+    if (ctx.count() == null) {
+      value.setMinMax(1, 1);
     }
-
-    if (subCtx.valueType().length > 1) {
-      const choice = new ChoiceValue();
-      for (const ct of subCtx.valueType()) {
-        choice.addOption(this.processType(ct, 1, 1));
-      }
-      choice.setMinMax(min, max);
-      this._currentDef.value = choice;
-    } else {
-      this._currentDef.value = this.processType(subCtx.valueType()[0], min, max);
-    }
+    this._currentDef.value = value;
   }
 
   enterField(ctx) {
-    if (ctx.countedField().length > 1) {
-      const choice = new ChoiceValue();
-      for (const csv of ctx.countedField()) {
-        choice.addOption(this.processCountedField(csv));
-      }
-      choice.setMinMax(1, 1);
-      this.addFieldToCurrentDef(choice);
-      return;
-    }
-    const val = this.processCountedField(ctx.countedField()[0]);
-    this.addFieldToCurrentDef(val);
+    const field = this.processCountAndTypes(ctx.count(), ctx.fieldType());
+    this.addFieldToCurrentDef(field);
   }
 
   // addFieldToCurrentDef contains special logic to handle IncompleteValues.  If an IncompleteValue matches an already
@@ -213,10 +187,6 @@ class Importer extends SHRParserListener {
       }
     }
     this._currentDef.addField(field);
-  }
-
-  processCountedField(ctx) {
-    return this.processCountAndTypes(ctx.count(), ctx.fieldType());
   }
 
   processCountAndTypes(countCtx, typeCtxArr) {
@@ -273,11 +243,19 @@ class Importer extends SHRParserListener {
           const newIdentifier = this.resolveToIdentifierOrTBD(cst.elementTypeConstraint());
           const onValue = cst.elementTypeConstraint().KW_VALUE_IS_TYPE() ? true : false;
           value.addConstraint(new TypeConstraint(newIdentifier, path, onValue));
+        } else if (cst.elementIncludesTypeConstraint()) {
+          for (const typeConstraint of cst.elementIncludesTypeConstraint().typeConstraint()) {
+            const newIdentifier = this.resolveToIdentifierOrTBD(typeConstraint);
+            [min, max] = this.getMinMax(typeConstraint.count());
+            const isOnValue = (path.length > 0 && path[0].name == "Value");
+            value.addConstraint(new IncludesTypeConstraint(newIdentifier, new Cardinality(min, max), path, isOnValue));
+          }
         } else if (cst.elementCodeVSConstraint()) {
-          const codeFromVS = cst.elementCodeVSConstraint().codeFromVS();
-          const codeIdentifier = this.resolveCodeFromVSIdentifier(codeFromVS);
-          const vs = this.resolveCodeFromVSValueSet(codeFromVS);
-          value.addConstraint(new ValueSetConstraint(vs, [...path, codeIdentifier]));
+          const vsConstraint = cst.elementCodeVSConstraint();
+          const vs = this.resolveValueSetForVSConstraint(vsConstraint); // TODO: Fix
+          const strength = this.resolveBindingStrengthForVSConstraint(vsConstraint); // TODO: Fix
+          // NOTE: The contraint may be on a non-code-like element.  The "expander" will adjust the path as necessary.
+          value.addConstraint(new ValueSetConstraint(vs, path, strength));
         } else if (cst.elementCodeValueConstraint()) {
           const code = this.processCodeOrFQCode(cst.elementCodeValueConstraint().codeOrFQCode());
           value.addConstraint(new CodeConstraint(code, path));
@@ -310,31 +288,18 @@ class Importer extends SHRParserListener {
       }
     } else if (ctx.primitive()) {
       value = new IdentifiableValue(new PrimitiveIdentifier(ctx.getText()));
-    } else if (ctx.codeFromVS()) {
-      const codeIdentifier = this.resolveCodeFromVSIdentifier(ctx.codeFromVS());
-      const vs = this.resolveCodeFromVSValueSet(ctx.codeFromVS());
-      value = new IdentifiableValue(codeIdentifier);
-      value.addConstraint(new ValueSetConstraint(vs));
     }
+
     if (typeof min !== 'undefined') {
       value.setMinMax(min, max);
     }
     return value;
   }
 
-  resolveCodeFromVSIdentifier(codeFromVS) {
-    if (codeFromVS.KW_CODING_FROM()) {
-      return this.resolveToIdentifier('Coding');
-    } else if (codeFromVS.KW_CODEABLECONCEPT_FROM()) {
-      return this.resolveToIdentifier('CodeableConcept');
-    }
-    return new PrimitiveIdentifier('code');
-  }
-
-  resolveCodeFromVSValueSet(codeFromVS) {
-    let vs = codeFromVS.valueset().getText();
-    if (codeFromVS.valueset().PATH_URL()) {
-      const [path, name] =  codeFromVS.valueset().PATH_URL().getText().split('/', 2);
+  resolveValueSetForVSConstraint(vsConstraint) {
+    let vs = vsConstraint.valueset().getText();
+    if (vsConstraint.valueset().PATH_URL()) {
+      const [path, name] =  vsConstraint.valueset().PATH_URL().getText().split('/', 2);
       const resolution = this._preprocessedData.resolvePath(path, this._currentNs, ...this._usesNs);
       if (resolution.error) {
         logger.error(resolution.error);
@@ -342,8 +307,8 @@ class Importer extends SHRParserListener {
       if (resolution.url) {
         vs = `${resolution.url}/${name}`;
       }
-    } else if (codeFromVS.valueset().simpleName()) {
-      const name = codeFromVS.valueset().simpleName().getText();
+    } else if (vsConstraint.valueset().simpleName()) {
+      const name = vsConstraint.valueset().simpleName().getText();
       // Look it up in this namespace's value set definitions
       let found = false;
       for (const ns of [this._currentNs, ...this._usesNs]) {
@@ -358,14 +323,30 @@ class Importer extends SHRParserListener {
         logger.error('Unable to resolve value set reference: %s', name);
         vs = `urn:tbd:${name}`;
       }
-    } else if (codeFromVS.valueset().tbd()) {
-      if (codeFromVS.valueset().tbd().STRING()) {
-        vs = `urn:tbd:${stripDelimitersFromToken(codeFromVS.valueset().tbd().STRING())}`;
+    } else if (vsConstraint.valueset().tbd()) {
+      if (vsConstraint.valueset().tbd().STRING()) {
+        vs = `urn:tbd:${stripDelimitersFromToken(vsConstraint.valueset().tbd().STRING())}`;
       } else {
         vs = 'urn:tbd';
       }
     }
     return vs;
+  }
+
+  resolveBindingStrengthForVSConstraint(vsConstraint) {
+    if (vsConstraint.bindingInfix()) {
+      const bindingCtx = vsConstraint.bindingInfix();
+      if (bindingCtx.KW_MUST_BE()) {
+        return vsConstraint.KW_IF_COVERED() ? EXTENSIBLE : REQUIRED;
+      } else if (bindingCtx.KW_SHOULD_BE()) {
+        return PREFERRED;
+      } else if (bindingCtx.KW_COULD_BE()) {
+        return EXAMPLE;
+      }
+      // This error should never occur unless the ANTLR grammar changes
+      logger.error('Unsupported binding strength: %s.  Defaulting to REQUIRED.', bindingCtx.getText());
+    }
+    return vsConstraint.KW_IF_COVERED() ? EXTENSIBLE : REQUIRED;
   }
 
   processCodeOrFQCode(ctx) {
@@ -420,7 +401,9 @@ class Importer extends SHRParserListener {
   resolveToIdentifierOrTBD(ctx) {
     if (ctx.simpleOrFQName()) {
       return this.resolveToIdentifier(ctx.simpleOrFQName().getText());
-    } else if (ctx.tbd() && ctx.tbd().STRING()) {
+    } else if (typeof ctx.ref === 'function' && ctx.ref()) {
+      return this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText());
+    }else if (ctx.tbd() && ctx.tbd().STRING()) {
       return new TBD(stripDelimitersFromToken(ctx.tbd().STRING()));
     } else {
       return new TBD();
@@ -496,4 +479,4 @@ function stripDelimitersFromToken(tkn) {
   return str.substr(1,str.length -2);
 }
 
-module.exports = {Importer, setLogger};
+module.exports = {DataElementImporter, setLogger};

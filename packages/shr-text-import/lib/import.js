@@ -3,7 +3,7 @@ const path = require('path');
 const bunyan = require('bunyan');
 const {Specifications} = require('shr-models');
 const {Preprocessor, VERSION, GRAMMAR_VERSION} = require('./preprocessor');
-const {Importer} = require('./listener');
+const {DataElementImporter} = require('./dataElementListener');
 const {ValueSetImporter} = require('./valueSetListener');
 const {MappingImporter} = require('./mappingListener');
 
@@ -11,7 +11,7 @@ var logger = bunyan.createLogger({name: 'shr-text-import'});
 function setLogger(bunyanLogger) {
   logger = bunyanLogger;
   require('./preprocessor').setLogger(logger);
-  require('./listener').setLogger(logger);
+  require('./dataElementListener').setLogger(logger);
   require('./valueSetListener').setLogger(logger);
   require('./mappingListener').setLogger(logger);
 }
@@ -26,7 +26,7 @@ function importFromFilePath(filePath, specifications = new Specifications()) {
   for (const file of filesByType.valueSet) {
     valueSetimporter.importFile(file);
   }
-  const importer = new Importer(preprocessor.data, specifications);
+  const importer = new DataElementImporter(preprocessor.data, specifications);
   for (const file of filesByType.dataElement) {
     importer.importFile(file);
   }
@@ -65,14 +65,33 @@ class FilesByType {
   get valueSet() { return this._valueSet; }
 
   add(file) {
-    if (file.endsWith('_cp.txt')) {
-      this._contentProfile.push(file);
-    } else if (file.endsWith('_map.txt')) {
-      this._map.push(file);
-    } else if (file.endsWith('_vs.txt')) {
-      this._valueSet.push(file);
-    } else if (file.endsWith('.txt')) {
-      this._dataElement.push(file);
+    switch (this.detectType(file)) {
+      case 'DataElement':
+        this._dataElement.push(file);
+        break;
+      case 'Map':
+        this._map.push(file);
+        break;
+      case 'ValueSet':
+        this._valueSet.push(file);
+        break;
+      case 'ContentProfile':
+        this._contentProfile.push(file);
+        break;
+    }
+  }
+
+  detectType(file) {
+    if (!file.endsWith('.txt') && !file.endsWith('.shr')) {
+      return;  // only support *.txt or *.shr
+    }
+    const re = /^\s*Grammar:\s+([^\s]+)/
+    const lines = fs.readFileSync(file, 'utf-8').split('\n')
+    for (const l of lines) {
+      const match = l.match(re);
+      if (match != null && match.length >= 2) {
+        return match[1]
+      }
     }
   }
 }

@@ -1,0 +1,9 @@
+Grammar:    DataElement 5.0
+Namespace:  shr.test
+
+CodeSystem:     FOO = http://foo.org
+
+Abstract Element:        Simple
+Concept:        FOO #bar
+Description:    "It is a simple element"
+Value:          string
