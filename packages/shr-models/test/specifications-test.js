@@ -52,9 +52,11 @@ describe('#Specifications.dataElements', () => {
     const specs = new mdl.Specifications();
     specs.dataElements.add(new mdl.DataElement(id('shr.test', 'One'), true).withGrammarVersion(v(4)));
     specs.dataElements.add(new mdl.DataElement(id('shr.test', 'Two')).withGrammarVersion(v(4)));
+    specs.dataElements.add(new mdl.DataElement(id('shr.test', 'Three'), false, true).withGrammarVersion(v(4)));
     expect(specs.dataElements.all).to.eql([
       new mdl.DataElement(id('shr.test', 'One'), true).withGrammarVersion(v(4)),
-      new mdl.DataElement(id('shr.test', 'Two')).withGrammarVersion(v(4))
+      new mdl.DataElement(id('shr.test', 'Two')).withGrammarVersion(v(4)),
+      new mdl.DataElement(id('shr.test', 'Three'), false, true).withGrammarVersion(v(4))
     ]);
   });
 
@@ -63,6 +65,7 @@ describe('#Specifications.dataElements', () => {
     specs.dataElements.add(new mdl.DataElement(id('shr.test', 'One'), true).withGrammarVersion(v(4)));
     specs.dataElements.add(new mdl.DataElement(id('shr.test', 'Two')).withGrammarVersion(v(4)));
     specs.dataElements.add(new mdl.DataElement(id('shr.test.too', 'Three'), true).withGrammarVersion(v(4, 1)));
+    specs.dataElements.add(new mdl.DataElement(id('shr.test.too', 'Four'), false, true).withGrammarVersion(v(4, 1)));
     expect(specs.dataElements.entries).to.eql([
       new mdl.DataElement(id('shr.test', 'One'), true).withGrammarVersion(v(4)),
       new mdl.DataElement(id('shr.test.too', 'Three'), true).withGrammarVersion(v(4, 1))

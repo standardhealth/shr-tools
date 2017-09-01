@@ -314,9 +314,10 @@ class Namespace {
 }
 
 class DataElement {
-  constructor(identifier, isEntry=false) {
+  constructor(identifier, isEntry=false, isAbstract=false) {
     this._identifier = identifier; // Identifier
     this._isEntry = isEntry; // boolean
+    this._isAbstract = isAbstract; // boolean
     this._basedOn = [];      // Identifier[]
     this._concepts = [];     // Concept[]
     this._fields = [];       // Value[] (and its subclasses) -- excluding primitive values
@@ -330,6 +331,12 @@ class DataElement {
   get isEntry() { return this._isEntry; }
   set isEntry(isEntry) {
     this._isEntry = isEntry;
+  }
+
+  // isAbstract is a boolean flag indicating if this element is abstract and non-instantiable
+  get isAbstract() { return this._isAbstract; }
+  set isAbstract(isAbstract) {
+    this._isAbstract = isAbstract;
   }
 
   // basedOn is an array of identifiers that the data element is based on.  This means that it takes on the value
@@ -407,7 +414,7 @@ class DataElement {
   }
 
   clone() {
-    const clone = new DataElement(this._identifier.clone(), this._isEntry);
+    const clone = new DataElement(this._identifier.clone(), this._isEntry, this._isAbstract);
     if (this._description) {
       clone._description = this._description;
     }
@@ -560,15 +567,28 @@ class Constraint {
 
 // ValueSetConstraint only makes sense on a code or Coding type value
 class ValueSetConstraint extends Constraint {
-  constructor(valueSet, path) {
+  constructor(valueSet, path, bindingStrength=REQUIRED) {
     super(path);
     this._valueSet = valueSet;
+    this._bindingStrength = bindingStrength;
   }
 
   get valueSet() { return this._valueSet; }
+  get bindingStrength() { return this._bindingStrength; }
+  set bindingStrength(bindingStrength) { this._bindingStrength = bindingStrength; }
+  // withBindingStrength is a convenience function for chaining
+  withBindingStrength(bindingStrength) {
+    this.bindingStrength = bindingStrength;
+    return this;
+  }
+
+  get isRequired() { return this.bindingStrength == REQUIRED; }
+  get isExtensible() { return this.bindingStrength == EXTENSIBLE; }
+  get isPreferred() { return this.bindingStrength == PREFERRED; }
+  get isExample() { return this.bindingStrength == EXAMPLE; }
 
   clone() {
-    const clone = new ValueSetConstraint(this._valueSet);
+    const clone = new ValueSetConstraint(this._valueSet).withBindingStrength(this.bindingStrength);
     this._clonePropertiesTo(clone);
     return clone;
   }
@@ -649,6 +669,28 @@ class TypeConstraint extends Constraint {
   }
 }
 
+class IncludesTypeConstraint extends Constraint {
+  constructor(isA, card, path, isOnValue=false) {
+    super(path);
+    this._isA = isA;
+    this._card = card;
+    this._isOnValue=isOnValue;
+  }
+
+  get isA() { return this._isA; }
+  get card() { return this._card; }
+  get isOnValue() { return this._isOnValue; }
+  set isOnValue(isOnValue) {
+    this._isOnValue = isOnValue;
+  }
+
+  clone() {
+    const clone = new IncludesTypeConstraint(this._isA.clone(), this._card.clone());
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
+}
+
 class CardConstraint extends Constraint {
   constructor(card, path) {
     super(path);
@@ -707,6 +749,10 @@ class ConstraintsFilter {
 
   get type() {
     return new ConstraintsFilter(this._constraints.filter(c => c instanceof TypeConstraint));
+  }
+
+  get includesType() {
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof IncludesTypeConstraint));
   }
 
   get card() {
@@ -805,6 +851,20 @@ class IdentifiableValue extends Value {
       return typeConstraints[typeConstraints.length - 1].isA;
     }
     return this.identifier;
+  }
+
+  get possibleIdentifiers() {
+    const idMap = new Map();
+    idMap.set(this.identifier.fqn, this.identifier);
+    const typeConstraints = this.constraintsFilter.own.type.constraints;
+    for (const tc of typeConstraints) {
+      idMap.set(tc.isA.fqn, tc.isA);
+    }
+    const includesTypeConstraints = this.constraintsFilter.own.includesType.constraints;
+    for (const itc of includesTypeConstraints) {
+      idMap.set(itc.isA.fqn, itc.isA);
+    }
+    return Array.from(idMap.values());
   }
 
   clone() {
@@ -1233,7 +1293,7 @@ class ElementMapping {
     this._targetItem = targetItem;
   }
 
-  // rules are FieldMappingRule or CardinalityMappingRule
+  // rules are FieldMappingRule, CardinalityMappingRule, or FixedValueMappingRule
   get rules() { return this._rules; }
   set rules(rules) {
     this._rules = rules;
@@ -1266,6 +1326,15 @@ class ElementMapping {
   // withCardinalityMappingRule is a convenience function for chaining
   withCardinalityMappingRule(targetPath, cardinality) {
     this.addCardinalityMappingRule(targetPath, cardinality);
+    return this;
+  }
+
+  addFixedValueMappingRule(targetPath, value) {
+    this._rules.push(new FixedValueMappingRule(targetPath, value));
+  }
+  // withFixedValueMappingRule is a convenience function for chaining
+  withFixedValueMappingRule(targetPath, value) {
+    this.addFixedValueMappingRule(targetPath, value);
     return this;
   }
 
@@ -1333,6 +1402,24 @@ class CardinalityMappingRule {
   }
 }
 
+class FixedValueMappingRule {
+  constructor(target = '', value='') {
+    this._target = target;   // string
+    this._value = value; // string
+  }
+
+  get target() { return this._target; }
+  get value() { return this._value; }
+
+  toString() {
+    return `fix ${this._target} to ${this._value}`;
+  }
+
+  clone() {
+    return new FixedValueMappingRule(this._target, this._value);
+  }
+}
+
 class MappingRulesFilter {
   constructor(rules = []) {
     this._rules = rules;
@@ -1347,6 +1434,10 @@ class MappingRulesFilter {
 
   get cardinality() {
     return new MappingRulesFilter(this._rules.filter(c => c instanceof CardinalityMappingRule));
+  }
+
+  get fixedValue() {
+    return new MappingRulesFilter(this._rules.filter(c => c instanceof FixedValueMappingRule));
   }
 
   withSourcePath(path = []) {
@@ -1393,10 +1484,19 @@ class Version {
   }
 }
 
+// Versioning constants
 const VERSION = new Version(4, 0, 0);
 const GRAMMAR_VERSION = new Version(4, 0, 0);
+
+// Value set binding strength constants (inspired by FHIR)
+const REQUIRED = 'REQUIRED';
+const EXTENSIBLE = 'EXTENSIBLE';
+const PREFERRED = 'PREFERRED';
+const EXAMPLE = 'EXAMPLE';
+
+// Primitive constants
 const PRIMITIVE_NS = 'primitive';
 const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'code', 'id',
   'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time', 'xhtml'];
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE};
