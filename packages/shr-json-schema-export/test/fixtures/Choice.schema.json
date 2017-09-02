@@ -13,6 +13,7 @@
               { "type": "string" },
               {
                 "type": "array",
+                "minItems": 0,
                 "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/CodeChoice, REQUIRED",
                 "items": {
                   "type": "string"

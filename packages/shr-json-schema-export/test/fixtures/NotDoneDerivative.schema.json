@@ -13,6 +13,7 @@
             "properties": {
               "Value": {
                 "type": "array",
+                "minItems": 0,
                 "description": "TBD: An undetermined list value."
               }
             }

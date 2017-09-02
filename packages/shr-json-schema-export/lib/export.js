@@ -185,9 +185,11 @@ function convertDefinition(valueDef, enclosingNamespace) {
   if (card) {
     if (card.isList) {
       retValue.type = 'array';
-      if (card.min) {
+      if (card.min != null) {
         retValue.minItems = card.min;
-        required = true;
+        if (card.min) {
+          required = true;
+        }
       }
       if (card.max) {
         retValue.maxItems = card.max;

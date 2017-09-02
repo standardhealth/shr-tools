@@ -27,6 +27,7 @@
           "Coded": { "$ref": "#/definitions/Coded" },
           "ElementValue": {
             "type": "array",
+            "minItems": 0,
             "items": {
               "$ref": "#/definitions/ElementValue"
             }
