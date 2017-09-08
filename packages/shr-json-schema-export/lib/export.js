@@ -224,11 +224,11 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
       value.oneOf.push(childValue);
     }
   } else if (valueDef.constructor.name === 'RefValue') {
-    // TODO: Schema extension or base definition: make this a first-class object.
+    // TODO: What should the value of EntryType be? The schema URL may not be portable across data types.
     value.type = 'object';
     value.properties = {
       ShrId: { type: 'string' },
-      EntryType: { type: 'string', format: 'uri' },
+      EntryType: { type: 'string', enum: [`${baseSchemaURL}/${namespaceToURLPathSegment(valueDef.identifier.namespace)}#/definitions/${valueDef.identifier.name}`] },
       EntryId: { type: 'string' }
     };
     value.required = ['ShrId', 'EntryType', 'EntryId'];

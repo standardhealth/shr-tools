@@ -19,7 +19,7 @@
                 "type": "object",
                 "properties": {
                   "ShrId": { "type": "string" },
-                  "EntryType": { "type": "string", "format":"uri" },
+                  "EntryType": { "type": "string", "enum":["https://standardhealthrecord.org/test/shr/test#/definitions/Simple"] },
                   "EntryId": { "type": "string" }
                 },
                 "required": ["ShrId", "EntryType", "EntryId"]
