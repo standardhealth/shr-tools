@@ -3,6 +3,14 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "oneOf": [
+      { "$ref": "#/definitions/Coded" },
+      { "$ref": "#/definitions/ElementValue" },
+      { "$ref": "#/definitions/ForeignElementValue" },
+      { "$ref": "#/definitions/GroupWithChoiceOfChoice" },
+      { "$ref": "#/definitions/Simple" }
+    ],
     "definitions": {
       "GroupWithChoiceOfChoice": {
         "description": "It is a group of elements with a choice containing a choice",
@@ -78,6 +86,10 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/other/test",
     "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "oneOf": [
+      { "$ref": "#/definitions/Simple" }
+    ],
     "definitions": {
       "Simple": {
         "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",

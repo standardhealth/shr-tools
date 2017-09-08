@@ -3,6 +3,10 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "oneOf": [
+      { "$ref": "#/definitions/Coded" }
+    ],
     "definitions": {
       "Coded": {
         "description": "It is a coded element",

@@ -3,6 +3,10 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "oneOf": [
+      { "$ref": "#/definitions/ChoiceOfChoice" }
+    ],
     "definitions": {
       "ChoiceOfChoice": {
         "description": "It is an element with a choice containing a choice",

@@ -46,6 +46,7 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
   };
 
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
+  const entryRefs = [];
   for (const def of defs) {
     let schemaDef = {
       type: 'object',
@@ -151,8 +152,15 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
     }
 
     schema.definitions[def.identifier.name] = wholeDef;
+    if (def.isEntry && (!def.isAbstract)) {
+      entryRefs.push({ $ref:  makeRef(def.identifier, ns, baseSchemaURL)});
+    }
   }
 
+  if (entryRefs.length) {
+    schema.type = 'object';
+    schema.oneOf = entryRefs;
+  }
   return { schemaId, schema };
 }
 
