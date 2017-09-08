@@ -44,6 +44,9 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
     title: "TODO: Figure out what the title should be.",
     definitions: {}
   };
+  if (ns.description) {
+    schema.description = ns.description;
+  }
 
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
   const entryRefs = [];
