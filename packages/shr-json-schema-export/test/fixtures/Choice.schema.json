@@ -11,35 +11,45 @@
     "definitions": {
       "Choice": {
         "description": "It is an element with a choice",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "oneOf": [
-              { "type": "string" },
-              {
-                "type": "array",
-                "minItems": 0,
-                "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/CodeChoice, REQUIRED",
-                "items": {
-                  "type": "string"
-                }
-              },
-              { "$ref": "#/definitions/Coded" }
-            ]
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "oneOf": [
+                  { "type": "string" },
+                  {
+                    "type": "array",
+                    "minItems": 0,
+                    "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/CodeChoice, REQUIRED",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  { "$ref": "#/definitions/Coded" }
+                ]
+              }
+            },
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       },
       "Coded": {
         "description": "It is a coded element",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/Coded, REQUIRED",
-            "type": "string"
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/Coded, REQUIRED",
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       }
     }
   }

@@ -10,13 +10,18 @@
     "definitions": {
       "Simple": {
         "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "type": "string"
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       }
     }
   }

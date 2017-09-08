@@ -3,7 +3,7 @@
 // Derived from export SHR specification content as a hierarchy in JSON format by Greg Quinn
 
 const bunyan = require('bunyan');
-const {IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, CodeConstraint, CardConstraint, TypeConstraint} = require('shr-models');
+const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, CodeConstraint, CardConstraint, TypeConstraint} = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-json-schema-export'});
 var logger = rootLogger;
@@ -44,6 +44,7 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
     title: "TODO: Figure out what the title should be.",
     definitions: {}
   };
+  const entryRef = makeRef(new Identifier('shr.base', 'Entry'), ns, baseSchemaURL);
   if (ns.description) {
     schema.description = ns.description;
   }
@@ -57,8 +58,11 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
     };
     let wholeDef = schemaDef;
     const tbdParentDescriptions = [];
-    if (def.basedOn.length) {
+    if (def.isEntry || def.basedOn.length) {
       wholeDef = { allOf: [] };
+      if (def.isEntry) {
+        wholeDef.allOf.push({ $ref: entryRef });
+      }
       for (const supertypeId of def.basedOn) {
         if (supertypeId instanceof TBD) {
           if (supertypeId.text) {

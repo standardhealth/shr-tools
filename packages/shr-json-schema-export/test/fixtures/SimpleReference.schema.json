@@ -10,19 +10,24 @@
     "definitions": {
       "SimpleReference": {
         "description": "It is a reference to a simple element",
-        "type": "object",
-        "properties": {
-          "Value": {
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
             "type": "object",
             "properties": {
-              "ShrId": { "type": "string" },
-              "EntryType": { "type": "string", "format":"uri" },
-              "EntryId": { "type": "string" }
+              "Value": {
+                "type": "object",
+                "properties": {
+                  "ShrId": { "type": "string" },
+                  "EntryType": { "type": "string", "format":"uri" },
+                  "EntryId": { "type": "string" }
+                },
+                "required": ["ShrId", "EntryType", "EntryId"]
+              }
             },
-            "required": ["ShrId", "EntryType", "EntryId"]
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       }
     }
   }

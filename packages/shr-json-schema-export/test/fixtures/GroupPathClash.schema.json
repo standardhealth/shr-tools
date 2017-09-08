@@ -11,24 +11,34 @@
     "definitions": {
       "GroupPathClash": {
         "description": "It is a group of elements with clashing names",
-        "type": "object",
-        "properties": {
-          "shr/test/Simple": { "$ref": "#/definitions/Simple" },
-          "shr/other/test/Simple": {
-            "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple"
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "shr/test/Simple": { "$ref": "#/definitions/Simple" },
+              "shr/other/test/Simple": {
+                "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple"
+              }
+            },
+            "required": ["shr/test/Simple"]
           }
-        },
-        "required": ["shr/test/Simple"]
+        ]
       },
       "Simple": {
         "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "type": "string"
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       }
     }
   },
@@ -43,13 +53,18 @@
     "definitions": {
       "Simple": {
         "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "type": "string"
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       }
     }
   }

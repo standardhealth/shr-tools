@@ -10,27 +10,32 @@
     "definitions": {
       "ChoiceOfChoice": {
         "description": "It is an element with a choice containing a choice",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "oneOf": [
-              { "type": "string" },
-              {
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
                 "oneOf": [
-                  { "type": "integer" },
-                  { "type": "number" }
+                  { "type": "string" },
+                  {
+                    "oneOf": [
+                      { "type": "integer" },
+                      { "type": "number" }
+                    ]
+                  },
+                  {
+                    "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/CodeChoice, REQUIRED",
+                    "type": "array",
+                    "minItems": 0,
+                    "items": { "type": "string" }
+                  }
                 ]
-              },
-              {
-                "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/CodeChoice, REQUIRED",
-                "type": "array",
-                "minItems": 0,
-                "items": { "type": "string" }
               }
-            ]
+            },
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       }
     }
   }

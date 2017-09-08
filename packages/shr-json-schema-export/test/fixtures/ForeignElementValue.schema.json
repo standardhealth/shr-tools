@@ -10,13 +10,18 @@
     "definitions": {
       "ForeignElementValue": {
         "description": "It is an element with a foreign element value",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple"
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple"
+              }
+            },
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       }
     }
   },
@@ -31,13 +36,18 @@
     "definitions": {
       "Simple": {
         "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "type": "string"
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       }
     }
   }

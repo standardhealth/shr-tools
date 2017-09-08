@@ -10,15 +10,18 @@
     "definitions": {
       "Coded": {
         "description": "It is a coded element",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/Coded, REQUIRED",
-            "type": "string"
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/Coded, REQUIRED",
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
           }
-        },
-        "required": [
-          "Value"
         ]
       }
     }

@@ -10,22 +10,32 @@
     "definitions": {
       "AbstractAndPlainGroup": {
         "description": "It is an abstract group of elements\nConcepts: Foobar (http://foo.org:bar)",
-        "type": "object",
-        "properties": {
-          "Simple": { "$ref": "#/definitions/Simple" },
-          "Plain": { "$ref": "#/definitions/Plain" }
-        },
-        "required": ["Simple", "Plain"]
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Simple": { "$ref": "#/definitions/Simple" },
+              "Plain": { "$ref": "#/definitions/Plain" }
+            },
+            "required": ["Simple", "Plain"]
+          }
+        ]
       },
       "Simple": {
         "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
-        "type": "object",
-        "properties": {
-          "Value": {
-            "type": "string"
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
           }
-        },
-        "required": ["Value"]
+        ]
       },
       "Plain": {
         "description": "It is not an entry element\nConcepts: Foobar (http://foo.org:bar)",
