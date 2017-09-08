@@ -218,10 +218,37 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
   // TODO: Is this really the best way to identify a type in ES6?
   logger.debug('Value type: %s', valueDef.constructor.name);
   if (valueDef.constructor.name === 'ChoiceValue') {
-    value.oneOf = [];
+    const refOptions = [];
+    const normalOptions = [];
     for (const option of valueDef.options) {
+      if (option instanceof RefValue) {
+        refOptions.push(option);
+      } else {
+        normalOptions.push(option);
+      }
+    }
+    value.oneOf = [];
+    if (refOptions.length) {
+      const props = {
+        ShrId: { type: 'string' },
+        EntryType: { type: 'string', enum: [] },
+        EntryId: { type: 'string' }
+      };
+      for (const option of refOptions) {
+        props.EntryType.enum.push(`${baseSchemaURL}/${namespaceToURLPathSegment(option.identifier.namespace)}#/definitions/${option.identifier.name}`);
+      }
+      value.oneOf.push({ type: 'object', properties: props, required: ['ShrId', 'EntryType', 'EntryId']});
+    }
+    for (const option of normalOptions) {
       const { value: childValue } = convertDefinition(option, enclosingNamespace, baseSchemaURL);
       value.oneOf.push(childValue);
+    }
+    if (value.oneOf.length == 1) {
+      const single = value.oneOf[0];
+      delete value.oneOf;
+      for (const ent in single) {
+        value[ent] = single[ent];
+      }
     }
   } else if (valueDef.constructor.name === 'RefValue') {
     // TODO: What should the value of EntryType be? The schema URL may not be portable across data types.
