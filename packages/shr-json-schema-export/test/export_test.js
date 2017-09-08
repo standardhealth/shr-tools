@@ -11,7 +11,7 @@ setLogger(err.logger());
 describe('#exportToJSONSchema()', commonExportTests(exportSpecifications, importFixture, importErrorsFixture));
 
 function exportSpecifications(specifications) {
-  const schemataDict = exportToJSONSchema(specifications);
+  const schemataDict = exportToJSONSchema(specifications, 'https://standardhealthrecord.org/test');
   validateSchemata(schemataDict);
   return schemataDict;
 }

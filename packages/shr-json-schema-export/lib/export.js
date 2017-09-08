@@ -17,12 +17,12 @@ function setLogger(bunyanLogger) {
  * @param {shr-models.Specifications} specifications - a Specifications object.
  * @return {Object.<string, Object>} A mapping of schema ids to JSON Schema definitions.
  */
-function exportToJSONSchema(specifications) {
+function exportToJSONSchema(specifications, baseSchemaURL) {
   const namespaceResults = {};
   for (const ns of specifications.namespaces.all) {
     const { schemaId, schema } = namespaceToSchema(ns,
         specifications.dataElements.byNamespace(ns.namespace),
-        specifications.dataElements.grammarVersions );
+        specifications.dataElements.grammarVersions, baseSchemaURL );
     namespaceResults[schemaId] = schema;
   }
 
@@ -36,8 +36,8 @@ function exportToJSONSchema(specifications) {
  * @param {shr-models.Version[]} grammarVersions - the grammar versions defined by the elements in the namespace.
  * @return {{schemaId: string, schema: Object}} The schema id and the JSON Schema definition.
  */
-function namespaceToSchema(ns, dataElements, grammarVersions) {
-  const schemaId = "https://standardhealthrecord.org/test/" + namespaceToURLPathSegment(ns.namespace);
+function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
+  const schemaId = `${baseSchemaURL}/${namespaceToURLPathSegment(ns.namespace)}`;
   let schema = {
     $schema: 'http://json-schema.org/draft-04/schema#',
     id: schemaId,
@@ -63,7 +63,7 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
             tbdParentDescriptions.push('TBD');
           }
         } else {
-          wholeDef.allOf.push({ $ref:  makeRef(supertypeId, ns)});
+          wholeDef.allOf.push({ $ref:  makeRef(supertypeId, ns, baseSchemaURL)});
         }
       }
       wholeDef.allOf.push(schemaDef);
@@ -72,7 +72,7 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
     let requiredProperties = [];
     const tbdFieldDescriptions = [];
     if (def.value) {
-      let { value, required, tbd } = convertDefinition(def.value, ns);
+      let { value, required, tbd } = convertDefinition(def.value, ns, baseSchemaURL);
       if (required) {
         requiredProperties.push('Value');
       }
@@ -109,7 +109,7 @@ function namespaceToSchema(ns, dataElements, grammarVersions) {
         if (card && card.isZeroedOut) {
           continue;
         }
-        let {value, required, tbd} = convertDefinition(field, ns);
+        let {value, required, tbd} = convertDefinition(field, ns, baseSchemaURL);
         if (tbd) {
           tbdFieldDescriptions.push(tbdValueToString(field));
           continue;
@@ -165,18 +165,18 @@ function isValidField(field) {
     logger.error('ERROR: Ignoring field defined as a choice', field);
     return false;
   }
-  if (field.identifier.name === 'Value') {
-    logger.error('ERROR: Ignoring restricted field name: Value', field);
-    return false;
-  }
   if (!(field.identifier)) {
     logger.error('ERROR: Ignoring name-less field: ', field);
+    return false;
+  }
+  if (field.identifier.name === 'Value') {
+    logger.error('ERROR: Ignoring restricted field name: Value', field);
     return false;
   }
   return true;
 }
 
-function convertDefinition(valueDef, enclosingNamespace) {
+function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
   const retValue = {};
   let value = retValue;
   const card = valueDef.effectiveCard;
@@ -205,7 +205,7 @@ function convertDefinition(valueDef, enclosingNamespace) {
   if (valueDef.constructor.name === 'ChoiceValue') {
     value.oneOf = [];
     for (const option of valueDef.options) {
-      const { value: childValue } = convertDefinition(option, enclosingNamespace);
+      const { value: childValue } = convertDefinition(option, enclosingNamespace, baseSchemaURL);
       value.oneOf.push(childValue);
     }
   } else if (valueDef.constructor.name === 'RefValue') {
@@ -263,7 +263,7 @@ function convertDefinition(valueDef, enclosingNamespace) {
           break;
       }
     } else {
-      value['$ref'] = makeRef(valueDef.identifier, enclosingNamespace);
+      value['$ref'] = makeRef(valueDef.identifier, enclosingNamespace, baseSchemaURL);
     }
   } else if (valueDef.constructor.name === 'TBD') {
     if (retValue.items != null) {
@@ -321,11 +321,11 @@ function tbdValueToString(tbd) {
   }
 }
 
-function makeRef(id, enclosingNamespace) {
+function makeRef(id, enclosingNamespace, baseSchemaURL) {
   if (id.namespace === enclosingNamespace.namespace) {
     return '#/definitions/' + id.name;
   } else {
-    return `https://standardhealthrecord.org/test/${namespaceToURLPathSegment(id.namespace)}#/definitions/${id.name}`;
+    return `${baseSchemaURL}/${namespaceToURLPathSegment(id.namespace)}#/definitions/${id.name}`;
   }
 }
 
