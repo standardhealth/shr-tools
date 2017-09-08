@@ -1,0 +1,42 @@
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "oneOf": [
+      { "$ref": "#/definitions/Simple" }
+    ],
+    "definitions": {
+      "AbstractAndPlainGroup": {
+        "description": "It is an abstract group of elements\nConcepts: Foobar (http://foo.org:bar)",
+        "type": "object",
+        "properties": {
+          "Simple": { "$ref": "#/definitions/Simple" },
+          "Plain": { "$ref": "#/definitions/Plain" }
+        },
+        "required": ["Simple", "Plain"]
+      },
+      "Simple": {
+        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          }
+        },
+        "required": ["Value"]
+      },
+      "Plain": {
+        "description": "It is not an entry element\nConcepts: Foobar (http://foo.org:bar)",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          }
+        },
+        "required": ["Value"]
+      }
+    }
+  }
+}
