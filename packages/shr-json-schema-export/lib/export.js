@@ -288,7 +288,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
           break;
         case 'dateTime':
           value.type = 'string';
-          value.format = 'dateTime';
+          value.format = 'date-time';
           break;
         case 'instant':
         case 'date':
