@@ -4,7 +4,7 @@
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
     "type": "object",
-    "oneOf": [
+    "anyOf": [
       { "$ref": "#/definitions/Coded" },
       { "$ref": "#/definitions/ElementValue" },
       { "$ref": "#/definitions/ForeignElementValue" },
@@ -24,10 +24,10 @@
                 "minItems": 0,
                 "maxItems": 2,
                 "items": {
-                  "oneOf": [
+                  "anyOf": [
                     { "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple" },
                     {
-                      "oneOf": [
+                      "anyOf": [
                         {
                           "type": "array",
                           "minItems": 1,
@@ -118,7 +118,7 @@
     "id": "https://standardhealthrecord.org/test/shr/other/test",
     "title": "TODO: Figure out what the title should be.",
     "type": "object",
-    "oneOf": [
+    "anyOf": [
       { "$ref": "#/definitions/Simple" }
     ],
     "definitions": {

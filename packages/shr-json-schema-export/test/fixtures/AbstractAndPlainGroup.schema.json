@@ -4,7 +4,7 @@
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
     "type": "object",
-    "oneOf": [
+    "anyOf": [
       { "$ref": "#/definitions/Simple" }
     ],
     "definitions": {

@@ -166,7 +166,7 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
 
   if (entryRefs.length) {
     schema.type = 'object';
-    schema.oneOf = entryRefs;
+    schema.anyOf = entryRefs;
   }
   return { schemaId, schema };
 }
@@ -227,7 +227,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
         normalOptions.push(option);
       }
     }
-    value.oneOf = [];
+    value.anyOf = [];
     if (refOptions.length) {
       const props = {
         ShrId: { type: 'string' },
@@ -237,15 +237,15 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
       for (const option of refOptions) {
         props.EntryType.enum.push(`${baseSchemaURL}/${namespaceToURLPathSegment(option.identifier.namespace)}#/definitions/${option.identifier.name}`);
       }
-      value.oneOf.push({ type: 'object', properties: props, required: ['ShrId', 'EntryType', 'EntryId']});
+      value.anyOf.push({ type: 'object', properties: props, required: ['ShrId', 'EntryType', 'EntryId']});
     }
     for (const option of normalOptions) {
       const { value: childValue } = convertDefinition(option, enclosingNamespace, baseSchemaURL);
-      value.oneOf.push(childValue);
+      value.anyOf.push(childValue);
     }
-    if (value.oneOf.length == 1) {
-      const single = value.oneOf[0];
-      delete value.oneOf;
+    if (value.anyOf.length == 1) {
+      const single = value.anyOf[0];
+      delete value.anyOf;
       for (const ent in single) {
         value[ent] = single[ent];
       }
