@@ -1,0 +1,13 @@
+{
+    "projectName":"Test Project",
+    "projectShorthand":"TEST",
+    "projectURL":"http://test.org",
+    "igIndexContent": "basicindexcontent.html",
+    "publisher":"Test Publisher",
+    "contact":[{
+        "telecom":[{
+          "system":"url",
+          "value":"http://test.org"
+        }]
+    }]
+}

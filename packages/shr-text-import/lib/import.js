@@ -16,13 +16,14 @@ function setLogger(bunyanLogger) {
   require('./mappingListener').setLogger(logger);
 }
 
-function importFromFilePath(filePath, specifications = new Specifications()) {
+function importFromFilePath(filePath, configuration=[], specifications = new Specifications()) {
   const filesByType = processPath(filePath);
-  const preprocessor = new Preprocessor();
+  const preprocessor = new Preprocessor(configuration);
+  
   for (const file of filesByType.dataElement) {
     preprocessor.preprocessFile(file);
   }
-  const valueSetimporter = new ValueSetImporter(specifications);
+  const valueSetimporter = new ValueSetImporter(specifications, configuration);
   for (const file of filesByType.valueSet) {
     valueSetimporter.importFile(file);
   }
@@ -35,6 +36,23 @@ function importFromFilePath(filePath, specifications = new Specifications()) {
     mappingImporter.importFile(file);
   }
   return specifications;
+}
+
+function importConfigFromFilePath(filePath) {
+  const filesByType = processPath(filePath);
+  const preprocessor = new Preprocessor();
+
+  let defaultConfigPath = path.join(__dirname, "config-template", "/default_config.json")
+  let defaultConfigFile = fs.readFileSync(defaultConfigPath, 'utf8');
+  
+  if (filesByType.config.length > 0) {
+    configuration = preprocessor.preprocessConfig(defaultConfigFile, filesByType.config[0])
+  } else {
+    configuration = preprocessor.preprocessConfig(defaultConfigFile);
+    fs.writeFileSync(filePath + "/config.json", defaultConfigFile, 'utf8')
+  };
+
+  return configuration;
 }
 
 function processPath(filePath, filesByType = new FilesByType()) {
@@ -57,12 +75,14 @@ class FilesByType {
     this._dataElement = [];
     this._map = [];
     this._valueSet = [];
+    this._config = [];
   }
 
   get contentProfile() { return this._contentProfile; }
   get dataElement() { return this._dataElement; }
   get map() { return this._map; }
   get valueSet() { return this._valueSet; }
+  get config() { return this._config; }
 
   add(file) {
     switch (this.detectType(file)) {
@@ -78,22 +98,27 @@ class FilesByType {
       case 'ContentProfile':
         this._contentProfile.push(file);
         break;
+      case 'Config':
+        this._config.push(file);
+        break;
     }
   }
 
   detectType(file) {
-    if (!file.endsWith('.txt') && !file.endsWith('.shr')) {
-      return;  // only support *.txt or *.shr
+    if (!file.endsWith('.txt') && !file.endsWith('.shr') && !file.endsWith('config.json')) {
+      return;  // only support *.txt or *.shr or .json coniguration files
     }
     const re = /^\s*Grammar:\s+([^\s]+)/
     const lines = fs.readFileSync(file, 'utf-8').split('\n')
     for (const l of lines) {
       const match = l.match(re);
       if (match != null && match.length >= 2) {
-        return match[1]
+        return match[1];
+      } else if (file.endsWith('config.txt') || file.endsWith('config.json')) {
+        return "Config"
       }
     }
   }
 }
 
-module.exports = {importFromFilePath, VERSION, GRAMMAR_VERSION, setLogger};
+module.exports = {importFromFilePath, importConfigFromFilePath, VERSION, GRAMMAR_VERSION, setLogger};

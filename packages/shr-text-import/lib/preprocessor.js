@@ -10,18 +10,59 @@ const GRAMMAR_VERSION = new Version(5, 0, 0);
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
 var logger = rootLogger;
+
 function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
 
 class Preprocessor extends SHRDataElementParserVisitor {
-  constructor() {
+  constructor(configuration=[]) {
     super();
     // The preprocessed data
     this._data = new PreprocessedData();
+    this._config = configuration;
   }
 
   get data() { return this._data; }
+
+  preprocessConfig(defaultsFile, file) {
+    
+    var defaults = JSON.parse(defaultsFile);
+    var configFile = {};
+
+    if (file != null) {
+      try { configFile = JSON.parse(new FileStream(file)); } 
+      catch (e) {
+        logger.error("Invalid config file. Should be valid JSON dictionary");
+        return defaults;
+      }
+    } else {
+      logger.warn(`No project configuration file found, currently using default EXAMPLE identifiers. Auto-generating a proper 'config.json' in your specifications folder.`);
+      return defaults;
+    }
+
+    //Fill in config dictionary with default values, if necessary (with some special logic)
+    for (var key in defaults) {
+      if (configFile[key] == null) {
+        if (key === "fhirURL" && configFile["projectURL"] != null) { //special logic
+          configFile["fhirURL"] = `${configFile["projectURL"]}/fhir`;
+          continue;
+        } 
+        
+        configFile[key] = defaults[key];
+        logger.warn("Config file missing key: %s, using default key: %s instead", key, defaults[key]);
+      } else {
+        //Additional compatibility logic
+        if ( (key === "projectURL" || key === "fhirURL" ) && configFile[key].endsWith('/')) {
+          configFile[key] = configFile[key].slice(0, -1);
+        }
+      }
+    }
+
+    this._config = configFile;
+
+    return configFile;
+  }
 
   preprocessFile(file) {
     // Setup a child logger to associate logs with the current file
@@ -153,7 +194,7 @@ class PreprocessedData {
       }
       // Didn't find default, so infer default from namespace
       const parts = ns.split('.');
-      return 'http://standardhealthrecord.org/' + parts.join('/') + '/vs';
+      return this._config.projectURL + '/' + parts.join('/') + '/vs';
     }
 
     // Attempt to resolve specific path

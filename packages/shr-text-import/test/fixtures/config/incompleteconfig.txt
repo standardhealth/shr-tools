@@ -1,0 +1,9 @@
+{
+    "projectName":"Test Project",
+    "contact":[{
+        "telecom":[{
+          "system":"url",
+          "value":"http://test.org"
+        }]
+    }]
+}

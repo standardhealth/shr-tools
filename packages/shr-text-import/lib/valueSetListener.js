@@ -14,10 +14,12 @@ function setLogger(bunyanLogger) {
 }
 
 class ValueSetImporter extends SHRValueSetParserListener {
-  constructor(specifications = new Specifications) {
+  constructor(specifications = new Specifications, configuration) {
     super();
     // The specifications container to put the mappings into
     this._specs = specifications;
+    // The configuration for this specification
+    this._config = configuration;
     // The currently active namespace
     this._currentNs = '';
     // The currently active grammar version
@@ -62,7 +64,7 @@ class ValueSetImporter extends SHRValueSetParserListener {
     this._currentNs = ctx.docHeader().namespace().getText();
 
     // Create the default path based on the namespace
-    this._currentPath = `http://standardhealthrecord.org/${this._currentNs.replace('.', '/')}/vs/`;
+    this._currentPath = `${this._config.projectURL}/${this._currentNs.replace('.', '/')}/vs/`;
 
     // Process the version
     const version = ctx.docHeader().version();
