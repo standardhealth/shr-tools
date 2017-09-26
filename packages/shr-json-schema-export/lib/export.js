@@ -17,12 +17,12 @@ function setLogger(bunyanLogger) {
  * @param {shr-models.Specifications} specifications - a Specifications object.
  * @return {Object.<string, Object>} A mapping of schema ids to JSON Schema definitions.
  */
-function exportToJSONSchema(specifications, baseSchemaURL) {
+function exportToJSONSchema(specifications, baseSchemaURL, expanded = false) {
   const namespaceResults = {};
   for (const ns of specifications.namespaces.all) {
     const { schemaId, schema } = namespaceToSchema(ns,
         specifications.dataElements.byNamespace(ns.namespace),
-        specifications.dataElements.grammarVersions, baseSchemaURL );
+        specifications.dataElements.grammarVersions, baseSchemaURL, expanded );
     namespaceResults[schemaId] = schema;
   }
 
@@ -36,7 +36,7 @@ function exportToJSONSchema(specifications, baseSchemaURL) {
  * @param {shr-models.Version[]} grammarVersions - the grammar versions defined by the elements in the namespace.
  * @return {{schemaId: string, schema: Object}} The schema id and the JSON Schema definition.
  */
-function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
+function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL, expanded) {
   const schemaId = `${baseSchemaURL}/${namespaceToURLPathSegment(ns.namespace)}`;
   let schema = {
     $schema: 'http://json-schema.org/draft-04/schema#',
@@ -45,6 +45,7 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
     definitions: {}
   };
   const entryRef = makeRef(new Identifier('shr.base', 'Entry'), ns, baseSchemaURL);
+  const expandedEntry = makeExpandedEntryDefinitions(ns, baseSchemaURL);
   if (ns.description) {
     schema.description = ns.description;
   }
@@ -58,7 +59,12 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
     };
     let wholeDef = schemaDef;
     const tbdParentDescriptions = [];
-    if (def.isEntry || def.basedOn.length) {
+    let requiredProperties = [];
+    if (expanded) {
+      if (def.isEntry) {
+        requiredProperties = expandedEntry.required.slice();
+      }
+    } else if (def.isEntry || def.basedOn.length) {
       wholeDef = { allOf: [] };
       if (def.isEntry) {
         wholeDef.allOf.push({ $ref: entryRef });
@@ -77,7 +83,6 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
       wholeDef.allOf.push(schemaDef);
     }
 
-    let requiredProperties = [];
     const tbdFieldDescriptions = [];
     if (def.value) {
       let { value, required, tbd } = convertDefinition(def.value, ns, baseSchemaURL);
@@ -130,6 +135,13 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL) {
         schemaDef.properties[fieldName] = value;
         if (required) {
           requiredProperties.push(fieldName);
+        }
+      }
+      if (expanded && def.isEntry) {
+        for (name in expandedEntry.properties) {
+          if (!(name in schemaDef.properties)) {
+            schemaDef.properties[name] = expandedEntry.properties[name];
+          }
         }
       }
     } else if (!def.value) {
@@ -369,6 +381,25 @@ function makeRef(id, enclosingNamespace, baseSchemaURL) {
   } else {
     return `${baseSchemaURL}/${namespaceToURLPathSegment(id.namespace)}#/definitions/${id.name}`;
   }
+}
+
+function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
+  const properties = {};
+  for (const name of ['ShrId', 'EntryId', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative', 'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
+    properties[name] = { $ref: makeRef(new Identifier('shr.base', name), enclosingNamespace, baseSchemaURL) };
+  }
+  properties.Version = { $ref: makeRef(new Identifier('shr.core', 'Version'), enclosingNamespace, baseSchemaURL) };
+  properties.EntryType = { type: 'array', minItems: 1,
+    items: { $ref: makeRef(new Identifier('shr.base', 'EntryType'), enclosingNamespace, baseSchemaURL) }
+  };
+  return { properties, required: [
+    'ShrId',
+    'EntryId',
+    'EntryType',
+    'FocalSubject',
+    'OriginalCreationDate',
+    'LastUpdateDate'
+  ]};
 }
 
 function conceptToString(concept) {

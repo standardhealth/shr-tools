@@ -901,6 +901,13 @@ shelljs@^0.7.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
+shr-expand@beta:
+  version "5.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-5.0.0-beta.4.tgz#95cda13488c963523399053c14d42bc16e03238c"
+  dependencies:
+    bunyan "^1.8.9"
+    shr-models beta
+
 shr-models@beta:
   version "5.0.0-beta.4"
   resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.0.0-beta.4.tgz#89b0c8e610a2ec52ea4f9024df76bf63051ff46f"
