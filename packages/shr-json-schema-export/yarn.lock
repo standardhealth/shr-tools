@@ -901,23 +901,16 @@ shelljs@^0.7.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shr-expand@beta:
-  version "5.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-5.0.0-beta.4.tgz#95cda13488c963523399053c14d42bc16e03238c"
-  dependencies:
-    bunyan "^1.8.9"
-    shr-models beta
-
-shr-models@beta:
-  version "5.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.0.0-beta.4.tgz#89b0c8e610a2ec52ea4f9024df76bf63051ff46f"
+shr-models@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.0.0.tgz#ddeefb62d99b630b828401d87e594803d06b9e3b"
 
 "shr-test-helpers@https://github.com/standardhealth/shr-test-helpers#json-schema-export":
-  version "5.0.0-beta.4"
-  resolved "https://github.com/standardhealth/shr-test-helpers#a9f0548304c0c608f436367f5a6bd7fd5560c2f3"
+  version "5.0.0"
+  resolved "https://github.com/standardhealth/shr-test-helpers#d1a9a2f8446a067b97efce925e7e10d456c1efc0"
   dependencies:
     bunyan "^1.8.9"
-    shr-models beta
+    shr-models "^5.0.0"
 
 slice-ansi@0.0.4:
   version "0.0.4"

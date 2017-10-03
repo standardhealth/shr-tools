@@ -18,8 +18,7 @@
   },
   "dependencies": {
     "bunyan": "^1.8.9",
-    "shr-expand": "beta",
-    "shr-models": "beta"
+    "shr-models": "^5.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
