@@ -338,12 +338,16 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
 
   const description = [];
   for (const constraint of valueDef.constraints) {
+    const constraintPath = extractConstraintPath(constraint);
     if (constraint instanceof ValueSetConstraint) {
       if (!isCode) {
         logger.error('ERROR: valueset constraint %s was applied to a non-coding type %s', valueDef, JSON.stringify(constraint, null, 2));
         continue;
       }
-      value.valueSet = { uri: constraint.valueSet, strength: constraint.bindingStrength };
+      if (!value.valueSet) {
+        value.valueSet = {};
+      }
+      value.valueSet[constraintPath] = { uri: constraint.valueSet, strength: constraint.bindingStrength };
     } else if (constraint instanceof CodeConstraint) {
       if (!isCode) {
         logger.error('ERROR: code constraint %s was applied to a non-coding type %s', valueDef, constraint);
@@ -387,6 +391,13 @@ function makeRef(id, enclosingNamespace, baseSchemaURL) {
   } else {
     return `${baseSchemaURL}/${namespaceToURLPathSegment(id.namespace)}#/definitions/${id.name}`;
   }
+}
+
+function extractConstraintPath(constraint) {
+  if (!constraint.hasPath()) {
+    return 'Value';
+  }
+  return constraint.path.map(pathId => namespaceToURLPathSegment(pathId.namespace) + '/' + pathId.name).join(',');
 }
 
 function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {

@@ -25,8 +25,10 @@
                     "items": {
                       "type": "string",
                       "valueSet": {
-                        "uri": "http://standardhealthrecord.org/test/vs/CodeChoice",
-                        "strength": "REQUIRED"
+                        "Value": {
+                          "uri": "http://standardhealthrecord.org/test/vs/CodeChoice",
+                          "strength": "REQUIRED"
+                        }
                       }
                     }
                   },
@@ -48,8 +50,10 @@
               "Value": {
                 "type": "string",
                 "valueSet": {
-                  "uri": "http://standardhealthrecord.org/test/vs/Coded",
-                  "strength": "REQUIRED"
+                  "Value": {
+                    "uri": "http://standardhealthrecord.org/test/vs/Coded",
+                    "strength": "REQUIRED"
+                  }
                 }
               }
             },
