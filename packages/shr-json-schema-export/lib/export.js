@@ -320,6 +320,10 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
       }
     } else {
       value['$ref'] = makeRef(valueDef.identifier, enclosingNamespace, baseSchemaURL);
+      // This isn't always true, but other types may descend from codes or offer codes as an option for their value
+      // so without walking the entire inheritance hierarchy we'll just allow it. The frontend of the tool chain
+      // should block illegal coding constraints (hopefully).
+      isCode = true;
     }
   } else if (valueDef.constructor.name === 'TBD') {
     if (retValue.items != null) {
@@ -336,10 +340,10 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
   for (const constraint of valueDef.constraints) {
     if (constraint instanceof ValueSetConstraint) {
       if (!isCode) {
-        logger.error('ERROR: valueset constraint %s was applied to a non-coding type %s', valueDef, constraint);
+        logger.error('ERROR: valueset constraint %s was applied to a non-coding type %s', valueDef, JSON.stringify(constraint, null, 2));
         continue;
       }
-      description.push('ValueSet: ' + constraint.valueSet + ', ' + constraint.bindingStrength);
+      value.valueSet = { uri: constraint.valueSet, strength: constraint.bindingStrength };
     } else if (constraint instanceof CodeConstraint) {
       if (!isCode) {
         logger.error('ERROR: code constraint %s was applied to a non-coding type %s', valueDef, constraint);

@@ -25,10 +25,15 @@
                     ]
                   },
                   {
-                    "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/CodeChoice, REQUIRED",
                     "type": "array",
                     "minItems": 0,
-                    "items": { "type": "string" }
+                    "items": {
+                      "type": "string",
+                      "valueSet": {
+                        "uri": "http://standardhealthrecord.org/test/vs/CodeChoice",
+                        "strength": "REQUIRED"
+                      }
+                    }
                   }
                 ]
               }

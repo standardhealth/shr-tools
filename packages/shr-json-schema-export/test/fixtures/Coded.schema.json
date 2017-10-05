@@ -16,8 +16,11 @@
             "type": "object",
             "properties": {
               "Value": {
-                "description": "Constraints: ValueSet: http://standardhealthrecord.org/test/vs/Coded, REQUIRED",
-                "type": "string"
+                "type": "string",
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/test/vs/Coded",
+                  "strength": "REQUIRED"
+                }
               }
             },
             "required": ["Value"]
