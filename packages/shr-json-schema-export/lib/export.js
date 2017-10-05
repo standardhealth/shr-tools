@@ -337,6 +337,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
   }
 
   const description = [];
+  const includesCodeLists = {};
   for (const constraint of valueDef.constraints) {
     const constraintPath = extractConstraintPath(constraint);
     if (constraint instanceof ValueSetConstraint) {
@@ -353,16 +354,33 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
         logger.error('ERROR: code constraint %s was applied to a non-coding type %s', valueDef, constraint);
         continue;
       }
-      description.push('Code: ' + constraint.code);
+      if (!value.code) {
+        value.code = {};
+      }
+      value.code[constraintPath] = { code: constraint.code.system + '#' + constraint.code.code };
+      if (constraint.code.display) {
+        value.code[constraintPath].display = constraint.code.display;
+      }
     } else if (constraint instanceof IncludesCodeConstraint) {
-      if (!(isCode && card.isList)) {
-        logger.error('ERROR: includes code constraint %s was applied to a non-coding array type %s', valueDef, constraint);
+      if (!(isCode/* && card && card.isList*/)) { // TODO: Deal with cardinality
+        logger.error('ERROR: includes code constraint %s was applied to a non-coding array type %s', valueDef, JSON.stringify(constraint, null, 2));
         continue;
       }
-      description.push('Includes Code: ' + constraint.code);
+      if (!includesCodeLists[constraintPath]) {
+        includesCodeLists[constraintPath] = [];
+      }
+      const code = {code: constraint.code.system + '#' + constraint.code.code};
+      if (constraint.code.display) {
+        code.display = constraint.code.display;
+      }
+      includesCodeLists[constraintPath].push(code);
     } else {
       logger.info('WARNING: Constraint not yet implemented', constraint);
     }
+  }
+
+  if (Object.keys(includesCodeLists).length) {
+    value.codes = includesCodeLists;
   }
 
   if (description.length) {
