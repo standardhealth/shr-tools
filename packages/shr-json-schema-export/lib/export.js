@@ -305,6 +305,8 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
         case 'instant':
         case 'date':
         case 'time':
+          value.type = 'string';
+          break;
         case 'code':
           value.type = 'string';
           isCode = true;
