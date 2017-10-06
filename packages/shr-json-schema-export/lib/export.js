@@ -374,6 +374,34 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
         code.display = constraint.code.display;
       }
       includesCodeLists[constraintPath].push(code);
+    } else if (constraint instanceof TypeConstraint) {
+      if (constraint.onValue || constraint.hasPath()) {
+        let allOfEntry = {};
+        if (retValue === value) {
+          value = {};
+          for (const key of Object.keys(retValue)) {
+            value[key] = retValue[key];
+            delete retValue[key];
+          }
+          retValue.allOf = [value, allOfEntry];
+        } else {
+          retValue.items = { allOf: [ value, allOfEntry ]};
+        }
+        if (constraint.hasPath()) {
+          // TODO: properly handling namespaces will require traversing the class hierarchy
+          for (const pathId of constraint.path) {
+            allOfEntry.properties = {};
+            allOfEntry = allOfEntry.properties[pathId.name] = {};
+          }
+        }
+        if (constraint.onValue) {
+          allOfEntry.properties = {};
+          allOfEntry = allOfEntry.properties.Value = {};
+        }
+        allOfEntry.$ref = makeRef(constraint.isA, enclosingNamespace, baseSchemaURL);
+      } else {
+        value.$ref = makeRef(constraint.isA, enclosingNamespace, baseSchemaURL);
+      }
     } else {
       logger.info('WARNING: Constraint not yet implemented', constraint);
     }

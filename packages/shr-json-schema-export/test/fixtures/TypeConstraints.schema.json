@@ -1,0 +1,174 @@
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "anyOf": [
+      { "$ref": "#/definitions/Coded" },
+      { "$ref": "#/definitions/ElementValue" },
+      { "$ref": "#/definitions/ForeignElementValue" },
+      { "$ref": "#/definitions/Group" },
+      { "$ref": "#/definitions/GroupDerivative" },
+      { "$ref": "#/definitions/Simple" },
+      { "$ref": "#/definitions/SimpleChild" }
+    ],
+    "definitions": {
+      "GroupDerivative": {
+        "description": "It is a derivative of a group of elements with type constraints.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          { "$ref": "#/definitions/Group" },
+          {
+            "type": "object",
+            "properties": {
+              "Simple": { "$ref": "#/definitions/SimpleChild" },
+              "ElementValue": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "allOf": [
+                    { "$ref": "#/definitions/ElementValue" },
+                    {
+                      "properties": {
+                        "Value": { "$ref": "#/definitions/SimpleChild" }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "required": ["Simple"]
+          }
+        ]
+      },
+      "Group": {
+        "description": "It is a group of elements\nConcepts: Foobar (http://foo.org:bar),Boofar (http://boo.org:far)",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Simple": { "$ref": "#/definitions/Simple" },
+              "Coded": { "$ref": "#/definitions/Coded" },
+              "ElementValue": {
+                "type": "array",
+                "minItems": 0,
+                "items": { "$ref": "#/definitions/ElementValue" }
+              }
+            },
+            "required": ["Simple"]
+          }
+        ]
+      },
+      "Simple": {
+        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "SimpleChild": {
+        "description": "A derivative of the simple type.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          { "$ref": "#/definitions/Simple" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "Coded": {
+        "description": "It is a coded element",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string",
+                "valueSet": {
+                  "Value": {
+                    "uri": "http://standardhealthrecord.org/test/vs/Coded",
+                    "strength": "REQUIRED"
+                  }
+                }
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "ForeignElementValue": {
+        "description": "It is an element with a foreign element value",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "ElementValue": {
+        "description": "It is an element with an element value",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "$ref": "#/definitions/Simple"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      }
+    }
+  },
+  "https://standardhealthrecord.org/test/shr/other/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/other/test",
+    "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "anyOf": [
+      { "$ref": "#/definitions/Simple" }
+    ],
+    "definitions": {
+      "Simple": {
+        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      }
+    }
+  }
+}

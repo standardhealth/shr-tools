@@ -1,0 +1,117 @@
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "anyOf": [
+      { "$ref": "#/definitions/ConstrainedPath" },
+      { "$ref": "#/definitions/ElementField" },
+      { "$ref": "#/definitions/NestedField" },
+      { "$ref": "#/definitions/Simple" },
+      { "$ref": "#/definitions/SimpleChild" },
+      { "$ref": "#/definitions/TwoDeepElementField" }
+    ],
+    "definitions": {
+      "ConstrainedPath": {
+        "description": "It derives an element with a nested field.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          { "$ref": "#/definitions/NestedField" },
+          {
+            "type": "object",
+            "properties": {
+              "TwoDeepElementField": {
+                "allOf": [
+                  { "$ref": "#/definitions/TwoDeepElementField" },
+                  {
+                    "properties": {
+                      "ElementField": {
+                        "properties": {
+                          "Simple": { "$ref": "#/definitions/SimpleChild" }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "NestedField": {
+        "description": "It is an element with a nested field.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "TwoDeepElementField": {
+                "$ref": "#/definitions/TwoDeepElementField"
+              }
+            }
+          }
+        ]
+      },
+      "TwoDeepElementField": {
+        "description": "It is an element with a two-deep element field",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "ElementField": {
+                "$ref": "#/definitions/ElementField"
+              }
+            },
+            "required": ["ElementField"]
+          }
+        ]
+      },
+      "ElementField": {
+        "description": "It is an element with a field.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Simple": { "$ref": "#/definitions/Simple" }
+            },
+            "required": ["Simple"]
+          }
+        ]
+      },
+      "Simple": {
+        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "SimpleChild": {
+        "description": "A derivative of the simple type.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          { "$ref": "#/definitions/Simple" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      }
+    }
+  }
+}
