@@ -3,7 +3,7 @@
 // Derived from export SHR specification content as a hierarchy in JSON format by Greg Quinn
 
 const bunyan = require('bunyan');
-const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, CodeConstraint, CardConstraint, TypeConstraint} = require('shr-models');
+const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint} = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-json-schema-export'});
 var logger = rootLogger;
@@ -209,6 +209,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
   const card = valueDef.effectiveCard;
   let required = false;
   let isCode = false;
+  let isList = false;
   if (card) {
     if (card.isList) {
       retValue.type = 'array';
@@ -222,6 +223,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
         retValue.maxItems = card.max;
       }
       value = retValue.items = {};
+      isList = true;
     } else if (card.min) {
       required = true;
     }
@@ -241,15 +243,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
     }
     value.anyOf = [];
     if (refOptions.length) {
-      const props = {
-        ShrId: { type: 'string' },
-        EntryType: { type: 'string', enum: [] },
-        EntryId: { type: 'string' }
-      };
-      for (const option of refOptions) {
-        props.EntryType.enum.push(`${baseSchemaURL}/${namespaceToURLPathSegment(option.identifier.namespace)}#/definitions/${option.identifier.name}`);
-      }
-      value.anyOf.push({ type: 'object', properties: props, required: ['ShrId', 'EntryType', 'EntryId']});
+      value.anyOf.push(makeShrRefObject(refOptions, baseSchemaURL));
     }
     for (const option of normalOptions) {
       const { value: childValue } = convertDefinition(option, enclosingNamespace, baseSchemaURL);
@@ -320,10 +314,11 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
       }
     } else {
       value['$ref'] = makeRef(valueDef.identifier, enclosingNamespace, baseSchemaURL);
-      // This isn't always true, but other types may descend from codes or offer codes as an option for their value
+      // These flags aren't always true, but other types may descend from codes or offer codes as an option for their value
       // so without walking the entire inheritance hierarchy we'll just allow it. The frontend of the tool chain
       // should block illegal coding constraints (hopefully).
       isCode = true;
+      isList = true;
     }
   } else if (valueDef.constructor.name === 'TBD') {
     if (retValue.items != null) {
@@ -338,6 +333,10 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
 
   const description = [];
   const includesCodeLists = {};
+  const includesTypeListType = [];
+  const includesTypeListRef = [];
+  let includesTypeListsMin = 0;
+  let includesTypeListsMax = 0;
   for (const constraint of valueDef.constraints) {
     const constraintPath = extractConstraintPath(constraint);
     if (constraint instanceof ValueSetConstraint) {
@@ -385,7 +384,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
           }
           retValue.allOf = [value, allOfEntry];
         } else {
-          retValue.items = { allOf: [ value, allOfEntry ]};
+          retValue.items = {allOf: [value, allOfEntry]};
         }
         if (constraint.hasPath()) {
           // TODO: properly handling namespaces will require traversing the class hierarchy
@@ -402,8 +401,76 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
       } else {
         value.$ref = makeRef(constraint.isA, enclosingNamespace, baseSchemaURL);
       }
+    } else if (constraint instanceof IncludesTypeConstraint) {
+      if (!isList) { // TODO: Deal with cardinality
+        logger.error('ERROR: includestypeconstraint %s was applied to a non-array type %s', valueDef, JSON.stringify(constraint, null, 2));
+        continue;
+      }
+      if (constraint.onValue || constraint.hasPath()) {
+        // TODO: properly handling namespaces will require traversing the class hierarchy
+      } else {
+        includesTypeListsMin += constraint.card.min;
+        if (includesTypeListsMax !== null) {
+          if (constraint.card.isMaxUnbounded) {
+            includesTypeListsMax = null;
+          } else {
+            includesTypeListsMax += constraint.card.max;
+          }
+        }
+
+        if (constraint.isA instanceof RefValue) {
+          includesTypeListRef.push(constraint);
+        } else {
+          includesTypeListType.push(constraint);
+        }
+      }
     } else {
       logger.info('WARNING: Constraint not yet implemented', constraint);
+    }
+  }
+
+  if (includesTypeListRef.length || includesTypeListType.length) {
+    if (typeof retValue.minItems === 'undefined') {
+      retValue.minItems = includesTypeListsMin;
+    } else if (retValue.minItems < includesTypeListsMin) {
+      retValue.minItems = includesTypeListsMin;
+    }
+
+    if (typeof retValue.maxItems === 'undefined') {
+      if (includesTypeListsMax !== null) {
+        retValue.maxItems = includesTypeListsMax;
+      }
+    } else {
+      if (includesTypeListsMax < retValue.maxItems) {
+        retValue.maxItems = includesTypeListsMax;
+      }
+    }
+    delete value.$ref;
+    retValue.includesTypes = [];
+    value.anyOf = [];
+    if (includesTypeListRef.length) {
+      value.anyOf.push(makeShrRefObject(includesTypeListRef.map((ref) => ref.isA), baseSchemaURL));
+      for (const ref of includesTypeListRef) {
+        const includesType = {
+          items: `ref(${makeShrDefinitionURL(ref.isA, baseSchemaURL)})`,
+          minItems: ref.card.min
+        };
+        if (!ref.card.isMaxUnbounded) {
+          includesType.maxItems = ref.card.max;
+        }
+        retValue.includesTypes.push(includesType);
+      }
+    }
+    for (const val of includesTypeListType) {
+      value.anyOf.push({ $ref: makeRef(val.isA, enclosingNamespace, baseSchemaURL) });
+      const includesType = {
+        items: makeShrDefinitionURL(val.isA, baseSchemaURL),
+        minItems: val.card.min
+      };
+      if (!val.card.isMaxUnbounded) {
+        includesType.maxItems = val.card.max;
+      }
+      retValue.includesTypes.push(includesType);
     }
   }
 
@@ -435,8 +502,27 @@ function makeRef(id, enclosingNamespace, baseSchemaURL) {
   if (id.namespace === enclosingNamespace.namespace) {
     return '#/definitions/' + id.name;
   } else {
-    return `${baseSchemaURL}/${namespaceToURLPathSegment(id.namespace)}#/definitions/${id.name}`;
+    return makeShrDefinitionURL(id, baseSchemaURL);
   }
+}
+
+function makeShrRefObject(refs, baseSchemaURL) {
+  return {
+    type: 'object',
+    properties: {
+      ShrId: { type: 'string' },
+      EntryId: { type: 'string' },
+      EntryType: {
+        type: 'string',
+        enum: refs.map((ref) => makeShrDefinitionURL(ref.identifier, baseSchemaURL))
+      }
+    },
+    required: ['ShrId', 'EntryType', 'EntryId']
+  };
+}
+
+function makeShrDefinitionURL(id, baseSchemaURL) {
+  return `${baseSchemaURL}/${namespaceToURLPathSegment(id.namespace)}#/definitions/${id.name}`;
 }
 
 function extractConstraintPath(constraint) {

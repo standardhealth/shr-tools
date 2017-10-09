@@ -1,0 +1,97 @@
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "anyOf": [
+      { "$ref": "#/definitions/IncludesTypesList" },
+      { "$ref": "#/definitions/Simple" },
+      { "$ref": "#/definitions/SimpleChild" },
+      { "$ref": "#/definitions/SimpleChild2" }
+    ],
+    "definitions": {
+      "IncludesTypesList": {
+        "description": "An entry with a includes types constraints.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 3,
+                "items": {
+                  "anyOf": [
+                    { "$ref": "#/definitions/SimpleChild" },
+                    { "$ref": "#/definitions/SimpleChild2" }
+                  ]
+                },
+                "includesTypes": [
+                  {
+                    "items": "https://standardhealthrecord.org/test/shr/test#/definitions/SimpleChild",
+                    "minItems": 0,
+                    "maxItems": 1
+                  },
+                  {
+                    "items": "https://standardhealthrecord.org/test/shr/test#/definitions/SimpleChild2",
+                    "minItems": 0,
+                    "maxItems": 2
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Simple": {
+        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "SimpleChild": {
+        "description": "A derivative of the simple type.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          { "$ref": "#/definitions/Simple" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "SimpleChild2": {
+        "description": "A derivative of the simple type.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          { "$ref": "#/definitions/Simple" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      }
+    }
+  }
+}
