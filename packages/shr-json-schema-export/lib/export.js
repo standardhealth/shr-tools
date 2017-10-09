@@ -153,7 +153,7 @@ function namespaceToSchema(ns, dataElements, grammarVersions, baseSchemaURL, exp
       descriptionList.push(def.description);
     }
     if (def.concepts.length) {
-      descriptionList.push('Concepts: ' + def.concepts.map((c) => { return conceptToString(c); }).join(','));
+      wholeDef.concepts = def.concepts.map((concept) => makeConceptEntry(concept));
     }
     if (tbdParentDescriptions.length) {
       tbdParentDescriptions[0] = 'TBD Parents: ' + tbdParentDescriptions[0];
@@ -354,10 +354,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
       if (!value.code) {
         value.code = {};
       }
-      value.code[constraintPath] = { code: constraint.code.system + '#' + constraint.code.code };
-      if (constraint.code.display) {
-        value.code[constraintPath].display = constraint.code.display;
-      }
+      value.code[constraintPath] = makeConceptEntry(constraint.code);
     } else if (constraint instanceof IncludesCodeConstraint) {
       if (!(isCode/* && card && card.isList*/)) { // TODO: Deal with cardinality
         logger.error('ERROR: includes code constraint %s was applied to a non-coding array type %s', valueDef, JSON.stringify(constraint, null, 2));
@@ -366,11 +363,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
       if (!includesCodeLists[constraintPath]) {
         includesCodeLists[constraintPath] = [];
       }
-      const code = {code: constraint.code.system + '#' + constraint.code.code};
-      if (constraint.code.display) {
-        code.display = constraint.code.display;
-      }
-      includesCodeLists[constraintPath].push(code);
+      includesCodeLists[constraintPath].push(makeConceptEntry(constraint.code));
     } else if (constraint instanceof TypeConstraint) {
       if (constraint.onValue || constraint.hasPath()) {
         let allOfEntry = {};
@@ -549,13 +542,25 @@ function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
   ]};
 }
 
-function conceptToString(concept) {
+/**
+ * Converts a concept into a code entry for the schema. (Codes are also represented as Concepts in the object model.)
+ *
+ * @param {Concept|TBD} concept - The concept to convert.
+ * @return {{code: string, display: (string|undefined)}} The converted object. Display is optional.
+ */
+function makeConceptEntry(concept) {
   if (concept instanceof TBD) {
-    return concept.text ? ('TBD: ' + concept.text) : 'TBD';
-  } else if (concept.display) {
-    return `${concept.display} (${concept.system}:${concept.code})`;
+    const ret = { code: 'urn:tbd#TBD' };
+    if (concept.text) {
+      ret.display = concept.text;
+    }
+    return ret;
   } else {
-    return `${concept.system}:${concept.code}`;
+    const ret = { code: concept.system + '#' + concept.code };
+    if (concept.display) {
+      ret.display = concept.display;
+    }
+    return ret;
   }
 }
 

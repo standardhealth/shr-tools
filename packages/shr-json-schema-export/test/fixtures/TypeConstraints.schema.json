@@ -43,7 +43,11 @@
         ]
       },
       "Group": {
-        "description": "It is a group of elements\nConcepts: Foobar (http://foo.org:bar),Boofar (http://boo.org:far)",
+        "description": "It is a group of elements",
+        "concepts": [
+          {"code": "http://foo.org#bar", "display": "Foobar"},
+          {"code": "http://boo.org#far", "display": "Boofar"}
+        ],
         "allOf": [
           { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           {
@@ -62,7 +66,8 @@
         ]
       },
       "Simple": {
-        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "description": "It is a simple element",
+        "concepts": [ { "code": "http://foo.org#bar", "display": "Foobar"}],
         "allOf": [
           { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           {
@@ -155,7 +160,8 @@
     ],
     "definitions": {
       "Simple": {
-        "description": "It is a simple element\nConcepts: Foobar (http://foo.org:bar)",
+        "description": "It is a simple element",
+        "concepts": [ { "code": "http://foo.org#bar", "display": "Foobar"}],
         "allOf": [
           { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           {
