@@ -229,9 +229,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
     }
   }
 
-  // TODO: Is this really the best way to identify a type in ES6?
-  logger.debug('Value type: %s', valueDef.constructor.name);
-  if (valueDef.constructor.name === 'ChoiceValue') {
+  if (valueDef instanceof ChoiceValue) {
     const refOptions = [];
     const normalOptions = [];
     for (const option of valueDef.options) {
@@ -256,7 +254,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
         value[ent] = single[ent];
       }
     }
-  } else if (valueDef.constructor.name === 'RefValue') {
+  } else if (valueDef instanceof RefValue) {
     // TODO: What should the value of EntryType be? The schema URL may not be portable across data types.
     value.type = 'object';
     value.properties = {
@@ -265,7 +263,7 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
       EntryId: { type: 'string' }
     };
     value.required = ['ShrId', 'EntryType', 'EntryId'];
-  } else if (valueDef.constructor.name === 'IdentifiableValue') {
+  } else if (valueDef instanceof IdentifiableValue) {
     const id = valueDef.effectiveIdentifier;
     if (id.isPrimitive) {
       switch (id.name) {
@@ -320,12 +318,12 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
       isCode = true;
       isList = true;
     }
-  } else if (valueDef.constructor.name === 'TBD') {
+  } else if (valueDef instanceof TBD) {
     if (retValue.items != null) {
       delete retValue.items;
     }
     return {value: retValue, required: required, tbd: true};
-  } else if (valueDef.constructor.name === 'IncompleteValue') {
+  } else if (valueDef instanceof IncompleteValue) {
     logger.error('Unsupported Incomplete');
   } else {
     logger.error('Unknown type for value "%s"', valueDef.constructor.name);
