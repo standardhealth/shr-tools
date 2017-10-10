@@ -329,7 +329,6 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
     logger.error('Unknown type for value "%s"', valueDef.constructor.name);
   }
 
-  const description = [];
   const includesCodeLists = {};
   const includesTypeListType = [];
   const includesTypeListRef = [];
@@ -467,10 +466,6 @@ function convertDefinition(valueDef, enclosingNamespace, baseSchemaURL) {
 
   if (Object.keys(includesCodeLists).length) {
     value.codes = includesCodeLists;
-  }
-
-  if (description.length) {
-    retValue.description = 'Constraints: ' + description.join('\n');
   }
 
   return {value: retValue, required, tbd: false};
