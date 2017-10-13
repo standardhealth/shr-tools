@@ -470,10 +470,14 @@ class Identifier {
 
   get namespace() { return this._namespace; }
   get name() { return this._name; }
-  get fqn() { return this.isPrimitive ? this._name : `${this._namespace}.${this._name}`; }
+  get fqn() { return this.isPrimitive || this.isValueKeyWord ? this._name : `${this._namespace}.${this._name}`; }
 
   get isPrimitive() {
-    return this._namespace == PRIMITIVE_NS;
+    return this._namespace === PRIMITIVE_NS;
+  }
+
+  get isValueKeyWord() {
+    return this._namespace === '' && this._name === 'Value';
   }
 
   equals(other) {
@@ -505,7 +509,19 @@ class Cardinality {
   }
 
   get min() { return this._min; }
+  set min(min) { this._min = min; }
+  // withMin is a convenience function for chaining
+  withMin(min) {
+    this.min = min;
+    return this;
+  }
   get max() { return this._max; }
+  set max(max) { this._max = max; }
+  // withMin is a convenience function for chaining
+  withMax(max) {
+    this.max = max;
+    return this;
+  }
   get isMaxUnbounded() {
     return typeof this._max === 'undefined' || this._max == null;
   }
@@ -818,6 +834,13 @@ class Value {
   // withConstraint is a convenience function for chaining
   withConstraint(constraint) {
     this.addConstraint(constraint);
+    return this;
+  }
+  // withConstraints is a convenience function for chaining
+  withConstraints(constraints) {
+    for (const constraint of constraints) {
+      this.addConstraint(constraint);
+    }
     return this;
   }
   get hasConstraints() {
