@@ -147,7 +147,7 @@ class MappingImporter extends SHRMapParserListener {
             sourcePath.push(new TBD());
           }
         } else {
-          logger.error('Error parsing source path: %s', c.source().getText());
+          logger.error('Error parsing source path: %s. ERROR_CODE:11005', c.source().getText());
         }
       }
     }

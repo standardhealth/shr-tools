@@ -1,0 +1,10 @@
+Grammar:     DataElement 5.0
+Namespace:   shr.test
+Description: "The SHR test namespace"
+
+EntryElement:   OptionalValue
+Value:          0..1 string
+
+EntryElement:   ZeroedOutValue
+Based on:        OptionalValue
+0..0 Value

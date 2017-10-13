@@ -1,0 +1,12 @@
+Grammar:     DataElement 5.0
+Namespace:   shr.test
+
+EntryElement:   BaseElement
+Value:          CodedElement
+
+EntryElement:   ChildElement
+Based on:       BaseElement
+Value from http://standardhealthrecord.org/test/vs/Coded
+
+Element:   CodedElement
+Value:     code

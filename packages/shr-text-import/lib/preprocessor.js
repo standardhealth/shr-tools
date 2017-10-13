@@ -33,11 +33,11 @@ class Preprocessor extends SHRDataElementParserVisitor {
     if (file != null) {
       try { configFile = JSON.parse(new FileStream(file)); } 
       catch (e) {
-        logger.error("Invalid config file. Should be valid JSON dictionary");
+        logger.error("Invalid config file. Should be valid JSON dictionary. ERROR_CODE:11006");
         return defaults;
       }
     } else {
-      logger.warn(`No project configuration file found, currently using default EXAMPLE identifiers. Auto-generating a proper 'config.json' in your specifications folder.`);
+      logger.warn(`No project configuration file found, currently using default EXAMPLE identifiers. Auto-generating a proper 'config.json' in your specifications folder. ERROR_CODE:01001`);
       return defaults;
     }
 
@@ -50,7 +50,7 @@ class Preprocessor extends SHRDataElementParserVisitor {
         } 
         
         configFile[key] = defaults[key];
-        logger.warn("Config file missing key: %s, using default key: %s instead", key, defaults[key]);
+        logger.warn("Configuration file missing key: %s, using default key: %s instead. ERROR_CODE:01002", key, defaults[key]);
       } else {
         //Additional compatibility logic
         if ( (key === "projectURL" || key === "fhirURL" ) && configFile[key].endsWith('/')) {
@@ -139,7 +139,7 @@ class Preprocessor extends SHRDataElementParserVisitor {
     const major = parseInt(version.WHOLE_NUMBER()[0], 10);
     const minor = parseInt(version.WHOLE_NUMBER()[2], 10);
     if (GRAMMAR_VERSION.major != major || GRAMMAR_VERSION.minor < minor) {
-      logger.error('Unsupported grammar version: %s.%s', major, minor);
+      logger.error('Unsupported grammar version: %s.%s. ERROR_CODE:11007', major, minor);
       return false;
     }
     return true;
@@ -183,7 +183,7 @@ class PreprocessedData {
   resolvePath(name, ...namespace) {
     // First ensure namespaces were passed in
     if (namespace.length == 0) {
-      return { error: `Cannot resolve path without namespaces` };
+      return { error: `Cannot resolve path without namespaces. ERROR_CODE:11017` };
     }
 
     // Special handling for default paths
@@ -212,9 +212,9 @@ class PreprocessedData {
       }
     }
     if (!result.hasOwnProperty('url')) {
-      result['error'] = `Failed to resolve path for ${name}.`;
+      result['error'] = `Failed to resolve path for ${name}. ERROR_CODE:11018`;
     } else if (conflict) {
-      result['error'] = `Found conflicting path for ${name} in multiple namespaces: ${foundNamespaces}`;
+      result['error'] = `Found conflicting path for ${name} in multiple namespaces: ${foundNamespaces}. ERROR_CODE:11019`;
     }
     return result;
   }
@@ -234,9 +234,9 @@ class PreprocessedData {
       }
     }
     if (!result.hasOwnProperty('url')) {
-      result['error'] = `Failed to resolve vocabulary for ${name}.`;
+      result['error'] = `Failed to resolve vocabulary for ${name}. ERROR_CODE:11020`;
     } else if (conflict) {
-      result['error'] = `Found conflicting vocabularies for ${name} in multiple namespaces: ${foundNamespaces}`;
+      result['error'] = `Found conflicting vocabularies for ${name} in multiple namespaces: ${foundNamespaces}. ERROR_CODE:11021`;
     }
     return result;
   }
@@ -253,9 +253,9 @@ class PreprocessedData {
       }
     }
     if (!result.hasOwnProperty('namespace')) {
-      result['error'] = `Failed to resolve definition for ${name}.`;
+      result['error'] = `Failed to resolve definition for ${name}. ERROR_CODE:11013`;
     } else if (foundNamespaces.length > 1) {
-      result['error'] = `Found conflicting definitions for ${name} in multiple namespaces: ${foundNamespaces}`;
+      result['error'] = `Found conflicting definitions for ${name} in multiple namespaces: ${foundNamespaces}. ERROR_CODE:11022`;
     }
     return result;
   }

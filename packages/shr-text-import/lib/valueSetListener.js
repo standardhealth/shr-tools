@@ -98,12 +98,12 @@ class ValueSetImporter extends SHRValueSetParserListener {
   enterValuesetDef(ctx) {
     const h = ctx.valuesetHeader();
     if (h.URL()) {
-      logger.error('Defining value sets by URL has been deprecated in ValueSet files.  ValueSet %s ignored.', h.URL().getText());
+      logger.error('Defining value sets by URL has been deprecated in ValueSet files.  ValueSet %s ignored. ERROR_CODE:11008', h.URL().getText());
       // Set a dummy unsupported def so the rest of the parsing can occur -- but it won't be added to the definitions
       this._currentDef = new ValueSet(new Identifier('unsupported', 'Unsupported'), 'urn:unsupported');
       return;
     } else if (h.URN_OID()) {
-      logger.error('Defining value sets by URN has been deprecated in ValueSet files.  ValueSet %s ignored.', h.URN_OID().getText());
+      logger.error('Defining value sets by URN has been deprecated in ValueSet files.  ValueSet %s ignored. ERROR_CODE:11009', h.URN_OID().getText());
       // Set a dummy unsupported def so the rest of the parsing can occur -- but it won't be added to the definitions
       this._currentDef = new ValueSet(new Identifier('unsupported', 'Unsupported'), 'urn:unsupported');
       return;
@@ -175,7 +175,7 @@ class ValueSetImporter extends SHRValueSetParserListener {
     const alias = ctx.ALL_CAPS().getText();
     const system = this._csMap.get(alias);
     if (typeof system === 'undefined') {
-      logger.error('Couldn\'t resolve code system for alias: %s', alias);
+      logger.error('Couldn\'t resolve code system for alias: %s. ERROR_CODE:11010', alias);
       return;
     }
     this._currentDef.addValueSetIncludesFromCodeSystemRule(system);
@@ -193,11 +193,11 @@ class ValueSetImporter extends SHRValueSetParserListener {
   }
 
   enterUsesStatement(ctx) {
-    logger.error('Uses statements have been deprecated in ValueSet files.  Uses statement ignored.');
+    logger.error('Uses statements have been deprecated in ValueSet files.  Uses statement ignored. ERROR_CODE:11011');
   }
 
   enterPathDef(ctx) {
-    logger.error('Only default path definitions are allowed in ValueSet files.  Path definition ignored.');
+    logger.error('Only default path definitions are allowed in ValueSet files.  Path definition ignored. ERROR_CODE:11012');
   }
 
   processFullyQualifiedCode(ctx) {
@@ -205,7 +205,7 @@ class ValueSetImporter extends SHRValueSetParserListener {
       const alias = ctx.ALL_CAPS().getText();
       const system = this._csMap.get(alias);
       if (typeof system === 'undefined') {
-        logger.error('Couldn\'t resolve code system for alias: %s', alias);
+        logger.error('Couldn\'t resolve code system for alias: %s. ERROR_CODE:11010', alias);
         return;
       }
       const code = ctx.code().CODE().getText().substr(1); // substr to skip the '#'

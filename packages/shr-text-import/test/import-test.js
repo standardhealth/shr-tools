@@ -1,6 +1,6 @@
 const {expect} = require('chai');
 const {importFromFilePath, importConfigFromFilePath, setLogger} = require('../index');
-const {Version, DataElement, Value, RefValue, ChoiceValue, Identifier, PrimitiveIdentifier, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, TBD, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
+const {Version, DataElement, Value, RefValue, ChoiceValue, IncompleteValue, Identifier, PrimitiveIdentifier, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, TBD, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
 const err = require('shr-test-helpers/errors');
 
 // Set the logger -- this is needed for detecting and checking errors
@@ -259,7 +259,7 @@ describe('#importFromFilePath()', () => {
       'ExtensibleVSConstraintOnValue': EXTENSIBLE,
       'PreferredVSConstraintOnValue': PREFERRED,
       'ExampleVSConstraintOnValue': EXAMPLE
-    }
+    };
     for (const testCase of Object.keys(answerKey)) {
       const entry = expectAndGetEntry(specifications, 'shr.test', testCase);
       expectCardOne(entry.value);
@@ -280,7 +280,7 @@ describe('#importFromFilePath()', () => {
       'ExtensibleVSConstraintOnField': EXTENSIBLE,
       'PreferredVSConstraintOnField': PREFERRED,
       'ExampleVSConstraintOnField': EXAMPLE
-    }
+    };
     for (const testCase of Object.keys(answerKey)) {
       const entry = expectAndGetEntry(specifications, 'shr.test', testCase);
       expect(entry.value).to.be.undefined;
@@ -293,6 +293,21 @@ describe('#importFromFilePath()', () => {
       expect(cmplx.constraints[0].valueSet).to.equal('http://standardhealthrecord.org/test/vs/Coded2');
       expect(cmplx.constraints[0].bindingStrength).to.equal(answerKey[testCase]);
     }
+  });
+
+  it('should correctly import an entry with a valueset constraint on the Value keyword', () => {
+    const specifications = importFixture('VSConstraintOnValueKeyWord');
+    const entry = expectAndGetEntry(specifications, 'shr.test', 'ChildElement');
+    expect(entry.description).to.be.undefined;
+    expect(entry.value.card).to.be.undefined;
+    expect(entry.value).to.be.instanceof(IncompleteValue);
+    expect(entry.value.identifier.isValueKeyWord).to.be.true;
+    expect(entry.value.constraints).to.have.length(1);
+    expect(entry.value.constraints[0]).to.be.instanceof(ValueSetConstraint);
+    expect(entry.value.constraints[0].path).to.be.empty;
+    expect(entry.value.constraints[0].valueSet).to.equal('http://standardhealthrecord.org/test/vs/Coded');
+    expect(entry.value.constraints[0].bindingStrength).to.equal(REQUIRED);
+    expect(entry.fields).to.be.empty;
   });
 
   it('should correctly import an entry with a code constraint on the value', () => {
@@ -317,6 +332,20 @@ describe('#importFromFilePath()', () => {
     expect(entry.value.constraints[0]).to.be.instanceof(CodeConstraint);
     expect(entry.value.constraints[0].path).to.eql([id('shr.core','Coding')]);
     expectConcept(entry.value.constraints[0].code, 'http://foo.org', 'bar', 'FooBar');
+  });
+
+  it('should correctly import an entry with a code constraint on the Value keyword', () => {
+    const specifications = importFixture('CodeConstraintOnValueKeyWord');
+    const entry = expectAndGetEntry(specifications, 'shr.test', 'ChildElement');
+    expect(entry.description).to.be.undefined;
+    expect(entry.value.card).to.be.undefined;
+    expect(entry.value).to.be.instanceof(IncompleteValue);
+    expect(entry.value.identifier.isValueKeyWord).to.be.true;
+    expect(entry.value.constraints).to.have.length(1);
+    expect(entry.value.constraints[0]).to.be.instanceof(CodeConstraint);
+    expect(entry.value.constraints[0].path).to.be.empty;
+    expectConcept(entry.value.constraints[0].code, 'http://foo.org', 'bar', 'FooBar');
+    expect(entry.fields).to.be.empty;
   });
 
   it('should correctly import a group with a code constraint on a field', () => {
@@ -680,6 +709,20 @@ describe('#importFromFilePath()', () => {
     expectCardOne(basedOn.value);
     expectPrimitiveValue(basedOn.value, 'string');
     expectNoConstraints(basedOn.value);
+  });
+
+  it('should correctly import an entry with a zeroed out Value', () => {
+    const specifications = importFixture('ZeroedOutValue');
+    const entry = expectAndGetEntry(specifications, 'shr.test', 'ZeroedOutValue');
+    expect(entry.basedOn).to.have.length(1);
+    expect(entry.basedOn[0].namespace).to.equal('shr.test');
+    expect(entry.basedOn[0].name).to.equal('OptionalValue');
+    expect(entry.concepts).to.be.empty;
+    expect(entry.description).to.be.empty;
+    expect(entry.value).to.be.instanceof(IncompleteValue);
+    expect(entry.value.identifier.isValueKeyWord).to.be.true;
+    expectMinMax(entry.value, 0, 0);
+    expectNoConstraints(entry.value);
   });
 
   it('should correctly import multiple elements in a single namespace', () => {
