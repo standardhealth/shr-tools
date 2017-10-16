@@ -9,7 +9,7 @@
     ],
     "definitions": {
       "NotDone": {
-        "description": "It is an unfinished element\nTBD Fields: An undetermined list field.\nAn undetermined singular field.\nAn undetermined field with no cardinality.\nTBD\nTBD with cardinality 1..*",
+        "description": "It is an unfinished element\nTBD Fields: An undetermined list field.\nAn undetermined singular field.\nTBD with cardinality 1..*",
         "concepts": [ { "code": "http://foo.org#bar", "display": "Foobar"}],
         "allOf": [
           { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
