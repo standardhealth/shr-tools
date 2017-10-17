@@ -14,7 +14,6 @@
         "description": "It is an unfinished derivative element\nTBD Parents: An undetermined parent.\nTBD\nTBD Fields: An undetermined singular field.",
         "concepts": [ { "code": "urn:tbd#TBD", "display": "Not sure of the concept"}],
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           { "$ref": "#/definitions/ValuelessElement" },
           {
             "type": "object",

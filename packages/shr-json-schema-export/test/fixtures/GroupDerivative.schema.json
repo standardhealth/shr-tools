@@ -16,7 +16,6 @@
       "GroupDerivative": {
         "description": "It is a derivative of a group of elements",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           { "$ref": "#/definitions/Group" },
           {
             "type": "object",

@@ -1,17 +1,24 @@
 const fs = require('fs');
 const err = require('shr-test-helpers/errors');
 const Ajv = require('ajv');
+const {expect} = require('chai');
 const {commonExportTests} = require('shr-test-helpers/export');
 const {exportToJSONSchema, setLogger} = require('../lib/export');
+const expander = require('shr-expand');
 
 // Set the logger -- this is needed for detecting and checking errors
 setLogger(err.logger());
+expander.setLogger(err.logger());
 
 
 describe('#exportToJSONSchema()', commonExportTests(exportSpecifications, importFixture, importErrorsFixture));
 
 function exportSpecifications(specifications) {
-  const schemataDict = exportToJSONSchema(specifications, 'https://standardhealthrecord.org/test');
+  const expSpecs = expander.expand(specifications);
+  if (err.errors().length) {
+    expect(err.errors()).to.deep.equal([]);
+  }
+  const schemataDict = exportToJSONSchema(expSpecs, 'https://standardhealthrecord.org/test');
   validateSchemata(schemataDict);
   return schemataDict;
 }

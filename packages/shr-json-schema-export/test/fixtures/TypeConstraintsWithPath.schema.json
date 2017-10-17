@@ -16,7 +16,6 @@
       "ConstrainedPath": {
         "description": "It derives an element with a nested field.",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           { "$ref": "#/definitions/NestedField" },
           {
             "type": "object",
@@ -100,16 +99,10 @@
       "SimpleChild": {
         "description": "A derivative of the simple type.",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           { "$ref": "#/definitions/Simple" },
           {
             "type": "object",
-            "properties": {
-              "Value": {
-                "type": "string"
-              }
-            },
-            "required": ["Value"]
+            "properties": {}
           }
         ]
       }

@@ -17,7 +17,6 @@
       "GroupDerivative": {
         "description": "It is a derivative of a group of elements with type constraints.",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           { "$ref": "#/definitions/Group" },
           {
             "type": "object",
@@ -84,16 +83,10 @@
       "SimpleChild": {
         "description": "A derivative of the simple type.",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           { "$ref": "#/definitions/Simple" },
           {
             "type": "object",
-            "properties": {
-              "Value": {
-                "type": "string"
-              }
-            },
-            "required": ["Value"]
+            "properties": {}
           }
         ]
       },
