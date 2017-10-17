@@ -1,6 +1,6 @@
 {
   "name": "shr-json-schema-export",
-  "version": "5.0.0-beta.1",
+  "version": "5.2.0-beta.1",
   "description": "Exports SHR data elements from SHR models to JSON Schema",
   "author": "",
   "license": "Apache-2.0",
@@ -18,13 +18,13 @@
   },
   "dependencies": {
     "bunyan": "^1.8.9",
-    "shr-models": "^5.0.0"
+    "shr-models": "https://github.com/standardhealth/shr-models#model-inheritance"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "mocha": "^3.2.0",
-    "shr-expand": "https://github.com/standardhealth/shr-expand#json-schema-export",
+    "shr-expand": "https://github.com/standardhealth/shr-expand#model-inheritance",
     "shr-test-helpers": "https://github.com/standardhealth/shr-test-helpers#json-schema-export",
     "ajv": "^5.2.0"
   }
