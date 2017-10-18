@@ -93,7 +93,7 @@ function commonExportTests(exportFn, expectedFn, expectedErrorsFn) {
 
     it('should correctly export a choice', function() {
       addChoice(_specs, 'shr.test');
-      const expected = wrappedExpectedFns('Choice');
+      const expected = wrappedExpectedFns('Choice', this);
       checkExpected(expected);
     });
 
