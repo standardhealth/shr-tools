@@ -914,7 +914,7 @@ shelljs@^0.7.5:
 
 "shr-test-helpers@https://github.com/standardhealth/shr-test-helpers#json-schema-export":
   version "5.0.1"
-  resolved "https://github.com/standardhealth/shr-test-helpers#5d2d8096daf71b72542795408743a4613e91b529"
+  resolved "https://github.com/standardhealth/shr-test-helpers#69d656ee65bf4f254316f56963cdf121af33221b"
   dependencies:
     bunyan "^1.8.9"
     shr-models "https://github.com/standardhealth/shr-models#model-inheritance"
