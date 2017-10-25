@@ -112,23 +112,17 @@ class ES6Exporter {
     } else if (field instanceof ChoiceValue) {
       // NOTE: This is special-case code to handle choice-fields, which actually should be deprecated!
       const choiceSymbol = toSymbol(field.options.filter(o => !(o instanceof TBD)).map(o => o.identifier.name).join('Or'));
-      for (const opt of field.options) {
-        if (opt instanceof TBD) {
-          continue;
-        }
-        const symbol = toSymbol(opt.identifier.name);
-        output.push(`  /**\n`)
-        output.push(`   * Getter for ${toCommentName(opt)} (option in a choice field).\n`)
-        output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`)
-        output.push(`   */\n`)
-        output.push(`  get ${symbol}() {\n    return this._${choiceSymbol};\n  }\n`)
-        output.push('\n');
-        output.push(`  /**\n`)
-        output.push(`   * Setter for ${toCommentName(opt)} (option in a choice field).\n`)
-        output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`)
-        output.push(`   */\n`)
-        output.push(`  set ${symbol}(${symbol}Val) {\n    this._${choiceSymbol} = ${symbol}Val;\n  }\n`);
-      }
+      output.push(`  /**\n`)
+      output.push(`   * Getter for ${toCommentName(field)}.\n`)
+      output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`)
+      output.push(`   */\n`)
+      output.push(`  get ${choiceSymbol}() {\n    return this._${choiceSymbol};\n  }\n`)
+      output.push('\n');
+      output.push(`  /**\n`)
+      output.push(`   * Setter for ${toCommentName(field)}.\n`)
+      output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`)
+      output.push(`   */\n`)
+      output.push(`  set ${choiceSymbol}(choiceVal) {\n    this._${choiceSymbol} = choiceVal;\n  }\n`);
     } else if (field.identifier.isValueKeyWord) {
       // Do nothing because this is just a constraint on value, and we already generated code for value
       return '';
@@ -154,7 +148,9 @@ function toSymbol(name) {
 
 function toCommentName(field) {
   const postFix = field.card && field.card.isList ? '[]' : '';
-  if (field instanceof TBD) {
+  if (field instanceof ChoiceValue) {
+    return `Choice<${field.options.map(o => toCommentName(o)).join(' | ')}>${postFix}`;
+  } else if (field instanceof TBD) {
     return `${field.toString()}${postFix}`;
   } else if (field instanceof RefValue) {
     return `Reference<${field.identifier.fqn}>${postFix}`;
