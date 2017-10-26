@@ -460,6 +460,16 @@ class Concept {
   clone() {
     return new Concept(this._system, this._code, this._display);
   }
+
+  /**
+   * Check concepts for equality. Note that this ignores the display property.
+   *
+   * @param other - the other concept for comparison.
+   * @returns {boolean} if the system and code are equal.
+   */
+  equals(other) {
+    return (other instanceof Concept) && this._system == other.system && this._code == other.code;
+  }
 }
 
 class Identifier {
@@ -579,6 +589,25 @@ class Constraint {
       clone._path.push(p.clone());
     }
   }
+
+  _pathsAreEqual(other) {
+    if (!this.hasPath) {
+      return !other.hasPath;
+    }
+    if (!other.hasPath) {
+      return false;
+    }
+    if (this.path.length !== other.path.length) {
+      return false;
+    }
+
+    for (let i=0; i < this.path.length; i++) {
+      if (!this.path[i].equals(other.path[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 // ValueSetConstraint only makes sense on a code or Coding type value
@@ -608,6 +637,13 @@ class ValueSetConstraint extends Constraint {
     this._clonePropertiesTo(clone);
     return clone;
   }
+
+  equals(other) {
+    return (other instanceof ValueSetConstraint) &&
+        this.bindingStrength == other.bindingStrength &&
+        this._valueSet == other.valueSet &&
+        this._pathsAreEqual(other);
+  }
 }
 
 // CodeConstraint only makes sense on a code or Coding type value
@@ -623,6 +659,12 @@ class CodeConstraint extends Constraint {
     const clone = new CodeConstraint(this._code.clone());
     this._clonePropertiesTo(clone);
     return clone;
+  }
+
+  equals(other) {
+    return (other instanceof CodeConstraint) &&
+        this._code.equals(other.code) &&
+        this._pathsAreEqual(other);
   }
 }
 
@@ -640,6 +682,12 @@ class IncludesCodeConstraint extends Constraint {
     this._clonePropertiesTo(clone);
     return clone;
   }
+
+  equals(other) {
+    return (other instanceof IncludesCodeConstraint) &&
+        this._code.equals(other.code) &&
+        this._pathsAreEqual(other);
+  }
 }
 
 // BooleanConstraint only makes sense on a boolean
@@ -655,6 +703,12 @@ class BooleanConstraint extends Constraint {
     const clone = new BooleanConstraint(this._value);
     this._clonePropertiesTo(clone);
     return clone;
+  }
+
+  equals(other) {
+    return (other instanceof BooleanConstraint) &&
+        this._value == other.value &&
+        this._pathsAreEqual(other);
   }
 }
 
@@ -683,6 +737,13 @@ class TypeConstraint extends Constraint {
     this._clonePropertiesTo(clone);
     return clone;
   }
+
+  equals(other) {
+    return (other instanceof TypeConstraint) &&
+        this._onValue == other.onValue &&
+        this._isA.equals(other.isA) &&
+        this._pathsAreEqual(other);
+  }
 }
 
 class IncludesTypeConstraint extends Constraint {
@@ -705,6 +766,14 @@ class IncludesTypeConstraint extends Constraint {
     this._clonePropertiesTo(clone);
     return clone;
   }
+
+  equals(other) {
+    return (other instanceof IncludesTypeConstraint) &&
+        this._onValue == other.onValue &&
+        this._isA.equals(other.isA) &&
+        this._card.equals(other.card) &&
+        this._pathsAreEqual(other);
+  }
 }
 
 class CardConstraint extends Constraint {
@@ -719,6 +788,12 @@ class CardConstraint extends Constraint {
     const clone = new CardConstraint(this._card.clone());
     this._clonePropertiesTo(clone);
     return clone;
+  }
+
+  equals(other) {
+    return (other instanceof CardConstraint) &&
+        this._card.equals(other.card) &&
+        this._pathsAreEqual(other);
   }
 }
 
@@ -850,6 +925,16 @@ class Value {
     return new ConstraintsFilter(this._constraints);
   }
 
+  get inheritance() { return this._inheritance; }
+  set inheritance(inheritance) {
+    this._inheritance = inheritance;
+  }
+  // withInheritance is a convenience function for chaining
+  withInheritance(inheritance) {
+    this.inheritance = inheritance;
+    return this;
+  }
+
   _clonePropertiesTo(clone) {
     if (this._card) {
       clone._card = this._card.clone();
@@ -857,6 +942,57 @@ class Value {
     for (const constraint of this._constraints) {
       clone._constraints.push(constraint.clone());
     }
+    if (this._inheritance) {
+      clone._inheritance = this.inheritance;
+    }
+  }
+
+  /**
+   * Check values for equality.
+   *
+   * @param other - the other value for comparison.
+   * @param {boolean} [ignoreInheritance=false] - if the inheritance property should be ignored.
+   * @returns {boolean} if the values are equal.
+   */
+  equals(other, ignoreInheritance = false) {
+    if (!other || (Object.getPrototypeOf(this) !== Object.getPrototypeOf(other))) {
+      return false;
+    }
+
+    if (!this.card) {
+      if (other.card) {
+        return false;
+      }
+    } else {
+      if (!other.card) {
+        return false;
+      }
+      if (!this.card.equals(other.card)) {
+        return false;
+      }
+    }
+
+    if ((!ignoreInheritance) && (this.inheritance !== other.inheritance)) {
+      return false;
+    }
+
+    if (!this.hasConstraints) {
+      return !other.hasConstraints;
+    }
+    if (!other.hasConstraints) {
+      return false;
+    }
+    if (this.constraints.length !== other.constraints.length) {
+      return false;
+    }
+
+    for (let i=0; i < this.constraints.length; i++) {
+      if (!this.constraints[i].equals(other.constraints[i])) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
 
@@ -899,6 +1035,12 @@ class IdentifiableValue extends Value {
   _clonePropertiesTo(clone) {
     super._clonePropertiesTo(clone);
     clone._identifier = this._identifier.clone();
+  }
+
+  /** @inheritDoc */
+  equals(other, ignoreInheritance = false) {
+    return super.equals(other, ignoreInheritance) &&
+        this._identifier.equals(other.identifier);
   }
 
   toString() {
@@ -959,6 +1101,30 @@ class ChoiceValue extends Value {
     return clone;
   }
 
+  /** @inheritDoc */
+  equals(other, ignoreInheritance = false) {
+    if (!super.equals(other, ignoreInheritance)) {
+      return false;
+    }
+
+    if (!this.options) {
+      return !other.options;
+    }
+    if (!other.options) {
+      return false;
+    }
+    if (this.options.length !== other.options.length) {
+      return false;
+    }
+
+    for (let i=0; i < this.options.length; i++) {
+      if (!this.options[i].equals(other.options[i], ignoreInheritance)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   toString() {
     let str = 'ChoiceValue<';
     for (let i=0; i < this._options.length; i++) {
@@ -1000,8 +1166,20 @@ class TBD extends Value{
 
   get text() { return this._text; }
 
+  set text(text) {
+    this._text = text;
+  }
+
+  /**
+   * Check value for equality. This only checks that the other object is a TBD and that the text properties are ==.
+   * Because inheritance doesn't apply to TBD the ignoreInheritance parameter is unused.
+   *
+   * @param other - the other value for comparison
+   * @returns {boolean} if the values are equal.
+   * @override
+   */
   equals(other) {
-    return this._text == other.text;
+    return (other instanceof TBD) && this._text == other.text;
   }
 
   clone() {
@@ -1522,4 +1700,8 @@ const PRIMITIVE_NS = 'primitive';
 const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'code', 'id',
   'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time', 'xhtml'];
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE};
+// Inheritance constants
+const INHERITED = 'inherited';
+const OVERRIDDEN = 'overridden'
+
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN};

@@ -1,6 +1,23 @@
 const {expect} = require('chai');
 const mdl = require('../index');
 
+describe('#Concept', () => {
+  it('should correctly calculate equality and handling cloning.', () => {
+    const code = new mdl.Concept('urn:x-test:some/namespace', '12345', 'My first code!');
+    const code2 = code.clone();
+    expect(code2.system).to.eql(code.system);
+    expect(code2.code).to.eql(code.code);
+    expect(code2.display).to.eql(code.display);
+    expect(code2.equals(code)).to.be.true;
+
+    code2.display = 'Another name for the code.'
+    expect(code2.equals(code)).to.be.true;
+
+    code2.code = '6789'
+    expect(code2.equals(code)).to.be.false;
+  });
+})
+
 describe('#Value', () => {
   it('should correctly set and get cardinalities', () => {
     // Need to use an subclass of Value to get an instance
@@ -98,7 +115,8 @@ describe('#Value', () => {
     const val = new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo'))
       .withMinMax(0,1)
       .withConstraint(new mdl.CardConstraint(new mdl.Cardinality(1,1)))
-      .withConstraint(new mdl.TypeConstraint(new mdl.Identifier('shr.test', 'SonOfFoo')));
+      .withConstraint(new mdl.TypeConstraint(new mdl.Identifier('shr.test', 'SonOfFoo')))
+      .withInheritance(mdl.INHERITED);
     const val2 = val.clone();
     // Ensure they're not the same instance ('equal'), but they have equal values ('eql')
     expect(val2).not.to.equal(val);
@@ -109,6 +127,22 @@ describe('#Value', () => {
     expect(val2.constraints[0]).not.to.equal(val.constraints[0]);
     expect(val2.constraints[1]).not.to.equal(val.constraints[1]);
     expect(val2.constraints).to.eql(val.constraints);
+    expect(val2.inheritance).to.equal(val.inheritance);
+    expect(val2.equals(val)).to.be.true;
+  });
+
+  it('should ignore inheritance during equality when asked', () => {
+    const val = new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo'))
+      .withMinMax(0,1)
+      .withConstraint(new mdl.CardConstraint(new mdl.Cardinality(1,1)))
+      .withConstraint(new mdl.TypeConstraint(new mdl.Identifier('shr.test', 'SonOfFoo')))
+      .withInheritance(mdl.INHERITED);
+
+    const val2 = val.clone();
+    val2.inheritance = mdl.OVERRIDDEN;
+
+    expect(val2.equals(val)).to.be.false;
+    expect(val2.equals(val, true)).to.be.true;
   });
 });
 
@@ -138,6 +172,7 @@ describe('#IdentifiableValue', () => {
     expect(val2).to.eql(val);
     expect(val2.identifier).not.to.equal(val.identifier);
     expect(val2.identifier).to.eql(val.identifier);
+    expect(val2.equals(val)).to.be.true;
   });
 
   it('should toString its class and identifier', () => {
@@ -145,6 +180,15 @@ describe('#IdentifiableValue', () => {
       .withMinMax(1,1);
     const str = val.toString();
     expect(str).to.equal('IdentifiableValue<shr.test.Foo>');
+  });
+
+  it('should ignore inheritance during equality when asked', () => {
+    const val = new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo'))
+        .withMinMax(1,1);
+    const val2 = val.clone();
+    val2.inheritance = mdl.INHERITED;
+    expect(val2.equals(val)).to.be.false;
+    expect(val2.equals(val, true)).to.be.true;
   });
 });
 
@@ -174,6 +218,7 @@ describe('#RefValue', () => {
     expect(val2).to.eql(val);
     expect(val2.identifier).not.to.equal(val.identifier);
     expect(val2.identifier).to.eql(val.identifier);
+    expect(val2.equals(val)).to.be.true;
   });
 
   it('should toString its class and identifier', () => {
@@ -181,6 +226,24 @@ describe('#RefValue', () => {
       .withMinMax(1,1);
     const str = val.toString();
     expect(str).to.equal('RefValue<shr.test.Foo>');
+  });
+
+  it('should not equal a similar IndentifiableValue', () => {
+    const val = new mdl.RefValue(new mdl.Identifier('shr.test', 'Foo'))
+        .withMinMax(1,1);
+    const ival = new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo'))
+        .withMinMax(1,1);
+    expect(val.equals(ival)).to.be.false;
+    expect(ival.equals(val)).to.be.false;
+  });
+
+  it('should ignore inheritance during equality when asked', () => {
+    const val = new mdl.RefValue(new mdl.Identifier('shr.test', 'Foo'))
+        .withMinMax(1,1);
+    const val2 = val.clone();
+    val.inheritance = mdl.OVERRIDDEN;
+    expect(val2.equals(val)).to.be.false;
+    expect(val2.equals(val, true)).to.be.true;
   });
 });
 
@@ -206,12 +269,16 @@ describe('#ChoiceValue', () => {
     ]);
   });
 
-  it('should correctly clone its properties', () => {
+  function cloneValues() {
     const val = new mdl.ChoiceValue()
-      .withMinMax(1,1)
-      .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
-      .withOption(new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
+        .withMinMax(1,1)
+        .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
+        .withOption(new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
     const val2 = val.clone();
+    return {val, val2};
+  }
+  it('should correctly clone its properties', () => {
+    const {val, val2} = cloneValues();
     // Ensure they're not the same instance ('equal'), but they have equal values ('eql')
     expect(val2).not.to.equal(val);
     expect(val2).to.eql(val);
@@ -219,6 +286,7 @@ describe('#ChoiceValue', () => {
     expect(val2.options[0]).not.to.equal(val.options[0]);
     expect(val2.options[1]).not.to.equal(val.options[1]);
     expect(val2.options).to.eql(val.options);
+    expect(val2.equals(val)).to.be.true;
   });
 
   it('should toString its class and identifier', () => {
@@ -228,6 +296,23 @@ describe('#ChoiceValue', () => {
       .withOption(new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
     const str = val.toString();
     expect(str).to.equal('ChoiceValue<IdentifiableValue<shr.test.Foo>|RefValue<shr.test.Bar>>');
+  });
+
+  it('should ignore inheritance during equality when asked', () => {
+    const {val, val2} = cloneValues();
+    val.inheritance = mdl.INHERITED;
+    val2.inheritance = mdl.OVERRIDDEN;
+    expect(val2.equals(val)).to.be.false;
+    expect(val2.equals(val, true)).to.be.true;
+    val2.inheritance = mdl.INHERITED;
+    expect(val2.equals(val)).to.be.true;
+
+    val.options[0].inheritance = mdl.INHERITED;
+    val2.options[0].inheritance = mdl.OVERRIDDEN;
+    val2.options[1].inheritance = mdl.INHERITED;
+
+    expect(val2.equals(val)).to.be.false;
+    expect(val2.equals(val, true)).to.be.true;
   });
 });
 
@@ -255,6 +340,24 @@ describe('#IncompleteValue', () => {
     const str = val.toString();
     expect(str).to.equal('IncompleteValue<shr.test.Foo>');
   });
+
+  it('should not equal a similar IndentifiableValue', () => {
+    const val = new mdl.IncompleteValue(new mdl.Identifier('shr.test', 'Foo'))
+        .withMinMax(1,1);
+    const ival = new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo'))
+        .withMinMax(1,1);
+    expect(val.equals(ival)).to.be.false;
+    expect(ival.equals(val)).to.be.false;
+  });
+
+  it('should ignore inheritance during equality when asked', () => {
+    const val = new mdl.IncompleteValue(new mdl.Identifier('shr.test', 'Foo'))
+        .withMinMax(1,1);
+    const val2 = val.clone();
+    val2.inheritance = mdl.INHERITED;
+    expect(val2.equals(val)).to.be.false;
+    expect(val2.equals(val, true)).to.be.true;
+  });
 });
 
 describe('#TBD', () => {
@@ -270,6 +373,11 @@ describe('#TBD', () => {
     expect(val2).not.to.equal(val);
     expect(val2).to.eql(val);
     expect(val2.text).to.equal(val.text);
+    expect(val2.equals(val)).to.be.true;
+    val.inheritance = mdl.OVERRIDDEN;
+    val2.inheritance = mdl.INHERITED;
+    expect(val2.equals(val)).to.be.true;
+    expect(val2.equals(val, false)).to.be.true;
   });
 
   it('should toString its class and identifier', () => {
