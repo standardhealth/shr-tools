@@ -43,6 +43,106 @@ class Expander {
         this.expandElement(de);
       }
     }
+
+    const entryDE = this._expanded.dataElements.find('shr.base', 'Entry');
+    let entryFields = null;
+    if (!entryDE) {
+      logger.warn('Could not find expanded definition of shr.base.Entry. Inheritance calculations will be incomplete.');
+      entryFields = {
+        'shr.core': { 'Version': true },
+        'shr.base': {}
+      };
+      for (const name of ['ShrId', 'EntryId', 'EntryType', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative',
+        'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
+        entryFields['shr.base'][name] = true;
+      }
+    }
+    for (const de of this._expanded.dataElements.all) {
+      if (de.basedOn && de.basedOn.length) {
+        const parents = [];
+        for (const basedOn of de.basedOn) {
+          if (basedOn instanceof models.TBD) {
+            logger.debug(`Ignoring TBD parent %s for child element %s.`, basedOn, de.identifier);
+            continue;
+          }
+          const parent = this._expanded.dataElements.findByIdentifier(basedOn);
+          if (!parent) {
+            logger.error(`Could not find based on element %s for child element %s.`, basedOn, de.identifier);
+          } else {
+            parents.push(parent);
+          }
+        }
+        if (de.value) {
+          let inheritance = null;
+          for (const parent of parents) {
+            if (parent.value) {
+              if (!(parent.value instanceof models.TBD)) {
+                inheritance = models.OVERRIDDEN;
+              }
+              if (parent.value.equals(de.value, true)) {
+                inheritance = models.INHERITED;
+                break;
+              }
+            }
+          }
+          if (inheritance) {
+            de.value.inheritance = inheritance;
+          }
+        }
+        for (const field of de.fields) {
+          if (field instanceof models.TBD) {
+            // You can't track inheritance for a TBD field because there is no name associated with it.
+            continue;
+          }
+          let inheritance = null;
+          for (const parent of parents) {
+            const i = parent.fields.findIndex(item => {
+              return item instanceof models.IdentifiableValue && (item.identifier.equals(field.identifier) || item.effectiveIdentifier.equals(field.identifier));
+            });
+            if (i >= 0) {
+              inheritance = models.OVERRIDDEN;
+              if (field.equals(parent.fields[i], true)) {
+                inheritance = models.INHERITED;
+                break;
+              }
+            }
+          }
+          if (inheritance) {
+            field.inheritance = inheritance;
+          }
+        }
+      }
+      if (de.isEntry) {
+        if (!entryDE) {
+          for (const field of de.fields) {
+            if (field instanceof models.TBD) {
+              // You can't track inheritance for a TBD field because there is no name associated with it.
+              continue;
+            }
+            if (entryFields[field.identifier.namespace] && entryFields[field.identifier.namespace][field.identifier.name]) {
+              logger.error('Could not find expanded definition of shr.base.Entry. Inheritance calculations for %s will be incomplete.', de.identifier);
+              break;
+            }
+          }
+        } else {
+          for (const field of entryDE.fields) {
+            const i = de.fields.findIndex(item => {
+              return item instanceof models.IdentifiableValue && (item.identifier.equals(field.identifier) || item.effectiveIdentifier.equals(field.identifier));
+            });
+            if (i >= 0) {
+              if (!de.fields[i].inheritance) {
+                if (!field.equals(de.fields[i])) {
+                  de.fields[i].inheritance = models.OVERRIDDEN;
+                } else {
+                  de.fields[i].inheritance = models.INHERITED;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     // Now expand all of the mappings
     for (const target of this._unexpanded.maps.targets) {
       for (const de of this._expanded.dataElements.all) {
@@ -157,6 +257,8 @@ class Expander {
     } else if (newValue instanceof models.ChoiceValue) {
       logger.error('Cannot override %s with %s since overriding ChoiceValue is not supported. ERROR_CODE:12008', oldValue.toString(), newValue.toString());
       return mergedValue;
+    } else if (newValue instanceof models.TBD) {
+      mergedValue.text = newValue.text;
     }
 
     // If the newValue cardinality doesn't match the old value cardinality, it should be a constraint.
@@ -512,7 +614,7 @@ class Expander {
     let constraints = previousConstraints;
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).includesCode.constraints;
     for (const previous of filtered) {
-      if (this.sameCode(previous.code, constraint.code)) {
+      if (previous.code.equals(constraint.code)) {
         // no need to duplicate the constraint -- just return the existing constraints as-is
         return constraints;
       }
@@ -633,10 +735,6 @@ class Expander {
 
   supportsBooleanConstraint(identifier) {
     return BOOLEAN.equals(identifier);
-  }
-
-  sameCode(c1, c2) {
-    return c1 && c2 && c1.system == c2.system && c1.code == c2.code;
   }
 
   checkHasBaseType(identifier, baseIdentifier) {

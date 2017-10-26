@@ -3,20 +3,25 @@ const {expand, setLogger} = require('../index');
 const models = require('shr-models');
 const err = require('shr-test-helpers/errors');
 
-// Set the logger -- this is needed for detecting and checking errors
-setLogger(err.logger('warn'));
-
 let _specs, _result;
 
 describe('#expandMap()', () => {
+  before(function() {
+    // Set the logger -- this is needed for detecting and checking errors
+    setLogger(err.logger('warn'));
+  });
+
   beforeEach(function() {
     err.clear();
     _specs = new models.Specifications();
     // The SHR test namespace used by most tests
-    _specs.namespaces.add(new models.Namespace('shr.core'));
+    _specs.namespaces.add(new models.Namespace('shr.test'));
     // A core namespace and Coding data element needed by some tests
     _specs.namespaces.add(new models.Namespace('shr.core'));
     _specs.dataElements.add(new models.DataElement(id('shr.core', 'Coding'), false));
+    // A degenerate shr.base.Entry is needed to avoid warnings, which are considered illegal in this test.
+    _specs.namespaces.add(new models.Namespace('shr.base'));
+    _specs.dataElements.add(new models.DataElement(id('shr.base', 'Entry'), false));
   });
 
   afterEach(function() {

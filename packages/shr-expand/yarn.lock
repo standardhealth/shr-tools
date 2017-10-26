@@ -885,6 +885,10 @@ shr-models@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.1.0.tgz#3f9ef0e7ba929ea440fd07f2f31f905866ac4e03"
 
+shr-models@^5.2.0-beta.1:
+  version "5.2.0-beta.1"
+  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.2.0-beta.1.tgz#7c2f4c42a44716dd8ea8288fec226512d15f0d38"
+
 shr-test-helpers@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/shr-test-helpers/-/shr-test-helpers-5.0.1.tgz#72abffcf26606fd5d88f731e3c3d4833210f9d1e"

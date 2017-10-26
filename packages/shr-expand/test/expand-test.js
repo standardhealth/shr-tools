@@ -3,12 +3,14 @@ const {expand, setLogger} = require('../index');
 const models = require('shr-models');
 const err = require('shr-test-helpers/errors');
 
-// Set the logger -- this is needed for detecting and checking errors
-setLogger(err.logger());
-
 let _specs, _result;
 
 describe('#expand()', () => {
+  before(function() {
+    // Set the logger -- this is needed for detecting and checking errors
+    setLogger(err.logger());
+  });
+
   beforeEach(function() {
     err.clear();
     _specs = new models.Specifications();
@@ -76,7 +78,7 @@ describe('#expand()', () => {
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.description).to.be.undefined;
     expect(eSubA.concepts).to.be.empty;
-    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1).withInheritance(models.INHERITED));
     expect(eSubA.fields).to.be.empty;
   });
 
@@ -99,7 +101,7 @@ describe('#expand()', () => {
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.description).to.equal('It is SubA.');
     expect(eSubA.concepts).to.eql([new models.Concept('http://foo.org', 'baz')]);
-    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1).withInheritance(models.INHERITED));
     expect(eSubA.fields).to.be.empty;
   });
 
@@ -117,7 +119,7 @@ describe('#expand()', () => {
     const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
-    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1).withInheritance(models.INHERITED));
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'SubAFieldA')).withMinMax(1, 1)
     ]);
@@ -137,7 +139,7 @@ describe('#expand()', () => {
     const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
-    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1).withInheritance(models.INHERITED));
     expect(eSubA.fields).to.be.empty;
   });
 
@@ -156,7 +158,7 @@ describe('#expand()', () => {
     const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
-    expect(eSubA.value).to.be.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
+    expect(eSubA.value).to.be.eql(new models.IdentifiableValue(pid('string')).withMinMax(1, 1).withInheritance(models.INHERITED));
     expect(eSubA.fields).to.be.empty;
   });
 
@@ -178,6 +180,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
         .withConstraint(new models.CardConstraint(new models.Cardinality(0, 0)))
+        .withInheritance(models.OVERRIDDEN)
       );
     expect(eSubA.fields).to.be.empty;
   });
@@ -206,6 +209,7 @@ describe('#expand()', () => {
           .withOption(new models.IdentifiableValue(pid('string')))
           .withOption(new models.IdentifiableValue(pid('code')))
         .withConstraint(new models.CardConstraint(new models.Cardinality(0, 0)))
+        .withInheritance(models.OVERRIDDEN)
       );
     expect(eSubA.fields).to.be.empty;
   });
@@ -227,7 +231,7 @@ describe('#expand()', () => {
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
     expect(eSubA.fields).to.eql([
-      new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1, 1),
+      new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1, 1).withInheritance(models.INHERITED),
       new models.IdentifiableValue(id('shr.test', 'SubAFieldA')).withMinMax(1, 1)
     ]);
   });
@@ -251,6 +255,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
         .withConstraint(new models.CardConstraint(new models.Cardinality(1, 1)))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -273,6 +278,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 5)
         .withConstraint(new models.CardConstraint(new models.Cardinality(1, 3)))
+        .withInheritance(models.OVERRIDDEN)
     ]);
   });
 
@@ -298,6 +304,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 5)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'Coding')]))
+        .withInheritance(models.OVERRIDDEN)
     ]);
   });
   // Invalid Cardinality Constraints
@@ -319,6 +326,7 @@ describe('#expand()', () => {
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(pid('string')).withMinMax(0, 1) // No constraint since it was invalid
+        .withInheritance(models.INHERITED)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -348,6 +356,7 @@ describe('#expand()', () => {
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.test', 'AVal')).withMinMax(0, 1) // No constraint since it was invalid
+        .withInheritance(models.INHERITED)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -378,6 +387,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.test', 'AVal')).withMinMax(0, 1)
         .withConstraint(new models.CardConstraint(new models.Cardinality(1, 1), [pid('decimal')])) // Last valid constraint
+        .withInheritance(models.INHERITED)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -400,6 +410,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.be.undefined;
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1, 1) // retain base cardinality
+        .withInheritance(models.INHERITED)
     ]);
   });
 
@@ -429,6 +440,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.be.undefined;
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'AField')).withMinMax(0, 1) // No constraint since it was invalid
+        .withInheritance(models.INHERITED)
     ]);
   });
 
@@ -459,6 +471,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'AField')).withMinMax(0, 1)
         .withConstraint(new models.CardConstraint(new models.Cardinality(1, 1), [pid('decimal')])) // Last valid constraint
+        .withInheritance(models.INHERITED)
     ]);
   });
 
@@ -488,6 +501,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
         .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -572,6 +586,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
         .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')))
+        .withInheritance(models.OVERRIDDEN)
     ]);
   });
 
@@ -626,7 +641,7 @@ describe('#expand()', () => {
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
-      new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)); // No constraint since it was invalid
+      new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1).withInheritance(models.INHERITED)); // No constraint since it was invalid
     expect(eSubA.fields).to.be.empty;
   });
 
@@ -660,6 +675,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
         .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB'))) // Original constraint
+        .withInheritance(models.INHERITED)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -689,6 +705,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.be.undefined;
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1) // No constraint since it was invalid
+        .withInheritance(models.INHERITED)
     ]);
 
   });
@@ -724,6 +741,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
         .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB'))) // Original constraint
+        .withInheritance(models.INHERITED)
     ]);
   });
 
@@ -810,6 +828,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue((id('shr.test', 'B'))).withMinMax(0, 1)
         .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1)))
+        .withInheritance(models.OVERRIDDEN)
     );
   });
 
@@ -837,6 +856,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue((id('shr.test', 'B'))).withMinMax(0, 1)
         .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1)))
+        .withInheritance(models.INHERITED)
     );
   });
 
@@ -872,7 +892,8 @@ describe('#expand()', () => {
     expect(eSubA.value).to.be.undefined;
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue((id('shr.test', 'B'))).withMinMax(0, 1)
-        .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1)))]
+        .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1)))
+        .withInheritance(models.OVERRIDDEN)]
     );
   });
 
@@ -903,6 +924,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue((id('shr.test', 'B'))).withMinMax(0, 1)
         .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1)))
+        .withInheritance(models.OVERRIDDEN)
     );
   });
 
@@ -929,7 +951,8 @@ describe('#expand()', () => {
     expect(eSubA.value).to.be.undefined;
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue((id('shr.test', 'B'))).withMinMax(0, 1)
-        .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1)))]
+        .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1)))
+        .withInheritance(models.INHERITED)]
     );
   });
 
@@ -1211,6 +1234,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.ValueSetConstraint('http://foo.org'))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1238,6 +1262,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.ValueSetConstraint('http://bar.org'))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1265,6 +1290,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1)
         .withConstraint(new models.ValueSetConstraint('http://bar.org'))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1293,6 +1319,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.ValueSetConstraint('http://bar.org'))
+        .withInheritance(models.OVERRIDDEN)
     ]);
   });
 
@@ -1317,6 +1344,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.ValueSetConstraint('http://foo.org'))
+        .withInheritance(models.OVERRIDDEN)
     ]);
   });
 
@@ -1395,7 +1423,7 @@ describe('#expand()', () => {
     const eSubB = findExpanded('shr.test', 'SubB');
     expect(eSubB.identifier).to.eql(id('shr.test', 'SubB'));
     expect(eSubB.basedOn).to.eql([id('shr.test', 'B')]);
-    expect(eSubB.value).to.eql(new models.IdentifiableValue(pid('code')).withMinMax(0, 1)); // No constraint
+    expect(eSubB.value).to.eql(new models.IdentifiableValue(pid('code')).withMinMax(0, 1).withInheritance(models.INHERITED)); // No constraint
     expect(eSubB.fields).to.be.empty;
   });
 
@@ -1422,6 +1450,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(1, 1)
         .withConstraint(new models.ValueSetConstraint('http://foo.org', [pid('code')]))
+        .withInheritance(models.OVERRIDDEN)
       );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1446,7 +1475,7 @@ describe('#expand()', () => {
     const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
-    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(0, 1)); // No constraint
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(0, 1).withInheritance(models.INHERITED)); // No constraint
     expect(eSubA.fields).to.be.empty;
   });
 
@@ -1474,6 +1503,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.INHERITED)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1498,7 +1528,7 @@ describe('#expand()', () => {
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
-    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1)]); // No constraint
+    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1).withInheritance(models.INHERITED)]); // No constraint
   });
 
   it('should report an error when putting a valueset constraint on a field already constrained to a code', () => {
@@ -1526,6 +1556,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.INHERITED)
     ]);
   });
 
@@ -1551,6 +1582,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1583,6 +1615,7 @@ describe('#expand()', () => {
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
         .withConstraint(new models.ValueSetConstraint('http://foo.org/valueset'))
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar')))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1654,6 +1687,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1681,6 +1715,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1708,6 +1743,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.INHERITED)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1737,6 +1773,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(1, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar'), [id('shr.core', 'Coding')]))
+        .withInheritance(models.OVERRIDDEN)
       );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1762,6 +1799,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.OVERRIDDEN)
     ]);
   });
 
@@ -1811,6 +1849,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+        .withInheritance(models.OVERRIDDEN)
     ]);
   });
 
@@ -1838,6 +1877,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0, 1)
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.INHERITED)
     ]);
   });
 
@@ -1861,7 +1901,7 @@ describe('#expand()', () => {
     const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
-    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(0, 1)); // No constraint
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(0, 1).withInheritance(models.INHERITED)); // No constraint
     expect(eSubA.fields).to.be.empty;
   });
 
@@ -1885,7 +1925,7 @@ describe('#expand()', () => {
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
-    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1)]); // No constraint
+    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(0, 1).withInheritance(models.INHERITED)]); // No constraint
   });
 
     // Valid Includes Code Constraints
@@ -1910,6 +1950,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -1942,6 +1983,7 @@ describe('#expand()', () => {
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
         .withConstraint(new models.ValueSetConstraint('http://foo.org/valueset'))
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar')))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -2014,6 +2056,7 @@ describe('#expand()', () => {
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -2042,6 +2085,7 @@ describe('#expand()', () => {
       new models.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(1)
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -2069,6 +2113,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.INHERITED)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -2094,6 +2139,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.OVERRIDDEN)
     ]);
   });
 
@@ -2144,6 +2190,7 @@ describe('#expand()', () => {
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'baz', 'FooBaz')))
+        .withInheritance(models.OVERRIDDEN)
     ]);
   });
 
@@ -2171,6 +2218,7 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.eql([
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
         .withConstraint(new models.IncludesCodeConstraint(new models.Concept('http://foo.org/codes', 'bar', 'FooBar')))
+        .withInheritance(models.INHERITED)
     ]);
   });
 
@@ -2194,7 +2242,7 @@ describe('#expand()', () => {
     const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
-    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1)); // No constraint
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(1).withInheritance(models.INHERITED)); // No constraint
     expect(eSubA.fields).to.be.empty;
   });
 
@@ -2218,7 +2266,7 @@ describe('#expand()', () => {
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.be.undefined;
-    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1)]); // No constraint
+    expect(eSubA.fields).to.eql([new models.IdentifiableValue(id('shr.test', 'AFieldA')).withMinMax(1).withInheritance(models.INHERITED)]); // No constraint
   });
 
   // Valid Boolean Constraints
@@ -2243,6 +2291,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
         .withConstraint(new models.BooleanConstraint(true))
+        .withInheritance(models.OVERRIDDEN)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -2292,6 +2341,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
         .withConstraint(new models.BooleanConstraint(false))
+        .withInheritance(models.INHERITED)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -2322,6 +2372,7 @@ describe('#expand()', () => {
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
         .withConstraint(new models.BooleanConstraint(true))
+        .withInheritance(models.INHERITED)
     );
     expect(eSubA.fields).to.be.empty;
   });
@@ -2344,8 +2395,65 @@ describe('#expand()', () => {
     const eSubA = findExpanded('shr.test', 'SubA');
     expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
-    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(0, 1)); // No constraint
+    expect(eSubA.value).to.eql(new models.IdentifiableValue(pid('string')).withMinMax(0, 1).withInheritance(models.INHERITED)); // No constraint
     expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should properly deal with inherited TBD values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.TBD('Not ready yet!')
+      .withMinMax(1, 1)
+    );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(new models.TBD('Almost ready!')
+      .withMinMax(1, 1)
+    );
+    let subA2 = new models.DataElement(id('shr.test', 'SubA2'), true)
+      .withBasedOn(id('shr.test', 'A'));
+    add(a, subA, subA2);
+
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+        new models.TBD('Almost ready!').withMinMax(1, 1)
+    );
+
+    const eSubA2 = findExpanded('shr.test', 'SubA2');
+    expect(eSubA2.identifier).to.eql(id('shr.test', 'SubA2'));
+    expect(eSubA2.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA2.value).to.eql(
+        new models.TBD('Not ready yet!')
+            .withInheritance(models.INHERITED).withMinMax(1, 1)
+    );
+  });
+
+  it('should report an error when overriding a value with a TBD', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+        .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1)
+    );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+        .withBasedOn(id('shr.test', 'A'))
+        .withValue(new models.TBD('Almost ready!')
+            .withMinMax(1, 1)
+    );
+    add(a, subA);
+
+    doExpand();
+
+    expect(err.errors()).to.have.length(1);
+    expect(err.errors()[0].msg).to.contain('Cannot override').and.to.contain('string').and.to.contain('TBD')
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(pid('string')).withMinMax(1, 1)
+        .withInheritance(models.INHERITED)
+    );
   });
 });
 
