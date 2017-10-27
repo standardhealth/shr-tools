@@ -2,9 +2,13 @@ const fs = require('fs');
 const err = require('shr-test-helpers/errors');
 const Ajv = require('ajv');
 const {expect} = require('chai');
-const {commonExportTests} = require('shr-test-helpers/export');
+const { sanityCheckModules } = require('shr-models');
+const export_tests = require('shr-test-helpers/export');
+const {commonExportTests } = export_tests;
 const {exportToJSONSchema, setLogger} = require('../lib/export');
 const expander = require('shr-expand');
+
+sanityCheckModules({ 'shr-expand': expander, 'shr-test-helpers': export_tests });
 
 // Set the logger -- this is needed for detecting and checking errors
 setLogger(err.logger());

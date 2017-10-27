@@ -3,7 +3,7 @@
 // Derived from export SHR specification content as a hierarchy in JSON format by Greg Quinn
 
 const bunyan = require('bunyan');
-const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, DataElement, Namespace, DataElementSpecifications, Specifications} = require('shr-models');
+const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, DataElement, Namespace, DataElementSpecifications, Specifications, MODELS_INFO} = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-json-schema-export'});
 var logger = rootLogger;
@@ -707,4 +707,4 @@ function identifierToString(identifier) {
   return `${identifier.namespace}:${identifier.name}`;
 }
 
-module.exports = {exportToJSONSchema, setLogger};
+module.exports = {exportToJSONSchema, setLogger, MODELS_INFO };
