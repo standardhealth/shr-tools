@@ -1027,4 +1027,4 @@ class Expander {
   }
 }
 
-module.exports = { expand, setLogger };
+module.exports = { expand, setLogger, MODELS_INFO: models.MODELS_INFO };
