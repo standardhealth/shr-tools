@@ -1,3 +1,41 @@
+/**
+ * An object that contains module information. Used to detect multiple versions of shr-models in a single environment.
+ *
+ * @type {{filename: string, id: string}}
+ */
+const MODELS_INFO = Object.seal({
+  filename: module.filename,
+  id: module.id
+});
+
+/**
+ * A sanity check of modules to ensure that they are all using the same version of shr-models. The selected modules
+ * must re-export shr-models' {@linkcode MODELS_INFO} object.
+ * <pre>
+ * An invocation would typically look like this:
+ * const { sanityCheckModules } = require('shr-models');
+ * const shrTI = require('shr-text-import');
+ * const shrEx = require('shr-expand');
+ * ...
+ * sanityCheckModules({shrTI, shrEx })
+ * </pre>
+ *
+ * @param {Object.<string, Object>} modelInfoMap - A mapping of module names to the modules that import shr-models.
+ * @throws {Error} if there is an inconsistency in the provided modules.
+ */
+function sanityCheckModules(modelInfoMap) {
+  if (Object.keys(modelInfoMap).some((key) => !modelInfoMap[key].MODELS_INFO || (modelInfoMap[key].MODELS_INFO !== MODELS_INFO))) {
+    const error = [];
+    error.push('Multiple versions of shr-models were detected');
+    error.push('shr-models: ' + JSON.stringify(MODELS_INFO, null, 2));
+    for (const modName in modelInfoMap) {
+      error.push(`${modName}: ${JSON.stringify(modelInfoMap[modName].MODELS_INFO, null, 2)}`);
+    }
+
+    throw new Error(error.join('\n'));
+  }
+}
+
 class Specifications {
   constructor() {
     this._namespaces = new NamespaceSpecifications();
@@ -1704,4 +1742,4 @@ const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt
 const INHERITED = 'inherited';
 const OVERRIDDEN = 'overridden'
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
