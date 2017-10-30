@@ -307,4 +307,4 @@ function pid(name) {
   return new mdl.PrimitiveIdentifier(name);
 }
 
-module.exports = {commonExportTests};
+module.exports = {commonExportTests, MODELS_INFO: mdl.MODELS_INFO};
