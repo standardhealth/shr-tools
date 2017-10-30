@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const bunyan = require('bunyan');
-const {Specifications} = require('shr-models');
+const {Specifications, MODELS_INFO} = require('shr-models');
 const {Preprocessor, VERSION, GRAMMAR_VERSION} = require('./preprocessor');
 const {DataElementImporter} = require('./dataElementListener');
 const {ValueSetImporter} = require('./valueSetListener');
@@ -121,4 +121,4 @@ class FilesByType {
   }
 }
 
-module.exports = {importFromFilePath, importConfigFromFilePath, VERSION, GRAMMAR_VERSION, setLogger};
+module.exports = {importFromFilePath, importConfigFromFilePath, VERSION, GRAMMAR_VERSION, setLogger, MODELS_INFO};
