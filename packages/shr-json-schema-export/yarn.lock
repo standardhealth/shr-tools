@@ -901,23 +901,23 @@ shelljs@^0.7.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-"shr-expand@https://github.com/standardhealth/shr-expand#model-inheritance":
-  version "5.1.0"
-  resolved "https://github.com/standardhealth/shr-expand#2df5483d4aa131a415d1f09c9db9e6bd873bef54"
+shr-expand@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-5.2.0.tgz#378d3cc20d4f51413fbfcb4fc0418b338003e901"
   dependencies:
     bunyan "^1.8.9"
-    shr-models "https://github.com/standardhealth/shr-models#model-inheritance"
+    shr-models "^5.2.0"
 
-"shr-models@https://github.com/standardhealth/shr-models#model-inheritance":
-  version "5.1.0"
-  resolved "https://github.com/standardhealth/shr-models#6e7d731f95f4208592a952a7f44913614400fee0"
+shr-models@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.2.0.tgz#3dba6f113f65a16250de2012f6e4d4bbf692e0ed"
 
 "shr-test-helpers@https://github.com/standardhealth/shr-test-helpers#json-schema-export":
-  version "5.0.1"
-  resolved "https://github.com/standardhealth/shr-test-helpers#69d656ee65bf4f254316f56963cdf121af33221b"
+  version "5.0.2"
+  resolved "https://github.com/standardhealth/shr-test-helpers#0ccf77a6042ed719d5acf0197b846e6e598a4e49"
   dependencies:
     bunyan "^1.8.9"
-    shr-models "https://github.com/standardhealth/shr-models#model-inheritance"
+    shr-models "^5.2.0"
 
 slice-ansi@0.0.4:
   version "0.0.4"

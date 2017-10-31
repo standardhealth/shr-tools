@@ -18,13 +18,13 @@
   },
   "dependencies": {
     "bunyan": "^1.8.9",
-    "shr-models": "https://github.com/standardhealth/shr-models#model-inheritance"
+    "shr-models": "^5.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "mocha": "^3.2.0",
-    "shr-expand": "https://github.com/standardhealth/shr-expand#model-inheritance",
+    "shr-expand": "^5.2.0",
     "shr-test-helpers": "https://github.com/standardhealth/shr-test-helpers#json-schema-export",
     "ajv": "^5.2.0"
   }
