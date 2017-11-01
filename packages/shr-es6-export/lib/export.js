@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const {IdentifiableValue, RefValue, ChoiceValue, TBD, ValueSetConstraint, CodeConstraint, TypeConstraint, BooleanConstraint} = require('shr-models');
+const {RefValue, ChoiceValue, TBD} = require('shr-models');
 
 function exportToES6(specifications) {
   const exporter = new ES6Exporter(specifications);
@@ -17,7 +17,7 @@ class ES6Exporter {
     const es6Defs = {};
 
     // Copy over Reference
-    es6Defs['Reference.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Reference.js'), "utf8");
+    es6Defs['Reference.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Reference.js'), 'utf8');
 
     // Generate other classes
     for (const ns of this._specs.namespaces.all) {
@@ -30,7 +30,7 @@ class ES6Exporter {
       }
       for (const def of this._specs.dataElements.byNamespace(ns.namespace)) {
         const es6Def = this.defToES6(def);
-        container[`${def.identifier.name}.js`] = es6Def;
+        container[`${sanitizeIdentifierName(def.identifier.name)}.js`] = es6Def;
       }
     }
     return es6Defs;
@@ -38,21 +38,23 @@ class ES6Exporter {
 
   defToES6(def) {
     const output = [];
+    const className = sanitizeIdentifierName(def.identifier.name);
     if (def.basedOn.length) {
       if (def.basedOn.length > 1) {
         console.error('ERROR: Can create proper inheritance tree w/ multiple based on elements.  Using first element.');
       }
 
       if (def.basedOn[0] instanceof TBD) {
-        output.push(`// Ommitting import and extension of base element: ${def.basedOn[0]}\n\n`)
+        output.push(`// Ommitting import and extension of base element: ${def.basedOn[0]}\n\n`);
       } else {
-        output.push(`import ${def.basedOn[0].name} from '${relativeImportPath(def.identifier, def.basedOn[0])}';\n\n`)
+        const superClassName = sanitizeIdentifierName(def.basedOn[0].name);
+        output.push(`import ${superClassName} from '${relativeImportPath(def.identifier, def.basedOn[0])}';\n\n`);
         output.push(`/** Generated from SHR definition for ${def.identifier.fqn} */\n`);
-        output.push(`class ${def.identifier.name} extends ${def.basedOn[0].name} {\n`);
+        output.push(`class ${className} extends ${superClassName} {\n`);
       }
     } else {
       output.push(`/** Generated from SHR definition for ${def.identifier.fqn} */\n`);
-      output.push(`class ${def.identifier.name} {\n`);
+      output.push(`class ${className} {\n`);
     }
 
     if (def.isEntry) {
@@ -67,7 +69,7 @@ class ES6Exporter {
     if (def.value) {
       if (def.value instanceof TBD) {
         output.push('\n');
-        output.push(`  // Ommitting getter/setter for value: ${toCommentName(def.value)}\n`)
+        output.push(`  // Ommitting getter/setter for value: ${toCommentName(def.value)}\n`);
       } else if (def.value instanceof ChoiceValue) {
         const options = def.value.options.map(o => `   * - ${toCommentName(o)}\n`).join('');
         output.push('\n');
@@ -86,7 +88,7 @@ class ES6Exporter {
       } else {
         const symbol = toSymbol(def.value.identifier.name);
         output.push('\n');
-        output.push(`  /**\n   * Convenience getter for value (accesses this.${symbol})\n   */\n`)
+        output.push(`  /**\n   * Convenience getter for value (accesses this.${symbol})\n   */\n`);
         output.push(`  get value() {\n    return this.${symbol};\n  }\n`);
         output.push('\n');
         output.push(`  /**\n   * Convenience setter for value (sets this.${symbol})\n   */\n`);
@@ -101,27 +103,28 @@ class ES6Exporter {
       output.push(this.fieldToGetterSetter(field));
     }
     output.push(`\n}\n\n`);
-    output.push(`export default ${def.identifier.name};\n`);
+    output.push(`export default ${className};\n`);
     return output.join('');
   }
 
   fieldToGetterSetter(field) {
     const output = [];
+    const fieldNameForComment = toCommentName(field);
     if (field instanceof TBD) {
-      output.push(`  // Ommitting getter/setter for field: ${toCommentName(field)}\n`)
+      output.push(`  // Ommitting getter/setter for field: ${fieldNameForComment}\n`);
     } else if (field instanceof ChoiceValue) {
       // NOTE: This is special-case code to handle choice-fields, which actually should be deprecated!
       const choiceSymbol = toSymbol(field.options.filter(o => !(o instanceof TBD)).map(o => o.identifier.name).join('Or'));
-      output.push(`  /**\n`)
-      output.push(`   * Getter for ${toCommentName(field)}.\n`)
-      output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`)
-      output.push(`   */\n`)
-      output.push(`  get ${choiceSymbol}() {\n    return this._${choiceSymbol};\n  }\n`)
+      output.push(`  /**\n`);
+      output.push(`   * Getter for ${fieldNameForComment}.\n`);
+      output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`);
+      output.push(`   */\n`);
+      output.push(`  get ${choiceSymbol}() {\n    return this._${choiceSymbol};\n  }\n`);
       output.push('\n');
-      output.push(`  /**\n`)
-      output.push(`   * Setter for ${toCommentName(field)}.\n`)
-      output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`)
-      output.push(`   */\n`)
+      output.push(`  /**\n`);
+      output.push(`   * Setter for ${fieldNameForComment}.\n`);
+      output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`);
+      output.push(`   */\n`);
       output.push(`  set ${choiceSymbol}(choiceVal) {\n    this._${choiceSymbol} = choiceVal;\n  }\n`);
     } else if (field.identifier.isValueKeyWord) {
       // Do nothing because this is just a constraint on value, and we already generated code for value
@@ -131,10 +134,10 @@ class ES6Exporter {
       return '';
     } else {
       const symbol = toSymbol(field.identifier.name);
-      output.push(`  /**\n   * Getter for ${toCommentName(field)}\n   */\n`)
-      output.push(`  get ${symbol}() {\n    return this._${symbol};\n  }\n`)
+      output.push(`  /**\n   * Getter for ${fieldNameForComment}\n   */\n`);
+      output.push(`  get ${symbol}() {\n    return this._${symbol};\n  }\n`);
       output.push('\n');
-      output.push(`  /**\n   * Setter for ${toCommentName(field)}\n   */\n`)
+      output.push(`  /**\n   * Setter for ${fieldNameForComment}\n   */\n`);
       output.push(`  set ${symbol}(${symbol}Val) {\n    this._${symbol} = ${symbol}Val;\n  }\n`);
     }
 
@@ -143,7 +146,8 @@ class ES6Exporter {
 }
 
 function toSymbol(name) {
-  return `${name.charAt(0).toLowerCase()}${name.slice(1)}`;
+  const _name = sanitizeIdentifierName(name);
+  return `${_name.charAt(0).toLowerCase()}${_name.slice(1)}`;
 }
 
 function toCommentName(field) {
@@ -167,7 +171,14 @@ function relativeImportPath(fromIdentifier, toIdentifier) {
     toNS.shift();
   }
   const fromPath = fromNS.length ? fromNS.map(x => '..') : ['.'];
-  return [...fromPath, ...toNS, toIdentifier.name].join('/');
+  return [...fromPath, ...toNS, sanitizeIdentifierName(toIdentifier.name)].join('/');
+}
+
+function sanitizeIdentifierName(identifierName) {
+      //console.log(identifierName);
+      //console.log(identifierName.replace(/[-]/g, '_'));
+  return `${identifierName.replace(/[-]/g, '_')}`;
+      //return identifierName;
 }
 
 module.exports = {exportToES6};
