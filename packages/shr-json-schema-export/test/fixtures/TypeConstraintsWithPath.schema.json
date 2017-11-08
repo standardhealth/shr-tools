@@ -20,14 +20,14 @@
           {
             "type": "object",
             "properties": {
-              "TwoDeepElementField": {
+              "shr/test/TwoDeepElementField": {
                 "allOf": [
                   { "$ref": "#/definitions/TwoDeepElementField" },
                   {
                     "properties": {
-                      "ElementField": {
+                      "shr/test/ElementField": {
                         "properties": {
-                          "Simple": { "$ref": "#/definitions/SimpleChild" }
+                          "shr/test/Simple": { "$ref": "#/definitions/SimpleChild" }
                         }
                       }
                     }
@@ -45,7 +45,7 @@
           {
             "type": "object",
             "properties": {
-              "TwoDeepElementField": {
+              "shr/test/TwoDeepElementField": {
                 "$ref": "#/definitions/TwoDeepElementField"
               }
             }
@@ -59,11 +59,11 @@
           {
             "type": "object",
             "properties": {
-              "ElementField": {
+              "shr/test/ElementField": {
                 "$ref": "#/definitions/ElementField"
               }
             },
-            "required": ["ElementField"]
+            "required": ["shr/test/ElementField"]
           }
         ]
       },
@@ -74,9 +74,9 @@
           {
             "type": "object",
             "properties": {
-              "Simple": { "$ref": "#/definitions/Simple" }
+              "shr/test/Simple": { "$ref": "#/definitions/Simple" }
             },
-            "required": ["Simple"]
+            "required": ["shr/test/Simple"]
           }
         ]
       },

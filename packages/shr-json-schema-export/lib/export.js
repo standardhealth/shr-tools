@@ -107,25 +107,6 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
       }
     }
     if (def.fields.length) {
-      let qualifiedFields = {};
-      let fieldNames = {};
-      for (const field of def.fields) {
-        if ((field instanceof TBD) || !isValidField(field) || (field.inheritance === INHERITED)) {
-          continue;
-        }
-        const card = field.effectiveCard;
-        if (!card) {
-          continue;
-        }
-        if (card.isZeroedOut) {
-          continue;
-        }
-        if (fieldNames[field.identifier.name]) {
-          qualifiedFields[field.identifier.name] = true;
-        } else {
-          fieldNames[field.identifier.name] = true;
-        }
-      }
       for (const field of def.fields) {
         if (!(field instanceof TBD) && !isValidField(field) || (field.inheritance === INHERITED)) {
           continue;
@@ -140,13 +121,10 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
           continue;
         }
 
-        let fieldName = field.identifier.name;
-        if (qualifiedFields[field.identifier.name]) {
-          fieldName = namespaceToURLPathSegment(field.identifier.namespace) + '/' + field.identifier.name;
-        }
-        schemaDef.properties[fieldName] = value;
+        const qualifiedName = identifierToNormalizedPath(field.identifier);
+        schemaDef.properties[qualifiedName] = value;
         if (required) {
-          requiredProperties.push(fieldName);
+          requiredProperties.push(qualifiedName);
         }
       }
     } else if (!def.value) {
@@ -235,25 +213,6 @@ function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
       }
     }
     if (def.fields.length) {
-      let qualifiedFields = {};
-      let fieldNames = {};
-      for (const field of def.fields) {
-        if ((field instanceof TBD) || !isValidField(field)) {
-          continue;
-        }
-        const card = field.effectiveCard;
-        if (!card) {
-          continue;
-        }
-        if (card.isZeroedOut) {
-          continue;
-        }
-        if (fieldNames[field.identifier.name]) {
-          qualifiedFields[field.identifier.name] = true;
-        } else {
-          fieldNames[field.identifier.name] = true;
-        }
-      }
       for (const field of def.fields) {
         if (!(field instanceof TBD) && !isValidField(field)) {
           continue;
@@ -268,13 +227,10 @@ function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
           continue;
         }
 
-        let fieldName = field.identifier.name;
-        if (qualifiedFields[field.identifier.name]) {
-          fieldName = namespaceToURLPathSegment(field.identifier.namespace) + '/' + field.identifier.name;
-        }
-        schemaDef.properties[fieldName] = value;
-        if (required) {
-          requiredProperties.push(fieldName);
+        const qualifiedName = identifierToNormalizedPath(field.identifier);
+        schemaDef.properties[qualifiedName] = value;
+        if (required && (requiredProperties.indexOf(qualifiedName) === -1)) {
+          requiredProperties.push(qualifiedName);
         }
       }
       if (def.isEntry) {
@@ -321,6 +277,16 @@ function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
     schema.anyOf = entryRefs;
   }
   return { schemaId, schema };
+}
+
+/**
+ * Convert an Identifier into a qualified SHR name with /s instead of .s.
+ *
+ * @param {Identifier} identifier - the identifier to convert.
+ * @return string - The converted identifier.
+ */
+function identifierToNormalizedPath(identifier) {
+  return namespaceToURLPathSegment(identifier.namespace) + '/' + identifier.name;
 }
 
 function namespaceToURLPathSegment(namespace) {
@@ -709,19 +675,12 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
           logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', currentDef, pathId, constraint);
           return {};
         } else {
-          let qualified = false;
-          for (const field of currentDef.fields) {
-            if (pathId.equals(field.identifier)) {
-              found = true;
-            } else if (field.identifier.name === pathId.name) {
-              qualified = true;
-            }
-          }
+          const found = currentDef.fields.some((field) => pathId.equals(field.identifier));
           if (!found) {
             logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', currentDef, pathId, constraint);
             return {};
           }
-          normalizedPath.push(qualified ? (namespaceToURLPathSegment(pathId.namespace) + '/' + pathId.name) : pathId.name);
+          normalizedPath.push(identifierToNormalizedPath(pathId));
         }
       }
       currentDef = newDef;
@@ -741,12 +700,12 @@ function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
     items: { $ref: makeRef(new Identifier('shr.base', 'EntryType'), enclosingNamespace, baseSchemaURL) }
   };
   return { properties, required: [
-    'ShrId',
-    'EntryId',
-    'EntryType',
-    'FocalSubject',
-    'OriginalCreationDate',
-    'LastUpdateDate'
+    'shr/base/ShrId',
+    'shr/base/EntryId',
+    'shr/base/EntryType',
+    'shr/base/FocalSubject',
+    'shr/base/OriginalCreationDate',
+    'shr/base/LastUpdateDate'
   ]};
 }
 

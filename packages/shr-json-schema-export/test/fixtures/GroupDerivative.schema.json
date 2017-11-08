@@ -39,9 +39,9 @@
           {
             "type": "object",
             "properties": {
-              "Simple": { "$ref": "#/definitions/Simple" },
-              "Coded": { "$ref": "#/definitions/Coded" },
-              "ElementValue": {
+              "shr/test/Simple": { "$ref": "#/definitions/Simple" },
+              "shr/test/Coded": { "$ref": "#/definitions/Coded" },
+              "shr/test/ElementValue": {
                 "type": "array",
                 "minItems": 0,
                 "items": {
@@ -49,7 +49,7 @@
                 }
               }
             },
-            "required": ["Simple"]
+            "required": ["shr/test/Simple"]
           }
         ]
       },

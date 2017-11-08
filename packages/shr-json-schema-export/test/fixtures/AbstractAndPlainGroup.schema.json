@@ -16,10 +16,10 @@
           {
             "type": "object",
             "properties": {
-              "Simple": { "$ref": "#/definitions/Simple" },
-              "Plain": { "$ref": "#/definitions/Plain" }
+              "shr/test/Simple": { "$ref": "#/definitions/Simple" },
+              "shr/test/Plain": { "$ref": "#/definitions/Plain" }
             },
-            "required": ["Simple", "Plain"]
+            "required": ["shr/test/Simple", "shr/test/Plain"]
           }
         ]
       },
