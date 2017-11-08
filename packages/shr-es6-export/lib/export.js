@@ -1,26 +1,47 @@
 const fs = require('fs');
 const path = require('path');
-const {RefValue, ChoiceValue, TBD} = require('shr-models');
+const generateClass = require('./generateClass');
+const generateNamespaceFactory = require('./generateNamespaceFactory');
+const generateFactory = require('./generateFactory');
+const { className, factoryName } = require('./common.js');
 
+/**
+ * Exports SHR namespaces and elements to a set of ES6 classes for using within SHR-aware applications.
+ * @param {Specifications} specifications - The SHR specifications to export to ES6 code
+ * @return {Object} An object representing the file hierarchy on disk, with file contents as the leaves
+ */
 function exportToES6(specifications) {
   const exporter = new ES6Exporter(specifications);
   return exporter.export();
 }
 
+/**
+ * A class to manage the basic export of SHR definitions to ES6 classes.
+ */
 class ES6Exporter {
+  /**
+   * Constructs an ES6Exporter with the given SHR specification definitions
+   * @param {Specifications} specifications - The SHR specifications to export to ES6 code
+   */
   constructor(specifications) {
     this._specs = specifications;
     this._currentNamespace = '';
   }
 
+  /**
+   * Exports the loaded specifications to ES6 classes
+   * @return {Object} An object representing the file hierarchy on disk, with file contents as the leaves
+   */
   export() {
     const es6Defs = {};
 
     // Copy over Reference
     es6Defs['Reference.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Reference.js'), 'utf8');
 
-    // Generate other classes
-    for (const ns of this._specs.namespaces.all) {
+    // Generate the namespace factories and specific ES6 classes
+    const namespaces = this._specs.namespaces.all;
+    for (const ns of namespaces) {
+      // Nest classes into subpaths by namespace
       let container = es6Defs;
       for (const part of ns.namespace.split('.')) {
         if (!container[part]) {
@@ -28,157 +49,18 @@ class ES6Exporter {
         }
         container = container[part];
       }
-      for (const def of this._specs.dataElements.byNamespace(ns.namespace)) {
-        const es6Def = this.defToES6(def);
-        container[`${sanitizeIdentifierName(def.identifier.name)}.js`] = es6Def;
+      const defs = this._specs.dataElements.byNamespace(ns.namespace);
+      container[`${factoryName(ns.namespace)}.js`] = generateNamespaceFactory(ns, defs);
+      for (const def of defs) {
+        container[`${className(def.identifier.name)}.js`] = generateClass(def);
       }
     }
+
+    // Generate the top-level factory
+    es6Defs['ObjectFactory.js'] = generateFactory(namespaces);
+
     return es6Defs;
   }
-
-  defToES6(def) {
-    const output = [];
-    const className = sanitizeIdentifierName(def.identifier.name);
-    if (def.basedOn.length) {
-      if (def.basedOn.length > 1) {
-        console.error('ERROR: Can create proper inheritance tree w/ multiple based on elements.  Using first element.');
-      }
-
-      if (def.basedOn[0] instanceof TBD) {
-        output.push(`// Ommitting import and extension of base element: ${def.basedOn[0]}\n\n`);
-      } else {
-        const superClassName = sanitizeIdentifierName(def.basedOn[0].name);
-        output.push(`import ${superClassName} from '${relativeImportPath(def.identifier, def.basedOn[0])}';\n\n`);
-        output.push(`/** Generated from SHR definition for ${def.identifier.fqn} */\n`);
-        output.push(`class ${className} extends ${superClassName} {\n`);
-      }
-    } else {
-      output.push(`/** Generated from SHR definition for ${def.identifier.fqn} */\n`);
-      output.push(`class ${className} {\n`);
-    }
-
-    if (def.isEntry) {
-      output.push('\n');
-      output.push(`  /**\n   * Getter for entry information (shr.base.Entry)\n   */\n`);
-      output.push(`  get entryInfo() {\n    return this._entryInfo;\n  }\n`);
-      output.push('\n');
-      output.push(`  /**\n   * Setter for entry information (shr.base.Entry)\n   */\n`);
-      output.push(`  set entryInfo(entryVal) {\n    this._entryInfo = entryVal;\n  }\n`);
-    }
-
-    if (def.value) {
-      if (def.value instanceof TBD) {
-        output.push('\n');
-        output.push(`  // Ommitting getter/setter for value: ${toCommentName(def.value)}\n`);
-      } else if (def.value instanceof ChoiceValue) {
-        const options = def.value.options.map(o => `   * - ${toCommentName(o)}\n`).join('');
-        output.push('\n');
-        output.push(`  /**\n`);
-        output.push(`   * Getter for choice value\n`);
-        output.push(options);
-        output.push(`   */\n`);
-        output.push('  get value() {\n    return this._value;\n  }\n');
-        output.push('\n');
-        output.push(`  /**\n`);
-        output.push(`   * Setter for choice value\n`);
-        output.push(options);
-        output.push(`   */\n`);        output.push('  set value(val) {\n    this._value = val;\n  }\n');
-      } else if (def.value.identifier.isValueKeyWord) {
-        // Do nothing because this is just constraining the parent value, so we'll inherit it instead
-      } else {
-        const symbol = toSymbol(def.value.identifier.name);
-        output.push('\n');
-        output.push(`  /**\n   * Convenience getter for value (accesses this.${symbol})\n   */\n`);
-        output.push(`  get value() {\n    return this.${symbol};\n  }\n`);
-        output.push('\n');
-        output.push(`  /**\n   * Convenience setter for value (sets this.${symbol})\n   */\n`);
-        output.push(`  set value(val) {\n    this.${symbol} = val;\n  }\n`);
-        output.push('\n');
-        output.push(this.fieldToGetterSetter(def.value));
-      }
-    }
-
-    for (const field of def.fields) {
-      output.push('\n');
-      output.push(this.fieldToGetterSetter(field));
-    }
-    output.push(`\n}\n\n`);
-    output.push(`export default ${className};\n`);
-    return output.join('');
-  }
-
-  fieldToGetterSetter(field) {
-    const output = [];
-    const fieldNameForComment = toCommentName(field);
-    if (field instanceof TBD) {
-      output.push(`  // Ommitting getter/setter for field: ${fieldNameForComment}\n`);
-    } else if (field instanceof ChoiceValue) {
-      // NOTE: This is special-case code to handle choice-fields, which actually should be deprecated!
-      const choiceSymbol = toSymbol(field.options.filter(o => !(o instanceof TBD)).map(o => o.identifier.name).join('Or'));
-      output.push(`  /**\n`);
-      output.push(`   * Getter for ${fieldNameForComment}.\n`);
-      output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`);
-      output.push(`   */\n`);
-      output.push(`  get ${choiceSymbol}() {\n    return this._${choiceSymbol};\n  }\n`);
-      output.push('\n');
-      output.push(`  /**\n`);
-      output.push(`   * Setter for ${fieldNameForComment}.\n`);
-      output.push(`   * NOTE: Choice fields are deprecated.  This is a stop-gap solution.\n`);
-      output.push(`   */\n`);
-      output.push(`  set ${choiceSymbol}(choiceVal) {\n    this._${choiceSymbol} = choiceVal;\n  }\n`);
-    } else if (field.identifier.isValueKeyWord) {
-      // Do nothing because this is just a constraint on value, and we already generated code for value
-      return '';
-    } else if ((!field.identifier.namespace || field.identifier.namespace == 'shr.base') && field.identifier.name == 'Entry') {
-      // Do nothing because this is just a constraint on entry, and we already generated code for entryInfo
-      return '';
-    } else {
-      const symbol = toSymbol(field.identifier.name);
-      output.push(`  /**\n   * Getter for ${fieldNameForComment}\n   */\n`);
-      output.push(`  get ${symbol}() {\n    return this._${symbol};\n  }\n`);
-      output.push('\n');
-      output.push(`  /**\n   * Setter for ${fieldNameForComment}\n   */\n`);
-      output.push(`  set ${symbol}(${symbol}Val) {\n    this._${symbol} = ${symbol}Val;\n  }\n`);
-    }
-
-    return output.join('');
-  }
-}
-
-function toSymbol(name) {
-  const _name = sanitizeIdentifierName(name);
-  return `${_name.charAt(0).toLowerCase()}${_name.slice(1)}`;
-}
-
-function toCommentName(field) {
-  const postFix = field.card && field.card.isList ? '[]' : '';
-  if (field instanceof ChoiceValue) {
-    return `Choice<${field.options.map(o => toCommentName(o)).join(' | ')}>${postFix}`;
-  } else if (field instanceof TBD) {
-    return `${field.toString()}${postFix}`;
-  } else if (field instanceof RefValue) {
-    return `Reference<${field.identifier.fqn}>${postFix}`;
-  } else {
-    return `${field.identifier.fqn}${postFix}`;
-  }
-}
-
-function relativeImportPath(fromIdentifier, toIdentifier) {
-  const fromNS = fromIdentifier.namespace.split('.');
-  const toNS = toIdentifier.namespace.split('.');
-  while (fromNS.length > 0 && toNS.length > 0 && fromNS[0] === toNS[0]) {
-    fromNS.shift();
-    toNS.shift();
-  }
-  const fromPath = fromNS.length ? fromNS.map(x => '..') : ['.'];
-  return [...fromPath, ...toNS, sanitizeIdentifierName(toIdentifier.name)].join('/');
-}
-
-function sanitizeIdentifierName(identifierName) {
-      //console.log(identifierName);
-      //console.log(identifierName.replace(/[-]/g, '_'));
-  return `${identifierName.replace(/[-]/g, '_')}`;
-      //return identifierName;
 }
 
 module.exports = {exportToES6};
