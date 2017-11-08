@@ -3,7 +3,9 @@
 // Derived from export SHR specification content as a hierarchy in JSON format by Greg Quinn
 
 const bunyan = require('bunyan');
-const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, DataElement, Namespace, DataElementSpecifications, Specifications, MODELS_INFO} = require('shr-models');
+const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, DataElement, Namespace, DataElementSpecifications, Specifications, MODELS_INFO, PrimitiveIdentifier, PRIMITIVE_NS} = require('shr-models');
+
+const CODE = new PrimitiveIdentifier('code');
 
 var rootLogger = bunyan.createLogger({name: 'shr-json-schema-export'});
 var logger = rootLogger;
@@ -453,8 +455,17 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
       // These flags aren't always true, but other types may descend from codes or offer codes as an option for their value
       // so without walking the entire inheritance hierarchy we'll just allow it. The frontend of the tool chain
       // should block illegal coding constraints (hopefully).
-      isCode = true;
-      isList = true;
+      isCode = supportsCodeConstraint(valueDef.identifier, dataElementsSpecs);
+      if (!isList) {
+        // Inheritance rules allow us to constrain a parent's list to a single element. However we have to still
+        // render it as a list so that the allOf() inheritance construct will work properly.
+        // TODO: Move this to the top check.
+        const fullDef = dataElementsSpecs.findByIdentifier(valueDef.identifier);
+        if (fullDef.value) {
+          const cardConstraints = fullDef.value.constraintsFilter.own.card.constraints;
+          isList = cardConstraints.some((oneCard) => oneCard.isList);
+        }
+      }
     }
   } else if (valueDef instanceof TBD) {
     if (retValue.items != null) {
@@ -476,7 +487,8 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     if (constraint.onValue) {
       logger.error('Constraint should not be on the value in an expanded object model "%s"', constraint);
     }
-    const constraintPath = extractConstraintPath(constraint);
+    const fullDef = dataElementsSpecs.findByIdentifier(valueDef.identifier);
+    const {path: constraintPath, target: constraintTarget } = extractConstraintPath(constraint, fullDef, dataElementsSpecs);
     if (constraint instanceof ValueSetConstraint) {
       if (!isCode) {
         logger.error('ERROR: valueset constraint %s was applied to a non-coding type %s', valueDef, JSON.stringify(constraint, null, 2));
@@ -488,7 +500,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
       value.valueSet[constraintPath] = { uri: constraint.valueSet, strength: constraint.bindingStrength };
     } else if (constraint instanceof CodeConstraint) {
       if (!isCode) {
-        logger.error('ERROR: code constraint %s was applied to a non-coding type %s', valueDef, constraint);
+        logger.error('ERROR: code constraint %s was applied to a non-coding type %s', valueDef, JSON.stringify(constraint, null, 2));
         continue;
       }
       if (!value.code) {
@@ -505,7 +517,9 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
       }
       includesCodeLists[constraintPath].push(makeConceptEntry(constraint.code));
     } else if (constraint instanceof TypeConstraint) {
-      if (constraint.hasPath()) {
+      if (!constraintTarget) {
+        value.$ref = makeRef(constraint.isA, enclosingNamespace, baseSchemaURL);
+      } else {
         let allOfEntry = {};
         if (retValue === value) {
           value = {};
@@ -517,23 +531,13 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
         } else {
           retValue.items = {allOf: [value, allOfEntry]};
         }
-        if (constraint.hasPath()) {
-          // TODO: properly handling namespaces will require traversing the class hierarchy
-          let currentDef = valueDef;
-          for (const pathId of constraint.path) {
-            const fullDef = dataElementsSpecs.findByIdentifier(currentDef.identifier);
-            allOfEntry.properties = {};
-            if (fullDef.value && (fullDef.value.identifier.equals(pathId))) {
-              allOfEntry = allOfEntry.properties.Value = {};
-            } else {
-              allOfEntry = allOfEntry.properties[pathId.name] = {};
-            }
-            currentDef = fullDef;
-          }
+
+        for (const path of constraintPath) {
+          allOfEntry.properties = {};
+          allOfEntry = allOfEntry.properties[path] = {};
         }
+
         allOfEntry.$ref = makeRef(constraint.isA, enclosingNamespace, baseSchemaURL);
-      } else {
-        value.$ref = makeRef(constraint.isA, enclosingNamespace, baseSchemaURL);
       }
     } else if (constraint instanceof IncludesTypeConstraint) {
       if (!isList) { // TODO: Deal with cardinality
@@ -655,11 +659,76 @@ function makeShrDefinitionURL(id, baseSchemaURL) {
   return `${baseSchemaURL}/${namespaceToURLPathSegment(id.namespace)}#/definitions/${id.name}`;
 }
 
-function extractConstraintPath(constraint) {
+/**
+ * Translates a constraint path into a valid path for the JSON Schema.
+ * @param {Constraint} constraint - the constraint.
+ * @param {DataElement} valueDef - the data element that contains the constraint.
+ * @param {DataElementSpecifications} dataElementSpecs - the elements in the namespace.
+ * @return {{path: (Array<string>|undefined), target: (DataElement|undefined)}} - The target of the constraint and the extracted path (qualified if necessary). Both properties will be null if there was an error.
+ */
+function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
   if (!constraint.hasPath()) {
-    return 'Value';
+    return {path: ['Value']};
   }
-  return constraint.path.map(pathId => namespaceToURLPathSegment(pathId.namespace) + '/' + pathId.name).join(',');
+
+  let currentDef = valueDef;
+  const normalizedPath = [];
+  for (let i = 0; i < constraint.path.length; i += 1) {
+    const pathId = constraint.path[i];
+    if (pathId.namespace === PRIMITIVE_NS) {
+      if (i !== constraint.path.length - 1) {
+        logger.error('Encountered a constraint path containing a primitive %s at index %d that was not the leaf: %s', i, pathId, constraint);
+        return {};
+      }
+      if (!currentDef.value) {
+        logger.error('Encountered a constraint path with a primitive leaf %s on an element that lacked a value: %s', pathId, constraint);
+        return {};
+      }
+      if (!pathId.equals(currentDef.value.identifier)) {
+        logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s', pathId, constraint);
+        return {};
+      }
+      normalizedPath.push('Value');
+    } else {
+      const newDef = dataElementSpecs.findByIdentifier(pathId);
+      if (!newDef) {
+        logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, constraint);
+        return {};
+      }
+      let found = false;
+      // See if the current definition has a value of the specified type.
+      if (currentDef.value) {
+        if (pathId.equals(currentDef.value.identifier) || checkHasBaseType(currentDef.value.identifier, pathId, dataElementSpecs)) {
+          normalizedPath.push('Value');
+          found = true;
+        }
+      }
+
+      if (!found) {
+        if (!currentDef.fields || !currentDef.fields.length) {
+          logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', currentDef, pathId, constraint);
+          return {};
+        } else {
+          let qualified = false;
+          for (const field of currentDef.fields) {
+            if (pathId.equals(field.identifier)) {
+              found = true;
+            } else if (field.identifier.name === pathId.name) {
+              qualified = true;
+            }
+          }
+          if (!found) {
+            logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', currentDef, pathId, constraint);
+            return {};
+          }
+          normalizedPath.push(qualified ? (namespaceToURLPathSegment(pathId.namespace) + '/' + pathId.name) : pathId.name);
+        }
+      }
+      currentDef = newDef;
+    }
+  }
+
+  return {path:normalizedPath, target: currentDef === valueDef ? null : currentDef};
 }
 
 function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
@@ -706,5 +775,68 @@ function makeConceptEntry(concept) {
 function identifierToString(identifier) {
   return `${identifier.namespace}:${identifier.name}`;
 }
+
+// stealing from shr-expand
+/**
+ * Determine if a type supports a code constraint.
+ *
+ * @param {Identifier} identifier - The identifier of the type to check.
+ * @param {DataElementSpecifications} dataElementSpecs - The available DataElement specs.
+ * @return {boolean} Whether or not the given type supports a code constraint.
+ */
+function supportsCodeConstraint(identifier, dataElementSpecs) {
+  if (CODE.equals(identifier) || checkHasBaseType(identifier, new Identifier('shr.core', 'Coding'), dataElementSpecs)
+      || checkHasBaseType(identifier, new Identifier('shr.core', 'CodeableConcept'), dataElementSpecs)) {
+    return true;
+  }
+  const element = dataElementSpecs.findByIdentifier(identifier);
+  if (element.value) {
+    if (element.value instanceof IdentifiableValue) {
+      return CODE.equals(element.value.identifier) || checkHasBaseType(element.value.identifier, new Identifier('shr.core', 'Coding'), dataElementSpecs)
+          || checkHasBaseType(element.value.identifier, new Identifier('shr.core', 'CodeableConcept'), dataElementSpecs);
+    } else if (element.value instanceof ChoiceValue) {
+      for (const value of element.value.aggregateOptions) {
+        if (value instanceof IdentifiableValue) {
+          if (CODE.equals(value.identifier) || checkHasBaseType(value.identifier, new Identifier('shr.core', 'Coding'), dataElementSpecs)
+              || checkHasBaseType(value.identifier, new Identifier('shr.core', 'CodeableConcept'), dataElementSpecs)) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+function checkHasBaseType(identifier, baseIdentifier, dataElementSpecs) {
+  if (typeof identifier === 'undefined' || typeof baseIdentifier === 'undefined') {
+    return false;
+  }
+  const basedOns = getRecursiveBasedOns(identifier, dataElementSpecs);
+  return basedOns.some(id => id.equals(baseIdentifier));
+}
+
+function getRecursiveBasedOns(identifier, dataElementSpecs, alreadyProcessed = []) {
+  // If it's primitive or we've already processed this one, don't go further (avoid circular dependencies)
+  if (identifier.isPrimitive || alreadyProcessed.some(id => id.equals(identifier))) {
+    return alreadyProcessed;
+  }
+
+  // We haven't processed it, so look it up
+  const element = dataElementSpecs.findByIdentifier(identifier);
+  if (typeof element === 'undefined') {
+    logger.error('Cannot resolve element definition for %s. ERROR_CODE:12029', identifier.fqn);
+    return alreadyProcessed;
+  }
+  // Add it to the already processed list (again, to avoid circular dependencies)
+  alreadyProcessed.push(identifier);
+  // Now recursively get the BasedOns for each of the BasedOns
+  for (const basedOn of element.basedOn) {
+    alreadyProcessed = getRecursiveBasedOns(basedOn, dataElementSpecs, alreadyProcessed);
+  }
+
+  return alreadyProcessed;
+}
+// done stealing from shr-expand
 
 module.exports = {exportToJSONSchema, setLogger, MODELS_INFO };
