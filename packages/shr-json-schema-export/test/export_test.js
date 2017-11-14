@@ -50,5 +50,10 @@ function validateSchemata(schemataDict) {
   for (const id in schemataDict) {
     schemata.push(schemataDict[id]);
   }
-  schemaValidator.addSchema(schemata);
+  try {
+    schemaValidator.addSchema(schemata);
+  } catch(ex) {
+    console.error('Error validating schemata', JSON.stringify(schemata, null, 2));
+    throw ex;
+  }
 }
