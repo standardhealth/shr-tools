@@ -914,7 +914,7 @@ shr-models@^5.2.0:
 
 "shr-test-helpers@https://github.com/standardhealth/shr-test-helpers#json-schema-export":
   version "5.0.2"
-  resolved "https://github.com/standardhealth/shr-test-helpers#0ccf77a6042ed719d5acf0197b846e6e598a4e49"
+  resolved "https://github.com/standardhealth/shr-test-helpers#8fa752f752d5446ddcbd6b4962bfcd792819d02d"
   dependencies:
     bunyan "^1.8.9"
     shr-models "^5.2.0"
