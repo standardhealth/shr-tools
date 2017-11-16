@@ -6,6 +6,7 @@
     "type": "object",
     "anyOf": [
       { "$ref": "#/definitions/ConstrainedPath" },
+      { "$ref": "#/definitions/ConstrainedPathNoInheritance" },
       { "$ref": "#/definitions/ElementField" },
       { "$ref": "#/definitions/NestedField" },
       { "$ref": "#/definitions/Simple" },
@@ -21,8 +22,27 @@
             "type": "object",
             "properties": {
               "shr/test/TwoDeepElementField": {
+                "properties": {
+                  "shr/test/ElementField": {
+                    "properties": {
+                      "shr/test/Simple": { "$ref": "#/definitions/SimpleChild" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ConstrainedPathNoInheritance": {
+        "description": "It has a new field with a nested constraint.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "shr/test/TwoDeepElementField": {
                 "allOf": [
-                  { "$ref": "#/definitions/TwoDeepElementField" },
                   {
                     "properties": {
                       "shr/test/ElementField": {
@@ -31,7 +51,8 @@
                         }
                       }
                     }
-                  }
+                  },
+                  { "$ref": "#/definitions/TwoDeepElementField" }
                 ]
               }
             }

@@ -310,26 +310,31 @@ function isValidField(field) {
 }
 
 function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, baseSchemaURL) {
-  const retValue = {};
-  let value = retValue;
+  let listValue = null;
+  let value = {};
+  const fullDef = valueDef.identifier ? dataElementsSpecs.findByIdentifier(valueDef.identifier) : null;
   const card = valueDef.effectiveCard;
   let required = false;
-  let isCode = false;
   let isList = false;
+  let valueIsPrimitive = false;
   if (card) {
-    if (card.isList) {
-      retValue.type = 'array';
+    isList = card.isList;
+    if (!isList && fullDef && fullDef.value) {
+      const cardConstraints = fullDef.value.constraintsFilter.own.card.constraints;
+      isList = cardConstraints.some((oneCard) => oneCard.isList);
+    }
+    if (isList) {
+      listValue = { type: 'array' };
       if (card.min != null) {
-        retValue.minItems = card.min;
+        listValue.minItems = card.min;
         if (card.min) {
           required = true;
         }
       }
       if (card.max) {
-        retValue.maxItems = card.max;
+        listValue.maxItems = card.max;
       }
-      value = retValue.items = {};
-      isList = true;
+      listValue.items = value;
     } else if (card.min) {
       required = true;
     }
@@ -372,6 +377,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
   } else if (valueDef instanceof IdentifiableValue) {
     const id = valueDef.effectiveIdentifier;
     if (id.isPrimitive) {
+      valueIsPrimitive = true;
       switch (id.name) {
         case 'boolean':
         case 'string':
@@ -417,164 +423,240 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
           break;
       }
     } else {
-      value['$ref'] = makeRef(valueDef.identifier, enclosingNamespace, baseSchemaURL);
-      // These flags aren't always true, but other types may descend from codes or offer codes as an option for their value
-      // so without walking the entire inheritance hierarchy we'll just allow it. The frontend of the tool chain
-      // should block illegal coding constraints (hopefully).
-      isCode = supportsCodeConstraint(valueDef.identifier, dataElementsSpecs);
-      if (!isList) {
-        // Inheritance rules allow us to constrain a parent's list to a single element. However we have to still
-        // render it as a list so that the allOf() inheritance construct will work properly.
-        // TODO: Move this to the top check.
-        const fullDef = dataElementsSpecs.findByIdentifier(valueDef.identifier);
-        if (fullDef.value) {
-          const cardConstraints = fullDef.value.constraintsFilter.own.card.constraints;
-          isList = cardConstraints.some((oneCard) => oneCard.isList);
-        }
+      const typeRef = makeRef(valueDef.identifier, enclosingNamespace, baseSchemaURL);
+      if (valueDef.inheritance !== OVERRIDDEN) {
+        value.allOf = [{ $ref: typeRef}];
       }
     }
   } else if (valueDef instanceof TBD) {
-    if (retValue.items != null) {
-      delete retValue.items;
+    let ret = value;
+    if (listValue) {
+      delete listValue.items;
+      ret = listValue;
     }
-    return {value: retValue, required: required, tbd: true};
+    return {value: ret, required: required, tbd: true};
   } else if (valueDef instanceof IncompleteValue) {
     logger.error('Unsupported Incomplete');
   } else {
     logger.error('Unknown type for value "%s"', valueDef.constructor.name);
   }
 
+  const constraintStructure = { $self: []};
   const includesCodeLists = {};
-  const includesTypeListType = [];
-  const includesTypeListRef = [];
-  let includesTypeListsMin = 0;
-  let includesTypeListsMax = 0;
   for (const constraint of valueDef.constraints) {
     if (constraint.onValue) {
-      logger.error('Constraint should not be on the value in an expanded object model "%s"', constraint);
+      logger.error('Constraint should not be on the value in an expanded object model "%s". Ignoring constraint.', constraint);
+      continue;
     }
-    const fullDef = dataElementsSpecs.findByIdentifier(valueDef.identifier);
-    const {path: constraintPath, target: constraintTarget } = extractConstraintPath(constraint, fullDef, dataElementsSpecs);
-    if (constraint instanceof ValueSetConstraint) {
-      if (!isCode) {
-        logger.error('ERROR: valueset constraint %s was applied to a non-coding type %s', valueDef, JSON.stringify(constraint, null, 2));
+
+    const {path: constraintPath, target: constraintTarget } = extractConstraintPath(constraint, valueDef, dataElementsSpecs);
+    if (!constraintTarget) {
+      // Cardinality constraints without a path are not useful (except if you're really a list, we'll handle that later).
+      if (constraint instanceof CardConstraint) {
         continue;
       }
-      if (!value.valueSet) {
-        value.valueSet = {};
+    }
+
+    let currentStruct = constraintStructure;
+    for (const path of constraintPath) {
+      if (!currentStruct[path]) {
+        currentStruct[path] = { $self: []};
       }
-      value.valueSet[constraintPath] = { uri: constraint.valueSet, strength: constraint.bindingStrength };
-    } else if (constraint instanceof CodeConstraint) {
-      if (!isCode) {
-        logger.error('ERROR: code constraint %s was applied to a non-coding type %s', valueDef, JSON.stringify(constraint, null, 2));
-        continue;
+      currentStruct = currentStruct[path];
+    }
+    currentStruct.$self.push({ constraint, constraintPath, constraintTarget });
+  }
+
+  let allOf = [{properties: {}}];
+  if (Object.keys(value).length) {
+    allOf.push(value);
+  }
+  function pruneExpandedStructure (currentAllOf) {
+    for (let i = currentAllOf.length - 1; i >= 0; i -= 1) {
+      const allOfEntry = currentAllOf[i];
+      if (allOfEntry.constraints && (!allOfEntry.constraints.length)) {
+        delete allOfEntry.constraints;
       }
-      if (!value.code) {
-        value.code = {};
-      }
-      value.code[constraintPath] = makeConceptEntry(constraint.code);
-    } else if (constraint instanceof IncludesCodeConstraint) {
-      if (!(isCode/* && card && card.isList*/)) { // TODO: Deal with cardinality
-        logger.error('ERROR: includes code constraint %s was applied to a non-coding array type %s', valueDef, JSON.stringify(constraint, null, 2));
-        continue;
-      }
-      if (!includesCodeLists[constraintPath]) {
-        includesCodeLists[constraintPath] = [];
-      }
-      includesCodeLists[constraintPath].push(makeConceptEntry(constraint.code));
-    } else if (constraint instanceof TypeConstraint) {
-      if (!constraintTarget) {
-        value.$ref = makeRef(constraint.isA, enclosingNamespace, baseSchemaURL);
-      } else {
-        let allOfEntry = {};
-        if (retValue === value) {
-          value = {};
-          for (const key of Object.keys(retValue)) {
-            value[key] = retValue[key];
-            delete retValue[key];
-          }
-          retValue.allOf = [value, allOfEntry];
+      if (allOfEntry.properties) {
+        if (!Object.keys(allOfEntry.properties).length) {
+          delete allOfEntry.properties;
         } else {
-          retValue.items = {allOf: [value, allOfEntry]};
-        }
-
-        for (const path of constraintPath) {
-          allOfEntry.properties = {};
-          allOfEntry = allOfEntry.properties[path] = {};
-        }
-
-        allOfEntry.$ref = makeRef(constraint.isA, enclosingNamespace, baseSchemaURL);
-      }
-    } else if (constraint instanceof IncludesTypeConstraint) {
-      if (!isList) { // TODO: Deal with cardinality
-        logger.error('ERROR: includestypeconstraint %s was applied to a non-array type %s', valueDef, JSON.stringify(constraint, null, 2));
-        continue;
-      }
-      if (constraint.hasPath()) {
-        // TODO: properly handling namespaces will require traversing the class hierarchy
-      } else {
-        includesTypeListsMin += constraint.card.min;
-        if (includesTypeListsMax !== null) {
-          if (constraint.card.isMaxUnbounded) {
-            includesTypeListsMax = null;
-          } else {
-            includesTypeListsMax += constraint.card.max;
+          for (const path in allOfEntry.properties) {
+            if (allOfEntry.properties[path].allOf) {
+              pruneExpandedStructure(allOfEntry.properties[path].allOf);
+              switch (allOfEntry.properties[path].allOf.length) {
+              case 1:
+                allOfEntry.properties[path] = allOfEntry.properties[path].allOf[0];
+                break;
+              case 0:
+                delete allOfEntry.properties[path].allOf;
+                break;
+              }
+            }
+            if (!Object.keys(allOfEntry.properties[path]).length) {
+              delete allOfEntry.properties[path];
+            }
+          }
+          if (!Object.keys(allOfEntry.properties).length) {
+            delete allOfEntry.properties;
           }
         }
-
-        if (constraint.isA instanceof RefValue) {
-          includesTypeListRef.push(constraint);
-        } else {
-          includesTypeListType.push(constraint);
-        }
       }
-    } else {
-      logger.info('WARNING: Constraint not yet implemented', constraint);
+      if (allOfEntry.allOf && allOfEntry.allOf.length === 1) {
+        for (const key in allOfEntry.allOf[0]) {
+          if (key !== 'allOf') {
+            allOfEntry[key] = allOfEntry.allOf[0][key];
+          }
+        }
+        delete allOfEntry.allOf;
+      }
+      if (!Object.keys(allOfEntry).length) {
+        currentAllOf.splice(i, 1);
+      }
     }
   }
 
-  if (includesTypeListRef.length || includesTypeListType.length) {
-    if (typeof retValue.minItems === 'undefined') {
-      retValue.minItems = includesTypeListsMin;
-    } else if (retValue.minItems < includesTypeListsMin) {
-      retValue.minItems = includesTypeListsMin;
+  if (valueDef.constraints && valueDef.constraints.length) {
+    function constraintDfs (node, currentAllOf) {
+      for (const path in node) {
+        if (path !== '$self') {
+          if (!currentAllOf[0].properties[path]) {
+            currentAllOf[0].properties[path] = {
+              allOf: [
+                { properties: {} }
+              ]
+            };
+          }
+          constraintDfs(node[path], currentAllOf[0].properties[path].allOf);
+        } else {
+          currentAllOf[0].constraints = [];
+          let includesConstraints = null;
+          for (const constraintInfo of node.$self) {
+            if (constraintInfo.constraint instanceof TypeConstraint) {
+              currentAllOf.push({$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)});
+            } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
+              if (!includesConstraints) {
+                includesConstraints = {refs: [], types: [], min: 0, max: 0};
+              }
+              includesConstraints.min += constraintInfo.constraint.card.min;
+              if (includesConstraints.max !== null) {
+                if (constraintInfo.constraint.card.isMaxUnbounded) {
+                  includesConstraints.max = null;
+                } else {
+                  includesConstraints.max += constraintInfo.constraint.card.max;
+                }
+              }
+
+              if (constraintInfo.constraint.isA instanceof RefValue) {
+                includesConstraints.refs.push(constraintInfo.constraint);
+              } else {
+                includesConstraints.types.push(constraintInfo.constraint);
+              }
+            } else if (constraintInfo.constraint instanceof ValueSetConstraint) {
+              if (currentAllOf[0].valueSet) {
+                logger.error(`Multiple valueset constraints found on a single element %s.`, constraintInfo.constraint);
+                continue;
+              }
+              currentAllOf[0].valueSet = {
+                uri: constraintInfo.constraint.valueSet,
+                strength: constraintInfo.constraint.bindingStrength
+              };
+            } else if (constraintInfo.constraint instanceof CodeConstraint) {
+              if (currentAllOf[0].code) {
+                logger.error(`Multiple code constraints found on a single element %s.`, constraintInfo.constraint);
+                continue;
+              }
+              currentAllOf[0].code = makeConceptEntry(constraintInfo.constraint.code);
+            } else {
+              currentAllOf[0].constraints.push(constraintInfo.constraint);
+            }
+          }
+
+          if (includesConstraints) {
+            currentAllOf[0].includesTypes = [];
+            const includesTypesArrayDef = {
+              type: 'array',
+              minItems: includesConstraints.min,
+              items: { anyOf: [] }
+            };
+            currentAllOf.push(includesTypesArrayDef);
+            if (includesConstraints.max !== null) {
+              includesTypesArrayDef.maxItems = includesConstraints.max;
+            }
+            if (includesConstraints.refs.length) {
+              includesTypesArrayDef.items.anyOf.push(makeShrRefObject(includesConstraints.refs.map((ref) => ref.isA), baseSchemaURL));
+              for (const ref of includesConstraints.refs) {
+                const includesType = {
+                  items: `ref(${makeShrDefinitionURL(ref.isA, baseSchemaURL)})`,
+                  minItems: ref.card.min
+                };
+                if (!ref.card.isMaxUnbounded) {
+                  includesType.maxItems = ref.card.max;
+                }
+                currentAllOf[0].includesTypes.push(includesType);
+              }
+            }
+            for (const val of includesConstraints.types) {
+              includesTypesArrayDef.items.anyOf.push({ $ref: makeRef(val.isA, enclosingNamespace, baseSchemaURL) });
+              const includesType = {
+                items: makeShrDefinitionURL(val.isA, baseSchemaURL),
+                minItems: val.card.min
+              };
+              if (!val.card.isMaxUnbounded) {
+                includesType.maxItems = val.card.max;
+              }
+              currentAllOf[0].includesTypes.push(includesType);
+            }
+          }
+        }
+      }
+    }
+    constraintDfs(constraintStructure, allOf);
+    if (isList) {
+      for (const includesConstraintDef of allOf) {
+        if (includesConstraintDef.type === 'array') {
+          if ((listValue.minItems !== null) && (listValue.minItems !== undefined)) {
+            listValue.minItems = Math.max(listValue.minItems, includesConstraintDef.minItems);
+          } else {
+            listValue.minItems = includesConstraintDef.minItems;
+          }
+          // TODO: Support 0..0
+          if (listValue.maxItems == null) {
+            listValue.maxItems = includesConstraintDef.maxItems;
+          } else {
+            if (includesConstraintDef.maxItems != null) {
+              listValue.maxItems = Math.min( listValue.maxItems, includesConstraintDef.maxItems);
+            }
+          }
+          listValue.includesTypes = allOf[0].includesTypes;
+          delete allOf[0].includesTypes;
+
+          allOf.push(includesConstraintDef.items);
+          delete includesConstraintDef.items;
+          delete includesConstraintDef.maxItems;
+          delete includesConstraintDef.minItems;
+          delete includesConstraintDef.type;
+          break;
+        }
+      }
     }
 
-    if (typeof retValue.maxItems === 'undefined') {
-      if (includesTypeListsMax !== null) {
-        retValue.maxItems = includesTypeListsMax;
+    if (valueIsPrimitive) {
+      pruneExpandedStructure(allOf);
+      for (const prop in allOf[0]) {
+        value[prop] = allOf[0][prop];
+        delete allOf[0][prop];
       }
+    }
+  }
+  pruneExpandedStructure(allOf);
+
+  if (allOf.length) {
+    const allOfDef = allOf.length === 1 ? allOf[0] : { allOf: allOf };
+    if (listValue) {
+      listValue.items = allOfDef;
     } else {
-      if (includesTypeListsMax < retValue.maxItems) {
-        retValue.maxItems = includesTypeListsMax;
-      }
-    }
-    delete value.$ref;
-    retValue.includesTypes = [];
-    value.anyOf = [];
-    if (includesTypeListRef.length) {
-      value.anyOf.push(makeShrRefObject(includesTypeListRef.map((ref) => ref.isA), baseSchemaURL));
-      for (const ref of includesTypeListRef) {
-        const includesType = {
-          items: `ref(${makeShrDefinitionURL(ref.isA, baseSchemaURL)})`,
-          minItems: ref.card.min
-        };
-        if (!ref.card.isMaxUnbounded) {
-          includesType.maxItems = ref.card.max;
-        }
-        retValue.includesTypes.push(includesType);
-      }
-    }
-    for (const val of includesTypeListType) {
-      value.anyOf.push({ $ref: makeRef(val.isA, enclosingNamespace, baseSchemaURL) });
-      const includesType = {
-        items: makeShrDefinitionURL(val.isA, baseSchemaURL),
-        minItems: val.card.min
-      };
-      if (!val.card.isMaxUnbounded) {
-        includesType.maxItems = val.card.max;
-      }
-      retValue.includesTypes.push(includesType);
+      value = allOfDef;
     }
   }
 
@@ -582,7 +664,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     value.codes = includesCodeLists;
   }
 
-  return {value: retValue, required, tbd: false};
+  return {value: listValue ? listValue : value, required, tbd: false};
 }
 
 function tbdValueToString(tbd) {
@@ -628,16 +710,16 @@ function makeShrDefinitionURL(id, baseSchemaURL) {
 /**
  * Translates a constraint path into a valid path for the JSON Schema.
  * @param {Constraint} constraint - the constraint.
- * @param {DataElement} valueDef - the data element that contains the constraint.
+ * @param {IdentifiableValue} valueDef - the identifiable value that contains the constraint.
  * @param {DataElementSpecifications} dataElementSpecs - the elements in the namespace.
  * @return {{path: (Array<string>|undefined), target: (DataElement|undefined)}} - The target of the constraint and the extracted path (qualified if necessary). Both properties will be null if there was an error.
  */
 function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
   if (!constraint.hasPath()) {
-    return {path: ['Value']};
+    return { path: [] };
   }
 
-  let currentDef = valueDef;
+  let currentDef = dataElementSpecs.findByIdentifier(valueDef.identifier);
   const normalizedPath = [];
   for (let i = 0; i < constraint.path.length; i += 1) {
     const pathId = constraint.path[i];
