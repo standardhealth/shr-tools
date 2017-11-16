@@ -23,9 +23,14 @@
                 "minItems": 0,
                 "maxItems": 3,
                 "items": {
-                  "anyOf": [
-                    { "$ref": "#/definitions/SimpleChild" },
-                    { "$ref": "#/definitions/SimpleChild2" }
+                  "allOf": [
+                    { "$ref": "#/definitions/Simple" },
+                    {
+                      "anyOf": [
+                        { "$ref": "#/definitions/SimpleChild" },
+                        { "$ref": "#/definitions/SimpleChild2" }
+                      ]
+                    }
                   ]
                 },
                 "includesTypes": [
