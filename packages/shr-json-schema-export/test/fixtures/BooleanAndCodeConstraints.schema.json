@@ -20,6 +20,12 @@
           {
             "type": "object",
             "properties": {
+              "Value": {
+                "allOf": [
+                  { "type": "boolean" },
+                  { "enum": [ true ] }
+                ]
+              },
               "shr/test/Bool": {
                 "allOf": [
                   {
@@ -37,7 +43,8 @@
                   }
                 }
               }
-            }
+            },
+            "required": ["Value"]
           }
         ]
       },

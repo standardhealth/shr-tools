@@ -646,9 +646,11 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
 
     if (valueIsPrimitive) {
       pruneExpandedStructure(allOf);
-      for (const prop in allOf[0]) {
-        value[prop] = allOf[0][prop];
-        delete allOf[0][prop];
+      if (value !== allOf[0]) {
+        for (const prop in allOf[0]) {
+          value[prop] = allOf[0][prop];
+          delete allOf[0][prop];
+        }
       }
     }
   }
