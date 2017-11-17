@@ -3,7 +3,7 @@
 // Derived from export SHR specification content as a hierarchy in JSON format by Greg Quinn
 
 const bunyan = require('bunyan');
-const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, DataElement, Namespace, DataElementSpecifications, Specifications, MODELS_INFO, PrimitiveIdentifier, PRIMITIVE_NS} = require('shr-models');
+const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, DataElement, Namespace, DataElementSpecifications, Specifications, BooleanConstraint, MODELS_INFO, PrimitiveIdentifier, PRIMITIVE_NS} = require('shr-models');
 
 const CODE = new PrimitiveIdentifier('code');
 
@@ -562,11 +562,14 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
                 strength: constraintInfo.constraint.bindingStrength
               };
             } else if (constraintInfo.constraint instanceof CodeConstraint) {
+              // Maybe TODO: For entry elements this can have some level of enforcement by ANDing the exact contents of the EntryType field with an enum for this value/field.
               if (currentAllOf[0].code) {
                 logger.error(`Multiple code constraints found on a single element %s.`, constraintInfo.constraint);
                 continue;
               }
               currentAllOf[0].code = makeConceptEntry(constraintInfo.constraint.code);
+            } else if (constraintInfo.constraint instanceof BooleanConstraint) {
+              currentAllOf.push({ enum: [constraintInfo.constraint.value]});
             } else {
               currentAllOf[0].constraints.push(constraintInfo.constraint);
             }
