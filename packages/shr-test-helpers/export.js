@@ -24,8 +24,17 @@ function commonExportTests(exportFn, expectedFn, expectedErrorsFn) {
   return () => {
     let _specs;
     let checkExpected = function(expected) {
-      expect(exportFn(_specs)).to.eql(expected.result);
-      expect(err.errors().length).to.equal(expected.errors.length);
+      try {
+        expect(exportFn(_specs)).to.eql(expected.result);
+      } catch (ex) {
+        if (err.errors().length) {
+          console.log('Test failed, additional errors that occurred while executing the test are', err.errors());
+        }
+        throw ex;
+      }
+      if (err.errors().length !== expected.errors.length) {
+        expect(err.errors()).to.deep.equal(expected.errors);
+      }
       for (let i=0; i < expected.errors.length; i++) {
         const expErr = expected.errors[i];
         const actErr = err.errors()[i];
