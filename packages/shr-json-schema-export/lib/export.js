@@ -739,7 +739,20 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
         logger.error('Encountered a constraint path with a primitive leaf %s on an element that lacked a value: %s', pathId, constraint);
         return {};
       }
-      if (!pathId.equals(currentDef.value.identifier)) {
+      if (currentDef.value instanceof ChoiceValue) {
+        let found = false;
+        for (const choice of currentDef.value.aggregateOptions) {
+          if (pathId.equals(choice.identifier)) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, JSON.stringify(constraint, null, 2), JSON.stringify(valueDef, null, 2));
+          return {};
+        }
+      }
+      else if (!pathId.equals(currentDef.value.identifier)) {
         logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, JSON.stringify(constraint, null, 2), JSON.stringify(valueDef, null, 2));
         return {};
       }
