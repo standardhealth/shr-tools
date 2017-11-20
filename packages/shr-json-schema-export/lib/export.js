@@ -450,7 +450,9 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     }
 
     const {path: constraintPath, target: constraintTarget } = extractConstraintPath(constraint, valueDef, dataElementsSpecs);
-    if (!constraintTarget) {
+    if (!constraintPath) {
+      continue;
+    } else if (!constraintTarget) {
       // Cardinality constraints without a path are not useful (except if you're really a list, we'll handle that later).
       if (constraint instanceof CardConstraint) {
         continue;
@@ -738,7 +740,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
         return {};
       }
       if (!pathId.equals(currentDef.value.identifier)) {
-        logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s', pathId, constraint);
+        logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, JSON.stringify(constraint, null, 2), JSON.stringify(valueDef, null, 2));
         return {};
       }
       normalizedPath.push('Value');
