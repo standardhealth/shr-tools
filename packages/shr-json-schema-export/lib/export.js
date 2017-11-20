@@ -533,6 +533,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
         } else {
           currentAllOf[0].constraints = [];
           let includesConstraints = null;
+          let includesCodeConstraints = null;
           for (const constraintInfo of node.$self) {
             if (constraintInfo.constraint instanceof TypeConstraint) {
               currentAllOf.push({$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)});
@@ -554,6 +555,11 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               } else {
                 includesConstraints.types.push(constraintInfo.constraint);
               }
+            } else if (constraintInfo.constraint instanceof IncludesCodeConstraint) {
+              if (!includesCodeConstraints) {
+                includesCodeConstraints = [];
+              }
+              includesCodeConstraints.push(constraintInfo.constraint);
             } else if (constraintInfo.constraint instanceof ValueSetConstraint) {
               if (currentAllOf[0].valueSet) {
                 logger.error(`Multiple valueset constraints found on a single element %s.`, constraintInfo.constraint);
@@ -612,6 +618,9 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               }
               currentAllOf[0].includesTypes.push(includesType);
             }
+          }
+          if (includesCodeConstraints) {
+            currentAllOf[0].includesCodes = includesCodeConstraints.map((it) => makeConceptEntry(it.code).code);
           }
         }
       }

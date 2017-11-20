@@ -1,0 +1,62 @@
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "anyOf": [
+      { "$ref": "#/definitions/Coded" },
+      { "$ref": "#/definitions/IncludesCodesList" }
+    ],
+    "definitions": {
+      "IncludesCodesList": {
+        "description": "An entry with a includes codes constraint.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "Value": {
+                          "includesCodes": [
+                            "http://foo.org#bar", "http://boo.org#far"
+                          ]
+                        }
+                      }
+                    },
+                    { "$ref": "#/definitions/Coded" }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Coded": {
+        "description": "It is a coded element",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string",
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/test/vs/Coded",
+                  "strength": "REQUIRED"
+                }
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      }
+    }
+  }
+}
