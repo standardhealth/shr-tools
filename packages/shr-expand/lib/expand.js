@@ -221,7 +221,7 @@ class Expander {
       return expanded;
     } finally {
       logger.debug('Done expanding element');
-      this.logger = lastLogger;
+      logger = lastLogger;
     }
   }
 
@@ -925,7 +925,7 @@ class Expander {
       return merged;
     } finally {
       logger.debug('Done expanding mapping');
-      this.logger = lastLogger;
+      logger = lastLogger;
     }
   }
 
@@ -937,7 +937,7 @@ class Expander {
     // Special case logic for "Value"
     else if (!idToMatch.namespace && idToMatch.name == 'Value') {
       if (de.value instanceof models.IdentifiableValue) {
-        return de.value.identifier;
+        return de.value.effectiveIdentifier;
       } else if (typeof de.value === 'undefined') {
         logger.error('Cannot map Value since element does not define a value. ERROR_CODE:12033');
       } else if (de.value instanceof models.ChoiceValue) {
@@ -975,9 +975,9 @@ class Expander {
   findMatchInValue(value, idToMatch) {
     if (value instanceof models.IdentifiableValue) {
       if (idToMatch.namespace && (value.identifier.equals(idToMatch)) || value.effectiveIdentifier.equals(idToMatch)) {
-        return value.identifier.clone();
+        return value.effectiveIdentifier.clone();
       } else if (!idToMatch.namespace && (value.identifier.name == idToMatch.name || value.effectiveIdentifier.name == idToMatch.name)) {
-        return value.identifier.clone();
+        return value.effectiveIdentifier.clone();
       }
     } else if (value instanceof models.ChoiceValue) {
       for (const opt of value.options) {

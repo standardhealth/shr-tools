@@ -1,6 +1,6 @@
 {
   "name": "shr-expand",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "Expands SHR data elements to copy down fields from data elements they're based on and consolidates their constraints; does similar for mappings.",
   "author": "",
   "license": "Apache-2.0",
