@@ -736,7 +736,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
     return { path: [] };
   }
 
-  let currentDef = dataElementSpecs.findByIdentifier(valueDef.identifier);
+  let currentDef = dataElementSpecs.findByIdentifier(valueDef.effectiveIdentifier);
   const normalizedPath = [];
   for (let i = 0; i < constraint.path.length; i += 1) {
     const pathId = constraint.path[i];
