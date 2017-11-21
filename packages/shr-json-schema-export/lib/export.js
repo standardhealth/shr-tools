@@ -667,6 +667,26 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     }
   }
   pruneExpandedStructure(allOf);
+  function sanityCheckFinalStructure (currentAllOf) {
+    for (let i = currentAllOf.length - 1; i >= 0; i -= 1) {
+      const allOfEntry = currentAllOf[i];
+      if (allOfEntry.constraints) {
+        for (const constraint of allOfEntry.constraints) {
+          logger.error('Internal error: unhandled constraint %s', JSON.stringify(constraint, null, 2));
+        }
+      }
+      if (allOfEntry.properties) {
+        for (const path in allOfEntry.properties) {
+          if (allOfEntry.properties[path].allOf) {
+            sanityCheckFinalStructure(allOfEntry.properties[path].allOf);
+          } else {
+            sanityCheckFinalStructure([allOfEntry.properties[path]]);
+          }
+        }
+      }
+    }
+  }
+  sanityCheckFinalStructure(allOf);
 
   if (allOf.length) {
     const allOfDef = allOf.length === 1 ? allOf[0] : { allOf: allOf };
