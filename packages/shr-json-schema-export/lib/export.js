@@ -776,7 +776,14 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
       let found = false;
       // See if the current definition has a value of the specified type.
       if (currentDef.value) {
-        if (pathId.equals(currentDef.value.identifier) || checkHasBaseType(currentDef.value.identifier, pathId, dataElementSpecs)) {
+        if (currentDef.value instanceof ChoiceValue) {
+          for (const choice of currentDef.value.aggregateOptions) {
+            if (pathId.equals(choice.identifier) || checkHasBaseType(choice.identifier, pathId, dataElementSpecs)) {
+              found = true;
+              break;
+            }
+          }
+        } else if (pathId.equals(currentDef.value.identifier) || checkHasBaseType(currentDef.value.identifier, pathId, dataElementSpecs)) {
           normalizedPath.push('Value');
           found = true;
         }
