@@ -1,0 +1,51 @@
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "anyOf": [
+      { "$ref": "#/definitions/NestedCardConstraint" }
+    ],
+    "definitions": {
+      "NestedCardConstraint": {
+        "description": "It has a field with a nested card constraint.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "shr/test/OptionalField": {
+                "allOf": [
+                  { "$ref": "#/definitions/OptionalField" },
+                  {
+                    "required": ["shr/test/OptionalValue"]
+                  }
+                ]
+              }
+            },
+            "required": ["shr/test/OptionalField"]
+          }
+        ]
+      },
+      "OptionalField": {
+        "description": "An element with an optional field.",
+        "type": "object",
+        "properties": {
+          "shr/test/OptionalValue": {
+            "$ref": "#/definitions/OptionalValue"
+          }
+        }
+      },
+      "OptionalValue": {
+        "description": "An element with an optional value.",
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

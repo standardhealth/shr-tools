@@ -520,7 +520,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
   }
 
   if (valueDef.constraints && valueDef.constraints.length) {
-    function constraintDfs (node, currentAllOf) {
+    function constraintDfs (node, currentAllOf, parentAllOf = null) {
       for (const path in node) {
         if (path !== '$self') {
           if (!currentAllOf[0].properties[path]) {
@@ -530,7 +530,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               ]
             };
           }
-          constraintDfs(node[path], currentAllOf[0].properties[path].allOf);
+          constraintDfs(node[path], currentAllOf[0].properties[path].allOf, currentAllOf);
         } else {
           currentAllOf[0].constraints = [];
           let includesConstraints = null;
@@ -579,6 +579,27 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               currentAllOf[0].code = makeConceptEntry(constraintInfo.constraint.code);
             } else if (constraintInfo.constraint instanceof BooleanConstraint) {
               currentAllOf.push({ enum: [constraintInfo.constraint.value]});
+            } else if (constraintInfo.constraint instanceof CardConstraint) {
+              // TODO: 0..0
+              const cardConstraints = constraintInfo.constraintTarget.value.constraintsFilter.own.card.constraints;
+              isList = cardConstraints.some((oneCard) => oneCard.isList);
+              if (isList) {
+                const arrayDef = {
+                  type: 'array',
+                  minItems: constraintInfo.constraint.card.min,
+                };
+                if (constraintInfo.constraint.card.max) {
+                  arrayDef.maxItems = constraintInfo.constraint.card.max;
+                }
+                currentAllOf.push(arrayDef);
+                if (constraintInfo.constraint.card.min) {
+                  parentAllOf.push({ required: [constraintInfo.constraintPath[constraintInfo.constraintPath.length - 1]] });
+                }
+              } else {
+                if (constraintInfo.constraint.card.min) {
+                  parentAllOf.push({ required: [constraintInfo.constraintPath[constraintInfo.constraintPath.length - 1]] });
+                }
+              }
             } else {
               currentAllOf[0].constraints.push(constraintInfo.constraint);
             }
