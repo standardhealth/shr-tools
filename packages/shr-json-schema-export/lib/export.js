@@ -60,6 +60,7 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
   const entryRefs = [];
   for (const def of defs) {
+    logger.debug('Exporting element %s', def.identifier);
     let schemaDef = {
       type: 'object',
       properties: {}
@@ -295,15 +296,15 @@ function namespaceToURLPathSegment(namespace) {
 
 function isValidField(field) {
   if (field instanceof ChoiceValue) {
-    logger.error('ERROR: Ignoring field defined as a choice', field);
+    logger.error('ERROR: Ignoring field defined as a choice', JSON.stringify(field, null, 2));
     return false;
   }
   if (!(field.identifier)) {
-    logger.error('ERROR: Ignoring name-less field: ', field);
+    logger.error('ERROR: Ignoring name-less field: ', JSON.stringify(field, null, 2));
     return false;
   }
   if (field.identifier.name === 'Value') {
-    logger.error('ERROR: Ignoring restricted field name: Value', field);
+    logger.error('ERROR: Ignoring restricted field name: Value', JSON.stringify(field, null, 2));
     return false;
   }
   return true;
@@ -445,7 +446,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
   const includesCodeLists = {};
   for (const constraint of valueDef.constraints) {
     if (constraint.onValue) {
-      logger.error('Constraint should not be on the value in an expanded object model "%s". Ignoring constraint.', constraint);
+      logger.error('Constraint should not be on the value in an expanded object model "%s". Ignoring constraint.', JSON.stringify(constraint, null, 2));
       continue;
     }
 
@@ -741,11 +742,11 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
     const pathId = constraint.path[i];
     if (pathId.namespace === PRIMITIVE_NS) {
       if (i !== constraint.path.length - 1) {
-        logger.error('Encountered a constraint path containing a primitive %s at index %d that was not the leaf: %s', i, pathId, constraint);
+        logger.error('Encountered a constraint path containing a primitive %s at index %d that was not the leaf: %s', i, pathId, JSON.stringify(constraint, null, 2));
         return {};
       }
       if (!currentDef.value) {
-        logger.error('Encountered a constraint path with a primitive leaf %s on an element that lacked a value: %s', pathId, constraint);
+        logger.error('Encountered a constraint path with a primitive leaf %s on an element that lacked a value: %s', pathId, JSON.stringify(constraint, null, 2));
         return {};
       }
       if (currentDef.value instanceof ChoiceValue) {
@@ -769,7 +770,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
     } else {
       const newDef = dataElementSpecs.findByIdentifier(pathId);
       if (!newDef) {
-        logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, constraint);
+        logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, JSON.stringify(constraint, null, 2));
         return {};
       }
       let found = false;
@@ -783,12 +784,12 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
 
       if (!found) {
         if (!currentDef.fields || !currentDef.fields.length) {
-          logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', currentDef, pathId, constraint);
+          logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
           return {};
         } else {
           const found = currentDef.fields.some((field) => pathId.equals(field.identifier));
           if (!found) {
-            logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', currentDef, pathId, constraint);
+            logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
             return {};
           }
           normalizedPath.push(identifierToNormalizedPath(pathId));
