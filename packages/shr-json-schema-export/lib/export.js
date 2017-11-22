@@ -581,9 +581,12 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               currentAllOf.push({ enum: [constraintInfo.constraint.value]});
             } else if (constraintInfo.constraint instanceof CardConstraint) {
               // TODO: 0..0
-              const cardConstraints = constraintInfo.constraintTarget.value.constraintsFilter.own.card.constraints;
-              isList = cardConstraints.some((oneCard) => oneCard.isList);
-              if (isList) {
+              let wasList = constraintInfo.constraintTarget.value.card.isList;
+              if (!wasList) {
+                const cardConstraints = constraintInfo.constraintTarget.value.constraintsFilter.own.card.constraints;
+                wasList = cardConstraints.some((oneCard) => oneCard.isList);
+              }
+              if (wasList) {
                 const arrayDef = {
                   type: 'array',
                   minItems: constraintInfo.constraint.card.min,
