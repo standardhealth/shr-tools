@@ -20,14 +20,10 @@
                 "anyOf": [
                   { "type": "string" },
                   {
-                    "type": "array",
-                    "minItems": 0,
-                    "items": {
-                      "type": "string",
-                      "valueSet": {
-                        "uri": "http://standardhealthrecord.org/test/vs/CodeChoice",
-                        "strength": "REQUIRED"
-                      }
+                    "type": "string",
+                    "valueSet": {
+                      "uri": "http://standardhealthrecord.org/test/vs/CodeChoice",
+                      "strength": "REQUIRED"
                     }
                   },
                   { "$ref": "#/definitions/Coded" }

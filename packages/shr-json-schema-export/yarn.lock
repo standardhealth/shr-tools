@@ -913,8 +913,8 @@ shr-models@^5.2.0:
   resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.2.0.tgz#3dba6f113f65a16250de2012f6e4d4bbf692e0ed"
 
 "shr-test-helpers@https://github.com/standardhealth/shr-test-helpers#json-schema-export":
-  version "5.1.0-beta.1"
-  resolved "https://github.com/standardhealth/shr-test-helpers#ce7969547e6503a867a204fe522314d9b53cb662"
+  version "5.1.0-beta.2"
+  resolved "https://github.com/standardhealth/shr-test-helpers#dd67dec977ca10854bb5642204f590ceae657528"
   dependencies:
     bunyan "^1.8.9"
     shr-models "^5.2.0"

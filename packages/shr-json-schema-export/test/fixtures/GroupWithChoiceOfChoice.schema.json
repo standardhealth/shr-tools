@@ -28,16 +28,8 @@
                     { "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple" },
                     {
                       "anyOf": [
-                        {
-                          "type": "array",
-                          "minItems": 1,
-                          "items": { "$ref": "#/definitions/ForeignElementValue" }
-                        },
-                        {
-                          "type": "array",
-                          "minItems": 1,
-                          "items": { "$ref": "#/definitions/ElementValue" }
-                        }
+                        { "$ref": "#/definitions/ForeignElementValue" },
+                        { "$ref": "#/definitions/ElementValue" }
                       ]
                     }
                   ]
