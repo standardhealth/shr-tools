@@ -19,16 +19,14 @@
                 "type": "object",
                 "properties": {
                   "ShrId": { "type": "string" },
-                  "EntryType": {
-                    "type": "string",
-                    "enum": [
-                      "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple",
-                      "https://standardhealthrecord.org/test/shr/test#/definitions/Coded"
-                    ]
-                  },
+                  "EntryType": { "type": "string" },
                   "EntryId": { "type": "string" }
                 },
-                "required": ["ShrId", "EntryType", "EntryId"]
+                "required": ["ShrId", "EntryType", "EntryId"],
+                "refType": [
+                  "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple",
+                  "https://standardhealthrecord.org/test/shr/test#/definitions/Coded"
+                ]
               }
             },
             "required": ["Value"]

@@ -370,13 +370,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     }
   } else if (valueDef instanceof RefValue) {
     // TODO: What should the value of EntryType be? The schema URL may not be portable across data types.
-    value.type = 'object';
-    value.properties = {
-      ShrId: { type: 'string' },
-      EntryType: { type: 'string', enum: [`${baseSchemaURL}/${namespaceToURLPathSegment(valueDef.identifier.namespace)}#/definitions/${valueDef.identifier.name}`] },
-      EntryId: { type: 'string' }
-    };
-    value.required = ['ShrId', 'EntryType', 'EntryId'];
+    makeShrRefObject([valueDef], baseSchemaURL, value);
   } else if (valueDef instanceof IdentifiableValue) {
     const id = valueDef.effectiveIdentifier;
     if (id.isPrimitive) {
@@ -751,19 +745,16 @@ function makeRef(id, enclosingNamespace, baseSchemaURL) {
   }
 }
 
-function makeShrRefObject(refs, baseSchemaURL) {
-  return {
-    type: 'object',
-    properties: {
-      ShrId: { type: 'string' },
-      EntryId: { type: 'string' },
-      EntryType: {
-        type: 'string',
-        enum: refs.map((ref) => makeShrDefinitionURL(ref.identifier, baseSchemaURL))
-      }
-    },
-    required: ['ShrId', 'EntryType', 'EntryId']
+function makeShrRefObject(refs, baseSchemaURL, target = {}) {
+  target.type = 'object';
+  target.properties = {
+    ShrId: { type: 'string' },
+    EntryId: { type: 'string' },
+    EntryType: { type: 'string' }
   };
+  target.required = ['ShrId', 'EntryType', 'EntryId'];
+  target.refType = refs.map((ref) => makeShrDefinitionURL(ref.identifier, baseSchemaURL));
+  return target;
 }
 
 function makeShrDefinitionURL(id, baseSchemaURL) {
