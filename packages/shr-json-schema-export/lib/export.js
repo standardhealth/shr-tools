@@ -345,7 +345,9 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     const refOptions = [];
     const normalOptions = [];
     for (const option of valueDef.options) {
-      if (option instanceof RefValue) {
+      if (option.effectiveCard && (!option.effectiveCard.isExactlyOne)) {
+        logger.error('Choices with options with cardinalities that are not exactly one are illegal "%s". Ignoring option.', JSON.stringify(valueDef, null, 2));
+      } else if (option instanceof RefValue) {
         refOptions.push(option);
       } else {
         normalOptions.push(option);
