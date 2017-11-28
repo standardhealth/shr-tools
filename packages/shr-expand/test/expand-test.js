@@ -533,7 +533,6 @@ describe('#expand()', () => {
   });
 
   it('should allow \'value type\' constraints to narrow a choice', function() {
-    this.skip('Doesn\'t currently support narrowing choices like this.  May require new constraint type.');
     let a = new models.DataElement(id('shr.test', 'A'), true);
     let b = new models.DataElement(id('shr.test', 'B'), true);
     let x = new models.DataElement(id('shr.test', 'X'), true)
@@ -556,9 +555,36 @@ describe('#expand()', () => {
     expect(eY.identifier).to.eql(id('shr.test', 'Y'));
     expect(eY.value).to.eql(
       new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
-        .withConstraint(new models.TypeConstraint(id('shr.test', 'B'), true))
+        .withConstraint(new models.TypeConstraint(id('shr.test', 'B')).withOnValue(true))
     );
     expect(eY.fields).to.be.empty;
+  });
+
+  it('should allow \'value type\' constraints to narrow a choice on a field', function() {
+    let a = new models.DataElement(id('shr.test', 'A'), true);
+    let b = new models.DataElement(id('shr.test', 'B'), true);
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.ChoiceValue().withMinMax(0, 1)
+          .withOption(new models.IdentifiableValue(id('shr.test', 'A')))
+          .withOption(new models.IdentifiableValue(id('shr.test', 'B')))
+      );
+    let y = new models.DataElement(id('shr.test', 'Y'), true)
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'B')).withOnValue(true))
+      );
+    add(a, b, x, y);
+
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const eY = findExpanded('shr.test', 'Y');
+    expect(eY.identifier).to.eql(id('shr.test', 'Y'));
+    expect(eY.fields).to.eql([
+      new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+        .withConstraint(new models.TypeConstraint(id('shr.test', 'B')).withOnValue(true))
+    ]);
   });
 
   it('should keep valid type constraints on fields', () => {
