@@ -779,7 +779,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
     const pathId = constraint.path[i];
     if (pathId.namespace === PRIMITIVE_NS) {
       if (i !== constraint.path.length - 1) {
-        logger.error('Encountered a constraint path containing a primitive %s at index %d that was not the leaf: %s', i, pathId, JSON.stringify(constraint, null, 2));
+        logger.error('Encountered a constraint path containing a primitive %s at index %d that was not the leaf: %s', pathId, i, JSON.stringify(constraint, null, 2));
         return {};
       }
       if (!currentDef.value) {
