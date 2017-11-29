@@ -375,50 +375,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     const id = valueDef.effectiveIdentifier;
     if (id.isPrimitive) {
       valueIsPrimitive = true;
-      switch (id.name) {
-        case 'boolean':
-        case 'string':
-        case 'integer':
-          value.type = id.name;
-          break;
-        case 'unsignedInt':
-          value.type = 'integer';
-          value.minimum = 0;
-          break;
-        case 'positiveInt':
-          value.type = 'integer';
-          value.minimum = 1;
-          break;
-        case 'decimal':
-          value.type = 'number';
-          break;
-        case 'uri':
-          value.type = 'string';
-          value.format = 'uri';
-          break;
-        case 'base64Binary':
-          value.type = 'string';
-          break;
-        case 'dateTime':
-          value.type = 'string';
-          value.format = 'date-time';
-          break;
-        case 'instant':
-        case 'date':
-        case 'time':
-          value.type = 'string';
-          break;
-        case 'code':
-          value.type = 'string';
-          isCode = true;
-          break;
-        case 'oid':
-        case 'id':
-        case 'markdown':
-        case 'xhtml':
-          value.type = 'string';
-          break;
-      }
+      makePrimitiveObject(id, value);
     } else {
       const typeRef = makeRef(valueDef.identifier, enclosingNamespace, baseSchemaURL);
       if (valueDef.inheritance !== OVERRIDDEN) {
@@ -533,7 +490,11 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
           let includesCodeConstraints = null;
           for (const constraintInfo of node.$self) {
             if (constraintInfo.constraint instanceof TypeConstraint) {
-              currentAllOf.push({$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)});
+              if (constraintInfo.constraint.isA.isPrimitive) {
+                currentAllOf.push(makePrimitiveObject(constraintInfo.constraint.isA));
+              } else {
+                currentAllOf.push({$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)});
+              }
             } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
               if (!includesConstraints) {
                 includesConstraints = {refs: [], types: [], min: 0, max: 0};
@@ -759,6 +720,54 @@ function makeShrRefObject(refs, baseSchemaURL, target = {}) {
 
 function makeShrDefinitionURL(id, baseSchemaURL) {
   return `${baseSchemaURL}/${namespaceToURLPathSegment(id.namespace)}#/definitions/${id.name}`;
+}
+
+function makePrimitiveObject(id, target = {}) {
+  switch (id.name) {
+  case 'boolean':
+  case 'string':
+  case 'integer':
+    target.type = id.name;
+    break;
+  case 'unsignedInt':
+    target.type = 'integer';
+    target.minimum = 0;
+    break;
+  case 'positiveInt':
+    target.type = 'integer';
+    target.minimum = 1;
+    break;
+  case 'decimal':
+    target.type = 'number';
+    break;
+  case 'uri':
+    target.type = 'string';
+    target.format = 'uri';
+    break;
+  case 'base64Binary':
+    target.type = 'string';
+    break;
+  case 'dateTime':
+    target.type = 'string';
+    target.format = 'date-time';
+    break;
+  case 'instant':
+  case 'date':
+  case 'time':
+    target.type = 'string';
+    break;
+  case 'code':
+    target.type = 'string';
+    break;
+  case 'oid':
+  case 'id':
+  case 'markdown':
+  case 'xhtml':
+    target.type = 'string';
+    break;
+  }
+
+  return target;
 }
 
 /**
