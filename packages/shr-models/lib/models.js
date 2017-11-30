@@ -807,7 +807,7 @@ class IncludesTypeConstraint extends Constraint {
 
   equals(other) {
     return (other instanceof IncludesTypeConstraint) &&
-        this._onValue == other.onValue &&
+        this._isOnValue == other._isOnValue &&
         this._isA.equals(other.isA) &&
         this._card.equals(other.card) &&
         this._pathsAreEqual(other);
@@ -1740,6 +1740,6 @@ const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt
 
 // Inheritance constants
 const INHERITED = 'inherited';
-const OVERRIDDEN = 'overridden'
+const OVERRIDDEN = 'overridden';
 
 module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
