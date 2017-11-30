@@ -24,12 +24,20 @@ function setLogger(bunyanLogger) {
 function exportToJSONSchema(expSpecifications, baseSchemaURL, flat = false) {
   const namespaceResults = {};
   for (const ns of expSpecifications.namespaces.all) {
-    if (flat) {
-      const { schemaId, schema } = flatNamespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL);
-      namespaceResults[schemaId] = schema;
-    } else {
-      const { schemaId, schema } = namespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL);
-      namespaceResults[schemaId] = schema;
+    const lastLogger = logger;
+    logger = logger.child({ shrId: ns.namespace});
+    try {
+      logger.debug('Exporting namespace.');
+      if (flat) {
+        const { schemaId, schema } = flatNamespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL);
+        namespaceResults[schemaId] = schema;
+      } else {
+        const { schemaId, schema } = namespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL);
+        namespaceResults[schemaId] = schema;
+      }
+      logger.debug('Finished exporting namespace.');
+    } finally {
+      logger = lastLogger;
     }
   }
 
@@ -60,103 +68,109 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
   const entryRefs = [];
   for (const def of defs) {
-    logger.debug('Exporting element %s', def.identifier);
-    let schemaDef = {
-      type: 'object',
-      properties: {}
-    };
-    let wholeDef = schemaDef;
-    const tbdParentDescriptions = [];
-    let requiredProperties = [];
-    if (def.isEntry || def.basedOn.length) {
-      wholeDef = { allOf: [] };
-      let hasEntryParent = false;
-      for (const supertypeId of def.basedOn) {
-        if (supertypeId instanceof TBD) {
-          if (supertypeId.text) {
-            tbdParentDescriptions.push(supertypeId.text);
+    const lastLogger = logger;
+    logger = logger.child({ shrId: def.identifier.fqn});
+    try {
+      logger.debug('Exporting element');
+      let schemaDef = {
+        type: 'object',
+        properties: {}
+      };
+      let wholeDef = schemaDef;
+      const tbdParentDescriptions = [];
+      let requiredProperties = [];
+      if (def.isEntry || def.basedOn.length) {
+        wholeDef = { allOf: [] };
+        let hasEntryParent = false;
+        for (const supertypeId of def.basedOn) {
+          if (supertypeId instanceof TBD) {
+            if (supertypeId.text) {
+              tbdParentDescriptions.push(supertypeId.text);
+            } else {
+              tbdParentDescriptions.push('TBD');
+            }
           } else {
-            tbdParentDescriptions.push('TBD');
+            const parent = dataElementsSpecs.findByIdentifier(supertypeId);
+            if (!parent) {
+              logger.error('Could not find definition for %s which is a supertype of %s', supertypeId, def);
+            } else {
+              hasEntryParent = hasEntryParent || parent.isEntry;
+            }
+            wholeDef.allOf.push({ $ref: makeRef(supertypeId, ns, baseSchemaURL)});
           }
-        } else {
-          const parent = dataElementsSpecs.findByIdentifier(supertypeId);
-          if (!parent) {
-            logger.error('Could not find definition for %s which is a supertype of %s', supertypeId, def);
-          } else {
-            hasEntryParent = hasEntryParent || parent.isEntry;
+        }
+        if (def.isEntry && (!hasEntryParent)) {
+          wholeDef.allOf.splice(0, 0, { $ref: entryRef });
+        }
+        wholeDef.allOf.push(schemaDef);
+      }
+
+      const tbdFieldDescriptions = [];
+      if (def.value) {
+        if (def.value.inheritance !== INHERITED) {
+          let { value, required, tbd } = convertDefinition(def.value, dataElementsSpecs, ns, baseSchemaURL);
+          if (required) {
+            requiredProperties.push('Value');
           }
-          wholeDef.allOf.push({ $ref:  makeRef(supertypeId, ns, baseSchemaURL)});
+          schemaDef.properties.Value = value;
+          if (tbd) {
+            schemaDef.properties.Value.description = def.value.text ? ('TBD: ' + def.value.text) : tbdValueToString(def.value);
+          }
         }
       }
-      if (def.isEntry && (!hasEntryParent)) {
-        wholeDef.allOf.splice(0, 0, { $ref: entryRef });
-      }
-      wholeDef.allOf.push(schemaDef);
-    }
+      if (def.fields.length) {
+        for (const field of def.fields) {
+          if (!(field instanceof TBD) && !isValidField(field) || (field.inheritance === INHERITED)) {
+            continue;
+          }
+          const card = field.effectiveCard;
+          if (card && card.isZeroedOut) {
+            continue;
+          }
+          let {value, required, tbd} = convertDefinition(field, dataElementsSpecs, ns, baseSchemaURL);
+          if (tbd) {
+            tbdFieldDescriptions.push(tbdValueToString(field));
+            continue;
+          }
 
-    const tbdFieldDescriptions = [];
-    if (def.value) {
-      if (def.value.inheritance !== INHERITED) {
-        let { value, required, tbd } = convertDefinition(def.value, dataElementsSpecs, ns, baseSchemaURL);
-        if (required) {
-          requiredProperties.push('Value');
+          const qualifiedName = identifierToNormalizedPath(field.identifier);
+          schemaDef.properties[qualifiedName] = value;
+          if (required) {
+            requiredProperties.push(qualifiedName);
+          }
         }
-        schemaDef.properties.Value = value;
-        if (tbd) {
-          schemaDef.properties.Value.description = def.value.text ? ('TBD: ' + def.value.text) : tbdValueToString(def.value);
-        }
+      } else if (!def.value) {
+        schemaDef.type = 'object';
+        schemaDef.description = 'Empty DataElement?';
       }
-    }
-    if (def.fields.length) {
-      for (const field of def.fields) {
-        if (!(field instanceof TBD) && !isValidField(field) || (field.inheritance === INHERITED)) {
-          continue;
-        }
-        const card = field.effectiveCard;
-        if (card && card.isZeroedOut) {
-          continue;
-        }
-        let {value, required, tbd} = convertDefinition(field, dataElementsSpecs, ns, baseSchemaURL);
-        if (tbd) {
-          tbdFieldDescriptions.push(tbdValueToString(field));
-          continue;
-        }
-
-        const qualifiedName = identifierToNormalizedPath(field.identifier);
-        schemaDef.properties[qualifiedName] = value;
-        if (required) {
-          requiredProperties.push(qualifiedName);
-        }
+      let descriptionList = [];
+      if (def.description) {
+        descriptionList.push(def.description);
       }
-    } else if (!def.value) {
-      schemaDef.type = 'object';
-      schemaDef.description = 'Empty DataElement?';
-    }
-    let descriptionList = [];
-    if (def.description) {
-      descriptionList.push(def.description);
-    }
-    if (def.concepts.length) {
-      wholeDef.concepts = def.concepts.map((concept) => makeConceptEntry(concept));
-    }
-    if (tbdParentDescriptions.length) {
-      tbdParentDescriptions[0] = 'TBD Parents: ' + tbdParentDescriptions[0];
-      descriptionList = descriptionList.concat(tbdParentDescriptions);
-    }
-    if (tbdFieldDescriptions.length) {
-      tbdFieldDescriptions[0] = 'TBD Fields: ' + tbdFieldDescriptions[0];
-      descriptionList = descriptionList.concat(tbdFieldDescriptions);
-    }
-    if (descriptionList.length) {
-      wholeDef.description = descriptionList.join('\n');
-    }
-    if (requiredProperties.length) {
-      schemaDef.required = requiredProperties;
-    }
+      if (def.concepts.length) {
+        wholeDef.concepts = def.concepts.map((concept) => makeConceptEntry(concept));
+      }
+      if (tbdParentDescriptions.length) {
+        tbdParentDescriptions[0] = 'TBD Parents: ' + tbdParentDescriptions[0];
+        descriptionList = descriptionList.concat(tbdParentDescriptions);
+      }
+      if (tbdFieldDescriptions.length) {
+        tbdFieldDescriptions[0] = 'TBD Fields: ' + tbdFieldDescriptions[0];
+        descriptionList = descriptionList.concat(tbdFieldDescriptions);
+      }
+      if (descriptionList.length) {
+        wholeDef.description = descriptionList.join('\n');
+      }
+      if (requiredProperties.length) {
+        schemaDef.required = requiredProperties;
+      }
 
-    schema.definitions[def.identifier.name] = wholeDef;
-    if (def.isEntry && (!def.isAbstract)) {
-      entryRefs.push({ $ref:  makeRef(def.identifier, ns, baseSchemaURL)});
+      schema.definitions[def.identifier.name] = wholeDef;
+      if (def.isEntry && (!def.isAbstract)) {
+        entryRefs.push({ $ref: makeRef(def.identifier, ns, baseSchemaURL)});
+      }
+    } finally {
+      logger = lastLogger;
     }
   }
 
