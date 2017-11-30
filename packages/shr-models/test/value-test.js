@@ -314,6 +314,21 @@ describe('#ChoiceValue', () => {
     expect(val2.equals(val)).to.be.false;
     expect(val2.equals(val, true)).to.be.true;
   });
+
+  it('should be properly identified as the effective value on a constrained element', () => {
+    // TODO: Perhaps this should be moved to a separate suite for ConstraintsFilter.
+    // TODO: We should also test for IncludesTypeConstraint's isOnValue as well.
+    const base = new mdl.DataElement(new mdl.Identifier('shr.test', 'ChoiceValue'))
+      .withValue(new mdl.ChoiceValue()
+        .withMinMax(1,1)
+        .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
+        .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(1,1)));
+    const consumer = new mdl.DataElement(new mdl.Identifier('shr.test', 'Consumer'))
+      .withValue(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'ChoiceValue'))
+        .withConstraint(new mdl.TypeConstraint(new mdl.Identifier('shr.test', 'Bar')).withOnValue(true)));
+
+    expect(consumer.value.effectiveIdentifier.equals(new mdl.Identifier('shr.test', 'ChoiceValue'))).to.be.true;
+  });
 });
 
 describe('#IncompleteValue', () => {

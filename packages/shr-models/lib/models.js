@@ -853,11 +853,11 @@ class ConstraintsFilter {
   }
 
   get own() {
-    return new ConstraintsFilter(this._constraints.filter(c => c.path.length == 0));
+    return new ConstraintsFilter(this._constraints.filter(c => c.path.length == 0 && (!c.onValue) && (!c.isOnValue)));
   }
 
   get child() {
-    return new ConstraintsFilter(this._constraints.filter(c => c.path.length > 0));
+    return new ConstraintsFilter(this._constraints.filter(c => c.path.length > 0 || c.onValue || c.isOnValue));
   }
 
   get valueSet() {
