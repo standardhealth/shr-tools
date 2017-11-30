@@ -398,11 +398,6 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
   const constraintStructure = { $self: []};
   const includesCodeLists = {};
   for (const constraint of valueDef.constraints) {
-    if (constraint.onValue) {
-      logger.error('Constraint should not be on the value in an expanded object model "%s". Ignoring constraint.', JSON.stringify(constraint, null, 2));
-      continue;
-    }
-
     const {path: constraintPath, target: constraintTarget } = extractConstraintPath(constraint, valueDef, dataElementsSpecs);
     if (!constraintPath) {
       continue;
@@ -778,6 +773,10 @@ function makePrimitiveObject(id, target = {}) {
  * @return {{path: (Array<string>|undefined), target: (DataElement|undefined)}} - The target of the constraint and the extracted path (qualified if necessary). Both properties will be null if there was an error.
  */
 function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
+  if (constraint.onValue) {
+    return extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpecs);
+  }
+
   if (!constraint.hasPath()) {
     return { path: [] };
   }
@@ -853,6 +852,65 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
   }
 
   return {path:normalizedPath, target: currentDef === valueDef ? null : currentDef};
+}
+
+function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpecs) {
+  let currentDef = dataElementSpecs.findByIdentifier(valueDef.effectiveIdentifier);
+  const normalizedPath = [];
+  const len = constraint.hasPath() ? constraint.path.length : 0;
+  for (let i = 0; i < len; i += 1) {
+    const pathId = constraint.path[i];
+    if (pathId.namespace === PRIMITIVE_NS) {
+      logger.error('Encountered an unnormalized constraint path containing a primitive %s at index %d: %s', pathId, i, JSON.stringify(constraint, null, 2));
+      return {};
+    }
+    const newDef = dataElementSpecs.findByIdentifier(pathId);
+    if (!newDef) {
+      logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, JSON.stringify(constraint, null, 2));
+      return {};
+    }
+    let found = false;
+    // See if the current definition has a value of the specified type.
+    if (currentDef.value) {
+      if (currentDef.value instanceof ChoiceValue) {
+        for (const choice of currentDef.value.aggregateOptions) {
+          if (pathId.equals(choice.identifier) || checkHasBaseType(choice.identifier, pathId, dataElementSpecs)) {
+            found = true;
+            break;
+          }
+        }
+      } else if (pathId.equals(currentDef.value.identifier) || checkHasBaseType(currentDef.value.identifier, pathId, dataElementSpecs)) {
+        normalizedPath.push('Value');
+        found = true;
+      }
+    }
+
+    if (!found) {
+      if (!currentDef.fields || !currentDef.fields.length) {
+        logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+        return {};
+      } else {
+        const found = currentDef.fields.some((field) => pathId.equals(field.identifier));
+        if (!found) {
+          logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+          return {};
+        }
+        normalizedPath.push(identifierToNormalizedPath(pathId));
+      }
+    }
+    currentDef = newDef;
+  }
+
+  if (!currentDef.value) {
+    logger.error('Target of an unnormalized constraint: %s does not have a value. Constraint is: %s', JSON.stringify(currentDef, null, 2), JSON.stringify(constraint, null, 2));
+    return {};
+  } else if (!(currentDef.value instanceof ChoiceValue)) {
+    logger.error('Constraint should not be on the value (except for choices): %s in an expanded object model "%s". Ignoring constraint.', JSON.stringify(currentDef, null, 2), JSON.stringify(constraint, null, 2));
+    return {};
+  }
+  normalizedPath.push('Value');
+
+  return {path:normalizedPath, target: currentDef.value};
 }
 
 function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
