@@ -1,0 +1,138 @@
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "anyOf": [
+      { "$ref": "#/definitions/Choice" },
+      { "$ref": "#/definitions/ChoiceValue" },
+      { "$ref": "#/definitions/Coded" },
+      { "$ref": "#/definitions/TwoDeepChoiceField" },
+      { "$ref": "#/definitions/TypeConstrainedChoice"},
+      { "$ref": "#/definitions/TypeConstrainedChoiceWithPath"}
+    ],
+    "definitions": {
+      "TypeConstrainedChoice": {
+        "description": "It is an element with a choice with a constraint.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "shr/test/Choice": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "Value": { "type": "string" }
+                    }
+                  },
+                  { "$ref": "#/definitions/Choice" }
+                ]
+              }
+            },
+            "required": ["shr/test/Choice"]
+          }
+        ]
+      },
+      "TypeConstrainedChoiceWithPath": {
+        "description": "It is an element with a choice on a field with a constraint.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "shr/test/TwoDeepChoiceField": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "shr/test/ChoiceValue": {
+                        "properties": {
+                          "Value": {
+                            "properties": {
+                              "Value": { "$ref": "#/definitions/Coded" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  { "$ref": "#/definitions/TwoDeepChoiceField" }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ChoiceValue": {
+        "description": "It is an element with a choice value.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": { "$ref": "#/definitions/Choice" }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "TwoDeepChoiceField": {
+        "description": "It is an element with a a field with a choice.",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "shr/test/ChoiceValue": { "$ref": "#/definitions/ChoiceValue" }
+            }
+          }
+        ]
+      },
+      "Choice": {
+        "description": "It is an element with a choice",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "anyOf": [
+                  { "type": "string" },
+                  {
+                    "type": "string",
+                    "valueSet": {
+                      "uri": "http://standardhealthrecord.org/test/vs/CodeChoice",
+                      "strength": "REQUIRED"
+                    }
+                  },
+                  { "$ref": "#/definitions/Coded" }
+                ]
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "Coded": {
+        "description": "It is a coded element",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string",
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/test/vs/Coded",
+                  "strength": "REQUIRED"
+                }
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      }
+    }
+  }
+}
