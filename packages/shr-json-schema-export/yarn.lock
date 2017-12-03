@@ -912,6 +912,10 @@ shr-models@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.2.0.tgz#3dba6f113f65a16250de2012f6e4d4bbf692e0ed"
 
+"shr-models@https://github.com/standardhealth/shr-models":
+  version "5.2.1"
+  resolved "https://github.com/standardhealth/shr-models#c483a053c97d2e7cb0614336cf351ecd34728d45"
+
 "shr-test-helpers@https://github.com/standardhealth/shr-test-helpers#json-schema-export":
   version "5.1.0-beta.2"
   resolved "https://github.com/standardhealth/shr-test-helpers#f8254998296f909e3eecf46f4352fe5f9de7cb42"

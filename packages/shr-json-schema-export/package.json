@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "bunyan": "^1.8.9",
-    "shr-models": "^5.2.0"
+    "shr-models": "https://github.com/standardhealth/shr-models"
   },
   "devDependencies": {
     "chai": "^3.5.0",
