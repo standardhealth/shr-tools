@@ -1,7 +1,7 @@
 const fs = require('fs');
 const err = require('shr-test-helpers/errors');
 const Ajv = require('ajv');
-const {expect} = require('chai');
+const {expect, assert} = require('chai');
 const { sanityCheckModules } = require('shr-models');
 const export_tests = require('shr-test-helpers/export');
 const {commonExportTests } = export_tests;
@@ -23,13 +23,21 @@ function exportSpecifications(specifications) {
     expect(err.errors()).to.deep.equal([]);
   }
   const schemataDict = exportToJSONSchema(expSpecs, 'https://standardhealthrecord.org/test');
-  validateSchemata(schemataDict);
+  createValidator(schemataDict);
   return schemataDict;
 }
 
 function importFixture(name, ext='.schema.json') {
   const fixture = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/${name}${ext}`, 'utf8'));
-  validateSchemata(fixture);
+  const { ajv, validator } = createValidator(fixture);
+  const file = `${__dirname}/fixtures/instances/${name}.json`;
+  if (fs.existsSync(file)) {
+    const instance = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const valid = validator(instance);
+    if (!valid) {
+      assert.fail(false, true, 'Errors validating instance: ' + ajv.errorsText(validator.errors));
+    }
+  }
   return fixture;
 }
 
@@ -43,17 +51,92 @@ function importErrorsFixture(name, ext='.schema.json') {
   }
 }
 
-function validateSchemata(schemataDict) {
+/**
+ * Creates a validator from the given dictionary of schemas.
+ *
+ * @param {Object.<string, Object>} schemataDict - a mapping of schema ids to JSON Schema definitions.
+ * @return {{ajv: Ajv, validator: function}} The validator and a compiled instance of the target schema.
+ */
+function createValidator(schemataDict) {
   const schemaValidator = new Ajv();
   schemaValidator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
+  schemaValidator.addSchema(stubSchema);
   const schemata = [];
+  // This generally assumes that we'll be testing the shr.test namespace
+  const defaultNamespace = 'https://standardhealthrecord.org/test/shr/test';
+  let schema = schemataDict[defaultNamespace];
+  if (!schema) {
+    for (const id in schemataDict) {
+      schema = schemataDict[id];
+      break;
+    }
+  }
   for (const id in schemataDict) {
     schemata.push(schemataDict[id]);
   }
   try {
     schemaValidator.addSchema(schemata);
+    return { ajv: schemaValidator, validator: schemaValidator.compile(schema) };
   } catch(ex) {
-    console.error('Error validating schemata', JSON.stringify(schemata, null, 2));
-    throw ex;
+    assert.fail(false, true, 'Errors validating schemata: ' + ex + ': schemata was: ' + JSON.stringify(schemata, null, 2));
   }
 }
+
+/**
+ * A stub implementation of shr.base.Entry.
+ */
+const stubSchema = JSON.parse(`{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://standardhealthrecord.org/test/shr/base",
+  "title": "A stub implementation of shr.base.Entry.",
+  "definitions": {
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "shr/base/EntryId": {
+          "$ref": "#/definitions/RequiredString"
+        },
+        "shr/base/EntryType": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/EntryType"
+          }
+        },
+        "shr/core/CreationTime": {
+          "type": "object",
+          "properties": {
+            "Value": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [ "Value" ]
+        },
+        "shr/base/LastUpdated": {
+          "$ref": "#/definitions/RequiredString"
+        }
+      },
+      "required": [
+        "shr/base/EntryId",
+        "shr/base/EntryType",
+        "shr/core/CreationTime",
+        "shr/base/LastUpdated"
+      ]
+    },
+    "RequiredString": {
+      "type": "object",
+      "properties": {
+        "Value": { "type": "string" }
+      },
+      "required": [ "Value" ]
+    },
+    "EntryType": {
+      "type": "object",
+      "properties": {
+        "Value": { "type": "string", "format": "uri" }
+      },
+      "required": [ "Value" ]
+    }
+  }
+}`);
