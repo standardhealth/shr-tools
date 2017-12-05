@@ -26,7 +26,7 @@
                   { "enum": [ true ] }
                 ]
               },
-              "shr/test/Bool": {
+              "shr.test.Bool": {
                 "allOf": [
                   {
                     "properties": {
@@ -36,7 +36,7 @@
                   { "$ref": "#/definitions/Bool" }
                 ]
               },
-              "shr/test/Coded": {
+              "shr.test.Coded": {
                 "properties": {
                   "Value": {
                     "code": { "code": "http://foo.org#bar", "display": "Foobar" }
@@ -68,9 +68,9 @@
           {
             "type": "object",
             "properties": {
-              "shr/test/Simple": { "$ref": "#/definitions/Simple" },
-              "shr/test/Coded": { "$ref": "#/definitions/Coded" },
-              "shr/test/ElementValue": {
+              "shr.test.Simple": { "$ref": "#/definitions/Simple" },
+              "shr.test.Coded": { "$ref": "#/definitions/Coded" },
+              "shr.test.ElementValue": {
                 "type": "array",
                 "minItems": 0,
                 "items": {
@@ -78,7 +78,7 @@
                 }
               }
             },
-            "required": ["shr/test/Simple"]
+            "required": ["shr.test.Simple"]
           }
         ]
       },

@@ -1,7 +1,7 @@
 {
-  "shr/base/EntryId": { "Value": "my-id" },
-  "shr/base/EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/Coded"}],
-  "shr/core/CreationTime": { "Value": "2017-11-30T12:34:56Z" },
-  "shr/base/LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
+  "shr.base.EntryId": { "Value": "my-id" },
+  "shr.base.EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/Coded"}],
+  "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
+  "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
   "Value": "urn:some-namespace:foo#bar"
 }

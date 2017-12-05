@@ -93,17 +93,17 @@ const stubSchema = JSON.parse(`{
     "Entry": {
       "type": "object",
       "properties": {
-        "shr/base/EntryId": {
+        "shr.base.EntryId": {
           "$ref": "#/definitions/RequiredString"
         },
-        "shr/base/EntryType": {
+        "shr.base.EntryType": {
           "type": "array",
           "minItems": 1,
           "items": {
             "$ref": "#/definitions/EntryType"
           }
         },
-        "shr/core/CreationTime": {
+        "shr.core.CreationTime": {
           "type": "object",
           "properties": {
             "Value": {
@@ -113,15 +113,15 @@ const stubSchema = JSON.parse(`{
           },
           "required": [ "Value" ]
         },
-        "shr/base/LastUpdated": {
+        "shr.base.LastUpdated": {
           "$ref": "#/definitions/RequiredString"
         }
       },
       "required": [
-        "shr/base/EntryId",
-        "shr/base/EntryType",
-        "shr/core/CreationTime",
-        "shr/base/LastUpdated"
+        "shr.base.EntryId",
+        "shr.base.EntryType",
+        "shr.core.CreationTime",
+        "shr.base.LastUpdated"
       ]
     },
     "RequiredString": {

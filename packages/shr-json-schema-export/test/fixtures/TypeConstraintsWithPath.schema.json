@@ -21,11 +21,11 @@
           {
             "type": "object",
             "properties": {
-              "shr/test/TwoDeepElementField": {
+              "shr.test.TwoDeepElementField": {
                 "properties": {
-                  "shr/test/ElementField": {
+                  "shr.test.ElementField": {
                     "properties": {
-                      "shr/test/Simple": { "$ref": "#/definitions/SimpleChild" }
+                      "shr.test.Simple": { "$ref": "#/definitions/SimpleChild" }
                     }
                   }
                 }
@@ -41,13 +41,13 @@
           {
             "type": "object",
             "properties": {
-              "shr/test/TwoDeepElementField": {
+              "shr.test.TwoDeepElementField": {
                 "allOf": [
                   {
                     "properties": {
-                      "shr/test/ElementField": {
+                      "shr.test.ElementField": {
                         "properties": {
-                          "shr/test/Simple": { "$ref": "#/definitions/SimpleChild" }
+                          "shr.test.Simple": { "$ref": "#/definitions/SimpleChild" }
                         }
                       }
                     }
@@ -66,7 +66,7 @@
           {
             "type": "object",
             "properties": {
-              "shr/test/TwoDeepElementField": {
+              "shr.test.TwoDeepElementField": {
                 "$ref": "#/definitions/TwoDeepElementField"
               }
             }
@@ -80,11 +80,11 @@
           {
             "type": "object",
             "properties": {
-              "shr/test/ElementField": {
+              "shr.test.ElementField": {
                 "$ref": "#/definitions/ElementField"
               }
             },
-            "required": ["shr/test/ElementField"]
+            "required": ["shr.test.ElementField"]
           }
         ]
       },
@@ -95,9 +95,9 @@
           {
             "type": "object",
             "properties": {
-              "shr/test/Simple": { "$ref": "#/definitions/Simple" }
+              "shr.test.Simple": { "$ref": "#/definitions/Simple" }
             },
-            "required": ["shr/test/Simple"]
+            "required": ["shr.test.Simple"]
           }
         ]
       },

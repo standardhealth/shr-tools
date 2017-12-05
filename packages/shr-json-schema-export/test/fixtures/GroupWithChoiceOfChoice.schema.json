@@ -35,10 +35,10 @@
                   ]
                 }
               },
-              "shr/test/Simple": { "$ref": "#/definitions/Simple" },
-              "shr/test/Coded": { "$ref": "#/definitions/Coded" }
+              "shr.test.Simple": { "$ref": "#/definitions/Simple" },
+              "shr.test.Coded": { "$ref": "#/definitions/Coded" }
             },
-            "required": [ "shr/test/Simple" ]
+            "required": [ "shr.test.Simple" ]
           }
         ]
       },

@@ -133,10 +133,9 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
             continue;
           }
 
-          const qualifiedName = identifierToNormalizedPath(field.identifier);
-          schemaDef.properties[qualifiedName] = value;
+          schemaDef.properties[field.identifier.fqn] = value;
           if (required) {
-            requiredProperties.push(qualifiedName);
+            requiredProperties.push(field.identifier.fqn);
           }
         }
       } else if (!def.value) {
@@ -242,7 +241,7 @@ function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
           continue;
         }
 
-        const qualifiedName = identifierToNormalizedPath(field.identifier);
+        const qualifiedName = field.identifier.fqn;
         schemaDef.properties[qualifiedName] = value;
         if (required && (requiredProperties.indexOf(qualifiedName) === -1)) {
           requiredProperties.push(qualifiedName);
@@ -292,16 +291,6 @@ function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
     schema.anyOf = entryRefs;
   }
   return { schemaId, schema };
-}
-
-/**
- * Convert an Identifier into a qualified SHR name with /s instead of .s.
- *
- * @param {Identifier} identifier - the identifier to convert.
- * @return string - The converted identifier.
- */
-function identifierToNormalizedPath(identifier) {
-  return namespaceToURLPathSegment(identifier.namespace) + '/' + identifier.name;
 }
 
 function namespaceToURLPathSegment(namespace) {
@@ -369,7 +358,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     }
     value.anyOf = [];
     if (refOptions.length) {
-      value.anyOf.push(makeShrRefObject(refOptions, baseSchemaURL));
+      value.anyOf.push(makeShrRefObject(refOptions));
     }
     for (const option of normalOptions) {
       const { value: childValue } = convertDefinition(option, dataElementsSpecs, enclosingNamespace, baseSchemaURL);
@@ -384,7 +373,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     }
   } else if (valueDef instanceof RefValue) {
     // TODO: What should the value of EntryType be? The schema URL may not be portable across data types.
-    makeShrRefObject([valueDef], baseSchemaURL, value);
+    makeShrRefObject([valueDef], value);
   } else if (valueDef instanceof IdentifiableValue) {
     const id = valueDef.effectiveIdentifier;
     if (id.isPrimitive) {
@@ -586,7 +575,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               includesTypesArrayDef.maxItems = includesConstraints.max;
             }
             if (includesConstraints.refs.length) {
-              includesTypesArrayDef.items.anyOf.push(makeShrRefObject(includesConstraints.refs.map((ref) => ref.isA), baseSchemaURL));
+              includesTypesArrayDef.items.anyOf.push(makeShrRefObject(includesConstraints.refs.map((ref) => ref.isA)));
               for (const ref of includesConstraints.refs) {
                 const includesType = {
                   items: `ref(${makeShrDefinitionURL(ref.isA, baseSchemaURL)})`,
@@ -715,15 +704,14 @@ function makeRef(id, enclosingNamespace, baseSchemaURL) {
   }
 }
 
-function makeShrRefObject(refs, baseSchemaURL, target = {}) {
+function makeShrRefObject(refs, target = {}) {
   target.type = 'object';
   target.properties = {
-    ShrId: { type: 'string' },
     EntryId: { type: 'string' },
     EntryType: { type: 'string' }
   };
-  target.required = ['ShrId', 'EntryType', 'EntryId'];
-  target.refType = refs.map((ref) => makeShrDefinitionURL(ref.identifier, baseSchemaURL));
+  target.required = ['EntryType', 'EntryId'];
+  target.refType = refs.map((ref) => ref.identifier.fqn);
   return target;
 }
 
@@ -858,7 +846,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
             logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
             return {};
           }
-          normalizedPath.push(identifierToNormalizedPath(pathId));
+          normalizedPath.push(pathId.fqn);
         }
       }
       currentDef = newDef;
@@ -909,7 +897,7 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
           logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
           return {};
         }
-        normalizedPath.push(identifierToNormalizedPath(pathId));
+        normalizedPath.push(pathId.fqn);
       }
     }
     currentDef = newDef;
@@ -929,7 +917,7 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
 
 function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
   const properties = {};
-  for (const name of ['ShrId', 'EntryId', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative', 'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
+  for (const name of ['EntryId', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative', 'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
     properties[name] = { $ref: makeRef(new Identifier('shr.base', name), enclosingNamespace, baseSchemaURL) };
   }
   properties.Version = { $ref: makeRef(new Identifier('shr.core', 'Version'), enclosingNamespace, baseSchemaURL) };
@@ -966,10 +954,6 @@ function makeConceptEntry(concept) {
     }
     return ret;
   }
-}
-
-function identifierToString(identifier) {
-  return `${identifier.namespace}:${identifier.name}`;
 }
 
 // stealing from shr-expand

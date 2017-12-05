@@ -15,16 +15,16 @@
           {
             "type": "object",
             "properties": {
-              "shr/test/OptionalField": {
+              "shr.test.OptionalField": {
                 "allOf": [
                   { "$ref": "#/definitions/OptionalField" },
                   {
-                    "required": ["shr/test/OptionalValue"]
+                    "required": ["shr.test.OptionalValue"]
                   }
                 ]
               }
             },
-            "required": ["shr/test/OptionalField"]
+            "required": ["shr.test.OptionalField"]
           }
         ]
       },
@@ -32,7 +32,7 @@
         "description": "An element with an optional field.",
         "type": "object",
         "properties": {
-          "shr/test/OptionalValue": {
+          "shr.test.OptionalValue": {
             "$ref": "#/definitions/OptionalValue"
           }
         }

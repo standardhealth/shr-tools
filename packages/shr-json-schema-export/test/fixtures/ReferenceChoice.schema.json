@@ -18,15 +18,11 @@
               "Value": {
                 "type": "object",
                 "properties": {
-                  "ShrId": { "type": "string" },
                   "EntryType": { "type": "string" },
                   "EntryId": { "type": "string" }
                 },
-                "required": ["ShrId", "EntryType", "EntryId"],
-                "refType": [
-                  "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple",
-                  "https://standardhealthrecord.org/test/shr/test#/definitions/Coded"
-                ]
+                "required": ["EntryType", "EntryId"],
+                "refType": ["shr.other.test.Simple", "shr.test.Coded"]
               }
             },
             "required": ["Value"]

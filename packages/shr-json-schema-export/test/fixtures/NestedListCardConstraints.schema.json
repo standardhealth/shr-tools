@@ -15,11 +15,11 @@
           {
             "type": "object",
             "properties": {
-              "shr/test/ListField": {
+              "shr.test.ListField": {
                 "allOf": [
                   {
                     "properties": {
-                      "shr/test/OptionalList": {
+                      "shr.test.OptionalList": {
                         "allOf": [
                           {
                             "properties": {
@@ -39,7 +39,7 @@
                 ]
               }
             },
-            "required": ["shr/test/ListField"]
+            "required": ["shr.test.ListField"]
           }
         ]
       },
@@ -47,11 +47,11 @@
         "description": "An element with a list field.",
         "type": "object",
         "properties": {
-          "shr/test/OptionalList": {
+          "shr.test.OptionalList": {
             "$ref": "#/definitions/OptionalList"
           }
         },
-        "required": ["shr/test/OptionalList"]
+        "required": ["shr.test.OptionalList"]
       },
       "OptionalList": {
         "description": "An element with an optional list.",
