@@ -28,11 +28,24 @@ function exportSpecifications(specifications) {
 }
 
 function importFixture(name, ext='.schema.json') {
-  const fixture = JSON.parse(fs.readFileSync(`${__dirname}/fixtures/${name}${ext}`, 'utf8'));
+  const rawSchema = fs.readFileSync(`${__dirname}/fixtures/${name}${ext}`, 'utf8');
+  let fixture;
+  try {
+    fixture = JSON.parse(rawSchema);
+  } catch (ex) {
+    assert.fail(false, true, `Errors parsing schemata as JSON: ${ex}: raw schemata was: ${rawSchema}`);
+    return;
+  }
   const { ajv, validator } = createValidator(fixture);
   const file = `${__dirname}/fixtures/instances/${name}.json`;
   if (fs.existsSync(file)) {
-    const instance = JSON.parse(fs.readFileSync(file, 'utf8'));
+    let instance;
+    try {
+      instance = JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch (ex) {
+      assert.fail(false, true, `Errors loading instance from file ${file}: ${ex}`);
+      return;
+    }
     const valid = validator(instance);
     if (!valid) {
       assert.fail(false, true, 'Errors validating instance: ' + ajv.errorsText(validator.errors));
