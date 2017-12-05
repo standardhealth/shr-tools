@@ -587,6 +587,34 @@ describe('#expand()', () => {
     ]);
   });
 
+  it('should allow \'value type\' constraints to narrow a choice to a primitive type', function() {
+    let a = new models.DataElement(id('shr.test', 'A'), true);
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.ChoiceValue().withMinMax(0, 1)
+          .withOption(new models.IdentifiableValue(id('shr.test', 'A')))
+          .withOption(new models.IdentifiableValue(pid('string')))
+          .withOption(new models.IdentifiableValue(pid('integer')))
+      );
+    let y = new models.DataElement(id('shr.test', 'Y'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(pid('string')).withOnValue(true))
+      );
+    add(a, x, y);
+
+    doExpand();
+
+    expect(err.errors()).to.deep.equal([]);
+    const eY = findExpanded('shr.test', 'Y');
+    expect(eY.identifier).to.eql(id('shr.test', 'Y'));
+    expect(eY.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+        .withConstraint(new models.TypeConstraint(pid('string')).withOnValue(true))
+    );
+    expect(eY.fields).to.be.empty;
+  });
+
   it('should keep valid type constraints on fields', () => {
     let b = new models.DataElement(id('shr.test', 'B'), true)
       .withField(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));

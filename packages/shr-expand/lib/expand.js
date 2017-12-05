@@ -747,7 +747,10 @@ class Expander {
 
   getRecursiveBasedOns(identifier, alreadyProcessed = []) {
     // If it's primitive or we've already processed this one, don't go further (avoid circular dependencies)
-    if (identifier.isPrimitive || alreadyProcessed.some(id => id.equals(identifier))) {
+    if (alreadyProcessed.some(id => id.equals(identifier))) {
+      return alreadyProcessed;
+    } else if (identifier.isPrimitive) {
+      alreadyProcessed.push(identifier);
       return alreadyProcessed;
     }
 
