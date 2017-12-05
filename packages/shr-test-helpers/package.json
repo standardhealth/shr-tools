@@ -1,6 +1,6 @@
 {
   "name": "shr-test-helpers",
-  "version": "5.0.3",
+  "version": "5.1.0",
   "description": "Re-usable classes and functions for testing SHR tools",
   "author": "",
   "license": "Apache-2.0",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "bunyan": "^1.8.9",
-    "shr-models": "^5.2.0"
+    "shr-models": "^5.2.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
