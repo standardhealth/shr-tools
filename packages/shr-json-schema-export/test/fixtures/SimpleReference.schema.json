@@ -18,10 +18,11 @@
               "Value": {
                 "type": "object",
                 "properties": {
+                  "ShrId": { "type": "string" },
                   "EntryType": { "type": "string" },
                   "EntryId": { "type": "string" }
                 },
-                "required": ["EntryType", "EntryId"],
+                "required": ["ShrId", "EntryType", "EntryId"],
                 "refType": ["shr.test.Simple"]
               }
             },

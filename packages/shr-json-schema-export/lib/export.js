@@ -707,10 +707,11 @@ function makeRef(id, enclosingNamespace, baseSchemaURL) {
 function makeShrRefObject(refs, target = {}) {
   target.type = 'object';
   target.properties = {
+    ShrId: { type: 'string' },
     EntryId: { type: 'string' },
     EntryType: { type: 'string' }
   };
-  target.required = ['EntryType', 'EntryId'];
+  target.required = ['ShrId', 'EntryType', 'EntryId'];
   target.refType = refs.map((ref) => ref.identifier.fqn);
   return target;
 }
@@ -917,7 +918,7 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
 
 function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
   const properties = {};
-  for (const name of ['EntryId', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative', 'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
+  for (const name of ['ShrId', 'EntryId', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative', 'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
     properties[name] = { $ref: makeRef(new Identifier('shr.base', name), enclosingNamespace, baseSchemaURL) };
   }
   properties.Version = { $ref: makeRef(new Identifier('shr.core', 'Version'), enclosingNamespace, baseSchemaURL) };
@@ -925,12 +926,12 @@ function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
     items: { $ref: makeRef(new Identifier('shr.base', 'EntryType'), enclosingNamespace, baseSchemaURL) }
   };
   return { properties, required: [
-    'shr/base/ShrId',
-    'shr/base/EntryId',
-    'shr/base/EntryType',
-    'shr/base/FocalSubject',
-    'shr/base/OriginalCreationDate',
-    'shr/base/LastUpdateDate'
+    'shr.base.ShrId',
+    'shr.base.EntryId',
+    'shr.base.EntryType',
+    'shr.base.FocalSubject',
+    'shr.base.OriginalCreationDate',
+    'shr.base.LastUpdateDate'
   ]};
 }
 

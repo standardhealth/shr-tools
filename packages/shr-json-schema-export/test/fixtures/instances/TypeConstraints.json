@@ -1,9 +1,11 @@
 {
+  "shr.base.ShrId": { "Value": "patient-id" },
   "shr.base.EntryId": { "Value": "my-id" },
   "shr.base.EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/GroupDerivative"}],
   "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
   "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
   "shr.test.Simple": {
+    "shr.base.ShrId": { "Value": "patient-id" },
     "shr.base.EntryId": { "Value": "my-id-2" },
     "shr.base.EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/SimpleChild"}],
     "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
@@ -12,11 +14,13 @@
   },
   "shr.test.ElementValue": [
     {
+      "shr.base.ShrId": { "Value": "patient-id" },
       "shr.base.EntryId": { "Value": "my-id-3" },
       "shr.base.EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/ElementValue"}],
       "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
       "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
       "Value": {
+        "shr.base.ShrId": { "Value": "patient-id" },
         "shr.base.EntryId": { "Value": "my-id-4" },
         "shr.base.EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/SimpleChild"}],
         "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
@@ -25,11 +29,13 @@
       }
     },
     {
+      "shr.base.ShrId": { "Value": "patient-id" },
       "shr.base.EntryId": { "Value": "my-id-5" },
       "shr.base.EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/ElementValue"}],
       "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
       "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
       "Value": {
+        "shr.base.ShrId": { "Value": "patient-id" },
         "shr.base.EntryId": { "Value": "my-id-6" },
         "shr.base.EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/SimpleChild"}],
         "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },

@@ -106,6 +106,9 @@ const stubSchema = JSON.parse(`{
     "Entry": {
       "type": "object",
       "properties": {
+        "shr.base.ShrId": {
+          "$ref": "#/definitions/RequiredString"
+        },
         "shr.base.EntryId": {
           "$ref": "#/definitions/RequiredString"
         },
@@ -131,6 +134,7 @@ const stubSchema = JSON.parse(`{
         }
       },
       "required": [
+        "shr.base.ShrId",
         "shr.base.EntryId",
         "shr.base.EntryType",
         "shr.core.CreationTime",
