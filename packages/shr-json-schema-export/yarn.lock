@@ -72,7 +72,7 @@ arrify@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
-assertion-error@^1.0.1, assertion-error@^1.0.2:
+assertion-error@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/assertion-error/-/assertion-error-1.0.2.tgz#13ca515d86206da0bac66e834dd397d87581094c"
 
@@ -901,28 +901,17 @@ shelljs@^0.7.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shr-expand@^5.2.1:
+shr-expand@^5.2.3:
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-5.2.3.tgz#b99d3d42691a31fa321c0aac22b5e0b1ffff7ade"
+
+shr-models@^5.2.1:
   version "5.2.1"
-  resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-5.2.1.tgz#a1165544c730f656f19419ea361064ec096a3fb7"
-  dependencies:
-    bunyan "^1.8.9"
-    shr-models "^5.2.0"
+  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.2.1.tgz#23108d369a0be9fa2518d9be4c1e53685d9dd776"
 
-shr-models@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.2.0.tgz#3dba6f113f65a16250de2012f6e4d4bbf692e0ed"
-
-"shr-models@https://github.com/standardhealth/shr-models":
-  version "5.2.1"
-  resolved "https://github.com/standardhealth/shr-models#c483a053c97d2e7cb0614336cf351ecd34728d45"
-
-"shr-test-helpers@https://github.com/standardhealth/shr-test-helpers#json-schema-export":
-  version "5.1.0-beta.2"
-  resolved "https://github.com/standardhealth/shr-test-helpers#f8254998296f909e3eecf46f4352fe5f9de7cb42"
-  dependencies:
-    assertion-error "^1.0.2"
-    bunyan "^1.8.9"
-    shr-models "^5.2.0"
+shr-test-helpers@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/shr-test-helpers/-/shr-test-helpers-5.1.1.tgz#e649cab3685f76bd25eca590d0949fd162b43f9f"
 
 slice-ansi@0.0.4:
   version "0.0.4"

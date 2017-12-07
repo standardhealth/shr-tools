@@ -17,15 +17,18 @@
     "lint:fix": "./node_modules/.bin/eslint . --fix"
   },
   "dependencies": {
-    "bunyan": "^1.8.9",
-    "shr-models": "https://github.com/standardhealth/shr-models"
+    "bunyan": "^1.8.9"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "mocha": "^3.2.0",
-    "shr-expand": "^5.2.1",
-    "shr-test-helpers": "https://github.com/standardhealth/shr-test-helpers#json-schema-export",
+    "shr-expand": "^5.2.3",
+    "shr-models": "^5.2.1",
+    "shr-test-helpers": "^5.1.1",
     "ajv": "^5.2.0"
+  },
+  "peerDependencies": {
+    "shr-models": ">= 5.2.1 < 6"
   }
 }
