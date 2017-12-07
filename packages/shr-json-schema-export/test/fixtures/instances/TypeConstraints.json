@@ -1,7 +1,7 @@
 {
   "shr.base.ShrId": { "Value": "patient-id" },
   "shr.base.EntryId": { "Value": "my-id" },
-  "shr.base.EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/GroupDerivative"}],
+  "shr.base.EntryType": [{ "Value": "https://standardhealthrecord.org/test/shr/test/Group"}, { "Value": "https://standardhealthrecord.org/test/shr/test/GroupDerivative"}],
   "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
   "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
   "shr.test.Simple": {
