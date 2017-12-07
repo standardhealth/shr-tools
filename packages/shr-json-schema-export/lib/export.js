@@ -64,6 +64,13 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
   if (ns.description) {
     schema.description = ns.description;
   }
+  const nonEntryEntryTypeField = {
+    type: 'array',
+    minItems: 1,
+    items: {
+      $ref: makeRef(new Identifier('shr.base', 'EntryType'), ns.namespace, baseSchemaURL)
+    }
+  };
 
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
   const entryRefs = [];
@@ -79,6 +86,7 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
       let wholeDef = schemaDef;
       const tbdParentDescriptions = [];
       let requiredProperties = [];
+      let needsEntryType = false;
       if (def.isEntry || def.basedOn.length) {
         wholeDef = { allOf: [] };
         let hasEntryParent = false;
@@ -103,6 +111,8 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
           wholeDef.allOf.splice(0, 0, { $ref: entryRef });
         }
         wholeDef.allOf.push(schemaDef);
+      } else {
+        needsEntryType = true;
       }
 
       const tbdFieldDescriptions = [];
@@ -133,6 +143,10 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
             continue;
           }
 
+          if (field.identifier.fqn === 'shr.base.EntryType') {
+            needsEntryType = false;
+          }
+
           schemaDef.properties[field.identifier.fqn] = value;
           if (required) {
             requiredProperties.push(field.identifier.fqn);
@@ -160,6 +174,21 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
       if (descriptionList.length) {
         wholeDef.description = descriptionList.join('\n');
       }
+      if (needsEntryType) {
+        if (def.identifier.fqn === 'shr.base.EntryType') {
+          schemaDef.properties['shr.base.EntryType'] = {
+            type: 'array',
+            minItems: 0,
+            items: {
+              $ref: makeRef(new Identifier('shr.base', 'EntryType'), ns.namespace, baseSchemaURL)
+            }
+          };
+        } else {
+          schemaDef.properties['shr.base.EntryType'] = nonEntryEntryTypeField;
+          requiredProperties.push('shr.base.EntryType');
+        }
+      }
+
       if (requiredProperties.length) {
         schemaDef.required = requiredProperties;
       }

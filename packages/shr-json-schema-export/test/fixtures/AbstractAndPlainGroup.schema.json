@@ -44,11 +44,16 @@
         "concepts": [ { "code": "http://foo.org#bar", "display": "Foobar"}],
         "type": "object",
         "properties": {
+          "shr.base.EntryType": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" }
+          },
           "Value": {
             "type": "string"
           }
         },
-        "required": ["Value"]
+        "required": ["Value", "shr.base.EntryType"]
       }
     }
   }
