@@ -4,6 +4,7 @@ const path = require('path');
 const minimist = require('minimist');
 const ncp = require('ncp').ncp;
 const Namespaces = require('./components/namespaces');
+const Elements = require('./components/Elements');
 
 renderEjsFile = (template, pkg, destination) => {
   ejs.renderFile(template, pkg, (error, htmlText) => {
@@ -16,10 +17,11 @@ renderEjsFile = (template, pkg, destination) => {
 class SHR {
   constructor(src, out) {
     this.outDirectory = out;
-    this.elements = {};
+    this.elements = new Elements;
     this.namespaces = new Namespaces();
     this.children = {};
     this.readFiles(src);
+    this.elements.updateChildren();
   }
 
   // Read in the canonical json files
@@ -37,26 +39,17 @@ class SHR {
         const fileData = fs.readFileSync(filePath, 'utf-8');
         let content = JSON.parse(fileData);
         if ('fqn' in content) {
-          this.elements[content.fqn] = content;
-          let namespace = this.namespaces.get(content.namespace);
-          namespace.addElement(content);
-          this.elements[content.fqn].namespacePath = namespace.path;
+          this.elements.add(content);
+          let element = this.elements.get(content.fqn);
+          let namespace = this.namespaces.get(element.namespace);
+          namespace.addElement(element);
+          element.namespacePath = namespace.path;
         } else {
           let namespace = this.namespaces.get(content.name);
           namespace.description = content.description;
         }
       });
     });
-  }
-
-  // Returns list of all elements sorted by name
-  sortedElements() {
-    let elementList = [];
-    Object.keys(this.elements).forEach((element) => {
-      elementList.push(this.elements[element])
-    });
-    elementList.sort((a, b) => { return a.name.localeCompare(b.name) });
-    return elementList;
   }
 
   // Builds the output directory folder structure
@@ -109,22 +102,21 @@ class SHR {
 
   // Builds overiew list of all the data elements on the main page
   buildOverviewSummary() {
-    const ejsPkg = { elements: this.sortedElements() };
+    const ejsPkg = { elements: this.elements.list() };
     const filePath = path.join(this.outDirectory, 'overview-summary.html');
     renderEjsFile('templates/overview-summary.ejs', ejsPkg, filePath);
   }
 
   // Builds list of all the data elements on the main page
   buildAllElementsFrame() {
-    const ejsPkg = { elements: this.sortedElements() };
+    const ejsPkg = { elements: this.elements.list() };
     const filePath = path.join(this.outDirectory, 'allclasses-frame.html');
     renderEjsFile('templates/allclasses-frame.ejs', ejsPkg, filePath);
   }
 
   // Builds pages for each data element
   buildDataElements() {
-    Object.keys(this.elements).forEach((e) => {
-      const element = this.elements[e];
+    this.elements.list().forEach((element) => {
       const ejsPkg = { element: element };
       const fileName = `${element.name}.html`;
       const filePath = path.join(out, element.namespacePath, fileName);
