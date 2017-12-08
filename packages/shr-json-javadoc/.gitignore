@@ -1,0 +1,5 @@
+/node_modules/
+/canonicaljson/
+*.zip
+/sample/
+/shr-javadoc/

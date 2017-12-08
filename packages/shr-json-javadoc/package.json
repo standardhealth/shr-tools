@@ -1,0 +1,17 @@
+{
+  "name": "shr-json-javadoc",
+  "version": "1.0.0",
+  "description": "Convert the canonical JSON into a java doc style representation",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Agustin Mora",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "ejs": "^2.5.7",
+    "minimist": "^1.2.0",
+    "ncp": "^2.0.0"
+  }
+}

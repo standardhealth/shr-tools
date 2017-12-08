@@ -1,0 +1,17 @@
+<% if (index == 0) { -%>
+  <% if (setClass) { -%>
+  <li class="last">
+    <a href="<%= name %>"><%= name %></a>
+  </li>
+  <% } else { -%>
+  <li>
+  <a href="<%= name %>"><%= name %></a>
+  </li>
+  <% } -%>
+<% } else { -%>
+  <li>
+    <ul>
+      <%- include('inheritanceTree', { name: name, index: index-1, setClass: true }) -%>
+    </ul>
+  </li>
+<% } -%>
