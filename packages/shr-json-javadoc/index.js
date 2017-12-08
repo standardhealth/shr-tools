@@ -3,43 +3,13 @@ const fs = require('fs');
 const path = require('path');
 const minimist = require('minimist');
 const ncp = require('ncp').ncp;
+const Namespaces = require('./components/namespaces');
 
 renderEjsFile = (template, pkg, destination) => {
   ejs.renderFile(template, pkg, (error, htmlText) => {
     if (error) console.log(error);
     else fs.writeFileSync(destination, htmlText);
   });
-}
-
-class Namespace {
-  constructor(name) {
-    this.name = name;
-    this.elements = [];
-    this.description = '';
-    this.path = name.replace('.', '-');
-  }
-  addElement(element) {
-    this.elements.push(element.name);
-  }
-}
-
-class Namespaces {
-  constructor() {
-    this.namespaces = {};
-  }
-  get(namespace) {
-    if (!(namespace in this.namespaces))
-      this.namespaces[namespace] = new Namespace(namespace);
-    return this.namespaces[namespace];
-  }
-  list() {
-    let oList = [];
-    Object.keys(this.namespaces).forEach((namespace) => {
-      oList.push(this.get(namespace));
-    });
-    oList.sort((a, b) => { return a.name.localeCompare(b.name) });
-    return oList;
-  }
 }
 
 // SHR Class to store the canonical json structure
