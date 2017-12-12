@@ -206,7 +206,7 @@ class Expander {
             // Still need to process the cardinality and constraints to ensure they are valid
             // (test for node == element to ensure we only report out the error on the root element)
             if (typeof f.effectiveCard === 'undefined' && node == element) {
-              logger.error('No cardinality found for field: %s. ERROR_CODE:12004', f.toString());
+              logger.error('No cardinality found for field %s in %s. ERROR_CODE:12004', f.toString(), element.identifier.name);
             }
             f.constraints = this.consolidateConstraints(node, f);
             mergedFields.push(f);
