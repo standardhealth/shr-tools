@@ -116,7 +116,7 @@ class DataElementImporter extends SHRDataElementParserListener {
   enterEntryDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.entryHeader().simpleName().getText());
     this._currentDef = new DataElement(id, true).withGrammarVersion(this._currentGrammarVersion);
-    
+
     if (ctx.entryHeader().simpleName().LOWER_WORD()) { logger.error('Entry Element name "%s" should begin with a capital letter. ERROR_CODE:11002', ctx.entryHeader().simpleName().getText()); }
   }
 
@@ -460,7 +460,9 @@ class DataElementImporter extends SHRDataElementParserListener {
       return this.resolveToIdentifier(ctx.simpleOrFQName().getText());
     } else if (typeof ctx.ref === 'function' && ctx.ref()) {
       return this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText());
-    }else if (ctx.tbd() && ctx.tbd().STRING()) {
+    } else if (typeof ctx.primitive === 'function' && ctx.primitive()) {
+      return new PrimitiveIdentifier(ctx.primitive().getText());
+    } else if (ctx.tbd() && ctx.tbd().STRING()) {
       return new TBD(stripDelimitersFromToken(ctx.tbd().STRING()));
     } else {
       return new TBD();

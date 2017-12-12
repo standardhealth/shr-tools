@@ -1,6 +1,6 @@
 {
   "name": "shr-text-import",
-  "version": "5.2.2",
+  "version": "5.2.3",
   "description": "Imports Standard Health Record (SHR) elements from their custom grammar to the SHR models",
   "author": "",
   "license": "Apache-2.0",

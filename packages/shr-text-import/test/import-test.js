@@ -653,6 +653,46 @@ describe('#importFromFilePath()', () => {
     expectIdentifier(group.fields[0].constraints[0].isA, 'shr.test', 'Simple2');
   });
 
+  // Type constraints on choices
+
+  it('should correctly import an entry with a value type constraint (to primitive) on a choice field', () => {
+    const specifications = importFixture('ChoiceTypeConstraints');
+    const primType = expectAndGetEntry(specifications, 'shr.test', 'PrimitiveTypeConstraintOnField');
+    expect(primType.basedOn).to.have.length(1);
+    expectIdentifier(primType.basedOn[0], 'shr.test', 'ThingWithChoiceField');
+    expect(primType.concepts).to.be.empty;
+    expect(primType.description).to.be.undefined;
+    expect(primType.value).to.be.undefined;
+    expect(primType.fields).to.have.length(1);
+    expectField(primType, 0, 'shr.test', 'ChoiceOfDatishThings');
+    expect(primType.fields[0].constraints).to.have.length(1);
+    expect(primType.fields[0].constraints[0]).to.be.instanceof(TypeConstraint);
+    expect(primType.fields[0].constraints[0].path).to.be.empty;
+    expect(primType.fields[0].constraints[0].onValue).to.be.true;
+    expectPrimitiveIdentifier(primType.fields[0].constraints[0].isA, 'dateTime');
+  });
+
+  it('should correctly import an entry with a value type constraint (to non-primitive) on a choice field', () => {
+    const specifications = importFixture('ChoiceTypeConstraints');
+    const primType = expectAndGetEntry(specifications, 'shr.test', 'NonPrimitiveTypeConstraintOnField');
+    expect(primType.basedOn).to.have.length(1);
+    expectIdentifier(primType.basedOn[0], 'shr.test', 'ThingWithChoiceField');
+    expect(primType.concepts).to.be.empty;
+    expect(primType.description).to.be.undefined;
+    expect(primType.value).to.be.undefined;
+    expect(primType.fields).to.have.length(1);
+    expectField(primType, 0, 'shr.test', 'ChoiceOfDatishThings');
+    expect(primType.fields[0].constraints).to.have.length(1);
+    expect(primType.fields[0].constraints[0]).to.be.instanceof(TypeConstraint);
+    expect(primType.fields[0].constraints[0].path).to.be.empty;
+    expect(primType.fields[0].constraints[0].onValue).to.be.true;
+    expectIdentifier(primType.fields[0].constraints[0].isA, 'shr.test', 'StringishDateTime');
+  });
+
+
+
+
+
   it('should correctly import an entry with a card constraint on the value\'s child', () => {
     const specifications = importFixture('CardConstraints');
     const entry = expectAndGetEntry(specifications, 'shr.test', 'CardConstraintOnValueChild');
