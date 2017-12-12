@@ -33,7 +33,7 @@ class Preprocessor extends SHRDataElementParserVisitor {
     if (file != null) {
       try { configFile = JSON.parse(new FileStream(file)); } 
       catch (e) {
-        logger.error("Invalid config file. Should be valid JSON dictionary. ERROR_CODE:11006");
+        logger.error('Invalid config file. Should be valid JSON dictionary. ERROR_CODE:11006');
         return defaults;
       }
     } else {
@@ -44,16 +44,16 @@ class Preprocessor extends SHRDataElementParserVisitor {
     //Fill in config dictionary with default values, if necessary (with some special logic)
     for (var key in defaults) {
       if (configFile[key] == null) {
-        if (key === "fhirURL" && configFile["projectURL"] != null) { //special logic
-          configFile["fhirURL"] = `${configFile["projectURL"]}/fhir`;
+        if (key === 'fhirURL' && configFile['projectURL'] != null) { //special logic
+          configFile['fhirURL'] = `${configFile['projectURL']}/fhir`;
           continue;
         } 
         
         configFile[key] = defaults[key];
-        logger.warn("Configuration file missing key: %s, using default key: %s instead. ERROR_CODE:01002", key, defaults[key]);
+        logger.warn('Configuration file missing key: %s, using default key: %s instead. ERROR_CODE:01002', key, defaults[key]);
       } else {
         //Additional compatibility logic
-        if ( (key === "projectURL" || key === "fhirURL" ) && configFile[key].endsWith('/')) {
+        if ( (key === 'projectURL' || key === 'fhirURL' ) && configFile[key].endsWith('/')) {
           configFile[key] = configFile[key].slice(0, -1);
         }
       }

@@ -19,7 +19,7 @@ function setLogger(bunyanLogger) {
 function importFromFilePath(filePath, configuration=[], specifications = new Specifications()) {
   const filesByType = processPath(filePath);
   const preprocessor = new Preprocessor(configuration);
-  
+
   for (const file of filesByType.dataElement) {
     preprocessor.preprocessFile(file);
   }
@@ -42,15 +42,16 @@ function importConfigFromFilePath(filePath) {
   const filesByType = processPath(filePath);
   const preprocessor = new Preprocessor();
 
-  let defaultConfigPath = path.join(__dirname, "config-template", "/default_config.json")
+  let defaultConfigPath = path.join(__dirname, 'config-template', '/default_config.json');
   let defaultConfigFile = fs.readFileSync(defaultConfigPath, 'utf8');
-  
+
+  let configuration;
   if (filesByType.config.length > 0) {
-    configuration = preprocessor.preprocessConfig(defaultConfigFile, filesByType.config[0])
+    configuration = preprocessor.preprocessConfig(defaultConfigFile, filesByType.config[0]);
   } else {
     configuration = preprocessor.preprocessConfig(defaultConfigFile);
-    fs.writeFileSync(filePath + "/config.json", defaultConfigFile, 'utf8')
-  };
+    fs.writeFileSync(filePath + '/config.json', defaultConfigFile, 'utf8');
+  }
 
   return configuration;
 }
@@ -86,21 +87,21 @@ class FilesByType {
 
   add(file) {
     switch (this.detectType(file)) {
-      case 'DataElement':
-        this._dataElement.push(file);
-        break;
-      case 'Map':
-        this._map.push(file);
-        break;
-      case 'ValueSet':
-        this._valueSet.push(file);
-        break;
-      case 'ContentProfile':
-        this._contentProfile.push(file);
-        break;
-      case 'Config':
-        this._config.push(file);
-        break;
+    case 'DataElement':
+      this._dataElement.push(file);
+      break;
+    case 'Map':
+      this._map.push(file);
+      break;
+    case 'ValueSet':
+      this._valueSet.push(file);
+      break;
+    case 'ContentProfile':
+      this._contentProfile.push(file);
+      break;
+    case 'Config':
+      this._config.push(file);
+      break;
     }
   }
 
@@ -108,14 +109,14 @@ class FilesByType {
     if (!file.endsWith('.txt') && !file.endsWith('.shr') && !file.endsWith('config.json')) {
       return;  // only support *.txt or *.shr or .json coniguration files
     }
-    const re = /^\s*Grammar:\s+([^\s]+)/
-    const lines = fs.readFileSync(file, 'utf-8').split('\n')
+    const re = /^\s*Grammar:\s+([^\s]+)/;
+    const lines = fs.readFileSync(file, 'utf-8').split('\n');
     for (const l of lines) {
       const match = l.match(re);
       if (match != null && match.length >= 2) {
         return match[1];
       } else if (file.endsWith('config.txt') || file.endsWith('config.json')) {
-        return "Config"
+        return 'Config';
       }
     }
   }

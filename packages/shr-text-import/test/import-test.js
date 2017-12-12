@@ -833,122 +833,122 @@ describe('#importFromFilePath()', () => {
   });
 });
 
-describe("#importConfigFromFilePath", () => {
+describe('#importConfigFromFilePath', () => {
   beforeEach(function() {
     err.clear();
   });
 
   it('should correctly import a basic configuration', () => {
-    const configuration = importConfiguration("basicconfig");
-    expect(configuration).to.have.all.keys("projectName","projectShorthand","projectURL","publisher","contact","fhirURL","igIndexContent");
-    expect(configuration.projectName).to.eql("Test Project");
-    expect(configuration.projectShorthand).to.eql("TEST");
-    expect(configuration.projectURL).to.eql("http://test.org");
-    expect(configuration.fhirURL).to.eql("http://test.org/fhir");
-    expect(configuration.igIndexContent).to.eql("basicindexcontent.html");
-    expect(configuration.publisher).to.eql("Test Publisher");
+    const configuration = importConfiguration('basicconfig');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','igIndexContent');
+    expect(configuration.projectName).to.eql('Test Project');
+    expect(configuration.projectShorthand).to.eql('TEST');
+    expect(configuration.projectURL).to.eql('http://test.org');
+    expect(configuration.fhirURL).to.eql('http://test.org/fhir');
+    expect(configuration.igIndexContent).to.eql('basicindexcontent.html');
+    expect(configuration.publisher).to.eql('Test Publisher');
     expect(configuration.contact).to.be.of.length(1);
     expect(configuration.contact[0]).to.eql({
-      "telecom": [{
-        "system": "url",
-        "value": "http://test.org"
+      'telecom': [{
+        'system': 'url',
+        'value': 'http://test.org'
       }]
     });
   });
 
   it('should correctly generate missing fhir url from project url when fhir url is missing', () => {
-    const configuration = importConfiguration("incompletefhirconfig");
-    expect(configuration).to.have.all.keys("projectName","projectShorthand","projectURL","publisher","contact","fhirURL","igIndexContent");
-    expect(configuration.projectName).to.eql("Test Project");
-    expect(configuration.projectShorthand).to.eql("TEST");
-    expect(configuration.projectURL).to.eql("http://test.org");
-    expect(configuration.fhirURL).to.eql("http://test.org/fhir");
-    expect(configuration.igIndexContent).to.eql("basicindexcontent.html");
-    expect(configuration.publisher).to.eql("Test Publisher");
+    const configuration = importConfiguration('incompletefhirconfig');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','igIndexContent');
+    expect(configuration.projectName).to.eql('Test Project');
+    expect(configuration.projectShorthand).to.eql('TEST');
+    expect(configuration.projectURL).to.eql('http://test.org');
+    expect(configuration.fhirURL).to.eql('http://test.org/fhir');
+    expect(configuration.igIndexContent).to.eql('basicindexcontent.html');
+    expect(configuration.publisher).to.eql('Test Publisher');
     expect(configuration.contact).to.be.of.length(1);
     expect(configuration.contact[0]).to.eql({
-      "telecom": [{
-        "system": "url",
-        "value": "http://test.org"
+      'telecom': [{
+        'system': 'url',
+        'value': 'http://test.org'
       }]
     });
 
   });
 
   it('should correctly use full default configuration when config is empty', () => {
-    const configuration = importConfiguration("emptyconfig");
-    expect(configuration).to.have.all.keys("projectName","projectShorthand","projectURL","publisher","contact","fhirURL","igIndexContent");
-    expect(configuration.projectName).to.eql("Example Project");
-    expect(configuration.projectShorthand).to.eql("EXAMPLE");
-    expect(configuration.projectURL).to.eql("http://example.com");
-    expect(configuration.fhirURL).to.eql("http://example.com/fhir");
-    expect(configuration.igIndexContent).to.eql("exampleIndexContent.html");
-    expect(configuration.publisher).to.eql("Example Publisher");
+    const configuration = importConfiguration('emptyconfig');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','igIndexContent');
+    expect(configuration.projectName).to.eql('Example Project');
+    expect(configuration.projectShorthand).to.eql('EXAMPLE');
+    expect(configuration.projectURL).to.eql('http://example.com');
+    expect(configuration.fhirURL).to.eql('http://example.com/fhir');
+    expect(configuration.igIndexContent).to.eql('exampleIndexContent.html');
+    expect(configuration.publisher).to.eql('Example Publisher');
     expect(configuration.contact).to.be.of.length(1);
     expect(configuration.contact[0]).to.eql({
-      "telecom": [{
-        "system": "url",
-        "value": "http://example.com"
+      'telecom': [{
+        'system': 'url',
+        'value': 'http://example.com'
       }]
     });
   });
 
   it('should correctly import an incomplete configuration with partial default data', () => {
-    const configuration = importConfiguration("incompleteconfig");
-    expect(configuration).to.have.all.keys("projectName","projectShorthand","projectURL","publisher","contact","fhirURL","igIndexContent");
-    expect(configuration.projectName).to.eql("Test Project");
-    expect(configuration.projectShorthand).to.eql("EXAMPLE");
-    expect(configuration.projectURL).to.eql("http://example.com");
-    expect(configuration.fhirURL).to.eql("http://example.com/fhir");
-    expect(configuration.igIndexContent).to.eql("exampleIndexContent.html");
-    expect(configuration.publisher).to.eql("Example Publisher");
+    const configuration = importConfiguration('incompleteconfig');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','igIndexContent');
+    expect(configuration.projectName).to.eql('Test Project');
+    expect(configuration.projectShorthand).to.eql('EXAMPLE');
+    expect(configuration.projectURL).to.eql('http://example.com');
+    expect(configuration.fhirURL).to.eql('http://example.com/fhir');
+    expect(configuration.igIndexContent).to.eql('exampleIndexContent.html');
+    expect(configuration.publisher).to.eql('Example Publisher');
     expect(configuration.contact).to.be.of.length(1);
     expect(configuration.contact[0]).to.eql({
-      "telecom": [{
-        "system": "url",
-        "value": "http://test.org"
+      'telecom': [{
+        'system': 'url',
+        'value': 'http://test.org'
       }]
     });
   });
 
 
   it('should correctly throw error then use full default configuration when file is not valid JSON', () => {
-    const configuration = importConfiguration("invalidblankconfig", 1);
-    expect(err.errors()[0].msg).to.contain("Invalid config file")
-    expect(configuration).to.have.all.keys("projectName","projectShorthand","projectURL","publisher","contact","fhirURL","igIndexContent");
-    expect(configuration.projectName).to.eql("Example Project");
-    expect(configuration.projectShorthand).to.eql("EXAMPLE");
-    expect(configuration.projectURL).to.eql("http://example.com");
-    expect(configuration.fhirURL).to.eql("http://example.com/fhir");
-    expect(configuration.igIndexContent).to.eql("exampleIndexContent.html");
-    expect(configuration.publisher).to.eql("Example Publisher");
+    const configuration = importConfiguration('invalidblankconfig', 1);
+    expect(err.errors()[0].msg).to.contain('Invalid config file');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','igIndexContent');
+    expect(configuration.projectName).to.eql('Example Project');
+    expect(configuration.projectShorthand).to.eql('EXAMPLE');
+    expect(configuration.projectURL).to.eql('http://example.com');
+    expect(configuration.fhirURL).to.eql('http://example.com/fhir');
+    expect(configuration.igIndexContent).to.eql('exampleIndexContent.html');
+    expect(configuration.publisher).to.eql('Example Publisher');
     expect(configuration.contact).to.be.of.length(1);
     expect(configuration.contact[0]).to.eql({
-      "telecom": [{
-        "system": "url",
-        "value": "http://example.com"
+      'telecom': [{
+        'system': 'url',
+        'value': 'http://example.com'
       }]
     });
   });
 
   it('should correctly throw error then use full default configuration when no file exists', () => {
-    const configuration = importConfigurationFolder("emptyfolder");
-    expect(configuration).to.have.all.keys("projectName","projectShorthand","projectURL","publisher","contact","fhirURL","igIndexContent");
-    expect(configuration.projectName).to.eql("Example Project");
-    expect(configuration.projectShorthand).to.eql("EXAMPLE");
-    expect(configuration.projectURL).to.eql("http://example.com");
-    expect(configuration.fhirURL).to.eql("http://example.com/fhir");
-    expect(configuration.igIndexContent).to.eql("exampleIndexContent.html");
-    expect(configuration.publisher).to.eql("Example Publisher");
+    const configuration = importConfigurationFolder('emptyfolder');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','igIndexContent');
+    expect(configuration.projectName).to.eql('Example Project');
+    expect(configuration.projectShorthand).to.eql('EXAMPLE');
+    expect(configuration.projectURL).to.eql('http://example.com');
+    expect(configuration.fhirURL).to.eql('http://example.com/fhir');
+    expect(configuration.igIndexContent).to.eql('exampleIndexContent.html');
+    expect(configuration.publisher).to.eql('Example Publisher');
     expect(configuration.contact).to.be.of.length(1);
     expect(configuration.contact[0]).to.eql({
-      "telecom": [{
-        "system": "url",
-        "value": "http://example.com"
+      'telecom': [{
+        'system': 'url',
+        'value': 'http://example.com'
       }]
     });
   });
-})
+});
 
 // Shorthand Identifier constructor for more concise code
 function id(namespace, name) {

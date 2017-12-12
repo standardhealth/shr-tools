@@ -19,7 +19,7 @@ class SHRErrorListener extends ErrorListener {
       return msg;
     }
     
-    msg = `${msg}. ERROR_CODE:${code}`
+    msg = `${msg}. ERROR_CODE:${code}`;
     return msg;
   }
 

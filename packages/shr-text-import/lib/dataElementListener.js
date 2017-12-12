@@ -292,7 +292,7 @@ class DataElementImporter extends SHRDataElementParserListener {
               logger.error('Fields cannot be constrained to type "Value". ERROR_CODE:11025');
             } else {
               [min, max] = this.getMinMax(typeConstraint.count());
-              const isOnValue = (path.length > 0 && path[0].name == "Value");
+              const isOnValue = (path.length > 0 && path[0].name == 'Value');
               value.addConstraint(new IncludesTypeConstraint(newIdentifier, new Cardinality(min, max), path, isOnValue));
             }
           }
