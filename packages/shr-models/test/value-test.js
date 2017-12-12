@@ -179,7 +179,7 @@ describe('#IdentifiableValue', () => {
     const val = new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo'))
       .withMinMax(1,1);
     const str = val.toString();
-    expect(str).to.equal('IdentifiableValue<shr.test.Foo>');
+    expect(str).to.equal('Foo');
   });
 
   it('should ignore inheritance during equality when asked', () => {
@@ -225,7 +225,7 @@ describe('#RefValue', () => {
     const val = new mdl.RefValue(new mdl.Identifier('shr.test', 'Foo'))
       .withMinMax(1,1);
     const str = val.toString();
-    expect(str).to.equal('RefValue<shr.test.Foo>');
+    expect(str).to.equal('ref(Foo)');
   });
 
   it('should not equal a similar IndentifiableValue', () => {
@@ -295,7 +295,7 @@ describe('#ChoiceValue', () => {
       .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
       .withOption(new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
     const str = val.toString();
-    expect(str).to.equal('ChoiceValue<IdentifiableValue<shr.test.Foo>|RefValue<shr.test.Bar>>');
+    expect(str).to.equal('Choice(Foo, ref(Bar))');
   });
 
   it('should ignore inheritance during equality when asked', () => {
@@ -398,6 +398,6 @@ describe('#TBD', () => {
   it('should toString its class and identifier', () => {
     const val = new mdl.TBD('To Be Defined').withMinMax(1,1);
     const str = val.toString();
-    expect(str).to.equal('TBD<To Be Defined>');
+    expect(str).to.equal('TBD(To Be Defined)');
   });
 });

@@ -1082,7 +1082,7 @@ class IdentifiableValue extends Value {
   }
 
   toString() {
-    return `IdentifiableValue<${this.identifier.fqn}>`;
+    return this.identifier.name;
   }
 }
 
@@ -1098,7 +1098,7 @@ class RefValue extends IdentifiableValue {
   }
 
   toString() {
-    return `RefValue<${this.identifier.fqn}>`;
+    return `ref(${this.identifier.name})`
   }
 }
 
@@ -1164,14 +1164,14 @@ class ChoiceValue extends Value {
   }
 
   toString() {
-    let str = 'ChoiceValue<';
+    let str = 'Choice(';
     for (let i=0; i < this._options.length; i++) {
       str += this._options[i].toString();
       if ((i+1) < this._options.length) {
-        str += '|';
+        str += ', ';
       }
     }
-    str += '>';
+    str += ')';
     return str;
   }
 }
@@ -1227,7 +1227,7 @@ class TBD extends Value{
   }
 
   toString() {
-    return this._text ? `TBD<${this._text}>` : 'TBD';
+    return this._text ? `TBD(${this._text})` : 'TBD';
   }
 }
 
