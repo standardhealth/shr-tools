@@ -1,0 +1,91 @@
+{
+  "https://standardhealthrecord.org/test/shr/test": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/test",
+    "title": "TODO: Figure out what the title should be.",
+    "type": "object",
+    "anyOf": [
+      { "$ref": "#/definitions/Simple" },
+      { "$ref": "#/definitions/SimpleChild" },
+      { "$ref": "#/definitions/SimpleReference" },
+      { "$ref": "#/definitions/TypeConstrainedReference" }
+    ],
+    "definitions": {
+      "TypeConstrainedReference": {
+        "description": "It is an element a constraint on a reference.",
+        "allOf": [
+          { "$ref": "#/definitions/SimpleReference" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "ShrId": { "type": "string" },
+                      "EntryType": { "type": "string" },
+                      "EntryId": { "type": "string" }
+                    },
+                    "required": ["ShrId", "EntryType", "EntryId"],
+                    "refType": ["shr.test.Simple"]
+                  },
+                  { "refType": ["shr.test.SimpleChild"] }
+                ]
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "Simple": {
+        "description": "It is a simple element",
+        "concepts": [ { "code": "http://foo.org#bar", "display": "Foobar"}],
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "string"
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      },
+      "SimpleChild": {
+        "description": "A derivative of the simple type.",
+        "allOf": [
+          { "$ref": "#/definitions/Simple" },
+          {
+            "type": "object",
+            "properties": {}
+          }
+        ]
+      },
+      "SimpleReference": {
+        "description": "It is a reference to a simple element",
+        "allOf": [
+          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "type": "object",
+            "properties": {
+              "Value": {
+                "type": "object",
+                "properties": {
+                  "ShrId": { "type": "string" },
+                  "EntryType": { "type": "string" },
+                  "EntryId": { "type": "string" }
+                },
+                "required": ["ShrId", "EntryType", "EntryId"],
+                "refType": ["shr.test.Simple"]
+              }
+            },
+            "required": ["Value"]
+          }
+        ]
+      }
+    }
+  }
+}

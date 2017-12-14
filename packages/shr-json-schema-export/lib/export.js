@@ -430,13 +430,15 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
   const constraintStructure = { $self: []};
   const includesCodeLists = {};
   for (const constraint of valueDef.constraints) {
-    const {path: constraintPath, target: constraintTarget } = extractConstraintPath(constraint, valueDef, dataElementsSpecs);
+    let {path: constraintPath, target: constraintTarget } = extractConstraintPath(constraint, valueDef, dataElementsSpecs);
     if (!constraintPath) {
       continue;
     } else if (!constraintTarget) {
       // Cardinality constraints without a path are not useful (except if you're really a list, we'll handle that later).
       if (constraint instanceof CardConstraint) {
         continue;
+      } else {
+        constraintTarget = valueDef;
       }
     }
 
@@ -517,10 +519,14 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
           let includesCodeConstraints = null;
           for (const constraintInfo of node.$self) {
             if (constraintInfo.constraint instanceof TypeConstraint) {
-              if (constraintInfo.constraint.isA.isPrimitive) {
-                currentAllOf.push(makePrimitiveObject(constraintInfo.constraint.isA));
+              if (constraintInfo.constraintTarget instanceof RefValue) {
+                currentAllOf.push({ refType: [constraintInfo.constraint.isA.fqn]});
               } else {
-                currentAllOf.push({$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)});
+                if (constraintInfo.constraint.isA.isPrimitive) {
+                  currentAllOf.push(makePrimitiveObject(constraintInfo.constraint.isA));
+                } else {
+                  currentAllOf.push({$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)});
+                }
               }
             } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
               if (!includesConstraints) {
