@@ -25,7 +25,13 @@
                     ]
                   },
                   {
-                    "type": "string",
+                    "type": "object",
+                    "properties": {
+                      "code": { "type": "string" },
+                      "codeSystem": { "type": "string", "format": "uri" },
+                      "displayText": { "type": "string" }
+                    },
+                    "required": [ "code", "codeSystem" ],
                     "valueSet": {
                       "uri": "http://standardhealthrecord.org/test/vs/CodeChoice",
                       "strength": "REQUIRED"

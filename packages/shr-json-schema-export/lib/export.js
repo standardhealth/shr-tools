@@ -790,7 +790,13 @@ function makePrimitiveObject(id, target = {}) {
     target.type = 'string';
     break;
   case 'code':
-    target.type = 'string';
+    target.type = 'object';
+    target.properties = {
+      code: { type: 'string' },
+      codeSystem: { type: 'string', format: 'uri' },
+      displayText: { type: 'string' }
+    };
+    target.required = ['code', 'codeSystem'];
     break;
   case 'oid':
   case 'id':
