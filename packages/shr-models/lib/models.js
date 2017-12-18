@@ -930,11 +930,24 @@ class Value {
   }
 
   get effectiveCard() {
+    let eCard = this.card.clone();
+
+    // First check if there is a cardinality constraint and use it if it's there
     const cardConstraints = this.constraintsFilter.own.card.constraints;
     if (cardConstraints.length > 0) {
-      return cardConstraints[cardConstraints.length - 1].card;
+      eCard = cardConstraints[cardConstraints.length - 1].card.clone();
     }
-    return this.card;
+
+    // Now look at includes type constraints, because any that have lower card > 0 may affect this card
+    let sumOfIncludesTypeMins = 0;
+    for (const itConstraint of this.constraintsFilter.own.includesType.constraints) {
+      sumOfIncludesTypeMins += itConstraint.card.min;
+    }
+    if (sumOfIncludesTypeMins > eCard.min) {
+      eCard.min = sumOfIncludesTypeMins;
+    }
+
+    return eCard;
   }
 
   get constraints() { return this._constraints; }
