@@ -628,7 +628,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
             for (const val of includesConstraints.types) {
               includesTypesArrayDef.items.anyOf.push({ $ref: makeRef(val.isA, enclosingNamespace, baseSchemaURL) });
               const includesType = {
-                items: makeShrDefinitionURL(val.isA, baseSchemaURL),
+                items: `${STANDARD_TYPE_URI}${namespaceToURLPathSegment(val.isA.namespace)}/${val.isA.name}`,
                 minItems: val.card.min
               };
               if (!val.card.isMaxUnbounded) {

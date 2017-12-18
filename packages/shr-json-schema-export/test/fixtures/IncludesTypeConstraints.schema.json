@@ -35,12 +35,12 @@
                 },
                 "includesTypes": [
                   {
-                    "items": "https://standardhealthrecord.org/test/shr/test#/definitions/SimpleChild",
+                    "items": "http://standardhealthrecord.org/spec/shr/test/SimpleChild",
                     "minItems": 0,
                     "maxItems": 1
                   },
                   {
-                    "items": "https://standardhealthrecord.org/test/shr/test#/definitions/SimpleChild2",
+                    "items": "http://standardhealthrecord.org/spec/shr/test/SimpleChild2",
                     "minItems": 0,
                     "maxItems": 2
                   }
