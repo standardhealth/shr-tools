@@ -638,7 +638,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
             }
           }
           if (includesCodeConstraints) {
-            currentAllOf[0].includesCodes = includesCodeConstraints.map((it) => makeConceptEntry(it.code).code);
+            currentAllOf[0].includesCodes = includesCodeConstraints.map((it) => makeConceptEntry(it.code));
           }
         }
       }
@@ -983,19 +983,19 @@ function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
  * Converts a concept into a code entry for the schema. (Codes are also represented as Concepts in the object model.)
  *
  * @param {Concept|TBD} concept - The concept to convert.
- * @return {{code: string, display: (string|undefined)}} The converted object. Display is optional.
+ * @return {{code: string, codeSystem: string, displayText: (string|undefined)}} The converted object. Display is optional.
  */
 function makeConceptEntry(concept) {
   if (concept instanceof TBD) {
-    const ret = { code: 'urn:tbd#TBD' };
+    const ret = { code: 'TBD', codeSystem: 'urn:tbd' };
     if (concept.text) {
-      ret.display = concept.text;
+      ret.displayText = concept.text;
     }
     return ret;
   } else {
-    const ret = { code: concept.system + '#' + concept.code };
+    const ret = { code: concept.code, codeSystem: concept.system };
     if (concept.display) {
-      ret.display = concept.display;
+      ret.displayText = concept.display;
     }
     return ret;
   }

@@ -25,7 +25,8 @@
                       "properties": {
                         "Value": {
                           "includesCodes": [
-                            "http://foo.org#bar", "http://boo.org#far"
+                            { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"},
+                            { "code": "far", "codeSystem": "http://boo.org", "displayText": "Boofar"}
                           ]
                         }
                       }

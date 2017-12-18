@@ -44,7 +44,7 @@
       },
       "Simple": {
         "description": "It is a simple element",
-        "concepts": [ { "code": "http://foo.org#bar", "display": "Foobar"}],
+        "concepts": [ { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"}],
         "allOf": [
           { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           {
@@ -126,7 +126,7 @@
     "definitions": {
       "Simple": {
         "description": "It is a simple element",
-        "concepts": [ { "code": "http://foo.org#bar", "display": "Foobar"}],
+        "concepts": [ { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"}],
         "allOf": [
           { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           {

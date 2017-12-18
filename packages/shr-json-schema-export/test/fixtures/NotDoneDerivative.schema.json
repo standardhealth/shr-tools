@@ -12,7 +12,7 @@
     "definitions": {
       "NotDoneDerivative": {
         "description": "It is an unfinished derivative element\nTBD Parents: An undetermined parent.\nTBD\nTBD Fields: An undetermined singular field.",
-        "concepts": [ { "code": "urn:tbd#TBD", "display": "Not sure of the concept"}],
+        "concepts": [ { "code": "TBD", "codeSystem": "urn:tbd", "displayText": "Not sure of the concept"}],
         "allOf": [
           { "$ref": "#/definitions/ValuelessElement" },
           {
@@ -44,7 +44,7 @@
       },
       "Simple": {
         "description": "It is a simple element",
-        "concepts": [ { "code": "http://foo.org#bar", "display": "Foobar"}],
+        "concepts": [ { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"}],
         "allOf": [
           { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           {
