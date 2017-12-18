@@ -23,7 +23,7 @@
                   "EntryId": { "type": "string" }
                 },
                 "required": ["ShrId", "EntryType", "EntryId"],
-                "refType": ["shr.test.Simple"]
+                "refType": ["http://standardhealthrecord.org/spec/shr/test/Simple"]
               }
             },
             "required": ["Value"]

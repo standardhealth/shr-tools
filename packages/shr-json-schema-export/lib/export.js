@@ -7,6 +7,8 @@ const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValu
 
 const CODE = new PrimitiveIdentifier('code');
 
+const STANDARD_TYPE_URI = 'http://standardhealthrecord.org/spec/';
+
 var rootLogger = bunyan.createLogger({name: 'shr-json-schema-export'});
 var logger = rootLogger;
 function setLogger(bunyanLogger) {
@@ -520,7 +522,8 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
           for (const constraintInfo of node.$self) {
             if (constraintInfo.constraint instanceof TypeConstraint) {
               if (constraintInfo.constraintTarget instanceof RefValue) {
-                currentAllOf.push({ refType: [constraintInfo.constraint.isA.fqn]});
+                const refid = constraintInfo.constraint.isA;
+                currentAllOf.push({ refType: [`${STANDARD_TYPE_URI}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]});
               } else {
                 if (constraintInfo.constraint.isA.isPrimitive) {
                   currentAllOf.push(makePrimitiveObject(constraintInfo.constraint.isA));
@@ -747,7 +750,7 @@ function makeShrRefObject(refs, target = {}) {
     EntryType: { type: 'string' }
   };
   target.required = ['ShrId', 'EntryType', 'EntryId'];
-  target.refType = refs.map((ref) => ref.identifier.fqn);
+  target.refType = refs.map((ref) => `${STANDARD_TYPE_URI}${namespaceToURLPathSegment(ref.identifier.namespace)}/${ref.identifier.name}`);
   return target;
 }
 
