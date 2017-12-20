@@ -57,30 +57,31 @@ if (location.href.indexOf('is-external=true') == -1) {
         </dd>
       </dl>
       <dl>
+        <% if (element.hierarchy) { -%>
         <dt>Ancestors:</dt>
         <dd>
           <ul class="tree">
-          <% if (element.hierarchy) { -%>
-            <% element.hierarchy.forEach(function(parent, i) { -%>
-              <%- include('inheritanceTree', { name: parent, index: i , setClass: false}) -%>
+            <% element.hierarchy.forEach(function(ancestor, i) { -%>
+              <%- include('inheritanceTree', { ancestor: ancestor, index: i , setClass: false}) -%>
             <% }) -%>
-          <% } -%>
           </ul>
         </dd>
+        <% } -%>        
       </dl>
       <dl>
+      <% if (element.children.length) { -%>
         <dt>Descendants:</dt>
         <dd>
           <ul class="class_list">
-            <% if (element.children.length) { -%>
+            
               <% element.children.forEach(function(child, i) { -%>
                 <li>
-                  <a href="../<%= child.path %>/<%= child.name %>.html"><%= child.fqn -%></a><% if (i < element.children.length - 1) { %>,&nbsp;<% } -%>
+                  <a href="../<%= child.path %>/<%= child.name %>.html"><%= child.name -%></a><% if (i < element.children.length - 1) { %>,&nbsp;<% } -%>
                 </li>
               <% }) -%>
-            <% } %>
           </ul>
         </dd>
+      <% } %>
       </dl>
     </div>
     <div class="description">
@@ -94,40 +95,26 @@ if (location.href.indexOf('is-external=true') == -1) {
               <a name="method_summary">
               </a>
               <h3>Field Summary</h3>
-              <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Property Summary table, listing class properties, and an explanation">
-                <caption>
-                  <span>Fields</span>
-                  <span class="tabEnd">&nbsp;</span>
-                </caption>
-                <tr>
-                  <th class="colFirst" scope="col">Name</th>
-                  <th class="colMiddle">Type and Description</th>
-                  <th class="colMiddle">Cardinality</th>
-                  <th class="colLast" scope="col">Value Set and Binding</th>
-                </tr>
-                <% if (element.fields) { -%>
-                  <% element.fields.forEach(function(field) { -%>
-                    <% if (!('inheritance' in field)) { -%>
-                      <tr class="rowColor">
-                        <td class="colFirst">
-                          <code><strong><%= field.fqn %></code>
-                        </td>
-                        <td class="colMiddle">
-                          <code><strong><%= field.fqn %></strong></code>
-                          <div class="block">None</div>
-                        </td>
-                        <td class="colMiddle">
-                          <code><strong>0..*</strong></code>
-                        </td>
-                        <td class="colLast">
-                          <code><strong>N/A</strong></code>
-                        </td>
-                      </tr>
-                    <% } -%>
+              <%- include('./tables/definedTable', { element: element }) -%>
+              <% if (element.overridden !== undefined && element.overridden.length) { -%>
+                <%- include('./tables/overridenTable', { element: element }) -%>
+              <% } -%>
+              <ul class="blockList">
+                <% if (element.hierarchy) { -%>
+                  <% element.hierarchy.reverse().forEach(function(ancestor) { -%>
+                    <li class="blockList">
+                      <a name="properties_inherited_from_class_java.lang.Object"></a>
+                      <h3>Properties inherited from&nbsp;
+                        <a href="../<%= ancestor.path %>/<%= ancestor.name %>.html"><%= ancestor.name %></a>
+                      </h3>
+                      <% if (ancestor.fields !== undefined && ancestor.fields.length) { -%>
+                        <% ancestor.fields.forEach(function(field, i) { -%>
+                          <code><a href="../<%= field.path %>/<%= field.name %>.html"><%= field.name %></a></code><% if (i < ancestor.fields.length - 1) { %>,&nbsp;&nbsp;&nbsp;<% } %>
+                        <% }) %>
+                      <% } -%>
+                    </li>
                   <% }) -%>
                 <% } -%>
-              </table>
-              <ul class="blockList">
               </ul>
             </li>
           </ul>

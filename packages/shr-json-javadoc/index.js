@@ -21,7 +21,7 @@ class SHR {
     this.namespaces = new Namespaces();
     this.children = {};
     this.readFiles(src);
-    this.elements.updateChildren();
+    this.elements.flatten();
   }
 
   // Read in the canonical json files

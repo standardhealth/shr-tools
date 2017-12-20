@@ -304,9 +304,10 @@ ul.blockList, ul.blockListLast {
     margin:10px 0 10px 0;
     padding:0;
 }
+/* FIND ME */
 ul.blockList li.blockList, ul.blockListLast li.blockList {
     list-style:none;
-    margin-bottom:25px;
+    margin-bottom:10px;
 }
 ul.blockList ul.blockList li.blockList, ul.blockList ul.blockListLast li.blockList {
     padding:0px 20px 5px 10px;
@@ -324,7 +325,7 @@ ul.blockList ul.blockList ul.blockList ul.blockList li.blockList {
     padding-left:0;
     padding-bottom:15px;
     border:none;
-    border-bottom:1px solid #9eadc0;
+    /* border-bottom:1px solid #9eadc0; */
 }
 ul.blockList ul.blockList ul.blockList ul.blockList li.blockListLast {
     list-style:none;
@@ -418,7 +419,7 @@ td.colOne a:link, td.colOne a:active, td.colOne a:visited, td.colOne a:hover, td
 }
 td.colFirst, th.colFirst {
     border-left:1px solid #9eadc0;
-    white-space:nowrap;
+    /* white-space:nowrap; */
 }
 td.colLast, th.colLast {
     border-right:1px solid #9eadc0;
@@ -431,7 +432,10 @@ table.overviewSummary  {
     padding:0px;
     margin-left:0px;
 }
-table.overviewSummary td.colFirst, table.overviewSummary th.colFirst,
+table.overviewSummary td.colFirst, table.overviewSummary th.colFirst {
+    width:35%;
+    vertical-align:middle;
+}
 table.overviewSummary td.colOne, table.overviewSummary th.colOne {
     width:25%;
     vertical-align:middle;

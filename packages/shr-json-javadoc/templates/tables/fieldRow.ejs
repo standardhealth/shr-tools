@@ -1,0 +1,31 @@
+<% if (index % 2 == 0) { %>
+  <tr class="rowColor">
+<% } else { %>
+  <tr class="altColor">
+<% } %>
+  <td class="colFirst">
+    <% if ('title' in field) { %>
+      <code><strong><%= field.title %></strong></code>
+    <% } else { %>
+      <code><strong><a href="../<%= field.path %>/<%= field.name %>.html"><%= field.name %></a></strong></code>
+    <% } %>
+    <div class="block"><%= field.description %></div>
+  </td>
+  <td class="colMiddle">
+    <% field.pConstraints.forEach(function(constraint) { -%>
+      <div class="block"><code><strong><%= constraint.name %></strong></code></div>
+    <% }) %>
+  </td>
+  <td class="colLast">
+    <% field.pConstraints.forEach(function(constraint) { -%>
+      <% if (constraint.href) { -%>
+        <div class="block">
+          <a href="<%= constraint.href %>"><%= constraint.value %></a>
+          <%= constraint.binding %>
+        </div>
+      <% } else { -%>
+        <div class="block"><%= constraint.value %></div>
+      <% } -%>
+    <% }) -%>
+  </td>
+</tr>

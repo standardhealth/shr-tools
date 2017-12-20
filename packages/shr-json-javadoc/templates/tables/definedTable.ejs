@@ -1,0 +1,24 @@
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0">
+  <caption>
+    <span>Properties of <%= element.name %></span>
+    <span class="tabEnd">&nbsp;</span>
+  </caption>
+  <tr>
+    <th class="colFirst" scope="col">Properties Defined</th>
+    <th class="colMiddle">Constraints</th>
+    <th class="colLast" scope="col">Value</th>
+  </tr>
+  <% var index = 0 %>
+  <% if ('pValue' in element) { -%>
+    <% element.pValue.forEach(function(value) { %>
+      <%- include('fieldRow', { field: value, index: index }) -%>
+    <% index += 1; }) %>
+  <% } -%>
+  <% if (element.fields) { -%>
+    <% element.fields.forEach(function(field) { -%>
+      <% if (!('inheritance' in field)) { -%>
+        <%- include('fieldRow', { field: field, index: index }) -%>
+      <% index += 1; } -%>
+    <% }) -%>
+  <% } -%>
+</table>

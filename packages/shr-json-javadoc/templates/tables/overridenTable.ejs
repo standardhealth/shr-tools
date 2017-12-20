@@ -1,0 +1,45 @@
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0">
+  <tr>
+    <th class="colFirst" scope="col">Properties Constrained</th>
+    <th class="colMiddle">Constraint</th>
+    <th class="colLast">Value</th>
+    <!-- <th class="colLast" scope="col">Override Class</th> -->
+  </tr>
+  <% element.overridden.forEach(function(constraint, index) { -%>
+    <% if (index % 2 == 0) { %>
+      <tr class="rowColor">
+    <% } else { %>
+      <tr class="altColor">
+    <% } %>
+      <td class="colFirst" style="width:25%;">
+        <code><strong><%= constraint.path %></strong></code>
+        <% if (constraint.overrideHref) { %>
+          <div class="block">Defined in <a href="<%= constraint.sourceHref %>"><%= constraint.source %></a></div>
+        <% } else { %>
+          <div class="block">Defined in <%= constraint.source %></div>
+        <% } %>
+      </td>
+      <td class="colMiddle">
+        <code><strong><%= constraint.name %></strong></code>
+        <% if (constraint.overrideHref) { %>
+          <div class="block">Constrained in <a href="<%= constraint.overrideHref %>"><%= constraint.override %></a></div>
+        <% } else { %>
+          <div class="block">Constrained in <%= constraint.override %></div>
+        <% } %>
+      </td>
+      <td class="colLast">
+        <% if (constraint.href) { -%>
+          <div class="block">
+            <a href="<%= constraint.href %>"><%= constraint.value %></a>
+            <%= constraint.binding %>
+          </div>
+        <% } else { -%>
+          <div class="block"><%= constraint.value %></div>
+        <% } -%>
+      </td>
+      <!-- <td class="colLast">
+        <div class="block"><%= constraint.override %></div>
+      </td> -->
+    </tr>
+  <% }) -%>
+</table>
