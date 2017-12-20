@@ -2535,8 +2535,8 @@ function add(...dataElements) {
 }
 
 // Expands the current specs and stores results in _result
-function doExpand() {
-  _result = expand(_specs);
+function doExpand(...exporters) {
+  _result = expand(_specs, ...exporters);
 }
 
 function findExpanded(namespace, name) {

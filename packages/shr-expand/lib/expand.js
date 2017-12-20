@@ -838,8 +838,9 @@ class Expander {
           } else if (targetItem != base.targetItem) {
             const ok = this._exporterMap.has(map.targetSpec) && this._exporterMap.get(map.targetSpec).isTargetBasedOn(targetItem, base.targetItem);
             if (!ok) {
-              logger.warn('Potentially mismatched targets: %s maps to %s, but based on class (%s) maps to %s, and %s is not based on %s in %s. ERROR_CODE:02001',
+              logger.debug('Skipping mismatched targets: %s maps to %s, but based on class (%s) maps to %s, and %s is not based on %s in %s. ERROR_CODE:02001',
                 identifier.fqn, targetItem, base.identifier.fqn, base.targetItem, targetItem, base.targetItem, map.targetSpec);
+              continue;
             }
           }
           // Push the rules onto our list, but clone them first (just for safety)

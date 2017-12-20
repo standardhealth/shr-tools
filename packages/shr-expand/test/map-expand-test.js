@@ -272,7 +272,7 @@ describe('#expandMap()', () => {
     );
   });
 
-  it('should report a warning when a based on class has a different target than the mapping class, and should take on its mappings', () => {
+  it('should allow a based on class to have a different target than the mapping class, as long as that target is a super-type of the mapping class\'s target', () => {
     const a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1))
       .withField(new models.IdentifiableValue(id('shr.test.b', 'B')).withMinMax(1, 1));
@@ -287,13 +287,12 @@ describe('#expandMap()', () => {
       .withFieldMappingRule([sid('D')], 'http://test.org/d');
     add(a, a2, ma, ma2);
 
-    doExpand();
+    // make a dummy expander to confirm that target a2 is based on target a
+    //const isTargetBasedOn = (target, baseTarget) => target === 'a2' && baseTarget === 'a';
+    const isTargetBasedOn = (target, baseTarget) => true;
+    doExpand({ TARGET: 'TEST', isTargetBasedOn });
 
-    expect(err.errors()).to.have.length(1);
-    expect(err.errors()[0].level).to.equal(40); // WARN
-    expect(err.errors()[0].shrId).to.equal('shr.test.A2');
-    expect(err.errors()[0].target).to.equal('a2');
-    expect(err.errors()[0].msg).to.contain('shr.test.A').and.to.contain('a');
+    expect(err.errors()).to.have.length(0);
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -303,6 +302,39 @@ describe('#expandMap()', () => {
     expect(eMa2).to.eql(
       new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a2')
         .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
+        .withFieldMappingRule([pid('string')], 'str')
+        .withFieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d')
+    );
+  });
+
+  it('should not inherit mappings when a based on class has a different target than the mapping class, and that target is not a super-type of the mapping class\'s target', () => {
+    const a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1))
+      .withField(new models.IdentifiableValue(id('shr.test.b', 'B')).withMinMax(1, 1));
+    const a2 = new models.DataElement(id('shr.test', 'A2'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(new models.IdentifiableValue(id('shr.test.c', 'C')).withMinMax(1, 1))
+      .withField(new models.IdentifiableValue(id('shr.test.d', 'D')).withMinMax(1, 1));
+    const ma = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
+      .withFieldMappingRule([sid('B')], 'b');
+    const ma2 = new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a2')
+      .withFieldMappingRule([sid('string')], 'str')
+      .withFieldMappingRule([sid('D')], 'http://test.org/d');
+    add(a, a2, ma, ma2);
+
+    // make a dummy expander to deny any relationship between the targets
+    const isTargetBasedOn = (target, baseTarget) => false;
+    doExpand({ TARGET: 'TEST', isTargetBasedOn });
+
+    expect(err.errors()).to.have.length(0);
+    const eMa = findExpanded('TEST', 'shr.test', 'A');
+    expect(eMa).to.eql(
+      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
+        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
+    );
+    const eMa2 = findExpanded('TEST', 'shr.test', 'A2');
+    expect(eMa2).to.eql(
+      new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a2')
         .withFieldMappingRule([pid('string')], 'str')
         .withFieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d')
     );
@@ -336,8 +368,8 @@ function add(...things) {
 }
 
 // Expands the current specs and stores results in _result
-function doExpand() {
-  _result = expand(_specs);
+function doExpand(...exporters) {
+  _result = expand(_specs, ...exporters);
 }
 
 function findExpanded(targetSpec, namespace, name) {
