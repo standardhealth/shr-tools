@@ -1,29 +1,28 @@
 const Constraints = require('./constraints');
 
-function cardToString(card) {
-  let min = 0;
-  let max = '*';
-  if (card) {
-    if ('min' in card)
-      min = card.min;
-    if ('max' in card)
-      max = card.max
-  }
-  return `${min}..${max}`
-}
-
+/*  
+ *  Elements class manages all the data elements in a map based on fqn.
+ *  The class has functions for accessing elements, adding elements,
+ *  and updating elements for the ejs templates
+ */
 class Elements {
   constructor() {
     this.elements = {};
   }
+
+  // Get the element that corresponds to the fqn
   get(fqn) {
     return this.elements[fqn];
   }
+
+  // Add a new element, add fields for ejs templates
   add(element) {
     element.children = [];
     element.overridden = [];
     this.elements[element.fqn] = element;
   }
+
+  // Returns a list of all the elements sorted by name
   list() {
     let oList = [];
     Object.keys(this.elements).forEach((element) => {
@@ -32,7 +31,11 @@ class Elements {
     oList.sort((a, b) => { return a.name.localeCompare(b.name) });
     return oList;
   }
+
+  // If element is a child, adds itself to parent's children array
   updateBasedOn(element) {
+    if (!('basedOn' in element)) return;
+
     element.basedOn.forEach((fqn) => {
       let parent = this.get(fqn);
       if (parent === undefined) return;
@@ -44,6 +47,7 @@ class Elements {
     });
   }
 
+  // Adds information to value object to be parsed for constraints
   valueConstraints(value, title) {
     if (value.fqn in this.elements) {
       const valueElement = this.get(value.fqn);
@@ -59,6 +63,8 @@ class Elements {
     return value;
   }
 
+  // Checks whether value is choice or not, iterates over options
+  // treating each option as an individual value
   updateValue(element) {
     element.pValue = [];
     let value = element.value;
@@ -75,6 +81,8 @@ class Elements {
     }
   }
 
+  // Adds information to hierarchy list
+  // Used for ejs templates display and hyperlink
   updateHierarchy(element) {
     let flatHierarchy = [];
     if ('hierarchy' in element) {
@@ -90,13 +98,16 @@ class Elements {
     element.hierarchy = flatHierarchy;
   }
 
-  // Set { 'IdentifiableValue', 'RefValue', 'TBD' }
+  // Iterates over fields adding constraints and checking for
+  // natively defined and overridden attributes
   updateFields(element) {
-    let hierarchyMap = {};
-    element.hierarchy.forEach((ancestor) => {
-      hierarchyMap[ancestor.fqn] = { 'fields': [], 'overridden': [] };
-    });
+    if (!('fields' in element)) return;
+    
+    // Build map of ancestors to track field origins
+    let hierarchyFields = {};
+    element.hierarchy.forEach((a) => { hierarchyFields[a.fqn] = []; });
 
+    // Iterate over fields, handle valueType TBD separately
     element.fields.forEach((field) => {
       let inherited = false;
       if (field.valueType === 'TBD') {
@@ -109,30 +120,26 @@ class Elements {
         field.path = fieldElement.namespacePath;
         if ('inheritance' in field) {
           inherited = true;
-          hierarchyMap[field.inheritance.from].fields.push(field);
-          if (field.inheritance.status === 'overridden')
-            hierarchyMap[field.inheritance.from].overridden.push(field);
+          hierarchyFields[field.inheritance.from].push(field);
         }
-      }
+      } 
       const cs = new Constraints(field, this.elements, inherited);
       field.pConstraints = cs.constraints;
       if ('inheritance' in field && field.inheritance.status === 'overridden')
         element.overridden = element.overridden.concat(cs.constraints);
     });
 
-    element.hierarchy.forEach((ancestor) => {
-      ancestor.overridden = hierarchyMap[ancestor.fqn].overridden;
-      ancestor.fields = hierarchyMap[ancestor.fqn].fields;
-    });
+    // Add fields to their origin ancestor
+    element.hierarchy.forEach((a) => { a.fields = hierarchyFields[a.fqn]; });
   }
+  // Updates elements to include extra data for ejs templates
+  // Only called after all elements have been added
   flatten() {
     this.list().forEach((element) => {
-      if ('basedOn' in element)
-        this.updateBasedOn(element);
+      this.updateBasedOn(element);
       this.updateValue(element);
       this.updateHierarchy(element);
-      if ('fields' in element)
-        this.updateFields(element);
+      this.updateFields(element);
     });
   }
 }

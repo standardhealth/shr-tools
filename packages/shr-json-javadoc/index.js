@@ -6,6 +6,7 @@ const ncp = require('ncp').ncp;
 const Namespaces = require('./components/namespaces');
 const Elements = require('./components/Elements');
 
+// Function to generate and write html from an ejs template
 renderEjsFile = (template, pkg, destination) => {
   ejs.renderFile(template, pkg, (error, htmlText) => {
     if (error) console.log(error);
@@ -13,11 +14,14 @@ renderEjsFile = (template, pkg, destination) => {
   });
 }
 
-// SHR Class to store the canonical json structure
+/*
+ *  SHR class holds the canonical json in memory.
+ *  Uses Namespaces and Elements classes to hold the data.
+ */
 class SHR {
   constructor(src, out) {
     this.outDirectory = out;
-    this.elements = new Elements;
+    this.elements = new Elements();
     this.namespaces = new Namespaces();
     this.children = {};
     this.readFiles(src);
@@ -32,18 +36,23 @@ class SHR {
       if (!fs.lstatSync(subPath).isDirectory()) return;
 
       fs.readdirSync(subPath).forEach((item) => {
+        // Ignores mappings and valuesets
         if (item === 'mappings' || item === 'valuesets') return;
+        // Ensures file is json
         if (item.split('.').pop() !== 'json') return;
 
         const filePath = path.join(subPath, item);
         const fileData = fs.readFileSync(filePath, 'utf-8');
         let content = JSON.parse(fileData);
+
+        // Checks if file is an element
         if ('fqn' in content) {
           this.elements.add(content);
           let element = this.elements.get(content.fqn);
           let namespace = this.namespaces.get(element.namespace);
           namespace.addElement(element);
           element.namespacePath = namespace.path;
+        // Checks if file is namespace descriptor
         } else {
           let namespace = this.namespaces.get(content.name);
           namespace.description = content.description;
