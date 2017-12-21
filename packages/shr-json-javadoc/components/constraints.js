@@ -27,13 +27,14 @@ class Constraints {
   }
 
   // Builds a new constraint row based on passed in parameter
-  newConstraint(name, value, path, lastMod, hrefValue, binding) {
+  newConstraint(name, value, path, lastMod, hrefValue, back, front) {
     let constraint = {
       name: name,
       source: this.field.name,
       value: value,
       href: hrefValue,
-      binding: binding,
+      back: back,
+      front: front,
       path: path
     }
     
@@ -78,11 +79,13 @@ class Constraints {
   // Handles the includes type constraint
   includesType(constraint, subpath) {
     constraint.forEach((item) => {
+      const element = this.elements[item.fqn];
       const card = cardToString(item.card);
       const name = 'Includes Type';
-      const value = `${card} ${item.fqn}`;
+      const value = element.name;
+      const href = `../${element.namespacePath}/${element.name}.html`
       const lastMod = item.lastModifiedBy;
-      const iConstraint = this.newConstraint(name, value, subpath, lastMod);
+      const iConstraint = this.newConstraint(name, value, subpath, lastMod, href, '', card);
       this.constraints.push(iConstraint);
     });
   }

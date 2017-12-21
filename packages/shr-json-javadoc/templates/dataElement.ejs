@@ -46,7 +46,11 @@ if (location.href.indexOf('is-external=true') == -1) {
   <!-- ======== START OF CLASS DATA ======== -->
   <div class="header">
     <div class="subTitle"><%= element.namespace %></div>
-    <h2 title="Element <%= element.name %>" class="title">Element <%= element.name %></h2>
+    <% if (element.isEntry) { %>
+      <h2 title="Entry Element <%= element.name %>" class="title">Entry Element <%= element.name %></h2>
+    <% } else { %>
+      <h2 title="Element <%= element.name %>" class="title">Element <%= element.name %></h2>
+    <% } %>
   </div>
   <div class="contentContainer">
     <div class="description">

@@ -30,8 +30,9 @@
       <td class="colLast">
         <% if (constraint.href) { -%>
           <div class="block">
+            <%= constraint.front %>
             <a href="<%= constraint.href %>"><%= constraint.value %></a>
-            <%= constraint.binding %>
+            <%= constraint.back %>
           </div>
         <% } else { -%>
           <div class="block"><%= constraint.value %></div>
