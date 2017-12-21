@@ -11,7 +11,7 @@ Before getting started on any development, one will need to have the following i
 From the command line, execute the following command in the directory where you want the spec_json2html directory to be put:
 
 ```
-git clone https://github.com/standardhealth/shr-json-javadoc.git
+$ git clone https://github.com/standardhealth/shr-json-javadoc.git
 ```
 
 ## Setting Up the Environment
@@ -33,9 +33,11 @@ To customize the output and source directories, use flags
 $ node index.js -s ../canonicaljson -o ./javadocs
 ```
 
-To open the site, open `index.html` in your browser.
+To open the site, open `index.html`, from the output directory, in your browser.
 
-###[The MITRE Corporation](https://www.mitre.org/)
+## About the Team Behind The Standard Health Record
+
+### [The MITRE Corporation](https://www.mitre.org/)
 
 The MITRE Corporation is a not-for-profit organization working in the public interest that operates federally funded research and development centers to provide innovative solutions to national problems.
 
