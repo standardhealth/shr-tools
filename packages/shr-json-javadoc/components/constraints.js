@@ -30,7 +30,6 @@ class Constraints {
   newConstraint(name, value, path, lastMod, hrefValue, back, front) {
     let constraint = {
       name: name,
-      source: this.field.name,
       value: value,
       href: hrefValue,
       back: back,
@@ -39,9 +38,10 @@ class Constraints {
     }
     
     // If source is an element, add hyperlink
-    const sElement = this.elements[this.field.fqn];
-    if (sElement) {
-      const sourceHref = `../${sElement.namespacePath}/${sElement.name}.html`;
+    if (this.inherited) {
+      const element = this.elements[this.field.inheritance.from];
+      const sourceHref = `../${element.namespacePath}/${element.name}.html`;
+      constraint.source = element.name;
       constraint.sourceHref = sourceHref;
     }
 

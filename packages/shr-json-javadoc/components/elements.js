@@ -57,7 +57,7 @@ class Elements {
       value.name = value.fqn;
     }
     value.title = title;
-    value.description = 'See Documentation';
+    value.description = '<nothing>';
     const cs = new Constraints(value, this.elements);
     value.pConstraints = cs.constraints;
     return value;
