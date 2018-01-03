@@ -577,8 +577,12 @@ class Expander {
       // Remove the previous type constraint since this one supercedes it
       constraints = constraints.filter(cst => cst !== previous);
     }
-    constraints.push(constraint);
 
+    // As a code constraint is a fixed value, we no longer need to retain value set constraints
+    const vsConstraints = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).valueSet.constraints;
+    vsConstraints.forEach(prev => constraints = constraints.filter(cst => cst !== prev))
+    
+    constraints.push(constraint);
     return constraints;
   }
 
@@ -675,6 +679,11 @@ class Expander {
       // Remove the previous type constraint since this one supercedes it
       constraints = constraints.filter(cst => cst !== previous);
     }
+
+    // As a boolean constraint is a fixed value, we no longer need to retain value set constraints
+    const vsConstraints = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).valueSet.constraints;
+    vsConstraints.forEach(prev => constraints = constraints.filter(cst => cst !== prev))
+
     constraints.push(constraint);
 
     return constraints;

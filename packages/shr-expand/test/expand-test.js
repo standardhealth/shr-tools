@@ -1667,7 +1667,6 @@ describe('#expand()', () => {
     expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
     expect(eSubA.value).to.eql(
       new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1)
-        .withConstraint(new models.ValueSetConstraint('http://foo.org/valueset'))
         .withConstraint(new models.CodeConstraint(new models.Concept('http://foo.org/codes', 'bar')))
         .withInheritance(models.OVERRIDDEN)
     );
