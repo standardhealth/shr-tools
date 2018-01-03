@@ -231,8 +231,12 @@ class Expander {
   mergeValue(element, oldValue, newValue) {
     let mergedValue = oldValue.clone();
 
-    // Check that the class types match (except when new one is IncompleteValue or old one is a choice).  An error abandons the merge.
-    if (!(newValue instanceof models.IncompleteValue) && !(oldValue instanceof models.ChoiceValue) && newValue.constructor.name != oldValue.constructor.name) {
+    if (typeof newValue === 'undefined') {
+      return mergedValue;
+    }
+
+    // Check that the class types match (except when new one is IncompleteValue or either one is a choice).  An error abandons the merge.
+    if (!(newValue instanceof models.IncompleteValue) && !(oldValue instanceof models.ChoiceValue) && !(newValue instanceof models.ChoiceValue) && newValue.constructor.name != oldValue.constructor.name) {
       logger.error('Cannot override %s with %s. ERROR_CODE:12005', oldValue.toString(), newValue.toString());
       return mergedValue;
     }
@@ -243,20 +247,45 @@ class Expander {
       if (!newValue.identifier.isValueKeyWord) {
         if (oldValue instanceof models.ChoiceValue) {
           // The newValue must be one of the choices
-          const match = this.findMatchingOption(oldValue, newValue);
+          const match = this.findMatchingOption(element, oldValue, newValue);
           if (!match) {
             logger.error('Cannot override %s with %s since it is not one of the options. ERROR_CODE:12006', oldValue.toString(), newValue.toString());
             return mergedValue;
           }
-          mergedValue = match.clone().withCard(oldValue.card.clone()); // Take on the choice's cardinality
+          mergedValue = match;
         } else if (!newValue.identifier.equals(oldValue.identifier) && !newValue.identifier.equals(oldValue.effectiveIdentifier)) {
-          logger.error('Cannot override %s with %s. ERROR_CODE:12007', oldValue.toString(), newValue.toString());
-          return mergedValue;
+          if (this.checkHasBaseType(newValue.identifier, mergedValue.effectiveIdentifier)) {
+            // This is a case where the new value is a subtype of the old value.  Convert this to a type constraint.
+            mergedValue.addConstraint(new models.TypeConstraint(newValue.identifier, [], false));
+          } else {
+            logger.error('Cannot override %s with %s. ERROR_CODE:12007', oldValue.toString(), newValue.toString());
+            return mergedValue;
+          }
         }
       }
     } else if (newValue instanceof models.ChoiceValue) {
-      logger.error('Cannot override %s with %s since overriding ChoiceValue is not supported. ERROR_CODE:12008', oldValue.toString(), newValue.toString());
-      return mergedValue;
+      let oldChoiceValue = oldValue.clone();
+      if (oldChoiceValue instanceof models.IdentifiableValue) {
+        // To simplify the code, we just turn the non-choice to a choice of 1 and proceed
+        oldChoiceValue = new models.ChoiceValue().withCard(oldChoiceValue.card).withOption(oldChoiceValue.withCard(undefined));
+      } else if (!(oldValue instanceof models.ChoiceValue)) {
+        logger.error('Cannot override %s with %s since overriding a simple value with a choice value is not supported. ERROR_CODE:12008', oldValue.toString(), newValue.toString());
+        return mergedValue;
+      }
+      // The newValue choice must contain options from the oldChoiceValue
+      const properSubset = newValue.options.every(v => this.findMatchingOption(element, oldChoiceValue, v));
+      if (!properSubset) {
+        logger.error('Cannot override %s with %s since the new options aren\'t compatible types with the original. ERROR_CODE:12036', oldValue.toString(), newValue.toString());
+        return mergedValue;
+      }
+      // A proper merge will require cloning the original object, swapping options w/ merged options, and setting card
+      mergedValue = newValue.clone();
+      for (let i=0; i < mergedValue.options.length; i++) {
+        mergedValue.options[i] = this.findMatchingOption(element, oldChoiceValue, mergedValue.options[i], false);
+      }
+      if (!mergedValue.effectiveCard) {
+        mergedValue.card = oldChoiceValue.effectiveCard;
+      }
     } else if (newValue instanceof models.TBD) {
       mergedValue.text = newValue.text;
     }
@@ -272,15 +301,32 @@ class Expander {
     return mergedValue;
   }
 
-  findMatchingOption(choice, value) {
+  findMatchingOption(element, choice, value, setCard=true) {
     for (const option of choice.options) {
       if (option instanceof models.ChoiceValue) {
-        const result = this.findMatchingOption(option, value);
+        const choiceOption = option.clone();
+        if (setCard) {
+          choiceOption.card = choice.effectiveCard;
+        }
+        const result = this.findMatchingOption(element, choiceOption, value, setCard);
         if (result) {
           return result;
         }
-      } else if (option instanceof models.IdentifiableValue && option.constructor.name == value.constructor.name && option.identifier.equals(value.identifier)) {
-        return option;
+      } else if (option instanceof models.IdentifiableValue && option.constructor.name == value.constructor.name) {
+        const oldOption = option.clone();
+        if (!option.identifier.equals(value.effectiveIdentifier)) {
+          if (this.checkHasBaseType(value.effectiveIdentifier, oldOption.effectiveIdentifier)) {
+            // This is a case where the new value is a subtype of the old value.  Convert this to a type constraint.
+            oldOption.addConstraint(new models.TypeConstraint(value.effectiveIdentifier, [], false));
+          } else {
+            // Wasn't a compatible identifier, so just keep on going
+            continue;
+          }
+        }
+        if (setCard) {
+          oldOption.card = choice.effectiveCard;
+        }
+        return this.mergeValue(element, oldOption, value);
       }
     }
   }
