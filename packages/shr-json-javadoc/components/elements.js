@@ -57,7 +57,7 @@ class Elements {
       value.name = value.fqn;
     }
     value.title = title;
-    value.description = '<nothing>';
+    value.description = '';
     const cs = new Constraints(value, this.elements);
     value.pConstraints = cs.constraints;
     return value;
@@ -71,8 +71,8 @@ class Elements {
     if (value === undefined) {
       return;
     } else if (value.valueType === 'ChoiceValue') {
-      value.options.forEach((option) => {
-        option = this.valueConstraints(option, 'Value Choice');
+      value.options.forEach((option, index) => {
+        option = this.valueConstraints(option, `Value (Choice ${index+1})`);
         element.pValue.push(option)
       });
     } else {

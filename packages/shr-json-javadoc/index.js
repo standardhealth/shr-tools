@@ -148,7 +148,7 @@ class SHR {
 
 // Read in command line arguments and set source and output directories
 let src = 'canonicaljson'
-let out = 'shr-javadoc'
+let out = 'reference-model'
 let argv = minimist(process.argv.slice(2));
 if ('s' in argv) src = argv.s;
 if ('o' in argv) out = argv.o;

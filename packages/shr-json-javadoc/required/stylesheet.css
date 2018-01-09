@@ -408,7 +408,7 @@ ul.blockList ul.blockList li.blockList table {
     padding:3px 3px 3px 7px;
 }
 th.colFirst, th.colLast, th.colMiddle, th.colOne, .constantValuesContainer th {
-    background:#dee3e9;
+    background:#fac29c;
     border-top:1px solid #9eadc0;
     border-bottom:1px solid #9eadc0;
     text-align:left;
@@ -422,6 +422,7 @@ td.colFirst, th.colFirst {
     /* white-space:nowrap; */
 }
 td.colLast, th.colLast {
+    width:40%;
     border-right:1px solid #9eadc0;
 }
 td.colOne, th.colOne {

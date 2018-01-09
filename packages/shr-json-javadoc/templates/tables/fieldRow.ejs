@@ -4,11 +4,13 @@
   <tr class="altColor">
 <% } %>
   <td class="colFirst">
+    <div class="block">
     <% if ('title' in field) { %>
       <code><strong><%= field.title %></strong></code>
     <% } else { %>
       <code><strong><a href="../<%= field.path %>/<%= field.name %>.html"><%= field.name %></a></strong></code>
     <% } %>
+    </div>
     <div class="block"><%= field.description %></div>
   </td>
   <td class="colMiddle">

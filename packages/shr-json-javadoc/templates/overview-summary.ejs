@@ -24,6 +24,7 @@ if (location.href.indexOf('is-external=true') == -1) {
   <a name="navbar_top_firstrow"></a>
   <ul class="navList" title="Navigation">
     <li class="navBarCell1Rev">Overview</li>
+    <li class="navBarCell1Rev"><a href="/#sitehomepage" target="_top">Back to SHR Website</a></li>
   </ul>
   <div class="aboutLanguage">
     <em><strong>SHR&nbsp;Reference&nbsp;Model</strong></em>
@@ -63,14 +64,17 @@ if (location.href.indexOf('is-external=true') == -1) {
 </div>
 <div class="contentContainer">
   <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Elements and Definitions">
-    <caption><span>Elements</span><span class="tabEnd">&nbsp;</span></caption>
     <tr>
       <th class="colFirst" scope="col">Element</th>
       <th class="colLast" scope="col">Description</th>
     </tr>
     <tbody>
-<% elements.forEach((element) => { -%>
-      <tr class="altColor">
+<% elements.forEach((element, index) => { -%>
+      <% if (index % 2 == -1) { %>
+        <tr class="rowColor">
+      <% } else { %>
+        <tr class="altColor">
+      <% } %>
         <td class="colFirst">
           <a href="<%= element.namespacePath %>/<%= element.name %>.html"><%= element.name %></a>
         </td>
