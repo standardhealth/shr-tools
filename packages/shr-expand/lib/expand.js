@@ -626,8 +626,8 @@ class Expander {
 
     // As a code constraint is a fixed value, we no longer need to retain value set constraints
     const vsConstraints = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).valueSet.constraints;
-    vsConstraints.forEach(prev => constraints = constraints.filter(cst => cst !== prev))
-    
+    vsConstraints.forEach(prev => constraints = constraints.filter(cst => cst !== prev));
+
     constraints.push(constraint);
     return constraints;
   }
@@ -728,7 +728,7 @@ class Expander {
 
     // As a boolean constraint is a fixed value, we no longer need to retain value set constraints
     const vsConstraints = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).valueSet.constraints;
-    vsConstraints.forEach(prev => constraints = constraints.filter(cst => cst !== prev))
+    vsConstraints.forEach(prev => constraints = constraints.filter(cst => cst !== prev));
 
     constraints.push(constraint);
 
@@ -845,76 +845,23 @@ class Expander {
     logger = rootLogger.child({ shrId: identifier.fqn, targetSpec: target });
     logger.debug('Start expanding mapping');
     try {
-      let map = this._unexpanded.maps.findByTargetAndIdentifier(target, identifier);
-
       const de = this._expanded.dataElements.findByIdentifier(identifier);
       if (typeof de === 'undefined') {
         logger.error('Cannot resolve element definition for %s. ERROR_CODE:12029', identifier.fqn);
         return;
       }
 
-      // If this doesn't have its own mapping, use a based on mapping
+      const map = this.getMapWithInheritedRules(target, identifier);
       if (typeof map === 'undefined') {
-        for (const baseID of de.basedOn) {
-          if (baseID instanceof models.TBD) {
-            continue;
-          }
-          const baseMap = this.lookupMapping(target, baseID);
-          if (typeof baseMap !== 'undefined') {
-            map = new models.ElementMapping(identifier.clone(), target, baseMap.targetItem);
-            for (const rule of baseMap.rules) {
-              map.rules.push(rule.clone());
-            }
-            this._expanded.maps.add(map);
-            return map;
-          }
-        }
-        // Didn't have its own mapping, nor did its based ons have any mappings, so just return
         return;
       }
-
-      // It had its own mapping, so continue with rest of logic to expand it
-      let targetItem = map.targetItem;
       // Put the target item into the logger for all future logging statements
-      logger.fields.target = targetItem;
-
-      // Need to start by building up the rules from the mappings for based on elements
-      const allRules = [];
-      for (const baseID of de.basedOn) {
-        if (baseID instanceof models.TBD) {
-          continue;
-        }
-        const base = this.lookupMapping(map.targetSpec, baseID);
-        if (typeof base !== 'undefined') {
-          if (typeof targetItem === 'undefined' && typeof base.targetItem !== 'undefined') {
-            targetItem = base.targetItem;
-            // Also adjust the target item in the logger
-            logger.fields.target = targetItem;
-          } else if (targetItem != base.targetItem) {
-            const ok = this._exporterMap.has(map.targetSpec) && this._exporterMap.get(map.targetSpec).isTargetBasedOn(targetItem, base.targetItem);
-            if (!ok) {
-              logger.debug('Skipping mismatched targets: %s maps to %s, but based on class (%s) maps to %s, and %s is not based on %s in %s. ERROR_CODE:02001',
-                identifier.fqn, targetItem, base.identifier.fqn, base.targetItem, targetItem, base.targetItem, map.targetSpec);
-              continue;
-            }
-          }
-          // Push the rules onto our list, but clone them first (just for safety)
-          allRules.push(...(base.rules.map(r => r.clone())));
-        }
-      }
-
-      // If we still don't have a target item, bail
-      if (typeof targetItem === 'undefined') {
-        logger.error('Cannot determine target item. ERROR_CODE:12030');
-        return;
-      }
+      logger.fields.target = map.targetItem;
 
       // Go through this mappings rules, resolve the identifiers, and add them to the big rules list
       // First clone the rules into a new list because we will possibly insert new rules into it
-      const mappingRules = [...map.rules];
-      for (let i=0; i < mappingRules.length; i++) {
-        const rule = mappingRules[i].clone();
-        let valid = true;
+      for (let i=0; i < map.rules.length; i++) {
+        const rule = map.rules[i];
         if (rule instanceof models.FieldMappingRule) {
           let currentDE = de;
           for (let j=0; j < rule.sourcePath.length; j++) {
@@ -930,7 +877,7 @@ class Expander {
                 // Create a clone of the rule with the new sourcepath in it
                 const newRule = new models.FieldMappingRule(newSourcePath, rule.target);
                 // Insert it into the mappingRules for processing later
-                mappingRules.splice(i+k, 0, newRule);
+                map.rules.splice(i+k, 0, newRule);
               }
               // Now reassign match to the first item in the choice options that matched
               match = match[0];
@@ -941,7 +888,9 @@ class Expander {
                 currentDE = this._expanded.dataElements.findByIdentifier(match);
                 if (typeof de === 'undefined') {
                   logger.error('Cannot resolve data element definition from path: %s. ERROR_CODE:12031', this.highlightPartInPath(rule.sourcePath, j));
-                  valid = false;
+                  // Remove the invalid rule from the map and decrement index so we don't skip a rule in the loop
+                  map.rules.splice(i, 1);
+                  i = i-1;
                   break;
                 }
               }
@@ -949,20 +898,19 @@ class Expander {
               if (rule.sourcePath[j].namespace || rule.sourcePath[j].name != 'Value') {
                 logger.error('Cannot resolve data element definition from path: %s. ERROR_CODE:12032', this.highlightPartInPath(rule.sourcePath, j));
               }
-              valid = false;
+              // Remove the invalid rule from the map and decrement index so we don't skip a rule in the loop
+              map.rules.splice(i, 1);
+              i = i-1;
               break;
             }
           }
         }
-        if (valid) {
-          allRules.push(rule);
-        }
       }
 
-      // Now merge the rules
-      const mergedRules = [];
-      for (const rule of allRules) {
-        const i = mergedRules.findIndex(item => {
+      // Now merge the rules to override earlier rules when later rules apply to the same source and/or target
+      for (let i=0; i < map.rules.length; i++) {
+        const rule = map.rules[i];
+        const j = map.rules.findIndex(item => {
           if (rule instanceof models.CardinalityMappingRule && item instanceof models.CardinalityMappingRule) {
             return rule.target == item.target;
           } else if (rule instanceof models.FixedValueMappingRule && item instanceof models.FixedValueMappingRule) {
@@ -970,22 +918,79 @@ class Expander {
           }
           return rule.sourcePath && item.sourcePath && this.equalSourcePaths(rule.sourcePath, item.sourcePath);
         });
-        if (i >= 0) {
-          mergedRules[i] = rule;
-        } else {
-          mergedRules.push(rule);
+        if (j >= 0 && j < i) {
+          map.rules[j] = rule;
+          map.rules.splice(i, 1);
+          i = i-1;
         }
       }
 
-      const merged = map.clone();
-      merged.targetItem = targetItem;
-      merged.rules = mergedRules;
-      this._expanded.maps.add(merged);
-      return merged;
+      this._expanded.maps.add(map);
+      return map;
     } finally {
       logger.debug('Done expanding mapping');
       logger = lastLogger;
     }
+  }
+
+  getMapWithInheritedRules(target, identifier) {
+    // First, collect all of the maps that will need to be merged together
+    const maps = this.collectMaps(target, identifier);
+    if (maps.length === 0) {
+      return;
+    }
+    // The list of maps is in order of priority, so create a new map with the targetItem based on the first returned map
+    const fullMap = new models.ElementMapping(identifier, target, maps[0].targetItem);
+    // Since rules are applied in order, and later rules override earlier rules, we want rules from the higher priority
+    // maps applied last.  For this reason, we iterate the collected maps backwards (so priority maps go last).  We
+    // also keep track of already seen rules in order to reduce duplicates.
+    const seen = new Map();
+    for (let i = maps.length-1; i >= 0; i--) {
+      const map = maps[i];
+      for (const rule of map.rules) {
+        const key = rule.toString();
+        if (!seen.has(key)) {
+          fullMap.addRule(rule.clone());
+          seen.set(key, true);
+        }
+      }
+    }
+    return fullMap;
+  }
+
+  collectMaps(target, identifier) {
+    const maps = [];
+    let map = this._unexpanded.maps.findByTargetAndIdentifier(target, identifier);
+    if (typeof map !== 'undefined') {
+      map = map.clone();
+      maps.push(map);
+    }
+    const de = this._expanded.dataElements.findByIdentifier(identifier);
+    if (typeof de !== 'undefined') {
+      for (const basedOn of de.basedOn) {
+        const basedOnMaps = this.collectMaps(target, basedOn);
+        if (basedOnMaps.length > 0) {
+          const basedOnMap = basedOnMaps[0];
+          if (typeof map === 'undefined') {
+            map = basedOnMap;
+          } else if (typeof map.targetItem === 'undefined') {
+            map.targetItem = basedOnMap.targetItem;
+          } else if (map.targetItem !== basedOnMap.targetItem) {
+            if (! this._exporterMap.get(target).isTargetBasedOn(map.targetItem, basedOnMap.targetItem)) {
+              logger.debug('Skipping mismatched targets: %s maps to %s, but based on class (%s) maps to %s, and %s is not based on %s in %s. ERROR_CODE:02001',
+                map.identifier.fqn, map.targetItem, basedOnMap.identifier.fqn, basedOnMap.targetItem, map.targetItem, basedOnMap.targetItem, map.targetSpec);
+              continue;
+            }
+          }
+          maps.push(...basedOnMaps);
+        }
+      }
+    }
+    if (typeof map !== 'undefined' && typeof map.targetItem === 'undefined') {
+      logger.error('Cannot determine target item of mapping for %s', map.identifier.fqn);
+      return [];
+    }
+    return maps;
   }
 
   findMatchInDataElement(de, idToMatch) {

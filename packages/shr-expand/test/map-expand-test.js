@@ -223,6 +223,40 @@ describe('#expandMap()', () => {
     );
   });
 
+  it('should override mappings from based on elements when new mapping is on type constraint', () => {
+    const a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1))
+      .withField(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(1, 1));
+    const a2 = new models.DataElement(id('shr.test', 'A2'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(new models.IdentifiableValue(id('shr.test', 'B'))
+        .withConstraint(new models.TypeConstraint(id('shr.test', 'B2'))));
+    const b = new models.DataElement(id('shr.test', 'B'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
+    const b2 = new models.DataElement(id('shr.test', 'B2'), true)
+      .withBasedOn(id('shr.test', 'B'))
+      .withField(new models.IdentifiableValue(id('shr.test', 'C')).withMinMax(1, 1))
+    const ma = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
+      .withFieldMappingRule([sid('B')], 'b');
+    const ma2 = new models.ElementMapping(id('shr.test', 'A2'), 'TEST')
+      .withFieldMappingRule([sid('B2')], 'b2');
+    add(a, a2, b, b2, ma, ma2);
+
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const eMa = findExpanded('TEST', 'shr.test', 'A');
+    expect(eMa).to.eql(
+      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
+        .withFieldMappingRule([id('shr.test', 'B')], 'b')
+    );
+    const eMa2 = findExpanded('TEST', 'shr.test', 'A2');
+    expect(eMa2).to.eql(
+      new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a')
+        .withFieldMappingRule([id('shr.test', 'B2')], 'b2')
+    );
+  });
+
   it('should report an error when there is an invalid path element and remove that rule', () => {
     const a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1))
