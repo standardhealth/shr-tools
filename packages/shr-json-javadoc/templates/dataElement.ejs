@@ -80,15 +80,30 @@ if (location.href.indexOf('is-external=true') == -1) {
       </dl>
       <dl>
       <% if (element.children.length) { -%>
-        <dt>Descendants:</dt>
+        <dt>Direct Descendants:</dt>
         <dd>
           <ul class="class_list">
-            
-              <% element.children.forEach(function(child, i) { -%>
-                <li>
-                  <a href="../<%= child.path %>/<%= child.name %>.html"><%= child.name -%></a><% if (i < element.children.length - 1) { %>,&nbsp;<% } -%>
-                </li>
-              <% }) -%>
+            <% element.children.forEach(function(child, i) { -%>
+              <li>
+                <a href="../<%= child.path %>/<%= child.name %>.html"><%= child.name -%></a><% if (i < element.children.length - 1) { %>,&nbsp;<% } -%>
+              </li>
+            <% }) -%>
+          </ul>
+        </dd>
+      <% } %>
+      </dl>
+      <dl>
+      <% if (element.usedBy.size) { -%>
+        <dt>Used By:</dt>
+        <dd>
+          <ul class="class_list">
+            <% var usedBy = Array.from(element.usedBy);
+               usedBy.sort((a, b) => { return a.name.localeCompare(b.name) });
+               usedBy.forEach(function(child, i) { -%>
+              <li>
+                <a href="../<%= child.path %>/<%= child.name %>.html"><%= child.name -%></a><% if (i < usedBy.length - 1) { %>,&nbsp;<% } -%>
+              </li>
+            <% }) -%>
           </ul>
         </dd>
       <% } %>

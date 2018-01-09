@@ -19,6 +19,7 @@ class Elements {
   add(element) {
     element.children = [];
     element.overridden = [];
+    element.usedBy = new Set();
     this.elements[element.fqn] = element;
   }
 
@@ -63,6 +64,18 @@ class Elements {
     return value;
   }
 
+  // Adds main element to sub element's usedBy set
+  addToUsedBy(fqn, element) {
+    if (fqn in this.elements) {
+      let subElement = this.get(fqn);
+      subElement.usedBy.add({
+        name: element.name,
+        fqn: element.fqn,
+        path: element.namespacePath
+      });
+    }
+  }
+
   // Checks whether value is choice or not, iterates over options
   // treating each option as an individual value
   updateValue(element) {
@@ -72,10 +85,12 @@ class Elements {
       return;
     } else if (value.valueType === 'ChoiceValue') {
       value.options.forEach((option, index) => {
+        this.addToUsedBy(option.fqn, element);
         option = this.valueConstraints(option, `Value (Choice ${index+1})`);
         element.pValue.push(option)
       });
     } else {
+      this.addToUsedBy(value.fqn, element);
       value = this.valueConstraints(element.value, 'Value');
       element.pValue.push(value);
     }
@@ -122,7 +137,8 @@ class Elements {
           inherited = true;
           hierarchyFields[field.inheritance.from].push(field);
         }
-      } 
+      }
+      this.addToUsedBy(field.fqn, element);
       const cs = new Constraints(field, this.elements, inherited);
       field.pConstraints = cs.constraints;
       if ('inheritance' in field && field.inheritance.status === 'overridden')
