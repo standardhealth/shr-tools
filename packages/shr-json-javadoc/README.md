@@ -30,7 +30,7 @@ $ node index.js
 
 To customize the output and source directories, use flags
 ```
-$ node index.js -s ../canonicaljson -o ./javadocs
+$ node index.js -s ../path/to/canonicaljson -o ./reference-model
 ```
 
 To open the site, open `index.html`, from the output directory, in your browser.
