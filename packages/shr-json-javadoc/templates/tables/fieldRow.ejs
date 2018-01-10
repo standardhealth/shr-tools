@@ -23,7 +23,11 @@
       <% if (constraint.href) { -%>
         <div class="block">
           <%= constraint.front %>
-          <a href="<%= constraint.href %>" target="_top"><%= constraint.value %></a>
+          <% if (constraint.targetTop) { -%>
+            <a href="<%= constraint.href %>" target="_top"><%= constraint.value %></a>
+          <% } else { -%>
+            <a href="<%= constraint.href %>"><%= constraint.value %></a>
+          <% } -%>
           <%= constraint.back %>
         </div>
       <% } else { -%>

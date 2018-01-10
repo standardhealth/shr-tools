@@ -27,11 +27,16 @@ class Constraints {
   }
 
   // Builds a new constraint row based on passed in parameter
-  newConstraint(name, value, path, lastMod, hrefValue, back, front) {
+  newConstraint(name, value, path, lastMod, href, back, front) {
+    let targetTop = false;
+    if (href !== undefined) {
+      targetTop = href.includes('http');
+    }
     let constraint = {
       name: name,
       value: value,
-      href: hrefValue,
+      href: href,
+      targetTop: targetTop,
       back: back,
       front: front,
       path: path
@@ -95,7 +100,7 @@ class Constraints {
     constraint.forEach((item) => {
       const system = item.system ? item.system : '';
       const name = 'Includes Code';
-      const value = `${system}#${item.code}`;
+      const value = `${system} (code: ${item.code})`;
       const lastMod = item.lastModifiedBy;
       const iConstraint = this.newConstraint(name, value, subpath, lastMod);
       this.constraints.push(iConstraint);
@@ -152,7 +157,7 @@ class Constraints {
   fixedValue(constraint, subpath) {
     let value = "";
     if (constraint.type === 'code') {
-      value = `${constraint.value.system}#${constraint.value.code}`;
+      value = `${constraint.value.system} (code: ${constraint.value.code})`;
     } else if (constraint.type === 'boolean') {
       value = constraint.value.toString();
     }
