@@ -22,7 +22,7 @@ function exportSpecifications(specifications) {
   if (err.errors().length) {
     expect(err.errors()).to.deep.equal([]);
   }
-  const schemataDict = exportToJSONSchema(expSpecs, 'https://standardhealthrecord.org/test');
+  const schemataDict = exportToJSONSchema(expSpecs, 'https://standardhealthrecord.org/test', 'http://standardhealthrecord.org/spec');
   createValidator(schemataDict);
   return schemataDict;
 }

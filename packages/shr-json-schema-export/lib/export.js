@@ -7,8 +7,6 @@ const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValu
 
 const CODE = new PrimitiveIdentifier('code');
 
-const STANDARD_TYPE_URI = 'http://standardhealthrecord.org/spec/';
-
 var rootLogger = bunyan.createLogger({name: 'shr-json-schema-export'});
 var logger = rootLogger;
 function setLogger(bunyanLogger) {
@@ -20,21 +18,26 @@ function setLogger(bunyanLogger) {
  * Converts a group of specifications into JSON Schema.
  * @param {Specifications} expSpecifications - a fully expanded Specifications object.
  * @param {string} baseSchemaURL - the root URL for the schema identifier.
- * @param {string=} flat - if true then the generated schema will not be hierarchical. Defaults to false.
+ * @param {string} baseTypeURL - the root URL for the EntryType field.
+ * @param {boolean=} flat - if true then the generated schema will not be hierarchical. Defaults to false.
  * @return {Object.<string, Object>} A mapping of schema ids to JSON Schema definitions.
  */
-function exportToJSONSchema(expSpecifications, baseSchemaURL, flat = false) {
+function exportToJSONSchema(expSpecifications, baseSchemaURL, baseTypeURL, flat = false) {
   const namespaceResults = {};
+  const endOfTypeURL = baseTypeURL[baseTypeURL.length - 1];
+  if (endOfTypeURL !== '#' && endOfTypeURL !== '/') {
+    baseTypeURL += '/';
+  }
   for (const ns of expSpecifications.namespaces.all) {
     const lastLogger = logger;
     logger = logger.child({ shrId: ns.namespace});
     try {
       logger.debug('Exporting namespace.');
       if (flat) {
-        const { schemaId, schema } = flatNamespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL);
+        const { schemaId, schema } = flatNamespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL, baseTypeURL);
         namespaceResults[schemaId] = schema;
       } else {
-        const { schemaId, schema } = namespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL);
+        const { schemaId, schema } = namespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL, baseTypeURL);
         namespaceResults[schemaId] = schema;
       }
       logger.debug('Finished exporting namespace.');
@@ -51,9 +54,10 @@ function exportToJSONSchema(expSpecifications, baseSchemaURL, flat = false) {
  * @param {Namespace} ns - the namespace of the schema.
  * @param {DataElementSpecifications} dataElementsSpecs - the elements in the namespace.
  * @param {string} baseSchemaURL - the root URL for the schema identifier.
+ * @param {string} baseTypeURL - the root URL for the EntryType field.
  * @return {{schemaId: string, schema: Object}} The schema id and the JSON Schema definition.
  */
-function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
+function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
   const dataElements = dataElementsSpecs.byNamespace(ns.namespace);
   const schemaId = `${baseSchemaURL}/${namespaceToURLPathSegment(ns.namespace)}`;
   let schema = {
@@ -120,7 +124,7 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
       const tbdFieldDescriptions = [];
       if (def.value) {
         if (def.value.inheritance !== INHERITED) {
-          let { value, required, tbd } = convertDefinition(def.value, dataElementsSpecs, ns, baseSchemaURL);
+          let { value, required, tbd } = convertDefinition(def.value, dataElementsSpecs, ns, baseSchemaURL, baseTypeURL);
           if (required) {
             requiredProperties.push('Value');
           }
@@ -139,7 +143,7 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
           if (card && card.isZeroedOut) {
             continue;
           }
-          let {value, required, tbd} = convertDefinition(field, dataElementsSpecs, ns, baseSchemaURL);
+          let {value, required, tbd} = convertDefinition(field, dataElementsSpecs, ns, baseSchemaURL, baseTypeURL);
           if (tbd) {
             tbdFieldDescriptions.push(tbdValueToString(field));
             continue;
@@ -216,9 +220,10 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
  * @param {Namespace} ns - the namespace of the schema.
  * @param {DataElementSpecifications} dataElementsSpecs - the elements in the namespace.
  * @param {string} baseSchemaURL - the root URL for the schema identifier.
+ * @param {string} baseTypeURL - the root URL for the EntryType field.
  * @return {{schemaId: string, schema: Object}} The schema id and the JSON Schema definition.
  */
-function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
+function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
   const dataElements = dataElementsSpecs.byNamespace(ns.namespace);
   const schemaId = `${baseSchemaURL}/${namespaceToURLPathSegment(ns.namespace)}`;
   let schema = {
@@ -248,7 +253,7 @@ function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
 
     const tbdFieldDescriptions = [];
     if (def.value) {
-      let { value, required, tbd } = convertDefinition(def.value, dataElementsSpecs, ns, baseSchemaURL);
+      let { value, required, tbd } = convertDefinition(def.value, dataElementsSpecs, ns, baseSchemaURL, baseTypeURL);
       if (required) {
         requiredProperties.push('Value');
       }
@@ -266,7 +271,7 @@ function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL) {
         if (card && card.isZeroedOut) {
           continue;
         }
-        let {value, required, tbd} = convertDefinition(field, dataElementsSpecs, ns, baseSchemaURL);
+        let {value, required, tbd} = convertDefinition(field, dataElementsSpecs, ns, baseSchemaURL, baseTypeURL);
         if (tbd) {
           tbdFieldDescriptions.push(tbdValueToString(field));
           continue;
@@ -344,7 +349,7 @@ function isValidField(field) {
   return true;
 }
 
-function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, baseSchemaURL) {
+function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, baseSchemaURL, baseTypeURL) {
   let listValue = null;
   let value = {};
   const fullDef = valueDef.identifier ? dataElementsSpecs.findByIdentifier(valueDef.identifier) : null;
@@ -389,10 +394,10 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     }
     value.anyOf = [];
     if (refOptions.length) {
-      value.anyOf.push(makeShrRefObject(refOptions));
+      value.anyOf.push(makeShrRefObject(refOptions, baseTypeURL));
     }
     for (const option of normalOptions) {
-      const { value: childValue } = convertDefinition(option, dataElementsSpecs, enclosingNamespace, baseSchemaURL);
+      const { value: childValue } = convertDefinition(option, dataElementsSpecs, enclosingNamespace, baseSchemaURL, baseTypeURL);
       value.anyOf.push(childValue);
     }
     if (value.anyOf.length == 1) {
@@ -404,7 +409,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     }
   } else if (valueDef instanceof RefValue) {
     // TODO: What should the value of EntryType be? The schema URL may not be portable across data types.
-    makeShrRefObject([valueDef], value);
+    makeShrRefObject([valueDef], baseTypeURL, value);
   } else if (valueDef instanceof IdentifiableValue) {
     const id = valueDef.effectiveIdentifier;
     if (id.isPrimitive) {
@@ -524,9 +529,9 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               if (constraintInfo.constraintTarget instanceof RefValue) {
                 const refid = constraintInfo.constraint.isA;
                 if (isOrWasAList(constraintInfo.constraintTarget)) {
-                  currentAllOf.push({ items: { refType: [`${STANDARD_TYPE_URI}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]}});
+                  currentAllOf.push({ items: { refType: [`${baseTypeURL}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]}});
                 } else {
-                  currentAllOf.push({ refType: [`${STANDARD_TYPE_URI}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]});
+                  currentAllOf.push({ refType: [`${baseTypeURL}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]});
                 }
               } else if (constraintInfo.constraintTarget instanceof IdentifiableValue) {
                 let schemaConstraint = null;
@@ -620,7 +625,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               includesTypesArrayDef.maxItems = includesConstraints.max;
             }
             if (includesConstraints.refs.length) {
-              includesTypesArrayDef.items.anyOf.push(makeShrRefObject(includesConstraints.refs.map((ref) => ref.isA)));
+              includesTypesArrayDef.items.anyOf.push(makeShrRefObject(includesConstraints.refs.map((ref) => ref.isA), baseTypeURL));
               for (const ref of includesConstraints.refs) {
                 const includesType = {
                   items: `ref(${makeShrDefinitionURL(ref.isA, baseSchemaURL)})`,
@@ -635,7 +640,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
             for (const val of includesConstraints.types) {
               includesTypesArrayDef.items.anyOf.push({ $ref: makeRef(val.isA, enclosingNamespace, baseSchemaURL) });
               const includesType = {
-                items: `${STANDARD_TYPE_URI}${namespaceToURLPathSegment(val.isA.namespace)}/${val.isA.name}`,
+                items: `${baseTypeURL}${namespaceToURLPathSegment(val.isA.namespace)}/${val.isA.name}`,
                 minItems: val.card.min
               };
               if (!val.card.isMaxUnbounded) {
@@ -749,7 +754,7 @@ function makeRef(id, enclosingNamespace, baseSchemaURL) {
   }
 }
 
-function makeShrRefObject(refs, target = {}) {
+function makeShrRefObject(refs, baseTypeURL, target = {}) {
   target.type = 'object';
   target.properties = {
     ShrId: { type: 'string' },
@@ -757,7 +762,7 @@ function makeShrRefObject(refs, target = {}) {
     EntryType: { type: 'string' }
   };
   target.required = ['ShrId', 'EntryType', 'EntryId'];
-  target.refType = refs.map((ref) => `${STANDARD_TYPE_URI}${namespaceToURLPathSegment(ref.identifier.namespace)}/${ref.identifier.name}`);
+  target.refType = refs.map((ref) => `${baseTypeURL}${namespaceToURLPathSegment(ref.identifier.namespace)}/${ref.identifier.name}`);
   return target;
 }
 
