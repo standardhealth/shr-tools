@@ -523,7 +523,11 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
             if (constraintInfo.constraint instanceof TypeConstraint) {
               if (constraintInfo.constraintTarget instanceof RefValue) {
                 const refid = constraintInfo.constraint.isA;
-                currentAllOf.push({ refType: [`${STANDARD_TYPE_URI}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]});
+                if (isOrWasAList(constraintInfo.constraintTarget)) {
+                  currentAllOf.push({ items: { refType: [`${STANDARD_TYPE_URI}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]}});
+                } else {
+                  currentAllOf.push({ refType: [`${STANDARD_TYPE_URI}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]});
+                }
               } else {
                 if (constraintInfo.constraint.isA.isPrimitive) {
                   currentAllOf.push(makePrimitiveObject(constraintInfo.constraint.isA));
@@ -574,12 +578,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               currentAllOf.push({ enum: [constraintInfo.constraint.value]});
             } else if (constraintInfo.constraint instanceof CardConstraint) {
               // TODO: 0..0
-              let wasList = constraintInfo.constraintTarget.card.isList;
-              if (!wasList) {
-                const cardConstraints = constraintInfo.constraintTarget.constraintsFilter.own.card.constraints;
-                wasList = cardConstraints.some((oneCard) => oneCard.isList);
-              }
-              if (wasList) {
+              if (isOrWasAList(constraintInfo.constraintTarget)) {
                 const arrayDef = {
                   type: 'array',
                   minItems: constraintInfo.constraint.card.min,
@@ -1004,6 +1003,20 @@ function makeConceptEntry(concept) {
     }
     return ret;
   }
+}
+
+/**
+ * Determine if a value or one of its ancestors is or was a list.
+ *
+ * @param {Value} value - the value to test.
+ * @return {boolean} True if the value or any of its ancestors ever had a cardinality greater than 1.
+ */
+function isOrWasAList(value) {
+  if (value.card.isList) {
+    return true;
+  }
+  const cardConstraints = value.constraintsFilter.own.card.constraints;
+  return cardConstraints.some((oneCard) => oneCard.isList);
 }
 
 // stealing from shr-expand
