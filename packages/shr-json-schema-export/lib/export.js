@@ -528,7 +528,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
                 } else {
                   currentAllOf.push({ refType: [`${STANDARD_TYPE_URI}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]});
                 }
-              } else {
+              } else if (constraintInfo.constraintTarget instanceof IdentifiableValue) {
                 let schemaConstraint = null;
                 if (constraintInfo.constraint.isA.isPrimitive) {
                   schemaConstraint = makePrimitiveObject(constraintInfo.constraint.isA);
@@ -540,6 +540,8 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
                 } else {
                   currentAllOf.push(schemaConstraint);
                 }
+              } else {
+                logger.error('Internal error unexpected constraint target: %s for constraint %s', JSON.stringify(constraintInfo.constraintTarget, null, 2), JSON.stringify(constraintInfo.constraint, null, 2));
               }
             } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
               if (!includesConstraints) {
@@ -838,6 +840,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
   let target = null;
   for (let i = 0; i < constraint.path.length; i += 1) {
     const pathId = constraint.path[i];
+    target = null;
     if (pathId.namespace === PRIMITIVE_NS) {
       if (i !== constraint.path.length - 1) {
         logger.error('Encountered a constraint path containing a primitive %s at index %d that was not the leaf: %s', pathId, i, JSON.stringify(constraint, null, 2));
@@ -848,24 +851,17 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
         return {};
       }
       if (currentDef.value instanceof ChoiceValue) {
-        let found = false;
-        for (const choice of currentDef.value.aggregateOptions) {
-          if (pathId.equals(choice.identifier)) {
-            target = choice;
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
+        target = findOptionInChoice(currentDef.value, pathId, dataElementSpecs);
+        if (!target) {
           logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, JSON.stringify(constraint, null, 2), JSON.stringify(valueDef, null, 2));
           return {};
         }
-      }
-      else if (!pathId.equals(currentDef.value.identifier)) {
+      } else if (!pathId.equals(currentDef.value.identifier)) {
         logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, JSON.stringify(constraint, null, 2), JSON.stringify(valueDef, null, 2));
         return {};
+      } else {
+        target = currentDef.value;
       }
-      target = currentDef.value;
       normalizedPath.push('Value');
     } else {
       const newDef = dataElementSpecs.findByIdentifier(pathId);
@@ -873,25 +869,17 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
         logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, JSON.stringify(constraint, null, 2));
         return {};
       }
-      let found = false;
       // See if the current definition has a value of the specified type.
       if (currentDef.value) {
         if (currentDef.value instanceof ChoiceValue) {
-          for (const choice of currentDef.value.aggregateOptions) {
-            if (pathId.equals(choice.identifier) || checkHasBaseType(choice.identifier, pathId, dataElementSpecs)) {
-              target = choice;
-              found = true;
-              break;
-            }
-          }
+          target = findOptionInChoice(currentDef.value, pathId, dataElementSpecs);
         } else if (pathId.equals(currentDef.value.identifier) || checkHasBaseType(currentDef.value.identifier, pathId, dataElementSpecs)) {
           target = currentDef.value;
           normalizedPath.push('Value');
-          found = true;
         }
       }
 
-      if (!found) {
+      if (!target) {
         if (!currentDef.fields || !currentDef.fields.length) {
           logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
           return {};
@@ -965,9 +953,18 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
     logger.error('Constraint should not be on the value (except for choices): %s in an expanded object model "%s". Ignoring constraint.', JSON.stringify(currentDef, null, 2), JSON.stringify(constraint, null, 2));
     return {};
   }
+  let target = currentDef.value;
+  if ((constraint instanceof TypeConstraint) || (constraint instanceof IncludesTypeConstraint)) {
+    target = findOptionInChoice(currentDef.value, constraint.isA, dataElementSpecs);
+    if (!target) {
+      logger.error('Target of an unnormalized constraint: %s was a choice value that did not have a valid option: %s', JSON.stringify(constraint, null, 2), JSON.stringify(currentDef, null, 2));
+      return {};
+    }
+  }
+
   normalizedPath.push('Value');
 
-  return {path:normalizedPath, target: currentDef.value};
+  return {path:normalizedPath, target};
 }
 
 function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
@@ -1023,6 +1020,23 @@ function isOrWasAList(value) {
   }
   const cardConstraints = value.constraintsFilter.own.card.constraints;
   return cardConstraints.some((oneCard) => oneCard.isList);
+}
+
+/**
+ * Searches the aggregate options of a choice for the specified option.
+ *
+ * @param {ChoiceValue} choice - the choice to evaluate.
+ * @param {Identifier} optionId - the identifier to find in the choice.
+ * @param {DataElementSpecifications} dataElementSpecs - The available DataElement specs.
+ * @returns {Value?} The first option in the choice that matches the specified optionId.
+ */
+function findOptionInChoice(choice, optionId, dataElementSpecs) {
+  for (const option of choice.aggregateOptions) {
+    if (optionId.equals(option.identifier) || checkHasBaseType(option.identifier, optionId, dataElementSpecs)) {
+      return option;
+    }
+  }
+  return null;
 }
 
 // stealing from shr-expand
