@@ -52,11 +52,7 @@
         "type": "object",
         "description": "A boolean element.",
         "properties": {
-          "shr.base.EntryType": {
-            "type": "array",
-            "minItems": 1,
-            "items": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" }
-          },
+          "shr.base.EntryType": {"$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
           "Value": {
             "type": "boolean"
           }

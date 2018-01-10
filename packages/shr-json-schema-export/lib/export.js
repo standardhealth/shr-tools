@@ -71,11 +71,7 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
     schema.description = ns.description;
   }
   const nonEntryEntryTypeField = {
-    type: 'array',
-    minItems: 1,
-    items: {
-      $ref: makeRef(new Identifier('shr.base', 'EntryType'), ns.namespace, baseSchemaURL)
-    }
+    $ref: makeRef(new Identifier('shr.base', 'EntryType'), ns.namespace, baseSchemaURL)
   };
 
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
@@ -182,13 +178,7 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
       }
       if (needsEntryType) {
         if (def.identifier.fqn === 'shr.base.EntryType') {
-          schemaDef.properties['shr.base.EntryType'] = {
-            type: 'array',
-            minItems: 0,
-            items: {
-              $ref: makeRef(new Identifier('shr.base', 'EntryType'), ns.namespace, baseSchemaURL)
-            }
-          };
+          schemaDef.properties['shr.base.EntryType'] = nonEntryEntryTypeField;
         } else {
           schemaDef.properties['shr.base.EntryType'] = nonEntryEntryTypeField;
           requiredProperties.push('shr.base.EntryType');
@@ -974,13 +964,10 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
 
 function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
   const properties = {};
-  for (const name of ['ShrId', 'EntryId', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative', 'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
+  for (const name of ['ShrId', 'EntryId', 'EntryType', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative', 'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
     properties[name] = { $ref: makeRef(new Identifier('shr.base', name), enclosingNamespace, baseSchemaURL) };
   }
   properties.Version = { $ref: makeRef(new Identifier('shr.core', 'Version'), enclosingNamespace, baseSchemaURL) };
-  properties.EntryType = { type: 'array', minItems: 1,
-    items: { $ref: makeRef(new Identifier('shr.base', 'EntryType'), enclosingNamespace, baseSchemaURL) }
-  };
   return { properties, required: [
     'shr.base.ShrId',
     'shr.base.EntryId',

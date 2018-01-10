@@ -32,11 +32,7 @@
         "description": "An element with an optional field.",
         "type": "object",
         "properties": {
-          "shr.base.EntryType": {
-            "type": "array",
-            "minItems": 1,
-            "items": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" }
-          },
+          "shr.base.EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
           "shr.test.OptionalValue": {
             "$ref": "#/definitions/OptionalValue"
           }
@@ -47,11 +43,7 @@
         "description": "An element with an optional value.",
         "type": "object",
         "properties": {
-          "shr.base.EntryType": {
-            "type": "array",
-            "minItems": 1,
-            "items": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" }
-          },
+          "shr.base.EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
           "Value": {
             "type": "string"
           }

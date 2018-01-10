@@ -113,11 +113,7 @@ const stubSchema = JSON.parse(`{
           "$ref": "#/definitions/RequiredString"
         },
         "shr.base.EntryType": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "$ref": "#/definitions/EntryType"
-          }
+          "$ref": "#/definitions/EntryType"
         },
         "shr.core.CreationTime": {
           "type": "object",

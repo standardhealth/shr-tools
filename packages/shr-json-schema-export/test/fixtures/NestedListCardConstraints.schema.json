@@ -47,11 +47,7 @@
         "description": "An element with a list field.",
         "type": "object",
         "properties": {
-          "shr.base.EntryType": {
-            "type": "array",
-            "minItems": 1,
-            "items": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" }
-          },
+          "shr.base.EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
           "shr.test.OptionalList": {
             "$ref": "#/definitions/OptionalList"
           }
@@ -62,11 +58,7 @@
         "description": "An element with an optional list.",
         "type": "object",
         "properties": {
-          "shr.base.EntryType": {
-            "type": "array",
-            "minItems": 1,
-            "items": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" }
-          },
+          "shr.base.EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
           "Value": {
             "type": "array",
             "minItems": 0,

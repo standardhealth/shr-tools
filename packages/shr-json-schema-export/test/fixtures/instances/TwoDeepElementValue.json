@@ -1,19 +1,19 @@
 {
   "shr.base.ShrId": { "Value": "patient-id" },
   "shr.base.EntryId": { "Value": "my-id-3" },
-  "shr.base.EntryType": [{ "Value": "http://standardhealthrecord.org/spec/shr/test/TwoDeepElementValue"}],
+  "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/TwoDeepElementValue"},
   "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
   "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
   "Value": {
     "shr.base.ShrId": { "Value": "patient-id" },
     "shr.base.EntryId": { "Value": "my-id-2" },
-    "shr.base.EntryType": [{ "Value": "http://standardhealthrecord.org/spec/shr/test/ElementValue"}],
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/ElementValue"},
     "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
     "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
     "Value": {
       "shr.base.ShrId": { "Value": "patient-id" },
       "shr.base.EntryId": { "Value": "my-id" },
-      "shr.base.EntryType": [{ "Value": "http://standardhealthrecord.org/spec/shr/test/Simple"}],
+      "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/Simple"},
       "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
       "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
       "Value": "I'm nested pretty deep."
