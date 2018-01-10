@@ -529,10 +529,16 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
                   currentAllOf.push({ refType: [`${STANDARD_TYPE_URI}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]});
                 }
               } else {
+                let schemaConstraint = null;
                 if (constraintInfo.constraint.isA.isPrimitive) {
-                  currentAllOf.push(makePrimitiveObject(constraintInfo.constraint.isA));
+                  schemaConstraint = makePrimitiveObject(constraintInfo.constraint.isA);
                 } else {
-                  currentAllOf.push({$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)});
+                  schemaConstraint = {$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)};
+                }
+                if (isOrWasAList(constraintInfo.constraintTarget)) {
+                  currentAllOf.push({ items: schemaConstraint });
+                } else {
+                  currentAllOf.push(schemaConstraint);
                 }
               }
             } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
