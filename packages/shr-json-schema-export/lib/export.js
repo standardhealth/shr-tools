@@ -574,9 +574,9 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               currentAllOf.push({ enum: [constraintInfo.constraint.value]});
             } else if (constraintInfo.constraint instanceof CardConstraint) {
               // TODO: 0..0
-              let wasList = constraintInfo.constraintTarget.value.card.isList;
+              let wasList = constraintInfo.constraintTarget.card.isList;
               if (!wasList) {
-                const cardConstraints = constraintInfo.constraintTarget.value.constraintsFilter.own.card.constraints;
+                const cardConstraints = constraintInfo.constraintTarget.constraintsFilter.own.card.constraints;
                 wasList = cardConstraints.some((oneCard) => oneCard.isList);
               }
               if (wasList) {
@@ -817,7 +817,7 @@ function makePrimitiveObject(id, target = {}) {
  * @param {Constraint} constraint - the constraint.
  * @param {IdentifiableValue} valueDef - the identifiable value that contains the constraint.
  * @param {DataElementSpecifications} dataElementSpecs - the elements in the namespace.
- * @return {{path: (Array<string>|undefined), target: (DataElement|undefined)}} - The target of the constraint and the extracted path (qualified if necessary). Both properties will be null if there was an error.
+ * @return {{path: (Array<string>|undefined), target: (Value|undefined)}} - The target of the constraint and the extracted path (qualified if necessary). Both properties will be null if there was an error.
  */
 function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
   if (constraint.onValue) {
@@ -830,6 +830,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
 
   let currentDef = dataElementSpecs.findByIdentifier(valueDef.effectiveIdentifier);
   const normalizedPath = [];
+  let target = null;
   for (let i = 0; i < constraint.path.length; i += 1) {
     const pathId = constraint.path[i];
     if (pathId.namespace === PRIMITIVE_NS) {
@@ -845,6 +846,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
         let found = false;
         for (const choice of currentDef.value.aggregateOptions) {
           if (pathId.equals(choice.identifier)) {
+            target = choice;
             found = true;
             break;
           }
@@ -858,6 +860,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
         logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, JSON.stringify(constraint, null, 2), JSON.stringify(valueDef, null, 2));
         return {};
       }
+      target = currentDef.value;
       normalizedPath.push('Value');
     } else {
       const newDef = dataElementSpecs.findByIdentifier(pathId);
@@ -871,11 +874,13 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
         if (currentDef.value instanceof ChoiceValue) {
           for (const choice of currentDef.value.aggregateOptions) {
             if (pathId.equals(choice.identifier) || checkHasBaseType(choice.identifier, pathId, dataElementSpecs)) {
+              target = choice;
               found = true;
               break;
             }
           }
         } else if (pathId.equals(currentDef.value.identifier) || checkHasBaseType(currentDef.value.identifier, pathId, dataElementSpecs)) {
+          target = currentDef.value;
           normalizedPath.push('Value');
           found = true;
         }
@@ -886,8 +891,8 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
           logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
           return {};
         } else {
-          const found = currentDef.fields.some((field) => pathId.equals(field.identifier));
-          if (!found) {
+          target = currentDef.fields.find((field) => pathId.equals(field.identifier));
+          if (!target) {
             logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
             return {};
           }
@@ -898,7 +903,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
     }
   }
 
-  return {path:normalizedPath, target: currentDef === valueDef ? null : currentDef};
+  return {path:normalizedPath, target};
 }
 
 function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpecs) {
