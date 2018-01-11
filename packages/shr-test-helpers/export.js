@@ -188,6 +188,11 @@ function commonExportTests(exportFn, expectedFn, expectedErrorsFn) {
       const expected = wrappedExpectedFns('TypeConstrainedChoices', this);
       checkExpected(expected);
     });
+    it('should correctly export type constraints on references', function() {
+      addTypeConstrainedReference(_specs, 'shr.test');
+      const expected = wrappedExpectedFns('TypeConstrainedReference', this);
+      checkExpected(expected);
+    });
 
     it('should correctly export includes type constraints', function() {
       addIncludesTypeConstraints(_specs, 'shr.test');
@@ -535,6 +540,21 @@ function addTypeConstrainedChoices(specs, ns, addSubElements=true) {
     addChoice(specs, ns);
   }
   return tccp;
+}
+
+function addTypeConstrainedReference(specs, ns, addSubElements=true) {
+  let de = new mdl.DataElement(id(ns, 'TypeConstrainedReference'), true)
+    .withBasedOn(id(ns, 'SimpleReference'))
+    .withDescription('It is an element a constraint on a reference.')
+    .withValue(new mdl.RefValue(id(ns, 'Simple')).withMinMax(1, 1)
+      .withConstraint(new mdl.TypeConstraint(id(ns, 'SimpleChild'))));
+  add(specs, de);
+  if (addSubElements) {
+    addSimpleElement(specs, ns);
+    addSimpleChildElement(specs, ns);
+    addSimpleReference(specs, ns);
+  }
+  return de;
 }
 
 function addIncludesTypeConstraints(specs, ns, addSubElements=true) {
