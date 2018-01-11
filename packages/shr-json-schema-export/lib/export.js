@@ -71,7 +71,7 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
     schema.description = ns.description;
   }
   const nonEntryEntryTypeField = {
-    $ref: makeRef(new Identifier('shr.base', 'EntryType'), ns.namespace, baseSchemaURL)
+    $ref: makeRef(new Identifier('shr.base', 'EntryType'), ns, baseSchemaURL)
   };
 
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
@@ -177,10 +177,8 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
         wholeDef.description = descriptionList.join('\n');
       }
       if (needsEntryType) {
-        if (def.identifier.fqn === 'shr.base.EntryType') {
-          schemaDef.properties['shr.base.EntryType'] = nonEntryEntryTypeField;
-        } else {
-          schemaDef.properties['shr.base.EntryType'] = nonEntryEntryTypeField;
+        schemaDef.properties['shr.base.EntryType'] = nonEntryEntryTypeField;
+        if (def.identifier.fqn !== 'shr.base.EntryType') {
           requiredProperties.push('shr.base.EntryType');
         }
       }
@@ -736,6 +734,14 @@ function tbdValueToString(tbd) {
   }
 }
 
+/**
+ * Create a JSON Schema reference to the specified type.
+ *
+ * @param {Identifier} id - the target type.
+ * @param {Namespace} enclosingNamespace - the current namespace that is being evaluated.
+ * @param {string} baseSchemaURL - the root URL for the schema identifier
+ * @returns {string} - a JSON Schema reference to the target type.
+ */
 function makeRef(id, enclosingNamespace, baseSchemaURL) {
   if (id.namespace === enclosingNamespace.namespace) {
     return '#/definitions/' + id.name;
