@@ -909,9 +909,9 @@ shr-models@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.2.2.tgz#42b9f13deded480628529e22bca09af546f8ba81"
 
-"shr-test-helpers@https://github.com/standardhealth/shr-test-helpers#type-constrained-reference-test":
-  version "5.1.1"
-  resolved "https://github.com/standardhealth/shr-test-helpers#017a928974110b1a0e93e364285f79fbe460bfd1"
+shr-test-helpers@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/shr-test-helpers/-/shr-test-helpers-5.1.2.tgz#79e40bfde12507bb5e9f84daae84b6d9b271f56c"
 
 slice-ansi@0.0.4:
   version "0.0.4"

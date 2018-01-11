@@ -1,6 +1,6 @@
 {
   "name": "shr-json-schema-export",
-  "version": "5.2.0-beta.2",
+  "version": "5.2.0",
   "description": "Exports SHR data elements from SHR models to JSON Schema",
   "author": "",
   "license": "Apache-2.0",
@@ -16,17 +16,16 @@
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint . --fix"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "ajv": "^5.2.0",
     "bunyan": "^1.8.9",
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "mocha": "^3.2.0",
     "shr-expand": "^5.2.6",
     "shr-models": "^5.2.2",
-    "shr-test-helpers": "https://github.com/standardhealth/shr-test-helpers#type-constrained-reference-test",
-    "ajv": "^5.2.0"
+    "shr-test-helpers": "^5.1.2"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9",
