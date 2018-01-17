@@ -283,7 +283,7 @@ class Expander {
       for (let i=0; i < mergedValue.options.length; i++) {
         mergedValue.options[i] = this.findMatchingOption(element, oldChoiceValue, mergedValue.options[i], false);
       }
-      if (!mergedValue.effectiveCard) {
+      if (!mergedValue.card || !mergedValue.effectiveCard) {
         mergedValue.card = oldChoiceValue.effectiveCard;
       }
     } else if (newValue instanceof models.TBD) {
