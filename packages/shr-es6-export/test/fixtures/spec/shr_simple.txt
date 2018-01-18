@@ -1,0 +1,44 @@
+Grammar:      DataElement 5.0
+Namespace:    shr.simple
+Uses:         shr.core
+
+Element:      StringValue
+Value:        string
+
+EntryElement: StringValueEntry
+Value:        string
+
+EntryElement: ElementValueEntry
+Value:        StringValue
+
+EntryElement: CodeValueEntry
+Value:        code
+
+EntryElement: CodeableConceptValueEntry
+Value:        CodeableConcept
+
+EntryElement: CodingValueEntry
+Value:        Coding
+
+EntryElement: RecursiveEntry
+Value:        integer
+0..*          RecursiveEntry
+
+EntryElement: ReferenceEntry
+Value:        ref(StringValueEntry)
+0..*          ref(CodeValueEntry)
+
+Element:      IntegerValueElement
+Value:        integer
+
+EntryElement: BasedOnIntegerValueElementEntry
+Based on:     IntegerValueElement
+1..1          StringValue
+
+Element:      StringValueChild
+Based on:     StringValue
+
+EntryElement: OverrideBasedOnIntegerValueElementEntry
+Based on:     BasedOnIntegerValueElementEntry
+StringValue is type StringValueChild
+

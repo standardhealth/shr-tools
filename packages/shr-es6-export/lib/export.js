@@ -8,7 +8,7 @@ const { className, factoryName } = require('./common.js');
 /**
  * Exports SHR namespaces and elements to a set of ES6 classes for using within SHR-aware applications.
  * @param {Specifications} specifications - The SHR specifications to export to ES6 code
- * @return {Object} An object representing the file hierarchy on disk, with file contents as the leaves
+ * @returns {Object} An object representing the file hierarchy on disk, with file contents as the leaves
  */
 function exportToES6(specifications) {
   const exporter = new ES6Exporter(specifications);
@@ -30,13 +30,14 @@ class ES6Exporter {
 
   /**
    * Exports the loaded specifications to ES6 classes
-   * @return {Object} An object representing the file hierarchy on disk, with file contents as the leaves
+   * @returns {Object} An object representing the file hierarchy on disk, with file contents as the leaves
    */
   export() {
     const es6Defs = {};
 
     // Copy over Reference
     es6Defs['Reference.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Reference.js'), 'utf8');
+    es6Defs['json-helper.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'json-helper.js'), 'utf8');
 
     // Generate the namespace factories and specific ES6 classes
     const namespaces = this._specs.namespaces.all;

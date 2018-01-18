@@ -8,9 +8,9 @@ export default class Reference {
     this._entryType = entryType;
   }
 
-   /**
+  /**
    * Get the ShrId.
-   * @return {ShrId} The shr.base.ShrId
+   * @returns {ShrId} The shr.base.ShrId
    */
   get shrId() {
     return this._shrId;
@@ -24,9 +24,9 @@ export default class Reference {
     this._shrId = shrId;
   }
 
-   /**
+  /**
    * Get the EntryId.
-   * @return {EntryId} The shr.base.EntryId
+   * @returns {EntryId} The shr.base.EntryId
    */
   get entryId() {
     return this._entryId;
@@ -40,9 +40,9 @@ export default class Reference {
     this._entryId = entryId;
   }
 
-   /**
+  /**
    * Get the EntryType.
-   * @return {EntryType} The shr.base.EntryType
+   * @returns {EntryType} The shr.base.EntryType
    */
   get entryType() {
     return this._entryType;

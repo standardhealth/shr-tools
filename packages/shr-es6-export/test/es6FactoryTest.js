@@ -4,42 +4,50 @@ require('babel-register')({
   presets: [ 'es2015' ]
 });
 
-setup('./build/test', true);
+setup('./test/fixtures/spec', './build/test', true);
 
 describe('#ObjectFactory()', () => {
   const ObjectFactory = importResult('ObjectFactory');
-  const SimpleValue = importResult('shr/test/SimpleValue');
+  const StringValueEntry = importResult('shr/simple/StringValueEntry');
 
   it('should create classes by name', () => {
-    const sv = ObjectFactory.createInstance('http://standardhealthrecord.org/test/SimpleValue');
-    expect(sv).instanceOf(SimpleValue);
-    expect(sv.entryInfo).to.be.undefined;
-    expect(sv.value).to.be.undefined;
-    expect(sv.string).to.be.undefined;
+    const pv = ObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry');
+    expect(pv).instanceOf(StringValueEntry);
+    expect(pv.entryInfo).to.be.undefined;
+    expect(pv.value).to.be.undefined;
+    expect(pv.string).to.be.undefined;
+  });
+
+  it('should throw when you request an element in the wrong namespace', () => {
+    expect(() => ObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/base/StringValueEntry')).to.throw();
   });
 
   it('should throw when you request an unknown element', () => {
-    expect(() => ObjectFactory.createInstance('http://therealworld.org/Unicorn')).to.throw();
+    expect(() => ObjectFactory.createInstance({}, 'http://therealworld.org/Unicorn')).to.throw();
   });
 });
 
 describe('#NamespaceObjectFactory()', () => {
-  const ShrTestObjectFactory = importResult('shr/test/ShrTestObjectFactory');
-  const SimpleValue = importResult('shr/test/SimpleValue');
+  const ShrSimpleTestObjectFactory = importResult('shr/simple/ShrSimpleObjectFactory');
+  const StringValueEntry = importResult('shr/simple/StringValueEntry');
 
   it('should create classes by name', () => {
-    const sv = ShrTestObjectFactory.createInstance('SimpleValue');
-    expect(sv).instanceOf(SimpleValue);
-    expect(sv.entryInfo).to.be.undefined;
-    expect(sv.value).to.be.undefined;
-    expect(sv.string).to.be.undefined;
+    const pv = ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry');
+    expect(pv).instanceOf(StringValueEntry);
+    expect(pv.entryInfo).to.be.undefined;
+    expect(pv.value).to.be.undefined;
+    expect(pv.string).to.be.undefined;
+  });
+
+  it('should throw when you request an element from a different namespace', () => {
+    expect(() => ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/base/StringValueEntry')).to.throw();
   });
 
   it('should throw when you request an unknown element', () => {
-    expect(() => ShrTestObjectFactory.createInstance('Unicorn')).to.throw();
+    expect(() => ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/simple/Unicorn')).to.throw();
   });
 });
 
 function importResult(path) {
-  return require(`../build/test/${path}`).default;
+  return require(`../build/test/es6/${path}`).default;
 }

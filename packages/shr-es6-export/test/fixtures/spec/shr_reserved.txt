@@ -1,0 +1,21 @@
+Grammar:      DataElement 5.0
+Namespace:    shr.reserved
+Uses:         shr.core
+
+Element:      Package
+Value:        string
+
+Element:      Class
+Value:        string
+
+Element:      Enum
+Value:        string
+
+Element:      Await
+Value:        boolean
+
+EntryElement: ReservedWordEntry
+Value:        Package
+0..1          Class
+0..1          Enum
+0..1          Await

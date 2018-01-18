@@ -1,0 +1,31 @@
+{
+  "shr.base.ShrId": {
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId" },
+    "Value": "1"
+  },
+  "shr.base.EntryId": {
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId" },
+    "Value": "1-1"
+  },
+  "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry" },
+  "shr.core.CreationTime": {
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"},
+    "Value": "2017-11-30T12:34:56Z"
+  },
+  "shr.base.LastUpdated": {
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"},
+    "Value": "2017-12-05T23:45:01Z"
+  },
+  "Value": {
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
+    "shr.core.CodeSystem": {
+      "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
+      "Value": "http://foo.org/bar"
+    },
+    "shr.core.DisplayText": {
+      "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/DisplayText"},
+      "Value": "Foo"
+    },
+    "Value": { "code": "foo", "codeSystem": "http://foo.org/bar", "display": "Foo" }
+  }
+}

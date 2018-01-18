@@ -1,14 +1,16 @@
+const reserved = require('reserved-words');
 const {Value, IdentifiableValue, RefValue, ChoiceValue, TBD, INHERITED} = require('shr-models');
 const CodeWriter = require('./CodeWriter');
 const { sanitizeName, className } = require('./common.js');
 
 /**
  * Generates an ES6 class for the provided element definition.
- * @param {Element} def - The definition of the SHR element to generate a class for.
- * @return {string} The ES6 class definition as a string (to be persisted to a .js file).
+ * @param {DataElement} def - The definition of the SHR element to generate a class for.
+ * @returns {string} The ES6 class definition as a string (to be persisted to a .js file).
  */
 function generateClass(def) {
   const cw = new CodeWriter();
+  cw.ln(`import { setPropertiesFromJSON } from '${relativeImportPath(def.identifier, 'json-helper')}';`).ln();
   const clazzName = className(def.identifier.name);
   let superClass;
   if (def.basedOn.length) {
@@ -38,7 +40,7 @@ function generateClass(def) {
 
 /**
  * Generates the body of the ES6 class.
- * @param {Element} def - The definition of the SHR element to generate a class body for
+ * @param {DataElement} def - The definition of the SHR element to generate a class body for
  * @param {CodeWriter} cw - The CodeWriter instance to use during generation
  * @private
  */
@@ -74,6 +76,15 @@ function generateClassBody(def, cw) {
       writeGetterAndSetter(cw, field);
     }
   }
+
+  cw.blComment( () => {
+    const clazzName = className(def.identifier.name);
+    cw.ln(`Deserializes JSON data to an instance of the ${clazzName} class.`)
+      .ln(`The JSON must be valid against the ${clazzName} JSON schema, although this is not validated by the function.`)
+      .ln(`@param {object} json - the JSON data to deserialize`)
+      .ln(`@returns {${clazzName}} An instance of ${clazzName} populated with the JSON data`);
+  })
+    .bl('static fromJSON(json={})', () => writeFromJson(def, cw));
 }
 
 /**
@@ -105,7 +116,7 @@ function writeGetterAndSetter(cw, formalDefOrName, publicSymbol, descriptiveName
       return;
     }
     formalName = 'choice value; one of: ' + options.map(o => {
-      return `${o.identifier.fqn}${o instanceof RefValue ? ' reference' : ''}`;
+      return `${o.effectiveIdentifier.fqn}${o instanceof RefValue ? ' reference' : ''}`;
     }).join(', ');
     if (typeof publicSymbol === 'undefined') {
       publicSymbol = toSymbol(options.map(o => o.identifier.name).join('Or'));
@@ -117,7 +128,7 @@ function writeGetterAndSetter(cw, formalDefOrName, publicSymbol, descriptiveName
         if (o instanceof RefValue) {
           typeMap['Reference'] = true;
         } else {
-          typeMap[o.identifier.name] = true;
+          typeMap[o.effectiveIdentifier.name] = true;
         }
       }
       const types = Object.keys(typeMap);
@@ -128,7 +139,7 @@ function writeGetterAndSetter(cw, formalDefOrName, publicSymbol, descriptiveName
     }
   } else if (formalDefOrName instanceof RefValue){
     // References get a special treatment too
-    formalName = `${formalDefOrName.identifier.fqn} reference`;
+    formalName = `${formalDefOrName.effectiveIdentifier.fqn} reference`;
     if (typeof typeName === 'undefined') {
       typeName = 'Reference';
     }
@@ -136,20 +147,23 @@ function writeGetterAndSetter(cw, formalDefOrName, publicSymbol, descriptiveName
       publicSymbol = toSymbol(formalDefOrName.identifier.name);
     }
     if (typeof descriptiveName === 'undefined') {
-      descriptiveName = `${formalDefOrName.identifier.name} reference`;
+      descriptiveName = formalName;
     }
   } else {
     // IdentifiableValue or string
+    let originalName;
     if (formalDefOrName instanceof IdentifiableValue) {
-      formalName = formalDefOrName.identifier.fqn;
+      originalName = formalDefOrName.identifier.fqn;
+      formalName = formalDefOrName.effectiveIdentifier.fqn;
     } else {
+      originalName = formalDefOrName;
       formalName = formalDefOrName;
     }
     if (typeof typeName === 'undefined') {
       typeName = formalName.split('.').pop();
     }
     if (typeof publicSymbol === 'undefined') {
-      publicSymbol = toSymbol(typeName);
+      publicSymbol = toSymbol(originalName.split('.').pop());
     }
     if (typeof descriptiveName === 'undefined') {
       descriptiveName = typeName;
@@ -163,18 +177,32 @@ function writeGetterAndSetter(cw, formalDefOrName, publicSymbol, descriptiveName
     typeName = `Array<${typeName}>`;
     arrayDescriptionPostfix = ' array';
   }
+  // The variable name can't be a reserved word, so check it and modify if necessary
+  const varName = reserved.check(publicSymbol, 'es2015', true) ? `${publicSymbol}Var` : publicSymbol;
   cw.blComment(() => {
     cw.ln(`Get the ${descriptiveName}${arrayDescriptionPostfix}.`)
-      .ln(`@return {${typeName}} The ${formalName}${arrayDescriptionPostfix}`);
+      .ln(`@returns {${typeName}} The ${formalName}${arrayDescriptionPostfix}`);
   })
-  .bl(`get ${publicSymbol}()`, `return this.${privateSymbol};`)
-  .ln()
-  .blComment(() => {
-    cw.ln(`Set the ${descriptiveName}${arrayDescriptionPostfix}.`)
-      .ln(`@param {${typeName}} ${publicSymbol} - The ${formalName}${arrayDescriptionPostfix}`);
-  })
-  .bl(`set ${publicSymbol}(${publicSymbol})`, `this.${privateSymbol} = ${publicSymbol};`)
-  .ln();
+    .bl(`get ${publicSymbol}()`, `return this.${privateSymbol};`)
+    .ln()
+    .blComment(() => {
+      cw.ln(`Set the ${descriptiveName}${arrayDescriptionPostfix}.`)
+        .ln(`@param {${typeName}} ${varName} - The ${formalName}${arrayDescriptionPostfix}`);
+    })
+    .bl(`set ${publicSymbol}(${varName})`, `this.${privateSymbol} = ${varName};`)
+    .ln();
+}
+
+/**
+ * Generates a JSON deserializer for the class.
+ * @param {DataElement} def - The definition of the SHR element to generate a deserializer for
+ * @param {CodeWriter} cw - The CodeWriter instance to use during generation
+ * @private
+ */
+function writeFromJson(def, cw) {
+  cw.ln(`const inst = new ${className(def.identifier.name)}();`);
+  cw.ln('setPropertiesFromJSON(inst, json);');
+  cw.ln('return inst;');
 }
 
 /**
@@ -188,21 +216,27 @@ function toSymbol(name) {
 }
 
 /**
- * Determines the relative path from one generated class to another.  Needed when generating imports.
+ * Determines the relative path from one generated class to another generated class or included file.  Needed when
+ * generating imports.
  * @param {Identifier} fromIdentifier - The element identifier representing the ES6 class that is doing the import
- * @param {Identifier} toIdentifier - The element identifier representing the ES6 class being imported
- * @return {string} A relative path to where the imported class can be expected to be found
+ * @param {Identifier|string} to - The element identifier representing the ES6 class being imported or the string
+ *   representing the file being imported
+ * @returns {string} A relative path to where the imported class or file can be expected to be found
  * @private
  */
-function relativeImportPath(fromIdentifier, toIdentifier) {
+function relativeImportPath(fromIdentifier, to) {
   const fromNS = fromIdentifier.namespace.split('.');
-  const toNS = toIdentifier.namespace.split('.');
-  while (fromNS.length > 0 && toNS.length > 0 && fromNS[0] === toNS[0]) {
-    fromNS.shift();
-    toNS.shift();
+  if (typeof to === 'string') {
+    return [...fromNS.map(n => '..'), to].join('/');
+  } else {
+    const toNS = to.namespace.split('.');
+    while (fromNS.length > 0 && toNS.length > 0 && fromNS[0] === toNS[0]) {
+      fromNS.shift();
+      toNS.shift();
+    }
+    const fromPath = fromNS.length ? fromNS.map(x => '..') : ['.'];
+    return [...fromPath, ...toNS, className(to.name)].join('/');
   }
-  const fromPath = fromNS.length ? fromNS.map(x => '..') : ['.'];
-  return [...fromPath, ...toNS, className(toIdentifier.name)].join('/');
 }
 
 module.exports = generateClass;

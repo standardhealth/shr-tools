@@ -1,0 +1,35 @@
+Grammar:   DataElement 5.0
+Namespace: shr.core
+
+Element:		Quantity
+Value:			decimal
+0..1		  	Comparator
+0..1		  	Units
+
+    Element:		Comparator
+    Value:			code from http://hl7.org/fhir/ValueSet/quantity-comparator
+
+    Element:		Units
+    Value:	  	Coding from http://hl7.org/fhir/ValueSet/ucum-units
+
+Element:		Coding
+Value:			0..1 code
+0..1		 	CodeSystem
+0..1 			CodeSystemVersion
+0..1			DisplayText
+
+  Element:		CodeSystem
+  Value:			uri
+
+  Element:		CodeSystemVersion
+  Value:			string
+
+  Element:		DisplayText
+  Value:			string
+
+Element:		CodeableConcept
+0..*			Coding
+0..1			DisplayText
+
+Element:   	 	CreationTime
+Value:        dateTime
