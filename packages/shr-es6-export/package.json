@@ -1,6 +1,6 @@
 {
   "name": "shr-es6-export",
-  "version": "5.2.0-alpha.3",
+  "version": "5.2.0",
   "description": "Exports ES6 classes represent SHR data elements",
   "author": "",
   "license": "Apache-2.0",
