@@ -1,0 +1,15 @@
+{
+  "name": "SimpleCoded",
+  "namespace": "shr.test",
+  "fqn": "shr.test.SimpleCoded",
+  "isEntry": true,
+  "isAbstract": false,
+  "value": {
+    "fqn": "code",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

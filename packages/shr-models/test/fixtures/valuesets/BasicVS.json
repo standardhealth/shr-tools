@@ -1,0 +1,25 @@
+{
+  "name": "BasicVS",
+  "namespace": "shr.test",
+  "fqn": "shr.test.BasicVS",
+  "description": "BasicVS",  
+  "concepts": [
+    {
+      "system": "http://foo.org",
+      "code": "bar"
+    }
+  ],
+  "url": "http://foo.org/vs/BasicVS",
+  "values": [
+    {
+      "system": "http://foo.org/test/cs/BasicCS",
+      "code": "AA",
+      "description": "Foo"
+    },
+    {
+      "system": "http://foo.org/test/cs/BasicCS",
+      "code": "AB",
+      "description": "Foo"
+    }
+  ]
+}

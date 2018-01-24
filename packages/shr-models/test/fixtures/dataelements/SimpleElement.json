@@ -1,0 +1,15 @@
+{
+  "name": "SimpleElement",
+  "namespace": "shr.test",
+  "fqn": "shr.test.SimpleElement",
+  "isEntry": false,
+  "isAbstract": false,
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

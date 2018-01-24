@@ -1,0 +1,28 @@
+{
+    "name": "SimpleChoice",
+    "namespace": "shr.test",
+    "fqn": "shr.test.SimpleChoice",
+    "isEntry": true,
+    "isAbstract": false,
+    "value": {
+      "valueType": "ChoiceValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "options": [
+        {
+          "fqn": "date",
+          "valueType": "IdentifiableValue"
+        },
+        {
+          "fqn": "shr.test.Simple",
+          "valueType": "IdentifiableValue"
+        },
+        {
+          "fqn": "other.ns.Simple2",
+          "valueType": "IdentifiableValue"
+        }
+      ]
+    }
+  }

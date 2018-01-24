@@ -317,7 +317,7 @@ describe('#ChoiceValue', () => {
 
   it('should be properly identified as the effective value on a constrained element', () => {
     // TODO: Perhaps this should be moved to a separate suite for ConstraintsFilter.
-    // TODO: We should also test for IncludesTypeConstraint's isOnValue as well.
+    // TODO: We should also test for IncludesTypeConstraint's onValue as well.
     const base = new mdl.DataElement(new mdl.Identifier('shr.test', 'ChoiceValue'))
       .withValue(new mdl.ChoiceValue()
         .withMinMax(1,1)

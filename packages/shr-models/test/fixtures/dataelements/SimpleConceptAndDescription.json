@@ -1,0 +1,23 @@
+{
+    "name": "SimpleElement",
+    "namespace": "shr.test",
+    "fqn": "shr.test.SimpleElement",
+    "isEntry": false,
+    "isAbstract": false,
+    "description": "It is a simple element",
+    "concepts": [
+      {
+        "system": "http://foo.org",
+        "code": "bar",
+        "display": "Foobar"
+      }
+    ],
+    "value": {
+      "fqn": "string",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  }

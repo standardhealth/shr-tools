@@ -1,0 +1,32 @@
+{
+    "name": "ZeroedOutValue",
+    "namespace": "shr.test",
+    "fqn": "shr.test.ZeroedOutValue",
+    "isEntry": true,
+    "isAbstract": false,
+    "hierarchy": [
+      "shr.test.OptionalValue"
+    ],
+    "basedOn": [
+      "shr.test.OptionalValue"
+    ],
+    "value": {
+      "fqn": "string",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "shr.test.OptionalValue",
+            "min": 0,
+            "max": 1
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "shr.test.OptionalValue"
+      }
+    }
+  }

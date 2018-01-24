@@ -1,0 +1,25 @@
+{
+  "name": "MultiCodedFromValueSet",
+  "namespace": "shr.test",
+  "fqn": "shr.test.MultiCodedFromValueSet",
+  "isEntry": false,
+  "isAbstract": false,
+  "value": {
+    "fqn": "shr.test.Coding",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1
+    },
+    "constraints": {
+      "subpaths": {
+        "code": {
+          "valueSet": {
+            "uri": "http://standardhealthrecord.org/test/vs/Coded",
+            "bindingStrength": "REQUIRED",
+            "lastModifiedBy": "shr.test.MultiCodedFromValueSet"
+          }
+        }
+      }
+    }
+  }
+}

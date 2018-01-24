@@ -1,0 +1,15 @@
+{
+    "name": "OptionalValue",
+    "namespace": "shr.test",
+    "fqn": "shr.test.OptionalValue",
+    "isEntry": true,
+    "isAbstract": false,
+    "value": {
+      "fqn": "string",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  }

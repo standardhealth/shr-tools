@@ -36,7 +36,19 @@ function sanityCheckModules(modelInfoMap) {
   }
 }
 
+function clearEmptyFields(object, iteratively = false) {
+    Object.keys(object).forEach((key) => {
+      if (object[key] == null) delete object[key]; else
+      if (Array.isArray(object[key]) && object[key].length == 0) delete object[key]; else
+      if (object[key] instanceof Object) {
+        if (Object.keys(object[key]).length && iteratively) clearEmptyFields(object[key], true);
+        if (!Object.keys(object[key]).length) delete object[key];
+      }
+  })
+}
+
 class Specifications {
+ 
   constructor() {
     this._namespaces = new NamespaceSpecifications();
     this._dataElements = new DataElementSpecifications();
@@ -53,6 +65,7 @@ class Specifications {
 }
 
 class NamespaceSpecifications {
+ 
   constructor() {
     this._nsMap = new Map();
   }
@@ -69,6 +82,7 @@ class NamespaceSpecifications {
 }
 
 class DataElementSpecifications {
+ 
   constructor() {
     this._nsMap = new Map();
     this._grammarVersions = new Map();
@@ -126,6 +140,7 @@ class DataElementSpecifications {
 }
 
 class ValueSetSpecifications {
+ 
   constructor() {
     this._nsMap = new Map();
     this._urlMap = new Map();
@@ -175,6 +190,7 @@ class ValueSetSpecifications {
 }
 
 class CodeSystemSpecifications {
+ 
   constructor() {
     this._nsMap = new Map();
     this._urlMap = new Map();
@@ -224,6 +240,7 @@ class CodeSystemSpecifications {
 }
 
 class MapSpecifications {
+ 
   constructor() {
     this._targetMap = new Map();
     this._grammarVersions = new Map();
@@ -280,6 +297,7 @@ class MapSpecifications {
 }
 
 class TargetMapSpecifications {
+
   constructor(target) {
     this._target = target;
     this._nsMap = new Map();
@@ -328,6 +346,7 @@ class TargetMapSpecifications {
 }
 
 class Namespace {
+ 
   constructor(namespace, description) {
     this._namespace = namespace; // string
     this._description = description; // string
@@ -349,6 +368,14 @@ class Namespace {
   clone() {
     return new Namespace(this._namespace, this._description);
   }
+
+  toJSON() {
+    return {
+      "name": this.namespace,
+      "description": this.description,
+      "external_dependencies" : undefined
+    }
+  }  
 }
 
 class DataElement {
@@ -359,9 +386,9 @@ class DataElement {
     this._basedOn = [];      // Identifier[]
     this._concepts = [];     // Concept[]
     this._fields = [];       // Value[] (and its subclasses) -- excluding primitive values
+    this._hierarchy = [];    // String[], list of base class FQNs
     // also contains _value, _description, and _grammarVersion
   }
-
   // identifier is the unique Identifier (namespace+name) for the DataElement
   get identifier() { return this._identifier; }
 
@@ -376,7 +403,6 @@ class DataElement {
   set isAbstract(isAbstract) {
     this._isAbstract = isAbstract;
   }
-
   // basedOn is an array of identifiers that the data element is based on.  This means that it takes on the value
   // and fields of any data element it is based on, and can potentially override/constrain it.
   get basedOn() { return this._basedOn; }
@@ -388,7 +414,7 @@ class DataElement {
     this.addBasedOn(basedOn);
     return this;
   }
-
+  
   // concepts are an array of Concept
   get concepts() { return this._concepts; }
   set concepts(concepts) {
@@ -402,7 +428,7 @@ class DataElement {
     this.addConcept(concept);
     return this;
   }
-
+  
   // a description is a string
   get description() { return this._description; }
   set description(description) {
@@ -413,7 +439,7 @@ class DataElement {
     this.description = description;
     return this;
   }
-
+  
   // Data elements should have a value, or a set of fields, or both a value and set of fields.
   get value() { return this._value; }
   set value(value) {
@@ -424,7 +450,7 @@ class DataElement {
     this.value = value;
     return this;
   }
-
+  
   // Data elements should have a value, or a set of fields, or both a value and set of fields.
   // Fields cannot be primitive values.
   get fields() { return this._fields; }
@@ -439,7 +465,7 @@ class DataElement {
     this.addField(field);
     return this;
   }
-
+  
   // the Version of the grammar used to define this element
   get grammarVersion() { return this._grammarVersion; }
   set grammarVersion(grammarVersion) {
@@ -450,6 +476,12 @@ class DataElement {
     this.grammarVersion = grammarVersion;
     return this;
   }
+
+  get hierarchy() { return this._hierarchy; }
+  set hierarchy(hierarchy) {
+    this._hierarchy = hierarchy;
+  }
+
 
   clone() {
     const clone = new DataElement(this._identifier.clone(), this._isEntry, this._isAbstract);
@@ -472,6 +504,26 @@ class DataElement {
       clone._grammarVersion = this._grammarVersion.clone();
     }
     return clone;
+  }
+
+  toJSON() {
+    var output = {
+      "name":         this.identifier.name,
+      "namespace":    this.identifier.namespace,
+      "fqn":          this.identifier.fqn,
+      "isEntry":      this.isEntry,
+      "isAbstract":   this.isAbstract,
+      "description":  this.description,
+      "concepts":     this.concepts.map(c => c.toJSON()),
+      "hierarchy":    this._hierarchy.map(h => h.identifier.fqn), //full hierarchy
+      "basedOn":      this.basedOn.map(b => b.fqn || b.toString()),
+      "value":        this.value != null ? this.value.toJSON() : undefined,
+      "fields":       this._fields.map(f => f.toJSON()),
+    };
+    
+    clearEmptyFields(output, true)
+    
+    return output;
   }
 }
 
@@ -499,6 +551,15 @@ class Concept {
     return new Concept(this._system, this._code, this._display);
   }
 
+  toJSON() {
+    return {
+      "system": this.system,
+      "code": this.code,
+      "display": this.display
+    }
+  }
+
+
   /**
    * Check concepts for equality. Note that this ignores the display property.
    *
@@ -508,9 +569,12 @@ class Concept {
   equals(other) {
     return (other instanceof Concept) && this._system == other.system && this._code == other.code;
   }
+
+
 }
 
 class Identifier {
+ 
   constructor(namespace, name) {
     this._namespace = namespace; // string
     this._name = name; // string
@@ -545,15 +609,18 @@ class Identifier {
 }
 
 class PrimitiveIdentifier extends Identifier {
+ 
   constructor(name) {
     super(PRIMITIVE_NS, name);
   }
 }
 
 class Cardinality {
+ 
   constructor(min, max) {
     this._min = min; // number
     this._max = max; // number|undefined
+    //additional properties: source (Identifier), history (Cardinality[])
   }
 
   get min() { return this._min; }
@@ -565,7 +632,7 @@ class Cardinality {
   }
   get max() { return this._max; }
   set max(max) { this._max = max; }
-  // withMin is a convenience function for chaining
+
   withMax(max) {
     this.max = max;
     return this;
@@ -586,6 +653,36 @@ class Cardinality {
     return this._max > 1 || this.isMaxUnbounded;
   }
 
+  get source() { return this._source; }
+  set source(source) { this._source = source; }
+
+  // withSource is a convenience function for chaining
+  withSource(source) {
+    this.source = source;
+    return this;
+  }
+  get history() { return this._history; }
+  set history(history) { this._history = history; }
+  // withHistory is a convenience function for chaining  
+  withHistory(card) {
+    this.addHistory(card);
+    return this;
+  }
+
+  // addHistory is a convenience function for chaining
+  addHistory(card) {
+    if (!this.history) this.history = [];
+    this.history.push(card);
+    return this;
+  }
+
+  // withHistories is a convenience function for chaining
+  withHistories(histories) {
+    if (!this.history) this.history = [];
+    this.history.push(...histories);
+    return this;
+  }
+
   fitsWithinCardinalityOf(other) {
     const minFits = other.min <= this.min;
     const maxFits = other.isMaxUnbounded || (!this.isMaxUnbounded && other.max >= this.max);
@@ -603,9 +700,28 @@ class Cardinality {
   toString() {
     return `${this.min}..${this.isMaxUnbounded ? '*' : this.max}`;
   }
+
+  toJSON() {
+    var out = {
+      "min": this._min,
+      "max": this._max
+    };
+
+    if (this._history && this._history.length > 0) {
+      out["history"] = this._history.map(h => ({
+        "source": (h._source && h._source.fqn) ? h._source.fqn : undefined,
+        "min": h._min,
+        "max": h._max
+      }))
+    }
+
+    return out;
+
+  }
 }
 
 class Constraint {
+ 
   constructor(path = []) {
     this._path = path;
   }
@@ -621,6 +737,13 @@ class Constraint {
     return this._path.length > 0;
   }
 
+  get lastModifiedBy() { return this._lastModifiedBy; }
+  set lastModifiedBy(lastModifiedBy) { this._lastModifiedBy = lastModifiedBy; }
+  // withLastModified is a convenience function for chaining
+  withLastModifiedBy(lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+    return this;
+  }
 
   _clonePropertiesTo(clone) {
     for (const p of this._path) {
@@ -646,10 +769,18 @@ class Constraint {
     }
     return true;
   }
+
+
+  toJSON() {
+    return {
+      "lastModifiedBy": (this.lastModifiedBy) ? this.lastModifiedBy.fqn : undefined,
+    }
+  }
 }
 
 // ValueSetConstraint only makes sense on a code or Coding type value
 class ValueSetConstraint extends Constraint {
+ 
   constructor(valueSet, path, bindingStrength=REQUIRED) {
     super(path);
     this._valueSet = valueSet;
@@ -682,10 +813,19 @@ class ValueSetConstraint extends Constraint {
         this._valueSet == other.valueSet &&
         this._pathsAreEqual(other);
   }
+
+  toJSON() {
+    return Object.assign({
+      "uri": this._valueSet,
+      "bindingStrength": this._bindingStrength
+
+    }, super.toJSON());
+  }
 }
 
 // CodeConstraint only makes sense on a code or Coding type value
 class CodeConstraint extends Constraint {
+ 
   constructor(code, path) {
     super(path);
     this._code = code;
@@ -704,10 +844,21 @@ class CodeConstraint extends Constraint {
         this._code.equals(other.code) &&
         this._pathsAreEqual(other);
   }
+
+  toJSON() {
+    return Object.assign({
+      "type": "code",
+      "value": {
+        "system": this._code.system,
+        "code": this._code.code
+      }
+    }, super.toJSON());
+  }
 }
 
 // IncludesCodeConstraint only makes sense on an array of code or Coding
 class IncludesCodeConstraint extends Constraint {
+
   constructor(code, path) {
     super(path);
     this._code = code;
@@ -726,10 +877,18 @@ class IncludesCodeConstraint extends Constraint {
         this._code.equals(other.code) &&
         this._pathsAreEqual(other);
   }
+  
+  toJSON() {
+    return Object.assign({
+      "system": this._code.system,
+      "code": this._code.code
+    }, super.toJSON());
+  }
 }
 
 // BooleanConstraint only makes sense on a boolean
 class BooleanConstraint extends Constraint {
+ 
   constructor(value, path) {
     super(path);
     this._value = value;
@@ -748,9 +907,20 @@ class BooleanConstraint extends Constraint {
         this._value == other.value &&
         this._pathsAreEqual(other);
   }
+
+  toJSON() {
+    var constraint = super.toJSON();
+    delete constraint["path"];
+    
+    return Object.assign({
+      "type": "boolean",
+      "value": this.value,
+    }, constraint);
+  }
 }
 
 class TypeConstraint extends Constraint {
+ 
   constructor(isA, path, onValue = false) {
     super(path);
     this._isA = isA;
@@ -782,21 +952,29 @@ class TypeConstraint extends Constraint {
         this._isA.equals(other.isA) &&
         this._pathsAreEqual(other);
   }
+
+  toJSON() {    
+    return Object.assign({
+      "fqn": this.isA.fqn,
+      "onValue": this.onValue
+    }, super.toJSON())
+  }
 }
 
 class IncludesTypeConstraint extends Constraint {
-  constructor(isA, card, path, isOnValue=false) {
+ 
+  constructor(isA, card, path, onValue=false) {
     super(path);
     this._isA = isA;
     this._card = card;
-    this._isOnValue=isOnValue;
+    this._onValue=onValue;
   }
 
   get isA() { return this._isA; }
   get card() { return this._card; }
-  get isOnValue() { return this._isOnValue; }
-  set isOnValue(isOnValue) {
-    this._isOnValue = isOnValue;
+  get onValue() { return this._onValue; }
+  set onValue(onValue) {
+    this._onValue = onValue;
   }
 
   clone() {
@@ -807,14 +985,23 @@ class IncludesTypeConstraint extends Constraint {
 
   equals(other) {
     return (other instanceof IncludesTypeConstraint) &&
-        this._isOnValue == other._isOnValue &&
+        this._onValue == other._onValue &&
         this._isA.equals(other.isA) &&
         this._card.equals(other.card) &&
         this._pathsAreEqual(other);
   }
+
+  toJSON() {
+    return Object.assign({
+      "fqn": this.isA.fqn,
+      "card": this.card.toJSON(), 
+      "onValue": this.onValue
+    }, super.toJSON())
+  }
 }
 
 class CardConstraint extends Constraint {
+ 
   constructor(card, path) {
     super(path);
     this._card = card;
@@ -833,9 +1020,14 @@ class CardConstraint extends Constraint {
         this._card.equals(other.card) &&
         this._pathsAreEqual(other);
   }
+
+  toJSON() {
+    return Object.assign(this.card.toJSON(), super.toJSON());
+  }
 }
 
 class ConstraintsFilter {
+ 
   constructor(constraints = []) {
     this._constraints = constraints;
   }
@@ -853,11 +1045,11 @@ class ConstraintsFilter {
   }
 
   get own() {
-    return new ConstraintsFilter(this._constraints.filter(c => c.path.length == 0 && (!c.onValue) && (!c.isOnValue)));
+    return new ConstraintsFilter(this._constraints.filter(c => c.path.length == 0 && (!c.onValue) && (!c.onValue)));
   }
 
   get child() {
-    return new ConstraintsFilter(this._constraints.filter(c => c.path.length > 0 || c.onValue || c.isOnValue));
+    return new ConstraintsFilter(this._constraints.filter(c => c.path.length > 0 || c.onValue || c.onValue));
   }
 
   get valueSet() {
@@ -905,6 +1097,7 @@ class ConstraintsFilter {
 }
 
 class Value {
+ 
   constructor() {
     this._constraints = [];
   }
@@ -980,6 +1173,17 @@ class Value {
   set inheritance(inheritance) {
     this._inheritance = inheritance;
   }
+
+  get inheritedFrom() { return this._inheritedFrom; }
+  set inheritedFrom(inheritedFrom) {
+    this._inheritedFrom = inheritedFrom;
+  }
+
+  withInheritedFrom(inheritedFrom) {
+    this.inheritedFrom = inheritedFrom;
+    return this;
+  }
+
   // withInheritance is a convenience function for chaining
   withInheritance(inheritance) {
     this.inheritance = inheritance;
@@ -995,6 +1199,9 @@ class Value {
     }
     if (this._inheritance) {
       clone._inheritance = this.inheritance;
+    }
+    if (this._inheritedFrom) {
+      clone._inheritedFrom = this.inheritance;
     }
   }
 
@@ -1045,9 +1252,64 @@ class Value {
 
     return true;
   }
+ 
+  toJSON() {
+    const constraints = this._constraints.reduce((out, constraint, i) => {
+      let key = constraint.constructor.name.replace(/constraint/i, '').replace(/^[a-zA-Z]/, (s) => s.toLowerCase());
+      let constraintJSON = constraint.toJSON();
+
+      const arrConstraints  = ['includesType', 'includesCode'];
+      const dicConstraints  = ['type', 'valueSet', 'card'];
+      const valConstraints  = ['boolean', 'code'];
+      
+      const addToPath = (outputDict, skipCard=false) => {
+        if (skipCard && key == 'card') return;
+
+        if (arrConstraints.includes(key)) {
+          if (outputDict[key] == null) outputDict[key] = [];
+
+          outputDict[key].push(constraintJSON);
+        } else if (dicConstraints.includes(key)) {
+          outputDict[key] = constraintJSON
+        } else if (valConstraints.includes(key)) {
+          outputDict['fixedValue'] = constraintJSON
+        }    
+      }
+
+      if (constraint.path.length == 0) addToPath(out, true);
+      else if (constraint.path.length  > 0) {
+        let currentSubField = out;
+        constraint.path.forEach((subP) => {
+          if (currentSubField['subpaths'] == null) currentSubField['subpaths'] = {};
+          if (currentSubField['subpaths'][subP.fqn] == null) currentSubField['subpaths'][subP.fqn] = {};
+          currentSubField = currentSubField['subpaths'][subP.fqn];
+        })
+        addToPath(currentSubField)
+      }   
+
+      return out;
+    }, {}
+    );
+
+    let card = this.effectiveCard;
+    if (this.card != null && this.effectiveCard != null && this.card != this.effectiveCard && this.card.history) {
+      card.history = this.card.history
+    }
+    
+    return {
+      "valueType": this.constructor.name,
+      "card": (card) ? card.toJSON() : "TBD",
+      "constraints": Object.keys(constraints).length > 0 ? constraints : undefined,
+      "inheritance": (this._inheritance) ? {
+        "status": this._inheritance,
+        "from": this._inheritedFrom.fqn,
+      } : undefined
+    };
+  }
 }
 
 class IdentifiableValue extends Value {
+ 
   constructor(identifier) {
     super();
     this._identifier = identifier; // Identifier
@@ -1097,9 +1359,19 @@ class IdentifiableValue extends Value {
   toString() {
     return this.identifier.name;
   }
+ 
+  toJSON() {
+    return Object.assign(
+      {
+        "fqn": this.identifier.fqn,
+      },
+      super.toJSON()
+    );  
+  }  
 }
 
 class RefValue extends IdentifiableValue {
+ 
   constructor(identifier) {
     super(identifier);
   }
@@ -1116,6 +1388,8 @@ class RefValue extends IdentifiableValue {
 }
 
 class ChoiceValue extends Value {
+
+ 
   constructor() {
     super();
     this._options = []; // Value[]
@@ -1187,6 +1461,16 @@ class ChoiceValue extends Value {
     str += ')';
     return str;
   }
+ 
+  toJSON() {
+    return Object.assign(super.toJSON(), {
+      "options": this._options.map(v => {
+        let option = v.toJSON();
+        delete option["card"]
+        return option
+      })
+    });
+  }
 }
 
 // IncompleteValue provides a place to put constraints when the full definition of the thing being constrained is
@@ -1194,6 +1478,7 @@ class ChoiceValue extends Value {
 // constraint is applied without knowing the full context of the current data element (in the case of the importer).
 // If a data element is fully resolved, it should never contain an IncompleteValue.
 class IncompleteValue extends IdentifiableValue {
+ 
   constructor(identifier) {
     super(identifier);
   }
@@ -1210,6 +1495,7 @@ class IncompleteValue extends IdentifiableValue {
 }
 
 class TBD extends Value{
+ 
   constructor(text) {
     super();
     this._text = text;
@@ -1242,9 +1528,19 @@ class TBD extends Value{
   toString() {
     return this._text ? `TBD(${this._text})` : 'TBD';
   }
+ 
+  toJSON() {
+    return Object.assign(
+      {
+        "fqn" : this.toString()
+      },
+      super.toJSON()
+    );
+  }
 }
 
 class ValueSet  {
+ 
   constructor(identifier, url) {
     this._identifier = identifier;
     this._url = url;
@@ -1370,10 +1666,34 @@ class ValueSet  {
     }
     return clone;
   }
+
+  toJSON() {
+    const rule = (ruleFilter) => ruleFilter._rules.map(r => r.toJSON());
+    var out = {
+      "name":        this._identifier._name,
+      "namespace":   this._identifier.namespace,
+      "fqn":         this._identifier.fqn,      
+      "description": this._description,
+      "concepts":    this.concepts.map(c => c.toJSON()),
+      "url":         this._url,
+      "values":      this.rulesFilter.includesCode._rules.map(r => r.toJSON()),
+      "rules": {
+        "includesDescendants":    rule(this.rulesFilter.includesDescendents),
+        "includesFromCode":       rule(this.rulesFilter.includesFromCode),
+        "includesFromCodeSystem": rule(this.rulesFilter.includesFromCodeSystem),
+        "excludesDescendants":    rule(this.rulesFilter.excludesDescendents),
+      }
+    }
+
+    clearEmptyFields(out, true);    
+
+    return out;
+  }
 }
 
 // Note -- this should be consider abstract.  Do not instantiate!
 class ValueSetCodeRule {
+ 
   constructor(code) {
     this._code = code;
   }
@@ -1383,6 +1703,7 @@ class ValueSetCodeRule {
 
 // ValueSetIncludesCodeRule indicates that the given code should be directly included in the value set
 class ValueSetIncludesCodeRule extends ValueSetCodeRule {
+ 
   constructor(code) {
     super(code);
   }
@@ -1390,10 +1711,19 @@ class ValueSetIncludesCodeRule extends ValueSetCodeRule {
   clone() {
     return new ValueSetIncludesCodeRule(this._code.clone());
   }
+
+  toJSON() {
+    return {
+      "system": this._code.system,
+      "code": this._code.code,
+      "description": this._code.display
+    }
+  }
 }
 
 // ValueSetIncludesDescendentsRule indicates that the given code and it's descendents (in SNOMED-CT) should be included in the value set
 class ValueSetIncludesDescendentsRule extends ValueSetCodeRule {
+ 
   constructor(code) {
     super(code);
   }
@@ -1401,10 +1731,19 @@ class ValueSetIncludesDescendentsRule extends ValueSetCodeRule {
   clone() {
     return new ValueSetIncludesDescendentsRule(this._code.clone());
   }
+
+  toJSON() {
+    return {
+      "system": this._code.system,
+      "code": this._code.code,
+      "description": this._code.display
+    }
+  }
 }
 
 // ValueSetExcludesDescendentsRule indicates that the given code and it's descendents (in SNOMED-CT) should be excluded from the value set
 class ValueSetExcludesDescendentsRule extends ValueSetCodeRule {
+ 
   constructor(code) {
     super(code);
   }
@@ -1412,10 +1751,19 @@ class ValueSetExcludesDescendentsRule extends ValueSetCodeRule {
   clone() {
     return new ValueSetExcludesDescendentsRule(this._code.clone());
   }
+
+  toJSON() {
+    return {
+      "system": this._code.system,
+      "code": this._code.code,
+      "description": this._code.display
+    }
+  }
 }
 
 // ValueSetIncludesFromCodeSystemRule indicates that all codes in the given code system should be included in the value set
 class ValueSetIncludesFromCodeSystemRule {
+ 
   constructor(system) {
     this._system = system;
   }
@@ -1425,10 +1773,15 @@ class ValueSetIncludesFromCodeSystemRule {
   clone() {
     return new ValueSetIncludesFromCodeSystemRule(this._system);
   }
+
+  toJSON() {
+    return { "system": this._system };
+  }
 }
 
 // ValueSetIncludesFromCodeRule indicates that codes referenced by the given code should be included in the value set
 class ValueSetIncludesFromCodeRule extends ValueSetCodeRule {
+ 
   constructor(code) {
     super(code);
   }
@@ -1436,9 +1789,18 @@ class ValueSetIncludesFromCodeRule extends ValueSetCodeRule {
   clone() {
     return new ValueSetIncludesFromCodeRule(this._code.clone());
   }
+
+  toJSON() {
+    return {
+      "system":   this._code.system,
+      "code":     this._code.code,
+      "description":  this._code.display
+    }
+  }
 }
 
 class ValueSetRulesFilter {
+ 
   constructor(rules = []) {
     this._rules = rules;
   }
@@ -1468,6 +1830,7 @@ class ValueSetRulesFilter {
 }
 
 class CodeSystem  {
+ 
   constructor(identifier, url) {
     this._identifier = identifier;
     this._url = url;
@@ -1530,6 +1893,7 @@ class CodeSystem  {
 
 
 class ElementMapping {
+ 
   constructor(identifier, targetSpec, targetItem) {
     this._identifier = identifier;
     this._targetSpec = targetSpec;
@@ -1612,9 +1976,46 @@ class ElementMapping {
 
     return clone;
   }
+
+  toJSON() {
+    /* TODO: make field mappings hierarchial
+    let fieldMappings = this.rulesFilter.field._rules.reduce((dict, m) => {      
+      var paths = m.sourcePath.map(p => p.fqn).slice();
+      var currDict = dict;
+      while (paths.length > 0) {
+          let key = paths.shift();
+          if (!currDict[key]) {
+              currDict[key] = {};
+          }
+          currDict = currDict[key]
+      }
+      currDict["target"] = m.target;
+
+      return dict;
+    }, {})
+    */
+    
+    let out = {
+      "name": this.identifier.name,
+      "namespace": this.identifier.namespace,
+      "fqn": this.identifier.fqn,
+      "targetSpec": this.targetSpec,
+      "targetItem": this.targetItem,
+      "mappings": {
+        "fieldMapping": this.rulesFilter.field._rules.map(m => m.toJSON()), //TODO make hierarchial
+        "cardMapping": this.rulesFilter.cardinality._rules.map(m => m.toJSON()),
+        "fixedValueMapping": this.rulesFilter.fixedValue._rules.map(m => m.toJSON())
+      }
+    }
+
+    clearEmptyFields(out, true)
+    
+    return out;
+  }
 }
 
 class FieldMappingRule {
+ 
   constructor(sourcePath = [], target = '') {
     this._sourcePath = sourcePath; // array of identifiers
     this._target = target; // string
@@ -1634,9 +2035,17 @@ class FieldMappingRule {
     const clonedSP = this._sourcePath.map(p => p.clone());
     return new FieldMappingRule(clonedSP, this._target);
   }
+
+  toJSON() {
+    return {
+      "target": this.target,
+      "sourcePath": this.sourcePath.map(s => s.fqn),
+    }
+  }
 }
 
 class CardinalityMappingRule {
+ 
   constructor(target = '', cardinality) {
     this._target = target;   // string
     this._cardinality = cardinality; // Cardinality
@@ -1652,9 +2061,17 @@ class CardinalityMappingRule {
   clone() {
     return new CardinalityMappingRule(this._target, this._cardinality.clone());
   }
+
+  toJSON() {
+    return {
+      "target": this._target,
+      "cardinality": this._cardinality,
+    }
+  }
 }
 
 class FixedValueMappingRule {
+ 
   constructor(target = '', value='') {
     this._target = target;   // string
     this._value = value; // string
@@ -1670,9 +2087,17 @@ class FixedValueMappingRule {
   clone() {
     return new FixedValueMappingRule(this._target, this._value);
   }
+
+  toJSON() {
+    return {
+      "target": this._target,
+      "fixedValue": this._value,
+    }
+  }
 }
 
 class MappingRulesFilter {
+ 
   constructor(rules = []) {
     this._rules = rules;
   }
@@ -1717,6 +2142,7 @@ class MappingRulesFilter {
 }
 
 class Version {
+ 
   constructor(major, minor = 0, patch = 0) {
     this._major = major;
     this._minor = minor;

@@ -1,0 +1,31 @@
+{
+  "name": "IncludesCodeConstraintOnValueChild",
+  "namespace": "shr.test",
+  "fqn": "shr.test.IncludesCodeConstraintOnValueChild",
+  "isEntry": true,
+  "isAbstract": false,
+  "value": {
+    "fqn": "shr.test.MultiCodedFromValueSet",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "subpaths": {
+        "shr.test.Coding": {
+          "subpaths": {
+            "code": {
+              "includesCode": [
+                {
+                  "system": "http://foo.org",
+                  "code": "bar"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "IncludesCodeFromCodesystemVS",
+  "namespace": "shr.test",
+  "fqn": "shr.test.IncludesCodeFromCodesystemVS",
+  "url": "http://foo.org/vs/IncludesCodeFromCodesystemVS",
+  "rules": {
+    "includesFromCodeSystem": [
+      {
+        "system": "http://foo.org"
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "IncludesCodeConstraintOnValue",
+  "namespace": "shr.test",
+  "fqn": "shr.test.IncludesCodeConstraintOnValue",
+  "isEntry": true,
+  "isAbstract": false,
+  "value": {
+    "fqn": "shr.test.Coding",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1
+    },
+    "constraints": {
+      "subpaths": {
+        "code": {
+          "includesCode": [
+            {
+              "system": "http://foo.org",
+              "code": "bar"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+    "name": "Simple",
+    "namespace": "shr.test",
+    "fqn": "shr.test.Simple",
+    "isEntry": true,
+    "isAbstract": false,
+    "description": "It is a multi-concept entry",
+    "concepts": [
+      {
+        "system": "http://foo.org",
+        "code": "bar",
+        "display": "Foobar"
+      },
+      {
+        "system": "urn:iso:std:iso:4217",
+        "code": "baz",
+        "display": "Foobaz"
+      },
+      {
+        "system": "urn:oid:2.16.840.1.114222.4.11.826",
+        "code": "bam",
+        "display": "Foobam"
+      }
+    ],
+    "value": {
+      "fqn": "string",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  }

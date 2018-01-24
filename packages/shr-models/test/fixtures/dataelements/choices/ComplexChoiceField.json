@@ -1,0 +1,53 @@
+{
+    "name": "ComplexChoiceField",
+    "namespace": "shr.test",
+    "fqn": "shr.test.ComplexChoiceField",
+    "isEntry": true,
+    "isAbstract": false,
+    "value": {
+        "fqn": "string",
+        "valueType": "IdentifiableValue",
+        "card": {
+          "min": 1,
+          "max": 1
+        }
+      },
+    "fields": [
+      {
+        "valueType": "ChoiceValue",
+        "card": {
+          "min": 0,
+          "max": 1
+        },
+        "options": [
+          {
+            "fqn": "date",
+            "valueType": "IdentifiableValue",
+            "constraints": {
+              "fixedValue": {
+                "type": "code",
+                "value": {
+                  "system": "http://foo.org",
+                  "code": "date"
+                }
+              }
+            }
+          },
+          {
+            "fqn": "other.ns.Simple2",
+            "valueType": "IdentifiableValue",
+            "constraints": {
+              "valueSet": {
+                "uri": "http://standardhealthrecord.org/test/vs/Choice",
+                "bindingStrength": "REQUIRED"
+              }
+            }
+          },
+          {
+            "fqn": "shr.test.Simple",
+            "valueType": "IdentifiableValue"
+          }
+        ]
+      }
+    ]
+  }
