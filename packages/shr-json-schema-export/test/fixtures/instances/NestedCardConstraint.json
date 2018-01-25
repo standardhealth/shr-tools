@@ -1,9 +1,9 @@
 {
-  "shr.base.ShrId": { "Value": "patient-id" },
-  "shr.base.EntryId": { "Value": "my-id-3" },
+  "shr.base.ShrId": { "Value": "patient-id", "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId"} },
+  "shr.base.EntryId": { "Value": "my-id-3", "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId"} },
   "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/NestedCardConstraint"},
-  "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z" },
-  "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z" },
+  "shr.core.CreationTime": { "Value": "2017-11-30T12:34:56Z", "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"} },
+  "shr.base.LastUpdated": { "Value": "2017-11-30T12:34:56Z", "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"} },
   "shr.test.OptionalField": {
     "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/OptionalField"},
     "shr.test.OptionalValue": {

@@ -104,52 +104,66 @@ const stubSchema = JSON.parse(`{
   "title": "A stub implementation of shr.base.Entry.",
   "definitions": {
     "Entry": {
-      "type": "object",
-      "properties": {
-        "shr.base.ShrId": {
-          "$ref": "#/definitions/RequiredString"
-        },
-        "shr.base.EntryId": {
-          "$ref": "#/definitions/RequiredString"
-        },
-        "shr.base.EntryType": {
-          "$ref": "#/definitions/EntryType"
-        },
-        "shr.core.CreationTime": {
+      "allOf": [
+        { "$ref": "#/definitions/Any" },
+        {
           "type": "object",
           "properties": {
-            "Value": {
-              "type": "string",
-              "format": "date-time"
+            "shr.base.ShrId": {
+              "$ref": "#/definitions/RequiredString"
+            },
+            "shr.base.EntryId": {
+              "$ref": "#/definitions/RequiredString"
+            },
+            "shr.core.CreationTime": {
+              "type": "object",
+              "properties": {
+                "Value": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [ "Value" ]
+            },
+            "shr.base.LastUpdated": {
+              "$ref": "#/definitions/RequiredString"
             }
           },
-          "required": [ "Value" ]
-        },
-        "shr.base.LastUpdated": {
-          "$ref": "#/definitions/RequiredString"
+          "required": [
+            "shr.base.ShrId",
+            "shr.base.EntryId",
+            "shr.core.CreationTime",
+            "shr.base.LastUpdated"
+          ]
         }
-      },
-      "required": [
-        "shr.base.ShrId",
-        "shr.base.EntryId",
-        "shr.base.EntryType",
-        "shr.core.CreationTime",
-        "shr.base.LastUpdated"
       ]
     },
     "RequiredString": {
-      "type": "object",
-      "properties": {
-        "Value": { "type": "string" }
-      },
-      "required": [ "Value" ]
+      "allOf": [
+        { "$ref": "#/definitions/Any" },
+        {
+          "type": "object",
+          "properties": {
+            "Value": { "type": "string" }
+          },
+          "required": [ "Value" ]
+        }
+      ]
     },
     "EntryType": {
       "type": "object",
       "properties": {
-        "Value": { "type": "string", "format": "uri" }
+        "Value": { "type": "string", "format": "uri" },
+        "shr.base.EntryType": { "$ref": "#/definitions/EntryType" }
       },
       "required": [ "Value" ]
+    },
+    "Any": {
+      "type": "object",
+      "properties": {
+        "shr.base.EntryType": { "$ref": "#/definitions/EntryType" }
+      },
+      "required": [ "shr.base.EntryType" ]
     }
   }
 }`);
