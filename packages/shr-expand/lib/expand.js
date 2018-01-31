@@ -47,7 +47,7 @@ class Expander {
     const entryDE = this._expanded.dataElements.find('shr.base', 'Entry');
     let entryFields = null;
     if (!entryDE) {
-      logger.warn('Could not find expanded definition of shr.base.Entry. Inheritance calculations will be incomplete.');
+      logger.warn('Could not find expanded definition of shr.base.Entry. Inheritance calculations will be incomplete. ERROR_CODE:12036');
       entryFields = {
         'shr.core': { 'Version': true },
         'shr.base': {}
@@ -67,7 +67,7 @@ class Expander {
           }
           const parent = this._expanded.dataElements.findByIdentifier(basedOn);
           if (!parent) {
-            logger.error(`Could not find based on element %s for child element %s.`, basedOn, de.identifier);
+            logger.error(`Could not find based on element %s for child element %s. ERROR_CODE:12037`, basedOn, de.identifier);
           } else {
             parents.push(parent);
           }
@@ -135,6 +135,7 @@ class Expander {
                   de.fields[i].inheritance = models.OVERRIDDEN;
                 } else {
                   de.fields[i].inheritance = models.INHERITED;
+                  
                 }
               }
             }
@@ -215,14 +216,146 @@ class Expander {
       }
 
       const expanded = element.clone();
-      expanded.value = mergedValue;
+      if (mergedValue) expanded.value = mergedValue;
       expanded.fields = mergedFields;
+      this.expandHierarchy(expanded);
       this._expanded.dataElements.add(expanded);
       return expanded;
     } finally {
       logger.debug('Done expanding element');
       logger = lastLogger;
     }
+  }
+  
+  /*
+  expandHierarchy - (DataElement)
+
+  This takes a data element and recursively transverses its hierarchy of 'Based On' parent elements, 
+  determining the original source of fields/values (.inheritedFrom), the most recent parent to modify
+  constraints on fields/values (.lastModifiedBy), and the full history of field/value cardinalities.
+
+  The element.hierarchy is a list of its parental hierarchy, and also serves to determine if an element
+  has already undergone expansion. 
+
+  By recursively filling out hierarchy, inheritance, and modifier information, the lower level child
+  elements can inherit the parents historical information.
+  */
+  expandHierarchy(element) {
+    /*
+    setCurrentElementAsOriginalModifier - (Value)
+    
+    Sets the current expanding element to be the original modifier for all value constraints. It also 
+    checks for ChoiceValues, and recursively fills out that information for those cases.
+    */
+    const setCurrentElementAsOriginalModifier = (value) => {
+      if (value.options) {
+        value.options.forEach(v => setCurrentElementAsOriginalModifier(v));
+      } else {
+        value.constraints.forEach(c => c.lastModifiedBy = element.identifier);
+      }
+    }
+
+    if (element.basedOn.length == 0) {
+      if (element.value) setCurrentElementAsOriginalModifier(element.value);
+      if (element.fields) element.fields.forEach(f => setCurrentElementAsOriginalModifier(f));
+
+    } else {
+      for (const baseID of element.basedOn) {
+        if (baseID instanceof models.TBD) continue;
+
+        const base = this.lookup(baseID);
+        if (typeof base === 'undefined') {
+          logger.error('Reference to non-existing base: %s. ERROR_CODE:12002', baseID.fqn);
+          continue;
+        }
+
+      
+        if (base.hierarchy.length == 0 && base.basedOn.length > 0) {
+          this.expandHierarchy(base);
+        }
+
+        /*
+        setCurrentElementAsOriginalModifier - (Value, Value)
+
+        Determines the original defining source of value (inheritedFrom). If there is no
+        recursively built parent inheritance information, then it must be the current expanding
+        element.
+
+        For each of the child value's constraints, it tries to match it with a parent constraint,
+        and similarly determines the 'lastModifiedBy' information using the result of that match.
+        */
+        const manageValueInheritance = (parent, child) => {
+          if (child.inheritedFrom == null) {
+            if (parent.inheritedFrom) {
+              child.inheritedFrom = parent.inheritedFrom;
+            } else {
+              child.inheritedFrom = base.identifier;
+            };
+          }
+
+          if (child.constraints.length > 0) {
+            for (const c of child.constraints) {
+              const matchedParentConstraint = parent.constraints.find(p => p.equals(c));
+              if (matchedParentConstraint && matchedParentConstraint.lastModifiedBy) {
+                c.lastModifiedBy = matchedParentConstraint.lastModifiedBy;
+              } else {
+                c.lastModifiedBy = element.identifier;
+              }
+            }
+          } 
+        }
+
+        /*
+        manageCardHistory - (Value, Value)
+
+        Builds the full history of a value's cardinality by recursively tranversing the
+        value's parents and cardinality constraint information from each parent source.
+        */
+        const manageCardHistory = (parent, child) => {
+          if (child.effectiveCard.equals(child.card)) {
+            return;
+          } else {
+            if (parent.constraintsFilter.own.card.hasConstraints) {
+              const oldCard = parent.constraintsFilter.own.card.constraints[0].card.clone();
+              oldCard.source = base.identifier;
+              if (!parent.card.history.find(h => h.source == oldCard.source)) { //if unique
+                parent.card.withHistory(oldCard);
+              }
+            } else {
+              const oldCard = parent.card.clone();
+              oldCard.source = base.identifier;
+              child.card.withHistory(oldCard)
+            }
+
+            if (parent.card.history) {
+              if (!child.card.history) child.card.history = []
+              child.card.history.unshift(...parent.card.history);
+            }
+          }
+        }
+
+        if (element.value) {
+          if (base.value) {
+            manageValueInheritance(base.value, element.value)
+            manageCardHistory(base.value, element.value);
+          } else {
+            setCurrentElementAsOriginalModifier(element.value);
+          }
+        }
+
+        for (const ef of element.fields) {
+          const baseField = base.fields.find(f => f.identifier != null && f.identifier.equals(ef.identifier));
+          if (baseField) {
+            manageValueInheritance(baseField, ef);
+            manageCardHistory(baseField, ef);
+          } else {
+            setCurrentElementAsOriginalModifier(ef);
+          }
+        }
+      
+        element.hierarchy.push(...base.hierarchy, base);
+      }
+    }  
   }
 
   // mergeValue does a best attempt at merging the values, recording errors as it encounters them.  If the values
