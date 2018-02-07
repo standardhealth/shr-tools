@@ -887,7 +887,14 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
         } else {
           target = currentDef.fields.find((field) => pathId.equals(field.identifier));
           if (!target) {
-            logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+            // It's possible that the field is actually defined as an "includes type" constraint on a list.
+            // In this case, do nothing, because right now there isn't a valid way to represent further constraints
+            // on includesType elements in the schema.
+            if (valueDef.constraintsFilter.includesType.constraints.some(c => c.isA.equals(pathId))) {
+              logger.warn('Cannot enforce constraint %s on Element %s since %s refers to an type introduced by an "includesType" constraint', JSON.stringify(constraint, null, 2), JSON.stringify(currentDef, null, 2), pathId);
+            } else {
+              logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+            }
             return {};
           }
           normalizedPath.push(pathId.fqn);
@@ -938,7 +945,14 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
       } else {
         const found = currentDef.fields.some((field) => pathId.equals(field.identifier));
         if (!found) {
-          logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+          // It's possible that the field is actually defined as an "includes type" constraint on a list.
+          // In this case, do nothing, because right now there isn't a valid way to represent includesType
+          // constraints in the schema.
+          if (valueDef.constraintsFilter.includesType.constraints.some(c => c.isA.equals(pathId))) {
+            // TODO: Eventually, somehow, support includesType constraints
+          } else {
+            logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+          }
           return {};
         }
         normalizedPath.push(pathId.fqn);
