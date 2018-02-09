@@ -38,6 +38,8 @@ class ES6Exporter {
     // Copy over Reference
     es6Defs['Reference.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Reference.js'), 'utf8');
     es6Defs['json-helper.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'json-helper.js'), 'utf8');
+    es6Defs['init.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'init.js'), 'utf8');
+
 
     // Generate the namespace factories and specific ES6 classes
     const namespaces = this._specs.namespaces.all;

@@ -41,6 +41,9 @@ function setup(inDir='./test/fixtures/spec', outDir='./build/test', clean=false)
     const filename = `${schemaId.substring(baseSchemaNamespace.length+1).replace(/\//g, '.')}.schema.json`;
     fs.writeFileSync(path.join(jsonSchemaPath, filename), JSON.stringify(jsonSchemaResults[schemaId], null, 2));
   }
+
+  // Initialize the ES6 classes as required
+  require(`${path.resolve(outDir)}/es6/init`);
 }
 
 module.exports = setup;
