@@ -1,6 +1,6 @@
 {
   "name": "shr-models",
-  "version": "5.3.0",
+  "version": "5.4.0",
   "description": "Models used to represent SHR namespaces, data elements, value sets, code systems, and mappings for import/export",
   "author": "",
   "license": "Apache-2.0",
