@@ -5,7 +5,7 @@ const {SHRMapLexer} = require('./parsers/SHRMapLexer');
 const {SHRMapParser} = require('./parsers/SHRMapParser');
 const {SHRMapParserListener} = require('./parsers/SHRMapParserListener');
 const {SHRErrorListener} = require('./errorListener.js');
-const {Specifications, Version, ElementMapping, Cardinality, Identifier, PrimitiveIdentifier, TBD} = require('shr-models');
+const {Specifications, Version, ElementMapping, Cardinality, Identifier, PrimitiveIdentifier, PRIMITIVES, TBD} = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
 var logger = rootLogger;
@@ -136,8 +136,9 @@ class MappingImporter extends SHRMapParserListener {
     let c = fmCtx;
     for (const part of c.source().sourcePart()) {
       for (const word of part.sourceWord()) {
-        if (word.simpleOrFQName()) {
-          sourcePath.push(this.resolveToIdentifier(word.simpleOrFQName().getText()));
+        if (word.simpleOrFQName() || word.specialWord()) {
+          const idText = word.simpleOrFQName() ? word.simpleOrFQName().getText() : word.specialWord().getText();
+          sourcePath.push(this.resolveToIdentifier(idText));
         } else if (word.primitive()) {
           sourcePath.push(new PrimitiveIdentifier(word.primitive().getText()));
         } else if (word.tbd()){
@@ -171,6 +172,18 @@ class MappingImporter extends SHRMapParserListener {
       const name = ref.substr(lastDot+1);
       return new Identifier(ns, name);
     }
+
+    // No specified namespace -- if it's a special word (e.g. _Value), or primitive, make it so.
+    if (ref.startsWith('_')) {
+      return new Identifier('', ref);
+    } else if (ref === 'Entry' || ref === 'Value') {
+      // "Fix" the legacy keyword to the new _-based keyword
+      return new Identifier('', `_${ref}`);
+    } else if (PRIMITIVES.includes(ref)) {
+      return new PrimitiveIdentifier(ref);
+    }
+
+    // We'll resolve the namespace later
     return new Identifier(null, ref);
   }
 

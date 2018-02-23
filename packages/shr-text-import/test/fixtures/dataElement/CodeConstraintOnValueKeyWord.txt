@@ -9,7 +9,7 @@ Value:          CodedElement
 
 EntryElement:   ChildElement
 Based on:       BaseElement
-Value is FOO#bar "FooBar"
+_Value is FOO#bar "FooBar"
 
 Element:   CodedElement
 Value:     Coding from http://standardhealthrecord.org/test/vs/Coded

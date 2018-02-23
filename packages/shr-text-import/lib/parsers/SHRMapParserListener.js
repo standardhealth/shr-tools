@@ -146,6 +146,15 @@ SHRMapParserListener.prototype.exitNamespace = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRMapParser#specialWord.
+SHRMapParserListener.prototype.enterSpecialWord = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRMapParser#specialWord.
+SHRMapParserListener.prototype.exitSpecialWord = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRMapParser#simpleName.
 SHRMapParserListener.prototype.enterSimpleName = function(ctx) {
 };

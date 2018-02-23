@@ -7,4 +7,8 @@ Value:          0..1 string
 
 EntryElement:   ZeroedOutValue
 Based on:        OptionalValue
+0..0 _Value
+
+EntryElement:   ZeroedOutValueBackwardsCompatibility
+Based on:        OptionalValue
 0..0 Value

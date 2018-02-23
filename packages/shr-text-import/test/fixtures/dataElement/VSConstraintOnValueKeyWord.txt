@@ -6,7 +6,7 @@ Value:          CodedElement
 
 EntryElement:   ChildElement
 Based on:       BaseElement
-Value from http://standardhealthrecord.org/test/vs/Coded
+_Value from http://standardhealthrecord.org/test/vs/Coded
 
 Element:   CodedElement
 Value:     code

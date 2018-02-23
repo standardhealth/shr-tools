@@ -5,8 +5,8 @@ const {SHRDataElementParser} = require('./parsers/SHRDataElementParser');
 const {SHRDataElementParserVisitor} = require('./parsers/SHRDataElementParserVisitor');
 const {Version} = require('shr-models');
 
-const VERSION = new Version(5, 2, 3);
-const GRAMMAR_VERSION = new Version(5, 0, 1);
+const VERSION = new Version(5, 3, 0);
+const GRAMMAR_VERSION = new Version(5, 1, 0);
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
 var logger = rootLogger;

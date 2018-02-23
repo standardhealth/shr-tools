@@ -7,41 +7,43 @@ var SHRMapParserVisitor = require('./SHRMapParserVisitor').SHRMapParserVisitor;
 var grammarFileName = "SHRMapParser.g4";
 
 var serializedATN = ["\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd",
-    "\3\64\u008f\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b",
+    "\3\67\u0094\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b",
     "\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20",
-    "\t\20\4\21\t\21\4\22\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\3",
-    "\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\5\7\5;\n\5\f\5",
-    "\16\5>\13\5\3\6\3\6\7\6B\n\6\f\6\16\6E\13\6\3\7\3\7\3\7\5\7J\n\7\3\7",
-    "\3\7\3\b\3\b\3\b\5\bQ\n\b\3\t\3\t\3\t\3\t\3\n\3\n\3\n\7\nZ\n\n\f\n\16",
-    "\n]\13\n\3\13\3\13\3\13\3\13\3\13\7\13d\n\13\f\13\16\13g\13\13\3\f\3",
-    "\f\3\f\5\fl\n\f\3\r\3\r\3\r\3\r\3\r\3\16\3\16\3\16\3\16\3\17\3\17\3",
-    "\17\3\17\3\20\3\20\3\21\3\21\3\22\3\22\3\23\3\23\5\23\u0083\n\23\3\24",
-    "\3\24\3\25\3\25\3\25\3\25\3\26\3\26\5\26\u008d\n\26\3\26\2\2\27\2\4",
-    "\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*\2\6\3\2&\'\3\2$%\3\2\22\"",
-    "\4\2\r\r##\u0084\2,\3\2\2\2\4\60\3\2\2\2\6\66\3\2\2\2\b<\3\2\2\2\n?",
-    "\3\2\2\2\fF\3\2\2\2\16P\3\2\2\2\20R\3\2\2\2\22V\3\2\2\2\24^\3\2\2\2",
-    "\26k\3\2\2\2\30m\3\2\2\2\32r\3\2\2\2\34v\3\2\2\2\36z\3\2\2\2 |\3\2\2",
-    "\2\"~\3\2\2\2$\u0082\3\2\2\2&\u0084\3\2\2\2(\u0086\3\2\2\2*\u008a\3",
-    "\2\2\2,-\5\4\3\2-.\5\6\4\2./\5\b\5\2/\3\3\2\2\2\60\61\7\3\2\2\61\62",
-    "\7\4\2\2\62\63\5\34\17\2\63\64\7\5\2\2\64\65\5\36\20\2\65\5\3\2\2\2",
-    "\66\67\7\7\2\2\678\5 \21\28\7\3\2\2\29;\5\n\6\2:9\3\2\2\2;>\3\2\2\2",
-    "<:\3\2\2\2<=\3\2\2\2=\t\3\2\2\2><\3\2\2\2?C\5\f\7\2@B\5\16\b\2A@\3\2",
-    "\2\2BE\3\2\2\2CA\3\2\2\2CD\3\2\2\2D\13\3\2\2\2EC\3\2\2\2FI\5 \21\2G",
-    "H\7\b\2\2HJ\7.\2\2IG\3\2\2\2IJ\3\2\2\2JK\3\2\2\2KL\7\20\2\2L\r\3\2\2",
-    "\2MQ\5\20\t\2NQ\5\30\r\2OQ\5\32\16\2PM\3\2\2\2PN\3\2\2\2PO\3\2\2\2Q",
-    "\17\3\2\2\2RS\5\22\n\2ST\7\b\2\2TU\7.\2\2U\21\3\2\2\2V[\5\24\13\2WX",
-    "\7\f\2\2XZ\5\24\13\2YW\3\2\2\2Z]\3\2\2\2[Y\3\2\2\2[\\\3\2\2\2\\\23\3",
-    "\2\2\2][\3\2\2\2^e\5\26\f\2_`\7\16\2\2`a\5\26\f\2ab\7\17\2\2bd\3\2\2",
-    "\2c_\3\2\2\2dg\3\2\2\2ec\3\2\2\2ef\3\2\2\2f\25\3\2\2\2ge\3\2\2\2hl\5",
-    "$\23\2il\5&\24\2jl\5*\26\2kh\3\2\2\2ki\3\2\2\2kj\3\2\2\2l\27\3\2\2\2",
-    "mn\7\t\2\2no\7\60\2\2op\7\13\2\2pq\5(\25\2q\31\3\2\2\2rs\7\n\2\2st\7",
-    "\62\2\2tu\7\63\2\2u\33\3\2\2\2vw\7#\2\2wx\7\f\2\2xy\7#\2\2y\35\3\2\2",
-    "\2z{\t\2\2\2{\37\3\2\2\2|}\t\3\2\2}!\3\2\2\2~\177\7(\2\2\177#\3\2\2",
-    "\2\u0080\u0083\5 \21\2\u0081\u0083\5\"\22\2\u0082\u0080\3\2\2\2\u0082",
-    "\u0081\3\2\2\2\u0083%\3\2\2\2\u0084\u0085\t\4\2\2\u0085\'\3\2\2\2\u0086",
-    "\u0087\7#\2\2\u0087\u0088\7\21\2\2\u0088\u0089\t\5\2\2\u0089)\3\2\2",
-    "\2\u008a\u008c\7\6\2\2\u008b\u008d\7)\2\2\u008c\u008b\3\2\2\2\u008c",
-    "\u008d\3\2\2\2\u008d+\3\2\2\2\13<CIP[ek\u0082\u008c"].join("");
+    "\t\20\4\21\t\21\4\22\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4",
+    "\27\t\27\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\5\7\5",
+    "=\n\5\f\5\16\5@\13\5\3\6\3\6\7\6D\n\6\f\6\16\6G\13\6\3\7\3\7\3\7\5\7",
+    "L\n\7\3\7\3\7\3\b\3\b\3\b\5\bS\n\b\3\t\3\t\3\t\3\t\3\n\3\n\3\n\7\n\\",
+    "\n\n\f\n\16\n_\13\n\3\13\3\13\3\13\3\13\3\13\7\13f\n\13\f\13\16\13i",
+    "\13\13\3\f\3\f\3\f\3\f\5\fo\n\f\3\r\3\r\3\r\3\r\3\r\3\16\3\16\3\16\3",
+    "\16\3\17\3\17\3\17\3\17\3\20\3\20\3\21\3\21\3\22\3\22\3\23\3\23\3\24",
+    "\3\24\5\24\u0088\n\24\3\25\3\25\3\26\3\26\3\26\3\26\3\27\3\27\5\27\u0092",
+    "\n\27\3\27\2\2\30\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,\2\7",
+    "\3\2)*\3\2\f\16\3\2\'(\3\2\25%\4\2\20\20&&\u0089\2.\3\2\2\2\4\62\3\2",
+    "\2\2\68\3\2\2\2\b>\3\2\2\2\nA\3\2\2\2\fH\3\2\2\2\16R\3\2\2\2\20T\3\2",
+    "\2\2\22X\3\2\2\2\24`\3\2\2\2\26n\3\2\2\2\30p\3\2\2\2\32u\3\2\2\2\34",
+    "y\3\2\2\2\36}\3\2\2\2 \177\3\2\2\2\"\u0081\3\2\2\2$\u0083\3\2\2\2&\u0087",
+    "\3\2\2\2(\u0089\3\2\2\2*\u008b\3\2\2\2,\u008f\3\2\2\2./\5\4\3\2/\60",
+    "\5\6\4\2\60\61\5\b\5\2\61\3\3\2\2\2\62\63\7\3\2\2\63\64\7\4\2\2\64\65",
+    "\5\34\17\2\65\66\7\5\2\2\66\67\5\36\20\2\67\5\3\2\2\289\7\7\2\29:\5",
+    "\"\22\2:\7\3\2\2\2;=\5\n\6\2<;\3\2\2\2=@\3\2\2\2><\3\2\2\2>?\3\2\2\2",
+    "?\t\3\2\2\2@>\3\2\2\2AE\5\f\7\2BD\5\16\b\2CB\3\2\2\2DG\3\2\2\2EC\3\2",
+    "\2\2EF\3\2\2\2F\13\3\2\2\2GE\3\2\2\2HK\5\"\22\2IJ\7\b\2\2JL\7\61\2\2",
+    "KI\3\2\2\2KL\3\2\2\2LM\3\2\2\2MN\7\23\2\2N\r\3\2\2\2OS\5\20\t\2PS\5",
+    "\30\r\2QS\5\32\16\2RO\3\2\2\2RP\3\2\2\2RQ\3\2\2\2S\17\3\2\2\2TU\5\22",
+    "\n\2UV\7\b\2\2VW\7\61\2\2W\21\3\2\2\2X]\5\24\13\2YZ\7\17\2\2Z\\\5\24",
+    "\13\2[Y\3\2\2\2\\_\3\2\2\2][\3\2\2\2]^\3\2\2\2^\23\3\2\2\2_]\3\2\2\2",
+    "`g\5\26\f\2ab\7\21\2\2bc\5\26\f\2cd\7\22\2\2df\3\2\2\2ea\3\2\2\2fi\3",
+    "\2\2\2ge\3\2\2\2gh\3\2\2\2h\25\3\2\2\2ig\3\2\2\2jo\5 \21\2ko\5&\24\2",
+    "lo\5(\25\2mo\5,\27\2nj\3\2\2\2nk\3\2\2\2nl\3\2\2\2nm\3\2\2\2o\27\3\2",
+    "\2\2pq\7\t\2\2qr\7\63\2\2rs\7\13\2\2st\5*\26\2t\31\3\2\2\2uv\7\n\2\2",
+    "vw\7\65\2\2wx\7\66\2\2x\33\3\2\2\2yz\7&\2\2z{\7\17\2\2{|\7&\2\2|\35",
+    "\3\2\2\2}~\t\2\2\2~\37\3\2\2\2\177\u0080\t\3\2\2\u0080!\3\2\2\2\u0081",
+    "\u0082\t\4\2\2\u0082#\3\2\2\2\u0083\u0084\7+\2\2\u0084%\3\2\2\2\u0085",
+    "\u0088\5\"\22\2\u0086\u0088\5$\23\2\u0087\u0085\3\2\2\2\u0087\u0086",
+    "\3\2\2\2\u0088\'\3\2\2\2\u0089\u008a\t\5\2\2\u008a)\3\2\2\2\u008b\u008c",
+    "\7&\2\2\u008c\u008d\7\24\2\2\u008d\u008e\t\6\2\2\u008e+\3\2\2\2\u008f",
+    "\u0091\7\6\2\2\u0090\u0092\7,\2\2\u0091\u0090\3\2\2\2\u0091\u0092\3",
+    "\2\2\2\u0092-\3\2\2\2\13>EKR]gn\u0087\u0091"].join("");
 
 
 var atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
@@ -52,8 +54,9 @@ var sharedContextCache = new antlr4.PredictionContextCache();
 
 var literalNames = [ 'null', "'Grammar:'", "'Map'", "'Namespace:'", "'TBD'", 
                      "'Target:'", "'maps to'", "'constrain'", "'fix'", "'to'", 
-                     "'.'", "'*'", "'['", "']'", "':'", "'..'", "'boolean'", 
-                     "'integer'", "'string'", "'decimal'", "'uri'", "'base64Binary'", 
+                     "'_Concept'", "'_Entry'", "'_Value'", "'.'", "'*'", 
+                     "'['", "']'", "':'", "'..'", "'boolean'", "'integer'", 
+                     "'string'", "'decimal'", "'uri'", "'base64Binary'", 
                      "'instant'", "'date'", "'dateTime'", "'time'", "'code'", 
                      "'oid'", "'id'", "'markdown'", "'unsignedInt'", "'positiveInt'", 
                      "'xhtml'", 'null', 'null', 'null', 'null', 'null', 
@@ -61,13 +64,14 @@ var literalNames = [ 'null', "'Grammar:'", "'Map'", "'Namespace:'", "'TBD'",
 
 var symbolicNames = [ 'null', "KW_GRAMMAR", "KW_G_MAP", "KW_NAMESPACE", 
                       "KW_TBD", "KW_TARGET", "KW_MAPS_TO", "KW_CONSTRAIN", 
-                      "KW_FIX", "KW_TO", "DOT", "STAR", "OPEN_BRACKET", 
-                      "CLOSE_BRACKET", "COLON", "RANGE", "KW_BOOLEAN", "KW_INTEGER", 
-                      "KW_STRING", "KW_DECIMAL", "KW_URI", "KW_BASE64_BINARY", 
-                      "KW_INSTANT", "KW_DATE", "KW_DATE_TIME", "KW_TIME", 
-                      "KW_CODE", "KW_OID", "KW_ID", "KW_MARKDOWN", "KW_UNSIGNED_INT", 
-                      "KW_POSITIVE_INT", "KW_XHTML", "WHOLE_NUMBER", "ALL_CAPS", 
-                      "UPPER_WORD", "LOWER_WORD", "DOT_SEPARATED_LW", "DOT_SEPARATED_UW", 
+                      "KW_FIX", "KW_TO", "KW_BAR_CONCEPT", "KW_BAR_ENTRY", 
+                      "KW_BAR_VALUE", "DOT", "STAR", "OPEN_BRACKET", "CLOSE_BRACKET", 
+                      "COLON", "RANGE", "KW_BOOLEAN", "KW_INTEGER", "KW_STRING", 
+                      "KW_DECIMAL", "KW_URI", "KW_BASE64_BINARY", "KW_INSTANT", 
+                      "KW_DATE", "KW_DATE_TIME", "KW_TIME", "KW_CODE", "KW_OID", 
+                      "KW_ID", "KW_MARKDOWN", "KW_UNSIGNED_INT", "KW_POSITIVE_INT", 
+                      "KW_XHTML", "WHOLE_NUMBER", "ALL_CAPS", "UPPER_WORD", 
+                      "LOWER_WORD", "DOT_SEPARATED_LW", "DOT_SEPARATED_UW", 
                       "STRING", "WS", "NEWLINE", "COMMENT", "LINE_COMMENT", 
                       "TARGET_PHRASE", "WS2", "TARGET_WORD", "WS3", "TARGET_WORD_2", 
                       "TARGET_PHRASE_2", "WS4" ];
@@ -75,9 +79,9 @@ var symbolicNames = [ 'null', "KW_GRAMMAR", "KW_G_MAP", "KW_NAMESPACE",
 var ruleNames =  [ "doc", "docHeader", "targetStatement", "mappingDefs", 
                    "mappingDef", "mappingDefHeader", "mappingRule", "fieldMapping", 
                    "source", "sourcePart", "sourceWord", "cardMapping", 
-                   "fixedMapping", "version", "namespace", "simpleName", 
-                   "fullyQualifiedName", "simpleOrFQName", "primitive", 
-                   "count", "tbd" ];
+                   "fixedMapping", "version", "namespace", "specialWord", 
+                   "simpleName", "fullyQualifiedName", "simpleOrFQName", 
+                   "primitive", "count", "tbd" ];
 
 function SHRMapParser (input) {
 	antlr4.Parser.call(this, input);
@@ -107,47 +111,50 @@ SHRMapParser.KW_MAPS_TO = 6;
 SHRMapParser.KW_CONSTRAIN = 7;
 SHRMapParser.KW_FIX = 8;
 SHRMapParser.KW_TO = 9;
-SHRMapParser.DOT = 10;
-SHRMapParser.STAR = 11;
-SHRMapParser.OPEN_BRACKET = 12;
-SHRMapParser.CLOSE_BRACKET = 13;
-SHRMapParser.COLON = 14;
-SHRMapParser.RANGE = 15;
-SHRMapParser.KW_BOOLEAN = 16;
-SHRMapParser.KW_INTEGER = 17;
-SHRMapParser.KW_STRING = 18;
-SHRMapParser.KW_DECIMAL = 19;
-SHRMapParser.KW_URI = 20;
-SHRMapParser.KW_BASE64_BINARY = 21;
-SHRMapParser.KW_INSTANT = 22;
-SHRMapParser.KW_DATE = 23;
-SHRMapParser.KW_DATE_TIME = 24;
-SHRMapParser.KW_TIME = 25;
-SHRMapParser.KW_CODE = 26;
-SHRMapParser.KW_OID = 27;
-SHRMapParser.KW_ID = 28;
-SHRMapParser.KW_MARKDOWN = 29;
-SHRMapParser.KW_UNSIGNED_INT = 30;
-SHRMapParser.KW_POSITIVE_INT = 31;
-SHRMapParser.KW_XHTML = 32;
-SHRMapParser.WHOLE_NUMBER = 33;
-SHRMapParser.ALL_CAPS = 34;
-SHRMapParser.UPPER_WORD = 35;
-SHRMapParser.LOWER_WORD = 36;
-SHRMapParser.DOT_SEPARATED_LW = 37;
-SHRMapParser.DOT_SEPARATED_UW = 38;
-SHRMapParser.STRING = 39;
-SHRMapParser.WS = 40;
-SHRMapParser.NEWLINE = 41;
-SHRMapParser.COMMENT = 42;
-SHRMapParser.LINE_COMMENT = 43;
-SHRMapParser.TARGET_PHRASE = 44;
-SHRMapParser.WS2 = 45;
-SHRMapParser.TARGET_WORD = 46;
-SHRMapParser.WS3 = 47;
-SHRMapParser.TARGET_WORD_2 = 48;
-SHRMapParser.TARGET_PHRASE_2 = 49;
-SHRMapParser.WS4 = 50;
+SHRMapParser.KW_BAR_CONCEPT = 10;
+SHRMapParser.KW_BAR_ENTRY = 11;
+SHRMapParser.KW_BAR_VALUE = 12;
+SHRMapParser.DOT = 13;
+SHRMapParser.STAR = 14;
+SHRMapParser.OPEN_BRACKET = 15;
+SHRMapParser.CLOSE_BRACKET = 16;
+SHRMapParser.COLON = 17;
+SHRMapParser.RANGE = 18;
+SHRMapParser.KW_BOOLEAN = 19;
+SHRMapParser.KW_INTEGER = 20;
+SHRMapParser.KW_STRING = 21;
+SHRMapParser.KW_DECIMAL = 22;
+SHRMapParser.KW_URI = 23;
+SHRMapParser.KW_BASE64_BINARY = 24;
+SHRMapParser.KW_INSTANT = 25;
+SHRMapParser.KW_DATE = 26;
+SHRMapParser.KW_DATE_TIME = 27;
+SHRMapParser.KW_TIME = 28;
+SHRMapParser.KW_CODE = 29;
+SHRMapParser.KW_OID = 30;
+SHRMapParser.KW_ID = 31;
+SHRMapParser.KW_MARKDOWN = 32;
+SHRMapParser.KW_UNSIGNED_INT = 33;
+SHRMapParser.KW_POSITIVE_INT = 34;
+SHRMapParser.KW_XHTML = 35;
+SHRMapParser.WHOLE_NUMBER = 36;
+SHRMapParser.ALL_CAPS = 37;
+SHRMapParser.UPPER_WORD = 38;
+SHRMapParser.LOWER_WORD = 39;
+SHRMapParser.DOT_SEPARATED_LW = 40;
+SHRMapParser.DOT_SEPARATED_UW = 41;
+SHRMapParser.STRING = 42;
+SHRMapParser.WS = 43;
+SHRMapParser.NEWLINE = 44;
+SHRMapParser.COMMENT = 45;
+SHRMapParser.LINE_COMMENT = 46;
+SHRMapParser.TARGET_PHRASE = 47;
+SHRMapParser.WS2 = 48;
+SHRMapParser.TARGET_WORD = 49;
+SHRMapParser.WS3 = 50;
+SHRMapParser.TARGET_WORD_2 = 51;
+SHRMapParser.TARGET_PHRASE_2 = 52;
+SHRMapParser.WS4 = 53;
 
 SHRMapParser.RULE_doc = 0;
 SHRMapParser.RULE_docHeader = 1;
@@ -164,12 +171,13 @@ SHRMapParser.RULE_cardMapping = 11;
 SHRMapParser.RULE_fixedMapping = 12;
 SHRMapParser.RULE_version = 13;
 SHRMapParser.RULE_namespace = 14;
-SHRMapParser.RULE_simpleName = 15;
-SHRMapParser.RULE_fullyQualifiedName = 16;
-SHRMapParser.RULE_simpleOrFQName = 17;
-SHRMapParser.RULE_primitive = 18;
-SHRMapParser.RULE_count = 19;
-SHRMapParser.RULE_tbd = 20;
+SHRMapParser.RULE_specialWord = 15;
+SHRMapParser.RULE_simpleName = 16;
+SHRMapParser.RULE_fullyQualifiedName = 17;
+SHRMapParser.RULE_simpleOrFQName = 18;
+SHRMapParser.RULE_primitive = 19;
+SHRMapParser.RULE_count = 20;
+SHRMapParser.RULE_tbd = 21;
 
 function DocContext(parser, parent, invokingState) {
 	if(parent===undefined) {
@@ -230,11 +238,11 @@ SHRMapParser.prototype.doc = function() {
     this.enterRule(localctx, 0, SHRMapParser.RULE_doc);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 42;
-        this.docHeader();
-        this.state = 43;
-        this.targetStatement();
         this.state = 44;
+        this.docHeader();
+        this.state = 45;
+        this.targetStatement();
+        this.state = 46;
         this.mappingDefs();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -317,15 +325,15 @@ SHRMapParser.prototype.docHeader = function() {
     this.enterRule(localctx, 2, SHRMapParser.RULE_docHeader);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 46;
-        this.match(SHRMapParser.KW_GRAMMAR);
-        this.state = 47;
-        this.match(SHRMapParser.KW_G_MAP);
         this.state = 48;
-        this.version();
+        this.match(SHRMapParser.KW_GRAMMAR);
         this.state = 49;
-        this.match(SHRMapParser.KW_NAMESPACE);
+        this.match(SHRMapParser.KW_G_MAP);
         this.state = 50;
+        this.version();
+        this.state = 51;
+        this.match(SHRMapParser.KW_NAMESPACE);
+        this.state = 52;
         this.namespace();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -396,9 +404,9 @@ SHRMapParser.prototype.targetStatement = function() {
     this.enterRule(localctx, 4, SHRMapParser.RULE_targetStatement);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 52;
+        this.state = 54;
         this.match(SHRMapParser.KW_TARGET);
-        this.state = 53;
+        this.state = 55;
         this.simpleName();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -473,13 +481,13 @@ SHRMapParser.prototype.mappingDefs = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 58;
+        this.state = 60;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===SHRMapParser.ALL_CAPS || _la===SHRMapParser.UPPER_WORD) {
-            this.state = 55;
+            this.state = 57;
             this.mappingDef();
-            this.state = 60;
+            this.state = 62;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -559,17 +567,17 @@ SHRMapParser.prototype.mappingDef = function() {
     this.enterRule(localctx, 8, SHRMapParser.RULE_mappingDef);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 61;
+        this.state = 63;
         this.mappingDefHeader();
-        this.state = 65;
+        this.state = 67;
         this._errHandler.sync(this);
         var _alt = this._interp.adaptivePredict(this._input,1,this._ctx)
         while(_alt!=2 && _alt!=antlr4.atn.ATN.INVALID_ALT_NUMBER) {
             if(_alt===1) {
-                this.state = 62;
+                this.state = 64;
                 this.mappingRule(); 
             }
-            this.state = 67;
+            this.state = 69;
             this._errHandler.sync(this);
             _alt = this._interp.adaptivePredict(this._input,1,this._ctx);
         }
@@ -652,18 +660,18 @@ SHRMapParser.prototype.mappingDefHeader = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 68;
+        this.state = 70;
         this.simpleName();
-        this.state = 71;
+        this.state = 73;
         _la = this._input.LA(1);
         if(_la===SHRMapParser.KW_MAPS_TO) {
-            this.state = 69;
+            this.state = 71;
             this.match(SHRMapParser.KW_MAPS_TO);
-            this.state = 70;
+            this.state = 72;
             this.match(SHRMapParser.TARGET_PHRASE);
         }
 
-        this.state = 73;
+        this.state = 75;
         this.match(SHRMapParser.COLON);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -737,9 +745,12 @@ SHRMapParser.prototype.mappingRule = function() {
     var localctx = new MappingRuleContext(this, this._ctx, this.state);
     this.enterRule(localctx, 12, SHRMapParser.RULE_mappingRule);
     try {
-        this.state = 78;
+        this.state = 80;
         switch(this._input.LA(1)) {
         case SHRMapParser.KW_TBD:
+        case SHRMapParser.KW_BAR_CONCEPT:
+        case SHRMapParser.KW_BAR_ENTRY:
+        case SHRMapParser.KW_BAR_VALUE:
         case SHRMapParser.KW_BOOLEAN:
         case SHRMapParser.KW_INTEGER:
         case SHRMapParser.KW_STRING:
@@ -761,17 +772,17 @@ SHRMapParser.prototype.mappingRule = function() {
         case SHRMapParser.UPPER_WORD:
         case SHRMapParser.DOT_SEPARATED_UW:
             this.enterOuterAlt(localctx, 1);
-            this.state = 75;
+            this.state = 77;
             this.fieldMapping();
             break;
         case SHRMapParser.KW_CONSTRAIN:
             this.enterOuterAlt(localctx, 2);
-            this.state = 76;
+            this.state = 78;
             this.cardMapping();
             break;
         case SHRMapParser.KW_FIX:
             this.enterOuterAlt(localctx, 3);
-            this.state = 77;
+            this.state = 79;
             this.fixedMapping();
             break;
         default:
@@ -850,11 +861,11 @@ SHRMapParser.prototype.fieldMapping = function() {
     this.enterRule(localctx, 14, SHRMapParser.RULE_fieldMapping);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 80;
-        this.source();
-        this.state = 81;
-        this.match(SHRMapParser.KW_MAPS_TO);
         this.state = 82;
+        this.source();
+        this.state = 83;
+        this.match(SHRMapParser.KW_MAPS_TO);
+        this.state = 84;
         this.match(SHRMapParser.TARGET_PHRASE);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -941,17 +952,17 @@ SHRMapParser.prototype.source = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 84;
+        this.state = 86;
         this.sourcePart();
-        this.state = 89;
+        this.state = 91;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===SHRMapParser.DOT) {
-            this.state = 85;
+            this.state = 87;
             this.match(SHRMapParser.DOT);
-            this.state = 86;
+            this.state = 88;
             this.sourcePart();
-            this.state = 91;
+            this.state = 93;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -1052,19 +1063,19 @@ SHRMapParser.prototype.sourcePart = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 92;
+        this.state = 94;
         this.sourceWord();
-        this.state = 99;
+        this.state = 101;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===SHRMapParser.OPEN_BRACKET) {
-            this.state = 93;
-            this.match(SHRMapParser.OPEN_BRACKET);
-            this.state = 94;
-            this.sourceWord();
             this.state = 95;
+            this.match(SHRMapParser.OPEN_BRACKET);
+            this.state = 96;
+            this.sourceWord();
+            this.state = 97;
             this.match(SHRMapParser.CLOSE_BRACKET);
-            this.state = 101;
+            this.state = 103;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -1097,6 +1108,10 @@ function SourceWordContext(parser, parent, invokingState) {
 
 SourceWordContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 SourceWordContext.prototype.constructor = SourceWordContext;
+
+SourceWordContext.prototype.specialWord = function() {
+    return this.getTypedRuleContext(SpecialWordContext,0);
+};
 
 SourceWordContext.prototype.simpleOrFQName = function() {
     return this.getTypedRuleContext(SimpleOrFQNameContext,0);
@@ -1140,13 +1155,20 @@ SHRMapParser.prototype.sourceWord = function() {
     var localctx = new SourceWordContext(this, this._ctx, this.state);
     this.enterRule(localctx, 20, SHRMapParser.RULE_sourceWord);
     try {
-        this.state = 105;
+        this.state = 108;
         switch(this._input.LA(1)) {
+        case SHRMapParser.KW_BAR_CONCEPT:
+        case SHRMapParser.KW_BAR_ENTRY:
+        case SHRMapParser.KW_BAR_VALUE:
+            this.enterOuterAlt(localctx, 1);
+            this.state = 104;
+            this.specialWord();
+            break;
         case SHRMapParser.ALL_CAPS:
         case SHRMapParser.UPPER_WORD:
         case SHRMapParser.DOT_SEPARATED_UW:
-            this.enterOuterAlt(localctx, 1);
-            this.state = 102;
+            this.enterOuterAlt(localctx, 2);
+            this.state = 105;
             this.simpleOrFQName();
             break;
         case SHRMapParser.KW_BOOLEAN:
@@ -1166,13 +1188,13 @@ SHRMapParser.prototype.sourceWord = function() {
         case SHRMapParser.KW_UNSIGNED_INT:
         case SHRMapParser.KW_POSITIVE_INT:
         case SHRMapParser.KW_XHTML:
-            this.enterOuterAlt(localctx, 2);
-            this.state = 103;
+            this.enterOuterAlt(localctx, 3);
+            this.state = 106;
             this.primitive();
             break;
         case SHRMapParser.KW_TBD:
-            this.enterOuterAlt(localctx, 3);
-            this.state = 104;
+            this.enterOuterAlt(localctx, 4);
+            this.state = 107;
             this.tbd();
             break;
         default:
@@ -1255,13 +1277,13 @@ SHRMapParser.prototype.cardMapping = function() {
     this.enterRule(localctx, 22, SHRMapParser.RULE_cardMapping);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 107;
-        this.match(SHRMapParser.KW_CONSTRAIN);
-        this.state = 108;
-        this.match(SHRMapParser.TARGET_WORD);
-        this.state = 109;
-        this.match(SHRMapParser.KW_TO);
         this.state = 110;
+        this.match(SHRMapParser.KW_CONSTRAIN);
+        this.state = 111;
+        this.match(SHRMapParser.TARGET_WORD);
+        this.state = 112;
+        this.match(SHRMapParser.KW_TO);
+        this.state = 113;
         this.count();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1336,11 +1358,11 @@ SHRMapParser.prototype.fixedMapping = function() {
     this.enterRule(localctx, 24, SHRMapParser.RULE_fixedMapping);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 112;
+        this.state = 115;
         this.match(SHRMapParser.KW_FIX);
-        this.state = 113;
+        this.state = 116;
         this.match(SHRMapParser.TARGET_WORD_2);
-        this.state = 114;
+        this.state = 117;
         this.match(SHRMapParser.TARGET_PHRASE_2);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1419,11 +1441,11 @@ SHRMapParser.prototype.version = function() {
     this.enterRule(localctx, 26, SHRMapParser.RULE_version);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 116;
+        this.state = 119;
         this.match(SHRMapParser.WHOLE_NUMBER);
-        this.state = 117;
+        this.state = 120;
         this.match(SHRMapParser.DOT);
-        this.state = 118;
+        this.state = 121;
         this.match(SHRMapParser.WHOLE_NUMBER);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1495,9 +1517,91 @@ SHRMapParser.prototype.namespace = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 120;
+        this.state = 123;
         _la = this._input.LA(1);
         if(!(_la===SHRMapParser.LOWER_WORD || _la===SHRMapParser.DOT_SEPARATED_LW)) {
+        this._errHandler.recoverInline(this);
+        }
+        else {
+            this.consume();
+        }
+    } catch (re) {
+    	if(re instanceof antlr4.error.RecognitionException) {
+	        localctx.exception = re;
+	        this._errHandler.reportError(this, re);
+	        this._errHandler.recover(this, re);
+	    } else {
+	    	throw re;
+	    }
+    } finally {
+        this.exitRule();
+    }
+    return localctx;
+};
+
+function SpecialWordContext(parser, parent, invokingState) {
+	if(parent===undefined) {
+	    parent = null;
+	}
+	if(invokingState===undefined || invokingState===null) {
+		invokingState = -1;
+	}
+	antlr4.ParserRuleContext.call(this, parent, invokingState);
+    this.parser = parser;
+    this.ruleIndex = SHRMapParser.RULE_specialWord;
+    return this;
+}
+
+SpecialWordContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
+SpecialWordContext.prototype.constructor = SpecialWordContext;
+
+SpecialWordContext.prototype.KW_BAR_CONCEPT = function() {
+    return this.getToken(SHRMapParser.KW_BAR_CONCEPT, 0);
+};
+
+SpecialWordContext.prototype.KW_BAR_ENTRY = function() {
+    return this.getToken(SHRMapParser.KW_BAR_ENTRY, 0);
+};
+
+SpecialWordContext.prototype.KW_BAR_VALUE = function() {
+    return this.getToken(SHRMapParser.KW_BAR_VALUE, 0);
+};
+
+SpecialWordContext.prototype.enterRule = function(listener) {
+    if(listener instanceof SHRMapParserListener ) {
+        listener.enterSpecialWord(this);
+	}
+};
+
+SpecialWordContext.prototype.exitRule = function(listener) {
+    if(listener instanceof SHRMapParserListener ) {
+        listener.exitSpecialWord(this);
+	}
+};
+
+SpecialWordContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof SHRMapParserVisitor ) {
+        return visitor.visitSpecialWord(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
+
+
+
+SHRMapParser.SpecialWordContext = SpecialWordContext;
+
+SHRMapParser.prototype.specialWord = function() {
+
+    var localctx = new SpecialWordContext(this, this._ctx, this.state);
+    this.enterRule(localctx, 30, SHRMapParser.RULE_specialWord);
+    var _la = 0; // Token type
+    try {
+        this.enterOuterAlt(localctx, 1);
+        this.state = 125;
+        _la = this._input.LA(1);
+        if(!((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRMapParser.KW_BAR_CONCEPT) | (1 << SHRMapParser.KW_BAR_ENTRY) | (1 << SHRMapParser.KW_BAR_VALUE))) !== 0))) {
         this._errHandler.recoverInline(this);
         }
         else {
@@ -1569,11 +1673,11 @@ SHRMapParser.SimpleNameContext = SimpleNameContext;
 SHRMapParser.prototype.simpleName = function() {
 
     var localctx = new SimpleNameContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 30, SHRMapParser.RULE_simpleName);
+    this.enterRule(localctx, 32, SHRMapParser.RULE_simpleName);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 122;
+        this.state = 127;
         _la = this._input.LA(1);
         if(!(_la===SHRMapParser.ALL_CAPS || _la===SHRMapParser.UPPER_WORD)) {
         this._errHandler.recoverInline(this);
@@ -1643,10 +1747,10 @@ SHRMapParser.FullyQualifiedNameContext = FullyQualifiedNameContext;
 SHRMapParser.prototype.fullyQualifiedName = function() {
 
     var localctx = new FullyQualifiedNameContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 32, SHRMapParser.RULE_fullyQualifiedName);
+    this.enterRule(localctx, 34, SHRMapParser.RULE_fullyQualifiedName);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 124;
+        this.state = 129;
         this.match(SHRMapParser.DOT_SEPARATED_UW);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1714,19 +1818,19 @@ SHRMapParser.SimpleOrFQNameContext = SimpleOrFQNameContext;
 SHRMapParser.prototype.simpleOrFQName = function() {
 
     var localctx = new SimpleOrFQNameContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 34, SHRMapParser.RULE_simpleOrFQName);
+    this.enterRule(localctx, 36, SHRMapParser.RULE_simpleOrFQName);
     try {
-        this.state = 128;
+        this.state = 133;
         switch(this._input.LA(1)) {
         case SHRMapParser.ALL_CAPS:
         case SHRMapParser.UPPER_WORD:
             this.enterOuterAlt(localctx, 1);
-            this.state = 126;
+            this.state = 131;
             this.simpleName();
             break;
         case SHRMapParser.DOT_SEPARATED_UW:
             this.enterOuterAlt(localctx, 2);
-            this.state = 127;
+            this.state = 132;
             this.fullyQualifiedName();
             break;
         default:
@@ -1858,13 +1962,13 @@ SHRMapParser.PrimitiveContext = PrimitiveContext;
 SHRMapParser.prototype.primitive = function() {
 
     var localctx = new PrimitiveContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 36, SHRMapParser.RULE_primitive);
+    this.enterRule(localctx, 38, SHRMapParser.RULE_primitive);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 130;
+        this.state = 135;
         _la = this._input.LA(1);
-        if(!(((((_la - 16)) & ~0x1f) == 0 && ((1 << (_la - 16)) & ((1 << (SHRMapParser.KW_BOOLEAN - 16)) | (1 << (SHRMapParser.KW_INTEGER - 16)) | (1 << (SHRMapParser.KW_STRING - 16)) | (1 << (SHRMapParser.KW_DECIMAL - 16)) | (1 << (SHRMapParser.KW_URI - 16)) | (1 << (SHRMapParser.KW_BASE64_BINARY - 16)) | (1 << (SHRMapParser.KW_INSTANT - 16)) | (1 << (SHRMapParser.KW_DATE - 16)) | (1 << (SHRMapParser.KW_DATE_TIME - 16)) | (1 << (SHRMapParser.KW_TIME - 16)) | (1 << (SHRMapParser.KW_CODE - 16)) | (1 << (SHRMapParser.KW_OID - 16)) | (1 << (SHRMapParser.KW_ID - 16)) | (1 << (SHRMapParser.KW_MARKDOWN - 16)) | (1 << (SHRMapParser.KW_UNSIGNED_INT - 16)) | (1 << (SHRMapParser.KW_POSITIVE_INT - 16)) | (1 << (SHRMapParser.KW_XHTML - 16)))) !== 0))) {
+        if(!(((((_la - 19)) & ~0x1f) == 0 && ((1 << (_la - 19)) & ((1 << (SHRMapParser.KW_BOOLEAN - 19)) | (1 << (SHRMapParser.KW_INTEGER - 19)) | (1 << (SHRMapParser.KW_STRING - 19)) | (1 << (SHRMapParser.KW_DECIMAL - 19)) | (1 << (SHRMapParser.KW_URI - 19)) | (1 << (SHRMapParser.KW_BASE64_BINARY - 19)) | (1 << (SHRMapParser.KW_INSTANT - 19)) | (1 << (SHRMapParser.KW_DATE - 19)) | (1 << (SHRMapParser.KW_DATE_TIME - 19)) | (1 << (SHRMapParser.KW_TIME - 19)) | (1 << (SHRMapParser.KW_CODE - 19)) | (1 << (SHRMapParser.KW_OID - 19)) | (1 << (SHRMapParser.KW_ID - 19)) | (1 << (SHRMapParser.KW_MARKDOWN - 19)) | (1 << (SHRMapParser.KW_UNSIGNED_INT - 19)) | (1 << (SHRMapParser.KW_POSITIVE_INT - 19)) | (1 << (SHRMapParser.KW_XHTML - 19)))) !== 0))) {
         this._errHandler.recoverInline(this);
         }
         else {
@@ -1948,15 +2052,15 @@ SHRMapParser.CountContext = CountContext;
 SHRMapParser.prototype.count = function() {
 
     var localctx = new CountContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 38, SHRMapParser.RULE_count);
+    this.enterRule(localctx, 40, SHRMapParser.RULE_count);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 132;
+        this.state = 137;
         this.match(SHRMapParser.WHOLE_NUMBER);
-        this.state = 133;
+        this.state = 138;
         this.match(SHRMapParser.RANGE);
-        this.state = 134;
+        this.state = 139;
         _la = this._input.LA(1);
         if(!(_la===SHRMapParser.STAR || _la===SHRMapParser.WHOLE_NUMBER)) {
         this._errHandler.recoverInline(this);
@@ -2030,16 +2134,16 @@ SHRMapParser.TbdContext = TbdContext;
 SHRMapParser.prototype.tbd = function() {
 
     var localctx = new TbdContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 40, SHRMapParser.RULE_tbd);
+    this.enterRule(localctx, 42, SHRMapParser.RULE_tbd);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 136;
+        this.state = 141;
         this.match(SHRMapParser.KW_TBD);
-        this.state = 138;
+        this.state = 143;
         _la = this._input.LA(1);
         if(_la===SHRMapParser.STRING) {
-            this.state = 137;
+            this.state = 142;
             this.match(SHRMapParser.STRING);
         }
 

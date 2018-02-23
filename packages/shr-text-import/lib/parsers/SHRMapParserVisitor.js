@@ -87,6 +87,11 @@ SHRMapParserVisitor.prototype.visitNamespace = function(ctx) {
 };
 
 
+// Visit a parse tree produced by SHRMapParser#specialWord.
+SHRMapParserVisitor.prototype.visitSpecialWord = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRMapParser#simpleName.
 SHRMapParserVisitor.prototype.visitSimpleName = function(ctx) {
 };

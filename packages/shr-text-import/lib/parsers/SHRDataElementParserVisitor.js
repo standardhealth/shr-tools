@@ -142,6 +142,11 @@ SHRDataElementParserVisitor.prototype.visitNamespace = function(ctx) {
 };
 
 
+// Visit a parse tree produced by SHRDataElementParser#specialWord.
+SHRDataElementParserVisitor.prototype.visitSpecialWord = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRDataElementParser#simpleName.
 SHRDataElementParserVisitor.prototype.visitSimpleName = function(ctx) {
 };

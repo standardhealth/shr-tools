@@ -126,8 +126,8 @@ class DataElementImporter extends SHRDataElementParserListener {
 
   enterBasedOnProp(ctx) {
     const identifier = this.resolveToIdentifierOrTBD(ctx);
-    if (identifier.isValueKeyWord) {
-      logger.error('Elements cannot be based on "Value" keyword. ERROR_CODE:11023');
+    if (identifier.isSpecialKeyWord) {
+      logger.error(`Elements cannot be based on "${identifier.name}" keyword. ERROR_CODE:11023`);
     } else {
       this._currentDef.addBasedOn(identifier);
     }
@@ -159,7 +159,7 @@ class DataElementImporter extends SHRDataElementParserListener {
     const field = this.processCountAndTypes(ctx.count(), ctx.fieldType());
     if (field instanceof IncompleteValue && field.identifier && field.identifier.isValueKeyWord) {
       if (this._currentDef.value) {
-        logger.error('Elements cannot use "Value:" modifier and specify "Value" field at same time. ERROR_CODE:11024');
+        logger.error('Elements cannot use "Value:" modifier and specify "_Value" field at same time. ERROR_CODE:11024');
         return;
       }
       this._currentDef.value = field;
@@ -171,7 +171,7 @@ class DataElementImporter extends SHRDataElementParserListener {
   // addFieldToCurrentDef contains special logic to handle IncompleteValues.  If an IncompleteValue matches an already
   // existing field, it will just apply the constraints to that field.  If no matching field is found, it will be pushed
   // to the fields as-is -- and when fields are added after, they will be checked against any IncompleteValues
-  // and resolved as appropriate.  Note that constraints on the Value can also be added by passing an IncompleteValue
+  // and resolved as appropriate.  Note that constraints on the _Value can also be added by passing an IncompleteValue
   // matching the value's identifier to this function.
   addFieldToCurrentDef(field) {
     if (field instanceof IncompleteValue) {
@@ -186,7 +186,7 @@ class DataElementImporter extends SHRDataElementParserListener {
         }
       }
       // If we got here, we didn't find anything -- but if it's an Entry field, resolve it to a 1..1 IdentifiableValue
-      if (field.identifier.equals(new Identifier('shr.base', 'Entry'))) {
+      if (field.identifier.isEntryKeyWord) {
         const entryField = new IdentifiableValue(field.identifier).withMinMax(1, 1);
         for (const cst of field.constraints) {
           entryField.addConstraint(cst);
@@ -234,8 +234,9 @@ class DataElementImporter extends SHRDataElementParserListener {
       const ewc = ctx.elementWithConstraint();
       let value;
       let path = [];
-      if (ewc.simpleOrFQName()) {
-        const identifier = this.resolveToIdentifier(ewc.simpleOrFQName().getText());
+      if (ewc.simpleOrFQName() || ewc.specialWord()) {
+        const idText = ewc.simpleOrFQName() ? ewc.simpleOrFQName().getText() : ewc.specialWord().getText();
+        const identifier = this.resolveToIdentifier(idText);
         if (identifier.isValueKeyWord) {
           value = new IncompleteValue(identifier);
         } else {
@@ -246,8 +247,8 @@ class DataElementImporter extends SHRDataElementParserListener {
         }
       } else if (ctx.ref()) {
         const refIdentifier = this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText());
-        if (refIdentifier.isValueKeyWord) {
-          logger.error('ref(Value) is an unsupported construct; treating as Value without the reference. ERROR_CODE:11026');
+        if (refIdentifier.isSpecialKeyWord) {
+          logger.error(`ref(${refIdentifier.name}) is an unsupported construct; treating as ${refIdentifier.name} without the reference. ERROR_CODE:11026`);
           value = new IdentifiableValue(refIdentifier);
         } else {
           value = new RefValue(refIdentifier);
@@ -263,7 +264,8 @@ class DataElementImporter extends SHRDataElementParserListener {
       } else {
         // This is a dotted path constraint -- so we must use an IncompleteValue
         const ep = ewc.elementPath();
-        value = new IncompleteValue(this.resolveToIdentifier(ep.simpleOrFQName().getText()));
+        const idText = ep.simpleOrFQName() ? ep.simpleOrFQName().getText() : ep.specialWord().getText();
+        value = new IncompleteValue(this.resolveToIdentifier(idText));
         if (ep.simpleName()) {
           path = ep.simpleName().map(ctx => this.resolveToIdentifier(ctx.getText()));
         }
@@ -279,8 +281,8 @@ class DataElementImporter extends SHRDataElementParserListener {
         const cst = ewc.elementConstraint();
         if (cst.elementTypeConstraint()) {
           const newIdentifier = this.resolveToIdentifierOrTBD(cst.elementTypeConstraint());
-          if (newIdentifier.isValueKeyWord) {
-            logger.error('Fields cannot be constrained to type "Value". ERROR_CODE:11025');
+          if (newIdentifier.isSpecialKeyWord) {
+            logger.error(`Fields cannot be constrained to type "${newIdentifier.name}". ERROR_CODE:11025`);
           } else {
             const onValue = cst.elementTypeConstraint().KW_VALUE_IS_TYPE() ? true : false;
             value.addConstraint(new TypeConstraint(newIdentifier, path, onValue));
@@ -288,11 +290,11 @@ class DataElementImporter extends SHRDataElementParserListener {
         } else if (cst.elementIncludesTypeConstraint()) {
           for (const typeConstraint of cst.elementIncludesTypeConstraint().typeConstraint()) {
             const newIdentifier = this.resolveToIdentifierOrTBD(typeConstraint);
-            if (newIdentifier.isValueKeyWord) {
-              logger.error('Fields cannot be constrained to type "Value". ERROR_CODE:11025');
+            if (newIdentifier.isSpecialKeyWord) {
+              logger.error(`Fields cannot be constrained to type "${newIdentifier.name}". ERROR_CODE:11025`);
             } else {
               [min, max] = this.getMinMax(typeConstraint.count());
-              const isOnValue = (path.length > 0 && path[0].name == 'Value');
+              const isOnValue = (path.length > 0 && path[0].isValueKeyWord);
               value.addConstraint(new IncludesTypeConstraint(newIdentifier, new Cardinality(min, max), path, isOnValue));
             }
           }
@@ -322,8 +324,9 @@ class DataElementImporter extends SHRDataElementParserListener {
     }
 
     let value;
-    if (ctx.simpleOrFQName()) {
-      const identifier = this.resolveToIdentifier(ctx.simpleOrFQName().getText());
+    if (ctx.simpleOrFQName() || (typeof ctx.specialWord === 'function' && ctx.specialWord())) {
+      const idText = ctx.simpleOrFQName() ? ctx.simpleOrFQName().getText() : ctx.specialWord().getText();
+      const identifier = this.resolveToIdentifier(idText);
       if (identifier.isValueKeyWord) {
         value = new IncompleteValue(identifier);
       } else {
@@ -331,8 +334,8 @@ class DataElementImporter extends SHRDataElementParserListener {
       }
     } else if (ctx.ref()) {
       const refIdentifier = this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText());
-      if (refIdentifier.isValueKeyWord) {
-        logger.error('ref(Value) is an unsupported construct; treating as Value without the reference. ERROR_CODE:11026');
+      if (refIdentifier.isSpecialKeyWord) {
+        logger.error(`ref(${refIdentifier.name}) is an unsupported construct; treating as ${refIdentifier.name} without the reference. ERROR_CODE:11026`);
         value = new IdentifiableValue(refIdentifier);
       } else {
         value = new RefValue(refIdentifier);
@@ -481,11 +484,12 @@ class DataElementImporter extends SHRDataElementParserListener {
       return new Identifier(ns, name);
     }
 
-    // No specified namespace -- is either special 'Entry' or 'Value' case, primitive, or something we need to resolve
-    if (ref === 'Entry') {
-      return new Identifier('shr.base', ref);
-    } else if (ref === 'Value') {
+    // No specified namespace -- is either special word (e.g. _Value), primitive, or something we need to resolve
+    if (ref.startsWith('_')) {
       return new Identifier('', ref);
+    } else if (ref === 'Entry' || ref === 'Value') {
+      // "Fix" the legacy keyword to the new _-based keyword
+      return new Identifier('', `_${ref}`);
     } else if (PRIMITIVES.includes(ref)) {
       return new PrimitiveIdentifier(ref);
     }

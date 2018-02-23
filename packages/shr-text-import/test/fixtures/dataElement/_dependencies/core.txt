@@ -26,3 +26,6 @@ Value:			decimal
 
 Element:		Units
 Value:			Coding from http://hl7.org/fhir/ValueSet/ucum-units
+
+Element:		Version
+Value:			id

@@ -1,0 +1,16 @@
+Grammar:	Map 5.1
+Namespace:	shr.test
+Target:		TEST
+
+A maps to B:
+	_Concept maps to testW
+	_Entry maps to testX
+	_Value maps to testY
+	C._Value maps to testZ
+
+// Test backwards compatibility, Entry/Value should get converted to _Entry/_Value
+A2 maps to B2:
+	_Concept maps to testW
+	Entry maps to testX
+	Value maps to testY
+	C.Value maps to testZ

@@ -179,6 +179,30 @@ describe('#importFromFilePath()', () => {
     expectNoConstraints(group.fields);
   });
 
+  it('should correctly import a special entry', () => {
+    const specifications = importFixture('SpecialWordsElement');
+    const parent = expectAndGetEntry(specifications, 'shr.test', 'SpecialParent');
+    expect(parent.grammarVersion).to.eql(new Version(5, 1));
+    expectMinMax(parent.value, 0, 1);
+    expectPrimitiveValue(parent.value, 'string');
+    const child = expectAndGetEntry(specifications, 'shr.test', 'SpecialChild');
+    expect(child.basedOn).to.have.length(1);
+    expect(child.basedOn[0].namespace).to.equal('shr.test');
+    expect(child.basedOn[0].name).to.equal('SpecialParent');
+    // The _Value identifier is set as the value. Do I love this? No. But that's
+    // how it already worked -- probably to avoid having to resolve the value
+    // (and leave it to shr-expand to do that work).
+    expect(child.value.identifier.isValueKeyWord).to.be.true;
+    expectMinMax(child.value, 1, 1);
+    expect(child.fields).to.have.length(1);
+    expectField(child, 0, '', '_Entry', 1, 1);
+    expect(child.fields[0].constraints).to.have.length(1);
+    expect(child.fields[0].constraints[0]).to.be.instanceof(CardConstraint);
+    expect(child.fields[0].constraints[0].path).to.eql([id('shr.core', 'Version')]);
+    expect(child.fields[0].constraints[0].card.min).to.equal(0);
+    expect(child.fields[0].constraints[0].card.max).to.equal(0);
+  });
+
   // Constraints
 
   it('should correctly import an entry with a valueset constraint on the value', () => {
@@ -765,6 +789,22 @@ describe('#importFromFilePath()', () => {
     expectNoConstraints(entry.value);
   });
 
+  it('should correctly import an entry with a zeroed out Value (backwards compatible version)', () => {
+    const specifications = importFixture('ZeroedOutValue');
+    const entry = expectAndGetEntry(specifications, 'shr.test', 'ZeroedOutValueBackwardsCompatibility');
+    expect(entry.basedOn).to.have.length(1);
+    expect(entry.basedOn[0].namespace).to.equal('shr.test');
+    expect(entry.basedOn[0].name).to.equal('OptionalValue');
+    expect(entry.concepts).to.be.empty;
+    expect(entry.description).to.be.empty;
+    expect(entry.value).to.be.instanceof(IncompleteValue);
+    expect(entry.value.identifier.isValueKeyWord).to.be.true;
+    // Check to be sure it converted it to the special word form
+    expect(entry.value.identifier.name).to.equal('_Value');
+    expectMinMax(entry.value, 0, 0);
+    expectNoConstraints(entry.value);
+  });
+
   it('should correctly import multiple elements in a single namespace', () => {
     const specifications = importFixture('MultipleElementNamespace');
     const simple = expectAndGetEntry(specifications, 'shr.test', 'SimpleDate');
@@ -1101,25 +1141,31 @@ function expectNoConstraints(value) {
 function importFixture(name, numExpectedErrors = 0) {
   const dependencies = importFromFilePath(`${__dirname}/fixtures/dataElement/_dependencies`);
   const specifications = importFromFilePath(`${__dirname}/fixtures/dataElement/${name}.txt`, null, dependencies);
-  expect(err.errors().length).to.equal(numExpectedErrors);
+  checkImportErrors(numExpectedErrors);
   return specifications;
 }
 
 function importFixtureFolder(name, numExpectedErrors = 0) {
   const dependencies = importFromFilePath(`${__dirname}/fixtures/dataElement/_dependencies`);
   const specifications = importFromFilePath(`${__dirname}/fixtures/dataElement/${name}`, null, dependencies);
-  expect(err.errors().length).to.equal(numExpectedErrors);
+  checkImportErrors(numExpectedErrors);
   return specifications;
 }
 
 function importConfiguration(name, numExpectedErrors = 0) {
   const configuration = importConfigFromFilePath(`${__dirname}/fixtures/config/${name}.txt`);
-  expect(err.errors().length).to.equal(numExpectedErrors);
+  checkImportErrors(numExpectedErrors);
   return configuration;
 }
 
 function importConfigurationFolder(name, numExpectedErrors = 0) {
   const configuration = importConfigFromFilePath(`${__dirname}/fixtures/config/${name}`);
-  expect(err.errors().length).to.equal(numExpectedErrors);
+  checkImportErrors(numExpectedErrors);
   return configuration;
+}
+
+function checkImportErrors(numExpectedErrors = 0) {
+  const errors = err.errors();
+  const message = `Import Errors: ${errors.map(e => e.msg).join('; ')}`;
+  expect(errors.length, message).to.equal(numExpectedErrors);
 }

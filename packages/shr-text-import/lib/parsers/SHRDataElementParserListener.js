@@ -245,6 +245,15 @@ SHRDataElementParserListener.prototype.exitNamespace = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRDataElementParser#specialWord.
+SHRDataElementParserListener.prototype.enterSpecialWord = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#specialWord.
+SHRDataElementParserListener.prototype.exitSpecialWord = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRDataElementParser#simpleName.
 SHRDataElementParserListener.prototype.enterSimpleName = function(ctx) {
 };

@@ -35,6 +35,26 @@ describe('#importFromFilePath()', () => {
     ]);
   });
 
+  it('should correctly import a mapping with special words', () => {
+    const specifications =  importFixture('SpecialWordMapping');
+    expectVersions(specifications, new mdls.Version(5,1));
+    expectTargets(specifications, 'TEST');
+    let s = getAndExpect(specifications, 'shr.test', 'A', 'TEST', 'B');
+    expect(s.rules).to.eql([
+      new mdls.FieldMappingRule([id('', '_Concept')], 'testW'),
+      new mdls.FieldMappingRule([id('', '_Entry')], 'testX'),
+      new mdls.FieldMappingRule([id('', '_Value')], 'testY'),
+      new mdls.FieldMappingRule([sid('C'), id('', '_Value')], 'testZ')
+    ]);
+    s = getAndExpect(specifications, 'shr.test', 'A2', 'TEST', 'B2');
+    expect(s.rules).to.eql([
+      new mdls.FieldMappingRule([id('', '_Concept')], 'testW'),
+      new mdls.FieldMappingRule([id('', '_Entry')], 'testX'),
+      new mdls.FieldMappingRule([id('', '_Value')], 'testY'),
+      new mdls.FieldMappingRule([sid('C'), id('', '_Value')], 'testZ')
+    ]);
+  });
+
   it('should correctly import a mapping with paths and choices', () => {
     const specifications =  importFixture('ChoicePathMapping');
     expectVersions(specifications, new mdls.Version(4,1));
