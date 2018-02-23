@@ -135,7 +135,7 @@ class Expander {
                   de.fields[i].inheritance = models.OVERRIDDEN;
                 } else {
                   de.fields[i].inheritance = models.INHERITED;
-                  
+
                 }
               }
             }
@@ -226,16 +226,16 @@ class Expander {
       logger = lastLogger;
     }
   }
-  
+
   /*
   expandHierarchy - (DataElement)
 
-  This takes a data element and recursively transverses its hierarchy of 'Based On' parent elements, 
+  This takes a data element and recursively transverses its hierarchy of 'Based On' parent elements,
   determining the original source of fields/values (.inheritedFrom), the most recent parent to modify
   constraints on fields/values (.lastModifiedBy), and the full history of field/value cardinalities.
 
   The element.hierarchy is a list of its parental hierarchy, and also serves to determine if an element
-  has already undergone expansion. 
+  has already undergone expansion.
 
   By recursively filling out hierarchy, inheritance, and modifier information, the lower level child
   elements can inherit the parents historical information.
@@ -243,8 +243,8 @@ class Expander {
   expandHierarchy(element) {
     /*
     setCurrentElementAsOriginalModifier - (Value)
-    
-    Sets the current expanding element to be the original modifier for all value constraints. It also 
+
+    Sets the current expanding element to be the original modifier for all value constraints. It also
     checks for ChoiceValues, and recursively fills out that information for those cases.
     */
     const setCurrentElementAsOriginalModifier = (value) => {
@@ -253,7 +253,7 @@ class Expander {
       } else {
         value.constraints.forEach(c => c.lastModifiedBy = element.identifier);
       }
-    }
+    };
 
     if (element.basedOn.length == 0) {
       if (element.value) setCurrentElementAsOriginalModifier(element.value);
@@ -269,7 +269,7 @@ class Expander {
           continue;
         }
 
-      
+
         if (base.hierarchy.length == 0 && base.basedOn.length > 0) {
           this.expandHierarchy(base);
         }
@@ -290,7 +290,7 @@ class Expander {
               child.inheritedFrom = parent.inheritedFrom;
             } else {
               child.inheritedFrom = base.identifier;
-            };
+            }
           }
 
           if (child.constraints.length > 0) {
@@ -302,8 +302,8 @@ class Expander {
                 c.lastModifiedBy = element.identifier;
               }
             }
-          } 
-        }
+          }
+        };
 
         /*
         manageCardHistory - (Value, Value)
@@ -324,19 +324,19 @@ class Expander {
             } else {
               const oldCard = parent.card.clone();
               oldCard.source = base.identifier;
-              child.card.withHistory(oldCard)
+              child.card.withHistory(oldCard);
             }
 
             if (parent.card.history) {
-              if (!child.card.history) child.card.history = []
+              if (!child.card.history) child.card.history = [];
               child.card.history.unshift(...parent.card.history);
             }
           }
-        }
+        };
 
         if (element.value) {
           if (base.value) {
-            manageValueInheritance(base.value, element.value)
+            manageValueInheritance(base.value, element.value);
             manageCardHistory(base.value, element.value);
           } else {
             setCurrentElementAsOriginalModifier(element.value);
@@ -352,10 +352,10 @@ class Expander {
             setCurrentElementAsOriginalModifier(ef);
           }
         }
-      
+
         element.hierarchy.push(...base.hierarchy, base);
       }
-    }  
+    }
   }
 
   // mergeValue does a best attempt at merging the values, recording errors as it encounters them.  If the values
@@ -376,7 +376,7 @@ class Expander {
 
     // Check that the identifiers match.  An error abandons the merge.
     if (newValue instanceof models.IdentifiableValue) {
-      // Only check if the new value is NOT the "Value" keyword -- because if it is, we just let it inherit parent value
+      // Only check if the new value is NOT the "_Value" keyword -- because if it is, we just let it inherit parent value
       if (!newValue.identifier.isValueKeyWord) {
         if (oldValue instanceof models.ChoiceValue) {
           // The newValue must be one of the choices
@@ -595,7 +595,7 @@ class Expander {
       }
 
       let firstId = constraint.path[0];
-      constraint.path[0] = (firstId.name == "Value" && firstId.namespace == "unknown") ? targetVal.identifier : constraint.path[0];
+      constraint.path[0] = (firstId.isValueKeyWord) ? targetVal.identifier : constraint.path[0];
     } */
 
     let constraints = previousConstraints;
@@ -1028,9 +1028,7 @@ class Expander {
                 }
               }
             } else {
-              if (rule.sourcePath[j].namespace || rule.sourcePath[j].name != 'Value') {
-                logger.error('Cannot resolve data element definition from path: %s. ERROR_CODE:12032', this.highlightPartInPath(rule.sourcePath, j));
-              }
+              logger.error('Cannot resolve data element definition from path: %s. ERROR_CODE:12032', this.highlightPartInPath(rule.sourcePath, j));
               // Remove the invalid rule from the map and decrement index so we don't skip a rule in the loop
               map.rules.splice(i, 1);
               i = i-1;
@@ -1131,12 +1129,12 @@ class Expander {
     if (idToMatch instanceof models.TBD) {
       return idToMatch.clone();
     }
-    // Special case logic for "Value"
-    else if (!idToMatch.namespace && idToMatch.name == 'Value') {
+    // Special case logic for "_Value"
+    else if (idToMatch.isValueKeyWord) {
       if (de.value instanceof models.IdentifiableValue) {
         return de.value.effectiveIdentifier;
       } else if (typeof de.value === 'undefined') {
-        logger.error('Cannot map Value since element does not define a value. ERROR_CODE:12033');
+        logger.error('Cannot map _Value since element does not define a value. ERROR_CODE:12033');
       } else if (de.value instanceof models.ChoiceValue) {
         // Return all the possible choices
         const results = [];
@@ -1147,11 +1145,11 @@ class Expander {
         }
         return results;
       } else {
-        logger.error('Cannot map Value since it is unsupported type: %s. ERROR_CODE:12034', de.value.constructor.name);
+        logger.error('Cannot map _Value since it is unsupported type: %s. ERROR_CODE:12034', de.value.constructor.name);
       }
-    // Special case logic for "Entry"
-    } else if ((!idToMatch.namespace || idToMatch.namespace == 'shr.base') && idToMatch.name == 'Entry') {
-      return new models.Identifier('shr.base', 'Entry');
+    // Special case logic for other special keywords
+    } else if (idToMatch.isSpecialKeyWord) {
+      return idToMatch.clone(); // just return them as-is
     // "Normal" case
     } else {
       let result;
