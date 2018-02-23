@@ -4,6 +4,7 @@ const generateClass = require('./generateClass');
 const generateNamespaceFactory = require('./generateNamespaceFactory');
 const generateFactory = require('./generateFactory');
 const { className, factoryName } = require('./common.js');
+const {MODELS_INFO} = require('shr-models');
 
 /**
  * Exports SHR namespaces and elements to a set of ES6 classes for using within SHR-aware applications.
@@ -66,4 +67,4 @@ class ES6Exporter {
   }
 }
 
-module.exports = {exportToES6};
+module.exports = {exportToES6, MODELS_INFO};

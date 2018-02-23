@@ -39,6 +39,15 @@ describe('#Class', () => {
       // value should really be a proxy for string
       expect(pv.value).to.equal('a value');
     });
+
+    it('should support chaining a string', () => {
+      const pv = new StringValueEntry();
+      const shouldBeThis = pv.withString('a value');
+      expect(pv.string).to.equal('a value');
+      // value should really be a proxy for string
+      expect(pv.value).to.equal('a value');
+      expect(shouldBeThis).to.equal(pv);
+    });
   });
 
   describe('#ReservedWordEntryClass()', () => {

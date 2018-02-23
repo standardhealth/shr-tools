@@ -1,9 +1,12 @@
 const path = require('path');
 const fs = require('fs-extra');
+const { sanityCheckModules } = require('shr-models');
 const shrTI = require('shr-text-import');
 const shrEx = require('shr-expand');
 const shrJSE = require('shr-json-schema-export');
 const { exportToES6 } = require('../lib/export');
+
+sanityCheckModules({shrTI, shrEx, shrJSE});
 
 function setup(inDir='./test/fixtures/spec', outDir='./build/test', clean=false) {
   const configSpecs = shrTI.importConfigFromFilePath(inDir);

@@ -47,25 +47,26 @@ function generateClass(def) {
 function generateClassBody(def, cw) {
   cw.ln();
 
+  const clazzName = className(def.identifier.name);
   if (def.isEntry) {
-    writeGetterAndSetter(cw, 'shr.base.Entry', 'entryInfo', 'entry information', '_entryInfo', 'Entry');
+    writeGetterAndSetter(cw, clazzName, 'shr.base.Entry', 'entryInfo', 'entry information', '_entryInfo', 'Entry');
   }
 
   // Don't repeat properties that were purely inherited (without overriding).  Although overrides actually don't
   // affect the definitions now, they may in the future, so we'll leave them in.
   if (def.value && def.value.inheritance !== INHERITED) {
     if (def.value instanceof ChoiceValue) {
-      writeGetterAndSetter(cw, def.value, 'value');
+      writeGetterAndSetter(cw, clazzName, def.value, 'value');
     } else if (def.value instanceof IdentifiableValue) {
       // If it's the "Value" keyword, we can just rely on an inherited getter/setter
       if (!def.value.identifier.isValueKeyWord) {
         const symbol = toSymbol(def.value.identifier.name);
-        writeGetterAndSetter(cw, def.value, 'value', `value (aliases ${symbol})`, `_${symbol}`);
-        writeGetterAndSetter(cw, def.value);
+        writeGetterAndSetter(cw, clazzName, def.value, 'value', `value (aliases ${symbol})`, `_${symbol}`);
+        writeGetterAndSetter(cw, clazzName, def.value);
       }
     } else {
       // This should only happen for TBDs
-      writeGetterAndSetter(cw, def.value);
+      writeGetterAndSetter(cw, clazzName, def.value);
     }
   }
 
@@ -73,7 +74,7 @@ function generateClassBody(def, cw) {
     // Don't repeat properties that were purely inherited (without overriding).  Although overrides actually don't
     // affect the definitions now, they may in the future, so we'll leave them in
     if (field.inheritance !== INHERITED) {
-      writeGetterAndSetter(cw, field);
+      writeGetterAndSetter(cw, clazzName, field);
     }
   }
 
@@ -98,18 +99,19 @@ function generateClassBody(def, cw) {
 /**
  * Generates a getter and a setter for a value or field.
  * @param {CodeWriter} cw - The CodeWriter instance to use during generation
+ * @param {string} clazzName - The name of the class.
  * @param {Value|string} formalDefOrName - The `Value` or a string representing the thing to generate get/set for
- * @param {string} publicSymbol - The symbol which other classes will use to access the property.  If undefined, it will
+ * @param {string=} publicSymbol - The symbol which other classes will use to access the property.  If undefined, it will
  *    be generated using sensible defaults.
- * @param {string} descriptiveName - The descriptive name, used in the generated comments for the get/set functions.  If
+ * @param {string=} descriptiveName - The descriptive name, used in the generated comments for the get/set functions.  If
  *    undefined, it will be generated using sensible defaults.
- * @param {string} privateSymbol - The private property name where the data will be stored in the class.  If undefined,
+ * @param {string=} privateSymbol - The private property name where the data will be stored in the class.  If undefined,
  *    it will be generated using sensible defaults.
- * @param {string} typeName - The type name used in the generated JSDoc to indicate the type of the thing being got or
+ * @param {string=} typeName - The type name used in the generated JSDoc to indicate the type of the thing being got or
  *    set.  If undefined, it will be generated using sensible defaults.
  * @private
  */
-function writeGetterAndSetter(cw, formalDefOrName, publicSymbol, descriptiveName, privateSymbol, typeName) {
+function writeGetterAndSetter(cw, clazzName, formalDefOrName, publicSymbol, descriptiveName, privateSymbol, typeName) {
   if (formalDefOrName instanceof TBD) {
     cw.ln(`// Ommitting getter/setter for TBD: ${formalDefOrName.text}`).ln();
     return;
@@ -185,6 +187,7 @@ function writeGetterAndSetter(cw, formalDefOrName, publicSymbol, descriptiveName
     typeName = `Array<${typeName}>`;
     arrayDescriptionPostfix = ' array';
   }
+  const capitalizedPublicSymbol = `${publicSymbol.charAt(0).toUpperCase()}${publicSymbol.slice(1)}`;
   // The variable name can't be a reserved word, so check it and modify if necessary
   const varName = reserved.check(publicSymbol, 'es2015', true) ? `${publicSymbol}Var` : publicSymbol;
   cw.blComment(() => {
@@ -198,6 +201,13 @@ function writeGetterAndSetter(cw, formalDefOrName, publicSymbol, descriptiveName
         .ln(`@param {${typeName}} ${varName} - The ${formalName}${arrayDescriptionPostfix}`);
     })
     .bl(`set ${publicSymbol}(${varName})`, `this.${privateSymbol} = ${varName};`)
+    .ln()
+    .blComment(() => {
+      cw.ln(`Set the ${descriptiveName}${arrayDescriptionPostfix} and return 'this' for chaining.`)
+        .ln(`@param {${typeName}} ${varName} - The ${formalName}${arrayDescriptionPostfix}`)
+        .ln(`@returns {${clazzName}} this.`);
+    })
+    .bl(`with${capitalizedPublicSymbol}(${varName})`, `this.${publicSymbol} = ${varName}; return this;`)
     .ln();
 }
 
