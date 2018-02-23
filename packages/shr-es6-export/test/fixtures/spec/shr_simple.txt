@@ -42,3 +42,11 @@ EntryElement: OverrideBasedOnIntegerValueElementEntry
 Based on:     BasedOnIntegerValueElementEntry
 StringValue is type StringValueChild
 
+EntryElement: ChoiceValueEntry
+Value:        string or decimal
+
+EntryElement: ChoiceValueListEntry
+Value:        0..* string or StringValue
+
+EntryElement: InheritBasedOnIntegerValueElementEntry
+Based on:     BasedOnIntegerValueElementEntry

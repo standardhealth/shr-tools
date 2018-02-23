@@ -85,6 +85,14 @@ function generateClassBody(def, cw) {
       .ln(`@returns {${clazzName}} An instance of ${clazzName} populated with the JSON data`);
   })
     .bl('static fromJSON(json={})', () => writeFromJson(def, cw));
+  
+  cw.blComment( () => {
+    const clazzName = className(def.identifier.name);
+    cw.ln(`Serializes an instance of the ${clazzName} class to a JSON object.`)
+      .ln(`The JSON is expected to be valid against the ${clazzName} JSON schema, but no validation checks are performed.`)
+      .ln(`@returns {object} a JSON object populated with the data from the element`);
+  })
+    .bl(`toJSON()`, () => writeToJson(def, cw));
 }
 
 /**
@@ -203,6 +211,65 @@ function writeFromJson(def, cw) {
   cw.ln(`const inst = new ${className(def.identifier.name)}();`);
   cw.ln('setPropertiesFromJSON(inst, json);');
   cw.ln('return inst;');
+}
+
+/**
+ * Generates a JSON serializer for the element
+ * @param {DataElement} def - The definition of the SHR element to generate a serializer for
+ * @param {CodeWriter} cw - The CodeWriter instance to use during generation
+ * @private
+ */
+function writeToJson(def, cw) {
+  // If the element is an Entry, put those fields on the JSON object first
+  const url = `http://standardhealthrecord.org/spec/${def.identifier.namespace.replace('.', '/')}/${className(def.identifier.name)}`;
+  if (def.isEntry) {
+    cw.ln(`const inst = this._entryInfo.toJSON();`);
+    cw.ln(`inst['shr.base.EntryType'] = { 'Value' : '${url}' };`);
+  } else if (def.identifier.name !== 'EntryType') {
+    cw.ln(`const inst = { 'shr.base.EntryType': { 'Value' : '${url}' } };`);
+  } else {
+    cw.ln(`const inst = {};`);
+  }
+
+  if (def.value !== undefined) {
+    if (def.value instanceof ChoiceValue) {
+      // Choices get a special treatment
+      if (def.value.card.isList) {
+        cw.ln(`inst['Value'] = this.value.map(f => typeof f.toJSON === 'function' ? f.toJSON() : f);`);
+      } else {
+        cw.ln(`inst['Value'] = typeof this.value.toJSON === 'function' ? this.value.toJSON() : this.value;`);
+      }
+    } else if (def.value instanceof IdentifiableValue && def.value.identifier.isPrimitive) {
+      cw.ln(`inst['Value'] = this.value;`);
+    } else {
+      generateAssignmentIfList(def.value.card, 'Value', 'value', cw);
+    }
+  }
+
+  for (const field of def.fields) {
+    if (!(field instanceof TBD)) {
+      generateAssignmentIfList(field.card, field.identifier.fqn, toSymbol(field.identifier.name), cw);
+    }
+  }
+
+  cw.ln(`return inst;`);
+}
+
+/**
+ * Writes out an object assignment string based on the cardinality
+ * @param {object} card - the Cardinality object for the value being written
+ * @param {string} jsonString - the key to use to write the value to JSON
+ * @param {string} valueString - the string to get the required value out of 'this'
+ * @param {CodeWriter} cw - The CodeWriter that's writing the class
+ */
+function generateAssignmentIfList(card, jsonString, valueString, cw) {
+  cw.bl(`if (this.${valueString} !== undefined)`, () => {
+    if (card.isList) {
+      cw.ln(`inst['${jsonString}'] = this.${valueString}.map(f => f.toJSON());`);
+    } else {
+      cw.ln(`inst['${jsonString}'] = typeof this.${valueString}.toJSON === 'function' ? this.${valueString}.toJSON() : this.${valueString};`);
+    }
+  });
 }
 
 /**

@@ -170,6 +170,20 @@ describe('#FromJSON', () => {
     });
   });
 
+  describe('#InheritBasedOnIntegerValueElementEntryClass()', () => {
+    const BasedOnIntegerValueElementEntry = importResult('shr/simple/InheritBasedOnIntegerValueElementEntry');
+    const InheritBasedOnIntegerValueElementEntry = importResult('shr/simple/InheritBasedOnIntegerValueElementEntry');
+    it('should deserialize a JSON instance', () => {
+      const json = getJSON('InheritBasedOnIntegerValueElementEntry');
+      const entry = InheritBasedOnIntegerValueElementEntry.fromJSON(json);
+      expect(entry).instanceOf(InheritBasedOnIntegerValueElementEntry);
+      expect(entry).instanceOf(BasedOnIntegerValueElementEntry);
+      expectIntegerValue(entry, 43);
+      expectInstanceOf(entry.stringValue, 'shr/simple/StringValue');
+      expectStringValue(entry.stringValue, 'Hello!');
+    });
+  });
+
   describe('#OverrideBasedOnIntegerValueElementEntryClass()', () => {
     const OverrideBasedOnIntegerValueElementEntry = importResult('shr/simple/OverrideBasedOnIntegerValueElementEntry');
     it('should deserialize a JSON instance', () => {
@@ -180,6 +194,23 @@ describe('#FromJSON', () => {
       expectIntegerValue(entry, 43);
       expectInstanceOf(entry.stringValue, 'shr/simple/StringValueChild');
       expectStringValue(entry.stringValue, 'Hello!');
+    });
+  });
+
+  describe('#ChoiceValueEntryClass()', () => {
+    const ChoiceValueEntry = importResult('shr/simple/ChoiceValueEntry');
+    it('should deserialize a JSON instance with a string', () => {
+      const json = getJSON('ChoiceValueStringEntry');
+      const entry = ChoiceValueEntry.fromJSON(json);
+      expect(entry).instanceOf(ChoiceValueEntry);
+      expect(entry.value).to.equal('Hello!');
+    });
+
+    it('should deserialize a JSON instance with an integer', () => {
+      const json = getJSON('ChoiceValueIntEntry');
+      const entry = ChoiceValueEntry.fromJSON(json);
+      expect(entry).instanceOf(ChoiceValueEntry);
+      expect(entry.value).to.equal(35);
     });
   });
 

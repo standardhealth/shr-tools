@@ -8,7 +8,7 @@ The SHR text definitions and grammar files can be found in the [shr_spec](https:
 
 # Setting Up the Environment
 
-This project has been developed and tested with Node.js 6.6, although other versions _may_ work.  After installing Node.js and Yarn, change to the project directory and _yarn install_ the dependencies:
+This project is being developed and tested with Node.js 8.x (the current LTS version), although other versions _may_ work.  After installing Node.js and Yarn, change to the project directory and _yarn install_ the dependencies:
 ```
 $ yarn install
 ```
