@@ -31,7 +31,9 @@ class SHR {
   // Read in the canonical json files
   // Assumes first level of directories are namespaces
   readFiles(src) {
-    fs.readdirSync(src).forEach((subdir) => {
+    const files = fs.readdirSync(src);
+    console.log('Reading %s namespaces...', files.filter(subdir => fs.lstatSync(path.join(src, subdir)).isDirectory()).length);
+    files.forEach((subdir) => {
       const subPath = path.join(src, subdir);
       if (!fs.lstatSync(subPath).isDirectory()) return;
 
@@ -81,7 +83,7 @@ class SHR {
     });
   }
 
-  // Builds the package files that contain lists of the elements for 
+  // Builds the package files that contain lists of the elements for
   // a given namespace
   buildPackageFiles() {
     this.namespaces.list().forEach((namespace) => {
@@ -125,6 +127,7 @@ class SHR {
 
   // Builds pages for each data element
   buildDataElements() {
+    console.log('Building pages for %s elements...', this.elements.list().length);
     this.elements.list().forEach((element) => {
       const ejsPkg = { element: element };
       const fileName = `${element.name}.html`;

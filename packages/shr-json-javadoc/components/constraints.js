@@ -11,7 +11,7 @@ function cardToString(card) {
   return `${min}..${max}`
 }
 
-/*  
+/*
  *  Constraints class parses the constraints for a given field or value
  *  Stores parsed constraints in this.constraints
  *  Takes the field/value, element map, and whether the field is inherited
@@ -41,7 +41,7 @@ class Constraints {
       front: front,
       path: path
     }
-    
+
     // If source is an element, add hyperlink
     if (this.inherited) {
       const element = this.elements[this.field.inheritance.from];
@@ -68,7 +68,7 @@ class Constraints {
     const isRef = this.field.valueType === 'RefValue';
     const dValue = isRef ? `ref(${this.field.name})` : this.field.name;
     const path = this.field.name;
-    
+
     // Datatype constraint
     let dTypeConstraint = this.newConstraint('DataType', dValue, path);
     if (this.field.path)
@@ -77,10 +77,10 @@ class Constraints {
 
     // Cardinality constraint
     const cValue = cardToString(this.field.card);
-    const cardConstraint = this.newConstraint('Cardinality', cValue, path); 
+    const cardConstraint = this.newConstraint('Cardinality', cValue, path);
     this.constraints.push(cardConstraint);
   }
-  
+
   // Handles the includes type constraint
   includesType(constraint, subpath) {
     constraint.forEach((item) => {
@@ -137,9 +137,13 @@ class Constraints {
   // type constraint.
   typeConstraint(constraint, subpath) {
     const element = this.elements[constraint.fqn];
-    const constraintName = element.name;
+    var constraintName = (this.field.valueType === 'RefValue') ? `ref(${element.name})` : element.name;
+    if (this.field.valueType === 'RefValue') {
+      constraintName = `${constraintName}`;
+    }
+
     const href = `../${element.namespacePath}/${element.name}.html`;
-    
+
     // Checks if type constraint is top level
     if (subpath === this.field.name && !this.inherited) {
       this.constraints[0].value = constraintName;
