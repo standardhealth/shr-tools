@@ -1,20 +1,20 @@
-const fs = require('fs');
 const {expect} = require('chai');
-const Ajv = require('ajv');
 const setup = require('./setup');
+const { TestContext, importResult } = require('./test_utils');
 require('babel-register')({
   presets: [ 'es2015' ]
 });
 
 setup('./test/fixtures/spec', './build/test', true);
-const ajv = setupAjv('./build/test/schema');
+const context = new TestContext();
+context.setupAjv('./build/test/schema');
 
 describe('#FromJSON', () => {
 
   describe('#StringValueEntryClass()', () => {
     const StringValueEntry = importResult('shr/simple/StringValueEntry');
     it('should deserialize a JSON instance', () => {
-      const json = getJSON('StringValueEntry');
+      const json = context.getJSON('StringValueEntry');
       const entry = StringValueEntry.fromJSON(json);
       expect(entry).instanceOf(StringValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry');
@@ -25,14 +25,14 @@ describe('#FromJSON', () => {
   describe('#CodeValueEntryClass()', () => {
     const CodeValueEntry = importResult('shr/simple/CodeValueEntry');
     it('should deserialize a JSON instance with a string code', () => {
-      const json = getJSON('CodeStringValueEntry');
+      const json = context.getJSON('CodeStringValueEntry');
       const entry = CodeValueEntry.fromJSON(json);
       expect(entry).instanceOf(CodeValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry');
       expectCodeValue(entry, 'foo');
     });
     it('should deserialize a JSON instance with an object code', () => {
-      const json = getJSON('CodeObjectValueEntry');
+      const json = context.getJSON('CodeObjectValueEntry');
       const entry = CodeValueEntry.fromJSON(json);
       expect(entry).instanceOf(CodeValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry');
@@ -43,14 +43,14 @@ describe('#FromJSON', () => {
   describe('#CodingValueEntryClass()', () => {
     const CodingValueEntry = importResult('shr/simple/CodingValueEntry');
     it('should deserialize a JSON instance with a string code', () => {
-      const json = getJSON('CodingStringValueEntry');
+      const json = context.getJSON('CodingStringValueEntry');
       const entry = CodingValueEntry.fromJSON(json);
       expect(entry).instanceOf(CodingValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry');
       expectCodingValue(entry, { code: 'foo', codeSystem: 'http://foo.org/bar', displayText: 'Foo' });
     });
     it('should deserialize a JSON instance with an object code', () => {
-      const json = getJSON('CodingObjectValueEntry');
+      const json = context.getJSON('CodingObjectValueEntry');
       const entry = CodingValueEntry.fromJSON(json);
       expect(entry).instanceOf(CodingValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry');
@@ -61,7 +61,7 @@ describe('#FromJSON', () => {
   describe('#CodeableConceptValueEntryClass()', () => {
     const CodeableConceptValueEntry = importResult('shr/simple/CodeableConceptValueEntry');
     it('should deserialize a JSON instance with a string code', () => {
-      const json = getJSON('CodeableConceptStringValueEntry');
+      const json = context.getJSON('CodeableConceptStringValueEntry');
       const entry = CodeableConceptValueEntry.fromJSON(json);
       expect(entry).instanceOf(CodeableConceptValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodeableConceptValueEntry');
@@ -74,7 +74,7 @@ describe('#FromJSON', () => {
       );
     });
     it('should deserialize a JSON instance with an object code', () => {
-      const json = getJSON('CodeableConceptObjectValueEntry');
+      const json = context.getJSON('CodeableConceptObjectValueEntry');
       const entry = CodeableConceptValueEntry.fromJSON(json);
       expect(entry).instanceOf(CodeableConceptValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodeableConceptValueEntry');
@@ -91,7 +91,7 @@ describe('#FromJSON', () => {
   describe('#ElementValueEntryClass()', () => {
     const ElementValueEntry = importResult('shr/simple/ElementValueEntry');
     it('should deserialize a JSON instance', () => {
-      const json = getJSON('ElementValueEntry');
+      const json = context.getJSON('ElementValueEntry');
       const entry = ElementValueEntry.fromJSON(json);
       expect(entry).instanceOf(ElementValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/ElementValueEntry');
@@ -103,7 +103,7 @@ describe('#FromJSON', () => {
   describe('#RecursiveEntryClass()', () => {
     const RecursiveEntry = importResult('shr/simple/RecursiveEntry');
     it('should deserialize a JSON instance', () => {
-      const json = getJSON('RecursiveEntry');
+      const json = context.getJSON('RecursiveEntry');
       const entry = RecursiveEntry.fromJSON(json);
       expect(entry).instanceOf(RecursiveEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/RecursiveEntry');
@@ -133,7 +133,7 @@ describe('#FromJSON', () => {
   describe('#ReferenceEntryClass()', () => {
     const ReferenceEntry = importResult('shr/simple/ReferenceEntry');
     it('should deserialize a JSON instance', () => {
-      const json = getJSON('ReferenceEntry');
+      const json = context.getJSON('ReferenceEntry');
       const entry = ReferenceEntry.fromJSON(json);
       expect(entry).instanceOf(ReferenceEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/ReferenceEntry');
@@ -160,7 +160,7 @@ describe('#FromJSON', () => {
   describe('#BasedOnIntegerValueElementEntryClass()', () => {
     const BasedOnIntegerValueElementEntry = importResult('shr/simple/BasedOnIntegerValueElementEntry');
     it('should deserialize a JSON instance', () => {
-      const json = getJSON('BasedOnIntegerValueElementEntry');
+      const json = context.getJSON('BasedOnIntegerValueElementEntry');
       const entry = BasedOnIntegerValueElementEntry.fromJSON(json);
       expect(entry).instanceOf(BasedOnIntegerValueElementEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/BasedOnIntegerValueElementEntry');
@@ -174,7 +174,7 @@ describe('#FromJSON', () => {
     const BasedOnIntegerValueElementEntry = importResult('shr/simple/InheritBasedOnIntegerValueElementEntry');
     const InheritBasedOnIntegerValueElementEntry = importResult('shr/simple/InheritBasedOnIntegerValueElementEntry');
     it('should deserialize a JSON instance', () => {
-      const json = getJSON('InheritBasedOnIntegerValueElementEntry');
+      const json = context.getJSON('InheritBasedOnIntegerValueElementEntry');
       const entry = InheritBasedOnIntegerValueElementEntry.fromJSON(json);
       expect(entry).instanceOf(InheritBasedOnIntegerValueElementEntry);
       expect(entry).instanceOf(BasedOnIntegerValueElementEntry);
@@ -187,7 +187,7 @@ describe('#FromJSON', () => {
   describe('#OverrideBasedOnIntegerValueElementEntryClass()', () => {
     const OverrideBasedOnIntegerValueElementEntry = importResult('shr/simple/OverrideBasedOnIntegerValueElementEntry');
     it('should deserialize a JSON instance', () => {
-      const json = getJSON('OverrideBasedOnIntegerValueElementEntry');
+      const json = context.getJSON('OverrideBasedOnIntegerValueElementEntry');
       const entry = OverrideBasedOnIntegerValueElementEntry.fromJSON(json);
       expect(entry).instanceOf(OverrideBasedOnIntegerValueElementEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/OverrideBasedOnIntegerValueElementEntry');
@@ -200,14 +200,14 @@ describe('#FromJSON', () => {
   describe('#ChoiceValueEntryClass()', () => {
     const ChoiceValueEntry = importResult('shr/simple/ChoiceValueEntry');
     it('should deserialize a JSON instance with a string', () => {
-      const json = getJSON('ChoiceValueStringEntry');
+      const json = context.getJSON('ChoiceValueStringEntry');
       const entry = ChoiceValueEntry.fromJSON(json);
       expect(entry).instanceOf(ChoiceValueEntry);
       expect(entry.value).to.equal('Hello!');
     });
 
     it('should deserialize a JSON instance with an integer', () => {
-      const json = getJSON('ChoiceValueIntEntry');
+      const json = context.getJSON('ChoiceValueIntEntry');
       const entry = ChoiceValueEntry.fromJSON(json);
       expect(entry).instanceOf(ChoiceValueEntry);
       expect(entry.value).to.equal(35);
@@ -326,40 +326,3 @@ function expectReferenceValue(entry, expected, alias) {
   }
 }
 
-function getJSON(name, validate=true) {
-  const json = require(`./fixtures/instances/${name}.json`);
-  if (!json) {
-    throw new Error(`No JSON found for ${name}`);
-  }
-  if (validate) {
-    if (!json['shr.base.EntryType'] || !json['shr.base.EntryType'].Value) {
-      throw new Error(`Couldn't find entry type for ${name}`);
-    }
-    const entryType = json['shr.base.EntryType'].Value;
-    const matches = entryType.match(/^http:\/\/standardhealthrecord\.org\/spec\/(.*)\/[^/]+$/);
-    if (!matches) {
-      throw new Error(`${name}'s entry type does not match expected format: ${entryType}`);
-    }
-    const schema = `${matches[1].split('/').join('.')}.schema.json`;
-    const valid = ajv.validate(schema, json);
-    expect(valid, ajv.errorsText()).to.be.true;
-  }
-  return json;
-}
-
-function importResult(path) {
-  return require(`../build/test/es6/${path}`).default;
-}
-
-function setupAjv(schemaPath='./build/test/schema') {
-  const ajv = new Ajv();
-  // Add the JSON Schema DRAFT-04 meta schema
-  ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
-  // Add the generated schemas
-  for (const file of fs.readdirSync(schemaPath)) {
-    if (file.endsWith('schema.json')) {
-      ajv.addSchema(require(`../${schemaPath}/${file}`), file);
-    }
-  }
-  return ajv;
-}

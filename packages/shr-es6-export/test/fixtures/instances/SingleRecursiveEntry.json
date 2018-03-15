@@ -1,0 +1,64 @@
+{
+  "shr.base.ShrId": {
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId" },
+    "Value": "1"
+  },
+  "shr.base.EntryId": {
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId" },
+    "Value": "1-1"
+  },
+  "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/SingleRecursiveEntry" },
+  "shr.core.CreationTime": {
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"},
+    "Value": "2017-11-30T12:34:56Z"
+  },
+  "shr.base.LastUpdated": {
+    "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"},
+    "Value": "2017-12-05T23:45:01Z"
+  },
+  "shr.simple.RecursiveEntry": [
+    {
+      "shr.base.ShrId": {
+        "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId" },
+        "Value": "1"
+      },
+      "shr.base.EntryId": {
+        "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId" },
+        "Value": "1-1"
+      },
+      "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/RecursiveEntry" },
+      "shr.core.CreationTime": {
+        "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"},
+        "Value": "2017-11-30T12:34:56Z"
+      },
+      "shr.base.LastUpdated": {
+        "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"},
+        "Value": "2017-12-05T23:45:01Z"
+      },
+      "shr.simple.RecursiveEntry": [
+        {
+          "shr.base.ShrId": {
+            "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId" },
+            "Value": "1"
+          },
+          "shr.base.EntryId": {
+            "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId" },
+            "Value": "1-1"
+          },
+          "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/SingleRecursiveEntry" },
+          "shr.core.CreationTime": {
+            "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"},
+            "Value": "2017-11-30T12:34:56Z"
+          },
+          "shr.base.LastUpdated": {
+            "shr.base.EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"},
+            "Value": "2017-12-05T23:45:01Z"
+          },
+          "Value": 11
+        }
+      ],
+      "Value": 10
+    }
+  ],
+  "Value": 1
+}

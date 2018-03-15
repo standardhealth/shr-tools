@@ -1,4 +1,5 @@
 const {expect} = require('chai');
+const { importResult } = require('./test_utils');
 const setup = require('./setup');
 require('babel-register')({
   presets: [ 'es2015' ]
@@ -63,7 +64,3 @@ describe('#Class', () => {
   });
 
 });
-
-function importResult(path) {
-  return require(`../build/test/es6/${path}`).default;
-}

@@ -24,12 +24,28 @@ EntryElement: RecursiveEntry
 Value:        integer
 0..*          RecursiveEntry
 
+EntryElement: SingleRecursiveEntry
+Based on:     RecursiveEntry
+0..1          RecursiveEntry
+
 EntryElement: ReferenceEntry
 Value:        ref(StringValueEntry)
 0..*          ref(CodeValueEntry)
 
 Element:      IntegerValueElement
 Value:        integer
+
+EntryElement: OptionalIntegerValueEntry
+Value:        0..1 integer
+
+EntryElement: OptionalChoiceValueEntry
+Value:        0..1 integer or string
+
+EntryElement: OptionalFieldEntry
+0..1          IntegerValueElement
+
+EntryElement: OptionalElementValueEntry
+Value:        0..1 IntegerValueElement
 
 EntryElement: BasedOnIntegerValueElementEntry
 Based on:     IntegerValueElement

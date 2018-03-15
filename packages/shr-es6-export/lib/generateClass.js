@@ -118,6 +118,7 @@ function writeGetterAndSetter(cw, clazzName, formalDefOrName, publicSymbol, desc
   }
 
   let formalName;
+  let required = (formalDefOrName instanceof Value) ? formalDefOrName.effectiveCard.min === 1 : false;
   if (formalDefOrName instanceof ChoiceValue) {
     // Choices get a special treatment
     const options = formalDefOrName.options.filter(o => !(o instanceof TBD));
@@ -197,14 +198,20 @@ function writeGetterAndSetter(cw, clazzName, formalDefOrName, publicSymbol, desc
     .bl(`get ${publicSymbol}()`, `return this.${privateSymbol};`)
     .ln()
     .blComment(() => {
-      cw.ln(`Set the ${descriptiveName}${arrayDescriptionPostfix}.`)
-        .ln(`@param {${typeName}} ${varName} - The ${formalName}${arrayDescriptionPostfix}`);
+      cw.ln(`Set the ${descriptiveName}${arrayDescriptionPostfix}.`);
+      if (required) {
+        cw.ln('This field/value is required.');
+      }
+      cw.ln(`@param {${typeName}} ${varName} - The ${formalName}${arrayDescriptionPostfix}`);
     })
     .bl(`set ${publicSymbol}(${varName})`, `this.${privateSymbol} = ${varName};`)
     .ln()
     .blComment(() => {
-      cw.ln(`Set the ${descriptiveName}${arrayDescriptionPostfix} and return 'this' for chaining.`)
-        .ln(`@param {${typeName}} ${varName} - The ${formalName}${arrayDescriptionPostfix}`)
+      cw.ln(`Set the ${descriptiveName}${arrayDescriptionPostfix} and return 'this' for chaining.`);
+      if (required) {
+        cw.ln('This field/value is required.');
+      }
+      cw.ln(`@param {${typeName}} ${varName} - The ${formalName}${arrayDescriptionPostfix}`)
         .ln(`@returns {${clazzName}} this.`);
     })
     .bl(`with${capitalizedPublicSymbol}(${varName})`, `this.${publicSymbol} = ${varName}; return this;`)
@@ -244,13 +251,17 @@ function writeToJson(def, cw) {
   if (def.value !== undefined) {
     if (def.value instanceof ChoiceValue) {
       // Choices get a special treatment
-      if (def.value.card.isList) {
-        cw.ln(`inst['Value'] = this.value.map(f => typeof f.toJSON === 'function' ? f.toJSON() : f);`);
-      } else {
-        cw.ln(`inst['Value'] = typeof this.value.toJSON === 'function' ? this.value.toJSON() : this.value;`);
-      }
+      cw.bl(`if (this.value != null)`, () => {
+        if (def.value.card.isList) {
+          cw.ln(`inst['Value'] = this.value.map(f => typeof f.toJSON === 'function' ? f.toJSON() : f);`);
+        } else {
+          cw.ln(`inst['Value'] = typeof this.value.toJSON === 'function' ? this.value.toJSON() : this.value;`);
+        }
+      });
     } else if (def.value instanceof IdentifiableValue && def.value.identifier.isPrimitive) {
-      cw.ln(`inst['Value'] = this.value;`);
+      cw.bl(`if (this.value != null)`, () => {
+        cw.ln(`inst['Value'] = this.value;`);
+      });
     } else {
       generateAssignmentIfList(def.value.card, 'Value', 'value', cw);
     }
@@ -273,7 +284,7 @@ function writeToJson(def, cw) {
  * @param {CodeWriter} cw - The CodeWriter that's writing the class
  */
 function generateAssignmentIfList(card, jsonString, valueString, cw) {
-  cw.bl(`if (this.${valueString} !== undefined)`, () => {
+  cw.bl(`if (this.${valueString} != null)`, () => {
     if (card.isList) {
       cw.ln(`inst['${jsonString}'] = this.${valueString}.map(f => f.toJSON());`);
     } else {
