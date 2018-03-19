@@ -28,13 +28,24 @@ class SHR {
     this.elements.flatten();
   }
 
+  set metaData(metaData) { this._metaData = metaData}
+  get metaData() { return this._metaData }
+
   // Read in the canonical json files
   // Assumes first level of directories are namespaces
   readFiles(src) {
     const files = fs.readdirSync(src);
     console.log('Reading %s namespaces...', files.filter(subdir => fs.lstatSync(path.join(src, subdir)).isDirectory()).length);
+    
+    if (files.find(f => f == 'project.json')) {
+      const subPath = path.join(src, 'project.json');
+      this.metaData = JSON.parse(fs.readFileSync(subPath, 'utf-8'));
+    }
+
+
     files.forEach((subdir) => {
       const subPath = path.join(src, subdir);
+
       if (!fs.lstatSync(subPath).isDirectory()) return;
 
       fs.readdirSync(subPath).forEach((item) => {
@@ -89,7 +100,7 @@ class SHR {
     this.namespaces.list().forEach((namespace) => {
       const fileName = `${namespace.path}-pkg.html`;
       const filePath = path.join(this.outDirectory, namespace.path, fileName);
-      const ejsPkg = { elements: namespace.elements, namespace: namespace };
+      const ejsPkg = { elements: namespace.elements, namespace: namespace, metaData: this.metaData };
       renderEjsFile('templates/pkg.ejs', ejsPkg, filePath);
     });
   }
@@ -99,28 +110,28 @@ class SHR {
     this.namespaces.list().forEach((namespace) => {
       const fileName = `${namespace.path}-info.html`;
       const filePath = path.join(this.outDirectory, namespace.path, fileName);
-      const ejsPkg = { namespace: namespace };
+      const ejsPkg = { namespace: namespace, metaData: this.metaData  };
       renderEjsFile('templates/info.ejs', ejsPkg, filePath);
     });
   }
 
   // Builds the overview list which displays all the namespaces
   buildOverviewFrame() {
-    const ejsPkg = { namespaces: this.namespaces.list() };
+    const ejsPkg = { namespaces: this.namespaces.list(), metaData: this.metaData  };
     const filePath = path.join(this.outDirectory, 'overview-frame.html');
     renderEjsFile('templates/overview-frame.ejs', ejsPkg, filePath);
   }
 
   // Builds overiew list of all the data elements on the main page
   buildOverviewSummary() {
-    const ejsPkg = { elements: this.elements.list() };
+    const ejsPkg = { elements: this.elements.list(), metaData: this.metaData  };
     const filePath = path.join(this.outDirectory, 'overview-summary.html');
     renderEjsFile('templates/overview-summary.ejs', ejsPkg, filePath);
   }
 
   // Builds list of all the data elements on the main page
   buildAllElementsFrame() {
-    const ejsPkg = { elements: this.elements.list() };
+    const ejsPkg = { elements: this.elements.list().filter(de=>de.hierarchy.length > 0), metaData: this.metaData  };
     const filePath = path.join(this.outDirectory, 'allclasses-frame.html');
     renderEjsFile('templates/allclasses-frame.ejs', ejsPkg, filePath);
   }
@@ -129,7 +140,7 @@ class SHR {
   buildDataElements() {
     console.log('Building pages for %s elements...', this.elements.list().length);
     this.elements.list().forEach((element) => {
-      const ejsPkg = { element: element };
+      const ejsPkg = { element: element, metaData: this.metaData  };
       const fileName = `${element.name}.html`;
       const filePath = path.join(out, element.namespacePath, fileName);
       renderEjsFile('templates/dataElement.ejs', ejsPkg, filePath);
@@ -150,7 +161,7 @@ class SHR {
 }
 
 // Read in command line arguments and set source and output directories
-let src = 'canonicaljson'
+let src = 'cimcore'
 let out = 'reference-model'
 let argv = minimist(process.argv.slice(2));
 if ('s' in argv) src = argv.s;
