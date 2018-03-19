@@ -1,5 +1,7 @@
 /node_modules/
 /canonicaljson/
+/cimcore/
+.vscode/
 *.zip
 /sample/
 /reference-model/
