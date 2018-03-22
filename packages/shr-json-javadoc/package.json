@@ -2,16 +2,24 @@
   "name": "shr-json-javadoc",
   "version": "1.0.1",
   "description": "Convert the canonical JSON into a java doc style representation",
-  "main": "index.js",
+  "main": "export.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec --recursive",
+    "test:watch": "npm test -- --watch",
+    "test:debug": "./node_modules/.bin/mocha --inspect --debug-brk --reporter spec --recursive",
+    "lint": "./node_modules/.bin/eslint .",
+    "lint:fix": "./node_modules/.bin/eslint . --fix"
   },
   "author": "Agustin Mora",
   "license": "Apache-2.0",
-  "dependencies": {
+  "devDependencies": {
     "bluebird": "^3.5.1",
     "ejs": "^2.5.7",
     "minimist": "^1.2.0",
-    "ncp": "^2.0.0"
+    "ncp": "^2.0.0",
+    "bunyan": "^1.8.12"
+  },
+  "peerDependencies": {
+    "bunyan": "^1.8.9"
   }
 }

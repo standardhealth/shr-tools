@@ -25,12 +25,12 @@ You may need to use sudo (for OSX, *nix, BSD etc) or run your command shell as A
 ## Building the HTML
 To assemble the project, assuming the canonical json is in the same directory, run:
 ```
-$ node index.js
+$ node export.js
 ```
 
 To customize the output and source directories, use flags
 ```
-$ node index.js -s ../path/to/canonicaljson -o ./reference-model
+$ node export.js -s ../path/to/canonicaljson -o ./reference-model
 ```
 
 To open the site, open `index.html`, from the output directory, in your browser.

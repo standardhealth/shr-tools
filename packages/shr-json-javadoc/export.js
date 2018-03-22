@@ -1,10 +1,29 @@
 const ejs = require('ejs');
 const fs = require('fs');
 const path = require('path');
+const bunyan = require('bunyan');
 const minimist = require('minimist');
 const ncp = require('ncp').ncp;
 const Namespaces = require('./components/namespaces');
 const Elements = require('./components/Elements');
+
+var rootLogger = bunyan.createLogger({name: 'shr-json-javadoc'});
+var logger = rootLogger;
+function setLogger(bunyanLogger) {
+  rootLogger = logger = bunyanLogger;
+}
+
+function compileJavadoc(cimcore, outPath) {
+  // Run main code
+  return new SHR(cimcore, outPath);
+}
+
+function exportToPath(compiledSHR, outPath) {
+  // export HTML
+  compiledSHR.outDirectory = outPath;
+  compiledSHR.generateHTML()
+}
+
 
 // Function to generate and write html from an ejs template
 renderEjsFile = (template, pkg, destination) => {
@@ -19,12 +38,12 @@ renderEjsFile = (template, pkg, destination) => {
  *  Uses Namespaces and Elements classes to hold the data.
  */
 class SHR {
-  constructor(src, out) {
+  constructor(cimcore, out) {
     this.outDirectory = out;
     this.elements = new Elements();
     this.namespaces = new Namespaces();
     this.children = {};
-    this.readFiles(src);
+    this.readFiles(cimcore);
     this.elements.flatten();
   }
 
@@ -33,45 +52,21 @@ class SHR {
 
   // Read in the canonical json files
   // Assumes first level of directories are namespaces
-  readFiles(src) {
-    const files = fs.readdirSync(src);
-    console.log('Reading %s namespaces...', files.filter(subdir => fs.lstatSync(path.join(src, subdir)).isDirectory()).length);
-    
-    if (files.find(f => f == 'project.json')) {
-      const subPath = path.join(src, 'project.json');
-      this.metaData = JSON.parse(fs.readFileSync(subPath, 'utf-8'));
+  readFiles(cimcore) {
+    logger.info('Compiling Documentation for %s namespaces...', Object.keys(cimcore.namespaces).length);
+    this.metaData = cimcore.projectInfo;
+    for (const ns in cimcore.namespaces) {
+      const namespace = this.namespaces.get(ns);
+      namespace.description = cimcore.namespaces[ns].description;
     }
 
-
-    files.forEach((subdir) => {
-      const subPath = path.join(src, subdir);
-
-      if (!fs.lstatSync(subPath).isDirectory()) return;
-
-      fs.readdirSync(subPath).forEach((item) => {
-        // Ignores mappings and valuesets
-        if (item === 'mappings' || item === 'valuesets') return;
-        // Ensures file is json
-        if (item.split('.').pop() !== 'json') return;
-
-        const filePath = path.join(subPath, item);
-        const fileData = fs.readFileSync(filePath, 'utf-8');
-        let content = JSON.parse(fileData);
-
-        // Checks if file is an element
-        if ('fqn' in content) {
-          this.elements.add(content);
-          let element = this.elements.get(content.fqn);
-          let namespace = this.namespaces.get(element.namespace);
-          namespace.addElement(element);
-          element.namespacePath = namespace.path;
-        // Checks if file is namespace descriptor
-        } else {
-          let namespace = this.namespaces.get(content.name);
-          namespace.description = content.description;
-        }
-      });
-    });
+    for (const de of cimcore.dataElements) {
+      this.elements.add(de);
+      const element = this.elements.get(de.fqn);
+      const namespace = this.namespaces.get(element.namespace);
+      namespace.addElement(element);
+      element.namespacePath = namespace.path;
+    }
   }
 
   // Builds the output directory folder structure
@@ -79,11 +74,11 @@ class SHR {
     if (!fs.existsSync(this.outDirectory))
       fs.mkdirSync(this.outDirectory);
 
-    this.namespaces.list().forEach((namespace) => {
-      const dir = path.join(out, namespace.path);
+    for (const namespace of this.namespaces.list()) {
+      const dir = path.join(this.outDirectory, namespace.path);
       if (!fs.existsSync(dir))
         fs.mkdirSync(dir);
-    });
+    };
   }
 
   // Copy the required files to output directory
@@ -97,22 +92,22 @@ class SHR {
   // Builds the package files that contain lists of the elements for
   // a given namespace
   buildPackageFiles() {
-    this.namespaces.list().forEach((namespace) => {
+    for (const namespace of this.namespaces.list()) {
       const fileName = `${namespace.path}-pkg.html`;
       const filePath = path.join(this.outDirectory, namespace.path, fileName);
       const ejsPkg = { elements: namespace.elements, namespace: namespace, metaData: this.metaData };
       renderEjsFile('templates/pkg.ejs', ejsPkg, filePath);
-    });
+    };
   }
 
   // Builds the info files that describe each namespace
   buildInfoFiles() {
-    this.namespaces.list().forEach((namespace) => {
+    for (const namespace of this.namespaces.list()) {
       const fileName = `${namespace.path}-info.html`;
       const filePath = path.join(this.outDirectory, namespace.path, fileName);
       const ejsPkg = { namespace: namespace, metaData: this.metaData  };
       renderEjsFile('templates/info.ejs', ejsPkg, filePath);
-    });
+    };
   }
 
   // Builds the overview list which displays all the namespaces
@@ -138,13 +133,13 @@ class SHR {
 
   // Builds pages for each data element
   buildDataElements() {
-    console.log('Building pages for %s elements...', this.elements.list().length);
-    this.elements.list().forEach((element) => {
+    console.log('Building documentation pages for %s elements...', this.elements.list().length);
+    for (const element of this.elements.list()) {
       const ejsPkg = { element: element, metaData: this.metaData  };
       const fileName = `${element.name}.html`;
-      const filePath = path.join(out, element.namespacePath, fileName);
+      const filePath = path.join(this.outDirectory, element.namespacePath, fileName);
       renderEjsFile('templates/dataElement.ejs', ejsPkg, filePath);
-    });
+    };
   }
 
   // Runs all the different components to generate the html files
@@ -160,13 +155,4 @@ class SHR {
   }
 }
 
-// Read in command line arguments and set source and output directories
-let src = 'cimcore'
-let out = 'reference-model'
-let argv = minimist(process.argv.slice(2));
-if ('s' in argv) src = argv.s;
-if ('o' in argv) out = argv.o;
-
-// Run main code
-let shr = new SHR(src, out);
-shr.generateHTML()
+module.exports = {setLogger, compileJavadoc, exportToPath}
