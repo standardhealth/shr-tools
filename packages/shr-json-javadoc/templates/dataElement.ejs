@@ -126,7 +126,7 @@ if (location.href.indexOf('is-external=true') == -1) {
               <% } -%>
               <ul class="blockList">
                 <% if (element.hierarchy) { -%>
-                  <% element.hierarchy.reverse().forEach(function(ancestor) { -%>
+                  <% element.hierarchy.map(h=>h).reverse().forEach(function(ancestor) { -%>
                     <li class="blockList">
                       <a name="properties_inherited_from_class_java.lang.Object"></a>
                       <h3>Properties inherited from&nbsp;
