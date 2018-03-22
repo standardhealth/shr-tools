@@ -2,12 +2,11 @@ const ejs = require('ejs');
 const fs = require('fs');
 const path = require('path');
 const bunyan = require('bunyan');
-const minimist = require('minimist');
 const ncp = require('ncp').ncp;
 const Namespaces = require('./components/namespaces');
 const Elements = require('./components/Elements');
 
-var rootLogger = bunyan.createLogger({name: 'shr-json-javadoc'});
+var rootLogger = bunyan.createLogger({ name: 'shr-json-javadoc' });
 var logger = rootLogger;
 function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
@@ -21,13 +20,13 @@ function compileJavadoc(cimcore, outPath) {
 function exportToPath(compiledSHR, outPath) {
   // export HTML
   compiledSHR.outDirectory = outPath;
-  compiledSHR.generateHTML()
+  compiledSHR.generateHTML();
 }
 
 
 // Function to generate and write html from an ejs template
-renderEjsFile = (template, pkg, destination) => {
-  ejs.renderFile(template, pkg, (error, htmlText) => {
+function renderEjsFile(template, pkg, destination) {
+  ejs.renderFile(path.join(__dirname, template), pkg, (error, htmlText) => {
     if (error) console.log(error);
     else fs.writeFileSync(destination, htmlText);
   });
@@ -47,8 +46,8 @@ class SHR {
     this.elements.flatten();
   }
 
-  set metaData(metaData) { this._metaData = metaData}
-  get metaData() { return this._metaData }
+  set metaData(metaData) { this._metaData = metaData;}
+  get metaData() { return this._metaData; }
 
   // Read in the canonical json files
   // Assumes first level of directories are namespaces
@@ -78,7 +77,7 @@ class SHR {
       const dir = path.join(this.outDirectory, namespace.path);
       if (!fs.existsSync(dir))
         fs.mkdirSync(dir);
-    };
+    }
   }
 
   // Copy the required files to output directory
@@ -97,7 +96,7 @@ class SHR {
       const filePath = path.join(this.outDirectory, namespace.path, fileName);
       const ejsPkg = { elements: namespace.elements, namespace: namespace, metaData: this.metaData };
       renderEjsFile('templates/pkg.ejs', ejsPkg, filePath);
-    };
+    }
   }
 
   // Builds the info files that describe each namespace
@@ -107,7 +106,7 @@ class SHR {
       const filePath = path.join(this.outDirectory, namespace.path, fileName);
       const ejsPkg = { namespace: namespace, metaData: this.metaData  };
       renderEjsFile('templates/info.ejs', ejsPkg, filePath);
-    };
+    }
   }
 
   // Builds the overview list which displays all the namespaces
@@ -139,7 +138,7 @@ class SHR {
       const fileName = `${element.name}.html`;
       const filePath = path.join(this.outDirectory, element.namespacePath, fileName);
       renderEjsFile('templates/dataElement.ejs', ejsPkg, filePath);
-    };
+    }
   }
 
   // Runs all the different components to generate the html files
@@ -155,4 +154,4 @@ class SHR {
   }
 }
 
-module.exports = {setLogger, compileJavadoc, exportToPath}
+module.exports = {setLogger, compileJavadoc, exportToPath};
