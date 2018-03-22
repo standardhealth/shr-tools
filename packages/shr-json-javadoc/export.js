@@ -83,7 +83,7 @@ class SHR {
   // Copy the required files to output directory
   // This includes images, index.html, and the stylesheet
   copyRequiredFiles() {
-    ncp('required', this.outDirectory, (error) => {
+    ncp(path.join(__dirname, 'required'), this.outDirectory, (error) => {
       if (error) return console.log(error);
     });
   }
@@ -132,7 +132,7 @@ class SHR {
 
   // Builds pages for each data element
   buildDataElements() {
-    console.log('Building documentation pages for %s elements...', this.elements.list().length);
+    logger.info('Building documentation pages for %s elements...', this.elements.list().length);
     for (const element of this.elements.list()) {
       const ejsPkg = { element: element, metaData: this.metaData  };
       const fileName = `${element.name}.html`;
