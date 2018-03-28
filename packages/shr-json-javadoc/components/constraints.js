@@ -17,9 +17,11 @@ function cardToString(card) {
  *  Takes the field/value, element map, and whether the field is inherited
  */
 class Constraints {
-  constructor(field, elements, inherited) {
+  constructor(field, elements, config, inherited=false, configureForIG=false) {
     this.field = field;
+    this.config = config;
     this.inherited = inherited;
+    this.configureForIG = configureForIG;
     this.constraints = [];
     this.subtypes = [];
     this.elements = elements;
@@ -31,6 +33,10 @@ class Constraints {
     let targetTop = false;
     if (href !== undefined) {
       targetTop = href.includes('http');
+      //Special case for FHIR IG model doc instance
+      if (this.configureForIG && href.startsWith(`${this.config.fhirURL}/ValueSet/`)) {
+        href = href.replace(`${this.config.fhirURL}/ValueSet/`, '../../ValueSet-').concat('.html');
+      }
     }
     let constraint = {
       name: name,
@@ -50,7 +56,7 @@ class Constraints {
       constraint.sourceHref = sourceHref;
     }
 
-    // If field was inherrited, check when it was last modified
+    // If field was inherited, check when it was last modified
     // Add hyperlink for last modified element
     if (lastMod !== undefined) {
       const lastModElement = this.elements[lastMod];

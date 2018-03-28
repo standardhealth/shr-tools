@@ -12,9 +12,9 @@ function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
 
-function compileJavadoc(cimcore, outPath) {
+function compileJavadoc(cimcore, outPath, configureForIG=false) {
   // Run main code
-  return new SHR(cimcore, outPath);
+  return new SHR(cimcore, outPath, configureForIG);
 }
 
 function exportToPath(compiledSHR, outPath) {
@@ -37,9 +37,10 @@ function renderEjsFile(template, pkg, destination) {
  *  Uses Namespaces and Elements classes to hold the data.
  */
 class SHR {
-  constructor(cimcore, out) {
+  constructor(cimcore, out, configureForIG) {
     this.outDirectory = out;
-    this.elements = new Elements();
+    this.configureForIG = configureForIG;
+    this.elements = new Elements(cimcore.projectInfo, configureForIG);
     this.namespaces = new Namespaces();
     this.children = {};
     this.readFiles(cimcore);
@@ -60,8 +61,9 @@ class SHR {
     }
 
     for (const de of cimcore.dataElements) {
-      this.elements.add(de);
-      const element = this.elements.get(de.fqn);
+      const deClone = JSON.parse(JSON.stringify(de));
+      this.elements.add(deClone);
+      const element = this.elements.get(deClone.fqn);
       const namespace = this.namespaces.get(element.namespace);
       namespace.addElement(element);
       element.namespacePath = namespace.path;

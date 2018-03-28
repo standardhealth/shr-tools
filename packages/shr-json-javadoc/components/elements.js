@@ -6,7 +6,9 @@ const Constraints = require('./constraints');
  *  and updating elements for the ejs templates
  */
 class Elements {
-  constructor() {
+  constructor(config, configureForIG = false) {
+    this.config = config;
+    this.configureForIG = configureForIG;
     this.elements = {};
   }
 
@@ -59,7 +61,7 @@ class Elements {
     }
     value.title = title;
     value.description = '';
-    const cs = new Constraints(value, this.elements);
+    const cs = new Constraints(value, this.elements, this.config, false, this.configureForIG);
     value.pConstraints = cs.constraints;
     return value;
   }
@@ -139,7 +141,7 @@ class Elements {
         }
       }
       this.addToUsedBy(field.fqn, element);
-      const cs = new Constraints(field, this.elements, inherited);
+      const cs = new Constraints(field, this.elements, this.config, inherited, this.configureForIG);
       field.pConstraints = cs.constraints;
       if ('inheritance' in field && field.inheritance.status === 'overridden')
         element.overridden = element.overridden.concat(cs.constraints);
