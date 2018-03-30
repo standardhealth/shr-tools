@@ -96,7 +96,7 @@ class SHR {
     for (const namespace of this.namespaces.list()) {
       const fileName = `${namespace.path}-pkg.html`;
       const filePath = path.join(this.outDirectory, namespace.path, fileName);
-      const ejsPkg = { elements: namespace.elements, namespace: namespace, metaData: this.metaData };
+      const ejsPkg = { elements: namespace.elements.sort(), namespace: namespace, metaData: this.metaData };
       renderEjsFile('templates/pkg.ejs', ejsPkg, filePath);
     }
   }
