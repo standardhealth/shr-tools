@@ -1,6 +1,6 @@
 {
   "name": "shr-json-schema-export",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "Exports SHR data elements from SHR models to JSON Schema",
   "author": "",
   "license": "Apache-2.0",
@@ -23,8 +23,8 @@
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "mocha": "^3.2.0",
-    "shr-expand": "^5.2.6",
-    "shr-models": "^5.2.2",
+    "shr-expand": "^5.5.0",
+    "shr-models": "^5.5.0",
     "shr-test-helpers": "^5.1.2"
   },
   "peerDependencies": {

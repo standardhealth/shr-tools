@@ -830,6 +830,12 @@ function makePrimitiveObject(id, target = {}) {
 function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
   if (constraint.onValue) {
     return extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpecs);
+  } else if (constraint.path.length > 0 && constraint.path[constraint.path.length-1].isValueKeyWord) {
+    // Essentially the same as above, when onValue is never checked again, so just chop it off
+    // treat it like above.  TODO: Determine if this is really the right approach.
+    const simpleConstraint = constraint.clone();
+    simpleConstraint.path = simpleConstraint.path.slice(0, simpleConstraint.path.length-1);
+    return extractUnnormalizedConstraintPath(simpleConstraint, valueDef, dataElementSpecs);
   }
 
   if (!constraint.hasPath()) {
