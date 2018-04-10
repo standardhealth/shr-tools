@@ -1006,6 +1006,7 @@ class IncludesTypeConstraint extends Constraint {
   clone() {
     const clone = new IncludesTypeConstraint(this._isA.clone(), this._card.clone());
     this._clonePropertiesTo(clone);
+    clone.onValue = this.onValue;
     return clone;
   }
 
@@ -1071,11 +1072,11 @@ class ConstraintsFilter {
   }
 
   get own() {
-    return new ConstraintsFilter(this._constraints.filter(c => c.path.length == 0 && (!c.onValue) && (!c.onValue)));
+    return new ConstraintsFilter(this._constraints.filter(c => c.path.length == 0 && (!c.onValue)));
   }
 
   get child() {
-    return new ConstraintsFilter(this._constraints.filter(c => c.path.length > 0 || c.onValue || c.onValue));
+    return new ConstraintsFilter(this._constraints.filter(c => c.path.length > 0 || c.onValue));
   }
 
   get valueSet() {
@@ -1122,10 +1123,229 @@ class ConstraintsFilter {
   }
 }
 
+/**
+ * A ConstraintHistoryItem represents a single constraint and its source.  These are collected in arrays in the
+ * ConstraintHistoryFilters.
+ */
+class ConstraintHistoryItem {
+  constructor(constraint, source) {
+    this._constraint = constraint;
+    this._source = source;
+  }
+
+  get constraint() { return this._constraint; }
+  set constraint(constraint) { this._constraint = constraint; }
+  // withConstraint is a convenience function for chaining
+  withConstraint(source) {
+    this.source = source;
+    return this;
+  }
+
+  get source() { return this._source; }
+  set source(source) { this._source = source; }
+  // withSource is a convenience function for chaining
+  withSource(source) {
+    this.source = source;
+    return this;
+  }
+
+  clone() {
+    const clone = new ConstraintHistoryItem();
+    if (this._constraint) {
+      clone._constraint = this._constraint.clone();
+    }
+    if (this._source) {
+      clone._source = this._source.clone();
+    }
+    return clone;
+  }
+
+  equals(other) {
+    if (!this.constraint.equals(other.constraint)) {
+      return false;
+    }
+    if (!this.source.equals(other.source)) {
+      return false;
+    }
+  }
+
+  toJSON() {
+    return {
+      constraint: this.constraint.toJSON(),
+      source: this.source.fqn
+    };
+  }
+}
+
+/**
+ * A ConstraintHistoryFilter contains an array of ConstraintHistoryItems and can filter them on various criteria.
+ * This allows for easily finding the histories you need.
+ */
+class ConstraintHistoryFilter {
+  constructor(histories = []) {
+    this._histories = histories;
+  }
+
+  add(constraint, source, unique=true) {
+    if (unique && this._histories.some(h => h.constraint.equals(constraint))) {
+      return;
+    }
+    this._histories.push(new ConstraintHistoryItem(constraint, source));
+  }
+
+  get histories() { return this._histories; }
+  get hasHistories() { return this._histories.length > 0; }
+
+  get own() {
+    return new ConstraintHistoryFilter(this._histories.filter(h => h.constraint.path.length == 0 && (!h.constraint.onValue)));
+  }
+
+  get child() {
+    return new ConstraintHistoryFilter(this._histories.filter(h => h.constraint.path.length > 0 || h.constraint.onValue));
+  }
+
+  withSource(source) {
+    if (!source) {
+      return [];
+    }
+
+    const matches = this._histories.filter(h => source.equals(h.source));
+    return new ConstraintHistoryFilter(matches);
+  }
+
+  withPath(path = []) {
+    const matches = this._histories.filter(h => {
+      if (path.length != h.constraint.path.length) {
+        return false;
+      }
+      for (let i=0; i < path.length; i++) {
+        if (!path[i].equals(h.constraint.path[i])) {
+          return false;
+        }
+      }
+      return true;
+    });
+    return new ConstraintHistoryFilter(matches);
+  }
+
+  clone() {
+    return new ConstraintHistoryFilter(this._histories.map(h => h.clone()));
+  }
+
+  equals(other) {
+    if (this.histories.length != other.histories.length) {
+      return false;
+    }
+    for (let i=0; i < this.histories.length; i++) {
+      if (! this.histories[i].equals(other.histories[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  toJSON() {
+    return this._histories.map(h => h.toJSON());
+  }
+}
+
+/**
+ * The ConstraintHistory is applied to a Value and contains the histories for every type of constraint.  These histories
+ * are intended to be in the order such that the original constraint is at index 0, and every time it is overridden, the
+ * new constraint is added to the end of the array.
+ */
+class ConstraintHistory {
+  constructor() {
+    this._valueSet = new ConstraintHistoryFilter();
+    this._code = new ConstraintHistoryFilter();
+    this._includesCode = new ConstraintHistoryFilter();
+    this._boolean = new ConstraintHistoryFilter();
+    this._type = new ConstraintHistoryFilter();
+    this._includesType = new ConstraintHistoryFilter();
+    this._card = new ConstraintHistoryFilter();
+  }
+
+  get valueSet() { return this._valueSet; }
+  get code() { return this._code; }
+  get includesCode() { return this._includesCode; }
+  get boolean() { return this._boolean; }
+  get type() { return this._type; }
+  get includesType() { return this._includesType; }
+  get card() { return this._card; }
+
+  get hasHistories() {
+    const filters = [this.valueSet, this.code, this.includesCode, this.boolean, this.type, this.includesType, this.card];
+    return filters.some(f => f.hasHistories);
+  }
+
+  add(constraint, source, unique=true) {
+    if (constraint instanceof ValueSetConstraint) {
+      this._valueSet.add(constraint, source, unique);
+    } else if (constraint instanceof CodeConstraint) {
+      this._code.add(constraint, source, unique);
+    } else if (constraint instanceof IncludesCodeConstraint) {
+      this._includesCode.add(constraint, source, unique);
+    } else if (constraint instanceof BooleanConstraint) {
+      this._boolean.add(constraint, source, unique);
+    } else if (constraint instanceof TypeConstraint) {
+      this._type.add(constraint, source, unique);
+    } else if (constraint instanceof IncludesTypeConstraint) {
+      this._includesType.add(constraint, source, unique);
+    } else if (constraint instanceof CardConstraint) {
+      this._card.add(constraint, source, unique);
+    }
+  }
+
+  mergeFrom(otherConstraintHistory, unique=true) {
+    otherConstraintHistory.valueSet.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
+    otherConstraintHistory.code.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
+    otherConstraintHistory.includesCode.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
+    otherConstraintHistory.boolean.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
+    otherConstraintHistory.type.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
+    otherConstraintHistory.includesType.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
+    otherConstraintHistory.card.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
+  }
+
+  clone() {
+    const clone = new ConstraintHistory();
+    clone._valueSet = this._valueSet.clone();
+    clone._code = this._code.clone();
+    clone._includesCode = this._includesCode.clone();
+    clone._boolean = this._boolean.clone();
+    clone._type = this._type.clone();
+    clone._includesType = this._includesType.clone();
+    clone._card = this._card.clone();
+  }
+
+  equals(other) {
+    return this.valueSet.equals(other.valueSet)
+      && this.code.equals(other.code)
+      && this.includesCode.equals(other.includesCode)
+      && this.boolean.equals(other.boolean)
+      && this.type.equals(other.type)
+      && this.includesType.equals(other.includesType)
+      && this.card.equals(other.card);
+  }
+
+  toJSON() {
+    const noEmpties = (historyFilter => historyFilter.hasHistories ? historyFilter.toJSON() : undefined);
+    return {
+      valueSet: noEmpties(this.valueSet),
+      code: noEmpties(this.code),
+      includesCode: noEmpties(this.includesCode),
+      boolean: noEmpties(this.boolean),
+      type: noEmpties(this.type),
+      includesType: noEmpties(this.includesType),
+      card: noEmpties(this.card)
+    };
+  }
+}
+
 class Value {
 
   constructor() {
     this._constraints = [];
+    this._constraintHistory = new ConstraintHistory();
   }
 
   // card is the Cardinality for the value.
@@ -1149,6 +1369,10 @@ class Value {
   }
 
   get effectiveCard() {
+    if (this.card == null) {
+      return;
+    }
+
     let eCard = this.card.clone();
 
     // First check if there is a cardinality constraint and use it if it's there
@@ -1195,6 +1419,11 @@ class Value {
     return new ConstraintsFilter(this._constraints);
   }
 
+  get constraintHistory() { return this._constraintHistory; }
+  set constraintHistory(constraintHistory) {
+    this._constraintHistory = constraintHistory;
+  }
+
   get inheritance() { return this._inheritance; }
   set inheritance(inheritance) {
     this._inheritance = inheritance;
@@ -1224,10 +1453,13 @@ class Value {
       clone._constraints.push(constraint.clone());
     }
     if (this._inheritance) {
-      clone._inheritance = this.inheritance;
+      clone._inheritance = this._inheritance;
     }
     if (this._inheritedFrom) {
-      clone._inheritedFrom = this.inheritance;
+      clone._inheritedFrom = this._inheritedFrom;
+    }
+    if (this._constraintHistory) {
+      clone._constraintHistory = this._constraintHistory;
     }
   }
 
@@ -1235,7 +1467,7 @@ class Value {
    * Check values for equality.
    *
    * @param other - the other value for comparison.
-   * @param {boolean} [ignoreInheritance=false] - if the inheritance property should be ignored.
+   * @param {boolean} [ignoreInheritance=false] - if the inheritance-related properties should be ignored.
    * @returns {boolean} if the values are equal.
    */
   equals(other, ignoreInheritance = false) {
@@ -1256,8 +1488,13 @@ class Value {
       }
     }
 
-    if ((!ignoreInheritance) && (this.inheritance !== other.inheritance)) {
-      return false;
+    if (!ignoreInheritance) {
+      if (this.inheritance !== other.inheritance) {
+        return false;
+      }
+      if (!this.constraintHistory.equals(other.constraintHistory)) {
+        return false;
+      }
     }
 
     if (!this.hasConstraints) {
@@ -1323,13 +1560,14 @@ class Value {
     }
 
     return {
-      "valueType": this.constructor.name,
-      "card": (card) ? card.toJSON() : "TBD",
-      "constraints": Object.keys(constraints).length > 0 ? constraints : undefined,
-      "inheritance": (this._inheritance) ? {
-        "status": this._inheritance,
-        "from": this._inheritedFrom.fqn,
-      } : undefined
+      valueType: this.constructor.name,
+      card: (card) ? card.toJSON() : "TBD",
+      constraints: Object.keys(constraints).length > 0 ? constraints : undefined,
+      inheritance: (this._inheritance) ? {
+        status: this._inheritance,
+        from: this._inheritedFrom.fqn,
+      } : undefined,
+      constraintHistory: this.constraintHistory.hasHistories ? this.constraintHistory.toJSON() : undefined
     };
   }
 }
@@ -1351,18 +1589,25 @@ class IdentifiableValue extends Value {
     return this.identifier;
   }
 
-  get possibleIdentifiers() {
+  getPossibleIdentifiers(withIncludesTypeIdentifiers=false) {
     const idMap = new Map();
     idMap.set(this.identifier.fqn, this.identifier);
-    const typeConstraints = this.constraintsFilter.own.type.constraints;
-    for (const tc of typeConstraints) {
-      idMap.set(tc.isA.fqn, tc.isA);
+    const typeConstraintsHistories = this.constraintHistory.type.own.histories;
+    for (const tch of typeConstraintsHistories) {
+      idMap.set(tch.constraint.isA.fqn, tch.constraint.isA);
     }
-    const includesTypeConstraints = this.constraintsFilter.own.includesType.constraints;
-    for (const itc of includesTypeConstraints) {
-      idMap.set(itc.isA.fqn, itc.isA);
+    if (withIncludesTypeIdentifiers) {
+      const includesTypeConstraints = this.constraintsFilter.own.includesType.constraints;
+      for (const itc of includesTypeConstraints) {
+        idMap.set(itc.isA.fqn, itc.isA);
+      }
     }
     return Array.from(idMap.values());
+  }
+
+  // TODO: Try to reduce redundancy between this and the function above
+  get possibleIdentifiers() {
+    return this.getPossibleIdentifiers(true);
   }
 
   clone() {
@@ -1427,7 +1672,7 @@ class ChoiceValue extends Value {
     const options = [];
     for (const opt of this._options) {
       if (opt instanceof ChoiceValue) {
-        options.push(opt.aggregateOptions);
+        options.push(...opt.aggregateOptions);
       } else {
         options.push(opt);
       }
@@ -2207,4 +2452,4 @@ const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt
 const INHERITED = 'inherited';
 const OVERRIDDEN = 'overridden';
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, ConstraintHistory, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
