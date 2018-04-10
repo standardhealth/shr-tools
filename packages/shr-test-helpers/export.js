@@ -1,16 +1,26 @@
 const {expect} = require('chai');
+const fs = require('fs-extra');
+const path = require('path');
 const err = require('./errors.js');
 const mdl = require('shr-models');
 
-function commonExportTests(exportFn, expectedFn, expectedErrorsFn) {
+function commonExportTests(exportFn, expectedFn, expectedErrorsFn, fixFn, resultsPath, clean=true) {
   if (typeof expectedErrorsFn === 'undefined') {
     // default to expecting no errors
     expectedErrorsFn = function() { return []; };
   }
 
+  if (resultsPath) {
+    if (clean) {
+      fs.removeSync(resultsPath);
+    }
+    fs.mkdirpSync(resultsPath);
+  }
+
   const wrappedExpectedFns = function(name, testCase) {
     try {
       return {
+        name,
         result: expectedFn(name),
         errors: expectedErrorsFn(name)
       };
@@ -27,24 +37,45 @@ function commonExportTests(exportFn, expectedFn, expectedErrorsFn) {
   return () => {
     let _specs;
     let checkExpected = function(expected) {
+      let result;
       try {
-        expect(exportFn(_specs)).to.eql(expected.result);
+        result = exportFn(_specs);
+        if (resultsPath) {
+          // Write out the actual results to the specified path
+          const ext = typeof result === 'object' ? 'json' : 'txt';
+          fs.writeFileSync(path.join(resultsPath, `${expected.name}.${ext}`), JSON.stringify(result, null, 2));
+        }
+        expect(result).to.eql(expected.result);
       } catch (ex) {
         if (err.errors().length) {
-          console.log('Test failed, additional errors that occurred while executing the test are', err.errors());
+          console.error('Test failed, additional errors that occurred while executing the test are', err.errors());
+          fs.writeFileSync(path.join(resultsPath, `${expected.name}_errors.json`), JSON.stringify(err.errors(), null, 2));
+        }
+        if (typeof fixFn === 'function') {
+          fixFn(expected.name, result, err.errors());
         }
         throw ex;
       }
-      if (err.errors().length !== expected.errors.length) {
-        expect(err.errors()).to.deep.equal(expected.errors);
+      if (err.hasErrors() && resultsPath) {
+        fs.writeFileSync(path.join(resultsPath, `${expected.name}_errors.json`), JSON.stringify(err.errors(), null, 2));
       }
-      for (let i=0; i < expected.errors.length; i++) {
-        const expErr = expected.errors[i];
-        const actErr = err.errors()[i];
-        // The expErr will be a subset of the actErr, so just check the keys in expErr
-        for (const key of Object.keys(expErr)) {
-          expect(actErr[key]).to.eql(expErr[key]);
+      try {
+        if (err.errors().length !== expected.errors.length) {
+          expect(err.errors()).to.deep.equal(expected.errors);
         }
+        for (let i=0; i < expected.errors.length; i++) {
+          const expErr = expected.errors[i];
+          const actErr = err.errors()[i];
+          // The expErr will be a subset of the actErr, so just check the keys in expErr
+          for (const key of Object.keys(expErr)) {
+            expect(actErr[key]).to.eql(expErr[key]);
+          }
+        }
+      } catch (e) {
+        if (typeof fixFn === 'function') {
+          fixFn(expected.name, null, err.errors());
+        }
+        throw e;
       }
     };
 
@@ -200,9 +231,33 @@ function commonExportTests(exportFn, expectedFn, expectedErrorsFn) {
       checkExpected(expected);
     });
 
+    it('should correctly export includes type constraints set on a field\'s value', function() {
+      addOnValueIncludesTypeConstraints(_specs, 'shr.test');
+      const expected = wrappedExpectedFns('OnValueIncludesTypeConstraints', this);
+      checkExpected(expected);
+    });
+
+    it('should correctly export nested includes type constraints', function() {
+      addNestedIncludesTypeConstraints(_specs, 'shr.test');
+      const expected = wrappedExpectedFns('NestedIncludesTypeConstraints', this);
+      checkExpected(expected);
+    });
+
+    it('should correctly export includes type constraints with a zeroed out include type', function() {
+      addIncludesTypeConstraintsWithZeroedOutType(_specs, 'shr.test');
+      const expected = wrappedExpectedFns('IncludesTypeConstraintsZeroedOut', this);
+      checkExpected(expected);
+    });
+
     it('should correctly export includes code constraints', function() {
       addIncludesCodeConstraints(_specs, 'shr.test');
       const expected = wrappedExpectedFns('IncludesCodeConstraints', this);
+      checkExpected(expected);
+    });
+
+    it('should correctly export nested includes code constraints', function() {
+      addNestedIncludesCodeConstraints(_specs, 'shr.test');
+      const expected = wrappedExpectedFns('NestedIncludesCodeConstraints', this);
       checkExpected(expected);
     });
 
@@ -221,6 +276,12 @@ function commonExportTests(exportFn, expectedFn, expectedErrorsFn) {
     it('should correctly export an element with boolean and code constraints', function() {
       addConstConstraints(_specs, 'shr.test', 'shr.other.test');
       const expected = wrappedExpectedFns('BooleanAndCodeConstraints', this);
+      checkExpected(expected);
+    });
+
+    it('should correctly export an element with code/Coding/CodeableConcept constraints', function() {
+      addFixedCodeExtravaganza(_specs, 'shr.test');
+      const expected = wrappedExpectedFns('FixedCodeExtravaganza', this);
       checkExpected(expected);
     });
   };
@@ -481,7 +542,7 @@ function addTypeConstrainedElements(specs, ns, otherNS, addSubElements=true) {
       .withBasedOn(id('shr.test', 'Group'))
       .withDescription('It is a derivative of a group of elements with type constraints.')
       .withField(new mdl.IdentifiableValue(id(ns, 'Simple')).withMinMax(1, 1).withConstraint(new mdl.TypeConstraint(id(ns, 'SimpleChild'))))
-      .withField(new mdl.IdentifiableValue(id(ns, 'ElementValue')).withMinMax(0).withConstraint(new mdl.TypeConstraint(id(ns, 'SimpleChild'), undefined, true)))
+      .withField(new mdl.IdentifiableValue(id(ns, 'ElementValue')).withMinMax(0).withConstraint(new mdl.TypeConstraint(id(ns, 'SimpleChild'), undefined, true)));
   add(specs, gd);
   if (addSubElements) {
     addGroup(specs, ns, otherNS, addSubElements);
@@ -502,15 +563,11 @@ function addTypeConstrainedElementsWithPath(specs, ns, addSubElements=true) {
   let cp = new mdl.DataElement(id(ns, 'ConstrainedPath'), true)
       .withBasedOn(id('shr.test', 'NestedField'))
       .withDescription('It derives an element with a nested field.')
-      .withField(new mdl.IdentifiableValue(id(ns, 'TwoDeepElementField')).withConstraint(new mdl.TypeConstraint(id(ns, 'SimpleChild'), [id(ns, 'ElementField'), id(ns, 'Simple')])));
+      .withField(new mdl.IdentifiableValue(id(ns, 'TwoDeepElementField')).withMinMax(0, 1).withConstraint(new mdl.TypeConstraint(id(ns, 'SimpleChild'), [id(ns, 'ElementField'), id(ns, 'Simple')])));
   let cpni = new mdl.DataElement(id(ns, 'ConstrainedPathNoInheritance'), true)
       .withDescription('It has a new field with a nested constraint.')
       .withField(new mdl.IdentifiableValue(id(ns, 'TwoDeepElementField')).withMinMax(0, 1).withConstraint(new mdl.TypeConstraint(id(ns, 'SimpleChild'), [id(ns, 'ElementField'), id(ns, 'Simple')])));
-  add(specs, ef);
-  add(specs, td);
-  add(specs, nf);
-  add(specs, cp);
-  add(specs, cpni);
+  add(specs, ef, td, nf, cp, cpni);
   if (addSubElements) {
     addSimpleElement(specs, ns);
     addSimpleChildElement(specs, ns);
@@ -577,12 +634,96 @@ function addIncludesTypeConstraints(specs, ns, addSubElements=true) {
   return de;
 }
 
+function addIncludesTypeConstraintsWithZeroedOutType(specs, ns, addSubElements=true) {
+  let sc2 = new mdl.DataElement(id(ns, 'SimpleChild2'), true)
+      .withBasedOn(id(ns, 'Simple'))
+      .withDescription('A derivative of the simple type.')
+      .withValue(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1));
+  let de = new mdl.DataElement(id(ns, 'IncludesTypesListWithZeroedOutType'), true)
+      .withDescription('An entry with a includes types constraints.')
+      .withValue(new mdl.IdentifiableValue(id(ns, 'Simple')).withMinMax(0)
+          .withConstraint(new mdl.IncludesTypeConstraint(id(ns, 'SimpleChild'), new mdl.Cardinality(0, 1)))
+          .withConstraint(new mdl.IncludesTypeConstraint(id(ns, 'SimpleChild2'), new mdl.Cardinality(0, 0)))
+  );
+  add(specs, sc2);
+  add(specs, de);
+  if (addSubElements) {
+    addSimpleElement(specs, ns);
+    addSimpleChildElement(specs, ns);
+  }
+  return de;
+}
+
+function addOnValueIncludesTypeConstraints(specs, ns, addSubElements=true) {
+  let evl = new mdl.DataElement(id(ns, 'ElementValueList'), false, false)
+      .withDescription('It is an element with a value that is a list of elements')
+      .withValue(new mdl.IdentifiableValue(id(ns, 'Simple')).withMinMax(0));
+  let sc2 = new mdl.DataElement(id(ns, 'SimpleChild2'), true)
+      .withBasedOn(id(ns, 'Simple'))
+      .withDescription('A derivative of the simple type.')
+      .withValue(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1));
+  let de = new mdl.DataElement(id(ns, 'OnValueIncludesTypeConstraints'), true)
+      .withDescription('An entry with includes types constraints that are on the value of the field.')
+      .withField(new mdl.IdentifiableValue(id(ns, 'ElementValueList')).withMinMax(0, 1)
+        .withConstraint(new mdl.IncludesTypeConstraint(id(ns, 'SimpleChild'), new mdl.Cardinality(0, 1), [], true))
+        .withConstraint(new mdl.IncludesTypeConstraint(id(ns, 'SimpleChild2'), new mdl.Cardinality(0, 2), [], true))
+  );
+  add(specs, evl, sc2, de);
+  if (addSubElements) {
+    addSimpleElement(specs, ns);
+    addSimpleChildElement(specs, ns);
+  }
+  return de;
+}
+
+function addNestedIncludesTypeConstraints(specs, ns, addSubElements=true) {
+  let efl = new mdl.DataElement(id(ns, 'ElementFieldList'), false, false)
+      .withDescription('It is an element with a field that is a list of elements')
+      .withField(new mdl.IdentifiableValue(id(ns, 'Simple')).withMinMax(0));
+  let eflc = new mdl.DataElement(id(ns, 'ElementFieldListContainer'), false, false)
+      .withDescription('It is an element with a field that contains an element with a field that is a list of elements')
+      .withField(new mdl.IdentifiableValue(id(ns, 'ElementFieldList')).withMinMax(0,1));
+  let sc2 = new mdl.DataElement(id(ns, 'SimpleChild2'), true)
+      .withBasedOn(id(ns, 'Simple'))
+      .withDescription('A derivative of the simple type.')
+      .withValue(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1));
+  let de = new mdl.DataElement(id(ns, 'NestedIncludesTypeConstraints'), true)
+      .withDescription('An entry with includes types constraints that are on a nested field.')
+      .withField(new mdl.IdentifiableValue(id(ns, 'ElementFieldListContainer')).withMinMax(0, 1)
+        .withConstraint(new mdl.IncludesTypeConstraint(id(ns, 'SimpleChild'), new mdl.Cardinality(0, 1), [id(ns, 'ElementFieldList'), id(ns, 'Simple')], false))
+        .withConstraint(new mdl.IncludesTypeConstraint(id(ns, 'SimpleChild2'), new mdl.Cardinality(0, 2), [id(ns, 'ElementFieldList'), id(ns, 'Simple')], false))
+  );
+  add(specs, efl, eflc, sc2, de);
+  if (addSubElements) {
+    addSimpleElement(specs, ns);
+    addSimpleChildElement(specs, ns);
+  }
+  return de;
+}
+
 function addIncludesCodeConstraints(specs, ns, addSubElements=true) {
   let de = new mdl.DataElement(id(ns, 'IncludesCodesList'), true)
     .withDescription('An entry with a includes codes constraint.')
-    .withValue(new mdl.IdentifiableValue(id(ns, 'Coded')).withMinMax(0)
+    .withValue(new mdl.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(0)
       .withConstraint(new mdl.IncludesCodeConstraint(new mdl.Concept('http://foo.org', 'bar', 'Foobar')))
       .withConstraint(new mdl.IncludesCodeConstraint(new mdl.Concept('http://boo.org', 'far', 'Boofar')))
+    );
+  add(specs, de);
+  if (addSubElements) {
+    addCodeableConcept(specs, addSubElements);
+  }
+  return de;
+}
+
+function addNestedIncludesCodeConstraints(specs, ns, addSubElements=true) {
+  // NOTE: This tests a suspicious use case, as the includes code resolves to a 1..1 code.  It's the code's parent
+  // that is actually a list -- so the iteration happens one level up.  This test is here because it reflects a real
+  // use case in actual SHR definitions.
+  let de = new mdl.DataElement(id(ns, 'NestedIncludesCodes'), true)
+    .withDescription('An entry with a nested includes codes constraint.')
+    .withValue(new mdl.IdentifiableValue(id('shr.test', 'Coded')).withMinMax(0)
+      .withConstraint(new mdl.IncludesCodeConstraint(new mdl.Concept('http://foo.org', 'bar', 'Foobar'), [pid('code')]))
+      .withConstraint(new mdl.IncludesCodeConstraint(new mdl.Concept('http://boo.org', 'far', 'Boofar'), [pid('code')]))
     );
   add(specs, de);
   if (addSubElements) {
@@ -595,8 +736,8 @@ function addValueSetConstraints(specs, ns, otherNS, addSubElements=true) {
   let gd = new mdl.DataElement(id(ns, 'NestedValueSetConstraints'), true)
       .withBasedOn(id('shr.test', 'Group'))
       .withDescription('It has valueset constraints on a field.')
-      .withField(new mdl.IdentifiableValue(id('shr.test', 'Coded'))
-        .withConstraint(new mdl.ValueSetConstraint('http://standardhealthrecord.org/test/vs/Coded2'))
+      .withField(new mdl.IdentifiableValue(id('shr.test', 'Coded')).withMinMax(0, 1)
+        .withConstraint(new mdl.ValueSetConstraint('http://standardhealthrecord.org/test/vs/Coded2', [pid('code')]).withBindingStrength(mdl.REQUIRED))
   );
   add(specs, gd);
   if (addSubElements) {
@@ -615,7 +756,7 @@ function addValueSetChoiceConstraints(specs, ns, addSubElements=true) {
   let de = new mdl.DataElement(id(ns, 'ChoiceValueSetConstraint'), true)
     .withDescription('It has valueset constraints on a choice field.')
     .withField(new mdl.IdentifiableValue(id(ns, 'CodedChoice')).withMinMax(0, 1)
-      .withConstraint(new mdl.ValueSetConstraint('http://standardhealthrecord.org/test/vs/Coded2').withBindingStrength(mdl.PREFERRED))
+      .withConstraint(new mdl.ValueSetConstraint('http://standardhealthrecord.org/test/vs/Coded2', [pid('code')]).withBindingStrength(mdl.PREFERRED))
     );
   add(specs, cc, de);
   if (addSubElements) {
@@ -632,8 +773,8 @@ function addConstConstraints(specs, ns, otherNS, addSubElements=true) {
     .withBasedOn(id('shr.test', 'Group'))
     .withDescription('It has boolean and code constraints.')
     .withValue(new mdl.IdentifiableValue(pid('boolean')).withMinMax(1, 1).withConstraint(new mdl.BooleanConstraint(true)))
-    .withField(new mdl.IdentifiableValue(id(ns, 'Coded'))
-      .withConstraint(new mdl.CodeConstraint(new mdl.Concept('http://foo.org', 'bar', 'Foobar'))))
+    .withField(new mdl.IdentifiableValue(id(ns, 'Coded')).withMinMax(0, 1)
+      .withConstraint(new mdl.CodeConstraint(new mdl.Concept('http://foo.org', 'bar', 'Foobar'), [pid('code')])))
     .withField(new mdl.IdentifiableValue(id(ns, 'Bool')).withMinMax(0, 1)
       .withConstraint(new mdl.BooleanConstraint(false)));
 
@@ -642,6 +783,58 @@ function addConstConstraints(specs, ns, otherNS, addSubElements=true) {
     addGroup(specs, ns, otherNS, addSubElements);
   }
   return cc;
+}
+
+function addFixedCodeExtravaganza(specs, ns, addSubElements=true) {
+  const fce = new mdl.DataElement(id(ns, 'FixedCodeExtravaganza'), false, false)
+    .withDescription('An element with all sorts of fixed codes.')
+    .withValue(new mdl.ChoiceValue().withMinMax(0, 1)
+      .withOption(new mdl.IdentifiableValue(pid('code')).withMinMax(1, 1)
+        .withConstraint(new mdl.CodeConstraint(new mdl.Concept('http://foo1.org', 'bar1', 'Foobar1')))
+      )
+      .withOption(new mdl.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1, 1)
+        .withConstraint(new mdl.CodeConstraint(new mdl.Concept('http://foo2.org', 'bar2', 'Foobar2')))
+      )
+    )
+    .withField(new mdl.IdentifiableValue(id('shr.core', 'CodeableConcept')).withMinMax(1, 1)
+      .withConstraint(new mdl.CodeConstraint(new mdl.Concept('http://foo3.org', 'bar3', 'Foobar3')))
+    )
+    .withField(new mdl.IdentifiableValue(id(ns, 'Coded')).withMinMax(1, 1)
+      .withConstraint(new mdl.CodeConstraint(new mdl.Concept('http://foo4.org', 'bar4', 'Foobar4'), [pid('code')]))
+    );
+  add(specs, fce);
+  if (addSubElements) {
+    addCodedElement(specs, ns);
+    addCodeableConcept(specs, addSubElements);
+  }
+
+}
+
+function addCodeableConcept(specs, addSubElements=true) {
+  const cc = new mdl.DataElement(id('shr.core', 'CodeableConcept'), false, false)
+    .withField(new mdl.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(0))
+    .withField(new mdl.IdentifiableValue(id('shr.core', 'DisplayText')).withMinMax(0, 1));
+  add(specs, cc);
+  if (addSubElements) {
+    addCoding(specs);
+  }
+  return cc;
+}
+
+function addCoding(specs) {
+  const coding = new mdl.DataElement(id('shr.core', 'Coding'), false, false)
+    .withValue(new mdl.IdentifiableValue(pid('code')).withMinMax(0, 1))
+    .withField(new mdl.IdentifiableValue(id('shr.core', 'CodeSystem')).withMinMax(0, 1))
+    .withField(new mdl.IdentifiableValue(id('shr.core', 'CodeSystemVersion')).withMinMax(0, 1))
+    .withField(new mdl.IdentifiableValue(id('shr.core', 'DisplayText')).withMinMax(0, 1));
+  const codeSystem = new mdl.DataElement(id('shr.core', 'CodeSystem'), false, false)
+    .withValue(new mdl.IdentifiableValue(pid('uri')).withMinMax(1, 1));
+  const codeSystemVersion = new mdl.DataElement(id('shr.core', 'CodeSystemVersion'), false, false)
+    .withValue(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1));
+  const displayText = new mdl.DataElement(id('shr.core', 'DisplayText'), false, false)
+    .withValue(new mdl.IdentifiableValue(pid('string')).withMinMax(1, 1));
+  add(specs, coding, codeSystem, codeSystemVersion, displayText);
+  return coding;
 }
 
 function addSimpleChildElement(specs, ns) {
