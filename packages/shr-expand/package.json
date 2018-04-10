@@ -1,6 +1,6 @@
 {
   "name": "shr-expand",
-  "version": "5.4.0",
+  "version": "5.5.0",
   "description": "Expands SHR data elements to copy down fields from data elements they're based on and consolidates their constraints; does similar for mappings.",
   "author": "",
   "license": "Apache-2.0",
@@ -21,11 +21,11 @@
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "mocha": "^3.2.0",
-    "shr-models": "^5.4.0",
+    "shr-models": "^5.5.0",
     "shr-test-helpers": "^5.1.3"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9",
-    "shr-models": "^5.4.0"
+    "shr-models": "^5.5.0"
   }
 }
