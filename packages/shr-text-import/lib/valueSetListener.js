@@ -63,8 +63,12 @@ class ValueSetImporter extends SHRValueSetParserListener {
     // Process the namespace
     this._currentNs = ctx.docHeader().namespace().getText();
 
-    // Create the default path based on the namespace
-    this._currentPath = `${this._config.projectURL}/${this._currentNs.replace('.', '/')}/vs/`;
+    // Create the default path.  If the project URL is the same as FHIR url, use FHIR-friendly path
+    if (this._config.projectURL === this._config.fhirURL) {
+      this._currentPath = `${this._config.projectURL}/ValueSet/${this._currentNs.replace(/\./g, '-')}-`;
+    } else {
+      this._currentPath = `${this._config.projectURL}/${this._currentNs.replace('.', '/')}/vs/`;
+    }
 
     // Process the version
     const version = ctx.docHeader().version();
@@ -115,7 +119,7 @@ class ValueSetImporter extends SHRValueSetParserListener {
   }
 
   enterDescriptionProp(ctx) {
-    this._currentDef.description = stripDelimitersFromToken(ctx.STRING());
+    this._currentDef.description = trimLines(stripDelimitersFromToken(ctx.STRING()));
   }
 
   enterConcepts(ctx) {
@@ -228,6 +232,8 @@ class ValueSetImporter extends SHRValueSetParserListener {
       let csPath;
       if (this._currentPath.indexOf('/vs/') >= 0) {
         csPath = this._currentPath.replace('/vs/', '/cs/');
+      } else if (this._currentPath.indexOf('/ValueSet/') >= 0) {
+        csPath = this._currentPath.replace('/ValueSet/', '/CodeSystem/');
       } else {
         csPath = `${this._currentPath}cs/`;
       }
@@ -268,6 +274,15 @@ function stripDelimitersFromToken(tkn) {
   const str = tkn.getText();
   // TODO: Also fix escaped double-quotes, but right now, the parser seems to be screwing those up.
   return str.substr(1,str.length -2);
+}
+
+function trimLines(str) {
+  // The way CIMPL authors often indent their definitions, multi-line descriptions may have indented white space on
+  // each new line.  We really don't want that, so we need to trim every line.
+  if (typeof str === 'string') {
+    return str.split('\n').map(s => s.trim()).join('\n');
+  }
+  return str;
 }
 
 module.exports = {ValueSetImporter, setLogger};

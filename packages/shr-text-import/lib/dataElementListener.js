@@ -67,7 +67,7 @@ class DataElementImporter extends SHRDataElementParserListener {
       this._specs.namespaces.add(nsDef);
     }
     if (ctx.descriptionProp() && typeof nsDef.description === 'undefined') {
-      nsDef.description = stripDelimitersFromToken(ctx.descriptionProp().STRING());
+      nsDef.description = trimLines(stripDelimitersFromToken(ctx.descriptionProp().STRING()));
     }
 
     // Process the version
@@ -138,7 +138,7 @@ class DataElementImporter extends SHRDataElementParserListener {
       // Skip this -- already handled elsewhere
       return;
     }
-    this._currentDef.description = stripDelimitersFromToken(ctx.STRING());
+    this._currentDef.description = trimLines(stripDelimitersFromToken(ctx.STRING()));
   }
 
   enterConcepts(ctx) {
@@ -544,6 +544,15 @@ function stripDelimitersFromToken(tkn) {
   const str = tkn.getText();
   // TODO: Also fix escaped double-quotes, but right now, the parser seems to be screwing those up.
   return str.substr(1,str.length -2);
+}
+
+function trimLines(str) {
+  // The way CIMPL authors often indent their definitions, multi-line descriptions may have indented white space on
+  // each new line.  We really don't want that, so we need to trim every line.
+  if (typeof str === 'string') {
+    return str.split('\n').map(s => s.trim()).join('\n');
+  }
+  return str;
 }
 
 module.exports = {DataElementImporter, setLogger};
