@@ -802,6 +802,10 @@ class Constraint {
       "lastModifiedBy": (this.lastModifiedBy) ? this.lastModifiedBy.fqn : undefined,
     }
   }
+
+  toString() {
+    return `${this.constructor.name} (on path:${this.path.map(p => p.name).join('.')})`;
+  }
 }
 
 // ValueSetConstraint only makes sense on a code or Coding type value
@@ -847,6 +851,10 @@ class ValueSetConstraint extends Constraint {
 
     }, super.toJSON());
   }
+
+  toString() {
+    return `ValueSetConstraint (${this.valueSet}, binding strength:${this.bindingStrength}, on path:${this.path.map(p => p.name).join('.')})`
+  }
 }
 
 // CodeConstraint only makes sense on a code or Coding type value
@@ -880,6 +888,10 @@ class CodeConstraint extends Constraint {
       }
     }, super.toJSON());
   }
+
+  toString() {
+    return `CodeConstraint (${this.code.system}#${this.code.code}, on path:${this.path.map(p => p.name).join('.')})`
+  }
 }
 
 // IncludesCodeConstraint only makes sense on an array of code or Coding
@@ -909,6 +921,10 @@ class IncludesCodeConstraint extends Constraint {
       "system": this._code.system,
       "code": this._code.code
     }, super.toJSON());
+  }
+
+  toString() {
+    return `IncludesCodeConstraint (${this.code.system}#${this.code.code}, on path:${this.path.map(p => p.name).join('.')})`
   }
 }
 
@@ -942,6 +958,10 @@ class BooleanConstraint extends Constraint {
       "type": "boolean",
       "value": this.value,
     }, constraint);
+  }
+
+  toString() {
+    return `BooleanConstraint (${this.value}, on path:${this.path.map(p => p.name).join('.')})`
   }
 }
 
@@ -985,6 +1005,10 @@ class TypeConstraint extends Constraint {
       "onValue": this.onValue
     }, super.toJSON())
   }
+
+  toString() {
+    return `TypeConstraint (${this.isA.fqn}, on value: ${this.onValue}, on path:${this.path.map(p => p.name).join('.')})`
+  }
 }
 
 class IncludesTypeConstraint extends Constraint {
@@ -1025,6 +1049,10 @@ class IncludesTypeConstraint extends Constraint {
       "onValue": this.onValue
     }, super.toJSON())
   }
+
+  toString() {
+    return `IncludesTypeConstraint (${this.card.toString()} ${this.isA.fqn}, on value: ${this.onValue}, on path:${this.path.map(p => p.name).join('.')})`
+  }
 }
 
 class CardConstraint extends Constraint {
@@ -1050,6 +1078,10 @@ class CardConstraint extends Constraint {
 
   toJSON() {
     return Object.assign(this.card.toJSON(), super.toJSON());
+  }
+
+  toString() {
+    return `CardConstraint (${this.card.toString()}, on path:${this.path.map(p => p.name).join('.')})`
   }
 }
 
