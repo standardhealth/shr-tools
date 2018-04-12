@@ -323,15 +323,15 @@ function namespaceToURLPathSegment(namespace) {
 
 function isValidField(field) {
   if (field instanceof ChoiceValue) {
-    logger.error('ERROR: Ignoring field defined as a choice', JSON.stringify(field, null, 2));
+    logger.error('Ignoring field defined as a choice', field.toString());
     return false;
   }
   if (!(field.identifier)) {
-    logger.error('ERROR: Ignoring name-less field: ', JSON.stringify(field, null, 2));
+    logger.error('Ignoring name-less field: ', field.toString());
     return false;
   }
   if (field.identifier.name === 'Value') {
-    logger.error('ERROR: Ignoring restricted field name: Value', JSON.stringify(field, null, 2));
+    logger.error('Ignoring restricted field name: Value', field.toString());
     return false;
   }
   return true;
@@ -373,7 +373,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     const normalOptions = [];
     for (const option of valueDef.options) {
       if (option.effectiveCard && (!option.effectiveCard.isExactlyOne)) {
-        logger.error('Choices with options with cardinalities that are not exactly one are illegal "%s". Ignoring option.', JSON.stringify(valueDef, null, 2));
+        logger.error('Choices with options with cardinalities that are not exactly one are illegal "%s". Ignoring option %s.', valueDef.toString(), option.toString());
       } else if (option instanceof RefValue) {
         refOptions.push(option);
       } else {
@@ -534,7 +534,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
                   currentAllOf.push(schemaConstraint);
                 }
               } else {
-                logger.error('Internal error unexpected constraint target: %s for constraint %s', JSON.stringify(constraintInfo.constraintTarget, null, 2), JSON.stringify(constraintInfo.constraint, null, 2));
+                logger.error('Internal error unexpected constraint target: %s for constraint %s', constraintInfo.constraintTarget.toString(), constraintInfo.constraint.toString());
               }
             } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
               if (!includesConstraints) {
@@ -689,7 +689,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
       const allOfEntry = currentAllOf[i];
       if (allOfEntry.constraints) {
         for (const constraint of allOfEntry.constraints) {
-          logger.error('Internal error: unhandled constraint %s', JSON.stringify(constraint, null, 2));
+          logger.error('Internal error: unhandled constraint %s', constraint.toString());
         }
       }
       if (allOfEntry.properties) {
@@ -850,21 +850,21 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
     target = null;
     if (pathId.namespace === PRIMITIVE_NS) {
       if (i !== constraint.path.length - 1) {
-        logger.error('Encountered a constraint path containing a primitive %s at index %d that was not the leaf: %s', pathId, i, JSON.stringify(constraint, null, 2));
+        logger.error('Encountered a constraint path containing a primitive %s at index %d that was not the leaf: %s', pathId, i, constraint.toString());
         return {};
       }
       if (!currentDef.value) {
-        logger.error('Encountered a constraint path with a primitive leaf %s on an element that lacked a value: %s', pathId, JSON.stringify(constraint, null, 2));
+        logger.error('Encountered a constraint path with a primitive leaf %s on an element that lacked a value: %s', pathId, constraint.toString());
         return {};
       }
       if (currentDef.value instanceof ChoiceValue) {
         target = findOptionInChoice(currentDef.value, pathId, dataElementSpecs);
         if (!target) {
-          logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, JSON.stringify(constraint, null, 2), JSON.stringify(valueDef, null, 2));
+          logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, constraint.toString(), valueDef.toString());
           return {};
         }
       } else if (!pathId.equals(currentDef.value.identifier)) {
-        logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, JSON.stringify(constraint, null, 2), JSON.stringify(valueDef, null, 2));
+        logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, constraint.toString(), valueDef.toString());
         return {};
       } else {
         target = currentDef.value;
@@ -873,7 +873,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
     } else {
       const newDef = dataElementSpecs.findByIdentifier(pathId);
       if (!newDef) {
-        logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, JSON.stringify(constraint, null, 2));
+        logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, constraint.toString());
         return {};
       }
       // See if the current definition has a value of the specified type.
@@ -888,7 +888,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
 
       if (!target) {
         if (!currentDef.fields || !currentDef.fields.length) {
-          logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+          logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', currentDef.identifier.fqn, pathId, constraint.toString());
           return {};
         } else {
           target = currentDef.fields.find((field) => pathId.equals(field.identifier));
@@ -897,9 +897,9 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
             // In this case, do nothing, because right now there isn't a valid way to represent further constraints
             // on includesType elements in the schema.
             if (valueDef.constraintsFilter.includesType.constraints.some(c => c.isA.equals(pathId))) {
-              logger.warn('Cannot enforce constraint %s on Element %s since %s refers to an type introduced by an "includesType" constraint', JSON.stringify(constraint, null, 2), JSON.stringify(currentDef, null, 2), pathId);
+              logger.warn('Cannot enforce constraint %s on Element %s since %s refers to an type introduced by an "includesType" constraint', constraint.toString(), currentDef.identifier.fqn, pathId);
             } else {
-              logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+              logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', currentDef.identifier.fqn, pathId, constraint.toString());
             }
             return {};
           }
@@ -920,12 +920,12 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
   for (let i = 0; i < len; i += 1) {
     const pathId = constraint.path[i];
     if (pathId.namespace === PRIMITIVE_NS) {
-      logger.error('Encountered an unnormalized constraint path containing a primitive %s at index %d: %s', pathId, i, JSON.stringify(constraint, null, 2));
+      logger.error('Encountered an unnormalized constraint path containing a primitive %s at index %d: %s', pathId, i, constraint.toString());
       return {};
     }
     const newDef = dataElementSpecs.findByIdentifier(pathId);
     if (!newDef) {
-      logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, JSON.stringify(constraint, null, 2));
+      logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, constraint.toString());
       return {};
     }
     let found = false;
@@ -946,7 +946,7 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
 
     if (!found) {
       if (!currentDef.fields || !currentDef.fields.length) {
-        logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+        logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', currentDef.identifier.fqn, pathId, constraint.toString());
         return {};
       } else {
         const found = currentDef.fields.some((field) => pathId.equals(field.identifier));
@@ -957,7 +957,7 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
           if (valueDef.constraintsFilter.includesType.constraints.some(c => c.isA.equals(pathId))) {
             // TODO: Eventually, somehow, support includesType constraints
           } else {
-            logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', JSON.stringify(currentDef, null, 2), pathId, JSON.stringify(constraint, null, 2));
+            logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', currentDef.identifier.fqn, pathId, constraint.toString());
           }
           return {};
         }
@@ -968,17 +968,17 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
   }
 
   if (!currentDef.value) {
-    logger.error('Target of an unnormalized constraint: %s does not have a value. Constraint is: %s', JSON.stringify(currentDef, null, 2), JSON.stringify(constraint, null, 2));
+    logger.error('Target of an unnormalized constraint: %s does not have a value. Constraint is: %s', currentDef.identifier.fqn, constraint.toString());
     return {};
   } else if (!(currentDef.value instanceof ChoiceValue)) {
-    logger.error('Constraint should not be on the value (except for choices): %s in an expanded object model "%s". Ignoring constraint.', JSON.stringify(currentDef, null, 2), JSON.stringify(constraint, null, 2));
+    logger.error('Constraint should not be on the value (except for choices): %s in an expanded object model "%s". Ignoring constraint.', currentDef.identifier.fqn, constraint.toString());
     return {};
   }
   let target = currentDef.value;
   if ((constraint instanceof TypeConstraint) || (constraint instanceof IncludesTypeConstraint)) {
     target = findOptionInChoice(currentDef.value, constraint.isA, dataElementSpecs);
     if (!target) {
-      logger.error('Target of an unnormalized constraint: %s was a choice value that did not have a valid option: %s', JSON.stringify(constraint, null, 2), JSON.stringify(currentDef, null, 2));
+      logger.error('Target of an unnormalized constraint: %s was a choice value that did not have a valid option: %s', constraint.toString(), currentDef.identifier.fqn);
       return {};
     }
   }
