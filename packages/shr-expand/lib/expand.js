@@ -798,6 +798,12 @@ class Expander {
     let targetLabel = this.constraintTargetLabel(value, constraint.path);
     let targetConstraints = [];
 
+    if (!target) {
+      logger.error('Invalid constraint path: %s', targetLabel);
+      target = this.constraintTarget(value, constraint.path);
+      return previousConstraints;
+    }
+
     // Determine if the constraint is on the specific target or its value
     if (!this.supportsCodeConstraint(target.identifier)) {
       // Isn't directly a code/Coding/CodeableConcept, so try its value
@@ -942,6 +948,28 @@ class Expander {
     return constraints;
   }
 
+  findMatchingIncludesType(value, path = [], typeToMatch) {
+    if (!value || !typeToMatch) {
+      return;
+    }
+    // First, check for a constraint directly on the element
+    let match = value.constraintsFilter.withPath(path).includesType.constraints.find(c => {
+      return c.isA.equals(typeToMatch);
+    });
+    if (match) {
+      return match;
+    } else if (path.length > 0 && value instanceof models.IdentifiableValue) {
+      // If the path length > 1, check the next level down
+      const element = this.lookup(value.effectiveIdentifier);
+      if (element) {
+        const newValue = this.findMatchInDataElement(element, path[0]);
+        if (newValue) {
+          return this.findMatchingIncludesType(newValue, path.slice(1), typeToMatch);
+        }
+      }
+    }
+  }
+
   constraintTarget(value, path) {
     if (path.length > 0) {
       // TODO: Actually follow the whole chain, merge constraints down instead of taking it off the last parent
@@ -962,9 +990,15 @@ class Expander {
             targetOption.card = target.effectiveCard;
             return targetOption;
           }
-        } else {
+        } else if (target) {
           return target;
         }
+      }
+      // The target wasn't found in the parent.  It may be be an includesType constraint.
+      const ictCst = this.findMatchingIncludesType(value, path.slice(0, -1), path[path.length-1]);
+      if (ictCst) {
+        // It's an IncludesTypeConstraint.  Create a new Value to represent it.
+        return new models.IdentifiableValue(ictCst.isA).withCard(ictCst.card);
       }
       return;
     }

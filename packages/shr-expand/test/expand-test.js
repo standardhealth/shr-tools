@@ -728,6 +728,51 @@ describe('#expand()', () => {
     ]);
   });
 
+  it('should keep a history of type constraints on fields', () => {
+    let b = new models.DataElement(id('shr.test', 'B'), true);
+    let subB = new models.DataElement(id('shr.test', 'SubB'), true)
+      .withBasedOn(id('shr.test', 'B'));
+    let subSubB = new models.DataElement(id('shr.test', 'SubSubB'), true)
+      .withBasedOn(id('shr.test', 'SubB'));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')))
+      );
+    let subSubA = new models.DataElement(id('shr.test', 'SubSubA'), true)
+    .withBasedOn(id('shr.test', 'SubA'))
+    .withField(
+      new models.IdentifiableValue(id('shr.test', 'SubB')).withMinMax(0, 1)
+        .withConstraint(new models.TypeConstraint(id('shr.test', 'SubSubB')))
+    );
+    add(b, subB, subSubB, a, subA, subSubA);
+
+    doExpandWithConstraintHistory();
+
+    expect(err.hasErrors()).to.be.false;
+    const eSubSubA = findExpanded('shr.test', 'SubSubA');
+    expect(eSubSubA.identifier).to.eql(id('shr.test', 'SubSubA'));
+    expect(eSubSubA.basedOn).to.eql([id('shr.test', 'SubA')]);
+    expect(eSubSubA.value).to.be.undefined;
+    const expectedField = new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+      .withConstraint(new models.TypeConstraint(id('shr.test', 'SubSubB'))
+        .withLastModifiedBy(id('shr.test', 'SubSubA')))
+      .withInheritance(models.OVERRIDDEN)
+      .withInheritedFrom(a.identifier);
+    expectedField.constraintHistory.add(
+      new models.TypeConstraint(id('shr.test', 'SubB')).withLastModifiedBy(id('shr.test', 'SubA')),
+      id('shr.test', 'SubA')
+    );
+    expectedField.constraintHistory.add(
+      new models.TypeConstraint(id('shr.test', 'SubSubB')).withLastModifiedBy(id('shr.test', 'SubSubA')),
+      id('shr.test', 'SubSubA')
+    );
+    expect(eSubSubA.fields).to.eql([expectedField]);
+  });
+
   // Constraining value types by redeclaring Value (not using a specific constraint)
 
   it('should allow a sub-type\'s value to be a sub-type of parent\'s value', function() {
@@ -1608,6 +1653,40 @@ describe('#expand()', () => {
         .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1))
           .withLastModifiedBy(id('shr.test', 'A')))
         .withInheritance(models.INHERITED)
+        .withInheritedFrom(a.identifier)
+    ]
+    );
+  });
+
+  it('should support putting VS constraints on an inherited includes type field', () => {
+    let b = new models.DataElement(id('shr.test', 'B'), true);  //e.g. PanelMembers.Observation
+    let subB = new models.DataElement(id('shr.test', 'subB'), true) //e.g. BreastTumorCategory, BreastNodeCategory,etc.
+      .withBasedOn(id('shr.test', 'B'))
+      .withValue(new models.IdentifiableValue(id('shr.core', 'Coding')).withMinMax(1));
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withField(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+        .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1))));
+    let subA = new models.DataElement(id('shr.test', 'subA'), true) //e.g. BreastCancerStage
+      .withBasedOn(id('shr.test', 'A'))
+      .withField(new models.IdentifiableValue(id('shr.test', 'B')).withMinMax(0, 1)
+        .withConstraint(new models.ValueSetConstraint('http://foo.org').withPath([id('shr.test', 'subB')]))
+    );
+
+    add(b, subB, a, subA);
+
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const eSubA = findExpanded('shr.test', 'subA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'subA'));
+    expect(eSubA.value).to.be.undefined;
+    expect(eSubA.fields).to.eql([
+      new models.IdentifiableValue((id('shr.test', 'B'))).withMinMax(0, 1)
+        .withConstraint(new models.IncludesTypeConstraint(id('shr.test', 'subB'), new models.Cardinality(0, 1))
+          .withLastModifiedBy(id('shr.test', 'A')))
+        .withConstraint(new models.ValueSetConstraint('http://foo.org').withPath([id('shr.test', 'subB'),id('shr.core', 'Coding')])
+          .withLastModifiedBy(id('shr.test', 'subA')))
+        .withInheritance(models.OVERRIDDEN)
         .withInheritedFrom(a.identifier)
     ]
     );
@@ -3259,6 +3338,10 @@ function doExpand(...exporters) {
       }
     }
   });
+}
+
+function doExpandWithConstraintHistory(...exporters) {
+  _result = expand(_specs, ...exporters);
 }
 
 function findExpanded(namespace, name) {
