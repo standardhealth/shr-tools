@@ -1347,6 +1347,7 @@ class ConstraintHistory {
     clone._type = this._type.clone();
     clone._includesType = this._includesType.clone();
     clone._card = this._card.clone();
+    return clone;
   }
 
   equals(other) {
@@ -1491,7 +1492,7 @@ class Value {
       clone._inheritedFrom = this._inheritedFrom;
     }
     if (this._constraintHistory) {
-      clone._constraintHistory = this._constraintHistory;
+      clone._constraintHistory = this._constraintHistory.clone();
     }
   }
 
