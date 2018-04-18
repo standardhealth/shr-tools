@@ -1589,7 +1589,7 @@ class Value {
 
     let card = this.effectiveCard;
     if (this.card != null && this.effectiveCard != null && this.card != this.effectiveCard && this.card.history) {
-      card.history = this.card.history
+      card.history = this.card.history;
     }
 
     return {
@@ -1624,11 +1624,17 @@ class IdentifiableValue extends Value {
 
   getPossibleIdentifiers(withIncludesTypeIdentifiers=false) {
     const idMap = new Map();
+    // First add its original identifier
     idMap.set(this.identifier.fqn, this.identifier);
+    // Then add its effective identifier
+    // NOTE: This is usually in the constraint history, but at one point in shr-expand, it might not be
+    idMap.set(this.effectiveIdentifier.fqn, this.effectiveIdentifier);
+    // Then add any other historical type constraints
     const typeConstraintsHistories = this.constraintHistory.type.own.histories;
     for (const tch of typeConstraintsHistories) {
       idMap.set(tch.constraint.isA.fqn, tch.constraint.isA);
     }
+    // Then add any include type constraints if requested
     if (withIncludesTypeIdentifiers) {
       const includesTypeConstraints = this.constraintsFilter.own.includesType.constraints;
       for (const itc of includesTypeConstraints) {
