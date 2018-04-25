@@ -18,7 +18,8 @@
     "ncp": "^2.0.0"
   },
   "devDependencies": {
-    "bunyan": "^1.8.12"
+    "bunyan": "^1.8.12",
+    "eslint": "^4.19.1"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9"

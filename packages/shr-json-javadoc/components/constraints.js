@@ -1,3 +1,10 @@
+const bunyan = require('bunyan');
+var rootLogger = bunyan.createLogger({ name: 'shr-json-javadoc' });
+var logger = rootLogger;
+function setLogger(bunyanLogger) {
+  rootLogger = logger = bunyanLogger;
+}
+
 // Converts a card object into the formatted string representing cardinality
 function cardToString(card) {
   let min = 0;
@@ -6,9 +13,9 @@ function cardToString(card) {
     if ('min' in card)
       min = card.min;
     if ('max' in card)
-      max = card.max
+      max = card.max;
   }
-  return `${min}..${max}`
+  return `${min}..${max}`;
 }
 
 /*
@@ -46,7 +53,7 @@ class Constraints {
       back: back,
       front: front,
       path: path
-    }
+    };
 
     // If source is an element, add hyperlink
     if (this.inherited) {
@@ -62,7 +69,7 @@ class Constraints {
       const lastModElement = this.elements[lastMod];
       const name = lastModElement.name;
       constraint.override = name;
-      const href = `../${lastModElement.namespacePath}/${name}.html`
+      const href = `../${lastModElement.namespacePath}/${name}.html`;
       constraint.overrideHref = href;
     }
     return constraint;
@@ -94,7 +101,7 @@ class Constraints {
       const card = cardToString(item.card);
       const name = 'Includes Type';
       const value = element.name;
-      const href = `../${element.namespacePath}/${element.name}.html`
+      const href = `../${element.namespacePath}/${element.name}.html`;
       const lastMod = item.lastModifiedBy;
       const iConstraint = this.newConstraint(name, value, subpath, lastMod, href, '', card);
       this.constraints.push(iConstraint);
@@ -165,7 +172,7 @@ class Constraints {
 
   // Handles fixed value constraints, checks for code and boolean
   fixedValue(constraint, subpath) {
-    let value = "";
+    let value = '';
     if (constraint.type === 'code') {
       value = `${constraint.value.system} (code: ${constraint.value.code})`;
     } else if (constraint.type === 'boolean') {
@@ -191,29 +198,29 @@ class Constraints {
   // Logs if the constraint doesn't exist
   switchConstraintType(constraint, cType, subpath) {
     switch (cType) {
-      case 'includesType':
-        this.includesType(constraint, subpath);
-        break;
-      case 'includesCode':
-        this.includesCode(constraint, subpath);
-        break;
-      case 'valueSet':
-        this.valueSet(constraint, subpath);
-        break;
-      case 'subpaths':
-        this.subpaths(constraint, subpath);
-        break;
-      case 'type':
-        this.typeConstraint(constraint, subpath);
-        break;
-      case 'fixedValue':
-        this.fixedValue(constraint, subpath);
-        break;
-      case 'card':
-        this.cardConstraint(constraint, subpath);
-        break;
-      default:
-        console.log(cType);
+    case 'includesType':
+      this.includesType(constraint, subpath);
+      break;
+    case 'includesCode':
+      this.includesCode(constraint, subpath);
+      break;
+    case 'valueSet':
+      this.valueSet(constraint, subpath);
+      break;
+    case 'subpaths':
+      this.subpaths(constraint, subpath);
+      break;
+    case 'type':
+      this.typeConstraint(constraint, subpath);
+      break;
+    case 'fixedValue':
+      this.fixedValue(constraint, subpath);
+      break;
+    case 'card':
+      this.cardConstraint(constraint, subpath);
+      break;
+    default:
+      logger.warn('Unknown constraint type %s. ERROR_CODE:TBD', cType);
     }
   }
 
@@ -230,4 +237,4 @@ class Constraints {
   }
 }
 
-module.exports = Constraints;
+module.exports = { Constraints, setLogger };

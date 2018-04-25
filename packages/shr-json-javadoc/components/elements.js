@@ -1,6 +1,6 @@
-const Constraints = require('./constraints');
+const Constraints = require('./constraints').Constraints;
 
-/*  
+/*
  *  Elements class manages all the data elements in a map based on fqn.
  *  The class has functions for accessing elements, adding elements,
  *  and updating elements for the ejs templates
@@ -31,7 +31,7 @@ class Elements {
     Object.keys(this.elements).forEach((element) => {
       oList.push(this.get(element));
     });
-    oList.sort((a, b) => { return a.name.localeCompare(b.name) });
+    oList.sort((a, b) => { return a.name.localeCompare(b.name); });
     return oList;
   }
 
@@ -89,7 +89,7 @@ class Elements {
       value.options.forEach((option, index) => {
         this.addToUsedBy(option.fqn, element);
         option = this.valueConstraints(option, `Value (Choice ${index+1})`);
-        element.pValue.push(option)
+        element.pValue.push(option);
       });
     } else {
       this.addToUsedBy(value.fqn, element);
@@ -119,7 +119,7 @@ class Elements {
   // natively defined and overridden attributes
   updateFields(element) {
     if (!('fields' in element)) return;
-    
+
     // Build map of ancestors to track field origins
     let hierarchyFields = {};
     element.hierarchy.forEach((a) => { hierarchyFields[a.fqn] = []; });

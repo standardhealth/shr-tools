@@ -1,6 +1,6 @@
 /*
  *  Respresents a single namespace. Holds a list of element names.
- */ 
+ */
 class Namespace {
   constructor(name) {
     this.name = name;
@@ -16,7 +16,7 @@ class Namespace {
 }
 
 /*
- *  Stores a map of the namespaces. Allows for new namespace and 
+ *  Stores a map of the namespaces. Allows for new namespace and
  *  getting a sorted list of namespaces
  */
 class Namespaces {
@@ -37,7 +37,7 @@ class Namespaces {
     Object.keys(this.namespaces).forEach((namespace) => {
       oList.push(this.get(namespace));
     });
-    oList.sort((a, b) => { return a.name.localeCompare(b.name) });
+    oList.sort((a, b) => { return a.name.localeCompare(b.name); });
     return oList;
   }
 }

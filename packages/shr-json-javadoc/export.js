@@ -4,12 +4,13 @@ const path = require('path');
 const bunyan = require('bunyan');
 const ncp = require('ncp').ncp;
 const Namespaces = require('./components/namespaces');
-const Elements = require('./components/Elements');
+const Elements = require('./components/elements');
 
 var rootLogger = bunyan.createLogger({ name: 'shr-json-javadoc' });
 var logger = rootLogger;
 function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
+  require('./components/constraints').setLogger(logger);
 }
 
 function compileJavadoc(cimcore, outPath, configureForIG=false) {
@@ -27,7 +28,7 @@ function exportToPath(compiledSHR, outPath) {
 // Function to generate and write html from an ejs template
 function renderEjsFile(template, pkg, destination) {
   ejs.renderFile(path.join(__dirname, template), pkg, (error, htmlText) => {
-    if (error) console.log(error);
+    if (error) logger.error('Error rendering model doc: %s', error);
     else fs.writeFileSync(destination, htmlText);
   });
 }
@@ -86,7 +87,10 @@ class SHR {
   // This includes images, index.html, and the stylesheet
   copyRequiredFiles() {
     ncp(path.join(__dirname, 'required'), this.outDirectory, (error) => {
-      if (error) return console.log(error);
+      if (error) {
+        logger.error('Error copying files for export of model doc: %s', error);
+        return;
+      }
     });
   }
 
