@@ -6,6 +6,9 @@ const ncp = require('ncp').ncp;
 const Namespaces = require('./components/namespaces');
 const Elements = require('./components/elements');
 
+const showdown = require('showdown');
+const mdConverter = new showdown.Converter();
+
 var rootLogger = bunyan.createLogger({ name: 'shr-json-javadoc' });
 var logger = rootLogger;
 function setLogger(bunyanLogger) {
@@ -27,7 +30,7 @@ function exportToPath(compiledSHR, outPath) {
 
 // Function to generate and write html from an ejs template
 function renderEjsFile(template, pkg, destination) {
-  ejs.renderFile(path.join(__dirname, template), pkg, (error, htmlText) => {
+  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, {mdConverter: mdConverter}), (error, htmlText) => {
     if (error) logger.error('Error rendering model doc: %s', error);
     else fs.writeFileSync(destination, htmlText);
   });

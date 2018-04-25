@@ -31,7 +31,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <!-- ========= END OF TOP NAVBAR ========= -->
 <div class="contentContainer">
 <h2 title="Overview">Overview of <%= namespace.name %></h2>
-  <p><%= namespace.description %></p>
+  <p><%- mdConverter.makeHtml(namespace.description) %></p>
 </div>
 </body>
 </html>
