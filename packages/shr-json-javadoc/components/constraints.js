@@ -149,13 +149,19 @@ class Constraints {
   // Handles type constraint. Will override datatype if top level
   // type constraint.
   typeConstraint(constraint, subpath) {
-    const element = this.elements[constraint.fqn];
-    var constraintName = (this.field.valueType === 'RefValue') ? `ref(${element.name})` : element.name;
-    if (this.field.valueType === 'RefValue') {
-      constraintName = `${constraintName}`;
-    }
+    let constraintName, href;
 
-    const href = `../${element.namespacePath}/${element.name}.html`;
+    const element = this.elements[constraint.fqn];
+    if (element) {
+      constraintName = (this.field.valueType === 'RefValue') ? `ref(${element.name})` : element.name;
+
+      href = `../${element.namespacePath}/${element.name}.html`;
+    } else if (constraint.fqn.indexOf('.') == -1) { //If primitive FQN
+      constraintName = constraint.fqn;
+    } else {
+      //Invalid constraint target
+      return;
+    }
 
     // Checks if type constraint is top level
     if (subpath === this.field.name && !this.inherited) {
