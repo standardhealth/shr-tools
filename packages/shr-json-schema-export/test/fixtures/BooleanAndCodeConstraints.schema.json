@@ -26,7 +26,7 @@
                   { "enum": [ true ] }
                 ]
               },
-              "shr.test.Bool": {
+              "Bool": {
                 "allOf": [
                   {
                     "properties": {
@@ -36,7 +36,7 @@
                   { "$ref": "#/definitions/Bool" }
                 ]
               },
-              "shr.test.Coded": {
+              "Coded": {
                 "properties": {
                   "Value": {
                     "code": { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"}
@@ -52,12 +52,12 @@
         "type": "object",
         "description": "A boolean element.",
         "properties": {
-          "shr.base.EntryType": {"$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
+          "EntryType": {"$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
           "Value": {
             "type": "boolean"
           }
         },
-        "required": ["shr.base.EntryType"]
+        "required": ["EntryType"]
       },
       "Group": {
         "description": "It is a group of elements",
@@ -70,9 +70,9 @@
           {
             "type": "object",
             "properties": {
-              "shr.test.Simple": { "$ref": "#/definitions/Simple" },
-              "shr.test.Coded": { "$ref": "#/definitions/Coded" },
-              "shr.test.ElementValue": {
+              "Simple": { "$ref": "#/definitions/Simple" },
+              "Coded": { "$ref": "#/definitions/Coded" },
+              "ElementValue": {
                 "type": "array",
                 "minItems": 0,
                 "items": {
@@ -80,7 +80,7 @@
                 }
               }
             },
-            "required": ["shr.test.Simple"]
+            "required": ["Simple"]
           }
         ]
       },

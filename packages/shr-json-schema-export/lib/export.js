@@ -131,9 +131,29 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
         }
       }
       if (def.fields.length) {
+        const fieldNameMap = {};
+        const clashingNames = {};
         for (const field of def.fields) {
-          if (!(field instanceof TBD) && !isValidField(field) || (field.inheritance === INHERITED)) {
-            continue;
+          if (!(field instanceof TBD)) {
+            if (!isValidField(field)) {
+              continue;
+            } else if (field.inheritance === INHERITED) {
+              if (fieldNameMap[field.identifier.name]) {
+                logger.error(`ERROR: clashing property names: %s and %s ERROR_CODE: 12038`, fieldNameMap[field.identifier.name].fqn, field.identifier.fqn);
+                clashingNames[field.identifier.name] = true;
+              } else {
+                fieldNameMap[field.identifier.name] = field.identifier;
+              }
+              continue;
+            }
+
+            if (fieldNameMap[field.identifier.name]) {
+              logger.error(`ERROR: clashing property names: %s and %s ERROR_CODE: 12038`, fieldNameMap[field.identifier.name].fqn, field.identifier.fqn);
+              clashingNames[field.identifier.name] = true;
+              continue;
+            } else {
+              fieldNameMap[field.identifier.name] = field.identifier;
+            }
           }
           const card = field.effectiveCard;
           if (card && card.isZeroedOut) {
@@ -149,11 +169,16 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
             needsEntryType = false;
           }
 
-          schemaDef.properties[field.identifier.fqn] = value;
+          schemaDef.properties[field.identifier.name] = value;
           if (required) {
-            requiredProperties.push(field.identifier.fqn);
+            requiredProperties.push(field.identifier.name);
           }
         }
+
+        for (const clashingName in clashingNames) {
+          delete schemaDef.properties[clashingName];
+        }
+        requiredProperties = requiredProperties.filter(propName => !(propName in clashingNames));
       } else if (!def.value) {
         schemaDef.type = 'object';
         schemaDef.description = 'Empty DataElement?';
@@ -177,9 +202,9 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
         wholeDef.description = descriptionList.join('\n');
       }
       if (needsEntryType) {
-        schemaDef.properties['shr.base.EntryType'] = nonEntryEntryTypeField;
+        schemaDef.properties['EntryType'] = nonEntryEntryTypeField;
         if (def.identifier.fqn !== 'shr.base.EntryType') {
-          requiredProperties.push('shr.base.EntryType');
+          requiredProperties.push('EntryType');
         }
       }
 
@@ -265,10 +290,10 @@ function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL
           continue;
         }
 
-        const qualifiedName = field.identifier.fqn;
-        schemaDef.properties[qualifiedName] = value;
-        if (required && (requiredProperties.indexOf(qualifiedName) === -1)) {
-          requiredProperties.push(qualifiedName);
+        const fieldName = field.identifier.name;
+        schemaDef.properties[fieldName] = value;
+        if (required && (requiredProperties.indexOf(fieldName) === -1)) {
+          requiredProperties.push(fieldName);
         }
       }
       if (def.isEntry) {
@@ -753,11 +778,11 @@ function makeRef(id, enclosingNamespace, baseSchemaURL) {
 function makeShrRefObject(refs, baseTypeURL, target = {}) {
   target.type = 'object';
   target.properties = {
-    ShrId: { type: 'string' },
-    EntryId: { type: 'string' },
-    EntryType: { type: 'string' }
+    _ShrId: { type: 'string' },
+    _EntryId: { type: 'string' },
+    _EntryType: { type: 'string' }
   };
-  target.required = ['ShrId', 'EntryType', 'EntryId'];
+  target.required = ['_ShrId', '_EntryType', '_EntryId'];
   target.refType = refs.map((ref) => `${baseTypeURL}${namespaceToURLPathSegment(ref.identifier.namespace)}/${ref.identifier.name}`);
   return target;
 }
@@ -903,7 +928,7 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
             }
             return {};
           }
-          normalizedPath.push(pathId.fqn);
+          normalizedPath.push(pathId.name);
         }
       }
       currentDef = newDef;
@@ -961,7 +986,7 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
           }
           return {};
         }
-        normalizedPath.push(pathId.fqn);
+        normalizedPath.push(pathId.name);
       }
     }
     currentDef = newDef;

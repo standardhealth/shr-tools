@@ -109,13 +109,13 @@ const stubSchema = JSON.parse(`{
         {
           "type": "object",
           "properties": {
-            "shr.base.ShrId": {
+            "ShrId": {
               "$ref": "#/definitions/RequiredString"
             },
-            "shr.base.EntryId": {
+            "EntryId": {
               "$ref": "#/definitions/RequiredString"
             },
-            "shr.core.CreationTime": {
+            "CreationTime": {
               "type": "object",
               "properties": {
                 "Value": {
@@ -125,15 +125,15 @@ const stubSchema = JSON.parse(`{
               },
               "required": [ "Value" ]
             },
-            "shr.base.LastUpdated": {
+            "LastUpdated": {
               "$ref": "#/definitions/RequiredString"
             }
           },
           "required": [
-            "shr.base.ShrId",
-            "shr.base.EntryId",
-            "shr.core.CreationTime",
-            "shr.base.LastUpdated"
+            "ShrId",
+            "EntryId",
+            "CreationTime",
+            "LastUpdated"
           ]
         }
       ]
@@ -154,16 +154,16 @@ const stubSchema = JSON.parse(`{
       "type": "object",
       "properties": {
         "Value": { "type": "string", "format": "uri" },
-        "shr.base.EntryType": { "$ref": "#/definitions/EntryType" }
+        "EntryType": { "$ref": "#/definitions/EntryType" }
       },
       "required": [ "Value" ]
     },
     "Any": {
       "type": "object",
       "properties": {
-        "shr.base.EntryType": { "$ref": "#/definitions/EntryType" }
+        "EntryType": { "$ref": "#/definitions/EntryType" }
       },
-      "required": [ "shr.base.EntryType" ]
+      "required": [ "EntryType" ]
     }
   }
 }`);

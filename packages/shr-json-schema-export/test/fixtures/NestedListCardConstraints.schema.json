@@ -15,11 +15,11 @@
           {
             "type": "object",
             "properties": {
-              "shr.test.ListField": {
+              "ListField": {
                 "allOf": [
                   {
                     "properties": {
-                      "shr.test.OptionalList": {
+                      "OptionalList": {
                         "allOf": [
                           {
                             "properties": {
@@ -39,7 +39,7 @@
                 ]
               }
             },
-            "required": ["shr.test.ListField"]
+            "required": ["ListField"]
           }
         ]
       },
@@ -47,18 +47,18 @@
         "description": "An element with a list field.",
         "type": "object",
         "properties": {
-          "shr.base.EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
-          "shr.test.OptionalList": {
+          "EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
+          "OptionalList": {
             "$ref": "#/definitions/OptionalList"
           }
         },
-        "required": ["shr.test.OptionalList", "shr.base.EntryType"]
+        "required": ["OptionalList", "EntryType"]
       },
       "OptionalList": {
         "description": "An element with an optional list.",
         "type": "object",
         "properties": {
-          "shr.base.EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
+          "EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
           "Value": {
             "type": "array",
             "minItems": 0,
@@ -67,7 +67,7 @@
             }
           }
         },
-        "required": ["shr.base.EntryType"]
+        "required": ["EntryType"]
       }
     }
   }

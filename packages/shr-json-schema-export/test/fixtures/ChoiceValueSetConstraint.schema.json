@@ -17,7 +17,7 @@
           {
             "type": "object",
             "properties": {
-              "shr.test.CodedChoice": {
+              "CodedChoice": {
                 "allOf": [
                   {
                     "properties": {

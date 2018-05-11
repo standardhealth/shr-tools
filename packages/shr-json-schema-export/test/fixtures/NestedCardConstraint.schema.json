@@ -15,16 +15,16 @@
           {
             "type": "object",
             "properties": {
-              "shr.test.OptionalField": {
+              "OptionalField": {
                 "allOf": [
                   { "$ref": "#/definitions/OptionalField" },
                   {
-                    "required": ["shr.test.OptionalValue"]
+                    "required": ["OptionalValue"]
                   }
                 ]
               }
             },
-            "required": ["shr.test.OptionalField"]
+            "required": ["OptionalField"]
           }
         ]
       },
@@ -32,23 +32,23 @@
         "description": "An element with an optional field.",
         "type": "object",
         "properties": {
-          "shr.base.EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
-          "shr.test.OptionalValue": {
+          "EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
+          "OptionalValue": {
             "$ref": "#/definitions/OptionalValue"
           }
         },
-        "required": ["shr.base.EntryType"]
+        "required": ["EntryType"]
       },
       "OptionalValue": {
         "description": "An element with an optional value.",
         "type": "object",
         "properties": {
-          "shr.base.EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
+          "EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
           "Value": {
             "type": "string"
           }
         },
-        "required": ["shr.base.EntryType"]
+        "required": ["EntryType"]
       }
     }
   }

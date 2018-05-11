@@ -15,13 +15,7 @@
           { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
           {
             "type": "object",
-            "properties": {
-              "shr.test.Simple": { "$ref": "#/definitions/Simple" },
-              "shr.other.test.Simple": {
-                "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple"
-              }
-            },
-            "required": ["shr.test.Simple"]
+            "properties": {}
           }
         ]
       },

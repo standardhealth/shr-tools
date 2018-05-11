@@ -20,7 +20,7 @@
           {
             "type": "object",
             "properties": {
-              "shr.test.Choice": {
+              "Choice": {
                 "allOf": [
                   {
                     "properties": {
@@ -31,7 +31,7 @@
                 ]
               }
             },
-            "required": ["shr.test.Choice"]
+            "required": ["Choice"]
           }
         ]
       },
@@ -42,11 +42,11 @@
           {
             "type": "object",
             "properties": {
-              "shr.test.TwoDeepChoiceField": {
+              "TwoDeepChoiceField": {
                 "allOf": [
                   {
                     "properties": {
-                      "shr.test.ChoiceValue": {
+                      "ChoiceValue": {
                         "properties": {
                           "Value": {
                             "properties": {
@@ -84,7 +84,7 @@
           {
             "type": "object",
             "properties": {
-              "shr.test.ChoiceValue": { "$ref": "#/definitions/ChoiceValue" }
+              "ChoiceValue": { "$ref": "#/definitions/ChoiceValue" }
             }
           }
         ]

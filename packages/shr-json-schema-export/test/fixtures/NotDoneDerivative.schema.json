@@ -34,11 +34,11 @@
           {
             "type": "object",
             "properties": {
-              "shr.test.Simple": {
+              "Simple": {
                 "$ref": "#/definitions/Simple"
               }
             },
-            "required": [ "shr.test.Simple" ]
+            "required": [ "Simple" ]
           }
         ]
       },
