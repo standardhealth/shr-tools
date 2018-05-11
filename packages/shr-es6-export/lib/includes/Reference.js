@@ -58,9 +58,9 @@ export default class Reference {
 
   toJSON() {
     return {
-      'ShrId': this._shrId,
-      'EntryId': this._entryId,
-      'EntryType': this._entryType
+      '_ShrId': this._shrId,
+      '_EntryId': this._entryId,
+      '_EntryType': this._entryType
     };
   }
 }

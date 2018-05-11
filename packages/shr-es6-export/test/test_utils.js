@@ -8,10 +8,10 @@ function importResult(path) {
 
 class TestContext {
   validateJSON(name, json) {
-    if (!json['shr.base.EntryType'] || !json['shr.base.EntryType'].Value) {
+    if (!json['EntryType'] || !json['EntryType'].Value) {
       throw new Error(`Couldn't find entry type for ${name}`);
     }
-    const entryType = json['shr.base.EntryType'].Value;
+    const entryType = json['EntryType'].Value;
     const matches = entryType.match(/^http:\/\/standardhealthrecord\.org\/spec\/(.*)\/[^/]+$/);
     if (!matches) {
       throw new Error(`${name}'s entry type does not match expected format: ${entryType}`);

@@ -241,9 +241,9 @@ function writeToJson(def, cw) {
   const url = `http://standardhealthrecord.org/spec/${def.identifier.namespace.replace('.', '/')}/${className(def.identifier.name)}`;
   if (def.isEntry) {
     cw.ln(`const inst = this._entryInfo.toJSON();`);
-    cw.ln(`inst['shr.base.EntryType'] = { 'Value' : '${url}' };`);
+    cw.ln(`inst['EntryType'] = { 'Value' : '${url}' };`);
   } else if (def.identifier.name !== 'EntryType') {
-    cw.ln(`const inst = { 'shr.base.EntryType': { 'Value' : '${url}' } };`);
+    cw.ln(`const inst = { 'EntryType': { 'Value' : '${url}' } };`);
   } else {
     cw.ln(`const inst = {};`);
   }
@@ -269,7 +269,7 @@ function writeToJson(def, cw) {
 
   for (const field of def.fields) {
     if (!(field instanceof TBD)) {
-      generateAssignmentIfList(field.card, field.identifier.fqn, toSymbol(field.identifier.name), cw);
+      generateAssignmentIfList(field.card, field.identifier.name, toSymbol(field.identifier.name), cw);
     }
   }
 

@@ -32,7 +32,7 @@ describe('#ToJSON', () => {
       
       let gen_json = entry.toJSON();
       context.validateJSON('CodeObjectValueEntry', gen_json);
-      expect(gen_json['shr.base.EntryType']).to.eql({Value: 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry'});
+      expect(gen_json['EntryType']).to.eql({Value: 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry'});
       expect(gen_json['Value']).to.equal('foo');
     });
   });
@@ -52,7 +52,7 @@ describe('#ToJSON', () => {
       
       let gen_json = entry.toJSON();
       context.validateJSON('CodingObjectValueEntry', gen_json);
-      expect(gen_json['shr.base.EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry' });
+      expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry' });
       expect(gen_json['Value']['Value']).to.eql('foo');
     });
   });
@@ -71,28 +71,28 @@ describe('#ToJSON', () => {
       
       let gen_json = entry.toJSON();
       context.validateJSON('CodeableConceptObjectValueEntry', gen_json);
-      expect(gen_json['shr.base.EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/CodeableConceptValueEntry' });
-      expect(gen_json['Value']['shr.core.Coding']).to.be.an('array');
-      expect(gen_json['Value']['shr.core.Coding']).to.include({
-        'shr.base.EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/Coding' },
-        'shr.core.CodeSystem': {
-          'shr.base.EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/CodeSystem' },
+      expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/CodeableConceptValueEntry' });
+      expect(gen_json['Value']['Coding']).to.be.an('array');
+      expect(gen_json['Value']['Coding']).to.include({
+        'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/Coding' },
+        'CodeSystem': {
+          'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/CodeSystem' },
           Value: 'http://foo.org/bar'
         },
-        'shr.core.DisplayText': {
-          'shr.base.EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/DisplayText' },
+        'DisplayText': {
+          'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/DisplayText' },
           Value: 'Foo'
         },
         Value: 'foo'
       });
-      expect(gen_json['Value']['shr.core.Coding']).to.include({
-        'shr.base.EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/Coding' },
-        'shr.core.CodeSystem': {
-          'shr.base.EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/CodeSystem' },
+      expect(gen_json['Value']['Coding']).to.include({
+        'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/Coding' },
+        'CodeSystem': {
+          'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/CodeSystem' },
           Value: 'http://foo.org/bar'
         },
-        'shr.core.DisplayText': {
-          'shr.base.EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/DisplayText' },
+        'DisplayText': {
+          'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/DisplayText' },
           Value: 'Bar'
         },
         Value: 'bar'
