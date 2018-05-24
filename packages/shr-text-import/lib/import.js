@@ -38,16 +38,25 @@ function importFromFilePath(filePath, configuration=[], specifications = new Spe
   return specifications;
 }
 
-function importConfigFromFilePath(filePath) {
+function importConfigFromFilePath(filePath, configName) {
   const filesByType = processPath(filePath);
   const preprocessor = new Preprocessor();
 
   let defaultConfigPath = path.join(__dirname, 'config-template', '/default_config.json');
   let defaultConfigFile = fs.readFileSync(defaultConfigPath, 'utf8');
 
-  let configuration;
+  let configuration; // variable to store configuration data
+  let configFile; // variable to store config file to be used
+
   if (filesByType.config.length > 0) {
-    configuration = preprocessor.preprocessConfig(defaultConfigFile, filesByType.config[0]);
+    configFile = filesByType.config.find((file) => {
+      return (file === filePath + configName);
+    }) || filesByType.config[0];
+  }
+
+  if (configFile) {
+    logger.info('Using config file %s', configFile);
+    configuration = preprocessor.preprocessConfig(defaultConfigFile, configFile);
   } else {
     configuration = preprocessor.preprocessConfig(defaultConfigFile);
     fs.writeFileSync(filePath + '/config.json', defaultConfigFile, 'utf8');

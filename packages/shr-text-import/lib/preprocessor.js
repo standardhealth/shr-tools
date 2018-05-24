@@ -49,6 +49,37 @@ class Preprocessor extends SHRDataElementParserVisitor {
           continue;
         }
 
+        //handle old ig fields
+        // TODO remove this handling once we fully deprecate the old ig fields
+        if (key === 'implementationGuide') {
+          let igObject = {};
+          if (configFile['igIndexContent'] != null) {
+            logger.warn(`Configuration file 'igIndexContent' field will be deprecated. Use 'implementationGuide.indexContent' instead.`);
+            igObject.indexContent = configFile['igIndexContent'];
+          } else { // since we use continue at end of old ig field conditional, we need to handle the case of implementationGuide.indexContent separately
+            logger.warn('Configuration file missing key: implementationGuide.indexContent, using default key: %s instead. ERROR_CODE:01002', defaults['implementationGuide']['indexContent']);
+            igObject.indexContent = defaults['implementationGuide']['indexContent'];
+          }
+
+          if (configFile['igLogicalModels'] != null) {
+            logger.warn(`Configuration file 'igLogicalModels' field will be deprecated. Use 'implementationGuide.includeLogicalModels' instead.`);
+            igObject.includeLogicalModels = configFile['igLogicalModels'];
+          }
+
+          if (configFile['igModelDoc'] != null) {
+            logger.warn(`Configuration file 'igModelDoc' field will be deprecated. Use 'implementationGuide.includeModelDoc' instead.`);
+            igObject.includeModelDoc = configFile['igModelDoc'];
+          }
+
+          if (configFile['igPrimarySelectionStrategy'] != null) {
+            logger.warn(`Configuration file 'igPrimarySelectionStrategy' field will be deprecated. Use 'implementationGuide.primarySelectionStrategy' instead.`);
+            igObject.primarySelectionStrategy = configFile['igPrimarySelectionStrategy'];
+          }
+
+          configFile['implementationGuide'] = igObject;
+          continue;
+        }
+
         configFile[key] = defaults[key];
         logger.warn('Configuration file missing key: %s, using default key: %s instead. ERROR_CODE:01002', key, defaults[key]);
       } else {

@@ -3,7 +3,9 @@
     "projectShorthand":"TEST",
     "projectURL":"http://test.org",
     "fhirURL": "http://test.org/fhir",
-    "igIndexContent": "basicindexcontent.html",
+    "implementationGuide": {
+      "indexContent": "basicindexcontent.html"
+    },
     "publisher":"Test Publisher",
     "contact":[{
         "telecom":[{
