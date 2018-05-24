@@ -4,7 +4,9 @@
     "projectURL": "http://es6-export.com",
     "fhirURL": "http://es6-export.com/fhir",
     "entryTypeURL": "http://es6-export.com/spec",
-    "igIndexContent": "es6ExportIndexContent.html",
+    "implementationGuide": {
+      "indexContent": "es6ExportIndexContent.html"
+    },
     "publisher": "SHR Testers",
     "contact": [
         {
