@@ -1,3 +1,4 @@
+const fs = require('fs');
 const {expect} = require('chai');
 const {importFromFilePath, importConfigFromFilePath, setLogger} = require('../index');
 const {Version, DataElement, Value, RefValue, ChoiceValue, IncompleteValue, Identifier, PrimitiveIdentifier, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, TBD, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
@@ -955,24 +956,6 @@ describe('#importConfigFromFilePath', () => {
 
   });
 
-  it('should correctly use full default configuration when config is empty', () => {
-    const configuration = importConfiguration('emptyconfig');
-    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','implementationGuide');
-    expect(configuration.projectName).to.eql('Example Project');
-    expect(configuration.projectShorthand).to.eql('EXAMPLE');
-    expect(configuration.projectURL).to.eql('http://example.com');
-    expect(configuration.fhirURL).to.eql('http://example.com/fhir');
-    expect(configuration.implementationGuide.indexContent).to.eql('exampleIndexContent.html');
-    expect(configuration.publisher).to.eql('Example Publisher');
-    expect(configuration.contact).to.be.of.length(1);
-    expect(configuration.contact[0]).to.eql({
-      'telecom': [{
-        'system': 'url',
-        'value': 'http://example.com'
-      }]
-    });
-  });
-
   it('should correctly import an incomplete configuration with partial default data', () => {
     const configuration = importConfiguration('incompleteconfig');
     expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','implementationGuide');
@@ -992,27 +975,20 @@ describe('#importConfigFromFilePath', () => {
   });
 
 
-  it('should correctly throw error then use full default configuration when file is not valid JSON', () => {
+  it('should correctly throw error when file is not valid JSON', () => {
     const configuration = importConfiguration('invalidblankconfig', 1);
     expect(err.errors()[0].msg).to.contain('Invalid config file');
-    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','implementationGuide');
-    expect(configuration.projectName).to.eql('Example Project');
-    expect(configuration.projectShorthand).to.eql('EXAMPLE');
-    expect(configuration.projectURL).to.eql('http://example.com');
-    expect(configuration.fhirURL).to.eql('http://example.com/fhir');
-    expect(configuration.implementationGuide.indexContent).to.eql('exampleIndexContent.html');
-    expect(configuration.publisher).to.eql('Example Publisher');
-    expect(configuration.contact).to.be.of.length(1);
-    expect(configuration.contact[0]).to.eql({
-      'telecom': [{
-        'system': 'url',
-        'value': 'http://example.com'
-      }]
-    });
+    expect(configuration).to.be.undefined;
   });
 
-  it('should correctly throw error then use full default configuration when no file exists', () => {
+  it('should correctly create default configuration as config.json when no file exists', () => {
+    // First ensure config.json doesn't exist (from previous run)
+    const cfgPath = `${__dirname}/fixtures/config/emptyfolder/config.json`;
+    if (fs.existsSync(cfgPath)) {
+      fs.unlinkSync(cfgPath);
+    }
     const configuration = importConfigurationFolder('emptyfolder');
+    expect(fs.existsSync(cfgPath)).to.be.true;
     expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','implementationGuide');
     expect(configuration.projectName).to.eql('Example Project');
     expect(configuration.projectShorthand).to.eql('EXAMPLE');

@@ -46,20 +46,26 @@ function importConfigFromFilePath(filePath, configName) {
   let defaultConfigFile = fs.readFileSync(defaultConfigPath, 'utf8');
 
   let configuration; // variable to store configuration data
-  let configFile; // variable to store config file to be used
 
-  if (filesByType.config.length > 0) {
-    configFile = filesByType.config.find((file) => {
-      return (file === filePath + configName);
-    }) || filesByType.config[0];
+  let configFile;
+  if (configName != null) {
+    configFile = path.resolve(filePath, configName);
+  } else if (fs.statSync(filePath).isDirectory()) {
+    configFile = path.resolve(filePath, 'config.json');
+  } else {
+    configFile = path.resolve(filePath);
   }
+  const validConfig = filesByType.config.some(f => path.resolve(f) === configFile);
 
-  if (configFile) {
+  if (validConfig) {
     logger.info('Using config file %s', configFile);
     configuration = preprocessor.preprocessConfig(defaultConfigFile, configFile);
-  } else {
+  } else if ((configName == null || configName === 'config.json') && fs.statSync(filePath).isDirectory()) {
+    const newFile = path.resolve(filePath, 'config.json');
     configuration = preprocessor.preprocessConfig(defaultConfigFile);
-    fs.writeFileSync(filePath + '/config.json', defaultConfigFile, 'utf8');
+    fs.writeFileSync(newFile, defaultConfigFile, 'utf8');
+  } else {
+    logger.error('Invalid config file: %s', configFile);
   }
 
   return configuration;
@@ -115,18 +121,31 @@ class FilesByType {
   }
 
   detectType(file) {
-    if (!file.endsWith('.txt') && !file.endsWith('.shr') && !file.endsWith('config.json')) {
-      return;  // only support *.txt or *.shr or .json coniguration files
+    const lcFile = file.toLowerCase();
+    if (!lcFile.endsWith('.txt') && !lcFile.endsWith('.shr') && !lcFile.endsWith('.json')) {
+      return;  // only support *.txt, *.shr, or .json files
     }
-    const re = /^\s*Grammar:\s+([^\s]+)/;
-    const lines = fs.readFileSync(file, 'utf-8').split('\n');
-    for (const l of lines) {
-      const match = l.match(re);
-      if (match != null && match.length >= 2) {
-        return match[1];
-      } else if (file.endsWith('config.txt') || file.endsWith('config.json')) {
+    const content = fs.readFileSync(file, 'utf-8');
+    if (!lcFile.endsWith('.json')) {
+      // This is likely an SHR text file, so detect type based on Grammar declaration
+      const re = /^\s*Grammar:\s+([^\s]+)/;
+      const lines = content.split('\n');
+      for (const l of lines) {
+        const match = l.match(re);
+        if (match != null && match.length >= 2) {
+          return match[1];
+        }
+      }
+    }
+    // No match yet, try parsing to see if it is a config file
+    try {
+      const fileJSON = JSON.parse(content);
+      // if it is a JSON w/ a projectName attribute, we assume it is a config file
+      if (fileJSON.projectName) {
         return 'Config';
       }
+    } catch (e) {
+      // No-op (couldn't parse JSON)
     }
   }
 }
