@@ -37,14 +37,14 @@ function sanityCheckModules(modelInfoMap) {
 }
 
 function clearEmptyFields(object, iteratively = false) {
-    Object.keys(object).forEach((key) => {
-      if (object[key] == null) delete object[key]; else
+  Object.keys(object).forEach((key) => {
+    if (object[key] == null) delete object[key]; else
       if (Array.isArray(object[key]) && object[key].length == 0) delete object[key]; else
       if (object[key] instanceof Object) {
         if (Object.keys(object[key]).length && iteratively) clearEmptyFields(object[key], true);
         if (!Object.keys(object[key]).length) delete object[key];
       }
-  })
+  });
 }
 
 class Specifications {
@@ -382,10 +382,10 @@ class Namespace {
 
   toJSON() {
     return {
-      "name": this.namespace,
-      "description": this.description,
-      "external_dependencies" : undefined
-    }
+      'name': this.namespace,
+      'description': this.description,
+      'external_dependencies': undefined
+    };
   }
 }
 
@@ -519,20 +519,20 @@ class DataElement {
 
   toJSON() {
     var output = {
-      "name":         this.identifier.name,
-      "namespace":    this.identifier.namespace,
-      "fqn":          this.identifier.fqn,
-      "isEntry":      this.isEntry,
-      "isAbstract":   this.isAbstract,
-      "description":  this.description,
-      "concepts":     this.concepts.map(c => c.toJSON()),
-      "hierarchy":    this._hierarchy.map(h => h.identifier.fqn), //full hierarchy
-      "basedOn":      this.basedOn.map(b => b.fqn || b.toString()),
-      "value":        this.value != null ? this.value.toJSON() : undefined,
-      "fields":       this._fields.map(f => f.toJSON()),
+      'name':         this.identifier.name,
+      'namespace':    this.identifier.namespace,
+      'fqn':          this.identifier.fqn,
+      'isEntry':      this.isEntry,
+      'isAbstract':   this.isAbstract,
+      'description':  this.description,
+      'concepts':     this.concepts.map(c => c.toJSON()),
+      'hierarchy':    this._hierarchy, //full hierarchy
+      'basedOn':      this.basedOn.map(b => b.fqn || b.toString()),
+      'value':        this.value != null ? this.value.toJSON() : undefined,
+      'fields':       this._fields.map(f => f.toJSON()),
     };
 
-    clearEmptyFields(output, true)
+    clearEmptyFields(output, true);
 
     return output;
   }
@@ -564,10 +564,10 @@ class Concept {
 
   toJSON() {
     return {
-      "system": this.system,
-      "code": this.code,
-      "display": this.display
-    }
+      'system': this.system,
+      'code': this.code,
+      'display': this.display
+    };
   }
 
 
@@ -729,16 +729,16 @@ class Cardinality {
 
   toJSON() {
     var out = {
-      "min": this._min,
-      "max": this._max
+      'min': this._min,
+      'max': this._max
     };
 
     if (this._history && this._history.length > 0) {
-      out["history"] = this._history.map(h => ({
-        "source": (h._source && h._source.fqn) ? h._source.fqn : undefined,
-        "min": h._min,
-        "max": h._max
-      }))
+      out['history'] = this._history.map(h => ({
+        'source': (h._source && h._source.fqn) ? h._source.fqn : undefined,
+        'min': h._min,
+        'max': h._max
+      }));
     }
 
     return out;
@@ -799,8 +799,8 @@ class Constraint {
 
   toJSON() {
     return {
-      "lastModifiedBy": (this.lastModifiedBy) ? this.lastModifiedBy.fqn : undefined,
-    }
+      'lastModifiedBy': (this.lastModifiedBy) ? this.lastModifiedBy.fqn : undefined,
+    };
   }
 
   toString() {
@@ -846,8 +846,8 @@ class ValueSetConstraint extends Constraint {
 
   toJSON() {
     return Object.assign({
-      "uri": this._valueSet,
-      "bindingStrength": this._bindingStrength
+      'uri': this._valueSet,
+      'bindingStrength': this._bindingStrength
 
     }, super.toJSON());
   }
@@ -881,10 +881,11 @@ class CodeConstraint extends Constraint {
 
   toJSON() {
     return Object.assign({
-      "type": "code",
-      "value": {
-        "system": this._code.system,
-        "code": this._code.code
+      'type': 'code',
+      'value': {
+        'system': this._code.system,
+        'code': this._code.code,
+        'display': this._code.display
       }
     }, super.toJSON());
   }
@@ -918,8 +919,9 @@ class IncludesCodeConstraint extends Constraint {
 
   toJSON() {
     return Object.assign({
-      "system": this._code.system,
-      "code": this._code.code
+      'system': this._code.system,
+      'code': this._code.code,
+      'description': this._code.display
     }, super.toJSON());
   }
 
@@ -952,11 +954,11 @@ class BooleanConstraint extends Constraint {
 
   toJSON() {
     var constraint = super.toJSON();
-    delete constraint["path"];
+    delete constraint['path'];
 
     return Object.assign({
-      "type": "boolean",
-      "value": this.value,
+      'type': 'boolean',
+      'value': this.value,
     }, constraint);
   }
 
@@ -1001,9 +1003,9 @@ class TypeConstraint extends Constraint {
 
   toJSON() {
     return Object.assign({
-      "fqn": this.isA.fqn,
-      "onValue": this.onValue
-    }, super.toJSON())
+      'fqn': this.isA.fqn,
+      'onValue': this.onValue
+    }, super.toJSON());
   }
 
   toString() {
@@ -1044,10 +1046,10 @@ class IncludesTypeConstraint extends Constraint {
 
   toJSON() {
     return Object.assign({
-      "fqn": this.isA.fqn,
-      "card": this.card.toJSON(),
-      "onValue": this.onValue
-    }, super.toJSON())
+      'fqn': this.isA.fqn,
+      'card': this.card.toJSON(),
+      'onValue': this.onValue
+    }, super.toJSON());
   }
 
   toString() {
@@ -1566,11 +1568,11 @@ class Value {
 
           outputDict[key].push(constraintJSON);
         } else if (dicConstraints.includes(key)) {
-          outputDict[key] = constraintJSON
+          outputDict[key] = constraintJSON;
         } else if (valConstraints.includes(key)) {
-          outputDict['fixedValue'] = constraintJSON
+          outputDict['fixedValue'] = constraintJSON;
         }
-      }
+      };
 
       if (constraint.path.length == 0) addToPath(out, true);
       else if (constraint.path.length  > 0) {
@@ -1579,8 +1581,8 @@ class Value {
           if (currentSubField['subpaths'] == null) currentSubField['subpaths'] = {};
           if (currentSubField['subpaths'][subP.fqn] == null) currentSubField['subpaths'][subP.fqn] = {};
           currentSubField = currentSubField['subpaths'][subP.fqn];
-        })
-        addToPath(currentSubField)
+        });
+        addToPath(currentSubField);
       }
 
       return out;
@@ -1594,7 +1596,7 @@ class Value {
 
     return {
       valueType: this.constructor.name,
-      card: (card) ? card.toJSON() : "TBD",
+      card: (card) ? card.toJSON() : 'TBD',
       constraints: Object.keys(constraints).length > 0 ? constraints : undefined,
       inheritance: (this._inheritance) ? {
         status: this._inheritance,
@@ -1673,7 +1675,7 @@ class IdentifiableValue extends Value {
   toJSON() {
     return Object.assign(
       {
-        "fqn": this.identifier.fqn,
+        'fqn': this.identifier.fqn,
       },
       super.toJSON()
     );
@@ -1693,7 +1695,7 @@ class RefValue extends IdentifiableValue {
   }
 
   toString() {
-    return `ref(${this.identifier.name})`
+    return `ref(${this.identifier.name})`;
   }
 }
 
@@ -1774,10 +1776,10 @@ class ChoiceValue extends Value {
 
   toJSON() {
     return Object.assign(super.toJSON(), {
-      "options": this._options.map(v => {
+      'options': this._options.map(v => {
         let option = v.toJSON();
-        delete option["card"]
-        return option
+        delete option['card'];
+        return option;
       })
     });
   }
@@ -1842,7 +1844,7 @@ class TBD extends Value{
   toJSON() {
     return Object.assign(
       {
-        "fqn" : this.toString()
+        'fqn' : this.toString()
       },
       super.toJSON()
     );
@@ -1980,20 +1982,20 @@ class ValueSet  {
   toJSON() {
     const rule = (ruleFilter) => ruleFilter._rules.map(r => r.toJSON());
     var out = {
-      "name":        this._identifier._name,
-      "namespace":   this._identifier.namespace,
-      "fqn":         this._identifier.fqn,
-      "description": this._description,
-      "concepts":    this.concepts.map(c => c.toJSON()),
-      "url":         this._url,
-      "values":      this.rulesFilter.includesCode._rules.map(r => r.toJSON()),
-      "rules": {
-        "includesDescendants":    rule(this.rulesFilter.includesDescendents),
-        "includesFromCode":       rule(this.rulesFilter.includesFromCode),
-        "includesFromCodeSystem": rule(this.rulesFilter.includesFromCodeSystem),
-        "excludesDescendants":    rule(this.rulesFilter.excludesDescendents),
+      'name':        this._identifier._name,
+      'namespace':   this._identifier.namespace,
+      'fqn':         this._identifier.fqn,
+      'description': this._description,
+      'concepts':    this.concepts.map(c => c.toJSON()),
+      'url':         this._url,
+      'values':      this.rulesFilter.includesCode._rules.map(r => r.toJSON()),
+      'rules': {
+        'includesDescendants':    rule(this.rulesFilter.includesDescendents),
+        'includesFromCode':       rule(this.rulesFilter.includesFromCode),
+        'includesFromCodeSystem': rule(this.rulesFilter.includesFromCodeSystem),
+        'excludesDescendants':    rule(this.rulesFilter.excludesDescendents),
       }
-    }
+    };
 
     clearEmptyFields(out, true);
 
@@ -2024,10 +2026,10 @@ class ValueSetIncludesCodeRule extends ValueSetCodeRule {
 
   toJSON() {
     return {
-      "system": this._code.system,
-      "code": this._code.code,
-      "description": this._code.display
-    }
+      'system': this._code.system,
+      'code': this._code.code,
+      'description': this._code.display
+    };
   }
 }
 
@@ -2044,10 +2046,10 @@ class ValueSetIncludesDescendentsRule extends ValueSetCodeRule {
 
   toJSON() {
     return {
-      "system": this._code.system,
-      "code": this._code.code,
-      "description": this._code.display
-    }
+      'system': this._code.system,
+      'code': this._code.code,
+      'description': this._code.display
+    };
   }
 }
 
@@ -2064,10 +2066,10 @@ class ValueSetExcludesDescendentsRule extends ValueSetCodeRule {
 
   toJSON() {
     return {
-      "system": this._code.system,
-      "code": this._code.code,
-      "description": this._code.display
-    }
+      'system': this._code.system,
+      'code': this._code.code,
+      'description': this._code.display
+    };
   }
 }
 
@@ -2085,7 +2087,7 @@ class ValueSetIncludesFromCodeSystemRule {
   }
 
   toJSON() {
-    return { "system": this._system };
+    return { 'system': this._system };
   }
 }
 
@@ -2102,10 +2104,10 @@ class ValueSetIncludesFromCodeRule extends ValueSetCodeRule {
 
   toJSON() {
     return {
-      "system":   this._code.system,
-      "code":     this._code.code,
-      "description":  this._code.display
-    }
+      'system':   this._code.system,
+      'code':     this._code.code,
+      'description':  this._code.display
+    };
   }
 }
 
@@ -2224,6 +2226,7 @@ class ElementMapping {
   set rules(rules) {
     this._rules = rules;
   }
+
   addRule(rule) {
     this._rules.push(rule);
   }
@@ -2275,6 +2278,27 @@ class ElementMapping {
     return this;
   }
 
+  get inheritance() { return this._inheritance; }
+  set inheritance(inheritance) {
+    this._inheritance = inheritance;
+  }
+
+  get inheritedFrom() { return this._inheritedFrom; }
+  set inheritedFrom(inheritedFrom) {
+    this._inheritedFrom = inheritedFrom;
+  }
+
+  withInheritedFrom(inheritedFrom) {
+    this.inheritedFrom = inheritedFrom;
+    return this;
+  }
+
+  // withInheritance is a convenience function for chaining
+  withInheritance(inheritance) {
+    this.inheritance = inheritance;
+    return this;
+  }
+
   clone() {
     const clone = new ElementMapping(this._identifier, this._targetSpec, this._targetItem);
     for (const rule of this._rules) {
@@ -2306,33 +2330,61 @@ class ElementMapping {
     */
 
     let out = {
-      "name": this.identifier.name,
-      "namespace": this.identifier.namespace,
-      "fqn": this.identifier.fqn,
-      "targetSpec": this.targetSpec,
-      "targetItem": this.targetItem,
-      "mappings": {
-        "fieldMapping": this.rulesFilter.field._rules.map(m => m.toJSON()), //TODO make hierarchial
-        "cardMapping": this.rulesFilter.cardinality._rules.map(m => m.toJSON()),
-        "fixedValueMapping": this.rulesFilter.fixedValue._rules.map(m => m.toJSON())
+      'name': this.identifier.name,
+      'namespace': this.identifier.namespace,
+      'fqn': this.identifier.fqn,
+      'targetSpec': this.targetSpec,
+      'targetItem': this.targetItem,
+      'inheritance': (this._inheritance) ? {
+        'status': this._inheritance,
+        'from': this._inheritedFrom.fqn,
+      } : undefined,
+      'mappings': {
+        'fieldMapping': this.rulesFilter.field._rules.map(m => m.toJSON()), //TODO make hierarchial
+        'cardMapping': this.rulesFilter.cardinality._rules.map(m => m.toJSON()),
+        'fixedValueMapping': this.rulesFilter.fixedValue._rules.map(m => m.toJSON())
       }
-    }
+    };
 
-    clearEmptyFields(out, true)
+    clearEmptyFields(out, true);
 
     return out;
   }
 }
 
-class FieldMappingRule {
 
-  constructor(sourcePath = [], target = '') {
-    this._sourcePath = sourcePath; // array of identifiers
+//Note: This should be considered abstract and never instantiated
+class MappingRule {
+  constructor(target = '') {
     this._target = target; // string
   }
 
-  get sourcePath() { return this._sourcePath; }
   get target() { return this._target; }
+
+  get lastModifiedBy() { return this._lastModifiedBy; }
+  set lastModifiedBy(lastModifiedBy) { this._lastModifiedBy = lastModifiedBy; }
+  // withLastModified is a convenience function for chaining
+  withLastModifiedBy(lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+    return this;
+  }
+
+  toJSON() {
+    return {
+      'target': this.target.replace(/[ \t]+$/,''),
+      'lastModifiedBy': (this.lastModifiedBy) ? this.lastModifiedBy.fqn : undefined,
+    };
+  }
+}
+
+class FieldMappingRule extends MappingRule {
+
+  constructor(sourcePath = [], target = '') {
+    super(target);
+    this._sourcePath = sourcePath; // array of identifiers
+  }
+
+  get sourcePath() { return this._sourcePath; }
 
   toString() {
     const sp = this._sourcePath.map(p => {
@@ -2343,25 +2395,28 @@ class FieldMappingRule {
 
   clone() {
     const clonedSP = this._sourcePath.map(p => p.clone());
-    return new FieldMappingRule(clonedSP, this._target);
+    const clone = new FieldMappingRule(clonedSP, this._target);
+    if (this.lastModifiedBy) {
+      clone.lastModifiedBy = this.lastModifiedBy;
+    }
+
+    return clone;
   }
 
   toJSON() {
-    return {
-      "target": this.target,
-      "sourcePath": this.sourcePath.map(s => s.fqn),
-    }
+    return Object.assign({
+      'sourcePath': this.sourcePath.map(s => (s.fqn) ? s.fqn : (s.text ? `TBD(${s.text})` : 'TBD')),
+    }, super.toJSON());
   }
 }
 
-class CardinalityMappingRule {
+class CardinalityMappingRule extends MappingRule {
 
   constructor(target = '', cardinality) {
-    this._target = target;   // string
+    super(target);
     this._cardinality = cardinality; // Cardinality
   }
 
-  get target() { return this._target; }
   get cardinality() { return this._cardinality; }
 
   toString() {
@@ -2369,25 +2424,27 @@ class CardinalityMappingRule {
   }
 
   clone() {
-    return new CardinalityMappingRule(this._target, this._cardinality.clone());
+    const clone = new CardinalityMappingRule(this._target, this._cardinality.clone());
+    if (this.lastModifiedBy) {
+      clone.lastModifiedBy = this.lastModifiedBy;
+    }
+
+    return clone;
   }
 
   toJSON() {
-    return {
-      "target": this._target,
-      "cardinality": this._cardinality,
-    }
+    return Object.assign({
+      'cardinality': this.cardinality,
+    }, super.toJSON());
   }
 }
 
-class FixedValueMappingRule {
-
-  constructor(target = '', value='') {
-    this._target = target;   // string
+class FixedValueMappingRule extends MappingRule {
+  constructor(target = '', value = '') {
+    super(target);
     this._value = value; // string
   }
 
-  get target() { return this._target; }
   get value() { return this._value; }
 
   toString() {
@@ -2395,14 +2452,18 @@ class FixedValueMappingRule {
   }
 
   clone() {
-    return new FixedValueMappingRule(this._target, this._value);
+    const clone = new FixedValueMappingRule(this._target, this._value);
+    if (this.lastModifiedBy) {
+      clone.lastModifiedBy = this.lastModifiedBy;
+    }
+
+    return clone;
   }
 
   toJSON() {
-    return {
-      "target": this._target,
-      "fixedValue": this._value,
-    }
+    return Object.assign({
+      'fixedValue': this.value,
+    }, super.toJSON());
   }
 }
 
