@@ -76,9 +76,9 @@ class Expander {
           let inheritance = null;
           for (const parent of parents) {
             if (parent.value) {
-              if (!(parent.value instanceof models.TBD)) {
-                inheritance = models.OVERRIDDEN;
-              }
+              // if (!(parent.value instanceof models.TBD)) {
+              inheritance = models.OVERRIDDEN;
+              // }
               if (parent.value.equals(de.value, true)) {
                 inheritance = models.INHERITED;
                 break;
@@ -90,20 +90,31 @@ class Expander {
           }
         }
         for (const field of de.fields) {
-          if (field instanceof models.TBD) {
-            // You can't track inheritance for a TBD field because there is no name associated with it.
-            continue;
-          }
           let inheritance = null;
           for (const parent of parents) {
-            const i = parent.fields.findIndex(item => {
-              return item instanceof models.IdentifiableValue && (item.identifier.equals(field.identifier) || item.effectiveIdentifier.equals(field.identifier));
-            });
-            if (i >= 0) {
-              inheritance = models.OVERRIDDEN;
-              if (field.equals(parent.fields[i], true)) {
-                inheritance = models.INHERITED;
-                break;
+            if (field instanceof models.TBD) {
+              // You can't track inheritance for a TBD field because there is no name associated with it.
+              const i = parent.fields.findIndex(item => {
+                return item instanceof models.TBD && (item.text === field.text);
+              });
+              if (i >= 0) {
+                inheritance = models.OVERRIDDEN;
+                if (field.equals(parent.fields[i], true)) {
+                  inheritance = models.INHERITED;
+                  break;
+                }
+              }
+              // continue;
+            } else {
+              const i = parent.fields.findIndex(item => {
+                return item instanceof models.IdentifiableValue && (item.identifier.equals(field.identifier) || item.effectiveIdentifier.equals(field.identifier));
+              });
+              if (i >= 0) {
+                inheritance = models.OVERRIDDEN;
+                if (field.equals(parent.fields[i], true)) {
+                  inheritance = models.INHERITED;
+                  break;
+                }
               }
             }
           }
@@ -374,21 +385,32 @@ class Expander {
         value's parents and cardinality constraint information from each parent source.
         */
         const manageCardHistory = (parent, child) => {
+          if (!child.card || !child.effectiveCard) return; //defensive programming against null cards
+
           if (child.effectiveCard.equals(child.card)) {
-            return;
+            // return;
           } else {
             if (parent.constraintsFilter.own.card.hasConstraints) {
               const oldCard = parent.constraintsFilter.own.card.constraints[0].card.clone();
-              oldCard.source = base.identifier;
-              if (!parent.card.history.find(h => h.source == oldCard.source)) { //if unique
+              oldCard.source = parent.constraintsFilter.own.card.constraints[0].lastModifiedBy;
+              if (!parent.card.history.find(h => h.source == oldCard.source || (h.min == oldCard.min && h.max == oldCard.max))) { //if unique
                 parent.card.withHistory(oldCard);
               }
             } else {
+              //Add original parent card into history (since card and effectiveCard are different and no history was inherited, this is definitely new)
               const oldCard = parent.card.clone();
               oldCard.source = base.identifier;
               child.card.withHistory(oldCard);
+
+              //if any child constraints exist, add them to history
+              if (child.constraintsFilter.own.card.hasConstraints) {
+                const newCard = child.constraintsFilter.own.card.constraints[0].card.clone();
+                newCard.source = child.constraintsFilter.own.card.constraints[0].lastModifiedBy;
+                child.card.withHistory(newCard);
+              }
             }
 
+            //prepend child history with inherited parent history
             if (parent.card.history) {
               if (!child.card.history) child.card.history = [];
               child.card.history.unshift(...parent.card.history);
@@ -406,7 +428,13 @@ class Expander {
         }
 
         for (const ef of element.fields) {
-          const baseField = base.fields.find(f => f.identifier != null && f.identifier.equals(ef.identifier));
+          const baseField = base.fields.find(f => {
+            if (f.identifier != null) {
+              return f.identifier.equals(ef.identifier);
+            } else if (f instanceof models.TBD) {
+              return ef instanceof models.TBD && f.text === ef.text;
+            }
+          });
           if (baseField) {
             manageValueInheritance(baseField, ef);
             manageCardHistory(baseField, ef);
@@ -415,7 +443,7 @@ class Expander {
           }
         }
 
-        element.hierarchy.push(...base.hierarchy, base);
+        element.hierarchy.push(...base.hierarchy, base.identifier.fqn);
       }
     }
   }
@@ -430,8 +458,14 @@ class Expander {
       return mergedValue;
     }
 
-    // Check that the class types match (except when new one is IncompleteValue or either one is a choice).  An error abandons the merge.
-    if (!(newValue instanceof models.IncompleteValue) && !(oldValue instanceof models.ChoiceValue) && !(newValue instanceof models.ChoiceValue) && newValue.constructor.name != oldValue.constructor.name) {
+    // Check that the class types match (except when new one is IncompleteValue, either one is a choice, or when the
+    // old value was a reference and the new value is an identifiable value (allowed to ease constraint authoring)).
+    // An error abandons the merge.
+    const sameValueType = newValue.constructor.name === oldValue.constructor.name;
+    const newValueIsIncomplete = newValue instanceof models.IncompleteValue;
+    const oneValueIsChoice = oldValue instanceof models.ChoiceValue || newValue instanceof models.ChoiceValue;
+    const identifiableValueConstrainingReference = oldValue instanceof models.RefValue && newValue instanceof models.IdentifiableValue;
+    if (!(sameValueType || newValueIsIncomplete || oneValueIsChoice || identifiableValueConstrainingReference)) {
       logger.error('Cannot override %s with %s. ERROR_CODE:12005', oldValue.toString(), newValue.toString());
       return mergedValue;
     }
@@ -1138,6 +1172,7 @@ class Expander {
                 newSourcePath[j] = match[k];
                 // Create a clone of the rule with the new sourcepath in it
                 const newRule = new models.FieldMappingRule(newSourcePath, rule.target);
+                newRule.lastModifiedBy = rule.lastModifiedBy;
                 // Insert it into the mappingRules for processing later
                 map.rules.splice(i+k, 0, newRule);
               }
@@ -1201,6 +1236,18 @@ class Expander {
     }
     // The list of maps is in order of priority, so create a new map with the targetItem based on the first returned map
     const fullMap = new models.ElementMapping(identifier, target, maps[0].targetItem);
+
+    if (maps.filter(map => map.identifier.fqn != identifier.fqn).length > 0) {
+      fullMap.inheritedFrom = maps.filter(map => map.identifier.fqn != identifier.fqn)[0].identifier;
+
+      const currMap = maps.find(map => map.identifier.fqn == identifier.fqn);
+      if (currMap) {
+        fullMap.inheritance = models.OVERRIDDEN;
+      } else {
+        fullMap.inheritance = models.INHERITED;
+      }
+    }
+
     // Since rules are applied in order, and later rules override earlier rules, we want rules from the higher priority
     // maps applied last.  For this reason, we iterate the collected maps backwards (so priority maps go last).  We
     // also keep track of already seen rules in order to reduce duplicates.
@@ -1210,6 +1257,9 @@ class Expander {
       for (const rule of map.rules) {
         const key = rule.toString();
         if (!seen.has(key)) {
+          if (!rule.lastModifiedBy) {
+            rule.lastModifiedBy = map.identifier;
+          }
           fullMap.addRule(rule.clone());
           seen.set(key, true);
         }

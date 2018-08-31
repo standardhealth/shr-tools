@@ -77,13 +77,13 @@ describe('#expandMap()', () => {
 
     expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-        .withFieldMappingRule([id('shr.test.c', 'C')], 'http://test.org/c')
-        .withFieldMappingRule([pid('string')], 'str')
-        .withFieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d')
-    );
+    const expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.c', 'C')], 'http://test.org/c').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([pid('string')], 'str').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d').withLastModifiedBy(id('shr.test', 'A')));
+
+    expect(eMa).to.eql(expected);
   });
 
   it('should resolve deep path identifiers in a mapping', () => {
@@ -104,11 +104,10 @@ describe('#expandMap()', () => {
 
     expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.z', 'Z')], 'z')
-        .withFieldMappingRule([id('shr.test.b', 'B'), id('shr.test.c', 'C'), id('shr.test.e', 'E')], 'b.c.e')
-    );
+    const expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test.z', 'Z')], 'z').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B'), id('shr.test.c', 'C'), id('shr.test.e', 'E')], 'b.c.e').withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
   });
 
   it('should support mapping _Concept, _Entry, and _Value', () => {
@@ -124,12 +123,11 @@ describe('#expandMap()', () => {
 
     expectNoErrors();
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('', '_Concept')], 'c')
-        .withFieldMappingRule([id('', '_Entry'), id('shr.base', 'EntryId')], 'e')
-        .withFieldMappingRule([pid('string')], 'v')
-    );
+    const expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('', '_Concept')], 'c').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([id('', '_Entry'), id('shr.base', 'EntryId')], 'e').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([pid('string')], 'v').withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
   });
 
 
@@ -148,11 +146,10 @@ describe('#expandMap()', () => {
 
     expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-        .withCardinalityMappingRule('z', new models.Cardinality(1, 2))
-    );
+    const expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.CardinalityMappingRule('z', new models.Cardinality(1, 2)).withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
   });
 
 
@@ -181,25 +178,28 @@ describe('#expandMap()', () => {
 
     expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-    );
+    let expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
+
     const eMa2 = findExpanded('TEST', 'shr.test', 'A2');
-    expect(eMa2).to.eql(
-      new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-        .withFieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d')
-        .withCardinalityMappingRule('z', new models.Cardinality(1, 2))
-    );
+    expected = new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a')
+      .withInheritance(models.OVERRIDDEN)
+      .withInheritedFrom(id('shr.test', 'A'));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d').withLastModifiedBy(id('shr.test', 'A2')));
+    expected.addRule(new models.CardinalityMappingRule('z', new models.Cardinality(1, 2)).withLastModifiedBy(id('shr.test', 'A2')));
+    expect(eMa2).to.eql(expected);
+
     const eMa3 = findExpanded('TEST', 'shr.test', 'A3');
-    expect(eMa3).to.eql(
-      new models.ElementMapping(id('shr.test', 'A3'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-        .withFieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d')
-        .withCardinalityMappingRule('z', new models.Cardinality(1, 2))
-        .withFieldMappingRule([id('shr.test.e', 'E')], 'e')
-    );
+    expected = new models.ElementMapping(id('shr.test', 'A3'), 'TEST', 'a')
+      .withInheritance(models.OVERRIDDEN)
+      .withInheritedFrom(id('shr.test', 'A2'));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d').withLastModifiedBy(id('shr.test', 'A2')));
+    expected.addRule(new models.CardinalityMappingRule('z', new models.Cardinality(1, 2)).withLastModifiedBy(id('shr.test', 'A2')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.e', 'E')], 'e').withLastModifiedBy(id('shr.test', 'A3')));
+    expect(eMa3).to.eql(expected);
   });
 
   it('should override mappings from based on elements', () => {
@@ -227,23 +227,26 @@ describe('#expandMap()', () => {
 
     expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-    );
+    let expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
+
     const eMa2 = findExpanded('TEST', 'shr.test', 'A2');
-    expect(eMa2).to.eql(
-      new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-        .withFieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d')
-    );
+    expected = new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a')
+      .withInheritance(models.OVERRIDDEN)
+      .withInheritedFrom(id('shr.test', 'A'));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d').withLastModifiedBy(id('shr.test', 'A2')));
+    expect(eMa2).to.eql(expected);
+
     const eMa3 = findExpanded('TEST', 'shr.test', 'A3');
-    expect(eMa3).to.eql(
-      new models.ElementMapping(id('shr.test', 'A3'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b+')
-        .withFieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d')
-        .withFieldMappingRule([id('shr.test.e', 'E')], 'e')
-    );
+    expected = new models.ElementMapping(id('shr.test', 'A3'), 'TEST', 'a')
+      .withInheritance(models.OVERRIDDEN)
+      .withInheritedFrom(id('shr.test', 'A2'));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b+').withLastModifiedBy(id('shr.test', 'A3')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d').withLastModifiedBy(id('shr.test', 'A2')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.e', 'E')], 'e').withLastModifiedBy(id('shr.test', 'A3')));
+    expect(eMa3).to.eql(expected);
   });
 
   it('should override mappings from based on elements when new mapping is on type constraint', () => {
@@ -269,15 +272,16 @@ describe('#expandMap()', () => {
 
     expect(err.hasErrors()).to.be.false;
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test', 'B')], 'b')
-    );
+    let expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
+
     const eMa2 = findExpanded('TEST', 'shr.test', 'A2');
-    expect(eMa2).to.eql(
-      new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test', 'B2')], 'b2')
-    );
+    expected = new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a')
+      .withInheritance(models.OVERRIDDEN)
+      .withInheritedFrom(id('shr.test', 'A'));
+    expected.addRule(new models.FieldMappingRule([id('shr.test', 'B2')], 'b2').withLastModifiedBy(id('shr.test', 'A2')));
+    expect(eMa2).to.eql(expected);
   });
 
   it('should report an error when there is an invalid path element and remove that rule', () => {
@@ -297,10 +301,9 @@ describe('#expandMap()', () => {
     expect(err.errors()[0].shrId).to.equal('shr.test.A');
     expect(err.errors()[0].msg).to.contain('Z');
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-    );
+    const expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
   });
 
   it('should report an error when there is an invalid deep path element and remove that rule', () => {
@@ -323,10 +326,9 @@ describe('#expandMap()', () => {
     expect(err.errors()[0].shrId).to.equal('shr.test.A');
     expect(err.errors()[0].msg).to.contain('X');
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.z', 'Z')], 'z')
-    );
+    const expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test.z', 'Z')], 'z').withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
   });
 
   it('should allow a based on class to have a different target than the mapping class, as long as that target is a super-type of the mapping class\'s target', () => {
@@ -351,17 +353,18 @@ describe('#expandMap()', () => {
 
     expect(err.errors()).to.have.length(0);
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-    );
+    let expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
+
     const eMa2 = findExpanded('TEST', 'shr.test', 'A2');
-    expect(eMa2).to.eql(
-      new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a2')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-        .withFieldMappingRule([pid('string')], 'str')
-        .withFieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d')
-    );
+    expected = new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a2')
+      .withInheritance(models.OVERRIDDEN)
+      .withInheritedFrom(id('shr.test', 'A'));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expected.addRule(new models.FieldMappingRule([pid('string')], 'str').withLastModifiedBy(id('shr.test', 'A2')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d').withLastModifiedBy(id('shr.test', 'A2')));
+    expect(eMa2).to.eql(expected);
   });
 
   it('should not inherit mappings when a based on class has a different target than the mapping class, and that target is not a super-type of the mapping class\'s target', () => {
@@ -385,16 +388,15 @@ describe('#expandMap()', () => {
 
     expect(err.errors()).to.have.length(0);
     const eMa = findExpanded('TEST', 'shr.test', 'A');
-    expect(eMa).to.eql(
-      new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
-        .withFieldMappingRule([id('shr.test.b', 'B')], 'b')
-    );
+    let expected = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a');
+    expected.addRule(new models.FieldMappingRule([id('shr.test.b', 'B')], 'b').withLastModifiedBy(id('shr.test', 'A')));
+    expect(eMa).to.eql(expected);
+
     const eMa2 = findExpanded('TEST', 'shr.test', 'A2');
-    expect(eMa2).to.eql(
-      new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a2')
-        .withFieldMappingRule([pid('string')], 'str')
-        .withFieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d')
-    );
+    expected = new models.ElementMapping(id('shr.test', 'A2'), 'TEST', 'a2');
+    expected.addRule(new models.FieldMappingRule([pid('string')], 'str').withLastModifiedBy(id('shr.test', 'A2')));
+    expected.addRule(new models.FieldMappingRule([id('shr.test.d', 'D')], 'http://test.org/d').withLastModifiedBy(id('shr.test', 'A2')));
+    expect(eMa2).to.eql(expected);
   });
 });
 
