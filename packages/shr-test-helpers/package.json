@@ -1,6 +1,6 @@
 {
   "name": "shr-test-helpers",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "Re-usable classes and functions for testing SHR tools",
   "author": "",
   "license": "Apache-2.0",
@@ -24,6 +24,7 @@
     "shr-models": "^5.5.0"
   },
   "dependencies": {
-    "fs-extra": "^5.0.0"
+    "fs-extra": "^5.0.0",
+    "shr-models": "^5.5.3"
   }
 }
