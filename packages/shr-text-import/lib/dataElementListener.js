@@ -535,6 +535,9 @@ class DataElementImporter extends SHRDataElementParserListener {
   }
 
   pushCurrentDefinition() {
+    if (this._specs.dataElements.findByIdentifier(this._currentDef.identifier) != null) {
+      logger.error('Name "%s" already exists. ERROR_CODE:11033', this._currentDef.identifier.name);
+    }
     this._specs.dataElements.add(this._currentDef);
     this._currentDef = null;
   }

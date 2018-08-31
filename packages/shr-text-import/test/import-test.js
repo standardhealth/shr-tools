@@ -921,7 +921,7 @@ describe('#importConfigFromFilePath', () => {
 
   it('should correctly import a basic configuration', () => {
     const configuration = importConfiguration('basicconfig');
-    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','implementationGuide');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','provenanceInfo','publisher','contact','fhirURL','implementationGuide');
     expect(configuration.projectName).to.eql('Test Project');
     expect(configuration.projectShorthand).to.eql('TEST');
     expect(configuration.projectURL).to.eql('http://test.org');
@@ -939,7 +939,7 @@ describe('#importConfigFromFilePath', () => {
 
   it('should correctly generate missing fhir url from project url when fhir url is missing', () => {
     const configuration = importConfiguration('incompletefhirconfig');
-    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','implementationGuide');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','provenanceInfo','publisher','contact','fhirURL','implementationGuide');
     expect(configuration.projectName).to.eql('Test Project');
     expect(configuration.projectShorthand).to.eql('TEST');
     expect(configuration.projectURL).to.eql('http://test.org');
@@ -958,7 +958,7 @@ describe('#importConfigFromFilePath', () => {
 
   it('should correctly import an incomplete configuration with partial default data', () => {
     const configuration = importConfiguration('incompleteconfig');
-    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','implementationGuide');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','provenanceInfo','publisher','contact','fhirURL','implementationGuide');
     expect(configuration.projectName).to.eql('Test Project');
     expect(configuration.projectShorthand).to.eql('EXAMPLE');
     expect(configuration.projectURL).to.eql('http://example.com');
@@ -989,7 +989,7 @@ describe('#importConfigFromFilePath', () => {
     }
     const configuration = importConfigurationFolder('emptyfolder');
     expect(fs.existsSync(cfgPath)).to.be.true;
-    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','publisher','contact','fhirURL','implementationGuide');
+    expect(configuration).to.have.all.keys('projectName','projectShorthand','projectURL','provenanceInfo','publisher','contact','fhirURL','implementationGuide');
     expect(configuration.projectName).to.eql('Example Project');
     expect(configuration.projectShorthand).to.eql('EXAMPLE');
     expect(configuration.projectURL).to.eql('http://example.com');

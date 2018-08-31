@@ -5,6 +5,3 @@ if (process.argv.length < 3) {
 }
 
 const result = importFromFilePath(process.argv[2]);
-for (const err of result.errors) {
-  console.error(`Import Error: ${err}`);
-}

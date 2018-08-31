@@ -16,5 +16,14 @@
                 }
             ]
         }
-    ]
+    ],
+    "provenanceInfo": {
+        "leadAuthor": {
+            "name":"Example Author",
+            "organization": "Example Publisher",
+            "email": "example@example.org"
+        },
+        "license": "Creative Commons CC-BY <https://creativecommons.org/licenses/by/3.0/>",
+        "copyright": "Copyright (c) The Example Organization <http://example.org>"
+    }
 }

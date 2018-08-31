@@ -257,6 +257,10 @@ class ValueSetImporter extends SHRValueSetParserListener {
       return;
     }
 
+    if (this._specs.valueSets.findByIdentifier(this._currentDef.identifier) != null) {
+      logger.error('Name "%s" already exists. ERROR_CODE:11034', this._currentDef.identifier.name);
+    }
+
     this._specs.valueSets.add(this._currentDef);
     this._currentDef = null;
     if (typeof this._currentCodeSystemDef !== 'undefined' && this._currentCodeSystemDef != null) {
