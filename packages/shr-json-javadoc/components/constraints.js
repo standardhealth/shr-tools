@@ -123,11 +123,11 @@ class Constraints {
   // Handles the value set constraint
   valueSet(constraint, subpath) {
     const name = 'Value Set';
-    const value = constraint.uri;
-    const lastMod = constraint.lastModifiedBy;
-    const href = constraint.uri;
     const binding = `(${constraint.bindingStrength})`;
-    const vConstraint = this.newConstraint(name, value, subpath, lastMod, href, binding);
+    const value = constraint.uri + ' ' + binding;
+    const lastMod = constraint.lastModifiedBy;
+    //const href = constraint.uri;
+    const vConstraint = this.newConstraint(name, value, subpath, lastMod, undefined, binding);
     this.constraints.push(vConstraint);
   }
 

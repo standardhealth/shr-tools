@@ -27,10 +27,17 @@ function exportToPath(compiledSHR, outPath) {
   compiledSHR.generateHTML();
 }
 
+function makeHtml(md) {
+  // First we need to escape < and >
+  if (md != null) {
+    md = md.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  return mdConverter.makeHtml(md);
+}
 
 // Function to generate and write html from an ejs template
 function renderEjsFile(template, pkg, destination) {
-  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, {mdConverter: mdConverter}), (error, htmlText) => {
+  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, {makeHtml: makeHtml}), (error, htmlText) => {
     if (error) logger.error('Error rendering model doc: %s', error);
     else fs.writeFileSync(destination, htmlText);
   });

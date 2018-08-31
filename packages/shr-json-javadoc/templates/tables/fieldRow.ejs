@@ -11,7 +11,7 @@
       <code><strong><a href="../<%= field.path %>/<%= field.name %>.html"><%= field.name %></a></strong></code>
     <% } %>
     </div>
-    <div class="block"><%- mdConverter.makeHtml(field.description) %></div>
+    <div class="block"><%- makeHtml(field.description) %></div>
   </td>
   <td class="colMiddle">
     <% field.pConstraints.forEach(function(constraint) { -%>
