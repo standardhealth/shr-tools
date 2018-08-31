@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const err = require('shr-test-helpers/errors');
 const Ajv = require('ajv');
 const {expect, assert} = require('chai');
@@ -10,12 +11,28 @@ const expander = require('shr-expand');
 
 sanityCheckModules({ 'shr-expand': expander, 'shr-test-helpers': export_tests });
 
+// define the fixFn to pass in to auto-fix broken tests
+function fixFn (name, result, errors) {
+  if (/^\s*(true|yes|1)\s*$/i.test(process.env.FIX_TEST_ERRORS)) {
+    if (result != null) {
+      const fixture = path.join(`${__dirname}/fixtures/`, `${name}.schema.json`);
+      console.error(`Fixing ${name} expected fixture to actual result.  Check ${fixture}.`);
+      fs.writeFileSync(fixture, JSON.stringify(result, null, 2));
+    }
+    if (errors.length) {
+      const fixture_err = path.join(`${__dirname}/fixtures/`, `${name}_errors.json`);
+      console.error(`Fixing ${name} expected errors fixture to actual errors.  Check ${fixture_err}.`);
+      fs.writeFileSync(fixture_err, JSON.stringify(errors.map(e => ({ msg: e.msg })), null, 2));
+    }
+  }
+}
+
 // Set the logger -- this is needed for detecting and checking errors
 setLogger(err.logger());
 expander.setLogger(err.logger());
 
 
-describe('#exportToJSONSchema()', commonExportTests(exportSpecifications, importFixture, importErrorsFixture));
+describe('#exportToJSONSchema()', commonExportTests(exportSpecifications, importFixture, importErrorsFixture, fixFn));
 
 function exportSpecifications(specifications) {
   const expSpecs = expander.expand(specifications);

@@ -1,6 +1,6 @@
 {
   "name": "shr-json-schema-export",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "description": "Exports SHR data elements from SHR models to JSON Schema",
   "author": "",
   "license": "Apache-2.0",
@@ -11,6 +11,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec --recursive",
+    "test:fix": "FIX_TEST_ERRORS=true ./node_modules/.bin/mocha --reporter spec --recursive",
     "test:watch": "npm test -- --watch",
     "test:debug": "./node_modules/.bin/mocha --inspect --debug-brk --reporter spec --recursive",
     "lint": "./node_modules/.bin/eslint .",
@@ -23,12 +24,12 @@
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "mocha": "^3.2.0",
-    "shr-expand": "^5.5.0",
-    "shr-models": "^5.5.0",
-    "shr-test-helpers": "^5.1.2"
+    "shr-expand": "^5.5.2",
+    "shr-models": "^5.5.3",
+    "shr-test-helpers": "^5.2.2"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9",
-    "shr-models": ">= 5.2.1 < 6"
+    "shr-models": "^5.5.3"
   }
 }

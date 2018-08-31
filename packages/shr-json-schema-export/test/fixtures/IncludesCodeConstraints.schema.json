@@ -3,16 +3,12 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
-    "type": "object",
-    "anyOf": [
-      { "$ref": "#/definitions/Coded" },
-      { "$ref": "#/definitions/IncludesCodesList" }
-    ],
     "definitions": {
       "IncludesCodesList": {
-        "description": "An entry with a includes codes constraint.",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry"
+          },
           {
             "type": "object",
             "properties": {
@@ -22,46 +18,147 @@
                 "items": {
                   "allOf": [
                     {
-                      "properties": {
-                        "Value": {
-                          "includesCodes": [
-                            { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"},
-                            { "code": "far", "codeSystem": "http://boo.org", "displayText": "Boofar"}
-                          ]
+                      "includesCodes": [
+                        {
+                          "code": "bar",
+                          "codeSystem": "http://foo.org",
+                          "displayText": "Foobar"
+                        },
+                        {
+                          "code": "far",
+                          "codeSystem": "http://boo.org",
+                          "displayText": "Boofar"
                         }
-                      }
+                      ]
                     },
-                    { "$ref": "#/definitions/Coded" }
+                    {
+                      "$ref": "https://standardhealthrecord.org/test/shr/core#/definitions/CodeableConcept"
+                    }
                   ]
                 }
               }
             }
           }
+        ],
+        "description": "An entry with a includes codes constraint."
+      }
+    },
+    "type": "object",
+    "anyOf": [
+      {
+        "$ref": "#/definitions/IncludesCodesList"
+      }
+    ]
+  },
+  "https://standardhealthrecord.org/test/shr/core": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/test/shr/core",
+    "title": "TODO: Figure out what the title should be.",
+    "definitions": {
+      "CodeableConcept": {
+        "type": "object",
+        "properties": {
+          "Coding": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/definitions/Coding"
+            }
+          },
+          "DisplayText": {
+            "$ref": "#/definitions/DisplayText"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "required": [
+          "EntryType"
         ]
       },
-      "Coded": {
-        "description": "It is a coded element",
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
+      "CodeSystem": {
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string",
+            "format": "uri"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "required": [
+          "Value",
+          "EntryType"
+        ]
+      },
+      "CodeSystemVersion": {
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "required": [
+          "Value",
+          "EntryType"
+        ]
+      },
+      "Coding": {
+        "type": "object",
+        "properties": {
+          "Value": {
             "type": "object",
             "properties": {
-              "Value": {
-                "type": "object",
-                "properties": {
-                  "code": { "type": "string" },
-                  "codeSystem": { "type": "string", "format": "uri" },
-                  "displayText": { "type": "string" }
-                },
-                "required": [ "code", "codeSystem" ],
-                "valueSet": {
-                  "uri": "http://standardhealthrecord.org/test/vs/Coded",
-                  "strength": "REQUIRED"
-                }
+              "code": {
+                "type": "string"
+              },
+              "codeSystem": {
+                "type": "string",
+                "format": "uri"
+              },
+              "displayText": {
+                "type": "string"
               }
             },
-            "required": ["Value"]
+            "required": [
+              "code",
+              "codeSystem"
+            ]
+          },
+          "CodeSystem": {
+            "$ref": "#/definitions/CodeSystem"
+          },
+          "CodeSystemVersion": {
+            "$ref": "#/definitions/CodeSystemVersion"
+          },
+          "DisplayText": {
+            "$ref": "#/definitions/DisplayText"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
           }
+        },
+        "required": [
+          "EntryType"
+        ]
+      },
+      "DisplayText": {
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "required": [
+          "Value",
+          "EntryType"
         ]
       }
     }
