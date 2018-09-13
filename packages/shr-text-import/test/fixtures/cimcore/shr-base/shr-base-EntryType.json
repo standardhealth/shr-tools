@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "EntryType",
+  "namespace": "shr.base",
+  "fqn": "shr.base.EntryType",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "SHR data element identifier, as a URI.",
+  "value": {
+    "fqn": "uri",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

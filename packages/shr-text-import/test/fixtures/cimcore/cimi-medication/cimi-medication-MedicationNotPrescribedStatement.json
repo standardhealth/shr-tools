@@ -1,0 +1,199 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationNotPrescribedStatement",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationNotPrescribedStatement",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A record of a medication NOT being prescribed. Recorded only when deviating from the normal expectation, care plan, or standard of care.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement"
+  ],
+  "basedOn": [
+    "cimi.statement.ClinicalStatement"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.medication.MedicationDispenseTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.medication.MedicationNotPrescribedStatement"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.medication.MedicationDispenseTopic",
+              "onValue": false,
+              "lastModifiedBy": "cimi.medication.MedicationNotPrescribedStatement"
+            },
+            "source": "cimi.medication.MedicationNotPrescribedStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.RequestedAgainstContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.medication.MedicationNotPrescribedStatement"
+        },
+        "subpaths": {
+          "cimi.context.Reason": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/cimi/medication/vs/MedicationNotUsedReasonVS",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "cimi.medication.MedicationNotPrescribedStatement"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/cimi/medication/vs/MedicationNotUsedReasonVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.medication.MedicationNotPrescribedStatement"
+            },
+            "source": "cimi.medication.MedicationNotPrescribedStatement"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.RequestedAgainstContext",
+              "onValue": false,
+              "lastModifiedBy": "cimi.medication.MedicationNotPrescribedStatement"
+            },
+            "source": "cimi.medication.MedicationNotPrescribedStatement"
+          }
+        ]
+      }
+    }
+  ]
+}

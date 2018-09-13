@@ -1,0 +1,58 @@
+{
+  "fileType": "Mapping",
+  "name": "AccessionIdentifier",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.AccessionIdentifier",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Identifier",
+  "inheritance": {
+    "status": "inherited",
+    "from": "cimi.element.Identifier"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "string"
+        ],
+        "target": "value",
+        "lastModifiedBy": "cimi.element.Identifier"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Purpose"
+        ],
+        "target": "use",
+        "lastModifiedBy": "cimi.element.Identifier"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "type",
+        "lastModifiedBy": "cimi.element.Identifier"
+      },
+      {
+        "sourcePath": [
+          "shr.core.CodeSystem"
+        ],
+        "target": "system",
+        "lastModifiedBy": "cimi.element.Identifier"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EffectiveTimePeriod"
+        ],
+        "target": "period",
+        "lastModifiedBy": "cimi.element.Identifier"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Issuer"
+        ],
+        "target": "assigner",
+        "lastModifiedBy": "cimi.element.Identifier"
+      }
+    ]
+  }
+}

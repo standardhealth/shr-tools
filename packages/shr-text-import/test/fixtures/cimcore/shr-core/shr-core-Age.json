@@ -1,0 +1,82 @@
+{
+  "fileType": "DataElement",
+  "name": "Age",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Age",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "How long something has existed in time.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0001779"
+    }
+  ],
+  "hierarchy": [
+    "shr.core.Quantity"
+  ],
+  "basedOn": [
+    "shr.core.Quantity"
+  ],
+  "value": {
+    "fqn": "decimal",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "inheritance": {
+      "status": "inherited",
+      "from": "shr.core.Quantity"
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.core.Comparator",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Quantity"
+      }
+    },
+    {
+      "fqn": "shr.core.Units",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Coding": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.Age"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "shr.core.Quantity"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.Age"
+            },
+            "source": "shr.core.Age"
+          }
+        ]
+      }
+    }
+  ]
+}

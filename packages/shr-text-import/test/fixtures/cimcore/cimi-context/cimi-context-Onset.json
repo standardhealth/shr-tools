@@ -1,0 +1,44 @@
+{
+  "fileType": "DataElement",
+  "name": "Onset",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.Onset",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The beginning or first appearance of a mental or physical disorder.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0277793"
+    }
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "dateTime",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.Age",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.TimePeriod",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.Range",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "string",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

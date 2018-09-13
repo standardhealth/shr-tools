@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "OverTheCounter",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.OverTheCounter",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "True if the medication is available to consumers without a prescription.",
+  "value": {
+    "fqn": "boolean",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

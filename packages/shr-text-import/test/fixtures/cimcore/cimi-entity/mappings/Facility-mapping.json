@@ -1,0 +1,75 @@
+{
+  "fileType": "Mapping",
+  "name": "Facility",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Facility",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-location",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.entity.FacilityName"
+        ],
+        "target": "name",
+        "lastModifiedBy": "cimi.entity.Facility"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Location",
+          "shr.core.Address"
+        ],
+        "target": "address",
+        "lastModifiedBy": "cimi.entity.Facility"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Location",
+          "shr.core.Geoposition",
+          "shr.core.Latitude"
+        ],
+        "target": "position.latitude",
+        "lastModifiedBy": "cimi.entity.Facility"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Location",
+          "shr.core.Geoposition",
+          "shr.core.Longitude"
+        ],
+        "target": "position.longitude",
+        "lastModifiedBy": "cimi.entity.Facility"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Location",
+          "shr.core.Geoposition",
+          "shr.core.Altitude"
+        ],
+        "target": "position.altitude",
+        "lastModifiedBy": "cimi.entity.Facility"
+      },
+      {
+        "sourcePath": [
+          "shr.core.ContactPoint"
+        ],
+        "target": "telecom",
+        "lastModifiedBy": "cimi.entity.Facility"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.ManagingOrganization"
+        ],
+        "target": "managingOrganization",
+        "lastModifiedBy": "cimi.entity.Facility"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "type",
+        "lastModifiedBy": "cimi.entity.Facility"
+      }
+    ]
+  }
+}

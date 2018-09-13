@@ -1,0 +1,30 @@
+{
+  "fileType": "ValueSet",
+  "name": "HER2StatusVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.HER2StatusVS",
+  "description": "HER2 status overall result",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#HER2StatusVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#HER2StatusCS",
+      "code": "not_amplified",
+      "description": "Negative/Not Amplified (IHC Score 0)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#HER2StatusCS",
+      "code": "negative",
+      "description": "Negative (IHC Score 1+) "
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#HER2StatusCS",
+      "code": "equivocal",
+      "description": "Equivocal (IHC Score 2+)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#HER2StatusCS",
+      "code": "positive",
+      "description": "Positive/Amplified (IHC Score 3+)"
+    }
+  ]
+}

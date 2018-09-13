@@ -1,0 +1,84 @@
+{
+  "fileType": "DataElement",
+  "name": "PatientOrGroup",
+  "namespace": "cimi.encounter",
+  "fqn": "cimi.encounter.PatientOrGroup",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A subject of information that is constrained to be either a patient or a group.",
+  "hierarchy": [
+    "cimi.core.SubjectOfInformation"
+  ],
+  "basedOn": [
+    "cimi.core.SubjectOfInformation"
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "inheritance": {
+      "status": "overridden",
+      "from": "cimi.core.SubjectOfInformation"
+    },
+    "options": [
+      {
+        "fqn": "cimi.entity.EntityOrRole",
+        "valueType": "RefValue",
+        "constraints": {
+          "type": {
+            "fqn": "cimi.entity.Patient",
+            "onValue": false
+          }
+        },
+        "constraintHistory": {
+          "type": [
+            {
+              "constraint": {
+                "fqn": "cimi.entity.Patient",
+                "onValue": false
+              },
+              "source": "cimi.encounter.PatientOrGroup"
+            }
+          ]
+        }
+      },
+      {
+        "fqn": "cimi.entity.EntityOrRole",
+        "valueType": "RefValue",
+        "constraints": {
+          "type": {
+            "fqn": "cimi.entity.Group",
+            "onValue": false
+          }
+        },
+        "constraintHistory": {
+          "type": [
+            {
+              "constraint": {
+                "fqn": "cimi.entity.Group",
+                "onValue": false
+              },
+              "source": "cimi.encounter.PatientOrGroup"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "fields": [
+    {
+      "fqn": "cimi.core.RelationshipToPersonOfRecord",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.SubjectOfInformation"
+      }
+    }
+  ]
+}

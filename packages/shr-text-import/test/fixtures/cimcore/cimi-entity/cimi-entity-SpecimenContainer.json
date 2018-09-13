@@ -1,0 +1,75 @@
+{
+  "fileType": "DataElement",
+  "name": "SpecimenContainer",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.SpecimenContainer",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "Direct container of specimen (tube&#47;slide, etc.)",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Entity"
+  ],
+  "basedOn": [
+    "cimi.entity.Entity"
+  ],
+  "fields": [
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.Identifier",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Details",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.Capacity",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.SpecimenQuantity",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.Additive",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.entity.SequenceNumber",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

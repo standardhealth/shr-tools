@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "EncounterClass",
+  "namespace": "cimi.encounter",
+  "fqn": "cimi.encounter.EncounterClass",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Concepts representing classification of patient encounter such as ambulatory (outpatient), inpatient, emergency, home health or others due to local variations.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,400 @@
+{
+  "fileType": "DataElement",
+  "name": "MilitaryServiceHistory",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.MilitaryServiceHistory",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "History of service in the US military.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded",
+    "cimi.statement.CodedEvaluationResultRecorded",
+    "cimi.statement.NonLabCodedEvaluationResultRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.NonLabCodedEvaluationResultRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.EvaluationResultTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.CodedEvaluationResultRecorded"
+            }
+          },
+          "cimi.entity.Device": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabCodedEvaluationResultRecorded"
+            }
+          },
+          "cimi.entity.Specimen": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabCodedEvaluationResultRecorded"
+            }
+          },
+          "shr.core.Category": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://hl7.org/fhir/observation-category",
+                    "code": "social-history"
+                  },
+                  "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+                }
+              }
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://ncimeta.nci.nih.gov",
+                    "code": "C3714797"
+                  },
+                  "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+                }
+              }
+            }
+          },
+          "cimi.topic.EvaluationComponent": {
+            "includesType": [
+              {
+                "fqn": "shr.occupation.MilitaryStatus",
+                "card": {
+                  "min": 1,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+              },
+              {
+                "fqn": "shr.occupation.MilitaryServiceDischargeStatus",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+              },
+              {
+                "fqn": "shr.occupation.MilitaryBranch",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+              },
+              {
+                "fqn": "shr.occupation.MilitaryServiceEra",
+                "card": {
+                  "min": 0
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+              },
+              {
+                "fqn": "shr.occupation.ServiceConnectedDisability",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+              }
+            ]
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "social-history"
+              },
+              "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+            },
+            "source": "shr.occupation.MilitaryServiceHistory"
+          },
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://ncimeta.nci.nih.gov",
+                "code": "C3714797"
+              },
+              "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+            },
+            "source": "shr.occupation.MilitaryServiceHistory"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          }
+        ],
+        "includesType": [
+          {
+            "constraint": {
+              "fqn": "shr.occupation.MilitaryStatus",
+              "card": {
+                "min": 1,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+            },
+            "source": "shr.occupation.MilitaryServiceHistory"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.occupation.MilitaryServiceDischargeStatus",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+            },
+            "source": "shr.occupation.MilitaryServiceHistory"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.occupation.MilitaryBranch",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+            },
+            "source": "shr.occupation.MilitaryServiceHistory"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.occupation.MilitaryServiceEra",
+              "card": {
+                "min": 0
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+            },
+            "source": "shr.occupation.MilitaryServiceHistory"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.occupation.ServiceConnectedDisability",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.occupation.MilitaryServiceHistory"
+            },
+            "source": "shr.occupation.MilitaryServiceHistory"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.CodedEvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.NonLabCodedEvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.NonLabCodedEvaluationResultRecorded"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "type": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "cimi.statement.CodedEvaluationResultRecorded"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true
+            },
+            "source": "cimi.statement.CodedEvaluationResultRecorded"
+          }
+        ]
+      }
+    }
+  ]
+}

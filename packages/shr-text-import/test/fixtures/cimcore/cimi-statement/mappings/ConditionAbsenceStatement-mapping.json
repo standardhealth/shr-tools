@@ -1,0 +1,8 @@
+{
+  "fileType": "Mapping",
+  "name": "ConditionAbsenceStatement",
+  "namespace": "cimi.statement",
+  "fqn": "cimi.statement.ConditionAbsenceStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Basic"
+}

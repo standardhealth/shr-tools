@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ResourceLocation",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ResourceLocation",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "URI where data can be found.",
+  "value": {
+    "fqn": "uri",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

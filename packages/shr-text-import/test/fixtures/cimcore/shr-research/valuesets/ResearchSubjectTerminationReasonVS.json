@@ -1,0 +1,45 @@
+{
+  "fileType": "ValueSet",
+  "name": "ResearchSubjectTerminationReasonVS",
+  "namespace": "shr.research",
+  "fqn": "shr.research.ResearchSubjectTerminationReasonVS",
+  "description": "The reason for a research subject leaving a research study.",
+  "url": "http://standardhealthrecord.org/shr/research/vs/#ResearchSubjectTerminationReasonVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#ResearchSubjectTerminationReasonCS",
+      "code": "moved",
+      "description": "Subject relocated"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#ResearchSubjectTerminationReasonCS",
+      "code": "died",
+      "description": "Suject passed away"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#ResearchSubjectTerminationReasonCS",
+      "code": "ended",
+      "description": "Study ended"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#ResearchSubjectTerminationReasonCS",
+      "code": "adverse",
+      "description": "Subject could not tolerate treatement"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#ResearchSubjectTerminationReasonCS",
+      "code": "protocol",
+      "description": "Subject could not follow protocol, e.g. required appointments, dosing schedule, etc."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#ResearchSubjectTerminationReasonCS",
+      "code": "other",
+      "description": "Other reason"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#ResearchSubjectTerminationReasonCS",
+      "code": "unknown",
+      "description": "Reason not known"
+    }
+  ]
+}

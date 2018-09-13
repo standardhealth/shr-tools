@@ -1,0 +1,49 @@
+{
+  "fileType": "ValueSet",
+  "name": "AgeGroupVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.AgeGroupVS",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#AgeGroupVS",
+  "values": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0935562",
+      "description": "Neonatal period (~0-1 mo)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0231330",
+      "description": "Infancy (~0-12 mo)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0599196",
+      "description": "Early childhood (~2-5)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0001578",
+      "description": "Teenage (~13-17)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0680085",
+      "description": "Early Adulthood (~18-35)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0205847",
+      "description": "Middle Aged (~36-64)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0001792",
+      "description": "Elderly (~65-79)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1999167",
+      "description": "Old Age (~80+)"
+    }
+  ]
+}

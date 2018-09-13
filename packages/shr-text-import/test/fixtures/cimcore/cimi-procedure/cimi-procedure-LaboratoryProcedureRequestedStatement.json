@@ -1,0 +1,219 @@
+{
+  "fileType": "DataElement",
+  "name": "LaboratoryProcedureRequestedStatement",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.LaboratoryProcedureRequestedStatement",
+  "isEntry": true,
+  "isAbstract": false,
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.ActionRequestedStatement",
+    "cimi.procedure.ProcedureRequestedStatement"
+  ],
+  "basedOn": [
+    "cimi.procedure.ProcedureRequestedStatement"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.entity.EntityOrRole": {
+            "type": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false,
+              "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false
+            },
+            "source": "cimi.procedure.ProcedureRequestedStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.procedure.LaboratoryProcedureTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.procedure.LaboratoryProcedureRequestedStatement"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.ActionTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.ActionRequestedStatement"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.procedure.ProcedureTopic",
+              "onValue": false
+            },
+            "source": "cimi.procedure.ProcedureRequestedStatement"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.procedure.LaboratoryProcedureTopic",
+              "onValue": false,
+              "lastModifiedBy": "cimi.procedure.LaboratoryProcedureRequestedStatement"
+            },
+            "source": "cimi.procedure.LaboratoryProcedureRequestedStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.procedure.ProcedureRequestedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.RequestedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.ActionRequestedStatement"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.procedure.ProcedureRequestedContext",
+              "onValue": false
+            },
+            "source": "cimi.procedure.ProcedureRequestedStatement"
+          }
+        ]
+      }
+    }
+  ]
+}

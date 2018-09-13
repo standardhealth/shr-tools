@@ -1,0 +1,20 @@
+{
+  "fileType": "ValueSet",
+  "name": "MammaprintRiskScoreInterpretationVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.MammaprintRiskScoreInterpretationVS",
+  "description": "Intepretation of Mammaprint Recurrence Score",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#MammaprintRiskScoreInterpretationVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MammaprintRiskScoreInterpretationCS",
+      "code": "low_risk",
+      "description": "Score between 0.0 and +1.0, meaning a patient has on average a 10% chance that her cancer will recur within 10 years without any additional adjuvant treatment, either hormonal therapy or chemotherapy."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MammaprintRiskScoreInterpretationCS",
+      "code": "high_risk",
+      "description": "Score between -1.0 and 0.0, meaning a patient has a 29% chance that her cancer will recur within 10 years without any additional adjuvant treatment, either hormonal therapy or chemotherapy."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "fileType": "DataElement",
+  "name": "DriversLicenseNumber",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.DriversLicenseNumber",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Identifying information from a drivers license.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.entity.StateOfIssue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.EffectiveTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

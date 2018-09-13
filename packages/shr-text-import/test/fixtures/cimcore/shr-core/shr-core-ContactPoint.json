@@ -1,0 +1,79 @@
+{
+  "fileType": "DataElement",
+  "name": "ContactPoint",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ContactPoint",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An electronic means of contacting an organization or individual.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2986441"
+    }
+  ],
+  "fields": [
+    {
+      "fqn": "shr.core.TelecomNumberOrAddress",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/contact-point-system",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.ContactPoint"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "shr.core.Purpose",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Coding": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/contact-point-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.ContactPoint"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "shr.core.PriorityRank",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.EffectiveTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

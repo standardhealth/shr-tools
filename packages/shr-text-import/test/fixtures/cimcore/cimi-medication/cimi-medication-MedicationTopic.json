@@ -1,0 +1,60 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationTopic",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationTopic",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Base class for actions involving medications, independent of context.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic",
+    "cimi.topic.ActionTopic"
+  ],
+  "basedOn": [
+    "cimi.topic.ActionTopic"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.StatementTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Category",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.ActionTopic"
+      }
+    },
+    {
+      "fqn": "cimi.entity.Medication",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.medication.Dosage",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

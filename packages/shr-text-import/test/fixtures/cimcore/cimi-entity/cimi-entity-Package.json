@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Package",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Package",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The kind of container the medication comes in.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

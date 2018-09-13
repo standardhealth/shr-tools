@@ -1,0 +1,369 @@
+{
+  "fileType": "DataElement",
+  "name": "DCISNuclearGrade",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.DCISNuclearGrade",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "An evaluation of the size and shape of the nucleus in tumor cells and the percentage of tumor cells that are in the process of dividing or growing. Cancers with low nuclear grade grow and spread less quickly than cancers with high nuclear grade.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C18513"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded",
+    "cimi.statement.LaboratoryTestResultRecorded",
+    "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.EvaluationResultTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "shr.core.Category": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://hl7.org/fhir/observation-category",
+                    "code": "laboratory"
+                  },
+                  "lastModifiedBy": "cimi.statement.LaboratoryTestResultRecorded"
+                }
+              }
+            }
+          },
+          "cimi.topic.Precondition": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+            }
+          },
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+            }
+          },
+          "cimi.element.AnatomicalLocation": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+            }
+          },
+          "cimi.entity.Specimen": {
+            "type": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://ncimeta.nci.nih.gov",
+                    "code": "C18513"
+                  },
+                  "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+                }
+              }
+            }
+          },
+          "cimi.topic.EvaluationComponent": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "laboratory"
+              }
+            },
+            "source": "cimi.statement.LaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://ncimeta.nci.nih.gov",
+                "code": "C18513"
+              },
+              "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+            },
+            "source": "shr.oncology.DCISNuclearGrade"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+            },
+            "source": "shr.oncology.DCISNuclearGrade"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+            },
+            "source": "shr.oncology.DCISNuclearGrade"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "type": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+            },
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/shr/oncology/vs/NuclearGradeVS",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/NuclearGradeVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+            },
+            "source": "shr.oncology.DCISNuclearGrade"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.DCISNuclearGrade"
+            },
+            "source": "shr.oncology.DCISNuclearGrade"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.statement.DiagnosticService",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.LaboratoryTestResultRecorded"
+      }
+    },
+    {
+      "fqn": "cimi.topic.PanelMembers",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+      }
+    }
+  ]
+}

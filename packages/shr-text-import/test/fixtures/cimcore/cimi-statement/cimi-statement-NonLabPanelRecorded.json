@@ -1,0 +1,265 @@
+{
+  "fileType": "DataElement",
+  "name": "NonLabPanelRecorded",
+  "namespace": "cimi.statement",
+  "fqn": "cimi.statement.NonLabPanelRecorded",
+  "isEntry": false,
+  "isAbstract": false,
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.EvaluationResultRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.PanelTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+        },
+        "subpaths": {
+          "cimi.entity.Device": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          },
+          "cimi.entity.Specimen": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          },
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.topic.PanelTopic",
+              "onValue": false,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          },
+          "cimi.context.ExceptionValue": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          }
+        ]
+      }
+    }
+  ]
+}

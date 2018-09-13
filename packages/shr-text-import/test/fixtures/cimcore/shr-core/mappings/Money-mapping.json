@@ -1,0 +1,57 @@
+{
+  "fileType": "Mapping",
+  "name": "Money",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Money",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Money",
+  "inheritance": {
+    "status": "overridden",
+    "from": "shr.core.Quantity"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "decimal"
+        ],
+        "target": "value",
+        "lastModifiedBy": "shr.core.Quantity"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Units",
+          "shr.core.Coding",
+          "code"
+        ],
+        "target": "code",
+        "lastModifiedBy": "shr.core.Quantity"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Units",
+          "shr.core.Coding",
+          "shr.core.CodeSystem"
+        ],
+        "target": "system",
+        "lastModifiedBy": "shr.core.Quantity"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Units",
+          "shr.core.Coding",
+          "shr.core.DisplayText"
+        ],
+        "target": "unit",
+        "lastModifiedBy": "shr.core.Quantity"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Comparator"
+        ],
+        "target": "comparator",
+        "lastModifiedBy": "shr.core.Quantity"
+      }
+    ]
+  }
+}

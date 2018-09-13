@@ -1,0 +1,29 @@
+{
+  "fileType": "DataElement",
+  "name": "State",
+  "namespace": "shr.core",
+  "fqn": "shr.core.State",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (i.e. US 2 letter state codes). (Source: HL7 FHIR).",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1552743"
+    }
+  ],
+  "hierarchy": [
+    "shr.core.GeopoliticalLocation"
+  ],
+  "basedOn": [
+    "shr.core.GeopoliticalLocation"
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

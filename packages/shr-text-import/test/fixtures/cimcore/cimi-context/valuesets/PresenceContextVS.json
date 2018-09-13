@@ -1,0 +1,40 @@
+{
+  "fileType": "ValueSet",
+  "name": "PresenceContextVS",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.PresenceContextVS",
+  "description": "A code describing whether the finding in question is present, possible, suspected, etc.",
+  "url": "http://standardhealthrecord.org/cimi/context/vs/#PresenceContextVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410515003",
+      "description": "Known present"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410590009",
+      "description": "Known possible"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410592001",
+      "description": "Probably present"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "415684004",
+      "description": "Suspected"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410593006",
+      "description": "Probably not present"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "261665006",
+      "description": "Unknown"
+    }
+  ]
+}

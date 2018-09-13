@@ -1,0 +1,68 @@
+{
+  "fileType": "Mapping",
+  "name": "Organization",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Organization",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-organization",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.entity.OrganizationName"
+        ],
+        "target": "name",
+        "lastModifiedBy": "cimi.entity.Organization"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.OrganizationAlias"
+        ],
+        "target": "alias  // I wish FHIR allowed multiple names, but it doesn't",
+        "lastModifiedBy": "cimi.entity.Organization"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "type",
+        "lastModifiedBy": "cimi.entity.Organization"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.OrganizationIdentifier"
+        ],
+        "target": "identifier",
+        "lastModifiedBy": "cimi.entity.Organization"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Address"
+        ],
+        "target": "address",
+        "lastModifiedBy": "cimi.entity.Organization"
+      },
+      {
+        "sourcePath": [
+          "shr.core.ContactPoint"
+        ],
+        "target": "contact",
+        "lastModifiedBy": "cimi.entity.Organization"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.ActiveFlag"
+        ],
+        "target": "active",
+        "lastModifiedBy": "cimi.entity.Organization"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.PartOf"
+        ],
+        "target": "partOf",
+        "lastModifiedBy": "cimi.entity.Organization"
+      }
+    ]
+  }
+}

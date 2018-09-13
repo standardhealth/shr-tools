@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "RelevantTime",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.RelevantTime",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The time or time period that the finding addresses.\n\nThe clinically relevant time is not necessarily when the information is gathered or when a test is carried out, but for example, when a specimen was collected, or the time period referred to by the question. Use a TimePeriod for a measurement or specimen collection continued over a significant period of time (e.g. 24 hour Urine Sodium).",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "dateTime",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.TimePeriod",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

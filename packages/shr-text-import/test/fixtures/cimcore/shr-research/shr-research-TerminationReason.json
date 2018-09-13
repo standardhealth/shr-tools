@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "TerminationReason",
+  "namespace": "shr.research",
+  "fqn": "shr.research.TerminationReason",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A description and/or code explaining the premature termination of the study.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

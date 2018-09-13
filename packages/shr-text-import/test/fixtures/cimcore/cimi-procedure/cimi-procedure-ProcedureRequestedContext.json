@@ -1,0 +1,236 @@
+{
+  "fileType": "DataElement",
+  "name": "ProcedureRequestedContext",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.ProcedureRequestedContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The requested context with additional constraints applicable to procedures.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.ActionContext",
+    "cimi.context.RequestedContext"
+  ],
+  "basedOn": [
+    "cimi.context.RequestedContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Reason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.ActionContext"
+      }
+    },
+    {
+      "fqn": "cimi.element.Status",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.procedure.ProcedureRequestedContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.context.RequestedContext"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-status",
+              "bindingStrength": "PREFERRED"
+            },
+            "source": "cimi.context.RequestedContext"
+          },
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.procedure.ProcedureRequestedContext"
+            },
+            "source": "cimi.procedure.ProcedureRequestedContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.encounter.Encounter",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.RequestedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.RequestIntent",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.RequestedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.ExpectedPerformanceTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.RequestedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.ExpectedPerformerType",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.RequestedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.ExpectedPerformer",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.RequestedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.ExpectedMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.RequestedContext"
+      }
+    },
+    {
+      "fqn": "shr.core.PriorityRank",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-priority",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.procedure.ProcedureRequestedContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.context.RequestedContext"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-priority",
+              "bindingStrength": "PREFERRED"
+            },
+            "source": "cimi.context.RequestedContext"
+          },
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-priority",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.procedure.ProcedureRequestedContext"
+            },
+            "source": "cimi.procedure.ProcedureRequestedContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.PerformerInstructions",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.RequestedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.PatientInstructions",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.RequestedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.CommunicationMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.RequestedContext"
+      }
+    }
+  ]
+}

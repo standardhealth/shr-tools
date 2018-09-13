@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "VerificationStatus",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.VerificationStatus",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Whether an assessment has been confirmed by testing or observation.\nCIMI Alignment: This attribute corresponds to FindingContext.status, but has been defined to align with FHIR. In AllergyIntolerance, the type is code.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

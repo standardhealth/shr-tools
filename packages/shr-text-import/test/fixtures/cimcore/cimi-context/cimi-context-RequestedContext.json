@@ -1,0 +1,183 @@
+{
+  "fileType": "DataElement",
+  "name": "RequestedContext",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.RequestedContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An order for something to take place.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1705178"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.ActionContext"
+  ],
+  "basedOn": [
+    "cimi.context.ActionContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Reason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.ActionContext"
+      }
+    },
+    {
+      "fqn": "cimi.element.Status",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-status",
+              "bindingStrength": "PREFERRED",
+              "lastModifiedBy": "cimi.context.RequestedContext"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-status",
+              "bindingStrength": "PREFERRED",
+              "lastModifiedBy": "cimi.context.RequestedContext"
+            },
+            "source": "cimi.context.RequestedContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.encounter.Encounter",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.RequestIntent",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.ExpectedPerformanceTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.ExpectedPerformerType",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.ExpectedPerformer",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.ExpectedMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.PriorityRank",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-priority",
+              "bindingStrength": "PREFERRED",
+              "lastModifiedBy": "cimi.context.RequestedContext"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/request-priority",
+              "bindingStrength": "PREFERRED",
+              "lastModifiedBy": "cimi.context.RequestedContext"
+            },
+            "source": "cimi.context.RequestedContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.PerformerInstructions",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.PatientInstructions",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.CommunicationMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

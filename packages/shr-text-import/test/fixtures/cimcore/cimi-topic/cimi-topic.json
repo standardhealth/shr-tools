@@ -1,0 +1,5 @@
+{
+  "fileType": "Namespace",
+  "name": "cimi.topic",
+  "description": "The Topic Core package contains the top-level specializations of the Statement Topic class, namely, the FindingTopic, ActionTopic (ProcedureTopic), and EventTopic classes."
+}

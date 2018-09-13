@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "PositiveNegativeEquivocalVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.PositiveNegativeEquivocalVS",
+  "description": "Interpretation of a test result as positive, negative or equivocal.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#PositiveNegativeEquivocalVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "10828004",
+      "description": "Positive (qualifier value)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "42425007",
+      "description": "Equivocal (qualifier value)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "260385009",
+      "description": "Negative (qualifier value)"
+    }
+  ]
+}

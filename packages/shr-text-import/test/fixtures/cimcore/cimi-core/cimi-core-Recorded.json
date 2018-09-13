@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Recorded",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.Recorded",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The person who entered the order on behalf of another individual for example in the case of a verbal or a telephone order.",
+  "value": {
+    "fqn": "cimi.core.Attribution",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

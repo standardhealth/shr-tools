@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "MobileFacility",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.MobileFacility",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A facility that moves from place to place, such as Meals-On-Wheels.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0231435"
+    }
+  ],
+  "value": {
+    "fqn": "boolean",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

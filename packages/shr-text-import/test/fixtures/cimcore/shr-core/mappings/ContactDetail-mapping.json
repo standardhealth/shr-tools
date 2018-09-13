@@ -1,0 +1,27 @@
+{
+  "fileType": "Mapping",
+  "name": "ContactDetail",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ContactDetail",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "ContactDetail",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.HumanName",
+          "cimi.element.NameAsText"
+        ],
+        "target": "name",
+        "lastModifiedBy": "shr.core.ContactDetail"
+      },
+      {
+        "sourcePath": [
+          "shr.core.ContactPoint"
+        ],
+        "target": "telecom",
+        "lastModifiedBy": "shr.core.ContactDetail"
+      }
+    ]
+  }
+}

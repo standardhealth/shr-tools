@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Entity",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Entity",
+  "isEntry": false,
+  "isAbstract": true,
+  "description": "Root class for entities such as people, organizations, and devices that have a separately identifiable existence.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole"
+  ],
+  "basedOn": [
+    "cimi.entity.EntityOrRole"
+  ]
+}

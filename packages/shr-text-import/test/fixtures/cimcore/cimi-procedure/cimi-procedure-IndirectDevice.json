@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "IndirectDevice",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.IndirectDevice",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An indirect device used for this procedure.",
+  "value": {
+    "fqn": "cimi.entity.Device",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

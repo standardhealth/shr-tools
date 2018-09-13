@@ -1,0 +1,23 @@
+{
+  "fileType": "ValueSet",
+  "name": "AnatomicalLocationVS",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.AnatomicalLocationVS",
+  "description": "Codes that describe normal and pathologic anatomic systems, regions, cavities, and spaces.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1545955"
+    }
+  ],
+  "url": "http://standardhealthrecord.org/cimi/element/vs/#AnatomicalLocationVS",
+  "rules": {
+    "includesDescendants": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "123037004",
+        "description": "Body Structure"
+      }
+    ]
+  }
+}

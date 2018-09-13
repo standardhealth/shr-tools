@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "IngredientAmount",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.IngredientAmount",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The amount of an ingredient in a mixture, as a ratio. For example, 250 mg per tablet is expressed as a ratio where the numerator is 250mg and the denominator is 1 tablet.",
+  "value": {
+    "fqn": "shr.core.Ratio",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

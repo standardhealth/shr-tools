@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ResourceSize",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ResourceSize",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Number of bytes of content in the resource (if url provided)",
+  "value": {
+    "fqn": "unsignedInt",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

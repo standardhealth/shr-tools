@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "VendorModelNumber",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.VendorModelNumber",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The model number of the device, assigned by the manufacturer or vendor.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

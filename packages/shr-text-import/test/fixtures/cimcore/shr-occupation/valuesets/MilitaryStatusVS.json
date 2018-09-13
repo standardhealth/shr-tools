@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "MilitaryStatusVS",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.MilitaryStatusVS",
+  "description": "The current status of the person in armed services.",
+  "url": "http://standardhealthrecord.org/shr/occupation/vs/#MilitaryStatusVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryStatusCS",
+      "code": "active",
+      "description": "On active duty in US military"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryStatusCS",
+      "code": "reserve",
+      "description": "Currently a Reservist"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryStatusCS",
+      "code": "discharged",
+      "description": "No longer in active military service"
+    }
+  ]
+}

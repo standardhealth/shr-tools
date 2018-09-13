@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Issuer",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Issuer",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An organization who issues a qualification, identifier, or license.",
+  "value": {
+    "fqn": "cimi.entity.Organization",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

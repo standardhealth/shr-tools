@@ -1,0 +1,93 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationDispenseTopic",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationDispenseTopic",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "The action of ordering and deliving a medication to the party responsible for administering the medication.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic",
+    "cimi.topic.ActionTopic",
+    "cimi.medication.MedicationTopic"
+  ],
+  "basedOn": [
+    "cimi.medication.MedicationTopic"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.StatementTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Category",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.ActionTopic"
+      }
+    },
+    {
+      "fqn": "cimi.entity.Medication",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.medication.MedicationTopic"
+      }
+    },
+    {
+      "fqn": "cimi.medication.Dosage",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.medication.MedicationTopic"
+      }
+    },
+    {
+      "fqn": "cimi.medication.NumberOfRefillsAllowed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.medication.QuantityPerDispense",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.medication.SupplyDuration",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

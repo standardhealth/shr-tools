@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "MaxCount",
+  "namespace": "shr.core",
+  "fqn": "shr.core.MaxCount",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Upper bound on a count.",
+  "value": {
+    "fqn": "integer",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

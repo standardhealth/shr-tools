@@ -1,0 +1,77 @@
+{
+  "fileType": "Mapping",
+  "name": "MedicationNotUsedStatement",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationNotUsedStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationstatement",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.core.SourceOfInformation",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "informationSource",
+        "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "_Entry",
+          "shr.core.CreationTime"
+        ],
+        "target": "dateAsserted",
+        "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationUseTopic",
+          "cimi.entity.Medication"
+        ],
+        "target": "medication[x]",
+        "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationUseTopic",
+          "shr.core.Category"
+        ],
+        "target": "category",
+        "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.NotPerformedContext",
+          "cimi.context.Reason"
+        ],
+        "target": "reasonNotTaken",
+        "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.NotPerformedContext",
+          "shr.core.NonOccurrenceTimeOrPeriod"
+        ],
+        "target": "effective[x]",
+        "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "dosage",
+        "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
+      }
+    ],
+    "fixedValueMapping": [
+      {
+        "fixedValue": "#n",
+        "target": "taken",
+        "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
+      }
+    ]
+  }
+}

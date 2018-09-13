@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "LifeEventOffset",
+  "namespace": "shr.core",
+  "fqn": "shr.core.LifeEventOffset",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A time in minutes before or after a given life event, for example, 30 minutes before a meal. Whether this means before or after is carried by the life event code.",
+  "value": {
+    "fqn": "unsignedInt",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "ContactDetail",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ContactDetail",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Describes an individual and how to reach them.",
+  "fields": [
+    {
+      "fqn": "shr.core.HumanName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.ContactPoint",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

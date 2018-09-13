@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ParticipationPeriod",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.ParticipationPeriod",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The point in time or span of time the participant is involved.",
+  "value": {
+    "fqn": "shr.core.TimePeriod",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

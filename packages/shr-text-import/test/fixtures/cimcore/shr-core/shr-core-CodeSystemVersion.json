@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "CodeSystemVersion",
+  "namespace": "shr.core",
+  "fqn": "shr.core.CodeSystemVersion",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The version of the vocabulary being used, if applicable.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

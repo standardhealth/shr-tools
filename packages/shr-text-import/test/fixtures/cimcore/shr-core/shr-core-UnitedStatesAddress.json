@@ -1,0 +1,224 @@
+{
+  "fileType": "DataElement",
+  "name": "UnitedStatesAddress",
+  "namespace": "shr.core",
+  "fqn": "shr.core.UnitedStatesAddress",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An address for a place in the USA, conforming to US mail postal conventions. (Source: HL7 FHIR).",
+  "hierarchy": [
+    "shr.core.Address"
+  ],
+  "basedOn": [
+    "shr.core.Address"
+  ],
+  "fields": [
+    {
+      "fqn": "shr.core.Purpose",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Coding": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/address-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.Address"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Address"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/address-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.Address"
+            },
+            "source": "shr.core.UnitedStatesAddress"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/address-type",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.Address"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Address"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/address-type",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.Address"
+            },
+            "source": "shr.core.UnitedStatesAddress"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.DisplayText",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Address"
+      }
+    },
+    {
+      "fqn": "shr.core.AddressLine",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 2
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Address"
+      }
+    },
+    {
+      "fqn": "shr.core.City",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Address"
+      }
+    },
+    {
+      "fqn": "shr.core.District",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Address"
+      }
+    },
+    {
+      "fqn": "shr.core.State",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1,
+        "history": [
+          {
+            "source": "shr.core.Address",
+            "min": 0,
+            "max": 1
+          },
+          {
+            "source": "shr.core.UnitedStatesAddress",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.core.UnitedStatesState",
+          "onValue": false,
+          "lastModifiedBy": "shr.core.UnitedStatesAddress"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "shr.core.Address"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.core.UnitedStatesState",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.UnitedStatesAddress"
+            },
+            "source": "shr.core.UnitedStatesAddress"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 1,
+              "max": 1,
+              "lastModifiedBy": "shr.core.UnitedStatesAddress"
+            },
+            "source": "shr.core.UnitedStatesAddress"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.PostalCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Address"
+      }
+    },
+    {
+      "fqn": "shr.core.Country",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Address"
+      }
+    },
+    {
+      "fqn": "shr.core.EffectiveTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Address"
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "SocialSecurityNumber",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.SocialSecurityNumber",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A US social security number (SSN).",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1301821"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

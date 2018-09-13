@@ -1,0 +1,129 @@
+{
+  "fileType": "DataElement",
+  "name": "BreastCancerPrimaryTumorClassification",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastCancerPrimaryTumorClassification",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The size and extent of the primary tumor, based on criteria defined by the staging system being used.",
+  "concepts": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "78873005",
+      "display": "T category"
+    }
+  ],
+  "hierarchy": [
+    "cimi.topic.EvaluationComponent",
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "basedOn": [
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.ComponentResultValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.core.CodeableConcept",
+          "onValue": true,
+          "lastModifiedBy": "cimi.topic.CodedEvaluationComponent"
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.ExceptionValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.Interpretation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.topic.EvaluationComponent",
+            "min": 0
+          },
+          {
+            "source": "cimi.topic.CodedEvaluationComponent",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.oncology.StageSuffix",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

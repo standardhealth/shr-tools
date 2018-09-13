@@ -1,0 +1,20 @@
+{
+  "fileType": "ValueSet",
+  "name": "HER2ISHMethodVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.HER2ISHMethodVS",
+  "description": "Value set containing In Situ Hybridization methods of determining HER2 status",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#HER2ISHMethodVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#HER2ISHMethodCS",
+      "code": "single",
+      "description": "HER2 by Single Probe Assay In Situ Hybridization test"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#HER2ISHMethodCS",
+      "code": "dual",
+      "description": "HER2 by Dual Probe Assay In Situ Hybridization test"
+    }
+  ]
+}

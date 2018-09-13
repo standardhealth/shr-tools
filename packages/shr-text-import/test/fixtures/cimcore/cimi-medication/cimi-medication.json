@@ -1,0 +1,5 @@
+{
+  "fileType": "Namespace",
+  "name": "cimi.medication",
+  "description": "The CIMI Medication domain contains definitions related to medications taken, or not taken, by the person of record, both currently and in the past."
+}

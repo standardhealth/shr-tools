@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "AssociatedStudy",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.AssociatedStudy",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The related clinical trial or other formal study.",
+  "value": {
+    "fqn": "shr.research.Study",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

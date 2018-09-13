@@ -1,0 +1,118 @@
+{
+  "fileType": "Mapping",
+  "name": "Medication",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Medication",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medication",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.DoseForm"
+        ],
+        "target": "form",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MedicationIngredient",
+          "shr.core.CodeableConcept"
+        ],
+        "target": "ingredient.item[x]",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MedicationIngredient",
+          "cimi.entity.Substance"
+        ],
+        "target": "ingredient.item[x]",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MedicationIngredient",
+          "cimi.entity.Medication"
+        ],
+        "target": "ingredient.item[x]",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MedicationIngredient",
+          "cimi.entity.IngredientAmount"
+        ],
+        "target": "ingredient.amount",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MedicationIngredient",
+          "cimi.entity.IsActiveIngredient"
+        ],
+        "target": "ingredient.isActive",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Brand"
+        ],
+        "target": "isBrand",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.OverTheCounter"
+        ],
+        "target": "isOverTheCounter",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Manufacturer"
+        ],
+        "target": "manufacturer",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.LotNumber"
+        ],
+        "target": "package.batch.lotNumber",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.ExpirationDate"
+        ],
+        "target": "package.batch.expirationDate",
+        "lastModifiedBy": "cimi.entity.Medication"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Package"
+        ],
+        "target": "package.container",
+        "lastModifiedBy": "cimi.entity.Medication"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 1
+        },
+        "target": "package.batch",
+        "lastModifiedBy": "cimi.entity.Medication"
+      }
+    ]
+  }
+}

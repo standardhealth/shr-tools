@@ -1,0 +1,26 @@
+{
+  "fileType": "Mapping",
+  "name": "Ratio",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Ratio",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Ratio",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.Numerator"
+        ],
+        "target": "numerator",
+        "lastModifiedBy": "shr.core.Ratio"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Denominator"
+        ],
+        "target": "denominator",
+        "lastModifiedBy": "shr.core.Ratio"
+      }
+    ]
+  }
+}

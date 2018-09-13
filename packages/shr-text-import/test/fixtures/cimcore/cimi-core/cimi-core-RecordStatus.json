@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "RecordStatus",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.RecordStatus",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Concept indicating the state of this record, e.g., 'entered in error'.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

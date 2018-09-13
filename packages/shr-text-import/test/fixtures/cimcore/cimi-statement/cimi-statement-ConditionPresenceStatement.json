@@ -1,0 +1,222 @@
+{
+  "fileType": "DataElement",
+  "name": "ConditionPresenceStatement",
+  "namespace": "cimi.statement",
+  "fqn": "cimi.statement.ConditionPresenceStatement",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A condition that is or may be present in a subject. 'Condition' is interpreted broadly and could be a disorder, abnormality, problem, injury, complaint, functionality, illness, disease, ailment, sickness, affliction, upset, difficulty, disorder, symptom, worry, or trouble.\n\nIn CIMI terms, it is an archetype of ClinicalStatement that combines a ConditionTopic with the ConditionPresenceContext context. The core attributes of ClinicalStatement are not included here because of mapping difficulties to FHIR DomainResource.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement"
+  ],
+  "basedOn": [
+    "cimi.statement.ClinicalStatement"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.entity.EntityOrRole": {
+            "type": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false,
+              "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false,
+              "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+            },
+            "source": "cimi.statement.ConditionPresenceStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.entity.EntityOrRole": {
+            "type": {
+              "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPerson",
+              "onValue": false,
+              "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPerson",
+              "onValue": false,
+              "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+            },
+            "source": "cimi.statement.ConditionPresenceStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.ConditionTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.ConditionTopic",
+              "onValue": false,
+              "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+            },
+            "source": "cimi.statement.ConditionPresenceStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.ConditionPresenceContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.ConditionPresenceContext",
+              "onValue": false,
+              "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+            },
+            "source": "cimi.statement.ConditionPresenceStatement"
+          }
+        ]
+      }
+    }
+  ]
+}

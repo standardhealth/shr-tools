@@ -1,0 +1,84 @@
+{
+  "fileType": "Mapping",
+  "name": "SurgicalProcedureRequestedAgainstStatement",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.SurgicalProcedureRequestedAgainstStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "ProcedureRequest",
+  "inheritance": {
+    "status": "inherited",
+    "from": "cimi.procedure.ProcedureRequestedAgainstStatement"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "_Entry",
+          "shr.core.CreationTime"
+        ],
+        "target": "authoredOn",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.Signed",
+          "cimi.core.Attribution",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "requester",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SurgicalProcedureTopic",
+          "cimi.topic.TopicCode"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SurgicalProcedureTopic",
+          "shr.core.Category"
+        ],
+        "target": "category",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.SubjectOfInformation"
+        ],
+        "target": "subject",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SurgicalProcedureTopic",
+          "cimi.element.AnatomicalLocation"
+        ],
+        "target": "bodySite",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.RequestedAgainstContext",
+          "cimi.context.Reason"
+        ],
+        "target": "reasonCode",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
+      }
+    ],
+    "fixedValueMapping": [
+      {
+        "fixedValue": "true",
+        "target": "doNotPerform",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
+      },
+      {
+        "fixedValue": "http://hl7.org/fhir/request-intent#proposal",
+        "target": "intent",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
+      }
+    ]
+  }
+}

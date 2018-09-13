@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "MinCount",
+  "namespace": "shr.core",
+  "fqn": "shr.core.MinCount",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Lower bound on a count.",
+  "value": {
+    "fqn": "integer",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

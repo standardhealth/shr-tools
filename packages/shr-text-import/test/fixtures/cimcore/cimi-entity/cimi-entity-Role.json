@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Role",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Role",
+  "isEntry": false,
+  "isAbstract": true,
+  "description": "Capacity in which an actor is involved in an activity. For instance, 'attending physician'. Note that attributes of the actor (an entity) that remain constant regardless of the role the actor plays should be part of the entity and not the role. For instance, a person may be a practitioner and a patient. In both cases their date of birth will be the same and thus such information should not be part of the role.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole"
+  ],
+  "basedOn": [
+    "cimi.entity.EntityOrRole"
+  ]
+}

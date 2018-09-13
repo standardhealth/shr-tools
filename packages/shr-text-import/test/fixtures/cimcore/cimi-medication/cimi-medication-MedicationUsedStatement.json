@@ -1,0 +1,277 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationUsedStatement",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationUsedStatement",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A record of the use of a medication.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement"
+  ],
+  "basedOn": [
+    "cimi.statement.ClinicalStatement"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.entity.EntityOrRole": {
+            "type": {
+              "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPersonOrOrganization",
+              "onValue": false,
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPersonOrOrganization",
+              "onValue": false,
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            },
+            "source": "cimi.medication.MedicationUsedStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.medication.MedicationUseTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+        },
+        "subpaths": {
+          "shr.core.Category": {
+            "card": {
+              "min": 0,
+              "max": 1,
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            },
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://hl7.org/fhir/ValueSet/medication-statement-category",
+                  "bindingStrength": "PREFERRED",
+                  "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/medication-statement-category",
+              "bindingStrength": "PREFERRED",
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            },
+            "source": "cimi.medication.MedicationUsedStatement"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.medication.MedicationUseTopic",
+              "onValue": false,
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            },
+            "source": "cimi.medication.MedicationUsedStatement"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 1,
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            },
+            "source": "cimi.medication.MedicationUsedStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.PerformedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+        },
+        "subpaths": {
+          "cimi.element.Status": {
+            "subpaths": {
+              "code": {
+                "valueSet": {
+                  "uri": "http://hl7.org/fhir/ValueSet/medication-statement-status",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+                }
+              }
+            }
+          },
+          "cimi.context.Method": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/medication-statement-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            },
+            "source": "cimi.medication.MedicationUsedStatement"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.PerformedContext",
+              "onValue": false,
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            },
+            "source": "cimi.medication.MedicationUsedStatement"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+            },
+            "source": "cimi.medication.MedicationUsedStatement"
+          }
+        ]
+      }
+    }
+  ]
+}

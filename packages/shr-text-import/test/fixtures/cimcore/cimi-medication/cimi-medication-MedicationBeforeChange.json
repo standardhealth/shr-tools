@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationBeforeChange",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationBeforeChange",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The medication taken, prior to the change.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "cimi.medication.MedicationDispenseRequestedStatement",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.medication.MedicationUsedStatement",
+        "valueType": "RefValue"
+      }
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "fileType": "DataElement",
+  "name": "SubjectOfInformation",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.SubjectOfInformation",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The person or thing that this entry relates to, usually the Person of Record (see Entry). However, not all entries have health information specifically about the patient, but in different contexts, could refer to a fetus, family member (living or dead), device, location, organization, behavior, finding, condition, wound, or intervention.\nCIMI alignment: SubjectOfInformation is not a Participation -- unlike CIMI. There's no action to participate in. Participant has extra unnecessary attributes, such as 'onBehalfOf'.",
+  "value": {
+    "fqn": "cimi.entity.EntityOrRole",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.core.RelationshipToPersonOfRecord",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

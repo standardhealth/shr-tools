@@ -1,0 +1,109 @@
+{
+  "fileType": "ValueSet",
+  "name": "QualitativeDateTimeVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.QualitativeDateTimeVS",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#QualitativeDateTimeVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "past",
+      "description": "A time or time period in the indefinite past"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "many_years_ago",
+      "description": "Many years ago"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "several_years_ago",
+      "description": "Several years ago"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "one_year_ago",
+      "description": "About a year ago"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "months_ago",
+      "description": "Several months ago"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "weeks_ago",
+      "description": "Several weeks ago"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "days_ago",
+      "description": "Several days ago"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "hours_ago",
+      "description": "Several hours ago"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "minutes_ago",
+      "description": "Several minutes ago"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "preexisting",
+      "description": "At a time previous to the current encounter or admission"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "now",
+      "description": "Now, currently, presently continuing or ongoing"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "minutes_hence",
+      "description": "Several minutes from now"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "hours_hence",
+      "description": "Several hours from now"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "days_hence",
+      "description": "Several days from now"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "weeks_hence",
+      "description": "Several weeks from now"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "months_hence",
+      "description": "Several months from now"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "one_year_hence",
+      "description": "About a year from now"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "several_years_hence",
+      "description": "Several years from now"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "many_years_hence",
+      "description": "Many years from now"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeDateTimeCS",
+      "code": "future",
+      "description": "A time or time period in the indefinite future"
+    }
+  ]
+}

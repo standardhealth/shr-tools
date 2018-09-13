@@ -1,0 +1,162 @@
+{
+  "fileType": "Mapping",
+  "name": "AdverseSensitivityToSubstance",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.AdverseSensitivityToSubstance",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-allergyintolerance",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.core.SubjectOfInformation"
+        ],
+        "target": "patient",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.SourceOfInformation",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "asserter",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.Signed",
+          "cimi.core.Attribution",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "recorder",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "_Entry",
+          "shr.core.CreationTime"
+        ],
+        "target": "assertedDate",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityTopic",
+          "shr.allergy.AllergenIrritant"
+        ],
+        "target": "code",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityTopic",
+          "shr.core.Type"
+        ],
+        "target": "type",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityTopic",
+          "shr.allergy.SubstanceCategory"
+        ],
+        "target": "category",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "cimi.context.VerificationStatus"
+        ],
+        "target": "verificationStatus",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "cimi.context.ClinicalStatus"
+        ],
+        "target": "clinicalStatus",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "cimi.context.Criticality"
+        ],
+        "target": "criticality",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "cimi.context.Onset"
+        ],
+        "target": "onset[x]",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "shr.allergy.MostRecentOccurrenceTime"
+        ],
+        "target": "lastOccurrence",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "shr.allergy.AdverseReaction",
+          "shr.allergy.AllergenIrritant"
+        ],
+        "target": "reaction.substance",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "shr.allergy.AdverseReaction",
+          "shr.allergy.Manifestation"
+        ],
+        "target": "reaction.manifestation",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "shr.allergy.AdverseReaction",
+          "shr.core.Details"
+        ],
+        "target": "reaction.description",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "shr.allergy.AdverseReaction",
+          "shr.core.OccurrenceTime"
+        ],
+        "target": "reaction.onset",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "shr.allergy.AdverseReaction",
+          "cimi.context.Severity"
+        ],
+        "target": "reaction.severity",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityPresenceContext",
+          "shr.allergy.AdverseReaction",
+          "cimi.element.RouteIntoBody"
+        ],
+        "target": "reaction.exposureRoute",
+        "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "fileType": "ValueSet",
+  "name": "StagingMethodVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.StagingMethodVS",
+  "description": "The methodology or standard used to assign the cancer's overall stage.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#StagingMethodVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StagingMethodCS",
+      "code": "ajcc_v7",
+      "description": "AJCC Cancer Staging Manual 7th Edition"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StagingMethodCS",
+      "code": "ajcc_v8",
+      "description": "AJCC Cancer Staging Manual 8th Edition"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StagingMethodCS",
+      "code": "seer_eod",
+      "description": "SEER Extent of Disease 2018"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StagingMethodCS",
+      "code": "seer_ss77",
+      "description": "SEER Summary Stage 1977"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StagingMethodCS",
+      "code": "seer_ss00",
+      "description": "SEER Summary Stage 2000"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StagingMethodCS",
+      "code": "seer_ss18",
+      "description": "SEER Summary Stage 2018"
+    }
+  ]
+}

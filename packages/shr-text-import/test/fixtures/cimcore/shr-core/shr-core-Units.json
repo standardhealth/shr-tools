@@ -1,0 +1,40 @@
+{
+  "fileType": "DataElement",
+  "name": "Units",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Units",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Code for the unit of measure of the quantity.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "shr.core.Coding",
+        "valueType": "IdentifiableValue",
+        "constraints": {
+          "valueSet": {
+            "uri": "http://hl7.org/fhir/ValueSet/ucum-units",
+            "bindingStrength": "REQUIRED",
+            "lastModifiedBy": "shr.core.Units"
+          }
+        }
+      },
+      {
+        "fqn": "shr.core.Coding",
+        "valueType": "IdentifiableValue",
+        "constraints": {
+          "valueSet": {
+            "uri": "http://standardhealthrecord.org/shr/core/vs/CurrencyVS",
+            "bindingStrength": "REQUIRED",
+            "lastModifiedBy": "shr.core.Units"
+          }
+        }
+      }
+    ]
+  }
+}

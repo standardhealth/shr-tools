@@ -1,0 +1,34 @@
+{
+  "fileType": "DataElement",
+  "name": "ExpectedPerformanceTime",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.ExpectedPerformanceTime",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "When an action should be done. If the action is a series or recurs (e.g. daily blood sugar testing in the morning) then a Timing can be used to describe the periodicity.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "dateTime",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "date",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.TimePeriod",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.Timing",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "fileType": "DataElement",
+  "name": "ReferenceRange",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.ReferenceRange",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The usual or acceptable range for a test result.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0883335"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.Range",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/referencerange-meaning",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "cimi.topic.ReferenceRange"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "cimi.topic.ApplicableSubpopulation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.topic.ApplicableAgeRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

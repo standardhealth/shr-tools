@@ -1,0 +1,138 @@
+{
+  "fileType": "Mapping",
+  "name": "SurgicalProcedureRequestedStatement",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.SurgicalProcedureRequestedStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "ProcedureRequest",
+  "inheritance": {
+    "status": "inherited",
+    "from": "cimi.procedure.ProcedureRequestedStatement"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "_Entry",
+          "shr.core.CreationTime"
+        ],
+        "target": "authoredOn",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.Signed",
+          "cimi.core.Attribution",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "requester",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SurgicalProcedureTopic",
+          "cimi.topic.TopicCode"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SurgicalProcedureTopic",
+          "shr.core.Category"
+        ],
+        "target": "category",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.SubjectOfInformation"
+        ],
+        "target": "subject",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SurgicalProcedureTopic",
+          "cimi.element.AnatomicalLocation"
+        ],
+        "target": "bodySite",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureRequestedContext",
+          "cimi.encounter.Encounter"
+        ],
+        "target": "context",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureRequestedContext",
+          "cimi.context.Reason"
+        ],
+        "target": "reasonCode",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureRequestedContext",
+          "cimi.element.Status"
+        ],
+        "target": "status",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureRequestedContext",
+          "cimi.context.RequestIntent"
+        ],
+        "target": "intent",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureRequestedContext",
+          "cimi.context.ExpectedPerformanceTime"
+        ],
+        "target": "occurrence[x]",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureRequestedContext",
+          "cimi.context.ExpectedPerformerType"
+        ],
+        "target": "performerType",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureRequestedContext",
+          "cimi.context.ExpectedPerformer"
+        ],
+        "target": "performer",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureRequestedContext",
+          "shr.core.PriorityRank"
+        ],
+        "target": "priority",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "doNotPerform",
+        "lastModifiedBy": "cimi.procedure.ProcedureRequestedStatement"
+      }
+    ]
+  }
+}

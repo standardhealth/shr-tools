@@ -1,0 +1,139 @@
+{
+  "fileType": "DataElement",
+  "name": "JobClassification",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.JobClassification",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The classification of a person's job (one job) as defined by compensation and sector (e.g. paid, unpaid, self-employed, government, etc.). This is different from employment status: a person who is a volunteer (work classification) may have chosen not to be in the labor force (employment status).",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0681111"
+    }
+  ],
+  "hierarchy": [
+    "cimi.topic.EvaluationComponent",
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "basedOn": [
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/ValueSet/work-classification-odh",
+        "bindingStrength": "EXAMPLE",
+        "lastModifiedBy": "shr.occupation.JobClassification"
+      }
+    },
+    "constraintHistory": {
+      "valueSet": [
+        {
+          "constraint": {
+            "uri": "http://hl7.org/fhir/ValueSet/work-classification-odh",
+            "bindingStrength": "EXAMPLE",
+            "lastModifiedBy": "shr.occupation.JobClassification"
+          },
+          "source": "shr.occupation.JobClassification"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.ComponentResultValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.core.CodeableConcept",
+          "onValue": true,
+          "lastModifiedBy": "cimi.topic.CodedEvaluationComponent"
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.ExceptionValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.Interpretation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.topic.EvaluationComponent",
+            "min": 0
+          },
+          {
+            "source": "cimi.topic.CodedEvaluationComponent",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    }
+  ]
+}

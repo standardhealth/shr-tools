@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "MorphologyBehavior",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.MorphologyBehavior",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A description of the morphology and behavioral characteristics of the cancer.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

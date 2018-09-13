@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "OrganizationAlias",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.OrganizationAlias",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A list of alternate names that the organization is known as, or was known as in the past.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

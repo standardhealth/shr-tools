@@ -1,0 +1,33 @@
+{
+  "fileType": "Mapping",
+  "name": "AnatomicalLocation",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.AnatomicalLocation",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "BodySite",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.CodeableConcept"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.element.AnatomicalLocation"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Laterality"
+        ],
+        "target": "qualifier (slice on = coding.code)",
+        "lastModifiedBy": "cimi.element.AnatomicalLocation"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.AnatomicalDirection"
+        ],
+        "target": "qualifier",
+        "lastModifiedBy": "cimi.element.AnatomicalLocation"
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "YesNoUnknownVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.YesNoUnknownVS",
+  "description": "Code set indicating yes, no, or unknown.",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#YesNoUnknownVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#YesNoUnknownCS",
+      "code": "yes",
+      "description": "Yes, or true"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#YesNoUnknownCS",
+      "code": "no",
+      "description": "No, or false"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#YesNoUnknownCS",
+      "code": "unknown",
+      "description": "Unknown"
+    }
+  ]
+}

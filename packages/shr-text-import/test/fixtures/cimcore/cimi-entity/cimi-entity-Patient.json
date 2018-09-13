@@ -1,0 +1,137 @@
+{
+  "fileType": "DataElement",
+  "name": "Patient",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Patient",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A person in the role of a patient, including extended demographic information about the subject of this health record.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1299487"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Role"
+  ],
+  "basedOn": [
+    "cimi.entity.Role"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.entity.Person",
+      "valueType": "RefValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.PlaceOfBirth",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.MultipleBirth",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.BirthSex",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.Race",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.Ethnicity",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.MaritalStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.MothersMaidenName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.FathersName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.SocialSecurityNumber",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.DriversLicenseNumber",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.PassportNumber",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.entity.MedicalInterpreterNeeded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.Deceased",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

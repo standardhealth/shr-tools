@@ -1,0 +1,102 @@
+{
+  "fileType": "Mapping",
+  "name": "Specimen",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Specimen",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Specimen",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.entity.AccessionIdentifier"
+        ],
+        "target": "accessionIdentifier",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.SpecimenStatus"
+        ],
+        "target": "status",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "type",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.SubjectOfInformation"
+        ],
+        "target": "subject",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.SourceSpecimen"
+        ],
+        "target": "parent",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "shr.core.ReceivedTime"
+        ],
+        "target": "receivedTime",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.SpecimenContainer",
+          "cimi.element.Identifier"
+        ],
+        "target": "container.identifier",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.SpecimenContainer",
+          "shr.core.Details"
+        ],
+        "target": "container.description",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.SpecimenContainer",
+          "shr.core.Type"
+        ],
+        "target": "container.type",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.SpecimenContainer",
+          "cimi.entity.Capacity"
+        ],
+        "target": "container.capacity",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.SpecimenContainer",
+          "cimi.entity.SpecimenQuantity"
+        ],
+        "target": "container.specimenQuantity",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.SpecimenContainer",
+          "cimi.entity.Additive"
+        ],
+        "target": "container.additive[x]",
+        "lastModifiedBy": "cimi.entity.Specimen"
+      }
+    ]
+  }
+}

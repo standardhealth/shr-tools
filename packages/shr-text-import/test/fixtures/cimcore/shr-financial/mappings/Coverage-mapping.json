@@ -1,0 +1,47 @@
+{
+  "fileType": "Mapping",
+  "name": "Coverage",
+  "namespace": "shr.financial",
+  "fqn": "shr.financial.Coverage",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Coverage",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.element.Status"
+        ],
+        "target": "status",
+        "lastModifiedBy": "shr.financial.Coverage"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "type",
+        "lastModifiedBy": "shr.financial.Coverage"
+      },
+      {
+        "sourcePath": [
+          "shr.financial.InsuranceMemberId"
+        ],
+        "target": "subscriberId",
+        "lastModifiedBy": "shr.financial.Coverage"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EffectiveTimePeriod"
+        ],
+        "target": "period",
+        "lastModifiedBy": "shr.financial.Coverage"
+      },
+      {
+        "sourcePath": [
+          "shr.financial.PolicyHolder"
+        ],
+        "target": "policyHolder",
+        "lastModifiedBy": "shr.financial.Coverage"
+      }
+    ]
+  }
+}

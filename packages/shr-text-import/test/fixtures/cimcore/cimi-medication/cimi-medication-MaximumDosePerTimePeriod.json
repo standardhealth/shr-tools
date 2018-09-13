@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "MaximumDosePerTimePeriod",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MaximumDosePerTimePeriod",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The maximum amount of a medication to be taken in a given period of time (e.g., no more than x in any 24-hour period)",
+  "value": {
+    "fqn": "shr.core.Ratio",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

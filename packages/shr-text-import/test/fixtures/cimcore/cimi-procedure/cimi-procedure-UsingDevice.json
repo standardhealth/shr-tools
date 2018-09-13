@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "UsingDevice",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.UsingDevice",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The device used to perform the procedure.",
+  "value": {
+    "fqn": "cimi.entity.Device",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

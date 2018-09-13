@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "ReceivedTime",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ReceivedTime",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Time the item was delivered to, or accepted by, the receiving facility or unit.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2735124"
+    }
+  ],
+  "value": {
+    "fqn": "dateTime",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "fileType": "Mapping",
+  "name": "Group",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Group",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Group",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.entity.ActiveFlag"
+        ],
+        "target": "active",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "type",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Actual"
+        ],
+        "target": "actual",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Title"
+        ],
+        "target": "name",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.GroupCharacteristic"
+        ],
+        "target": "characteristic.value[x]",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.GroupCharacteristic",
+          "cimi.entity.GroupCharacteristicCode"
+        ],
+        "target": "characteristic.code",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.GroupCharacteristic",
+          "cimi.entity.ExcludeFlag"
+        ],
+        "target": "characteristic.exclude",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.GroupCharacteristic",
+          "shr.core.TimePeriod"
+        ],
+        "target": "characteristic.period",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Member",
+          "cimi.entity.Patient"
+        ],
+        "target": "member.entity",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Member",
+          "cimi.entity.Practitioner"
+        ],
+        "target": "member.entity",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Member",
+          "cimi.entity.Device"
+        ],
+        "target": "member.entity",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Member",
+          "cimi.entity.Medication"
+        ],
+        "target": "member.entity",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Member",
+          "cimi.entity.Substance"
+        ],
+        "target": "member.entity",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Member",
+          "cimi.context.ParticipationPeriod"
+        ],
+        "target": "member.period",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Member",
+          "cimi.entity.ActiveFlag"
+        ],
+        "target": "member.inactive // TODO this is an inverse TF mapping",
+        "lastModifiedBy": "cimi.entity.Group"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Count"
+        ],
+        "target": "quantity",
+        "lastModifiedBy": "cimi.entity.Group"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "code",
+        "lastModifiedBy": "cimi.entity.Group"
+      }
+    ]
+  }
+}

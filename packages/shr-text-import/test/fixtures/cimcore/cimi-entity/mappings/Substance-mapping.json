@@ -1,0 +1,50 @@
+{
+  "fileType": "Mapping",
+  "name": "Substance",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Substance",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Substance",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.entity.Substance"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Ingredient"
+        ],
+        "target": "ingredient",
+        "lastModifiedBy": "cimi.entity.Substance"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Ingredient",
+          "cimi.entity.IngredientAmount"
+        ],
+        "target": "ingredient.quantity",
+        "lastModifiedBy": "cimi.entity.Substance"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Ingredient",
+          "shr.core.CodeableConcept"
+        ],
+        "target": "ingredient.substance[x]",
+        "lastModifiedBy": "cimi.entity.Substance"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Ingredient",
+          "cimi.entity.Substance"
+        ],
+        "target": "ingredient.substance[x]",
+        "lastModifiedBy": "cimi.entity.Substance"
+      }
+    ]
+  }
+}

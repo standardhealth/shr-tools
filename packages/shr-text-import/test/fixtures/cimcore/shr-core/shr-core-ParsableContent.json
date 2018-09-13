@@ -1,0 +1,33 @@
+{
+  "fileType": "DataElement",
+  "name": "ParsableContent",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ParsableContent",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A string that follows a formal syntax and can be analyzed and broken into meaningful parts.",
+  "hierarchy": [
+    "shr.core.EmbeddedContent"
+  ],
+  "basedOn": [
+    "shr.core.EmbeddedContent"
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.core.Formalism",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

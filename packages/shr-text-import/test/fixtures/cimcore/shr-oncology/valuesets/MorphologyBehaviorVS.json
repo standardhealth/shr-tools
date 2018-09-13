@@ -1,0 +1,40 @@
+{
+  "fileType": "ValueSet",
+  "name": "MorphologyBehaviorVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.MorphologyBehaviorVS",
+  "description": "The morphologic behavior of the cancer. These are the suffix to the ICD-O-3 histologic type codes. Codes are presented as local codes due to the lack of a ICD-O-3 terminology server available to the FHIR IG publisher.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#MorphologyBehaviorVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MorphologyBehaviorCS",
+      "code": "0",
+      "description": "Benign"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MorphologyBehaviorCS",
+      "code": "1",
+      "description": "Uncertain whether benign or malignant"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MorphologyBehaviorCS",
+      "code": "2",
+      "description": "In situ"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MorphologyBehaviorCS",
+      "code": "3",
+      "description": "Malignant, primary site"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MorphologyBehaviorCS",
+      "code": "6",
+      "description": "Malignant, metastatic site"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MorphologyBehaviorCS",
+      "code": "9",
+      "description": "Malignant, uncertain whether primary or metastatic site"
+    }
+  ]
+}

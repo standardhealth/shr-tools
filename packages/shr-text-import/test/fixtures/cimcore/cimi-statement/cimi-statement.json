@@ -1,0 +1,5 @@
+{
+  "fileType": "Namespace",
+  "name": "cimi.statement",
+  "description": "The namespace containing cimi-derived classes representing complete clinical statements. In this specification, these classes derive from the StatementTopic class hierarchy, not ClinicalStatement, which is a significant departure from CIMI. This simplifies the resulting logical models."
+}

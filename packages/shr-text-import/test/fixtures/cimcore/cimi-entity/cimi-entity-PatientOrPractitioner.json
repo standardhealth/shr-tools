@@ -1,0 +1,34 @@
+{
+  "fileType": "DataElement",
+  "name": "PatientOrPractitioner",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.PatientOrPractitioner",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A choice of Patient or Practitioner. Needed for mapping to FHIR.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole"
+  ],
+  "basedOn": [
+    "cimi.entity.EntityOrRole"
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "cimi.entity.Patient",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Practitioner",
+        "valueType": "RefValue"
+      }
+    ]
+  }
+}

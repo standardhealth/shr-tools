@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Prefix",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Prefix",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Contains a set of honorific terms that typically appear before a person's name, for example Mr., Mrs., Dr., etc.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3476361"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

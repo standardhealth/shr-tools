@@ -1,0 +1,36 @@
+{
+  "fileType": "DataElement",
+  "name": "ExternalHealthRecord",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.ExternalHealthRecord",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A health record other than the current health record; may have been used to help populate the current record.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Entity"
+  ],
+  "basedOn": [
+    "cimi.entity.Entity"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.element.Identifier",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.AccessTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

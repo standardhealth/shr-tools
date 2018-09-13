@@ -1,0 +1,462 @@
+{
+  "fileType": "DataElement",
+  "name": "HER2ReceptorStatus",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.HER2ReceptorStatus",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "HER2 receptor status. HER2 is a member of the human epidermal growth factor receptor family of proteins and is encoded by the ERBB2 oncogene. HER2 is overexpressed in 20-30% of breast tumors, and is associated with an aggressive clinical course and poor prognosis. HER2 status (positive=present or overexpressed; negative=absent) is a factor in determining prognosis and treatment options.\n\nWe are seeking feedback if it is better to put the positive/negative status in Value or Interpretation. The current approach is that positive/negative designation is a value, even though that value is (in fact) an interpretation of evidence from HER2 by IHC and/or HER2 by ISH tests, not a direct observation.",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "48676-1",
+      "display": "HER2 [Interpretation] in Tissue"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded",
+    "cimi.statement.LaboratoryTestResultRecorded",
+    "cimi.statement.PanelRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.PanelRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Category": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://hl7.org/fhir/observation-category",
+                    "code": "laboratory"
+                  },
+                  "lastModifiedBy": "cimi.statement.LaboratoryTestResultRecorded"
+                }
+              }
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://loinc.org",
+                    "code": "48676-1",
+                    "display": "HER2 [Interpretation] in Tissue"
+                  },
+                  "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+                }
+              }
+            }
+          },
+          "cimi.entity.Specimen": {
+            "type": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            }
+          },
+          "cimi.topic.Precondition": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            }
+          },
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            }
+          },
+          "cimi.element.AnatomicalLocation": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            }
+          },
+          "cimi.topic.FindingMethod": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            }
+          },
+          "cimi.topic.EvaluationComponent": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            }
+          },
+          "cimi.topic.PanelMembers": {
+            "subpaths": {
+              "cimi.statement.EvaluationResultRecorded": {
+                "includesType": [
+                  {
+                    "fqn": "shr.oncology.HER2byIHC",
+                    "card": {
+                      "min": 0
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+                  },
+                  {
+                    "fqn": "shr.oncology.HER2byISH",
+                    "card": {
+                      "min": 0
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "type": {
+          "fqn": "cimi.topic.PanelTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.PanelRecorded"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "laboratory"
+              }
+            },
+            "source": "cimi.statement.LaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://loinc.org",
+                "code": "48676-1",
+                "display": "HER2 [Interpretation] in Tissue"
+              },
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.topic.PanelTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.PanelRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          }
+        ],
+        "includesType": [
+          {
+            "constraint": {
+              "fqn": "shr.oncology.HER2byIHC",
+              "card": {
+                "min": 0
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.HER2byISH",
+              "card": {
+                "min": 0
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "type": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/shr/oncology/vs/PositiveNegativeEquivocalVS",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/PositiveNegativeEquivocalVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.statement.DiagnosticService",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "fixedValue": {
+              "type": "code",
+              "value": {
+                "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+                "code": "pathology"
+              },
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.LaboratoryTestResultRecorded"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+                "code": "pathology"
+              },
+              "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
+            },
+            "source": "shr.oncology.HER2ReceptorStatus"
+          }
+        ]
+      }
+    }
+  ]
+}

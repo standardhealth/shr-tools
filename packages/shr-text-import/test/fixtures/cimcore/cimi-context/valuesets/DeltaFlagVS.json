@@ -1,0 +1,23 @@
+{
+  "fileType": "ValueSet",
+  "name": "DeltaFlagVS",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.DeltaFlagVS",
+  "description": "Indicators for degree of change (delta) from the last or previous measurement.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1705241"
+    }
+  ],
+  "url": "http://standardhealthrecord.org/cimi/context/vs/#DeltaFlagVS",
+  "rules": {
+    "includesDescendants": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "263703002",
+        "description": "Changed status (qualifier value)"
+      }
+    ]
+  }
+}

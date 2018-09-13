@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Details",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Details",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An text note containing additional details, explanation, description, comment, or summarization. Details can discuss, support, explain changes to, or dispute information.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0947611"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

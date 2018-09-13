@@ -1,0 +1,78 @@
+{
+  "fileType": "Mapping",
+  "name": "Entry",
+  "namespace": "shr.base",
+  "fqn": "shr.base.Entry",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "DomainResource",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.base.EntryId"
+        ],
+        "target": "id",
+        "lastModifiedBy": "shr.base.Entry"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Version"
+        ],
+        "target": "meta.versionId",
+        "lastModifiedBy": "shr.base.Entry"
+      },
+      {
+        "sourcePath": [
+          "shr.base.EntryType"
+        ],
+        "target": "meta.profile",
+        "lastModifiedBy": "shr.base.Entry"
+      },
+      {
+        "sourcePath": [
+          "shr.base.LastUpdated"
+        ],
+        "target": "meta.lastUpdated",
+        "lastModifiedBy": "shr.base.Entry"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Language"
+        ],
+        "target": "language",
+        "lastModifiedBy": "shr.base.Entry"
+      },
+      {
+        "sourcePath": [
+          "shr.base.Narrative"
+        ],
+        "target": "text",
+        "lastModifiedBy": "shr.base.Entry"
+      },
+      {
+        "sourcePath": [
+          "shr.base.SecurityLabel"
+        ],
+        "target": "meta.security",
+        "lastModifiedBy": "shr.base.Entry"
+      },
+      {
+        "sourcePath": [
+          "shr.base.Tag"
+        ],
+        "target": "meta.tag",
+        "lastModifiedBy": "shr.base.Entry"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "target": "meta",
+        "lastModifiedBy": "shr.base.Entry"
+      }
+    ]
+  }
+}

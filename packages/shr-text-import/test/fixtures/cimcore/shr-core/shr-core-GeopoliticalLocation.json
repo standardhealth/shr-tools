@@ -1,0 +1,15 @@
+{
+  "fileType": "DataElement",
+  "name": "GeopoliticalLocation",
+  "namespace": "shr.core",
+  "fqn": "shr.core.GeopoliticalLocation",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The countries of the world and major geopolitical subregions, such as US states.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0017446"
+    }
+  ]
+}

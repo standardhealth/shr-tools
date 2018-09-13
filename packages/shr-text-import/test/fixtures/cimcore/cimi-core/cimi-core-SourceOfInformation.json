@@ -1,0 +1,33 @@
+{
+  "fileType": "DataElement",
+  "name": "SourceOfInformation",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.SourceOfInformation",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The person or entity that provided the information in the entry, e.g. the subject (patient), medical professional, family member, device or software program, as distinct from who recorded the entry.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0449416"
+    }
+  ],
+  "value": {
+    "fqn": "cimi.entity.EntityOrRole",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.core.RelationshipToPersonOfRecord",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

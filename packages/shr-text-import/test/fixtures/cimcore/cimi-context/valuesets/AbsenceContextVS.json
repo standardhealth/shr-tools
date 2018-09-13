@@ -1,0 +1,30 @@
+{
+  "fileType": "ValueSet",
+  "name": "AbsenceContextVS",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.AbsenceContextVS",
+  "description": "A code describing whether the finding is question is absent, unknown, or not suspected.",
+  "url": "http://standardhealthrecord.org/cimi/context/vs/#AbsenceContextVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410516002",
+      "description": "Known absent"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410594000",
+      "description": "Definitely not present"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410593006",
+      "description": "Probably not present"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "428263003",
+      "description": "NOT suspected"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "fileType": "ValueSet",
+  "name": "BreastCancerStageVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastCancerStageVS",
+  "description": "Codes representing the overall stage of the cancer, based on criteria defined by the staging system being used. The preferred staging system is American Joint Committee on Cancer, 8th Edition, Breast Cancer Chapter. Codes and descriptions have been redacted due to copyright restrictions.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#BreastCancerStageVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastCancerStageCS",
+      "code": "redacted",
+      "description": "A dummy code."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "fileType": "ValueSet",
+  "name": "AtRiskContextVS",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.AtRiskContextVS",
+  "description": "A code describing the sense in which the subject has risk of a hypothetical (future) finding. At present, this value set contains only one code, but it is presented as a value set to allow for more nuanced meanings in the future.",
+  "url": "http://standardhealthrecord.org/cimi/context/vs/#AtRiskContextVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410519009",
+      "description": "At risk"
+    }
+  ]
+}

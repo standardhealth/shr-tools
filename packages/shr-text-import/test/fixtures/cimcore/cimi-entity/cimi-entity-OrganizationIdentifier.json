@@ -1,0 +1,135 @@
+{
+  "fileType": "DataElement",
+  "name": "OrganizationIdentifier",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.OrganizationIdentifier",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An identifier of the organization. An NPI preferred, tax id is allowed, and a local id is allowed in addition to ‘authoritative’ identifier",
+  "hierarchy": [
+    "cimi.element.Identifier"
+  ],
+  "basedOn": [
+    "cimi.element.Identifier"
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "inheritance": {
+      "status": "inherited",
+      "from": "cimi.element.Identifier"
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.core.Purpose",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Coding": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.element.Identifier"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.element.Identifier"
+            },
+            "source": "cimi.entity.OrganizationIdentifier"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-type",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "cimi.element.Identifier"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-type",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "cimi.element.Identifier"
+            },
+            "source": "cimi.entity.OrganizationIdentifier"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.CodeSystem",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      }
+    },
+    {
+      "fqn": "shr.core.EffectiveTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      }
+    },
+    {
+      "fqn": "cimi.element.Issuer",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      }
+    }
+  ]
+}

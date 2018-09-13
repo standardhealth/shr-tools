@@ -1,0 +1,30 @@
+{
+  "fileType": "Mapping",
+  "name": "PercentageRange",
+  "namespace": "shr.core",
+  "fqn": "shr.core.PercentageRange",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Range",
+  "inheritance": {
+    "status": "inherited",
+    "from": "shr.core.Range"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.LowerBound"
+        ],
+        "target": "low",
+        "lastModifiedBy": "shr.core.Range"
+      },
+      {
+        "sourcePath": [
+          "shr.core.UpperBound"
+        ],
+        "target": "high",
+        "lastModifiedBy": "shr.core.Range"
+      }
+    ]
+  }
+}

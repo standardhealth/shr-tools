@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "DirectSite",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.DirectSite",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The site where the procedure is performed.",
+  "value": {
+    "fqn": "cimi.element.AnatomicalLocation",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "AdministrativeGender",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.AdministrativeGender",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A gender classification used for administrative purposes. Administrative gender is not necessarily the same as a biological description or a gender identity. This attribute does not include terms related to clinical gender.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1550327"
+    }
+  ],
+  "value": {
+    "fqn": "code",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/ValueSet/administrative-gender",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.entity.AdministrativeGender"
+      }
+    }
+  }
+}

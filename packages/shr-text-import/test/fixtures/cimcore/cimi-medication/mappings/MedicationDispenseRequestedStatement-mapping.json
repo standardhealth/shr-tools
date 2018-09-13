@@ -1,0 +1,119 @@
+{
+  "fileType": "Mapping",
+  "name": "MedicationDispenseRequestedStatement",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationDispenseRequestedStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationDispenseTopic",
+          "cimi.entity.Medication"
+        ],
+        "target": "medication[x]",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationDispenseTopic",
+          "cimi.medication.NumberOfRefillsAllowed"
+        ],
+        "target": "dispenseRequest.numberOfRepeatsAllowed",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationDispenseTopic",
+          "cimi.medication.QuantityPerDispense"
+        ],
+        "target": "dispenseRequest.quantity",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationDispenseTopic",
+          "cimi.medication.SupplyDuration"
+        ],
+        "target": "dispenseRequest.expectedSupplyDuration",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationDispenseTopic",
+          "cimi.medication.Dosage"
+        ],
+        "target": "dosageInstruction",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.RequestedContext",
+          "cimi.context.Reason"
+        ],
+        "target": "reasonCode",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.RequestedContext",
+          "cimi.element.Status"
+        ],
+        "target": "status",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.RequestedContext",
+          "cimi.context.ExpectedPerformanceTime"
+        ],
+        "target": "dispenseRequest.validityPeriod",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.RequestedContext",
+          "shr.core.PriorityRank"
+        ],
+        "target": "priority",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.RequestedContext",
+          "cimi.context.PerformerInstructions"
+        ],
+        "target": "note.text",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.RequestedContext",
+          "cimi.context.ExpectedPerformer",
+          "cimi.entity.Organization"
+        ],
+        "target": "dispenseRequest.performer",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 1
+        },
+        "target": "dosageInstruction",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 1
+        },
+        "target": "note",
+        "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+      }
+    ]
+  }
+}

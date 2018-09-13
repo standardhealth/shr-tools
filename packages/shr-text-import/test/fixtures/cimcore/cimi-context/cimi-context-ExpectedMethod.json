@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ExpectedMethod",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.ExpectedMethod",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The method that should be used to carry out the action.",
+  "value": {
+    "fqn": "cimi.context.Method",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

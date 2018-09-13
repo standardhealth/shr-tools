@@ -1,0 +1,27 @@
+{
+  "fileType": "DataElement",
+  "name": "GivenName",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.GivenName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The person's given name - e.g., John",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "45392-8"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "408677003"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

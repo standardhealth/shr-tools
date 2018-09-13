@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "SecurityLabel",
+  "namespace": "shr.base",
+  "fqn": "shr.base.SecurityLabel",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A code that connects the entry to a security policy. Security labels can be updated when the resource changes, or whenever the security sub-system chooses to.",
+  "value": {
+    "fqn": "shr.core.Coding",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

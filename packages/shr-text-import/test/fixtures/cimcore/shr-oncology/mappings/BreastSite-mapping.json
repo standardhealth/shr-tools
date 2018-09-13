@@ -1,0 +1,37 @@
+{
+  "fileType": "Mapping",
+  "name": "BreastSite",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastSite",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "BodySite",
+  "inheritance": {
+    "status": "inherited",
+    "from": "cimi.element.AnatomicalLocation"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.CodeableConcept"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.element.AnatomicalLocation"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Laterality"
+        ],
+        "target": "qualifier (slice on = coding.code)",
+        "lastModifiedBy": "cimi.element.AnatomicalLocation"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.AnatomicalDirection"
+        ],
+        "target": "qualifier",
+        "lastModifiedBy": "cimi.element.AnatomicalLocation"
+      }
+    ]
+  }
+}

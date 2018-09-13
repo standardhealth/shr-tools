@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "CorrectionFactor",
+  "namespace": "shr.core",
+  "fqn": "shr.core.CorrectionFactor",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A correction factor that is applied to the sampled data points before they are added to the origin.",
+  "value": {
+    "fqn": "decimal",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

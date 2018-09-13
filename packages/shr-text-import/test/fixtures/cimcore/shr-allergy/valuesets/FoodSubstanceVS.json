@@ -1,0 +1,15 @@
+{
+  "fileType": "ValueSet",
+  "name": "FoodSubstanceVS",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.FoodSubstanceVS",
+  "url": "http://standardhealthrecord.org/shr/allergy/vs/#FoodSubstanceVS",
+  "rules": {
+    "includesDescendants": [
+      {
+        "system": "urn:tbd",
+        "code": "TBD"
+      }
+    ]
+  }
+}

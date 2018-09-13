@@ -1,0 +1,24 @@
+{
+  "fileType": "DataElement",
+  "name": "Jurisdiction",
+  "namespace": "shr.research",
+  "fqn": "shr.research.Jurisdiction",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The country, state or other region taking legal responsibility for the conduct of the study.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/ValueSet/jurisdiction",
+        "bindingStrength": "EXTENSIBLE",
+        "lastModifiedBy": "shr.research.Jurisdiction"
+      }
+    }
+  }
+}

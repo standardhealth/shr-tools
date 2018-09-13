@@ -1,0 +1,61 @@
+{
+  "fileType": "Mapping",
+  "name": "HumanName",
+  "namespace": "shr.core",
+  "fqn": "shr.core.HumanName",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "HumanName",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.element.NameAsText"
+        ],
+        "target": "text",
+        "lastModifiedBy": "shr.core.HumanName"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Prefix"
+        ],
+        "target": "prefix",
+        "lastModifiedBy": "shr.core.HumanName"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.GivenName"
+        ],
+        "target": "given",
+        "lastModifiedBy": "shr.core.HumanName"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.FamilyName"
+        ],
+        "target": "family",
+        "lastModifiedBy": "shr.core.HumanName"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Suffix"
+        ],
+        "target": "suffix",
+        "lastModifiedBy": "shr.core.HumanName"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Purpose"
+        ],
+        "target": "use",
+        "lastModifiedBy": "shr.core.HumanName"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EffectiveTimePeriod"
+        ],
+        "target": "period",
+        "lastModifiedBy": "shr.core.HumanName"
+      }
+    ]
+  }
+}

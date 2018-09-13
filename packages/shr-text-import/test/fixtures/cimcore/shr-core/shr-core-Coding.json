@@ -1,0 +1,49 @@
+{
+  "fileType": "DataElement",
+  "name": "Coding",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Coding",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Coding of a concept, drawn from a controlled vocabulary. Includes the vocabulary and version, if applicable. May include a display text, and a descriptor expressing the intended interpretation of the code.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0805701"
+    }
+  ],
+  "value": {
+    "fqn": "code",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.core.CodeSystem",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.CodeSystemVersion",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.DisplayText",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

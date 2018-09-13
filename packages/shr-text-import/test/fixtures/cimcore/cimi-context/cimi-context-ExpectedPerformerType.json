@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ExpectedPerformerType",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.ExpectedPerformerType",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "What type of party should carry out the testing.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

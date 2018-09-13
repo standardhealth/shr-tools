@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "AddressLine",
+  "namespace": "shr.core",
+  "fqn": "shr.core.AddressLine",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Part of an address that contains the house number, apartment number, street name, street direction, P.O. Box number, delivery hints, and similar address information. (Source: HL7 FHIR).",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

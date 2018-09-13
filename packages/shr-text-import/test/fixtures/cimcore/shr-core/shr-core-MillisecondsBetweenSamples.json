@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "MillisecondsBetweenSamples",
+  "namespace": "shr.core",
+  "fqn": "shr.core.MillisecondsBetweenSamples",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The length of time between sampling times, measured in milliseconds.",
+  "value": {
+    "fqn": "decimal",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

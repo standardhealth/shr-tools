@@ -1,0 +1,530 @@
+{
+  "fileType": "DataElement",
+  "name": "BreastCancerStage",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastCancerStage",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "The stage of a breast cancer. Different staging systems use different staging groups, so there are currently no terminology bindings associated with this class.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2216702",
+      "display": "Malignant Neoplasm of Breast Staging"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded",
+    "cimi.statement.LaboratoryTestResultRecorded",
+    "cimi.statement.PanelRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.PanelRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Category": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://hl7.org/fhir/observation-category",
+                    "code": "laboratory"
+                  },
+                  "lastModifiedBy": "cimi.statement.LaboratoryTestResultRecorded"
+                }
+              }
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://ncimeta.nci.nih.gov",
+                    "code": "C2216702",
+                    "display": "Malignant Neoplasm of Breast Staging"
+                  },
+                  "lastModifiedBy": "shr.oncology.BreastCancerStage"
+                }
+              }
+            }
+          },
+          "cimi.element.AnatomicalLocation": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            }
+          },
+          "cimi.entity.Specimen": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            }
+          },
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            }
+          },
+          "cimi.topic.EvaluationComponent": {
+            "includesType": [
+              {
+                "fqn": "shr.oncology.BreastCancerPrimaryTumorClassification",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.oncology.BreastCancerStage"
+              },
+              {
+                "fqn": "shr.oncology.BreastCancerRegionalNodesClassification",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.oncology.BreastCancerStage"
+              },
+              {
+                "fqn": "shr.oncology.BreastCancerDistantMetastasesClassification",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.oncology.BreastCancerStage"
+              }
+            ]
+          },
+          "cimi.topic.PanelMembers": {
+            "subpaths": {
+              "cimi.statement.EvaluationResultRecorded": {
+                "includesType": [
+                  {
+                    "fqn": "shr.oncology.HER2ReceptorStatus",
+                    "card": {
+                      "min": 0,
+                      "max": 1
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.oncology.BreastCancerStage"
+                  },
+                  {
+                    "fqn": "shr.oncology.EstrogenReceptorStatus",
+                    "card": {
+                      "min": 0,
+                      "max": 1
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.oncology.BreastCancerStage"
+                  },
+                  {
+                    "fqn": "shr.oncology.ProgesteroneReceptorStatus",
+                    "card": {
+                      "min": 0,
+                      "max": 1
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.oncology.BreastCancerStage"
+                  },
+                  {
+                    "fqn": "shr.oncology.DCISNuclearGrade",
+                    "card": {
+                      "min": 0,
+                      "max": 1
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.oncology.BreastCancerStage"
+                  },
+                  {
+                    "fqn": "shr.oncology.BreastCancerHistologicGrade",
+                    "card": {
+                      "min": 0,
+                      "max": 1
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.oncology.BreastCancerStage"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "type": {
+          "fqn": "cimi.topic.PanelTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.PanelRecorded"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "laboratory"
+              }
+            },
+            "source": "cimi.statement.LaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://ncimeta.nci.nih.gov",
+                "code": "C2216702",
+                "display": "Malignant Neoplasm of Breast Staging"
+              },
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.topic.PanelTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.PanelRecorded"
+          }
+        ],
+        "includesType": [
+          {
+            "constraint": {
+              "fqn": "shr.oncology.BreastCancerPrimaryTumorClassification",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.BreastCancerRegionalNodesClassification",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.BreastCancerDistantMetastasesClassification",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.HER2ReceptorStatus",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.EstrogenReceptorStatus",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.ProgesteroneReceptorStatus",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.DCISNuclearGrade",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.BreastCancerHistologicGrade",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "type": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/shr/oncology/vs/BreastCancerStageVS",
+                  "bindingStrength": "EXAMPLE",
+                  "lastModifiedBy": "shr.oncology.BreastCancerStage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/BreastCancerStageVS",
+              "bindingStrength": "EXAMPLE",
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.BreastCancerStage"
+            },
+            "source": "shr.oncology.BreastCancerStage"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.statement.DiagnosticService",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.LaboratoryTestResultRecorded"
+      }
+    },
+    {
+      "fqn": "shr.oncology.StageTimingPrefix",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

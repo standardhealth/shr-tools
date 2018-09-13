@@ -1,0 +1,59 @@
+{
+  "fileType": "ValueSet",
+  "name": "MedicationNotUsedReasonVS",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationNotUsedReasonVS",
+  "url": "http://standardhealthrecord.org/cimi/medication/vs/#MedicationNotUsedReasonVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "not_indicated",
+      "description": "Not indicated"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "ineffective",
+      "description": "Medication or similiar class of medications have been ineffective on the patient"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "nonadherence",
+      "description": "Patient not expected to adhere to the medication"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "side_effect",
+      "description": "Patient has experienced side effects to this or similar medication"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "allergy_intolerance",
+      "description": "Patient has an allergy or intolerance to this or similar medications"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "apprehension",
+      "description": "Subject is worried about taking medication due to potential side effects, drug interactions, etc."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "affordability",
+      "description": "Medication is unaffordable for the patient"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "objection",
+      "description": "Patient or patient representative objects to medication"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "asleep",
+      "description": "Patient was asleep when the dose was supposed to have been given"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationNotUsedReasonCS",
+      "code": "unsuccessful",
+      "description": "Administration attempt unsuccessful (patient vomited dose, could not find vein, etc.)"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "SubstanceCategory",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.SubstanceCategory",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Categorization of the risk substance as a food, drug, or environmental agent. For difficult-to-classify substances, one can leave this field empty or choose the most typical category.",
+  "value": {
+    "fqn": "code",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

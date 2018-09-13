@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "InputFinding",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.InputFinding",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Patient findings expected for the performance of the specified procedure. For instance, an x-ray of a fracture prior to a surgical procedure for a bone fracture.",
+  "value": {
+    "fqn": "cimi.statement.FindingStatement",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

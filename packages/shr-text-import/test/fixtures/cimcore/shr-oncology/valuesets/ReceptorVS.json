@@ -1,0 +1,16 @@
+{
+  "fileType": "ValueSet",
+  "name": "ReceptorVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.ReceptorVS",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#ReceptorVS",
+  "rules": {
+    "includesDescendants": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "116647005",
+        "description": "Receptor (substance)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "fileType": "DataElement",
+  "name": "NotPerformedContext",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.NotPerformedContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A record that a clinical act was not performed at a certain time or during a stated period of time, particularly when there might be an expectation of performing such an act, for example, if a vaccination is not given because of parental objection. Do not use this context if the act was initiated or started but aborted or cancelled.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.ActionContext"
+  ],
+  "basedOn": [
+    "cimi.context.ActionContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Reason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.ActionContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.RelatedRequest",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.NonOccurrenceTimeOrPeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

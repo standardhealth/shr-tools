@@ -1,0 +1,39 @@
+{
+  "fileType": "ValueSet",
+  "name": "MedicationChangeReasonVS",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationChangeReasonVS",
+  "url": "http://standardhealthrecord.org/cimi/medication/vs/#MedicationChangeReasonVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeReasonCS",
+      "code": "not_needed",
+      "description": "Do not need it any more, condition abated"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeReasonCS",
+      "code": "finished",
+      "description": "Course of treatment complete"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeReasonCS",
+      "code": "ineffective",
+      "description": "MTH #C3661846 Medication not effective."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeReasonCS",
+      "code": "burdensome",
+      "description": "Can't take it when supposed to, too busy, or inconvenient to store or administer"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeReasonCS",
+      "code": "difficult",
+      "description": "Has trouble or finds it difficult to take or administer"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeReasonCS",
+      "code": "side_effect",
+      "description": "MTH#C0879626 \tExperienced side effects"
+    }
+  ]
+}

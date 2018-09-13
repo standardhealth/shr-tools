@@ -1,0 +1,16 @@
+{
+  "fileType": "DataElement",
+  "name": "Content",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.Content",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Abstract ancestor of all concrete content types. A unit of content that makes up a composition - e.g., a clinical statement in a patient record, a simple or composite action is a knowledge document, a catalog entry in a catalog.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent"
+  ],
+  "basedOn": [
+    "cimi.core.Independent"
+  ]
+}

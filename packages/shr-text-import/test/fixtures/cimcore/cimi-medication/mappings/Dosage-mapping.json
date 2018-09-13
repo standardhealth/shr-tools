@@ -1,0 +1,75 @@
+{
+  "fileType": "Mapping",
+  "name": "Dosage",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.Dosage",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Dosage",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.medication.DoseAmount"
+        ],
+        "target": "dose[x]",
+        "lastModifiedBy": "cimi.medication.Dosage"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.TimingOfDoses"
+        ],
+        "target": "timing",
+        "lastModifiedBy": "cimi.medication.Dosage"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.AsNeededIndicator"
+        ],
+        "target": "asNeeded[x]",
+        "lastModifiedBy": "cimi.medication.Dosage"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.DoseInstructionsText"
+        ],
+        "target": "text",
+        "lastModifiedBy": "cimi.medication.Dosage"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.AdditionalDoseInstruction"
+        ],
+        "target": "additionalInstruction",
+        "lastModifiedBy": "cimi.medication.Dosage"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.RouteIntoBody"
+        ],
+        "target": "route",
+        "lastModifiedBy": "cimi.medication.Dosage"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.AdministrationMethod"
+        ],
+        "target": "method",
+        "lastModifiedBy": "cimi.medication.Dosage"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.AdministrationBodySite"
+        ],
+        "target": "site",
+        "lastModifiedBy": "cimi.medication.Dosage"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MaximumDosePerTimePeriod"
+        ],
+        "target": "maxDosePerPeriod",
+        "lastModifiedBy": "cimi.medication.Dosage"
+      }
+    ]
+  }
+}

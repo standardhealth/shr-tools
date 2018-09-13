@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "SupplyDuration",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.SupplyDuration",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Identifies the period time over which the supplied product is expected to be used, or the length of time the dispense is expected to last.",
+  "value": {
+    "fqn": "shr.core.Duration",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

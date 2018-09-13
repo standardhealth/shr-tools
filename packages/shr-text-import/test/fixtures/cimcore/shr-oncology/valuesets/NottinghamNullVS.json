@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "NottinghamNullVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.NottinghamNullVS",
+  "description": "Data absent reasons (null values) for Nottingham Combined Grade scores. Removes non-applicable values from the ExceptionValueVS, and adds values that align with LOINC normative answer list LL4561-8",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#NottinghamNullVS",
+  "values": [
+    {
+      "system": "http://loinc.org",
+      "code": "LA27219-7",
+      "description": "Only microinvasion present (not graded)"
+    },
+    {
+      "system": "http://loinc.org",
+      "code": "LA27220-5",
+      "description": "No residual invasive carcinoma after presurgical (neoadjuvant) therapy"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#NottinghamNullCS",
+      "code": "missing_indeterminate",
+      "description": "The value cannot be determined, for some unspecified reason."
+    }
+  ]
+}

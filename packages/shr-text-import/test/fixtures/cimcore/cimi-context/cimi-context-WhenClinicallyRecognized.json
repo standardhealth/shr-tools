@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "WhenClinicallyRecognized",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.WhenClinicallyRecognized",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The time at which a condition or condition was first identified in a healthcare context.",
+  "value": {
+    "fqn": "date",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

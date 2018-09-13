@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "PostalCode",
+  "namespace": "shr.core",
+  "fqn": "shr.core.PostalCode",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A sequence of letters and digits used as part of a postal address, often designating a geographic region",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1514254"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

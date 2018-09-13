@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Title",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Title",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A distinguishing word or group of words naming an item.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

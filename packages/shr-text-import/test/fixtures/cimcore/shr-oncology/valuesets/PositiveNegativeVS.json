@@ -1,0 +1,20 @@
+{
+  "fileType": "ValueSet",
+  "name": "PositiveNegativeVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.PositiveNegativeVS",
+  "description": "Value set containing the values positive and negative. VSAC  value set OID 2.16.840.1.113762.1.4.1166.62.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#PositiveNegativeVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "10828004",
+      "description": "Positive"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "260385009",
+      "description": "Negative"
+    }
+  ]
+}

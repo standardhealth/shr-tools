@@ -1,0 +1,138 @@
+{
+  "fileType": "Mapping",
+  "name": "Timing",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Timing",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Timing",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.OccurrenceTime"
+        ],
+        "target": "event",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.TimingCode"
+        ],
+        "target": "code",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EventDuration",
+          "shr.core.DurationRange",
+          "shr.core.LowerBound"
+        ],
+        "target": "repeat.duration",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EventDuration",
+          "shr.core.DurationRange",
+          "shr.core.UpperBound"
+        ],
+        "target": "repeat.durationMax",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EventDuration",
+          "shr.core.DurationRange",
+          "shr.core.LowerBound",
+          "shr.core.Quantity",
+          "shr.core.Units",
+          "shr.core.Coding",
+          "code"
+        ],
+        "target": "repeat.durationUnit",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.RecurrencePattern",
+          "shr.core.RecurrenceInterval",
+          "shr.core.Duration"
+        ],
+        "target": "repeat.period",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.RecurrencePattern",
+          "shr.core.RecurrenceInterval",
+          "shr.core.Duration",
+          "shr.core.Units",
+          "shr.core.Coding",
+          "code"
+        ],
+        "target": "repeat.periodUnit",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.RecurrencePattern",
+          "shr.core.DayOfWeek"
+        ],
+        "target": "repeat.dayOfWeek",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.RecurrencePattern",
+          "shr.core.TimeOfDay"
+        ],
+        "target": "repeat.timeOfDay",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.RecurrencePattern",
+          "shr.core.DailyLifeEvent"
+        ],
+        "target": "repeat.when",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.RecurrencePattern",
+          "shr.core.LifeEventOffset"
+        ],
+        "target": "repeat.offset",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.RecurrencePattern",
+          "shr.core.CountPerInterval",
+          "shr.core.MinCount"
+        ],
+        "target": "repeat.frequency",
+        "lastModifiedBy": "shr.core.Timing"
+      },
+      {
+        "sourcePath": [
+          "shr.core.RecurrencePattern",
+          "shr.core.CountPerInterval",
+          "shr.core.MaxCount"
+        ],
+        "target": "repeat.frequencyMax",
+        "lastModifiedBy": "shr.core.Timing"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "repeat.periodMax",
+        "lastModifiedBy": "shr.core.Timing"
+      }
+    ]
+  }
+}

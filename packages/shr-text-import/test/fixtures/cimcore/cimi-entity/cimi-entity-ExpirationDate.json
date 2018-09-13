@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ExpirationDate",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.ExpirationDate",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "When the item (medication, device, etc.) will expire.",
+  "value": {
+    "fqn": "dateTime",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

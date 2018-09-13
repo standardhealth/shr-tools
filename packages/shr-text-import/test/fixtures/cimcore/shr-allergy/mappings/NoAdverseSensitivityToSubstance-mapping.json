@@ -1,0 +1,110 @@
+{
+  "fileType": "Mapping",
+  "name": "NoAdverseSensitivityToSubstance",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.NoAdverseSensitivityToSubstance",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-allergyintolerance",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.core.SubjectOfInformation"
+        ],
+        "target": "patient",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.SourceOfInformation",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "asserter",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.Signed",
+          "cimi.core.Attribution",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "recorder",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "_Entry",
+          "shr.core.CreationTime"
+        ],
+        "target": "assertedDate",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "sourcePath": [
+          "shr.allergy.AdverseSensitivityTopic",
+          "cimi.topic.TopicCode"
+        ],
+        "target": "code",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "type",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "category",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "clinicalStatus",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "criticality",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "onset[x]",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "lastOccurrence",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "reaction",
+        "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+      }
+    ]
+  }
+}

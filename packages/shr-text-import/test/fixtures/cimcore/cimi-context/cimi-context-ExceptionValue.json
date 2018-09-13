@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ExceptionValue",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.ExceptionValue",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Reason that a value associated with a test or other finding is missing.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

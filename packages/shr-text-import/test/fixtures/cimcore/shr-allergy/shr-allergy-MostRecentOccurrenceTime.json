@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "MostRecentOccurrenceTime",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.MostRecentOccurrenceTime",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The time of the last or latest of a series of events.",
+  "value": {
+    "fqn": "dateTime",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

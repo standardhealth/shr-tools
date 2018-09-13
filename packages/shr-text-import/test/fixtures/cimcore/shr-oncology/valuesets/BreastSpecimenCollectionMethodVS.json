@@ -1,0 +1,30 @@
+{
+  "fileType": "ValueSet",
+  "name": "BreastSpecimenCollectionMethodVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastSpecimenCollectionMethodVS",
+  "description": "The surgical method used to obtain the tissue sample.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#BreastSpecimenCollectionMethodVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "9911007",
+      "description": "Core needle biopsy (procedure)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "48635004",
+      "description": "Fine needle biopsy (procedure)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "172043006",
+      "description": "Simple mastectomy (procedure)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "237372000",
+      "description": "Excisional biopsy of breast (procedure)"
+    }
+  ]
+}

@@ -1,0 +1,421 @@
+{
+  "fileType": "DataElement",
+  "name": "HER2byIHC",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.HER2byIHC",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "HER2 receptor status as determined by Immunohistochemistry (IHC).",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "72383-3"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded",
+    "cimi.statement.LaboratoryTestResultRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.LaboratoryTestResultRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.EvaluationResultTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "shr.core.Category": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://hl7.org/fhir/observation-category",
+                    "code": "laboratory"
+                  },
+                  "lastModifiedBy": "cimi.statement.LaboratoryTestResultRecorded"
+                }
+              }
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://loinc.org",
+                    "code": "72383-3",
+                    "display": "HER2 Presence in Tissue by Immunoassay"
+                  },
+                  "lastModifiedBy": "shr.oncology.HER2byIHC"
+                }
+              }
+            }
+          },
+          "cimi.topic.FindingMethod": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            }
+          },
+          "cimi.element.AnatomicalLocation": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            }
+          },
+          "cimi.topic.Precondition": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            }
+          },
+          "cimi.entity.Specimen": {
+            "type": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            }
+          },
+          "cimi.topic.EvaluationComponent": {
+            "includesType": [
+              {
+                "fqn": "shr.oncology.CompleteMembraneStainingPercent",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.oncology.HER2byIHC"
+              }
+            ]
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "laboratory"
+              }
+            },
+            "source": "cimi.statement.LaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://loinc.org",
+                "code": "72383-3",
+                "display": "HER2 Presence in Tissue by Immunoassay"
+              },
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          }
+        ],
+        "includesType": [
+          {
+            "constraint": {
+              "fqn": "shr.oncology.CompleteMembraneStainingPercent",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "type": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/shr/oncology/vs/HER2byIHCScoreVS",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "shr.oncology.HER2byIHC"
+                }
+              }
+            }
+          },
+          "cimi.context.Interpretation": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/shr/oncology/vs/PositiveNegativeEquivocalVS",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "shr.oncology.HER2byIHC"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/HER2byIHCScoreVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          },
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/PositiveNegativeEquivocalVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.statement.DiagnosticService",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "fixedValue": {
+              "type": "code",
+              "value": {
+                "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+                "code": "pathology"
+              },
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.LaboratoryTestResultRecorded"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+                "code": "pathology"
+              },
+              "lastModifiedBy": "shr.oncology.HER2byIHC"
+            },
+            "source": "shr.oncology.HER2byIHC"
+          }
+        ]
+      }
+    }
+  ]
+}

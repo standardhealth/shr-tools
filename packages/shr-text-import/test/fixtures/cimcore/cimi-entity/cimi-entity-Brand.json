@@ -1,0 +1,27 @@
+{
+  "fileType": "DataElement",
+  "name": "Brand",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Brand",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "If the product is branded, and if so, the brand name of a product.",
+  "value": {
+    "fqn": "boolean",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.entity.BrandName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

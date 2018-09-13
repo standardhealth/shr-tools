@@ -1,0 +1,45 @@
+{
+  "fileType": "DataElement",
+  "name": "Location",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Location",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A position, site, or point in space where something can be found.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0450429"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Entity"
+  ],
+  "basedOn": [
+    "cimi.entity.Entity"
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "shr.core.Address",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.Geoposition",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.GeopoliticalLocation",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

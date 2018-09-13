@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "DisplayText",
+  "namespace": "shr.core",
+  "fqn": "shr.core.DisplayText",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A string meant for reading by a person, for example, accompanying a code.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1548311"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

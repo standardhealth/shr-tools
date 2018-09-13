@@ -1,0 +1,5 @@
+{
+  "fileType": "Namespace",
+  "name": "cimi.encounter",
+  "description": "The Encounter domain contains definitions that capture interactions between the person of record and healthcare providers, including inpatient, ambulatory care, and telecare."
+}

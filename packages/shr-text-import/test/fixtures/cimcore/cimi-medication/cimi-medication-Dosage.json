@@ -1,0 +1,110 @@
+{
+  "fileType": "DataElement",
+  "name": "Dosage",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.Dosage",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The dosage of the medication, prescribed or taken.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0178602"
+    }
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.medication.DoseAmount",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.medication.TimingOfDoses",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.medication.AsNeededIndicator",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.medication.DoseInstructionsText",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.medication.AdditionalDoseInstruction",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/additional-instruction-codes",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.medication.Dosage"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "cimi.element.RouteIntoBody",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.medication.AdministrationMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/administration-method-codes",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.medication.Dosage"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "cimi.medication.AdministrationBodySite",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.medication.MaximumDosePerTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

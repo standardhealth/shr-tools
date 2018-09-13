@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "GestationalTemporalContext",
+  "namespace": "shr.core",
+  "fqn": "shr.core.GestationalTemporalContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A named gestational time period, or a gestational age.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "shr.core.GestationalAge",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.GestationalTimePeriod",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

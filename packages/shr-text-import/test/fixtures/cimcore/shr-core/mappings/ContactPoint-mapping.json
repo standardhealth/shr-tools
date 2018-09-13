@@ -1,0 +1,47 @@
+{
+  "fileType": "Mapping",
+  "name": "ContactPoint",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ContactPoint",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "ContactPoint",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.TelecomNumberOrAddress"
+        ],
+        "target": "value",
+        "lastModifiedBy": "shr.core.ContactPoint"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "system",
+        "lastModifiedBy": "shr.core.ContactPoint"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Purpose"
+        ],
+        "target": "use",
+        "lastModifiedBy": "shr.core.ContactPoint"
+      },
+      {
+        "sourcePath": [
+          "shr.core.PriorityRank"
+        ],
+        "target": "rank",
+        "lastModifiedBy": "shr.core.ContactPoint"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EffectiveTimePeriod"
+        ],
+        "target": "period",
+        "lastModifiedBy": "shr.core.ContactPoint"
+      }
+    ]
+  }
+}

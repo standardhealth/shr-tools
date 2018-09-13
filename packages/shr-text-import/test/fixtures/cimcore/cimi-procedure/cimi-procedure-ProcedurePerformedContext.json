@@ -1,0 +1,234 @@
+{
+  "fileType": "DataElement",
+  "name": "ProcedurePerformedContext",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.ProcedurePerformedContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The performed context with constraints applicable to procedures.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.ActionContext",
+    "cimi.context.PerformedContext"
+  ],
+  "basedOn": [
+    "cimi.context.PerformedContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Reason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.ActionContext"
+      }
+    },
+    {
+      "fqn": "shr.core.OccurrenceTimeOrPeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PerformedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Participant",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.procedure.FHIRProcedureParticipant",
+          "onValue": false,
+          "lastModifiedBy": "cimi.procedure.ProcedurePerformedContext"
+        },
+        "subpaths": {
+          "cimi.element.OnBehalfOf": {
+            "type": {
+              "fqn": "cimi.entity.Organization",
+              "onValue": true,
+              "lastModifiedBy": "cimi.procedure.ProcedurePerformedContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.context.PerformedContext"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.procedure.FHIRProcedureParticipant",
+              "onValue": false,
+              "lastModifiedBy": "cimi.procedure.ProcedurePerformedContext"
+            },
+            "source": "cimi.procedure.ProcedurePerformedContext"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.entity.Organization",
+              "onValue": true,
+              "lastModifiedBy": "cimi.procedure.ProcedurePerformedContext"
+            },
+            "source": "cimi.procedure.ProcedurePerformedContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.encounter.Encounter",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PerformedContext"
+      }
+    },
+    {
+      "fqn": "cimi.element.Status",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/event-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.procedure.ProcedurePerformedContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.context.PerformedContext"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/event-status",
+              "bindingStrength": "PREFERRED"
+            },
+            "source": "cimi.context.PerformedContext"
+          },
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/event-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.procedure.ProcedurePerformedContext"
+            },
+            "source": "cimi.procedure.ProcedurePerformedContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.Method",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PerformedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.RelatedRequest",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.statement.ActionRequestedStatement": {
+            "type": {
+              "fqn": "cimi.procedure.ProcedureRequestedStatement",
+              "onValue": false,
+              "lastModifiedBy": "cimi.procedure.ProcedurePerformedContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.context.PerformedContext"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.procedure.ProcedureRequestedStatement",
+              "onValue": false,
+              "lastModifiedBy": "cimi.procedure.ProcedurePerformedContext"
+            },
+            "source": "cimi.procedure.ProcedurePerformedContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.entity.Facility",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PerformedContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Outcome",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PerformedContext"
+      }
+    },
+    {
+      "fqn": "cimi.procedure.OutputFinding",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "Precondition",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.Precondition",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A description of the conditions or context of an observation, for example, under sedation, fasting or post-exercise. Body position and body site are also qualifiers, but handled separately. A qualifier cannot modify the measurement type; for example, a fasting blood sugar is still a blood sugar.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "shr.core.CodeableConcept",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "cimi.statement.EvaluationResultRecorded",
+        "valueType": "RefValue"
+      }
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "fileType": "Namespace",
+  "name": "cimi.procedure",
+  "description": "The CIMI procedure domain contains contexts, topics, and statements related to procedures."
+}

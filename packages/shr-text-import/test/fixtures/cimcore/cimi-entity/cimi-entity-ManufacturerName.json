@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ManufacturerName",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.ManufacturerName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The name of the company who produce the device.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "fileType": "DataElement",
+  "name": "BreastSite",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastSite",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A body site specific to the breast structure.",
+  "hierarchy": [
+    "cimi.element.AnatomicalLocation"
+  ],
+  "basedOn": [
+    "cimi.element.AnatomicalLocation"
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/shr/oncology/vs/BreastSiteVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "shr.oncology.BreastSite"
+      }
+    },
+    "inheritance": {
+      "status": "overridden",
+      "from": "cimi.element.AnatomicalLocation"
+    },
+    "constraintHistory": {
+      "valueSet": [
+        {
+          "constraint": {
+            "uri": "http://standardhealthrecord.org/shr/oncology/vs/BreastSiteVS",
+            "bindingStrength": "REQUIRED",
+            "lastModifiedBy": "shr.oncology.BreastSite"
+          },
+          "source": "shr.oncology.BreastSite"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.element.Laterality",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.AnatomicalLocation"
+      }
+    },
+    {
+      "fqn": "cimi.element.AnatomicalDirection",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.element.AnatomicalLocation",
+            "min": 0,
+            "max": 1
+          },
+          {
+            "source": "shr.oncology.BreastSite",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.element.AnatomicalLocation"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.BreastSite"
+            },
+            "source": "shr.oncology.BreastSite"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.ClockDirection",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.oncology.DistanceFromBreastSiteToNipple",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

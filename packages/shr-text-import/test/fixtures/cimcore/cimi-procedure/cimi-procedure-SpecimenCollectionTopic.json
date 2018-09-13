@@ -1,0 +1,210 @@
+{
+  "fileType": "DataElement",
+  "name": "SpecimenCollectionTopic",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.SpecimenCollectionTopic",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Base class for actions related to the collection of a specimen, independent of context.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic",
+    "cimi.topic.ActionTopic",
+    "cimi.procedure.ProcedureTopic"
+  ],
+  "basedOn": [
+    "cimi.procedure.ProcedureTopic"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/us/core/ValueSet/us-core-procedure-code",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "cimi.procedure.ProcedureTopic"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.StatementTopic"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/us/core/ValueSet/us-core-procedure-code",
+              "bindingStrength": "EXTENSIBLE"
+            },
+            "source": "cimi.procedure.ProcedureTopic"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.Category",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.ActionTopic"
+      }
+    },
+    {
+      "fqn": "cimi.element.AnatomicalLocation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      }
+    },
+    {
+      "fqn": "cimi.element.PartOf",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.core.Independent": {
+            "type": {
+              "fqn": "cimi.procedure.ProcedurePerformedStatement",
+              "onValue": false,
+              "lastModifiedBy": "cimi.procedure.ProcedureTopic"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.procedure.ProcedurePerformedStatement",
+              "onValue": false
+            },
+            "source": "cimi.procedure.ProcedureTopic"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      }
+    },
+    {
+      "fqn": "cimi.context.Reason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      }
+    },
+    {
+      "fqn": "cimi.context.Method",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      }
+    },
+    {
+      "fqn": "cimi.topic.Precondition",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      }
+    },
+    {
+      "fqn": "cimi.procedure.InputFinding",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      }
+    },
+    {
+      "fqn": "cimi.procedure.Indication",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      }
+    },
+    {
+      "fqn": "cimi.entity.Device",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      }
+    },
+    {
+      "fqn": "cimi.entity.Location",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.procedure.ProcedureTopic"
+      }
+    },
+    {
+      "fqn": "cimi.procedure.AmountOrSize",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

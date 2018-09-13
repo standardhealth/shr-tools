@@ -1,0 +1,96 @@
+{
+  "fileType": "DataElement",
+  "name": "NuclearPositivity",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.NuclearPositivity",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The percentage of cells that test (stain) positive for the presence of a receptor.\n\nWe are seeking feedback on whether nuclear positivity should be an exact percentage or a range of percentages. As currently defined, an exact nuclear positivity could be represented by a zero-width range, where the lower and upper bounds would be the same number.",
+  "hierarchy": [
+    "cimi.topic.EvaluationComponent"
+  ],
+  "basedOn": [
+    "cimi.topic.EvaluationComponent"
+  ],
+  "value": {
+    "fqn": "shr.core.PercentageRange",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.ComponentResultValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.ExceptionValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.Interpretation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.topic.EvaluationComponent",
+            "min": 0
+          },
+          {
+            "source": "shr.oncology.NuclearPositivity",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.NuclearPositivity"
+            },
+            "source": "shr.oncology.NuclearPositivity"
+          }
+        ]
+      }
+    }
+  ]
+}

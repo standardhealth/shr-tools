@@ -1,0 +1,31 @@
+{
+  "fileType": "DataElement",
+  "name": "Laterality",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Laterality",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Anatomical location or specimen further detailing the side(s) of interest.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0925205",
+      "display": "Anatomical laterality"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/ValueSet/bodysite-laterality",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.element.Laterality"
+      }
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "fileType": "DataElement",
+  "name": "PerformedContext",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.PerformedContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "ActionContext indicating actual performance or execution of a healthcare-related action, e.g., 3rd dose of Hepatitis B vaccine administered on Dec 4th 2012, appendectomy performed today.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.ActionContext"
+  ],
+  "basedOn": [
+    "cimi.context.ActionContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Reason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.ActionContext"
+      }
+    },
+    {
+      "fqn": "shr.core.OccurrenceTimeOrPeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.Participant",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.encounter.Encounter",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.Status",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/event-status",
+              "bindingStrength": "PREFERRED",
+              "lastModifiedBy": "cimi.context.PerformedContext"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/event-status",
+              "bindingStrength": "PREFERRED",
+              "lastModifiedBy": "cimi.context.PerformedContext"
+            },
+            "source": "cimi.context.PerformedContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.Method",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.RelatedRequest",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.entity.Facility",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.Outcome",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

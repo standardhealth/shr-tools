@@ -1,0 +1,30 @@
+{
+  "fileType": "ValueSet",
+  "name": "ExpectationContextVS",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.ExpectationContextVS",
+  "description": "A code describing the sense in which a finding is expected.",
+  "url": "http://standardhealthrecord.org/cimi/context/vs/#ExpectationContextVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410517006",
+      "description": "Expected"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410596003",
+      "description": "Likely outcome"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410595004",
+      "description": "Prognosis"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "71033007",
+      "description": "Impending"
+    }
+  ]
+}

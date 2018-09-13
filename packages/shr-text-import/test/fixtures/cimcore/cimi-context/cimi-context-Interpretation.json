@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "Interpretation",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.Interpretation",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A clinical interpretation of a finding.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0420833"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/ValueSet/observation-interpretation",
+        "bindingStrength": "EXTENSIBLE",
+        "lastModifiedBy": "cimi.context.Interpretation"
+      }
+    }
+  }
+}

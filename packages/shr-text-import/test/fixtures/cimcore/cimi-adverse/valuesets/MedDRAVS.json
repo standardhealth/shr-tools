@@ -1,0 +1,14 @@
+{
+  "fileType": "ValueSet",
+  "name": "MedDRAVS",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.MedDRAVS",
+  "url": "http://standardhealthrecord.org/cimi/adverse/vs/#MedDRAVS",
+  "rules": {
+    "includesFromCodeSystem": [
+      {
+        "system": "http://www.meddra.org"
+      }
+    ]
+  }
+}

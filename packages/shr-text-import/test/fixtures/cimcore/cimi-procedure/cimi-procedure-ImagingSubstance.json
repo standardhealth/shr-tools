@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ImagingSubstance",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.ImagingSubstance",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Substance used for this imaging procedure such as a contrast agent.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

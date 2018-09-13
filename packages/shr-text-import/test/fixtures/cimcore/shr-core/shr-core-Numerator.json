@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Numerator",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Numerator",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The dividend of a fraction.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2825219"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.Quantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

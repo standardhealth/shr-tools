@@ -1,0 +1,49 @@
+{
+  "fileType": "DataElement",
+  "name": "DurationRange",
+  "namespace": "shr.core",
+  "fqn": "shr.core.DurationRange",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A range of durations.",
+  "fields": [
+    {
+      "fqn": "shr.core.LowerBound",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "type": {
+              "fqn": "shr.core.Duration",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.DurationRange"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "shr.core.UpperBound",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "type": {
+              "fqn": "shr.core.Duration",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.DurationRange"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

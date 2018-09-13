@@ -1,0 +1,26 @@
+{
+  "fileType": "Mapping",
+  "name": "TimePeriod",
+  "namespace": "shr.core",
+  "fqn": "shr.core.TimePeriod",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Period",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.TimePeriodStart"
+        ],
+        "target": "start",
+        "lastModifiedBy": "shr.core.TimePeriod"
+      },
+      {
+        "sourcePath": [
+          "shr.core.TimePeriodEnd"
+        ],
+        "target": "end",
+        "lastModifiedBy": "shr.core.TimePeriod"
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "fileType": "DataElement",
+  "name": "DiagnosticService",
+  "namespace": "cimi.statement",
+  "fqn": "cimi.statement.DiagnosticService",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A code that classifies the clinical discipline, department or diagnostic service that created the report (e.g. cardiology, biochemistry, hematology, MRI). This is used for searching, sorting and display purposes.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/cimi/statement/vs/DiagnosticServiceVS",
+        "bindingStrength": "EXTENSIBLE",
+        "lastModifiedBy": "cimi.statement.DiagnosticService"
+      }
+    }
+  }
+}

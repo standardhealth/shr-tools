@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Manufacturer",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Manufacturer",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The organization producing the product or test.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1114744"
+    }
+  ],
+  "value": {
+    "fqn": "cimi.entity.Organization",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

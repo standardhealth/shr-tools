@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "QuantityPerDispense",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.QuantityPerDispense",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The amount that is to be dispensed for one fill.",
+  "value": {
+    "fqn": "shr.core.SimpleQuantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

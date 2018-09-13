@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "Language",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Language",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A human language, spoken or written.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0023008"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/ValueSet/languages",
+        "bindingStrength": "EXTENSIBLE",
+        "lastModifiedBy": "shr.core.Language"
+      }
+    }
+  }
+}

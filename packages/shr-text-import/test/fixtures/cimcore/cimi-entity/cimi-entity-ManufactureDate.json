@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ManufactureDate",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.ManufactureDate",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "When the item (medication, device, etc.) was produced.",
+  "value": {
+    "fqn": "dateTime",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "fileType": "Mapping",
+  "name": "UnitedStatesAddress",
+  "namespace": "shr.core",
+  "fqn": "shr.core.UnitedStatesAddress",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Address",
+  "inheritance": {
+    "status": "inherited",
+    "from": "shr.core.Address"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.Purpose"
+        ],
+        "target": "use",
+        "lastModifiedBy": "shr.core.Address"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "type",
+        "lastModifiedBy": "shr.core.Address"
+      },
+      {
+        "sourcePath": [
+          "shr.core.DisplayText"
+        ],
+        "target": "text",
+        "lastModifiedBy": "shr.core.Address"
+      },
+      {
+        "sourcePath": [
+          "shr.core.AddressLine"
+        ],
+        "target": "line",
+        "lastModifiedBy": "shr.core.Address"
+      },
+      {
+        "sourcePath": [
+          "shr.core.City"
+        ],
+        "target": "city",
+        "lastModifiedBy": "shr.core.Address"
+      },
+      {
+        "sourcePath": [
+          "shr.core.District"
+        ],
+        "target": "district",
+        "lastModifiedBy": "shr.core.Address"
+      },
+      {
+        "sourcePath": [
+          "shr.core.UnitedStatesState"
+        ],
+        "target": "state",
+        "lastModifiedBy": "shr.core.Address"
+      },
+      {
+        "sourcePath": [
+          "shr.core.PostalCode"
+        ],
+        "target": "postalCode",
+        "lastModifiedBy": "shr.core.Address"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Country"
+        ],
+        "target": "country",
+        "lastModifiedBy": "shr.core.Address"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EffectiveTimePeriod"
+        ],
+        "target": "period",
+        "lastModifiedBy": "shr.core.Address"
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "TelecomNumberOrAddress",
+  "namespace": "shr.core",
+  "fqn": "shr.core.TelecomNumberOrAddress",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A user name or other identifier on a telecommunication network, such as a telephone number (including country code and extension, if necessary), email address, or SkypeID.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

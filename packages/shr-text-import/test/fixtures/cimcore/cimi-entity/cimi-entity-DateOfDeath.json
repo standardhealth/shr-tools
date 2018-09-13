@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "DateOfDeath",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.DateOfDeath",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The calendar date of subject's death.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1148348"
+    }
+  ],
+  "value": {
+    "fqn": "dateTime",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

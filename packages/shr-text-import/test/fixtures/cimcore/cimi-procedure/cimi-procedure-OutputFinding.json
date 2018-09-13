@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "OutputFinding",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.OutputFinding",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Patient findings documented during the performance of the procedure.",
+  "value": {
+    "fqn": "cimi.statement.FindingStatement",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

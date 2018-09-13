@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Hash",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Hash",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A hash code of the data (sha-1, base64ed)",
+  "value": {
+    "fqn": "base64Binary",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "BirthSex",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.BirthSex",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Administrative sex assigned at birth and recorded on birth certificate.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C4086849"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/us/core/ValueSet/us-core-birthsex",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.entity.BirthSex"
+      }
+    }
+  }
+}

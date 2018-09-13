@@ -1,0 +1,43 @@
+{
+  "fileType": "DataElement",
+  "name": "RequestedAgainstContext",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.RequestedAgainstContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Represents a recommendation or order from a practitioner or clinical decision support system to NOT perform an act.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.ActionContext"
+  ],
+  "basedOn": [
+    "cimi.context.ActionContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Reason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.ActionContext"
+      }
+    }
+  ]
+}

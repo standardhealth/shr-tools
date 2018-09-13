@@ -1,0 +1,16 @@
+{
+  "fileType": "ValueSet",
+  "name": "NoKnownAllergyVS",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.NoKnownAllergyVS",
+  "description": "Codes that express no known allergies to food, environmtal agents, drugs, etc.",
+  "url": "http://standardhealthrecord.org/shr/allergy/vs/#NoKnownAllergyVS",
+  "rules": {
+    "includesDescendants": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "716186003"
+      }
+    ]
+  }
+}

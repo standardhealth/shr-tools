@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "DoseAmount",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.DoseAmount",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The amount of medication taken per dose, as a quantity or range.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "shr.core.SimpleQuantity",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.Range",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

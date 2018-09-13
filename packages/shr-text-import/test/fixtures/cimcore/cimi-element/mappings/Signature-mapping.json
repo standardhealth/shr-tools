@@ -1,0 +1,54 @@
+{
+  "fileType": "Mapping",
+  "name": "Signature",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Signature",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Signature",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.element.SignatureType"
+        ],
+        "target": "type",
+        "lastModifiedBy": "cimi.element.Signature"
+      },
+      {
+        "sourcePath": [
+          "shr.core.CreationTime"
+        ],
+        "target": "when",
+        "lastModifiedBy": "cimi.element.Signature"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Signatory"
+        ],
+        "target": "who[x]",
+        "lastModifiedBy": "cimi.element.Signature"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.OnBehalfOf"
+        ],
+        "target": "onBehalfOf[x]",
+        "lastModifiedBy": "cimi.element.Signature"
+      },
+      {
+        "sourcePath": [
+          "shr.core.ContentType"
+        ],
+        "target": "contentType",
+        "lastModifiedBy": "cimi.element.Signature"
+      },
+      {
+        "sourcePath": [
+          "shr.core.BinaryData"
+        ],
+        "target": "blob",
+        "lastModifiedBy": "cimi.element.Signature"
+      }
+    ]
+  }
+}

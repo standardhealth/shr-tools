@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Category",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Category",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A class or division of people or things having particular shared characteristics",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "MitoticCountScoreVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.MitoticCountScoreVS",
+  "description": "Value set containing the scores for Nottingham Histologic Score Mitotic Rate",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#MitoticCountScoreVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MitoticCountScoreCS",
+      "code": "score_1",
+      "description": "<= 3 mitoses per mm2"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MitoticCountScoreCS",
+      "code": "score_2",
+      "description": ">=4 and <=7 mitoses per mm2"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#MitoticCountScoreCS",
+      "code": "score_3",
+      "description": ">= 8 mitoses per mm2"
+    }
+  ]
+}

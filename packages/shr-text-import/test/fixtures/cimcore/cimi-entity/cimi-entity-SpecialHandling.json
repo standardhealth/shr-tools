@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "SpecialHandling",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.SpecialHandling",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Information about the proper handling of the specimen.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

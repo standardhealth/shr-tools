@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "NuclearGradeVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.NuclearGradeVS",
+  "description": "The nuclear grade describes how closely the nuclei of cancer cells look like the nuclei of normal breast cells. In general, the higher the nuclear grade, the more abnormal the nuclei are and the more aggressive the tumor cells tend to be. The nuclear grade is a part of overall tumor grade.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#NuclearGradeVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#NuclearGradeCS",
+      "code": "G1",
+      "description": "Grade I - low grade or well differentiated"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#NuclearGradeCS",
+      "code": "G2",
+      "description": "Grade II - Intermediate/moderate grade or moderately differentiated"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#NuclearGradeCS",
+      "code": "G3",
+      "description": "Grade III - High grade or pooly differentiated"
+    }
+  ]
+}

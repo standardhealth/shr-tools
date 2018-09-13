@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "RecurrenceRiskScoreInterpretationVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.RecurrenceRiskScoreInterpretationVS",
+  "description": "Interpretations of risk as high, intermediate, or low. Answer set taken from LOINC LL3198-0",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#RecurrenceRiskScoreInterpretationVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#RecurrenceRiskScoreInterpretationCS",
+      "code": "LA19541-4",
+      "description": "High risk of recurrence."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#RecurrenceRiskScoreInterpretationCS",
+      "code": "LA22380-2",
+      "description": "Intermediate risk of recurrence."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#RecurrenceRiskScoreInterpretationCS",
+      "code": "LA19542-2",
+      "description": "Low risk of recurrence."
+    }
+  ]
+}

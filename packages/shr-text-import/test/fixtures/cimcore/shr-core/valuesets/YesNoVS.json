@@ -1,0 +1,20 @@
+{
+  "fileType": "ValueSet",
+  "name": "YesNoVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.YesNoVS",
+  "description": "Code set indicating yes or no.",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#YesNoVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#YesNoCS",
+      "code": "yes",
+      "description": "Yes, or true"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#YesNoCS",
+      "code": "no",
+      "description": "No, or false"
+    }
+  ]
+}

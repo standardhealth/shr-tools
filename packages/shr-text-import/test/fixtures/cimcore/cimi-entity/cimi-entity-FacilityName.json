@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "FacilityName",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.FacilityName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The DBA (doing business as) or most commonly-used name for a facility.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3261404"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "fileType": "ValueSet",
+  "name": "AnatomicalDirectionVS",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.AnatomicalDirectionVS",
+  "description": "Anatomical location or specimen further detailing directionality. Codes are from NCI",
+  "concepts": [
+    {
+      "system": "https://evs.nci.nih.gov/ftp1/CDISC/SDTM/",
+      "code": "C99074"
+    }
+  ],
+  "url": "http://standardhealthrecord.org/cimi/element/vs/#AnatomicalDirectionVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25231",
+      "description": "ANTERIOR Denoting the front portion of the body or a structure."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25423",
+      "description": "APICAL Relating to or located at the apex."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C90067",
+      "description": "BASAL Relating to or located at the lowest portion of a structure."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C73851",
+      "description": "CAUDAL Toward the tail in a body."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25445",
+      "description": "CENTRAL A point or area that is approximately central within some larger region or structure."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C37936",
+      "description": "CRANIAL Toward the head in a body."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25240",
+      "description": "DEEP Extending relatively far inward."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25237",
+      "description": "DISTAL Situated farthest from a point of reference."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C45874",
+      "description": "DORSAL Pertaining to the back or upper surface of the body."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C90376",
+      "description": "DORSOLATERAL Toward the back and side of a body."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C90386",
+      "description": "FORE Of or involving the front of a main body."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C90393",
+      "description": "HIND Of or involving the back of a main body."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25353",
+      "description": "INFERIOR Pertaining to a point below a given reference point."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C37980",
+      "description": "INNER Inside or closer to the inside of the body or object."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C73705",
+      "description": "INTERMEDIATE Located between two points or extremes."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25309",
+      "description": "LOWER The bottom one of two."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25232",
+      "description": "MEDIAL Toward the middle or in a limb toward the median plane."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C81170",
+      "description": "MIDLINE A medial line, especially the medial line or medial plane of the body (or some part of the body)."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C27958",
+      "description": "NASAL Of, or related to, or in the direction of the nose."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C38166",
+      "description": "OUTER Being on or toward the outside of the body or object."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25233",
+      "description": "PERIPHERAL On or near an edge or constituting an outer boundary;the outer area."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25622",
+      "description": "POSTERIOR Denoting the back portion of the body or a structure."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C94393",
+      "description": "ROSTRAL Toward the muzzle in the head."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25239",
+      "description": "SUPERFICIAL Of or pertaining to the exterior surface."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25235",
+      "description": "SUPERIOR Pertaining to a point above a given reference point."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25245",
+      "description": "SURFACE The extended two-dimensional outer layer or area of a three-dimensional object."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C117754",
+      "description": "TEMPORAL Of, or related to, anatomic sites that are located in the cranium, brain, and eye."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C90069",
+      "description": "TIP The pointed end of a structure."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C25355",
+      "description": "UPPER The top one of two."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C45875",
+      "description": "VENTRAL Pertaining to the front or lower surface of the body."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/element/cs/#AnatomicalDirectionCS",
+      "code": "C98798",
+      "description": "VENTROLATERAL Of or pertaining to the front and side of a main body."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "AdditionalDoseInstruction",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.AdditionalDoseInstruction",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Supplemental instructions - e.g. 'with meals'.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1644714"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

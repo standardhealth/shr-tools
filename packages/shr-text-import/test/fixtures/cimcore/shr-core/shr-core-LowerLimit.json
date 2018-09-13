@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "LowerLimit",
+  "namespace": "shr.core",
+  "fqn": "shr.core.LowerLimit",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The lower limit of detection of the measured points. This is needed if any of the data points have the value 'L' (lower than detection limit).",
+  "value": {
+    "fqn": "decimal",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "fileType": "ValueSet",
+  "name": "ClinicalFindingAbsentVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ClinicalFindingAbsentVS",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#ClinicalFindingAbsentVS",
+  "rules": {
+    "includesDescendants": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "373572006"
+      }
+    ]
+  }
+}

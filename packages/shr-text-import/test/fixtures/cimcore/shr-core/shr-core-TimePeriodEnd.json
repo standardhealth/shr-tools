@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "TimePeriodEnd",
+  "namespace": "shr.core",
+  "fqn": "shr.core.TimePeriodEnd",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The time at which something is to end or did end. Boundary is considered inclusive.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1522314"
+    }
+  ],
+  "value": {
+    "fqn": "dateTime",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "ExcludeFlag",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.ExcludeFlag",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "If true, exclude the subjects that match the criterion.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0680251"
+    }
+  ],
+  "value": {
+    "fqn": "boolean",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

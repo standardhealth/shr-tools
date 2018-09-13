@@ -1,0 +1,81 @@
+{
+  "fileType": "DataElement",
+  "name": "Attachment",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Attachment",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A file that contains audio, video, image, or similar content.",
+  "hierarchy": [
+    "shr.core.EmbeddedContent"
+  ],
+  "basedOn": [
+    "shr.core.EmbeddedContent"
+  ],
+  "fields": [
+    {
+      "fqn": "shr.core.BinaryData",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.ContentType",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Language",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.ResourceLocation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.ResourceSize",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Hash",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Title",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.CreationTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

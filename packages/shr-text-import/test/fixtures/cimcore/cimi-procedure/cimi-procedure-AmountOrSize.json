@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "AmountOrSize",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.AmountOrSize",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The quantity of specimen collected",
+  "value": {
+    "fqn": "shr.core.SimpleQuantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

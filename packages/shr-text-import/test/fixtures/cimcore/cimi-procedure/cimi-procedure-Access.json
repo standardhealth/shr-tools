@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Access",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.Access",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The route used to access the site of a procedure. It is used to distinguish open, closed, and percutaneous procedures.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

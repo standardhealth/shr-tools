@@ -1,0 +1,24 @@
+{
+  "fileType": "ValueSet",
+  "name": "DegreeOfLymphaticInvolvementVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.DegreeOfLymphaticInvolvementVS",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#DegreeOfLymphaticInvolvementVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#DegreeOfLymphaticInvolvementCS",
+      "code": "microscopic",
+      "description": "Only a few cancer cells are in the node."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#DegreeOfLymphaticInvolvementCS",
+      "code": "gross",
+      "description": "The cancer can be seen or felt without aid of microscopy."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#DegreeOfLymphaticInvolvementCS",
+      "code": "extracapsular",
+      "description": "Cancer has pread outside the wall of the node."
+    }
+  ]
+}

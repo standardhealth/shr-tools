@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "RecurrenceInterval",
+  "namespace": "shr.core",
+  "fqn": "shr.core.RecurrenceInterval",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The period of time after which the pattern repeats, for example, each day. To specify an event should take place every other Monday, the recurrence interval should be two weeks, and DayOfWeek should be Monday.",
+  "value": {
+    "fqn": "shr.core.Duration",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "fileType": "ValueSet",
+  "name": "SemiquantitativeDurationVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.SemiquantitativeDurationVS",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#SemiquantitativeDurationVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeDurationCS",
+      "code": "many_years",
+      "description": "Many years"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeDurationCS",
+      "code": "several_years",
+      "description": "Several years"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeDurationCS",
+      "code": "one_year",
+      "description": "About a year"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeDurationCS",
+      "code": "months",
+      "description": "Several months but less than a year"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeDurationCS",
+      "code": "weeks",
+      "description": "Several weeks but less than a month"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeDurationCS",
+      "code": "days",
+      "description": "Several days but less than a week"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeDurationCS",
+      "code": "hours",
+      "description": "Several hours but less than a day"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeDurationCS",
+      "code": "minutes",
+      "description": "Several minutes but less than an hour"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeDurationCS",
+      "code": "seconds",
+      "description": "Several seconds but less than a minute"
+    }
+  ]
+}

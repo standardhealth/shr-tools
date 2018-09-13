@@ -1,0 +1,50 @@
+{
+  "fileType": "ValueSet",
+  "name": "MilitaryServiceEraVS",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.MilitaryServiceEraVS",
+  "description": "Values were taken from Final HMIS Data Standards March 2010 (Homeless Management Information System), field 5.05E Veteran’s Information. See: https://www.onecpd.info/resources/documents/FinalHMISDataStandards_March2010.pdf.",
+  "url": "http://standardhealthrecord.org/shr/occupation/vs/#MilitaryServiceEraVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceEraCS",
+      "code": "post_9_11_era",
+      "description": "Post September 11, 2001 to Present"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceEraCS",
+      "code": "gulf_era",
+      "description": "Persian Gulf Era (August 1991 - September 10, 2001)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceEraCS",
+      "code": "post_vietnam_era",
+      "description": "Post-Vietnam (May 1975 - July 1991)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceEraCS",
+      "code": "vietnam_era",
+      "description": "Vietnam Era (August 1964 - April 1975)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceEraCS",
+      "code": "post_korean_era",
+      "description": "Between Korean and Vietnam War (February 1955 - July 1964)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceEraCS",
+      "code": "korean_era",
+      "description": "Korean War (June 1950 - January 1955)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceEraCS",
+      "code": "post_wwII_era",
+      "description": "Between WWII and Korean War (August 1947 - May 1950)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceEraCS",
+      "code": "wwII_era",
+      "description": "World War II (September 1940 - July 1947)"
+    }
+  ]
+}

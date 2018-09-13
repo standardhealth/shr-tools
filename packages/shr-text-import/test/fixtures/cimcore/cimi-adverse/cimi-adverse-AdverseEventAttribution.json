@@ -1,0 +1,62 @@
+{
+  "fileType": "DataElement",
+  "name": "AdverseEventAttribution",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.AdverseEventAttribution",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A possible cause of an observed adverse event, known or theorized. There can be more than one possible cause.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1510821",
+      "display": "Adverse Event Attribution to Product or ProcedurePerformed"
+    }
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "shr.core.CodeableConcept",
+        "valueType": "IdentifiableValue",
+        "constraints": {
+          "valueSet": {
+            "uri": "http://hl7.org/fhir/ValueSet/substance-code",
+            "bindingStrength": "PREFERRED",
+            "lastModifiedBy": "cimi.adverse.AdverseEventAttribution"
+          }
+        }
+      },
+      {
+        "fqn": "cimi.entity.Substance",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.statement.ActionPerformedStatement",
+        "valueType": "RefValue"
+      }
+    ]
+  },
+  "fields": [
+    {
+      "fqn": "cimi.context.Certainty",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.RouteIntoBody",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

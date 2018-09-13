@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "PlaceOfBirth",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.PlaceOfBirth",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The location of a birth event. There may be multiple entries, but a person has only one place of birth.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0032040"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.GeopoliticalLocation",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

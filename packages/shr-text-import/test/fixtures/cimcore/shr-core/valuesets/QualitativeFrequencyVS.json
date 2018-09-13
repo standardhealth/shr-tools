@@ -1,0 +1,35 @@
+{
+  "fileType": "ValueSet",
+  "name": "QualitativeFrequencyVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.QualitativeFrequencyVS",
+  "description": "Code set indicating the frequency of an event in qualitative terms.",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#QualitativeFrequencyVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "code": "always",
+      "description": "Virtually always or every time"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "code": "usually",
+      "description": "Frequently or often"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "code": "sometimes",
+      "description": "Occasionally or sometimes"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "code": "rarely",
+      "description": "Rarely"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "code": "never",
+      "description": "Never"
+    }
+  ]
+}

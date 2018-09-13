@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Type",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Type",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The most specific code (lowest level term) describing the kind or sort of thing being represented.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0332307"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

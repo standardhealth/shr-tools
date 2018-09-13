@@ -1,0 +1,61 @@
+{
+  "fileType": "Mapping",
+  "name": "SampledData",
+  "namespace": "shr.core",
+  "fqn": "shr.core.SampledData",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "SampledData",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "string"
+        ],
+        "target": "data",
+        "lastModifiedBy": "shr.core.SampledData"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Origin"
+        ],
+        "target": "origin",
+        "lastModifiedBy": "shr.core.SampledData"
+      },
+      {
+        "sourcePath": [
+          "shr.core.MillisecondsBetweenSamples"
+        ],
+        "target": "period",
+        "lastModifiedBy": "shr.core.SampledData"
+      },
+      {
+        "sourcePath": [
+          "shr.core.CorrectionFactor"
+        ],
+        "target": "factor",
+        "lastModifiedBy": "shr.core.SampledData"
+      },
+      {
+        "sourcePath": [
+          "shr.core.LowerLimit"
+        ],
+        "target": "lowerLimit",
+        "lastModifiedBy": "shr.core.SampledData"
+      },
+      {
+        "sourcePath": [
+          "shr.core.UpperLimit"
+        ],
+        "target": "upperLimit",
+        "lastModifiedBy": "shr.core.SampledData"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Dimensions"
+        ],
+        "target": "dimensions",
+        "lastModifiedBy": "shr.core.SampledData"
+      }
+    ]
+  }
+}

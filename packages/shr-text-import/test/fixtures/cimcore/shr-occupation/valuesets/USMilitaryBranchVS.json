@@ -1,0 +1,45 @@
+{
+  "fileType": "ValueSet",
+  "name": "USMilitaryBranchVS",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.USMilitaryBranchVS",
+  "description": "The code indicating the branch of the US military.",
+  "url": "http://standardhealthrecord.org/shr/occupation/vs/#USMilitaryBranchVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#USMilitaryBranchCS",
+      "code": "usa",
+      "description": "US Army"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#USMilitaryBranchCS",
+      "code": "usn",
+      "description": "US Navy"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#USMilitaryBranchCS",
+      "code": "usaf",
+      "description": "US Air Force"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#USMilitaryBranchCS",
+      "code": "usmc",
+      "description": "US Marine Corps"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#USMilitaryBranchCS",
+      "code": "uscg",
+      "description": "US Coast Guard"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#USMilitaryBranchCS",
+      "code": "usphc",
+      "description": "US Public Health Service"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#USMilitaryBranchCS",
+      "code": "noaa",
+      "description": "National Oceanic and Atmospheric Administration"
+    }
+  ]
+}

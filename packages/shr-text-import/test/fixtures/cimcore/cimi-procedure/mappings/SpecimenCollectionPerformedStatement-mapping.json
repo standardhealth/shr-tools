@@ -1,0 +1,209 @@
+{
+  "fileType": "Mapping",
+  "name": "SpecimenCollectionPerformedStatement",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.SpecimenCollectionPerformedStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-procedure",
+  "inheritance": {
+    "status": "inherited",
+    "from": "cimi.procedure.ProcedurePerformedStatement"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.procedure.SpecimenCollectionTopic",
+          "cimi.topic.TopicCode"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.SubjectOfInformation"
+        ],
+        "target": "subject",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SpecimenCollectionTopic",
+          "shr.core.Category"
+        ],
+        "target": "category",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SpecimenCollectionTopic",
+          "cimi.element.AnatomicalLocation"
+        ],
+        "target": "bodySite",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SpecimenCollectionTopic",
+          "cimi.element.PartOf"
+        ],
+        "target": "partOf",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.SpecimenCollectionTopic",
+          "cimi.element.Annotation"
+        ],
+        "target": "note",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.encounter.Encounter"
+        ],
+        "target": "context",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.context.Reason"
+        ],
+        "target": "reasonCode",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "shr.core.OccurrenceTimeOrPeriod"
+        ],
+        "target": "performed[x]",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.procedure.FHIRProcedureParticipant"
+        ],
+        "target": "performer",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.procedure.FHIRProcedureParticipant",
+          "cimi.entity.Practitioner"
+        ],
+        "target": "performer.actor",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.procedure.FHIRProcedureParticipant",
+          "cimi.entity.Organization"
+        ],
+        "target": "performer.actor",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.procedure.FHIRProcedureParticipant",
+          "cimi.entity.Patient"
+        ],
+        "target": "performer.actor",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.procedure.FHIRProcedureParticipant",
+          "cimi.entity.RelatedPerson"
+        ],
+        "target": "performer.actor",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.procedure.FHIRProcedureParticipant",
+          "cimi.entity.Device"
+        ],
+        "target": "performer.actor",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.procedure.FHIRProcedureParticipant",
+          "cimi.context.ParticipationType"
+        ],
+        "target": "performer.role",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.procedure.FHIRProcedureParticipant",
+          "cimi.element.OnBehalfOf"
+        ],
+        "target": "performer.onBehalfOf",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.element.Status"
+        ],
+        "target": "status",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.context.RelatedRequest",
+          "cimi.statement.ActionRequestedStatement"
+        ],
+        "target": "basedOn",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.context.Outcome"
+        ],
+        "target": "outcome",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedurePerformedContext",
+          "cimi.entity.Facility"
+        ],
+        "target": "location",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "notDone",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "notDoneReason",
+        "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
+      }
+    ]
+  }
+}

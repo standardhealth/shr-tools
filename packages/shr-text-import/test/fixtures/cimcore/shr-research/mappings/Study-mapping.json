@@ -1,0 +1,127 @@
+{
+  "fileType": "Mapping",
+  "name": "Study",
+  "namespace": "shr.research",
+  "fqn": "shr.research.Study",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "ResearchStudy",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.Title"
+        ],
+        "target": "title",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Identifier"
+        ],
+        "target": "identifier",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.PartOf"
+        ],
+        "target": "partOf",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Status"
+        ],
+        "target": "status",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.research.Enrollment"
+        ],
+        "target": "enrollment",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EffectiveTimePeriod"
+        ],
+        "target": "period",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.research.Sponsor"
+        ],
+        "target": "sponsor",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.research.Jurisdiction"
+        ],
+        "target": "jurisdiction",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.core.ContactDetail"
+        ],
+        "target": "contact",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.research.PrincipalInvestigator"
+        ],
+        "target": "principalInvestigator",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Facility"
+        ],
+        "target": "site",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.research.TerminationReason"
+        ],
+        "target": "reasonStopped",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Annotation"
+        ],
+        "target": "note",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.research.StudyArm",
+          "shr.core.Title"
+        ],
+        "target": "arm.name",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.research.StudyArm",
+          "shr.core.Type"
+        ],
+        "target": "arm.code",
+        "lastModifiedBy": "shr.research.Study"
+      },
+      {
+        "sourcePath": [
+          "shr.research.StudyArm",
+          "shr.core.Details"
+        ],
+        "target": "arm.description",
+        "lastModifiedBy": "shr.research.Study"
+      }
+    ]
+  }
+}

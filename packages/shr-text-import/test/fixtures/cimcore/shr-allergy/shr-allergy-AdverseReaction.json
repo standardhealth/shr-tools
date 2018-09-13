@@ -1,0 +1,76 @@
+{
+  "fileType": "DataElement",
+  "name": "AdverseReaction",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.AdverseReaction",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An instance of a negative response to the allergy or intolerance.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0559546"
+    }
+  ],
+  "fields": [
+    {
+      "fqn": "shr.allergy.AllergenIrritant",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.allergy.Manifestation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Details",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.OccurrenceTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.Severity",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/reaction-event-severity",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.allergy.AdverseReaction"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "cimi.element.RouteIntoBody",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

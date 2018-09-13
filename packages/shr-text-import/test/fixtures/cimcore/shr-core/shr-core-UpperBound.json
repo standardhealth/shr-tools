@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "UpperBound",
+  "namespace": "shr.core",
+  "fqn": "shr.core.UpperBound",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The upper limit on a quantitative value.",
+  "value": {
+    "fqn": "shr.core.Quantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

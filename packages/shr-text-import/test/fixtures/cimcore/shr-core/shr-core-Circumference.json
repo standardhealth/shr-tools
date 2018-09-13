@@ -1,0 +1,15 @@
+{
+  "fileType": "DataElement",
+  "name": "Circumference",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Circumference",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The length of such a boundary line of a figure, area, or object.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0332520"
+    }
+  ]
+}

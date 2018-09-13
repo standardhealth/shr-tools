@@ -1,0 +1,16 @@
+{
+  "fileType": "DataElement",
+  "name": "DataType",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.DataType",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Serves as a common ancestor of all CIMI types which represent the core granularity of the model.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent"
+  ],
+  "basedOn": [
+    "cimi.core.NonIndependent"
+  ]
+}

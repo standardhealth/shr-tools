@@ -1,0 +1,40 @@
+{
+  "fileType": "ValueSet",
+  "name": "BreastSpecimenTypeVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastSpecimenTypeVS",
+  "description": "The type of specimen obtained from the breast.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#BreastSpecimenTypeVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSpecimenTypeCS",
+      "code": "aspirate",
+      "description": "Aspirate"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSpecimenTypeCS",
+      "code": "core",
+      "description": "Core biopsy specimen"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSpecimenTypeCS",
+      "code": "excision",
+      "description": "Excision specimen without wire loc"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSpecimenTypeCS",
+      "code": "wire",
+      "description": "Excision specimen with wire loc"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSpecimenTypeCS",
+      "code": "duct",
+      "description": "Nipple duct excision"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSpecimenTypeCS",
+      "code": "mastectomy",
+      "description": "Total mastectomy"
+    }
+  ]
+}

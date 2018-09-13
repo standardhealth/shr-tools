@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "DerivedFrom",
+  "namespace": "shr.base",
+  "fqn": "shr.base.DerivedFrom",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Indicates the source of information in the case the Entry has been created by logical extension or modification of one or more source entries.",
+  "value": {
+    "fqn": "cimi.statement.ClinicalStatement",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

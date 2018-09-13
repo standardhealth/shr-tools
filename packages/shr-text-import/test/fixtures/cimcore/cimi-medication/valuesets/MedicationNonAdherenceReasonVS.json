@@ -1,0 +1,64 @@
+{
+  "fileType": "ValueSet",
+  "name": "MedicationNonAdherenceReasonVS",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationNonAdherenceReasonVS",
+  "url": "http://standardhealthrecord.org/cimi/medication/vs/#MedicationNonAdherenceReasonVS",
+  "values": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3841796",
+      "description": "Forget to take medication"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1444650",
+      "description": "Not needed"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3661846",
+      "description": "Medication not effective"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1709370",
+      "description": "Overmedicated"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0420261",
+      "description": "Patient misunderstood treatment directions"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C4074975",
+      "description": "Difficulty taking medication"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0879626",
+      "description": "Experienced side effects"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0849836",
+      "description": "Worried about taking medication due to potential side effects, drug interactions, etc."
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C4049170",
+      "description": "Inability to afford medication"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0520941",
+      "description": "Absence of motivation to adhere to medication regimen"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C4038419",
+      "description": "Prescription unfilled"
+    }
+  ]
+}

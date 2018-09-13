@@ -1,0 +1,36 @@
+{
+  "fileType": "ValueSet",
+  "name": "StudyArmTypeVS",
+  "namespace": "shr.research",
+  "fqn": "shr.research.StudyArmTypeVS",
+  "description": "The role of each arm in the clinical trial.",
+  "url": "http://standardhealthrecord.org/shr/research/vs/#StudyArmTypeVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#StudyArmTypeCS",
+      "code": "experimental",
+      "description": "Experimental study arm"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#StudyArmTypeCS",
+      "code": "active_comparator",
+      "description": ""
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#StudyArmTypeCS",
+      "code": "placebo_comparator"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#StudyArmTypeCS",
+      "code": "sham_comparator"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#StudyArmTypeCS",
+      "code": "no_intervention"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/research/cs/#StudyArmTypeCS",
+      "code": "other"
+    }
+  ]
+}

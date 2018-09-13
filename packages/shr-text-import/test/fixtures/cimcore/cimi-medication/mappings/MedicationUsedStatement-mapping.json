@@ -1,0 +1,101 @@
+{
+  "fileType": "Mapping",
+  "name": "MedicationUsedStatement",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationUsedStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationstatement",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.core.SourceOfInformation",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "informationSource",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "_Entry",
+          "shr.core.CreationTime"
+        ],
+        "target": "dateAsserted  // date asserted and date recorded may not be the same",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationUseTopic",
+          "cimi.medication.Dosage"
+        ],
+        "target": "dosage",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationUseTopic",
+          "cimi.entity.Medication"
+        ],
+        "target": "medication[x]",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.medication.MedicationUseTopic",
+          "shr.core.Category"
+        ],
+        "target": "category",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.PerformedContext",
+          "cimi.context.Reason"
+        ],
+        "target": "reasonCode",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.PerformedContext",
+          "shr.core.OccurrenceTimeOrPeriod"
+        ],
+        "target": "effective[x]",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.PerformedContext",
+          "cimi.element.Status"
+        ],
+        "target": "status",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "reasonNotTaken",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 1
+        },
+        "target": "dosage",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      }
+    ],
+    "fixedValueMapping": [
+      {
+        "fixedValue": "#y",
+        "target": "taken",
+        "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
+      }
+    ]
+  }
+}

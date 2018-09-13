@@ -1,0 +1,39 @@
+{
+  "fileType": "ValueSet",
+  "name": "ProgressionVS",
+  "namespace": "shr.condition",
+  "fqn": "shr.condition.ProgressionVS",
+  "url": "http://standardhealthrecord.org/shr/condition/vs/#ProgressionVS",
+  "values": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0677874",
+      "description": "Complete response or remission; no measurable or observable evidence of cancer."
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0015250",
+      "description": "Complete resection/excision of cancerous tumor"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1272745",
+      "description": "Improving, responding to treatment"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0205360",
+      "description": "Stable, neither improving nor worsening"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1546960",
+      "description": "Worsening, disease progressing"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3858734",
+      "description": "Insufficient evidence"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "fileType": "Mapping",
+  "name": "ResearchSubject",
+  "namespace": "shr.research",
+  "fqn": "shr.research.ResearchSubject",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "ResearchSubject",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.entity.Patient"
+        ],
+        "target": "individual",
+        "lastModifiedBy": "shr.research.ResearchSubject"
+      },
+      {
+        "sourcePath": [
+          "shr.research.Study"
+        ],
+        "target": "study",
+        "lastModifiedBy": "shr.research.ResearchSubject"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Status"
+        ],
+        "target": "status",
+        "lastModifiedBy": "shr.research.ResearchSubject"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ParticipationPeriod"
+        ],
+        "target": "period",
+        "lastModifiedBy": "shr.research.ResearchSubject"
+      }
+    ]
+  }
+}

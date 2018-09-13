@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "StateOfIssue",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.StateOfIssue",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A state or country acting as an assuing authority for a document.",
+  "value": {
+    "fqn": "shr.core.State",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

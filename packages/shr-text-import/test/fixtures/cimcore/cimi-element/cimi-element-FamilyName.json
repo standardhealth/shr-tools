@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "FamilyName",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.FamilyName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The portion of a person's name that reflects the genealogy of the person. In western cultures, this is the 'last' name. In eastern cultures, the family name appears before the person's given name(s). In some cultures (e.g. Eritrea) the family name of a son is the first name of his father. (Source: HL7 V3).",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "45394-4"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

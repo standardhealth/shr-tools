@@ -1,0 +1,129 @@
+{
+  "fileType": "DataElement",
+  "name": "ServiceConnectedDisability",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.ServiceConnectedDisability",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Percentage disability resulting from US Military Service.",
+  "hierarchy": [
+    "cimi.topic.EvaluationComponent"
+  ],
+  "basedOn": [
+    "cimi.topic.EvaluationComponent"
+  ],
+  "value": {
+    "fqn": "shr.core.Quantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "subpaths": {
+        "shr.core.Units": {
+          "subpaths": {
+            "shr.core.Coding": {
+              "fixedValue": {
+                "type": "code",
+                "value": {
+                  "system": "http://unitsofmeasure.org",
+                  "code": "%"
+                },
+                "lastModifiedBy": "shr.occupation.ServiceConnectedDisability"
+              }
+            }
+          }
+        }
+      }
+    },
+    "constraintHistory": {
+      "code": [
+        {
+          "constraint": {
+            "type": "code",
+            "value": {
+              "system": "http://unitsofmeasure.org",
+              "code": "%"
+            },
+            "lastModifiedBy": "shr.occupation.ServiceConnectedDisability"
+          },
+          "source": "shr.occupation.ServiceConnectedDisability"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.ComponentResultValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.ExceptionValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.Interpretation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.topic.EvaluationComponent",
+            "min": 0
+          },
+          {
+            "source": "shr.occupation.ServiceConnectedDisability",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.occupation.ServiceConnectedDisability"
+            },
+            "source": "shr.occupation.ServiceConnectedDisability"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "fileType": "DataElement",
+  "name": "NoKnownFoodAllergy",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.NoKnownFoodAllergy",
+  "isEntry": true,
+  "isAbstract": false,
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "shr.allergy.NoAdverseSensitivityToSubstance"
+  ],
+  "basedOn": [
+    "shr.allergy.NoAdverseSensitivityToSubstance"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.entity.EntityOrRole": {
+            "type": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false,
+              "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false
+            },
+            "source": "shr.allergy.NoAdverseSensitivityToSubstance"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.entity.EntityOrRole": {
+            "type": {
+              "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPerson",
+              "onValue": false,
+              "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPerson",
+              "onValue": false
+            },
+            "source": "shr.allergy.NoAdverseSensitivityToSubstance"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.core.Attribution": {
+            "subpaths": {
+              "cimi.entity.EntityOrRole": {
+                "type": {
+                  "fqn": "cimi.entity.PatientOrPractitioner",
+                  "onValue": false,
+                  "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.PatientOrPractitioner",
+              "onValue": false
+            },
+            "source": "shr.allergy.NoAdverseSensitivityToSubstance"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.allergy.AdverseSensitivityTopic",
+          "onValue": false,
+          "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+        },
+        "subpaths": {
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://snomed.info/sct",
+                    "code": "428607008",
+                    "display": "No known environmental allergy (situation)"
+                  },
+                  "lastModifiedBy": "shr.allergy.NoKnownFoodAllergy"
+                }
+              }
+            }
+          },
+          "shr.allergy.AllergenIrritant": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.allergy.NoKnownFoodAllergy"
+            }
+          },
+          "shr.allergy.SubstanceCategory": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.allergy.NoKnownFoodAllergy"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/allergy/vs/NoKnownAllergyVS",
+              "bindingStrength": "REQUIRED"
+            },
+            "source": "shr.allergy.NoAdverseSensitivityToSubstance"
+          }
+        ],
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://snomed.info/sct",
+                "code": "428607008",
+                "display": "No known environmental allergy (situation)"
+              },
+              "lastModifiedBy": "shr.allergy.NoKnownFoodAllergy"
+            },
+            "source": "shr.allergy.NoKnownFoodAllergy"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.allergy.AdverseSensitivityTopic",
+              "onValue": false
+            },
+            "source": "shr.allergy.NoAdverseSensitivityToSubstance"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.allergy.NoKnownFoodAllergy"
+            },
+            "source": "shr.allergy.NoKnownFoodAllergy"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.allergy.NoKnownFoodAllergy"
+            },
+            "source": "shr.allergy.NoKnownFoodAllergy"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.AbsenceContext",
+          "onValue": false,
+          "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.AbsenceContext",
+              "onValue": false
+            },
+            "source": "shr.allergy.NoAdverseSensitivityToSubstance"
+          }
+        ]
+      }
+    }
+  ]
+}

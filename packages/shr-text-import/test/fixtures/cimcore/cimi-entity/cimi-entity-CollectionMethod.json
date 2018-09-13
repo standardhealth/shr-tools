@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "CollectionMethod",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.CollectionMethod",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "How the specimen was obtained.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

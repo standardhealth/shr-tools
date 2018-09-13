@@ -1,0 +1,433 @@
+{
+  "fileType": "DataElement",
+  "name": "ProgesteroneReceptorStatus",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.ProgesteroneReceptorStatus",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "Progesterone receptor status is a factor in determining prognosis and treatment options. The value is the percentage of cells that test (stain) positive for the presence of a receptor. The interpretation of positive or negative (found in the interpretation property) is based on the staining percentage, and may take into account the staining intensity.\n\nBased on discussion with Cancer Interoperability Group subject matter experts, there was insufficient rationale to include the following components in the data model: StainingControl, PrimaryAntibody, Allred Score (both total and component scores). We are seeking feedback on whether or not those components should be included in this model.\n\nWe are seeking feedback if it is better to put the positive/negative status in Value or Interpretation. The current approach is that positive/negative designation is a value, even though that value is (in fact) an interpretation of evidence (NuclearPositivity and AverageStainingIntensity).",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "16113-3"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded",
+    "cimi.statement.LaboratoryTestResultRecorded",
+    "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.EvaluationResultTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "shr.core.Category": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://hl7.org/fhir/observation-category",
+                    "code": "laboratory"
+                  },
+                  "lastModifiedBy": "cimi.statement.LaboratoryTestResultRecorded"
+                }
+              }
+            }
+          },
+          "cimi.topic.Precondition": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+            }
+          },
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+            }
+          },
+          "cimi.element.AnatomicalLocation": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://loinc.org",
+                    "code": "16113-3",
+                    "display": "Progesterone receptor [Interpretation] in Tissue"
+                  },
+                  "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+                }
+              }
+            }
+          },
+          "cimi.entity.Specimen": {
+            "type": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            }
+          },
+          "cimi.topic.EvaluationComponent": {
+            "includesType": [
+              {
+                "fqn": "shr.oncology.NuclearPositivity",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+              },
+              {
+                "fqn": "shr.oncology.AverageStainingIntensity",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+              }
+            ]
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "laboratory"
+              }
+            },
+            "source": "cimi.statement.LaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://loinc.org",
+                "code": "16113-3",
+                "display": "Progesterone receptor [Interpretation] in Tissue"
+              },
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            },
+            "source": "shr.oncology.ProgesteroneReceptorStatus"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            },
+            "source": "shr.oncology.ProgesteroneReceptorStatus"
+          }
+        ],
+        "includesType": [
+          {
+            "constraint": {
+              "fqn": "shr.oncology.NuclearPositivity",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            },
+            "source": "shr.oncology.ProgesteroneReceptorStatus"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.AverageStainingIntensity",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            },
+            "source": "shr.oncology.ProgesteroneReceptorStatus"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "type": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            },
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/shr/oncology/vs/PositiveNegativeVS",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/PositiveNegativeVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            },
+            "source": "shr.oncology.ProgesteroneReceptorStatus"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            },
+            "source": "shr.oncology.ProgesteroneReceptorStatus"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.statement.DiagnosticService",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "fixedValue": {
+              "type": "code",
+              "value": {
+                "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+                "code": "pathology"
+              },
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.LaboratoryTestResultRecorded"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+                "code": "pathology"
+              },
+              "lastModifiedBy": "shr.oncology.ProgesteroneReceptorStatus"
+            },
+            "source": "shr.oncology.ProgesteroneReceptorStatus"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.topic.PanelMembers",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+      }
+    }
+  ]
+}

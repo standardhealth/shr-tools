@@ -1,0 +1,44 @@
+{
+  "fileType": "DataElement",
+  "name": "RelatedPerson",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.RelatedPerson",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A person in a role defined in relationship to a patient",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Role"
+  ],
+  "basedOn": [
+    "cimi.entity.Role"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.entity.Person",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.RelationshipType",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.EffectiveTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

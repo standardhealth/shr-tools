@@ -1,0 +1,40 @@
+{
+  "fileType": "ValueSet",
+  "name": "QualitativeLikelihoodVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.QualitativeLikelihoodVS",
+  "description": "The likelihood of an event or state, expressed qualitatively. Qualitative likelihoods are associated with judgments and assessments. Values are based on US Intelligence Community's standard language used to describe judgements of likelihood.",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#QualitativeLikelihoodVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeLikelihoodCS",
+      "code": "definitely",
+      "description": "With certainty or near-complete certainty, an event that definitely has or almost certainly will happen"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeLikelihoodCS",
+      "code": "very_likely",
+      "description": "Very likely, highly probable, e.g., an event with more than 80% but less than 100% likelihood"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeLikelihoodCS",
+      "code": "likely",
+      "description": "Likely or probable, e.g., an event with 60% to 80% likelihood"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeLikelihoodCS",
+      "code": "even_chance",
+      "description": "Roughly equal chance or even odds of happening, between 40% and 60% probability"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeLikelihoodCS",
+      "code": "unlikely",
+      "description": "Not likely or improbable, e.g., an event with 20% to 40% likelihood"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeLikelihoodCS",
+      "code": "very_unlikely",
+      "description": "Very unlikely, highly improbable, e.g., an event with less than 20% but non-zero likelihood"
+    }
+  ]
+}

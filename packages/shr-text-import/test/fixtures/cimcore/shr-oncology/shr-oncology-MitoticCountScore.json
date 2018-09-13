@@ -1,0 +1,162 @@
+{
+  "fileType": "DataElement",
+  "name": "MitoticCountScore",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.MitoticCountScore",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "How fast the tumor cells are growing and dividing, determined from the number of mitotic cells present. Scored 1 to 3, with 3 being the most mitotic cells. We are seeking feedback on the value of representing the mitotic rate as a value rather than coded ranges.",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "85300-2"
+    }
+  ],
+  "hierarchy": [
+    "cimi.topic.EvaluationComponent",
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "basedOn": [
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/shr/oncology/vs/MitoticCountScoreVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "shr.oncology.MitoticCountScore"
+      }
+    },
+    "constraintHistory": {
+      "valueSet": [
+        {
+          "constraint": {
+            "uri": "http://standardhealthrecord.org/shr/oncology/vs/MitoticCountScoreVS",
+            "bindingStrength": "REQUIRED",
+            "lastModifiedBy": "shr.oncology.MitoticCountScore"
+          },
+          "source": "shr.oncology.MitoticCountScore"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.ComponentResultValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.core.CodeableConcept",
+          "onValue": true,
+          "lastModifiedBy": "cimi.topic.CodedEvaluationComponent"
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.ExceptionValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/NottinghamNullVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.MitoticCountScore"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/NottinghamNullVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.MitoticCountScore"
+            },
+            "source": "shr.oncology.MitoticCountScore"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.Interpretation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.topic.EvaluationComponent",
+            "min": 0
+          },
+          {
+            "source": "cimi.topic.CodedEvaluationComponent",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    }
+  ]
+}

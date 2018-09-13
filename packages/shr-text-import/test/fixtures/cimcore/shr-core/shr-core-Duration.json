@@ -1,0 +1,82 @@
+{
+  "fileType": "DataElement",
+  "name": "Duration",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Duration",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The length of time that something continues.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0449238"
+    }
+  ],
+  "hierarchy": [
+    "shr.core.Quantity"
+  ],
+  "basedOn": [
+    "shr.core.Quantity"
+  ],
+  "value": {
+    "fqn": "decimal",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "inheritance": {
+      "status": "inherited",
+      "from": "shr.core.Quantity"
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.core.Comparator",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.Quantity"
+      }
+    },
+    {
+      "fqn": "shr.core.Units",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Coding": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/shr/core/vs/TimeUnitOfMeasureVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.Duration"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "shr.core.Quantity"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/core/vs/TimeUnitOfMeasureVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.Duration"
+            },
+            "source": "shr.core.Duration"
+          }
+        ]
+      }
+    }
+  ]
+}

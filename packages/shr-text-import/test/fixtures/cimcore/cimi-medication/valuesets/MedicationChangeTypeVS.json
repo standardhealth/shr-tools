@@ -1,0 +1,34 @@
+{
+  "fileType": "ValueSet",
+  "name": "MedicationChangeTypeVS",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationChangeTypeVS",
+  "url": "http://standardhealthrecord.org/cimi/medication/vs/#MedicationChangeTypeVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeTypeCS",
+      "code": "reduced",
+      "description": "Dose reduced"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeTypeCS",
+      "code": "increased",
+      "description": "Dose increased"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeTypeCS",
+      "code": "temp_stop",
+      "description": "Medication temporarily interrupted"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeTypeCS",
+      "code": "swap",
+      "description": "Switch from one medication (or set of medications) to another"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/medication/cs/#MedicationChangeTypeCS",
+      "code": "stop",
+      "description": "Medication stopped"
+    }
+  ]
+}

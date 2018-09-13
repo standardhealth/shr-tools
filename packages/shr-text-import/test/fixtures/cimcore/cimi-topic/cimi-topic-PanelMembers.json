@@ -1,0 +1,18 @@
+{
+  "fileType": "DataElement",
+  "name": "PanelMembers",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.PanelMembers",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "PanelMember represent the elements of a group of a related but independent evaluations.\nExamples are the measurements that compose a complete blood count (CBC), or the elements of a pathology report. Each member is an independent evaluation, but the grouping reflects a composite lab order, shared specimen, or a single report author. Typically the Category and Reason are not given for individual findings that are part of the panel, but rather given at the level of the panel itself.",
+  "fields": [
+    {
+      "fqn": "cimi.statement.EvaluationResultRecorded",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

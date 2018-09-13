@@ -1,0 +1,445 @@
+{
+  "fileType": "DataElement",
+  "name": "OccupationalDataSummaryPanel",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.OccupationalDataSummaryPanel",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "Current and past activities for profit, wages, salary, or as a service to others.",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "74165-2"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded",
+    "cimi.statement.NonLabPanelRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.NonLabPanelRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.PanelTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+        },
+        "subpaths": {
+          "cimi.entity.Device": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          },
+          "cimi.entity.Specimen": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          },
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://loinc.org",
+                    "code": "74165-2"
+                  },
+                  "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+                }
+              }
+            }
+          },
+          "shr.core.Category": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://hl7.org/fhir/observation-category",
+                    "code": "social-history"
+                  },
+                  "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+                }
+              }
+            }
+          },
+          "cimi.element.AnatomicalLocation": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            }
+          },
+          "cimi.topic.FindingMethod": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            }
+          },
+          "cimi.topic.EvaluationComponent": {
+            "includesType": [
+              {
+                "fqn": "shr.occupation.CurrentEmploymentStatus",
+                "card": {
+                  "min": 0,
+                  "max": 1
+                },
+                "onValue": false,
+                "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+              }
+            ]
+          },
+          "cimi.topic.PanelMembers": {
+            "subpaths": {
+              "cimi.statement.EvaluationResultRecorded": {
+                "includesType": [
+                  {
+                    "fqn": "shr.occupation.UsualOccupation",
+                    "card": {
+                      "min": 0,
+                      "max": 1
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+                  },
+                  {
+                    "fqn": "shr.occupation.PastOrPresentJob",
+                    "card": {
+                      "min": 0
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+                  },
+                  {
+                    "fqn": "shr.occupation.MilitaryServiceHistory",
+                    "card": {
+                      "min": 0,
+                      "max": 1
+                    },
+                    "onValue": false,
+                    "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://loinc.org",
+                "code": "74165-2"
+              },
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            },
+            "source": "shr.occupation.OccupationalDataSummaryPanel"
+          },
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "social-history"
+              },
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            },
+            "source": "shr.occupation.OccupationalDataSummaryPanel"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.topic.PanelTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          }
+        ],
+        "includesType": [
+          {
+            "constraint": {
+              "fqn": "shr.occupation.CurrentEmploymentStatus",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            },
+            "source": "shr.occupation.OccupationalDataSummaryPanel"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.occupation.UsualOccupation",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            },
+            "source": "shr.occupation.OccupationalDataSummaryPanel"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.occupation.PastOrPresentJob",
+              "card": {
+                "min": 0
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            },
+            "source": "shr.occupation.OccupationalDataSummaryPanel"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.occupation.MilitaryServiceHistory",
+              "card": {
+                "min": 0,
+                "max": 1
+              },
+              "onValue": false,
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            },
+            "source": "shr.occupation.OccupationalDataSummaryPanel"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            },
+            "source": "shr.occupation.OccupationalDataSummaryPanel"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.occupation.OccupationalDataSummaryPanel"
+            },
+            "source": "shr.occupation.OccupationalDataSummaryPanel"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          },
+          "cimi.context.ExceptionValue": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.NonLabPanelRecorded"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.NonLabPanelRecorded"
+          }
+        ]
+      }
+    }
+  ]
+}

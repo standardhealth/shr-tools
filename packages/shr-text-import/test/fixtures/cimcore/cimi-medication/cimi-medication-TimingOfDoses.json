@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "TimingOfDoses",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.TimingOfDoses",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "When doses of medication should be administered.",
+  "value": {
+    "fqn": "shr.core.Timing",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

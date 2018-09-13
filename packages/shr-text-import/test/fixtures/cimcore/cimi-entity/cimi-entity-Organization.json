@@ -1,0 +1,132 @@
+{
+  "fileType": "DataElement",
+  "name": "Organization",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Organization",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A social or legal structure formed by human beings.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1561598"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Entity"
+  ],
+  "basedOn": [
+    "cimi.entity.Entity"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.entity.OrganizationName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.OrganizationAlias",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.entity.OrganizationIdentifier",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/organization-type",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Organization"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/organization-type",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Organization"
+            },
+            "source": "cimi.entity.Organization"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.Address",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1
+      }
+    },
+    {
+      "fqn": "shr.core.ContactPoint",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.ActiveFlag",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.PartOf",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.core.Independent": {
+            "type": {
+              "fqn": "cimi.entity.Organization",
+              "onValue": false,
+              "lastModifiedBy": "cimi.entity.Organization"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.Organization",
+              "onValue": false,
+              "lastModifiedBy": "cimi.entity.Organization"
+            },
+            "source": "cimi.entity.Organization"
+          }
+        ]
+      }
+    }
+  ]
+}

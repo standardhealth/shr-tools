@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "SpokenLanguageProficiency",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.SpokenLanguageProficiency",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Accuracy and fluency in spoken communication in a language.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0678997"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/shr/core/vs/PerformanceGradingScaleVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.entity.SpokenLanguageProficiency"
+      }
+    }
+  }
+}

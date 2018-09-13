@@ -1,0 +1,16 @@
+{
+  "fileType": "ValueSet",
+  "name": "DeviceVS",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.DeviceVS",
+  "description": "Codes describing medical devices.",
+  "url": "http://standardhealthrecord.org/cimi/entity/vs/#DeviceVS",
+  "rules": {
+    "includesDescendants": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "49062001"
+      }
+    ]
+  }
+}

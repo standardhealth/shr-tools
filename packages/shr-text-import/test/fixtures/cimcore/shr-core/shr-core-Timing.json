@@ -1,0 +1,50 @@
+{
+  "fileType": "DataElement",
+  "name": "Timing",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Timing",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A timing schedule that specifies an event that may occur multiple times. Timing offers a choice of multiple OccurrenceTime (used is used to specify specific times), or recurrence patterns.",
+  "fields": [
+    {
+      "fqn": "shr.core.OccurrenceTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "shr.core.TimingCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.EventDuration",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.RecurrencePattern",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.RecurrenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

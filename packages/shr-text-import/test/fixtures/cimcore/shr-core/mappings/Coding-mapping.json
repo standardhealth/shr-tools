@@ -1,0 +1,40 @@
+{
+  "fileType": "Mapping",
+  "name": "Coding",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Coding",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Coding",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "code"
+        ],
+        "target": "code",
+        "lastModifiedBy": "shr.core.Coding"
+      },
+      {
+        "sourcePath": [
+          "shr.core.CodeSystem"
+        ],
+        "target": "system",
+        "lastModifiedBy": "shr.core.Coding"
+      },
+      {
+        "sourcePath": [
+          "shr.core.CodeSystemVersion"
+        ],
+        "target": "version",
+        "lastModifiedBy": "shr.core.Coding"
+      },
+      {
+        "sourcePath": [
+          "shr.core.DisplayText"
+        ],
+        "target": "display",
+        "lastModifiedBy": "shr.core.Coding"
+      }
+    ]
+  }
+}

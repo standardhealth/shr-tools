@@ -1,0 +1,40 @@
+{
+  "fileType": "Mapping",
+  "name": "Encounter",
+  "namespace": "cimi.encounter",
+  "fqn": "cimi.encounter.Encounter",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Encounter",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.encounter.PatientOrGroup"
+        ],
+        "target": "subject",
+        "lastModifiedBy": "cimi.encounter.Encounter"
+      },
+      {
+        "sourcePath": [
+          "cimi.encounter.EncounterType"
+        ],
+        "target": "type",
+        "lastModifiedBy": "cimi.encounter.Encounter"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Status"
+        ],
+        "target": "status",
+        "lastModifiedBy": "cimi.encounter.Encounter"
+      },
+      {
+        "sourcePath": [
+          "shr.core.TimePeriod"
+        ],
+        "target": "period",
+        "lastModifiedBy": "cimi.encounter.Encounter"
+      }
+    ]
+  }
+}

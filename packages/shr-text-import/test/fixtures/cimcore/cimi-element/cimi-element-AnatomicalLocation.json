@@ -1,0 +1,48 @@
+{
+  "fileType": "DataElement",
+  "name": "AnatomicalLocation",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.AnatomicalLocation",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A location or structure in the body, including tissues, regions, cavities, and spaces; for example, right elbow, or left ventricle of the heart.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1545955"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/cimi/element/vs/AnatomicalLocationVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.element.AnatomicalLocation"
+      }
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.element.Laterality",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.AnatomicalDirection",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

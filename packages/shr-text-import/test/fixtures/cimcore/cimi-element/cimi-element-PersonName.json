@@ -1,0 +1,146 @@
+{
+  "fileType": "DataElement",
+  "name": "PersonName",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.PersonName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A name used by a human being, written as it would be typically expressed. May include a breakdown of the various elements of the name (family name, given name, etc.).",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1547383"
+    }
+  ],
+  "hierarchy": [
+    "cimi.element.Name"
+  ],
+  "basedOn": [
+    "cimi.element.Name"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.element.NameAsText",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Name"
+      }
+    },
+    {
+      "fqn": "shr.core.Purpose",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1,
+        "history": [
+          {
+            "source": "cimi.element.Name",
+            "min": 0
+          },
+          {
+            "source": "cimi.element.PersonName",
+            "min": 0,
+            "max": 1
+          }
+        ]
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Coding": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/name-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.element.PersonName"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.element.Name"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/name-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.element.PersonName"
+            },
+            "source": "cimi.element.PersonName"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 1,
+              "lastModifiedBy": "cimi.element.PersonName"
+            },
+            "source": "cimi.element.PersonName"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.EffectiveTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Name"
+      }
+    },
+    {
+      "fqn": "cimi.element.PreferredFlag",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.Prefix",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.element.GivenName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.element.MiddleName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.element.FamilyName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.element.Suffix",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

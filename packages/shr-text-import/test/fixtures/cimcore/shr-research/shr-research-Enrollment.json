@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Enrollment",
+  "namespace": "shr.research",
+  "fqn": "shr.research.Enrollment",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Description of the group or groups enrolled or qualified to be enrolled in the study.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C4041024"
+    }
+  ],
+  "value": {
+    "fqn": "cimi.entity.Group",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

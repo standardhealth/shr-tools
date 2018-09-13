@@ -1,0 +1,91 @@
+{
+  "fileType": "DataElement",
+  "name": "ProcedureNotPerformedContext",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.ProcedureNotPerformedContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The not performed context with constraints applicable to procedures, namely, the request must be a procedure request.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.ActionContext",
+    "cimi.context.NotPerformedContext"
+  ],
+  "basedOn": [
+    "cimi.context.NotPerformedContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Reason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.ActionContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.RelatedRequest",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.statement.ActionRequestedStatement": {
+            "type": {
+              "fqn": "cimi.procedure.ProcedureRequestedStatement",
+              "onValue": false,
+              "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.context.NotPerformedContext"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.procedure.ProcedureRequestedStatement",
+              "onValue": false,
+              "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedContext"
+            },
+            "source": "cimi.procedure.ProcedureNotPerformedContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.NonOccurrenceTimeOrPeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.NotPerformedContext"
+      }
+    }
+  ]
+}

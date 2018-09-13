@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Certainty",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.Certainty",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The degree of confidence in a conclusion or assertion.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

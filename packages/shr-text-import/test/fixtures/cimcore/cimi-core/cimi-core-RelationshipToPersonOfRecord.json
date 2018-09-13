@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "RelationshipToPersonOfRecord",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.RelationshipToPersonOfRecord",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The relationship of the SubjectOfInformation to the subject of record.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

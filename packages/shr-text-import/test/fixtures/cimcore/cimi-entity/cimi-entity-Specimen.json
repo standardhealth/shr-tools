@@ -1,0 +1,189 @@
+{
+  "fileType": "DataElement",
+  "name": "Specimen",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Specimen",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A specimen is a substance, physical object, or collection of objects, that the laboratory considers a single discrete, uniquely identified unit that is the subject of one or more steps in the laboratory workflow. A specimen may include multiple physical pieces as long as they are considered a single unit within the laboratory workflow. A specimen results from one to many specimen collection procedures, and may be contained in multiple specimen containers. Specimen may have one or more processing activities.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Entity"
+  ],
+  "basedOn": [
+    "cimi.entity.Entity"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.entity.AccessionIdentifier",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.SpecimenStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/specimen-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Specimen"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/specimen-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Specimen"
+            },
+            "source": "cimi.entity.Specimen"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/v2-0487",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Specimen"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/v2-0487",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Specimen"
+            },
+            "source": "cimi.entity.Specimen"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.entity.EntityOrRole": {
+            "type": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false,
+              "lastModifiedBy": "cimi.entity.Specimen"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false,
+              "lastModifiedBy": "cimi.entity.Specimen"
+            },
+            "source": "cimi.entity.Specimen"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.entity.SourceSpecimen",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.ReceivedTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.CollectionTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.CollectionMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.CollectionSite",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.SpecimenContainer",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.entity.SpecimenTreatment",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.entity.HandlingRisk",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.entity.SpecialHandling",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "fileType": "ValueSet",
+  "name": "ExceptionValueVS",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.ExceptionValueVS",
+  "description": "Reasons that a value associated with a test or other finding is missing. Includes all codes from \thttp://hl7.org/fhir/ValueSet/data-absent-reason version 3.3.0 and additional codes covering other missing value circumstances.",
+  "url": "http://standardhealthrecord.org/cimi/context/vs/#ExceptionValueVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "unknown",
+      "description": "Unknown: The value is not known."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "asked-unknown",
+      "description": "Asked But Unknown: The source human does not know the value."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "temp-unknown",
+      "description": "Temporarily Unknown: There is reason to expect (from the workflow) that the value may become known."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "not-asked",
+      "description": "Not Asked: The workflow didn't lead to this value being known."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "asked-declined",
+      "description": "Asked But Declined: The source was asked but declined to answer."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "masked",
+      "description": "Masked: The information is not available due to security, privacy or related reasons."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "not-applicable",
+      "description": "Not Applicable: There is no proper value for this element (e.g. last menstrual period for a male)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "unsupported",
+      "description": "Unsupported: The source system wasn't capable of supporting this element."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "as-text",
+      "description": "As Text: The content of the data is represented in the resource narrative."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "error",
+      "description": "Error: Some system or workflow process error means that the information is not available."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "not-a-number",
+      "description": "Not a Number (NaN): The numeric value is undefined or unrepresentable due to a floating point processing error."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "negative-infinity",
+      "description": "Negative Infinity (NINF): The numeric value is excessively low and unrepresentable due to a floating point processing error."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "positive-infinity",
+      "description": "Positive Infinity (PINF): The numeric value is excessively high and unrepresentable due to a floating point processing error."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "not-performed",
+      "description": "Not Performed: The value is not available because the observation procedure  (test, etc.) was not performed."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "not-permitted",
+      "description": "Not Permitted: The value is not permitted in this context (e.g. due to profiles, or the base data types)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "missing_indeterminate",
+      "description": "The value cannot be determined, for some unspecified reason."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "missing_noexplanation",
+      "description": "The reason the information is not present is not known."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "missing_nonesuch",
+      "description": "The answer is missing because nothing of a type of thing is known to exists, e.g., the siblings of an only child. Also use this code to represent a 'none of the above' answer"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "missing_collection",
+      "description": "Missing due to a problem collecting, identifying, or locating the specimen, including patient refusal or unable to provide specimen"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "missing_specimen",
+      "description": "Missing due to a problem with the specimen, e.g. inadequate specimen, contamination, clotting, improper tube type, improper storage, too small, etc."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/context/cs/#ExceptionValueCS",
+      "code": "missing_malfunction",
+      "description": "Missing due to instrument malfunction."
+    }
+  ]
+}

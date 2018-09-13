@@ -1,0 +1,24 @@
+{
+  "fileType": "DataElement",
+  "name": "LanguageQualifier",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.LanguageQualifier",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Additional information about a person's use of language.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/cimi/entity/vs/LanguageQualifierVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.entity.LanguageQualifier"
+      }
+    }
+  }
+}

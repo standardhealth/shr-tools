@@ -1,0 +1,304 @@
+{
+  "fileType": "DataElement",
+  "name": "AdverseSensitivityToSubstance",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.AdverseSensitivityToSubstance",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A finding related to the presence or absence of an individual's risk or sensitivity to a substance or class of substances. A finding can be taken as tantamount to a representation of an allergic condition, allowing it to be tracked over time.",
+  "concepts": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "420134006",
+      "display": "Propensity to adverse reactions"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement"
+  ],
+  "basedOn": [
+    "cimi.statement.ClinicalStatement"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.entity.EntityOrRole": {
+            "type": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false,
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.Patient",
+              "onValue": false,
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            },
+            "source": "shr.allergy.AdverseSensitivityToSubstance"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.entity.EntityOrRole": {
+            "type": {
+              "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPerson",
+              "onValue": false,
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPerson",
+              "onValue": false,
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            },
+            "source": "shr.allergy.AdverseSensitivityToSubstance"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.core.Attribution": {
+            "subpaths": {
+              "cimi.entity.EntityOrRole": {
+                "type": {
+                  "fqn": "cimi.entity.PatientOrPractitioner",
+                  "onValue": false,
+                  "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.PatientOrPractitioner",
+              "onValue": false,
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            },
+            "source": "shr.allergy.AdverseSensitivityToSubstance"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.allergy.AdverseSensitivityTopic",
+          "onValue": false,
+          "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+        },
+        "subpaths": {
+          "shr.allergy.AllergenIrritant": {
+            "card": {
+              "min": 1,
+              "max": 1,
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://snomed.info/sct",
+                    "code": "473010000",
+                    "display": "Hypersensitivity condition (disorder)"
+                  },
+                  "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://snomed.info/sct",
+                "code": "473010000",
+                "display": "Hypersensitivity condition (disorder)"
+              },
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            },
+            "source": "shr.allergy.AdverseSensitivityToSubstance"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.allergy.AdverseSensitivityTopic",
+              "onValue": false,
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            },
+            "source": "shr.allergy.AdverseSensitivityToSubstance"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 1,
+              "max": 1,
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            },
+            "source": "shr.allergy.AdverseSensitivityToSubstance"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.allergy.AdverseSensitivityPresenceContext",
+          "onValue": false,
+          "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.allergy.AdverseSensitivityPresenceContext",
+              "onValue": false,
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
+            },
+            "source": "shr.allergy.AdverseSensitivityToSubstance"
+          }
+        ]
+      }
+    }
+  ]
+}

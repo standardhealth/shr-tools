@@ -1,0 +1,32 @@
+{
+  "fileType": "DataElement",
+  "name": "Version",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Version",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A number or code associated with the product that identifies a particular release iteration.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0333052"
+    }
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "string",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "id",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

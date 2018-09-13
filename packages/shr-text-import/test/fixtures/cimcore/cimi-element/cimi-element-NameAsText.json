@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "NameAsText",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.NameAsText",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The name as plain unstructured or semi-structured text.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

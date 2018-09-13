@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "AdministrationBodySite",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.AdministrationBodySite",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The anatomic site at which medical intervention is applied.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0229986"
+    }
+  ],
+  "value": {
+    "fqn": "cimi.element.AnatomicalLocation",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "LastUpdated",
+  "namespace": "shr.base",
+  "fqn": "shr.base.LastUpdated",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The most recent date the entry was changed.",
+  "value": {
+    "fqn": "instant",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

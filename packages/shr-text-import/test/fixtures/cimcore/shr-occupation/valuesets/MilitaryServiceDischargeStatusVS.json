@@ -1,0 +1,35 @@
+{
+  "fileType": "ValueSet",
+  "name": "MilitaryServiceDischargeStatusVS",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.MilitaryServiceDischargeStatusVS",
+  "description": "The way in which a separation from the armed services was achieved.",
+  "url": "http://standardhealthrecord.org/shr/occupation/vs/#MilitaryServiceDischargeStatusVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceDischargeStatusCS",
+      "code": "bad",
+      "description": "Bad Conduct Discharge"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceDischargeStatusCS",
+      "code": "dishonorable",
+      "description": "Dishonorable discharge"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceDischargeStatusCS",
+      "code": "general",
+      "description": "General Conduct Discharge"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceDischargeStatusCS",
+      "code": "honorable",
+      "description": "Honorable Discharge"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/occupation/cs/#MilitaryServiceDischargeStatusCS",
+      "code": "not_honorable",
+      "description": "Other than honorable discharge, but not specified"
+    }
+  ]
+}

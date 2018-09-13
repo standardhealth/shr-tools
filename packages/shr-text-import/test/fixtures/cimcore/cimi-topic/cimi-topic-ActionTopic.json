@@ -1,0 +1,39 @@
+{
+  "fileType": "DataElement",
+  "name": "ActionTopic",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.ActionTopic",
+  "isEntry": false,
+  "isAbstract": true,
+  "description": "An entry related to an action or intervention, whether potential or actual, past or future. An intervention is an action addressing a undesired health state, behavior, risk, or goal.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic"
+  ],
+  "basedOn": [
+    "cimi.topic.StatementTopic"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.StatementTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Category",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

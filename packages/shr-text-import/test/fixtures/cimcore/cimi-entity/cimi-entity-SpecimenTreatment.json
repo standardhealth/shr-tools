@@ -1,0 +1,18 @@
+{
+  "fileType": "DataElement",
+  "name": "SpecimenTreatment",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.SpecimenTreatment",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "Treatment performed on the specimen.",
+  "fields": [
+    {
+      "fqn": "cimi.entity.Additive",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

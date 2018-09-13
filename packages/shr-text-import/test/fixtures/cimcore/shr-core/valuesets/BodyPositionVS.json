@@ -1,0 +1,71 @@
+{
+  "fileType": "ValueSet",
+  "name": "BodyPositionVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.BodyPositionVS",
+  "description": "The body position with respect to gravity.",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "8361-8"
+    }
+  ],
+  "url": "http://standardhealthrecord.org/shr/core/vs/#BodyPositionVS",
+  "values": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0277814",
+      "description": "sitting position"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0277811",
+      "description": "semi-sitting (Fowlers)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0231472",
+      "description": "standing position (anatomical)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0038846",
+      "description": "supine position (lying face up)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0033422",
+      "description": "prone position(lying face down)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0150435",
+      "description": "semi-prone position (sims position)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0559228",
+      "description": "right lateral recumbent"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0559227",
+      "description": "left lateral recumbent (lying on left side)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0242683",
+      "description": "head-down tilt (Trendelenburg)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0150665",
+      "description": "Lithotomy position (lying on back with legs raised)"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0277810",
+      "description": "Knee-chest position"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "fileType": "ValueSet",
+  "name": "ProgressionEvidenceVS",
+  "namespace": "shr.condition",
+  "fqn": "shr.condition.ProgressionEvidenceVS",
+  "url": "http://standardhealthrecord.org/shr/condition/vs/#ProgressionEvidenceVS",
+  "values": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0011923",
+      "description": "Progression determined based on imaging"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0030664",
+      "description": "Progression determined based on pathology"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1457887",
+      "description": "Progression determined based on physical signs or symptoms"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0031809",
+      "description": "Progression determined based on physical examination"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0005516",
+      "description": "Progression determined based on biomarkers"
+    }
+  ]
+}

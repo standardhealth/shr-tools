@@ -1,0 +1,141 @@
+{
+  "fileType": "DataElement",
+  "name": "NationalProviderIdentifier",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.NationalProviderIdentifier",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A unique 10 digit number to allow US healthcare providers to identify themselves in a standard way throughout the healthcare industry.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1549728"
+    }
+  ],
+  "hierarchy": [
+    "cimi.element.Identifier"
+  ],
+  "basedOn": [
+    "cimi.element.Identifier"
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "inheritance": {
+      "status": "inherited",
+      "from": "cimi.element.Identifier"
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.core.Purpose",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Coding": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.element.Identifier"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.element.Identifier"
+            },
+            "source": "cimi.entity.NationalProviderIdentifier"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-type",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "cimi.element.Identifier"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-type",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "cimi.element.Identifier"
+            },
+            "source": "cimi.entity.NationalProviderIdentifier"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.CodeSystem",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      }
+    },
+    {
+      "fqn": "shr.core.EffectiveTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      }
+    },
+    {
+      "fqn": "cimi.element.Issuer",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Identifier"
+      }
+    }
+  ]
+}

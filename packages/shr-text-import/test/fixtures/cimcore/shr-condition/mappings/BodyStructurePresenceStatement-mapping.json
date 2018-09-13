@@ -1,0 +1,147 @@
+{
+  "fileType": "Mapping",
+  "name": "BodyStructurePresenceStatement",
+  "namespace": "shr.condition",
+  "fqn": "shr.condition.BodyStructurePresenceStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition",
+  "inheritance": {
+    "status": "inherited",
+    "from": "cimi.statement.ConditionPresenceStatement"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "_Entry",
+          "shr.core.CreationTime"
+        ],
+        "target": "assertedDate",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.SubjectOfInformation"
+        ],
+        "target": "subject",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.SourceOfInformation",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "asserter",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "shr.condition.BodyStructureTopic",
+          "shr.core.Category"
+        ],
+        "target": "category",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "shr.condition.BodyStructureTopic",
+          "cimi.topic.TopicCode"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "shr.condition.BodyStructureTopic",
+          "cimi.element.AnatomicalLocation"
+        ],
+        "target": "http://hl7.org/fhir/StructureDefinition/condition-targetBodySite",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ConditionPresenceContext",
+          "cimi.encounter.Encounter"
+        ],
+        "target": "context",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ConditionPresenceContext",
+          "cimi.context.ClinicalStatus"
+        ],
+        "target": "clinicalStatus",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ConditionPresenceContext",
+          "cimi.context.VerificationStatus"
+        ],
+        "target": "verificationStatus",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ConditionPresenceContext",
+          "cimi.context.Onset"
+        ],
+        "target": "onset[x]",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ConditionPresenceContext",
+          "cimi.context.Abatement"
+        ],
+        "target": "abatement[x]",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ConditionPresenceContext",
+          "cimi.context.Severity"
+        ],
+        "target": "severity",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ConditionPresenceContext",
+          "cimi.context.Stage"
+        ],
+        "target": "stage",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ConditionPresenceContext",
+          "cimi.context.Stage",
+          "shr.core.CodeableConcept"
+        ],
+        "target": "stage.summary",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.ConditionPresenceContext",
+          "cimi.context.Stage",
+          "cimi.context.StageDetail"
+        ],
+        "target": "stage.assessment",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "bodySite",
+        "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
+      }
+    ]
+  }
+}

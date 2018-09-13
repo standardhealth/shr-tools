@@ -1,0 +1,86 @@
+{
+  "fileType": "Mapping",
+  "name": "AdverseEventPresenceStatement",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.AdverseEventPresenceStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "AdverseEvent",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.core.Signed",
+          "cimi.core.Attribution",
+          "cimi.entity.EntityOrRole"
+        ],
+        "target": "recorder",
+        "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.adverse.AdverseEventTopic",
+          "cimi.topic.TopicCode"
+        ],
+        "target": "type",
+        "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.adverse.AdverseEventTopic",
+          "shr.core.Details"
+        ],
+        "target": "description",
+        "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.adverse.AdverseEventTopic",
+          "cimi.adverse.AssociatedStudy"
+        ],
+        "target": "study",
+        "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.adverse.AdverseEventPresenceContext",
+          "cimi.adverse.SeriousAdverseEvent"
+        ],
+        "target": "seriousness",
+        "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.adverse.AdverseEventPresenceContext",
+          "cimi.context.Onset"
+        ],
+        "target": "date",
+        "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.adverse.AdverseEventPresenceContext",
+          "cimi.context.Outcome"
+        ],
+        "target": "outcome",
+        "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.adverse.AdverseEventPresenceContext",
+          "cimi.adverse.AdverseEventAttribution"
+        ],
+        "target": "suspectEntity.instance",
+        "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.adverse.AdverseEventPresenceContext",
+          "cimi.adverse.AdverseEventAttribution",
+          "cimi.context.Certainty"
+        ],
+        "target": "suspectEntity.causalityAssessment",
+        "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+      }
+    ]
+  }
+}

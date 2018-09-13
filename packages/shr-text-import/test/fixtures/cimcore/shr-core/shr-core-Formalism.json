@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Formalism",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Formalism",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The system of formal syntax or interpretation associated with parsable content.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "AccessTime",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.AccessTime",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Point in time when data was accessed.",
+  "value": {
+    "fqn": "dateTime",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

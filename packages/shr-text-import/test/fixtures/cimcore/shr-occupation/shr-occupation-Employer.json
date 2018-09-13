@@ -1,0 +1,32 @@
+{
+  "fileType": "DataElement",
+  "name": "Employer",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.Employer",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A person or organization that hires the services of another.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1274022"
+    }
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "cimi.entity.Person",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Organization",
+        "valueType": "RefValue"
+      }
+    ]
+  }
+}

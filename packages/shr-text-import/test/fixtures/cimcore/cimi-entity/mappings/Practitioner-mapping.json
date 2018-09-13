@@ -1,0 +1,106 @@
+{
+  "fileType": "Mapping",
+  "name": "Practitioner",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Practitioner",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-practitioner",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.ActiveFlag"
+        ],
+        "target": "active",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "shr.core.HumanName"
+        ],
+        "target": "name",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.AdministrativeGender"
+        ],
+        "target": "gender",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.Headshot"
+        ],
+        "target": "photo",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "shr.core.Address"
+        ],
+        "target": "address",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "shr.core.ContactPoint"
+        ],
+        "target": "telecom",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.LanguageUsed"
+        ],
+        "target": "communication",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.NationalProviderIdentifier"
+        ],
+        "target": "identifier",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Qualification"
+        ],
+        "target": "qualification",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Qualification",
+          "shr.core.Type"
+        ],
+        "target": "qualification.code",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Qualification",
+          "shr.core.EffectiveTimePeriod"
+        ],
+        "target": "qualification.period",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Qualification",
+          "cimi.element.Issuer"
+        ],
+        "target": "qualification.issuer",
+        "lastModifiedBy": "cimi.entity.Practitioner"
+      }
+    ]
+  }
+}

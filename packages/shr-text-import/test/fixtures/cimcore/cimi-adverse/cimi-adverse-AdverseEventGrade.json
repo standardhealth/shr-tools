@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "AdverseEventGrade",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.AdverseEventGrade",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A coded value specifying the level of injury suffered by the subject for whom the event is reported, using the CTCAE coding system.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2985911"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/cimi/adverse/vs/AdverseEventGradeVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.adverse.AdverseEventGrade"
+      }
+    }
+  }
+}

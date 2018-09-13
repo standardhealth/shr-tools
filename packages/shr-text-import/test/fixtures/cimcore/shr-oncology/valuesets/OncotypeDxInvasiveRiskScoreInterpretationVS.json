@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "OncotypeDxInvasiveRiskScoreInterpretationVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.OncotypeDxInvasiveRiskScoreInterpretationVS",
+  "description": "Intepretation of OncotypeDX Recurrence Score for invasive cancers.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#OncotypeDxInvasiveRiskScoreInterpretationVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#OncotypeDxInvasiveRiskScoreInterpretationCS",
+      "code": "low_risk",
+      "description": "Recurrence Score lower than 18: The cancer has a low risk of recurrence. The benefit of chemotherapy is likely to be small and will not outweigh the risks of side effects."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#OncotypeDxInvasiveRiskScoreInterpretationCS",
+      "code": "intermediate_risk",
+      "description": "Recurrence Score of 18 up to and including 30: The cancer has an intermediate risk of recurrence. It’s unclear whether the benefits of chemotherapy outweigh the risks of side effects."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#OncotypeDxInvasiveRiskScoreInterpretationCS",
+      "code": "high_risk",
+      "description": "Recurrence Score greater than or equal to 31: The cancer has a high risk of recurrence, and the benefits of chemotherapy are likely to be greater than the risks of side effects."
+    }
+  ]
+}

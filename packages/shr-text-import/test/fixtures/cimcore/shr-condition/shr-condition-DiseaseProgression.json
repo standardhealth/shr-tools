@@ -1,0 +1,339 @@
+{
+  "fileType": "DataElement",
+  "name": "DiseaseProgression",
+  "namespace": "shr.condition",
+  "fqn": "shr.condition.DiseaseProgression",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A finding related to the current trend of a particular existing disease. This concept is most often used for chronic and incurable diseases where the status and trendline of the disease is an important determinant of therapy and prognosis. The specific disorder being evaluated must be cited in the Focus_Reference or Focus_CodeableConcept as a reference to a Condition.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0421176",
+      "display": "Progression"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.EvaluationResultRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.EvaluationResultTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://ncimeta.nci.nih.gov",
+                    "code": "C0421176",
+                    "display": "Progression"
+                  },
+                  "lastModifiedBy": "shr.condition.DiseaseProgression"
+                }
+              }
+            }
+          },
+          "cimi.topic.Focus": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://hl7.org/fhir/us/core/ValueSet/us-core-problem",
+                  "bindingStrength": "EXTENSIBLE",
+                  "lastModifiedBy": "shr.condition.DiseaseProgression"
+                }
+              }
+            }
+          },
+          "cimi.entity.Specimen": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            }
+          },
+          "cimi.topic.EvaluationComponent": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            }
+          },
+          "cimi.topic.Precondition": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            }
+          },
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/us/core/ValueSet/us-core-problem",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            },
+            "source": "shr.condition.DiseaseProgression"
+          }
+        ],
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://ncimeta.nci.nih.gov",
+                "code": "C0421176",
+                "display": "Progression"
+              },
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            },
+            "source": "shr.condition.DiseaseProgression"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            },
+            "source": "shr.condition.DiseaseProgression"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            },
+            "source": "shr.condition.DiseaseProgression"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            },
+            "source": "shr.condition.DiseaseProgression"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            },
+            "source": "shr.condition.DiseaseProgression"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "type": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            },
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/shr/condition/vs/ProgressionVS",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "shr.condition.DiseaseProgression"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/condition/vs/ProgressionVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            },
+            "source": "shr.condition.DiseaseProgression"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "shr.condition.DiseaseProgression"
+            },
+            "source": "shr.condition.DiseaseProgression"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.condition.ProgressionEvidence",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

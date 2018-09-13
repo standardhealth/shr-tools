@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "PersonOfRecord",
+  "namespace": "shr.base",
+  "fqn": "shr.base.PersonOfRecord",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The person this entry belongs to.",
+  "value": {
+    "fqn": "cimi.entity.Patient",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

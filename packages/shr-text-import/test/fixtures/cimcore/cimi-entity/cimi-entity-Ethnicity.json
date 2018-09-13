@@ -1,0 +1,39 @@
+{
+  "fileType": "DataElement",
+  "name": "Ethnicity",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Ethnicity",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Indicator of Hispanic or Latino origin.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0015031"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/us/core/ValueSet/omb-ethnicity",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.entity.Ethnicity"
+      }
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.entity.EthnicityDetail",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

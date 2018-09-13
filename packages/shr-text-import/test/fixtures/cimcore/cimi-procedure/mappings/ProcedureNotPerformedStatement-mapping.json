@@ -1,0 +1,117 @@
+{
+  "fileType": "Mapping",
+  "name": "ProcedureNotPerformedStatement",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.ProcedureNotPerformedStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-procedure",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureTopic",
+          "cimi.topic.TopicCode"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.core.SubjectOfInformation"
+        ],
+        "target": "subject",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureTopic",
+          "shr.core.Category"
+        ],
+        "target": "category",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureNotPerformedContext",
+          "cimi.context.Reason"
+        ],
+        "target": "notDoneReason",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureTopic",
+          "cimi.element.AnatomicalLocation"
+        ],
+        "target": "bodySite",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureTopic",
+          "cimi.element.PartOf"
+        ],
+        "target": "partOf",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureTopic",
+          "cimi.element.Annotation"
+        ],
+        "target": "note",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "sourcePath": [
+          "cimi.procedure.ProcedureNotPerformedContext",
+          "cimi.context.RelatedRequest",
+          "cimi.statement.ActionRequestedStatement"
+        ],
+        "target": "basedOn",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      }
+    ],
+    "cardMapping": [
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "performed[x]",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "performer",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "outcome",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      },
+      {
+        "cardinality": {
+          "min": 0,
+          "max": 0
+        },
+        "target": "location",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      }
+    ],
+    "fixedValueMapping": [
+      {
+        "fixedValue": "http://hl7.org/fhir/event-status#suspended ",
+        "target": "status",
+        "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "fileType": "DataElement",
+  "name": "Area",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Area",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The extent of a 2-dimensional surface enclosed within a boundary.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0205146"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.Quantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "subpaths": {
+        "shr.core.Units": {
+          "subpaths": {
+            "shr.core.Coding": {
+              "fixedValue": {
+                "type": "code",
+                "value": {
+                  "system": "http://unitsofmeasure.org",
+                  "code": "TBD"
+                },
+                "lastModifiedBy": "shr.core.Area"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

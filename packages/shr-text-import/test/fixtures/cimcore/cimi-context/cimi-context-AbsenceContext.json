@@ -1,0 +1,67 @@
+{
+  "fileType": "DataElement",
+  "name": "AbsenceContext",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.AbsenceContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Indicates the finding in question is either known absent (ruled out), not suspected, or unknown.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.FindingContext"
+  ],
+  "basedOn": [
+    "cimi.context.FindingContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/cimi/context/vs/AbsenceContextVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.AbsenceContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.context.StatementContext"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/cimi/context/vs/AbsenceContextVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.AbsenceContext"
+            },
+            "source": "cimi.context.AbsenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.encounter.Encounter",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.FindingContext"
+      }
+    }
+  ]
+}

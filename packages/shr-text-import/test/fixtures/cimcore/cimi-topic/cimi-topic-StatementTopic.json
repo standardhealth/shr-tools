@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "StatementTopic",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.StatementTopic",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Compositional and reusable grouping of clinical statement attributes that make up the clinical focus of a statement.\n\nStatementTopic class attributes are aligned with SNOMED CT Concept Model attributes when such an overlap exists. Note that this class does not include contextual attributes such as the nature of the action (ordered, proposed, planned, etc...), the nature of the patient state being described (e.g., present, suspected present, absent), and the attribution of this information (the who, when, where, how, why of the information recorded).",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent"
+  ],
+  "basedOn": [
+    "cimi.core.NonIndependent"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

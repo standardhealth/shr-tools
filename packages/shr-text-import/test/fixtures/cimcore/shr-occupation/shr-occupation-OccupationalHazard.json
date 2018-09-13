@@ -1,0 +1,102 @@
+{
+  "fileType": "DataElement",
+  "name": "OccupationalHazard",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.OccupationalHazard",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A hazard that is specific to a person's work or work environment for a single job and with which the person might come in contact. A hazard is a source of potential harm to an individual's physical or mental health (e.g., biological, chemical, physical, psychological, radiological).",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0337074"
+    }
+  ],
+  "hierarchy": [
+    "cimi.topic.EvaluationComponent"
+  ],
+  "basedOn": [
+    "cimi.topic.EvaluationComponent"
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.ComponentResultValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.ExceptionValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.Interpretation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.topic.EvaluationComponent",
+            "min": 0
+          },
+          {
+            "source": "shr.occupation.OccupationalHazard",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.occupation.OccupationalHazard"
+            },
+            "source": "shr.occupation.OccupationalHazard"
+          }
+        ]
+      }
+    }
+  ]
+}

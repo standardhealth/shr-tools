@@ -1,0 +1,24 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationNonAdherenceReason",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationNonAdherenceReason",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Reason that patient did not adhere to a medication regimen.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/cimi/medication/vs/MedicationNonAdherenceReasonVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.medication.MedicationNonAdherenceReason"
+      }
+    }
+  }
+}

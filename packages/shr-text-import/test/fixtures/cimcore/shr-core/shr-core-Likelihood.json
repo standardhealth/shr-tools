@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Likelihood",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Likelihood",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A measure of the expectation of the occurrence of a particular event, as a percentage.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0033204"
+    }
+  ],
+  "value": {
+    "fqn": "positiveInt",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

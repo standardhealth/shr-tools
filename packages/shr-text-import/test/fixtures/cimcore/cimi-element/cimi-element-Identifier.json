@@ -1,0 +1,87 @@
+{
+  "fileType": "DataElement",
+  "name": "Identifier",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Identifier",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A unique string that identifies a specific person or thing.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0600091"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.core.Purpose",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Coding": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.element.Identifier"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/identifier-type",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "cimi.element.Identifier"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "shr.core.CodeSystem",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.EffectiveTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.Issuer",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

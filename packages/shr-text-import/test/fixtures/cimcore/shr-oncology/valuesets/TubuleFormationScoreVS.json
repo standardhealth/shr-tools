@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "TubuleFormationScoreVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.TubuleFormationScoreVS",
+  "description": "Value set containing the extent (scope) of tubule formation.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#TubuleFormationScoreVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "369778004",
+      "description": "Breast tubule formation: Majority of tumor >75% (score = 1)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "369779007",
+      "description": "Breast tubule formation: Moderate 10% to 75% (score = 2)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "369780005",
+      "description": "Breast tubule formation: Minimal <10% (score = 3)"
+    }
+  ]
+}

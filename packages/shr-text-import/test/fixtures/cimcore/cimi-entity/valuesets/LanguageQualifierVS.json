@@ -1,0 +1,50 @@
+{
+  "fileType": "ValueSet",
+  "name": "LanguageQualifierVS",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.LanguageQualifierVS",
+  "description": "A code indicating whether the language is preferred, secondary, or practiced in an unconventional or limited way.",
+  "url": "http://standardhealthrecord.org/cimi/entity/vs/#LanguageQualifierVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#LanguageQualifierCS",
+      "code": "preferred_spoken",
+      "description": "Preferred language"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#LanguageQualifierCS",
+      "code": "secondary_spoken",
+      "description": "Secondary language"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#LanguageQualifierCS",
+      "code": "apraxia",
+      "description": "Difficulty speaking due to motor disorder"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#LanguageQualifierCS",
+      "code": "aphasia",
+      "description": "Difficulty in speaking, listening, reading, and writing"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#LanguageQualifierCS",
+      "code": "signs",
+      "description": "Uses sign language"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#LanguageQualifierCS",
+      "code": "braille",
+      "description": "Reads using braille"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#LanguageQualifierCS",
+      "code": "lipreads",
+      "description": "Uses lipreading (speechreading)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#LanguageQualifierCS",
+      "code": "aac",
+      "description": "Uses augmentative and alternative communication"
+    }
+  ]
+}

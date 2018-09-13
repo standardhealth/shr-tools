@@ -1,0 +1,19 @@
+{
+  "fileType": "ValueSet",
+  "name": "EncounterUrgencyVS",
+  "namespace": "cimi.encounter",
+  "fqn": "cimi.encounter.EncounterUrgencyVS",
+  "url": "http://standardhealthrecord.org/cimi/encounter/vs/#EncounterUrgencyVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "4525004",
+      "description": "Emergency, Crisis, or Urgent Care"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "14736009",
+      "description": "Routine care"
+    }
+  ]
+}

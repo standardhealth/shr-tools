@@ -1,0 +1,88 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationChangeTopic",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationChangeTopic",
+  "isEntry": false,
+  "isAbstract": false,
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic",
+    "cimi.topic.ActionTopic"
+  ],
+  "basedOn": [
+    "cimi.topic.ActionTopic"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.StatementTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Category",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.ActionTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/cimi/medication/vs/MedicationChangeTypeVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.medication.MedicationChangeTopic"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/cimi/medication/vs/MedicationChangeTypeVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.medication.MedicationChangeTopic"
+            },
+            "source": "cimi.medication.MedicationChangeTopic"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.medication.MedicationBeforeChange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.medication.MedicationAfterChange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

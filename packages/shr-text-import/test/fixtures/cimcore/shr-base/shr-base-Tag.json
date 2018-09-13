@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Tag",
+  "namespace": "shr.base",
+  "fqn": "shr.base.Tag",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A code used to relate entries to categories or workflows. Applications are not required to consider the tags when interpreting the meaning of an entry.",
+  "value": {
+    "fqn": "shr.core.Coding",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

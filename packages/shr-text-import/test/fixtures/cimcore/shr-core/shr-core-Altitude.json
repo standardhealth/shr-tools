@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Altitude",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Altitude",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Height above sea level or above the earth's surface. Measured with with WGS84 datum.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0002349"
+    }
+  ],
+  "value": {
+    "fqn": "decimal",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "DeltaFlag",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.DeltaFlag",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Indicator of significant change (delta) from the last or previous measurement.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1705241"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/cimi/context/vs/DeltaFlagVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.context.DeltaFlag"
+      }
+    }
+  }
+}

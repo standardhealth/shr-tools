@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "SequenceNumber",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.SequenceNumber",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The sequence number for this specimen in a collection of specimens.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

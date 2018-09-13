@@ -1,0 +1,35 @@
+{
+  "fileType": "DataElement",
+  "name": "Attribution",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.Attribution",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Information ascribing the record to a particular contributor or responsible person.",
+  "fields": [
+    {
+      "fqn": "cimi.entity.EntityOrRole",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordedOn",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.Signature",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

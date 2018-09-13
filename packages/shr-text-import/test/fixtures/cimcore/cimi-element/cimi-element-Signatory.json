@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "Signatory",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Signatory",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The party signing.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "uri",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "cimi.entity.Entity",
+        "valueType": "RefValue"
+      }
+    ]
+  }
+}

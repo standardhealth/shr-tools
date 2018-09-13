@@ -1,0 +1,218 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationDispenseRequestedStatement",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationDispenseRequestedStatement",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "An order for a medication to be dispensed and instructions for use.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement"
+  ],
+  "basedOn": [
+    "cimi.statement.ClinicalStatement"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.medication.MedicationDispenseTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.medication.MedicationDispenseTopic",
+              "onValue": false,
+              "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+            },
+            "source": "cimi.medication.MedicationDispenseRequestedStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.RequestedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+        },
+        "subpaths": {
+          "cimi.element.Status": {
+            "subpaths": {
+              "code": {
+                "valueSet": {
+                  "uri": "http://hl7.org/fhir/ValueSet/medication-request-status",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+                }
+              }
+            }
+          },
+          "shr.core.PriorityRank": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://hl7.org/fhir/ValueSet/medication-request-priority",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/medication-request-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+            },
+            "source": "cimi.medication.MedicationDispenseRequestedStatement"
+          },
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/medication-request-priority",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+            },
+            "source": "cimi.medication.MedicationDispenseRequestedStatement"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.RequestedContext",
+              "onValue": false,
+              "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"
+            },
+            "source": "cimi.medication.MedicationDispenseRequestedStatement"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "fileType": "ValueSet",
+  "name": "PerformanceGradingScaleVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.PerformanceGradingScaleVS",
+  "description": "A simple performance grading scale. Also useful for grading quality.",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#PerformanceGradingScaleVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "code": "excellent",
+      "description": "Excellent"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "code": "very_good",
+      "description": "Very good"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "code": "good",
+      "description": "Good"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "code": "fair",
+      "description": "Fair"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "code": "poor",
+      "description": "Poor"
+    }
+  ]
+}

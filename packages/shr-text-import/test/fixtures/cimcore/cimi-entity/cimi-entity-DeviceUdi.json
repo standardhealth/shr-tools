@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "DeviceUdi",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.DeviceUdi",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Unique Device Identifier (UDI) Barcode string number for a device, assigned by the organization using the device.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

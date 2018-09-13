@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "CodeableConcept",
+  "namespace": "shr.core",
+  "fqn": "shr.core.CodeableConcept",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A set of codes drawn from different coding systems, representing the same concept.",
+  "fields": [
+    {
+      "fqn": "shr.core.Coding",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "shr.core.DisplayText",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

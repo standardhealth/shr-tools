@@ -1,0 +1,34 @@
+{
+  "fileType": "ValueSet",
+  "name": "QualitativeValueScaleVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.QualitativeValueScaleVS",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#QualitativeValueScaleVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeValueScaleCS",
+      "code": "very_high",
+      "description": "Very high"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeValueScaleCS",
+      "code": "high",
+      "description": "High"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeValueScaleCS",
+      "code": "moderate",
+      "description": "Moderate/Intermediate or Borderline"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeValueScaleCS",
+      "code": "low",
+      "description": "Low"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeValueScaleCS",
+      "code": "very_low",
+      "description": "Very low"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "MultipleBirthOrder",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.MultipleBirthOrder",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Order of birth of the person in multiple birth event (if part of multiple birth).",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "73771-8"
+    }
+  ],
+  "value": {
+    "fqn": "integer",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

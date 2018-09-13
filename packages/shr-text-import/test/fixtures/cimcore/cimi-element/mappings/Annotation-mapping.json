@@ -1,0 +1,33 @@
+{
+  "fileType": "Mapping",
+  "name": "Annotation",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Annotation",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Annotation",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "string"
+        ],
+        "target": "text",
+        "lastModifiedBy": "cimi.element.Annotation"
+      },
+      {
+        "sourcePath": [
+          "cimi.element.Author"
+        ],
+        "target": "author[x]",
+        "lastModifiedBy": "cimi.element.Annotation"
+      },
+      {
+        "sourcePath": [
+          "shr.core.OccurrenceTime"
+        ],
+        "target": "time",
+        "lastModifiedBy": "cimi.element.Annotation"
+      }
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "fileType": "ValueSet",
+  "name": "BreastSiteVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastSiteVS",
+  "description": "Topography of the breast. Codes are drawn from ICD-O-3. Codes are presented as local codes due to the lack of a ICD-O-3 terminology server available to the FHIR IG publisher.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#BreastSiteVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSiteCS",
+      "code": "C50.0",
+      "description": "Nipple"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSiteCS",
+      "code": "C50.1",
+      "description": "Central portion of the breast."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSiteCS",
+      "code": "C50.2",
+      "description": "Upper inner quadrant"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSiteCS",
+      "code": "C50.3",
+      "description": "Lower inner quadrant"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSiteCS",
+      "code": "C50.4",
+      "description": "Upper outer quadrant"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSiteCS",
+      "code": "C50.5",
+      "description": "Lower outer quadrant"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSiteCS",
+      "code": "C50.6",
+      "description": "Axillary tail of breast"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSiteCS",
+      "code": "C50.8",
+      "description": "Overlapping lesion of breast"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastSiteCS",
+      "code": "C50.9",
+      "description": "Breast, not otherwise specified (NOS)"
+    }
+  ]
+}

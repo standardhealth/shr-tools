@@ -1,0 +1,29 @@
+{
+  "fileType": "DataElement",
+  "name": "City",
+  "namespace": "shr.core",
+  "fqn": "shr.core.City",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The name of a municipality, city, town, village or other community or delivery center. (Source: HL7 FHIR).",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1555315"
+    }
+  ],
+  "hierarchy": [
+    "shr.core.GeopoliticalLocation"
+  ],
+  "basedOn": [
+    "shr.core.GeopoliticalLocation"
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

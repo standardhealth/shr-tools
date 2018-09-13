@@ -1,0 +1,5 @@
+{
+  "fileType": "Namespace",
+  "name": "shr.base",
+  "description": "Contains the SHR Entry definition -- the metadata added to any independent item in the SHR."
+}

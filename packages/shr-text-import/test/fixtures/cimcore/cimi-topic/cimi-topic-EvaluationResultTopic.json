@@ -1,0 +1,153 @@
+{
+  "fileType": "DataElement",
+  "name": "EvaluationResultTopic",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.EvaluationResultTopic",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The base class, independent of context for evaluations (measurements, tests, or questions). The subject of a finding can be the entire patient, or an entity such as a location body structure, intervention, or condition. Things observed about the subject can include social and behavioral factors, subjective and objective observations, and assessments.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1554188"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic",
+    "cimi.topic.FindingTopic"
+  ],
+  "basedOn": [
+    "cimi.topic.FindingTopic"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.StatementTopic"
+      }
+    },
+    {
+      "fqn": "cimi.topic.FindingMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.FindingTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Details",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.FindingTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Category",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/observation-category",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "cimi.topic.EvaluationResultTopic"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/observation-category",
+              "bindingStrength": "EXTENSIBLE",
+              "lastModifiedBy": "cimi.topic.EvaluationResultTopic"
+            },
+            "source": "cimi.topic.EvaluationResultTopic"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.topic.EvaluationMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.AnatomicalLocation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.topic.Focus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.Device",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.Specimen",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.topic.Precondition",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.topic.EvaluationComponent",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

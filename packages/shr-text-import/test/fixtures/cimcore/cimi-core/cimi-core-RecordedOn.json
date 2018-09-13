@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "RecordedOn",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.RecordedOn",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The time of the attribution action.",
+  "value": {
+    "fqn": "instant",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

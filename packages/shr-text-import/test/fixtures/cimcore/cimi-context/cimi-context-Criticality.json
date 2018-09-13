@@ -1,0 +1,24 @@
+{
+  "fileType": "DataElement",
+  "name": "Criticality",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.Criticality",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The potential clinical harm associated with a condition. When the worst case result is assessed to have a life-threatening or organ system threatening potential, it is considered to be of high criticality.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3858539",
+      "display": "Criticality"
+    }
+  ],
+  "value": {
+    "fqn": "code",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

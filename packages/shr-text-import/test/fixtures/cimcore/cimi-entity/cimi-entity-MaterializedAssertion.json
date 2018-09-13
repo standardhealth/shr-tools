@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "MaterializedAssertion",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.MaterializedAssertion",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A thing whose existence is implied by an assertion of presence. For example, a wound presence assertion implies there is a physical wound that exists. Observation of a tumor implies there is a tumor that exists. Assertion of a condition in a patient implies there is one more countable instance (case) of that condition in the world. The MaterializedAssertion allows one to refer to the implied entity as an actual entity. In other words, MaterializedAssertion represents the reification of a clinical statement.\nCIMI Alignment: not part of CIMI.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Entity"
+  ],
+  "basedOn": [
+    "cimi.entity.Entity"
+  ],
+  "value": {
+    "fqn": "cimi.statement.ConditionPresenceStatement",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,400 @@
+{
+  "fileType": "DataElement",
+  "name": "MammaprintRecurrenceScore",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.MammaprintRecurrenceScore",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "Breast cancer genomic signature assay for 10-year risk of distant recurrence score calculated by Mammaprint.\n\nIn the United States, MammaPrint can only be used on cancers that are stage I or stage II, invasive, smaller than 5 centimeters, and estrogen-receptor-positive or -negative. Scores range from -1.0 to +1.0, with scores less than 0 indicating high risk, and scores greater than 0 indicating low risk.\n\nThe is currently no LOINC code for Mammaprint test.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2827401"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded",
+    "cimi.statement.LaboratoryTestResultRecorded",
+    "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.EvaluationResultTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "shr.core.Category": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://hl7.org/fhir/observation-category",
+                    "code": "laboratory"
+                  },
+                  "lastModifiedBy": "cimi.statement.LaboratoryTestResultRecorded"
+                }
+              }
+            }
+          },
+          "cimi.topic.Precondition": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+            }
+          },
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+            }
+          },
+          "cimi.element.AnatomicalLocation": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://ncimeta.nci.nih.gov",
+                    "code": "C2827401"
+                  },
+                  "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+                }
+              }
+            }
+          },
+          "cimi.entity.Specimen": {
+            "type": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            }
+          },
+          "cimi.topic.EvaluationComponent": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "laboratory"
+              }
+            },
+            "source": "cimi.statement.LaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://ncimeta.nci.nih.gov",
+                "code": "C2827401"
+              },
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            },
+            "source": "shr.oncology.MammaprintRecurrenceScore"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.oncology.BreastSpecimen",
+              "onValue": false,
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            },
+            "source": "shr.oncology.MammaprintRecurrenceScore"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+          },
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            },
+            "source": "shr.oncology.MammaprintRecurrenceScore"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "type": {
+              "fqn": "shr.core.Quantity",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            }
+          },
+          "cimi.context.Interpretation": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/shr/oncology/vs/MammaprintRiskScoreInterpretationVS",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/MammaprintRiskScoreInterpretationVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            },
+            "source": "shr.oncology.MammaprintRecurrenceScore"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.core.Quantity",
+              "onValue": true,
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            },
+            "source": "shr.oncology.MammaprintRecurrenceScore"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.statement.DiagnosticService",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "fixedValue": {
+              "type": "code",
+              "value": {
+                "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+                "code": "pathology"
+              },
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.LaboratoryTestResultRecorded"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+                "code": "pathology"
+              },
+              "lastModifiedBy": "shr.oncology.MammaprintRecurrenceScore"
+            },
+            "source": "shr.oncology.MammaprintRecurrenceScore"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.topic.PanelMembers",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.SimplifiedLaboratoryTestResultRecorded"
+      }
+    }
+  ]
+}

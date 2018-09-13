@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "NumberOfRepeats",
+  "namespace": "shr.core",
+  "fqn": "shr.core.NumberOfRepeats",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "How many times the action should be repeated.",
+  "value": {
+    "fqn": "positiveInt",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

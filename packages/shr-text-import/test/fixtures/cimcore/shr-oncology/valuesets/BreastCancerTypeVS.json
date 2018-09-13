@@ -1,0 +1,230 @@
+{
+  "fileType": "ValueSet",
+  "name": "BreastCancerTypeVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastCancerTypeVS",
+  "description": "Histologic types of breast cancer. Codes are drawn from ICD-O-3. Codes are presented as local codes due to the lack of a ICD-O-3 terminology server available to the FHIR IG publisher.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#BreastCancerTypeVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "86049000",
+      "description": "Malignant neoplasm, primary (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "68956006",
+      "description": "Carcinoma in situ (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "65692009",
+      "description": "Spindle cell carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128631001",
+      "description": "Carcinoma with osteoclast-like giant cells (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "74364000",
+      "description": "Small cell carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "59529006",
+      "description": "Squamous cell carcinoma in situ (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "35917007",
+      "description": "Adenocarcinoma, no subtype (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "11671000",
+      "description": "Adenoid cystic carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "30156004",
+      "description": "Cribriform carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "19665009",
+      "description": "Tubular adenoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "55937004",
+      "description": "Neuroendocrine carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128662002",
+      "description": "Adenocarcinoma with mixed subtypes (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "89439007",
+      "description": "Oxyphilic adenoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "3839000",
+      "description": "Lipid-rich carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "74280008",
+      "description": "Glycogen-rich carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "36318001",
+      "description": "Apocrine adenoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "78424008",
+      "description": "Sebaceous adenoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "39892006",
+      "description": "Mucoepidermoid tumor (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "33170000",
+      "description": "Mucinous adenoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "86616005",
+      "description": "Intraductal carcinoma, noninfiltrating (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "36425007",
+      "description": "Comedocarcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "41919003",
+      "description": "Juvenile carcinoma of the breast (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "30566004",
+      "description": "Noninfiltrating intraductal papillary adenocarcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "47488001",
+      "description": "Intracystic papillary adenoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128696009",
+      "description": "Intraductal micropapillary carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastCancerTypeCS",
+      "code": "8509",
+      "description": "Solid papillary carcinoma"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "32913002",
+      "description": "Medullary carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128698005",
+      "description": "Atypical medullary carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "58477004",
+      "description": "Infiltrating ductular carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "35232005",
+      "description": "Infiltrating duct and lobular carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128700001",
+      "description": "Infiltrating duct mixed with other types of carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128701002",
+      "description": "Infiltrating lobular mixed with other types of carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128702009",
+      "description": "Polymorphous low grade adenocarcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "32968003",
+      "description": "Inflammatory carcinoma"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "2985005",
+      "description": "Paget's disease, mammary (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "82591005",
+      "description": "Paget's disease and infiltrating duct carcinoma of breast (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "54666007",
+      "description": "Paget's disease and intraductal carcinoma of breast (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "15176003",
+      "description": "Adenocarcinoma with squamous metaplasia (morphologic abnormality)"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#BreastCancerTypeCS",
+      "code": "8571",
+      "description": "Metaplastic carcinoma with mesenchymal differentiation"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "733875004",
+      "description": "Fibromatosis-like metaplastic carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128704005",
+      "description": "Adenocarcinoma with neuroendocrine differentiation (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128705006",
+      "description": "Metaplastic carcinoma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "69291002",
+      "description": "Myoepithelioma (morphologic abnormality)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "128765009",
+      "description": "Adenomyoepithelioma (morphologic abnormality)"
+    }
+  ]
+}

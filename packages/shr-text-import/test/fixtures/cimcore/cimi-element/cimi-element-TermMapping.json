@@ -1,0 +1,35 @@
+{
+  "fileType": "DataElement",
+  "name": "TermMapping",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.TermMapping",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Represents an alternative (mapped) Concept associated with a source concept (i.e., CodedText.concept or the textual value of the CodedText when no equivalent concept has been defined), and the relative match of the mapped Concept with respect to the source Concept. Mappings may be used to add classification terms (e.g. adding ICD classifiers to SNOMED descriptive terms), for computational convenience, or to provide equivalents in other terminologies (e.g. across nursing vocabularies).",
+  "value": {
+    "fqn": "shr.core.Coding",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.element.Match",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Purpose",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

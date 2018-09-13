@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "BrandName",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.BrandName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The marketing name for a brand name product",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

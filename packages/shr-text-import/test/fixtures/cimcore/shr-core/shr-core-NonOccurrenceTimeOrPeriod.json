@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "NonOccurrenceTimeOrPeriod",
+  "namespace": "shr.core",
+  "fqn": "shr.core.NonOccurrenceTimeOrPeriod",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The point in time or span of time in which something did not happen.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "date",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "dateTime",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.TimePeriod",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

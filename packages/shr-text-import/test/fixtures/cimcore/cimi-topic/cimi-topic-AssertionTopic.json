@@ -1,0 +1,56 @@
+{
+  "fileType": "DataElement",
+  "name": "AssertionTopic",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.AssertionTopic",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The base topic for conditions, allergies, adverse events, etc. These are things that are asserted to exist or not. The Value is interpreted in the context of the class; for an AdverseSensitivityToSubstance, the value is the substance, for a Condition, the Value represents the type of condition found.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic",
+    "cimi.topic.FindingTopic"
+  ],
+  "basedOn": [
+    "cimi.topic.FindingTopic"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.StatementTopic"
+      }
+    },
+    {
+      "fqn": "cimi.topic.FindingMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.FindingTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Details",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.FindingTopic"
+      }
+    }
+  ]
+}

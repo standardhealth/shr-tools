@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "EntryId",
+  "namespace": "shr.base",
+  "fqn": "shr.base.EntryId",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A persistent, permanent identifier for an entry in a health record, unique within the scope of the health record.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0600091"
+    }
+  ],
+  "value": {
+    "fqn": "id",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "fileType": "ValueSet",
+  "name": "DiagnosticServiceVS",
+  "namespace": "cimi.statement",
+  "fqn": "cimi.statement.DiagnosticServiceVS",
+  "description": "The type of laboratory service used in producing a laboratory result",
+  "url": "http://standardhealthrecord.org/cimi/statement/vs/#DiagnosticServiceVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "microbiology",
+      "description": "Laboratory concerned with cultures, to look for suspected pathogens."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "parasitology",
+      "description": "Laboratory responsible for examining parasites, feces samples may be examined for evidence of intestinal parasites such as tapeworms or hookworms and others."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "virology",
+      "description": "Laboratory concerned with identification of viruses in specimens such as blood, urine, and cerebrospinal fluid."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "hematology",
+      "description": "Laboratory that works with whole blood to do full blood counts, and blood films as well as many other specialised tests."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "biochemistry",
+      "description": "Laboratory that usually receives serum or plasma and tests the serum for chemicals present in blood."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "toxicology",
+      "description": "Laboratory that mainly tests for pharmaceutical and recreational drugs. Urine and blood samples are submitted to this lab."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "immunology",
+      "description": "Immunology/Serology laboratory uses the concept of antigen-antibody interaction as a diagnostic tool. Compatibility of transplanted organs is also determined."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "Immunohaematology",
+      "description": "Laboratory or blood bank that determines blood groups, and performs compatibility testing on donor blood and recipients. It also prepares blood components, derivatives, and products for transfusion."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "urinalysis",
+      "description": "Laboratory tests urine for many analytes. Some health care providers have a urinalysis laboratory, while others don't."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "pathology",
+      "description": "Surgical, cytopathology, or histopathology laboratory. Surgical pathology examines organs, limbs, tumors, fetuses, and other tissues biopsied in surgery such as breast mastectomies."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "genetics",
+      "description": "Laboratory that mainly performs DNA analysis."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/statement/cs/#DiagnosticServiceCS",
+      "code": "cytogenetics",
+      "description": "Laboratory that uses blood and other cells to get a karyotype. This can be helpful in prenatal diagnosis (e.g. Down's syndrome) as well as in cancer (some cancers have abnormal chromosomes)."
+    }
+  ]
+}

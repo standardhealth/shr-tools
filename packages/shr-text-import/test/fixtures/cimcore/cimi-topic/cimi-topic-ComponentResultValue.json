@@ -1,0 +1,58 @@
+{
+  "fileType": "DataElement",
+  "name": "ComponentResultValue",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.ComponentResultValue",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The actual value of the component finding.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "shr.core.Quantity",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.CodeableConcept",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "string",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.Range",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.Ratio",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.Attachment",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "time",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "dateTime",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.TimePeriod",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.IntegerQuantity",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

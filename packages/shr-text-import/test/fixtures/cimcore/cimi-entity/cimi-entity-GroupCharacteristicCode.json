@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "GroupCharacteristicCode",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.GroupCharacteristicCode",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A code describing the characteristic present, absent, or having a value in this group.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

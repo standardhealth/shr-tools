@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "PatientInstructions",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.PatientInstructions",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Information for the patient, such as, where to get the test, how to prepare for the test, etc.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

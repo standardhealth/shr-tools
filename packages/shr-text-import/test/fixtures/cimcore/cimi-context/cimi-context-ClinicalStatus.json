@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ClinicalStatus",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.ClinicalStatus",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A flag indicating whether the condition is active or inactive, recurring, in remission, or resolved (as of the last update of the Condition).",
+  "value": {
+    "fqn": "code",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

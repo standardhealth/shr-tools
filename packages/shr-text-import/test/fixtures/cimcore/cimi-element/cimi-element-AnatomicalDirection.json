@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "AnatomicalDirection",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.AnatomicalDirection",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Anatomical location or specimen further detailing directionality.",
+  "concepts": [
+    {
+      "system": "https://evs.nci.nih.gov/ftp1/CDISC/SDTM/",
+      "code": "C99074"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/cimi/element/vs/AnatomicalDirectionVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.element.AnatomicalDirection"
+      }
+    }
+  }
+}

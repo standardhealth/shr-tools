@@ -1,0 +1,97 @@
+{
+  "fileType": "DataElement",
+  "name": "Facility",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Facility",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "Services and space and equipment provided for a particular purpose; a building or place that provides a particular service or is used for a particular industry. Could be a clinical site, community site, or a mobile facility.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1547538"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Entity"
+  ],
+  "basedOn": [
+    "cimi.entity.Entity"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.entity.FacilityName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/v3-ServiceDeliveryLocationRoleType",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Facility"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/v3-ServiceDeliveryLocationRoleType",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Facility"
+            },
+            "source": "cimi.entity.Facility"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.entity.Location",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.MobileFacility",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.ContactPoint",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.ManagingOrganization",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

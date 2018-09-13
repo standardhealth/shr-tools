@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "MothersMaidenName",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.MothersMaidenName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The name of the mother as it was or likely to have been recorded on the birth certificate of the subject. This is most likely the name prior to marriage of the mother (aka the maiden name).",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0806887"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.HumanName",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

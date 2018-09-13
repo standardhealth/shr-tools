@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "OccurrenceDuration",
+  "namespace": "shr.core",
+  "fqn": "shr.core.OccurrenceDuration",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The length of time in which something happens.",
+  "value": {
+    "fqn": "shr.core.Duration",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "fileType": "ValueSet",
+  "name": "DiseaseFindingVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.DiseaseFindingVS",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#DiseaseFindingVS",
+  "rules": {
+    "includesDescendants": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "64572001"
+      }
+    ]
+  }
+}

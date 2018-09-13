@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "LowerBound",
+  "namespace": "shr.core",
+  "fqn": "shr.core.LowerBound",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The lower limit on a range",
+  "value": {
+    "fqn": "shr.core.Quantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

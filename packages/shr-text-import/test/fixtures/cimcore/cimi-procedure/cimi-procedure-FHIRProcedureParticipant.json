@@ -1,0 +1,171 @@
+{
+  "fileType": "DataElement",
+  "name": "FHIRProcedureParticipant",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.FHIRProcedureParticipant",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Constraints participants to classes that are accepted by FHIR as actors in procedures.",
+  "hierarchy": [
+    "cimi.context.Participant"
+  ],
+  "basedOn": [
+    "cimi.context.Participant"
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "inheritance": {
+      "status": "overridden",
+      "from": "cimi.context.Participant"
+    },
+    "options": [
+      {
+        "fqn": "cimi.entity.EntityOrRole",
+        "valueType": "RefValue",
+        "constraints": {
+          "type": {
+            "fqn": "cimi.entity.Practitioner",
+            "onValue": false
+          }
+        },
+        "constraintHistory": {
+          "type": [
+            {
+              "constraint": {
+                "fqn": "cimi.entity.Practitioner",
+                "onValue": false
+              },
+              "source": "cimi.procedure.FHIRProcedureParticipant"
+            }
+          ]
+        }
+      },
+      {
+        "fqn": "cimi.entity.EntityOrRole",
+        "valueType": "RefValue",
+        "constraints": {
+          "type": {
+            "fqn": "cimi.entity.Organization",
+            "onValue": false
+          }
+        },
+        "constraintHistory": {
+          "type": [
+            {
+              "constraint": {
+                "fqn": "cimi.entity.Organization",
+                "onValue": false
+              },
+              "source": "cimi.procedure.FHIRProcedureParticipant"
+            }
+          ]
+        }
+      },
+      {
+        "fqn": "cimi.entity.EntityOrRole",
+        "valueType": "RefValue",
+        "constraints": {
+          "type": {
+            "fqn": "cimi.entity.Patient",
+            "onValue": false
+          }
+        },
+        "constraintHistory": {
+          "type": [
+            {
+              "constraint": {
+                "fqn": "cimi.entity.Patient",
+                "onValue": false
+              },
+              "source": "cimi.procedure.FHIRProcedureParticipant"
+            }
+          ]
+        }
+      },
+      {
+        "fqn": "cimi.entity.EntityOrRole",
+        "valueType": "RefValue",
+        "constraints": {
+          "type": {
+            "fqn": "cimi.entity.RelatedPerson",
+            "onValue": false
+          }
+        },
+        "constraintHistory": {
+          "type": [
+            {
+              "constraint": {
+                "fqn": "cimi.entity.RelatedPerson",
+                "onValue": false
+              },
+              "source": "cimi.procedure.FHIRProcedureParticipant"
+            }
+          ]
+        }
+      },
+      {
+        "fqn": "cimi.entity.EntityOrRole",
+        "valueType": "RefValue",
+        "constraints": {
+          "type": {
+            "fqn": "cimi.entity.Device",
+            "onValue": false
+          }
+        },
+        "constraintHistory": {
+          "type": [
+            {
+              "constraint": {
+                "fqn": "cimi.entity.Device",
+                "onValue": false
+              },
+              "source": "cimi.procedure.FHIRProcedureParticipant"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "fields": [
+    {
+      "fqn": "cimi.context.ParticipationType",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.Participant"
+      }
+    },
+    {
+      "fqn": "cimi.context.ParticipationPeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.Participant"
+      }
+    },
+    {
+      "fqn": "cimi.element.OnBehalfOf",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.Participant"
+      }
+    }
+  ]
+}

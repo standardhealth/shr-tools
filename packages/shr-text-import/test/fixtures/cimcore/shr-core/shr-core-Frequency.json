@@ -1,0 +1,115 @@
+{
+  "fileType": "DataElement",
+  "name": "Frequency",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Frequency",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "How many occurrences of an event per unit of time.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0376249"
+    }
+  ],
+  "hierarchy": [
+    "shr.core.Ratio"
+  ],
+  "basedOn": [
+    "shr.core.Ratio"
+  ],
+  "fields": [
+    {
+      "fqn": "shr.core.Numerator",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "subpaths": {
+              "shr.core.Units": {
+                "subpaths": {
+                  "shr.core.Coding": {
+                    "fixedValue": {
+                      "type": "code",
+                      "value": {
+                        "system": "http://unitsofmeasure.org",
+                        "code": "1"
+                      },
+                      "lastModifiedBy": "shr.core.Frequency"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "shr.core.Ratio"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://unitsofmeasure.org",
+                "code": "1"
+              },
+              "lastModifiedBy": "shr.core.Frequency"
+            },
+            "source": "shr.core.Frequency"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.Denominator",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "subpaths": {
+              "shr.core.Units": {
+                "subpaths": {
+                  "shr.core.Coding": {
+                    "valueSet": {
+                      "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
+                      "bindingStrength": "REQUIRED",
+                      "lastModifiedBy": "shr.core.Frequency"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "shr.core.Ratio"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.core.Frequency"
+            },
+            "source": "shr.core.Frequency"
+          }
+        ]
+      }
+    }
+  ]
+}

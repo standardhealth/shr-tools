@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "StageDetail",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.StageDetail",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The full staging information",
+  "value": {
+    "fqn": "cimi.statement.EvaluationResultRecorded",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

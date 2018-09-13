@@ -1,0 +1,34 @@
+{
+  "fileType": "DataElement",
+  "name": "UnitedStatesState",
+  "namespace": "shr.core",
+  "fqn": "shr.core.UnitedStatesState",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A state or territory in the USA expressed by 2-letter US Postal code.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3148680"
+    }
+  ],
+  "hierarchy": [
+    "shr.core.GeopoliticalLocation",
+    "shr.core.State"
+  ],
+  "basedOn": [
+    "shr.core.State"
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "inheritance": {
+      "status": "inherited",
+      "from": "shr.core.State"
+    }
+  }
+}

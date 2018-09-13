@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "FathersName",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.FathersName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The name of the father as it was or likely to have been recorded on the birth certificate of the subject; most likely the name of the father at the time of birth of the subject.",
+  "value": {
+    "fqn": "shr.core.HumanName",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

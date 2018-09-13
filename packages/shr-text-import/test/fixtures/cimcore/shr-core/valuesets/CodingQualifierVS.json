@@ -1,0 +1,44 @@
+{
+  "fileType": "ValueSet",
+  "name": "CodingQualifierVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.CodingQualifierVS",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#CodingQualifierVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#CodingQualifierCS",
+      "code": "preferred_code",
+      "description": "The preferred, standardized code for interoperability purposes. There should be only one coding in a CodeableConcept with this tag."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#CodingQualifierCS",
+      "code": "source_code",
+      "description": "The code found in the information source for this entry, e.g., the raw, original, or first encoding."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#CodingQualifierCS",
+      "code": "user_selected_code",
+      "description": "The code was directly selected by the user, as opposed to being determined after the fact via interpretation of notes or natural language processing."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#CodingQualifierCS",
+      "code": "derived_code",
+      "description": "The code was determined after-the-fact from source data, either through translation, or via interpretation of free text (by human or machine)."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#CodingQualifierCS",
+      "code": "category_code",
+      "description": "Indicates the code is a less specific term or a categorization of the source or standard code, i.e., a hypernym. For example, a code for 'vital sign' in the context of a body weight measurement would be a category code. Category codes can  be useful for search and query purposes."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#CodingQualifierCS",
+      "code": "coded_expression",
+      "description": "The code is an expression in an expression language defined by the CodeSystem"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#CodingQualifierCS",
+      "code": "default_code",
+      "description": "The code was supplied by the system by default, because no specific coded value was available."
+    }
+  ]
+}

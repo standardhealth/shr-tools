@@ -1,0 +1,27 @@
+{
+  "fileType": "DataElement",
+  "name": "Suffix",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Suffix",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the end of the name.",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "45395-1"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "715196001"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

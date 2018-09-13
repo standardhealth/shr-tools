@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Method",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.Method",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The technique used to carry out an action, for example, the specific imaging technical or assessment vehicle.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

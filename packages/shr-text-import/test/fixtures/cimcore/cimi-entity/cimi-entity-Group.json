@@ -1,0 +1,102 @@
+{
+  "fileType": "DataElement",
+  "name": "Group",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Group",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A set of entities (personnel, material, or places) to be considered together. May be a pool of like-type resources, a team, or combination of personnel, material and places.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0441833"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole"
+  ],
+  "basedOn": [
+    "cimi.entity.EntityOrRole"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.entity.ActiveFlag",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Type",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/group-type",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Group"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/group-type",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.entity.Group"
+            },
+            "source": "cimi.entity.Group"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.Title",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.Actual",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.GroupCharacteristic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.entity.Member",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "shr.core.Count",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

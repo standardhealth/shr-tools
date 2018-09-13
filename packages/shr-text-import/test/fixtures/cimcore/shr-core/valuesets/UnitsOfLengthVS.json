@@ -1,0 +1,55 @@
+{
+  "fileType": "ValueSet",
+  "name": "UnitsOfLengthVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.UnitsOfLengthVS",
+  "description": "Units of measure related to length or distance.",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#UnitsOfLengthVS",
+  "values": [
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "pm",
+      "description": "Picometer"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "nm",
+      "description": "Nanometer"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "mm",
+      "description": "Millimeter"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "cm",
+      "description": "Centimeter"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "m",
+      "description": "Meter"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "km",
+      "description": "Kilometer"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "ft-us",
+      "description": "Foot"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "in-us",
+      "description": "Inch"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "mi_us",
+      "description": "Mile"
+    }
+  ]
+}

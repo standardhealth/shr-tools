@@ -1,0 +1,87 @@
+{
+  "fileType": "DataElement",
+  "name": "PercentageRange",
+  "namespace": "shr.core",
+  "fqn": "shr.core.PercentageRange",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A range of percentage values.",
+  "hierarchy": [
+    "shr.core.Range"
+  ],
+  "basedOn": [
+    "shr.core.Range"
+  ],
+  "fields": [
+    {
+      "fqn": "shr.core.LowerBound",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "type": {
+              "fqn": "shr.core.Percentage",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.PercentageRange"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "shr.core.Range"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.core.Percentage",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.PercentageRange"
+            },
+            "source": "shr.core.PercentageRange"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.UpperBound",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "type": {
+              "fqn": "shr.core.Percentage",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.PercentageRange"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "shr.core.Range"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.core.Percentage",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.PercentageRange"
+            },
+            "source": "shr.core.PercentageRange"
+          }
+        ]
+      }
+    }
+  ]
+}

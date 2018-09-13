@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "InsuranceMemberId",
+  "namespace": "shr.financial",
+  "fqn": "shr.financial.InsuranceMemberId",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Patient identifier at a healthcare provider, insurer, or other related organization.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

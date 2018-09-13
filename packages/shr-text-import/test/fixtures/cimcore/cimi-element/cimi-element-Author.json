@@ -1,0 +1,42 @@
+{
+  "fileType": "DataElement",
+  "name": "Author",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Author",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The person or organization who created the entry and is responsible for (and may certify) the content.",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "string",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "cimi.entity.Patient",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Group",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Device",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.RelatedPerson",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Organization",
+        "valueType": "RefValue"
+      }
+    ]
+  }
+}

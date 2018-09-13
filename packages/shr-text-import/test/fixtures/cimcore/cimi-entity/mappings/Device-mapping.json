@@ -1,0 +1,68 @@
+{
+  "fileType": "Mapping",
+  "name": "Device",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Device",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-device",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.Type"
+        ],
+        "target": "type",
+        "lastModifiedBy": "cimi.entity.Device"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.DeviceUdi"
+        ],
+        "target": "udi.carrierHRF",
+        "lastModifiedBy": "cimi.entity.Device"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.VendorModelNumber"
+        ],
+        "target": "model",
+        "lastModifiedBy": "cimi.entity.Device"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.ManufacturerName"
+        ],
+        "target": "manufacturer",
+        "lastModifiedBy": "cimi.entity.Device"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.ManufactureDate"
+        ],
+        "target": "manufactureDate",
+        "lastModifiedBy": "cimi.entity.Device"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.ExpirationDate"
+        ],
+        "target": "expirationDate",
+        "lastModifiedBy": "cimi.entity.Device"
+      },
+      {
+        "sourcePath": [
+          "shr.core.Version"
+        ],
+        "target": "version",
+        "lastModifiedBy": "cimi.entity.Device"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Url"
+        ],
+        "target": "url",
+        "lastModifiedBy": "cimi.entity.Device"
+      }
+    ]
+  }
+}

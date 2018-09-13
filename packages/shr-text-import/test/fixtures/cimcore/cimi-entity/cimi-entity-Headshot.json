@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Headshot",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Headshot",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A photograph showing a person's face.",
+  "value": {
+    "fqn": "shr.core.Attachment",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

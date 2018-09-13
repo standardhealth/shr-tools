@@ -1,0 +1,183 @@
+{
+  "fileType": "DataElement",
+  "name": "BodyStructureAbsenceStatement",
+  "namespace": "shr.condition",
+  "fqn": "shr.condition.BodyStructureAbsenceStatement",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "Presence of a distinct anatomical or pathological morphological feature or organizational pattern, acquired or innate. Examples include tissue types, tumors, and wounds. Body structures are continuants that allow observations of the same body structure to be related to be tracked over time.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.ConditionAbsenceStatement"
+  ],
+  "basedOn": [
+    "cimi.statement.ConditionAbsenceStatement"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.condition.BodyStructureTopic",
+          "onValue": false,
+          "lastModifiedBy": "shr.condition.BodyStructureAbsenceStatement"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.ConditionTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.ConditionAbsenceStatement"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.condition.BodyStructureTopic",
+              "onValue": false,
+              "lastModifiedBy": "shr.condition.BodyStructureAbsenceStatement"
+            },
+            "source": "shr.condition.BodyStructureAbsenceStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.AbsenceContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.ConditionAbsenceStatement"
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.AbsenceContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.ConditionAbsenceStatement"
+          }
+        ]
+      }
+    }
+  ]
+}

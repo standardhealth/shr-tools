@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Indication",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.Indication",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Conditions or situations where the procedure is recommended. In the Performed context, the actual indication should be reported.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

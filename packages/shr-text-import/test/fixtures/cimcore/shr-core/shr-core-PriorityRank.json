@@ -1,0 +1,32 @@
+{
+  "fileType": "DataElement",
+  "name": "PriorityRank",
+  "namespace": "shr.core",
+  "fqn": "shr.core.PriorityRank",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An indication of the importance of an action.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0549179"
+    }
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "positiveInt",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.CodeableConcept",
+        "valueType": "IdentifiableValue"
+      }
+    ]
+  }
+}

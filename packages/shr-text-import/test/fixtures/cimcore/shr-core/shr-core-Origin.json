@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Origin",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Origin",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The base quantity that a measured value of zero represents. In addition, this provides the units of the entire measurement series.",
+  "value": {
+    "fqn": "shr.core.SimpleQuantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

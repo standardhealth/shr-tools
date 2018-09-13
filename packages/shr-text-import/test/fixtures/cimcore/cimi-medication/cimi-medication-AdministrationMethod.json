@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "AdministrationMethod",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.AdministrationMethod",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Technique for administering medication.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1547585"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

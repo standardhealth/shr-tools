@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Sponsor",
+  "namespace": "shr.research",
+  "fqn": "shr.research.Sponsor",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The organization responsible for the execution of the study.",
+  "value": {
+    "fqn": "cimi.entity.Organization",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Cosigned",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.Cosigned",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Provenance information specific to the cosigning of the clinical statement.",
+  "value": {
+    "fqn": "cimi.core.Attribution",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

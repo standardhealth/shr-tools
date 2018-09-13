@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "UsingAccessDeviceCode",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.UsingAccessDeviceCode",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The access device used to perform the procedure.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

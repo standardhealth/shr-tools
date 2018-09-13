@@ -1,0 +1,30 @@
+{
+  "fileType": "ValueSet",
+  "name": "StainingIntensityVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.StainingIntensityVS",
+  "description": "Part of the Allred scoring, based on the intensity of that staining, on a scale of 0 (Negative) to 3 (Strong).",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#StainingIntensityVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StainingIntensityCS",
+      "code": "none",
+      "description": "None/Negative"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StainingIntensityCS",
+      "code": "weak",
+      "description": "Weak"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StainingIntensityCS",
+      "code": "moderate",
+      "description": "Moderate"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StainingIntensityCS",
+      "code": "strong",
+      "description": "Strong"
+    }
+  ]
+}

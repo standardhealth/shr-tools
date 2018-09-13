@@ -1,0 +1,26 @@
+{
+  "fileType": "Mapping",
+  "name": "Narrative",
+  "namespace": "shr.base",
+  "fqn": "shr.base.Narrative",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Narrative",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "xhtml"
+        ],
+        "target": "div",
+        "lastModifiedBy": "shr.base.Narrative"
+      },
+      {
+        "sourcePath": [
+          "shr.base.NarrativeQualifier"
+        ],
+        "target": "status",
+        "lastModifiedBy": "shr.base.Narrative"
+      }
+    ]
+  }
+}

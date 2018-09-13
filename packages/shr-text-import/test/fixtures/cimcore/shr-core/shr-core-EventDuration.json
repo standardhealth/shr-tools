@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "EventDuration",
+  "namespace": "shr.core",
+  "fqn": "shr.core.EventDuration",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The length of the recurring event.",
+  "value": {
+    "fqn": "shr.core.DurationRange",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

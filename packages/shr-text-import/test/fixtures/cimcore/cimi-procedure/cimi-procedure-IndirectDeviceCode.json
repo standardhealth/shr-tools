@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "IndirectDeviceCode",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.IndirectDeviceCode",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An indirect device used for this procedure.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

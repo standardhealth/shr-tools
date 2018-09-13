@@ -1,0 +1,56 @@
+{
+  "fileType": "DataElement",
+  "name": "RecurrencePattern",
+  "namespace": "shr.core",
+  "fqn": "shr.core.RecurrencePattern",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A set of rules that describe when a recurring event is scheduled.",
+  "fields": [
+    {
+      "fqn": "shr.core.RecurrenceInterval",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.DayOfWeek",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "shr.core.TimeOfDay",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "shr.core.DailyLifeEvent",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "shr.core.LifeEventOffset",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.CountPerInterval",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

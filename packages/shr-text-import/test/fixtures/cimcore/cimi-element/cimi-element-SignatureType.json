@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "SignatureType",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.SignatureType",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Type of signature",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0332307"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.Coding",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

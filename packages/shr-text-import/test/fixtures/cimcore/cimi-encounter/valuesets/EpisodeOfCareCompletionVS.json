@@ -1,0 +1,59 @@
+{
+  "fileType": "ValueSet",
+  "name": "EpisodeOfCareCompletionVS",
+  "namespace": "cimi.encounter",
+  "fqn": "cimi.encounter.EpisodeOfCareCompletionVS",
+  "url": "http://standardhealthrecord.org/cimi/encounter/vs/#EpisodeOfCareCompletionVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "completed",
+      "description": "Treatment was completed."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "eligibility",
+      "description": "Insurance eligibility changed."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "declined",
+      "description": "Declined further treatment."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "lost_contact",
+      "description": "Client fell out of contact."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "incarcerated",
+      "description": "Client was detained/incarcerated."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "moved",
+      "description": "Client moved out of the area."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "transferred",
+      "description": "Care was tranferred to the care of another provider."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "failed",
+      "description": "Client was unable to complete the course of treatment."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "noncompliance",
+      "description": "Client did not comply with the course of treatment."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#EpisodeOfCareCompletionCS",
+      "code": "death",
+      "description": "Client died."
+    }
+  ]
+}

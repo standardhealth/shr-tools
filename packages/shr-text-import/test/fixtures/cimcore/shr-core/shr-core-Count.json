@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Count",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Count",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The number of items (0 or more), as an integer.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0750480"
+    }
+  ],
+  "value": {
+    "fqn": "unsignedInt",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

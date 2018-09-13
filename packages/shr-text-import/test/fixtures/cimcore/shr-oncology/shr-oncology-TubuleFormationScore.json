@@ -1,0 +1,163 @@
+{
+  "fileType": "DataElement",
+  "name": "TubuleFormationScore",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.TubuleFormationScore",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A comparison between structures formed by the tumor cells and those formed by normal cells. Scored 1 to 3 with 3 being the most abnormal.",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "85321-8",
+      "display": "Granular differentiation"
+    }
+  ],
+  "hierarchy": [
+    "cimi.topic.EvaluationComponent",
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "basedOn": [
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/shr/oncology/vs/TubuleFormationScoreVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "shr.oncology.TubuleFormationScore"
+      }
+    },
+    "constraintHistory": {
+      "valueSet": [
+        {
+          "constraint": {
+            "uri": "http://standardhealthrecord.org/shr/oncology/vs/TubuleFormationScoreVS",
+            "bindingStrength": "REQUIRED",
+            "lastModifiedBy": "shr.oncology.TubuleFormationScore"
+          },
+          "source": "shr.oncology.TubuleFormationScore"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.ComponentResultValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.core.CodeableConcept",
+          "onValue": true,
+          "lastModifiedBy": "cimi.topic.CodedEvaluationComponent"
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.ExceptionValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/NottinghamNullVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.TubuleFormationScore"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/oncology/vs/NottinghamNullVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.oncology.TubuleFormationScore"
+            },
+            "source": "shr.oncology.TubuleFormationScore"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.Interpretation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.topic.EvaluationComponent",
+            "min": 0
+          },
+          {
+            "source": "cimi.topic.CodedEvaluationComponent",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "fileType": "DataElement",
+  "name": "Entry",
+  "namespace": "shr.base",
+  "fqn": "shr.base.Entry",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Metadata attributes that apply to any item represented in the standard health record. An Entry may not belong exclusively to a single person's health record, but could represent an entity that surfaces in multiple records, such as organizations or practitioners. If the entry belongs to a single person's record, then the identity of the person of record must be recorded.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1705654"
+    }
+  ],
+  "fields": [
+    {
+      "fqn": "shr.base.ShrId",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.base.EntryId",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.base.PersonOfRecord",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Version",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "id",
+          "onValue": true,
+          "lastModifiedBy": "shr.base.Entry"
+        }
+      }
+    },
+    {
+      "fqn": "shr.base.EntryType",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.CreationTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.base.LastUpdated",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.base.Narrative",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Language",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.base.SecurityLabel",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "shr.base.Tag",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "shr.base.DerivedFrom",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

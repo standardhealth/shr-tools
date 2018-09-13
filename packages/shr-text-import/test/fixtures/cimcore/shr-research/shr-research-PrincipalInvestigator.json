@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "PrincipalInvestigator",
+  "namespace": "shr.research",
+  "fqn": "shr.research.PrincipalInvestigator",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Indicates the individual who has primary oversite of the execution of the study.",
+  "value": {
+    "fqn": "cimi.entity.Practitioner",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

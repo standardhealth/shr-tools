@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "LotNumber",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.LotNumber",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A distinctive alpha-numeric identification code assigned by the manufacturer or distributor to a specific quantity of manufactured material or product within a batch.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1115660"
+    }
+  ],
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

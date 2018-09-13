@@ -1,0 +1,209 @@
+{
+  "fileType": "DataElement",
+  "name": "AdverseEventPresenceStatement",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.AdverseEventPresenceStatement",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "The topic (independent of context) for any unfavorable and unintended sign, symptom, disease, or other medical occurrence with a temporal association with the use of a medical product, procedure or other therapy, or in conjunction with a research study, regardless of causal relationship. EXAMPLE(S): back pain, headache, pulmonary embolism, death. An AdverseEvent may also document a causal relationship to an intervention is at least a reasonable possibility i.e., the relationship cannot be ruled out.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0877248"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement"
+  ],
+  "basedOn": [
+    "cimi.statement.ClinicalStatement"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.core.Attribution": {
+            "subpaths": {
+              "cimi.entity.EntityOrRole": {
+                "type": {
+                  "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPerson",
+                  "onValue": false,
+                  "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.entity.PatientOrPractitionerOrRelatedPerson",
+              "onValue": false,
+              "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+            },
+            "source": "cimi.adverse.AdverseEventPresenceStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.adverse.AdverseEventTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.adverse.AdverseEventTopic",
+              "onValue": false,
+              "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+            },
+            "source": "cimi.adverse.AdverseEventPresenceStatement"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.adverse.AdverseEventPresenceContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.adverse.AdverseEventPresenceContext",
+              "onValue": false,
+              "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"
+            },
+            "source": "cimi.adverse.AdverseEventPresenceStatement"
+          }
+        ]
+      }
+    }
+  ]
+}

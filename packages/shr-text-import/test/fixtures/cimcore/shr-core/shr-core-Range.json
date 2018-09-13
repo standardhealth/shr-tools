@@ -1,0 +1,49 @@
+{
+  "fileType": "DataElement",
+  "name": "Range",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Range",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An interval defined by a quantitative upper and/or lower bound. One of the two bounds must be specified, and the lower bound must be less than the upper bound. When Quantities are specified, the units of measure must be the same.",
+  "fields": [
+    {
+      "fqn": "shr.core.LowerBound",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "type": {
+              "fqn": "shr.core.SimpleQuantity",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.Range"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "shr.core.UpperBound",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "type": {
+              "fqn": "shr.core.SimpleQuantity",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.Range"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

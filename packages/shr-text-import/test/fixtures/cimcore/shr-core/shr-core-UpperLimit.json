@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "UpperLimit",
+  "namespace": "shr.core",
+  "fqn": "shr.core.UpperLimit",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The upper limit of detection of the measured points. This is needed if any of the data points have the value 'U' (higher than detection limit).",
+  "value": {
+    "fqn": "decimal",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

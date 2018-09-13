@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ActiveFlagAsaCodeableConcept",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.ActiveFlagAsaCodeableConcept",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "If the ActiveFlag is false, it indicates the record or item is no longer to be used and should generally be hidden for the user in the UI.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

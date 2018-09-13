@@ -1,0 +1,204 @@
+{
+  "fileType": "Mapping",
+  "name": "UsualOccupation",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.UsualOccupation",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observationresults",
+  "inheritance": {
+    "status": "inherited",
+    "from": "cimi.statement.EvaluationResultRecorded"
+  },
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "shr.core.Category"
+        ],
+        "target": "category",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.FindingMethod"
+        ],
+        "target": "method",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.TopicCode"
+        ],
+        "target": "code",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.element.AnatomicalLocation"
+        ],
+        "target": "bodySite",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.entity.Specimen"
+        ],
+        "target": "specimen",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.EvaluationResultRecordedContext",
+          "cimi.context.ResultValue"
+        ],
+        "target": "value[x]",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.EvaluationResultRecordedContext",
+          "cimi.context.ExceptionValue"
+        ],
+        "target": "dataAbsentReason",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.EvaluationResultRecordedContext",
+          "cimi.context.Interpretation"
+        ],
+        "target": "interpretation",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.EvaluationResultRecordedContext",
+          "cimi.context.RelevantTime"
+        ],
+        "target": "effective[x]",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.context.EvaluationResultRecordedContext",
+          "cimi.context.FindingStatus"
+        ],
+        "target": "status",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.ReferenceRange"
+        ],
+        "target": "referenceRange",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.ReferenceRange",
+          "shr.core.Range",
+          "shr.core.LowerBound"
+        ],
+        "target": "referenceRange.low",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.ReferenceRange",
+          "shr.core.Range",
+          "shr.core.UpperBound"
+        ],
+        "target": "referenceRange.high",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.ReferenceRange",
+          "shr.core.Type"
+        ],
+        "target": "referenceRange.type",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.ReferenceRange",
+          "cimi.topic.ApplicableSubpopulation"
+        ],
+        "target": "referenceRange.appliesTo",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.ReferenceRange",
+          "cimi.topic.ApplicableAgeRange"
+        ],
+        "target": "referenceRange.age",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.EvaluationComponent"
+        ],
+        "target": "component (slice on = coding.code; slice strategy = includes)",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.EvaluationComponent",
+          "_Concept"
+        ],
+        "target": "component.code",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.EvaluationComponent",
+          "cimi.topic.ComponentResultValue"
+        ],
+        "target": "component.value[x]",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.EvaluationComponent",
+          "cimi.context.ExceptionValue"
+        ],
+        "target": "component.dataAbsentReason",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.EvaluationComponent",
+          "cimi.context.Interpretation"
+        ],
+        "target": "component.interpretation",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      },
+      {
+        "sourcePath": [
+          "cimi.topic.EvaluationResultTopic",
+          "cimi.topic.EvaluationComponent",
+          "cimi.topic.ReferenceRange"
+        ],
+        "target": "component.referenceRange",
+        "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+      }
+    ]
+  }
+}

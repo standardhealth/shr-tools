@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "ManagingOrganization",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.ManagingOrganization",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The organization that manages the operation of an activity, facility, or service provision.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0677351"
+    }
+  ],
+  "value": {
+    "fqn": "cimi.entity.Organization",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

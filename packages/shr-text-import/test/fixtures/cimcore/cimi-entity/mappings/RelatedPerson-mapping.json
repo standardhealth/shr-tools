@@ -1,0 +1,82 @@
+{
+  "fileType": "Mapping",
+  "name": "RelatedPerson",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.RelatedPerson",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "RelatedPerson",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.ActiveFlag"
+        ],
+        "target": "active",
+        "lastModifiedBy": "cimi.entity.RelatedPerson"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "shr.core.HumanName"
+        ],
+        "target": "name",
+        "lastModifiedBy": "cimi.entity.RelatedPerson"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.DateOfBirth"
+        ],
+        "target": "birthDate",
+        "lastModifiedBy": "cimi.entity.RelatedPerson"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.AdministrativeGender"
+        ],
+        "target": "gender",
+        "lastModifiedBy": "cimi.entity.RelatedPerson"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "shr.core.Address"
+        ],
+        "target": "address",
+        "lastModifiedBy": "cimi.entity.RelatedPerson"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.Headshot"
+        ],
+        "target": "photo",
+        "lastModifiedBy": "cimi.entity.RelatedPerson"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "shr.core.ContactPoint"
+        ],
+        "target": "telecom",
+        "lastModifiedBy": "cimi.entity.RelatedPerson"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.RelationshipType"
+        ],
+        "target": "relationship",
+        "lastModifiedBy": "cimi.entity.RelatedPerson"
+      },
+      {
+        "sourcePath": [
+          "shr.core.EffectiveTimePeriod"
+        ],
+        "target": "period",
+        "lastModifiedBy": "cimi.entity.RelatedPerson"
+      }
+    ]
+  }
+}

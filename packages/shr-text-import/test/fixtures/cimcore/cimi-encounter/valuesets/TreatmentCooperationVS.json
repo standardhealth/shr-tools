@@ -1,0 +1,29 @@
+{
+  "fileType": "ValueSet",
+  "name": "TreatmentCooperationVS",
+  "namespace": "cimi.encounter",
+  "fqn": "cimi.encounter.TreatmentCooperationVS",
+  "url": "http://standardhealthrecord.org/cimi/encounter/vs/#TreatmentCooperationVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#TreatmentCooperationCS",
+      "code": "voluntary",
+      "description": "Voluntary cooperation"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#TreatmentCooperationCS",
+      "code": "ordered_criminal",
+      "description": "Criminal court ordered treatment"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#TreatmentCooperationCS",
+      "code": "ordered_civil",
+      "description": "Civil court ordered treatment"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#TreatmentCooperationCS",
+      "code": "involuntary",
+      "description": "Not court-ordered but involutary treatment"
+    }
+  ]
+}

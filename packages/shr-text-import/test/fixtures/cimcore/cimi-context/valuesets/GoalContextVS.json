@@ -1,0 +1,20 @@
+{
+  "fileType": "ValueSet",
+  "name": "GoalContextVS",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.GoalContextVS",
+  "description": "A code describing the sense in which a finding is a goal or objective.",
+  "url": "http://standardhealthrecord.org/cimi/context/vs/#GoalContextVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "703039001",
+      "description": "Health objective"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "410518001",
+      "description": "Goal"
+    }
+  ]
+}

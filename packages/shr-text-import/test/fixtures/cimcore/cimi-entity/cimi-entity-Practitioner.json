@@ -1,0 +1,72 @@
+{
+  "fileType": "DataElement",
+  "name": "Practitioner",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Practitioner",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "A person who practices a healing art.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2220264"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Role"
+  ],
+  "basedOn": [
+    "cimi.entity.Role"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.entity.Person",
+      "valueType": "RefValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.HumanName": {
+            "card": {
+              "min": 1,
+              "max": 1,
+              "lastModifiedBy": "cimi.entity.Practitioner"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 1,
+              "max": 1,
+              "lastModifiedBy": "cimi.entity.Practitioner"
+            },
+            "source": "cimi.entity.Practitioner"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.entity.NationalProviderIdentifier",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.Qualification",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

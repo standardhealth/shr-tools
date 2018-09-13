@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "NuclearPleomorphismScoreVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.NuclearPleomorphismScoreVS",
+  "description": "Value set containing the scores for nuclear pleomorphism.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#NuclearPleomorphismScoreVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "384735004",
+      "description": "Nuclear pleomorphism: small regular nuclei (score=1)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "384737007",
+      "description": "Nuclear pleomorphism: moderate increase in size, etc (score = 2)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "384738002",
+      "description": "Nuclear pleomorphism: marked variation in size, nucleoli, chromatin clumping, etc (score = 3)"
+    }
+  ]
+}

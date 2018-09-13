@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "StageSuffix",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.StageSuffix",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A suffix used in conjuction with certain breast cancer stages, based on criteria defined by the staging system being used.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "fileType": "ValueSet",
+  "name": "StatisticTypeVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.StatisticTypeVS",
+  "description": "How to interpret a reported quantity, i.e, whether the quantity is an maximum, minimum, mean, median, etc.",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#StatisticTypeVS",
+  "values": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1524031",
+      "description": "Desired or observed minimum"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0806909",
+      "description": "Desired or observed maximum"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0444504",
+      "description": "Mean value"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0876920",
+      "description": "Median value"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0750480",
+      "description": "Count"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1514721",
+      "description": "Range, the difference between lowest and highest numerical values"
+    },
+    {
+      "system": "urn:tbd",
+      "code": "TBD",
+      "description": "Rank, priority, or order, with 1 being the first (highest) rank"
+    },
+    {
+      "system": "urn:tbd",
+      "code": "TBD",
+      "description": "Standard deviation"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "CollectionSite",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.CollectionSite",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The body site where specimen was collected",
+  "value": {
+    "fqn": "cimi.element.AnatomicalLocation",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

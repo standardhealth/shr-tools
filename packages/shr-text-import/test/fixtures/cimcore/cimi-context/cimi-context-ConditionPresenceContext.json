@@ -1,0 +1,233 @@
+{
+  "fileType": "DataElement",
+  "name": "ConditionPresenceContext",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.ConditionPresenceContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The context for a condition that is known, suspected, or possibly present.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.FindingContext",
+    "cimi.context.AssertionContext",
+    "cimi.context.PresenceContext"
+  ],
+  "basedOn": [
+    "cimi.context.PresenceContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/cimi/context/vs/PresenceContextVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.PresenceContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/cimi/context/vs/PresenceContextVS",
+              "bindingStrength": "REQUIRED"
+            },
+            "source": "cimi.context.PresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.encounter.Encounter",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.FindingContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.VerificationStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Onset",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Abatement",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Certainty",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.ClinicalStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/condition-clinical",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.ConditionPresenceContext"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/condition-clinical",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.ConditionPresenceContext"
+            },
+            "source": "cimi.context.ConditionPresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.WhenClinicallyRecognized",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.Preexisting",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.Severity",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/condition-severity",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.ConditionPresenceContext"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/condition-severity",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.ConditionPresenceContext"
+            },
+            "source": "cimi.context.ConditionPresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.Criticality",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.ConditionPresenceContext"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.ConditionPresenceContext"
+            },
+            "source": "cimi.context.ConditionPresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.Stage",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

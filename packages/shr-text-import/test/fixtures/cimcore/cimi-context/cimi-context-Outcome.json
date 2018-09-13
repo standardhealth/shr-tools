@@ -1,0 +1,33 @@
+{
+  "fileType": "DataElement",
+  "name": "Outcome",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.Outcome",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The result of performing an action or behavior, for example, an adverse reaction or new finding.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/ValueSet/procedure-outcome",
+        "bindingStrength": "EXAMPLE",
+        "lastModifiedBy": "cimi.context.Outcome"
+      }
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.statement.ClinicalStatement",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

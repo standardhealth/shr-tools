@@ -1,0 +1,34 @@
+{
+  "fileType": "ValueSet",
+  "name": "AdverseEventGradeVS",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.AdverseEventGradeVS",
+  "url": "http://standardhealthrecord.org/cimi/adverse/vs/#AdverseEventGradeVS",
+  "values": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1513302",
+      "description": "Mild Adverse Event. Transient or mild discomfort, no limitaion in activity; no medical intervention or therapy required"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1513374",
+      "description": "Moderate Adverse Event. Daily activity is affected moderately; some assistance might be needed; no or minimal medical intervention/therapy required."
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1519275",
+      "description": "Severe Adverse Event. Daily activity is markedly reduced; some assistance usually required; medical intervention/therapy required, hospitalization or hospice care possible."
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1517874",
+      "description": "Potentially Life-Threatening Adverse Event. Extreme limitation to daily activity, significant assistance required; significant medical intervention/therapy, hospitalization or hospice care very likely."
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1559081",
+      "description": "Fatal Adverse Event. Adverse event associated with death"
+    }
+  ]
+}

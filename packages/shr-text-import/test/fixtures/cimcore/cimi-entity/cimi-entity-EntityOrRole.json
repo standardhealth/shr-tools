@@ -1,0 +1,16 @@
+{
+  "fileType": "DataElement",
+  "name": "EntityOrRole",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.EntityOrRole",
+  "isEntry": false,
+  "isAbstract": true,
+  "description": "Parent class entity and role.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent"
+  ],
+  "basedOn": [
+    "cimi.core.Independent"
+  ]
+}

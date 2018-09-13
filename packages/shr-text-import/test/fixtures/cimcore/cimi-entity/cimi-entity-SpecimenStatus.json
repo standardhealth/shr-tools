@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "SpecimenStatus",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.SpecimenStatus",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "State of the specimen, such as obtained, processed, used.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0449438"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

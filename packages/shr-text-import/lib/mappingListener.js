@@ -92,7 +92,7 @@ class MappingImporter extends SHRMapParserListener {
     const source = new Identifier(this._currentNs, ctx.mappingDefHeader().simpleName().getText());
     let target;
     if (ctx.mappingDefHeader().TARGET_PHRASE()) {
-      target = ctx.mappingDefHeader().TARGET_PHRASE().getText();
+      target = ctx.mappingDefHeader().TARGET_PHRASE().getText().trim();
     }
     this._currentDef = new ElementMapping(source, this._currentTargetSpec, target);
     this._currentDef.grammarVersion = this._currentGrammarVersion;
@@ -115,18 +115,18 @@ class MappingImporter extends SHRMapParserListener {
 
   enterFieldMapping(ctx) {
     const sourcePath = this.buildSourcePath(ctx);
-    const target = ctx.TARGET_PHRASE().getText();
+    const target = ctx.TARGET_PHRASE().getText().trim();
     this._currentDef.addFieldMappingRule(sourcePath, target);
   }
 
   enterCardMapping(ctx) {
-    const target = ctx.TARGET_WORD().getText();
+    const target = ctx.TARGET_WORD().getText().trim();
     const cardinality = this.processCardinality(ctx.count());
     this._currentDef.addCardinalityMappingRule(target, cardinality);
   }
 
   enterFixedMapping(ctx) {
-    const target = ctx.TARGET_WORD_2().getText();
+    const target = ctx.TARGET_WORD_2().getText().trim();
     const value = ctx.TARGET_PHRASE_2().getText().substr(3); // substr to remove leading "to "
     this._currentDef.addFixedValueMappingRule(target, value);
   }

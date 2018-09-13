@@ -1,0 +1,69 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationUseTopic",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationUseTopic",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A course or dose of medication for a patient, independent of context of being recommended, used, or not used. Medication use can be reported, directly observed, or inferred from clinical events associated with orders, prescriptions written, pharmacy dispensings, procedural administrations, and other patient-reported information.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic",
+    "cimi.topic.ActionTopic",
+    "cimi.medication.MedicationTopic"
+  ],
+  "basedOn": [
+    "cimi.medication.MedicationTopic"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.StatementTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Category",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.ActionTopic"
+      }
+    },
+    {
+      "fqn": "cimi.entity.Medication",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.medication.MedicationTopic"
+      }
+    },
+    {
+      "fqn": "cimi.medication.Dosage",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.medication.MedicationTopic"
+      }
+    }
+  ]
+}

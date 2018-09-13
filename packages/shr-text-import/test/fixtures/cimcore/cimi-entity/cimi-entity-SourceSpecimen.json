@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "SourceSpecimen",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.SourceSpecimen",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Identifier for the source specimen from which this specimen was derived.",
+  "value": {
+    "fqn": "cimi.entity.Specimen",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

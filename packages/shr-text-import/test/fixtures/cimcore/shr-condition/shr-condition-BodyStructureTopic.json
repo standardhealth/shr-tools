@@ -1,0 +1,181 @@
+{
+  "fileType": "DataElement",
+  "name": "BodyStructureTopic",
+  "namespace": "shr.condition",
+  "fqn": "shr.condition.BodyStructureTopic",
+  "isEntry": false,
+  "isAbstract": true,
+  "description": "Presence (or absence) of a distinct anatomical or pathological morphological feature or organizational pattern, acquired or innate. Examples include tissue types, tumors, and wounds.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1268086"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic",
+    "cimi.topic.FindingTopic",
+    "cimi.topic.AssertionTopic",
+    "cimi.topic.ConditionTopic"
+  ],
+  "basedOn": [
+    "cimi.topic.ConditionTopic"
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/cimi/element/vs/AnatomicalLocationVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "shr.condition.BodyStructureTopic"
+      }
+    },
+    "constraintHistory": {
+      "valueSet": [
+        {
+          "constraint": {
+            "uri": "http://standardhealthrecord.org/cimi/element/vs/AnatomicalLocationVS",
+            "bindingStrength": "REQUIRED",
+            "lastModifiedBy": "shr.condition.BodyStructureTopic"
+          },
+          "source": "shr.condition.BodyStructureTopic"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "fixedValue": {
+              "type": "code",
+              "value": {
+                "system": "http://ncimeta.nci.nih.gov",
+                "code": "C1268086"
+              },
+              "lastModifiedBy": "shr.condition.BodyStructureTopic"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.topic.StatementTopic"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/us/core/ValueSet/us-core-problem",
+              "bindingStrength": "EXTENSIBLE"
+            },
+            "source": "cimi.topic.ConditionTopic"
+          }
+        ],
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://ncimeta.nci.nih.gov",
+                "code": "C1268086"
+              },
+              "lastModifiedBy": "shr.condition.BodyStructureTopic"
+            },
+            "source": "shr.condition.BodyStructureTopic"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.topic.FindingMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.FindingTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Details",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.FindingTopic"
+      }
+    },
+    {
+      "fqn": "shr.core.Category",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/shr/core/vs/ConditionCategoryVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.topic.ConditionTopic"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.ConditionTopic"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/core/vs/ConditionCategoryVS",
+              "bindingStrength": "REQUIRED"
+            },
+            "source": "cimi.topic.ConditionTopic"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.element.AnatomicalLocation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.ConditionTopic"
+      }
+    },
+    {
+      "fqn": "shr.condition.Morphology",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

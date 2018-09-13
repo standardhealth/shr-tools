@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "TimePeriodStart",
+  "namespace": "shr.core",
+  "fqn": "shr.core.TimePeriodStart",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The time at which something is to take effect, start, or did start. Boundary is considered inclusive.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1301880"
+    }
+  ],
+  "value": {
+    "fqn": "dateTime",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

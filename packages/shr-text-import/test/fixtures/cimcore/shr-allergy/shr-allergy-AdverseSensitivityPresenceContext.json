@@ -1,0 +1,216 @@
+{
+  "fileType": "DataElement",
+  "name": "AdverseSensitivityPresenceContext",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.AdverseSensitivityPresenceContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Context for adverse sensitivities that are known or suspected to exist.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.FindingContext",
+    "cimi.context.AssertionContext",
+    "cimi.context.PresenceContext"
+  ],
+  "basedOn": [
+    "cimi.context.PresenceContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/cimi/context/vs/PresenceContextVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.PresenceContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/cimi/context/vs/PresenceContextVS",
+              "bindingStrength": "REQUIRED"
+            },
+            "source": "cimi.context.PresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.encounter.Encounter",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.FindingContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.VerificationStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/allergy-verification-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityPresenceContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.context.PresenceContext"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/allergy-verification-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityPresenceContext"
+            },
+            "source": "shr.allergy.AdverseSensitivityPresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.Onset",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Abatement",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Certainty",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.ClinicalStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/allergy-clinical-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityPresenceContext"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/allergy-clinical-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityPresenceContext"
+            },
+            "source": "shr.allergy.AdverseSensitivityPresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.Criticality",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityPresenceContext"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.allergy.AdverseSensitivityPresenceContext"
+            },
+            "source": "shr.allergy.AdverseSensitivityPresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.allergy.MostRecentOccurrenceTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.allergy.AdverseReaction",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

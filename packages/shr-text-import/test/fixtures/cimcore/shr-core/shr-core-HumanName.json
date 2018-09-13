@@ -1,0 +1,217 @@
+{
+  "fileType": "DataElement",
+  "name": "HumanName",
+  "namespace": "shr.core",
+  "fqn": "shr.core.HumanName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The CIMI person name, constrained to map correctly to FHIR.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1547383"
+    }
+  ],
+  "hierarchy": [
+    "cimi.element.Name",
+    "cimi.element.PersonName"
+  ],
+  "basedOn": [
+    "cimi.element.PersonName"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.element.NameAsText",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Name"
+      }
+    },
+    {
+      "fqn": "shr.core.Purpose",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1,
+        "history": [
+          {
+            "source": "cimi.element.Name",
+            "min": 0
+          },
+          {
+            "source": "cimi.element.PersonName",
+            "min": 0,
+            "max": 1
+          }
+        ]
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Coding": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/name-use",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.element.PersonName"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Name"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/name-use",
+              "bindingStrength": "REQUIRED"
+            },
+            "source": "cimi.element.PersonName"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 1
+            },
+            "source": "cimi.element.PersonName"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "shr.core.EffectiveTimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.Name"
+      }
+    },
+    {
+      "fqn": "cimi.element.PreferredFlag",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.PersonName"
+      }
+    },
+    {
+      "fqn": "cimi.element.Prefix",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.PersonName"
+      }
+    },
+    {
+      "fqn": "cimi.element.GivenName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.PersonName"
+      }
+    },
+    {
+      "fqn": "cimi.element.MiddleName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.element.PersonName",
+            "min": 0
+          },
+          {
+            "source": "shr.core.HumanName",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.element.PersonName"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.core.HumanName"
+            },
+            "source": "shr.core.HumanName"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.element.FamilyName",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1,
+        "history": [
+          {
+            "source": "cimi.element.PersonName",
+            "min": 0
+          },
+          {
+            "source": "shr.core.HumanName",
+            "min": 0,
+            "max": 1
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.element.PersonName"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 1,
+              "lastModifiedBy": "shr.core.HumanName"
+            },
+            "source": "shr.core.HumanName"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.element.Suffix",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.element.PersonName"
+      }
+    }
+  ]
+}

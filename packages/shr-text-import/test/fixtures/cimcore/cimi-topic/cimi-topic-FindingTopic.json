@@ -1,0 +1,47 @@
+{
+  "fileType": "DataElement",
+  "name": "FindingTopic",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.FindingTopic",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Base class - independent of context - for all kinds of determinations: questions/answers, conditions, observations, allergies, and other findings.\n\nThe subject of a finding can be the entire patient, or an entity such as a location body structure, intervention, or condition. Things observed about the subject can include social and behavioral factors, subjective and objective observations, and assessments.\n\nCIMI Alignment: In CIMI V0.0.4, FindingTopic has four attributes: result, description, multimedia, and intepretation. The model assumes the result of the finding, and interpretationof that result, are not part of the topic (the question), but part of the result (the answer), and therefore appears in the context (RecordedContext and PresenceContext).",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.topic.StatementTopic"
+  ],
+  "basedOn": [
+    "cimi.topic.StatementTopic"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.topic.TopicCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.StatementTopic"
+      }
+    },
+    {
+      "fqn": "cimi.topic.FindingMethod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.Details",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

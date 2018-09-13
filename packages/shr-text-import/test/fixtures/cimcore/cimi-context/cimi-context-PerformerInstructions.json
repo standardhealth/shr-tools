@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "PerformerInstructions",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.PerformerInstructions",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Information for the performer of the test, if needed.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

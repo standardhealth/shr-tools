@@ -1,0 +1,301 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicationAdherenceStatement",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.MedicationAdherenceStatement",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "The degree (frequency) that the stated treatment plan, prescription, or protocol was followed. A statement of the ability and cooperation of the patient in taking medicine or supplement as recommended or prescribed. This includes correct timing, dosage, and frequency.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2364172"
+    }
+  ],
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry",
+    "cimi.statement.ClinicalStatement",
+    "cimi.statement.EvaluationResultRecorded",
+    "cimi.statement.CodedEvaluationResultRecorded"
+  ],
+  "basedOn": [
+    "cimi.statement.CodedEvaluationResultRecorded"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.topic.StatementTopic",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.topic.EvaluationResultTopic",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.topic.ReferenceRange": {
+            "card": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "cimi.statement.CodedEvaluationResultRecorded"
+            }
+          },
+          "cimi.topic.TopicCode": {
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "fixedValue": {
+                  "type": "code",
+                  "value": {
+                    "system": "http://ncimeta.nci.nih.gov",
+                    "code": "C2364172"
+                  },
+                  "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
+                }
+              }
+            }
+          },
+          "cimi.topic.Focus": {
+            "type": {
+              "fqn": "cimi.entity.EntityOrRole",
+              "onValue": true,
+              "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
+            },
+            "subpaths": {
+              "cimi.entity.EntityOrRole": {
+                "type": {
+                  "fqn": "cimi.entity.Medication",
+                  "onValue": false,
+                  "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "code": [
+          {
+            "constraint": {
+              "type": "code",
+              "value": {
+                "system": "http://ncimeta.nci.nih.gov",
+                "code": "C2364172"
+              },
+              "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
+            },
+            "source": "cimi.medication.MedicationAdherenceStatement"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.topic.EvaluationResultTopic",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.entity.EntityOrRole",
+              "onValue": true,
+              "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
+            },
+            "source": "cimi.medication.MedicationAdherenceStatement"
+          },
+          {
+            "constraint": {
+              "fqn": "cimi.entity.Medication",
+              "onValue": false,
+              "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
+            },
+            "source": "cimi.medication.MedicationAdherenceStatement"
+          }
+        ],
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.statement.CodedEvaluationResultRecorded"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.StatementContext",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.context.EvaluationResultRecordedContext",
+          "onValue": false,
+          "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
+        },
+        "subpaths": {
+          "cimi.context.ResultValue": {
+            "type": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true,
+              "lastModifiedBy": "cimi.statement.CodedEvaluationResultRecorded"
+            },
+            "subpaths": {
+              "shr.core.CodeableConcept": {
+                "valueSet": {
+                  "uri": "http://standardhealthrecord.org/shr/core/vs/QualitativeFrequencyVS",
+                  "bindingStrength": "REQUIRED",
+                  "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.statement.ClinicalStatement"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/core/vs/QualitativeFrequencyVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
+            },
+            "source": "cimi.medication.MedicationAdherenceStatement"
+          }
+        ],
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.context.EvaluationResultRecordedContext",
+              "onValue": false
+            },
+            "source": "cimi.statement.EvaluationResultRecorded"
+          },
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true
+            },
+            "source": "cimi.statement.CodedEvaluationResultRecorded"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.medication.MedicationNonAdherenceReason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

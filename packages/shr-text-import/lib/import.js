@@ -6,6 +6,7 @@ const {Preprocessor, VERSION, GRAMMAR_VERSION} = require('./preprocessor');
 const {DataElementImporter} = require('./dataElementListener');
 const {ValueSetImporter} = require('./valueSetListener');
 const {MappingImporter} = require('./mappingListener');
+const {CimcoreImporter} = require('./cimcore/cimcoreImport');
 
 var logger = bunyan.createLogger({name: 'shr-text-import'});
 function setLogger(bunyanLogger) {
@@ -14,6 +15,7 @@ function setLogger(bunyanLogger) {
   require('./dataElementListener').setLogger(logger);
   require('./valueSetListener').setLogger(logger);
   require('./mappingListener').setLogger(logger);
+  require('./cimcore/cimcoreImport').setLogger(logger);
 }
 
 function importFromFilePath(filePath, configuration=[], specifications = new Specifications()) {
@@ -69,6 +71,14 @@ function importConfigFromFilePath(filePath, configName) {
   }
 
   return configuration;
+}
+
+function importCIMCOREFromFilePath(filePath) {
+  const importer = new CimcoreImporter();
+  importer.readFiles(filePath);
+  const configSpecs = importer.configSpecs;
+  const importedSpecs = importer.convertToSpecifications();
+  return [configSpecs, importedSpecs];
 }
 
 function processPath(filePath, filesByType = new FilesByType()) {
@@ -150,4 +160,4 @@ class FilesByType {
   }
 }
 
-module.exports = {importFromFilePath, importConfigFromFilePath, VERSION, GRAMMAR_VERSION, setLogger, MODELS_INFO};
+module.exports = {importFromFilePath, importConfigFromFilePath, importCIMCOREFromFilePath, VERSION, GRAMMAR_VERSION, setLogger, MODELS_INFO};

@@ -1,0 +1,136 @@
+{
+  "fileType": "DataElement",
+  "name": "CompleteMembraneStainingPercent",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.CompleteMembraneStainingPercent",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Percentage of cells with uniform intense complete membrane staining.",
+  "concepts": [
+    {
+      "system": "http://loinc.org",
+      "code": "85328-3",
+      "display": "Cells.HER2 uniform intense membrane staining/100 cells"
+    }
+  ],
+  "hierarchy": [
+    "cimi.topic.EvaluationComponent"
+  ],
+  "basedOn": [
+    "cimi.topic.EvaluationComponent"
+  ],
+  "value": {
+    "fqn": "shr.core.Quantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "subpaths": {
+        "shr.core.Units": {
+          "subpaths": {
+            "shr.core.Coding": {
+              "fixedValue": {
+                "type": "code",
+                "value": {
+                  "system": "http://unitsofmeasure.org",
+                  "code": "%"
+                },
+                "lastModifiedBy": "shr.oncology.CompleteMembraneStainingPercent"
+              }
+            }
+          }
+        }
+      }
+    },
+    "constraintHistory": {
+      "code": [
+        {
+          "constraint": {
+            "type": "code",
+            "value": {
+              "system": "http://unitsofmeasure.org",
+              "code": "%"
+            },
+            "lastModifiedBy": "shr.oncology.CompleteMembraneStainingPercent"
+          },
+          "source": "shr.oncology.CompleteMembraneStainingPercent"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.ComponentResultValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.ExceptionValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.Interpretation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.topic.EvaluationComponent",
+            "min": 0
+          },
+          {
+            "source": "shr.oncology.CompleteMembraneStainingPercent",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0,
+              "lastModifiedBy": "shr.oncology.CompleteMembraneStainingPercent"
+            },
+            "source": "shr.oncology.CompleteMembraneStainingPercent"
+          }
+        ]
+      }
+    }
+  ]
+}

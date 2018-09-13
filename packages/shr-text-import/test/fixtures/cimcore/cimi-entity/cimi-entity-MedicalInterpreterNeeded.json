@@ -1,0 +1,40 @@
+{
+  "fileType": "DataElement",
+  "name": "MedicalInterpreterNeeded",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.MedicalInterpreterNeeded",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Whether the subject requires an interpreter to communicate with an English-speaking provider.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1442531"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/shr/core/vs/YesNoUnknownVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.entity.MedicalInterpreterNeeded"
+      }
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.core.Language",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

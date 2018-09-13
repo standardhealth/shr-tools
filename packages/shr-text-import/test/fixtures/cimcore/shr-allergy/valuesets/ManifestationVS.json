@@ -1,0 +1,17 @@
+{
+  "fileType": "ValueSet",
+  "name": "ManifestationVS",
+  "namespace": "shr.allergy",
+  "fqn": "shr.allergy.ManifestationVS",
+  "description": "An observable sign or symptom of an underlying physical or psychological cause.",
+  "url": "http://standardhealthrecord.org/shr/allergy/vs/#ManifestationVS",
+  "rules": {
+    "includesDescendants": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "418799008",
+        "description": "Condition reported by subject or history provider"
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "fileType": "DataElement",
+  "name": "AgeRange",
+  "namespace": "shr.core",
+  "fqn": "shr.core.AgeRange",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A quantitative range of ages. One of the two ages must be specified.",
+  "fields": [
+    {
+      "fqn": "shr.core.UpperBound",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "type": {
+              "fqn": "shr.core.Age",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.AgeRange"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fqn": "shr.core.LowerBound",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.Quantity": {
+            "type": {
+              "fqn": "shr.core.Age",
+              "onValue": false,
+              "lastModifiedBy": "shr.core.AgeRange"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

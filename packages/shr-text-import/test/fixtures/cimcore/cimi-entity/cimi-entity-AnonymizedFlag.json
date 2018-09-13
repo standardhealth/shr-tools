@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "AnonymizedFlag",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.AnonymizedFlag",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Flag indicating if personally identifiable information has been withheld or disguised.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3858751"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/shr/core/vs/YesNoVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.entity.AnonymizedFlag"
+      }
+    }
+  }
+}

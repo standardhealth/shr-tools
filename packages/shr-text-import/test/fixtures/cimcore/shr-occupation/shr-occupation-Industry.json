@@ -1,0 +1,133 @@
+{
+  "fileType": "DataElement",
+  "name": "Industry",
+  "namespace": "shr.occupation",
+  "fqn": "shr.occupation.Industry",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A particular form or branch of economic or commercial activity.",
+  "hierarchy": [
+    "cimi.topic.EvaluationComponent",
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "basedOn": [
+    "cimi.topic.CodedEvaluationComponent"
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/ValueSet/industry-cdc-census-2010",
+        "bindingStrength": "EXAMPLE",
+        "lastModifiedBy": "shr.occupation.Industry"
+      }
+    },
+    "constraintHistory": {
+      "valueSet": [
+        {
+          "constraint": {
+            "uri": "http://hl7.org/fhir/ValueSet/industry-cdc-census-2010",
+            "bindingStrength": "EXAMPLE",
+            "lastModifiedBy": "shr.occupation.Industry"
+          },
+          "source": "shr.occupation.Industry"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.topic.ComponentResultValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "shr.core.CodeableConcept",
+          "onValue": true,
+          "lastModifiedBy": "cimi.topic.CodedEvaluationComponent"
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "shr.core.CodeableConcept",
+              "onValue": true
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.ExceptionValue",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.context.Interpretation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      }
+    },
+    {
+      "fqn": "cimi.topic.ReferenceRange",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 0,
+        "history": [
+          {
+            "source": "cimi.topic.EvaluationComponent",
+            "min": 0
+          },
+          {
+            "source": "cimi.topic.CodedEvaluationComponent",
+            "min": 0,
+            "max": 0
+          }
+        ]
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.topic.EvaluationComponent"
+      },
+      "constraintHistory": {
+        "card": [
+          {
+            "constraint": {
+              "min": 0,
+              "max": 0
+            },
+            "source": "cimi.topic.CodedEvaluationComponent"
+          }
+        ]
+      }
+    }
+  ]
+}

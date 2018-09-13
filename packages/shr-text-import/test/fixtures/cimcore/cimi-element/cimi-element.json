@@ -1,0 +1,5 @@
+{
+  "fileType": "Namespace",
+  "name": "cimi.element",
+  "description": "The Element Package defines reusable data elements that are used across multiple packages."
+}

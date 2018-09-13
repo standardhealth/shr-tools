@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "CreationTime",
+  "namespace": "shr.core",
+  "fqn": "shr.core.CreationTime",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The point in time when the information was recorded in the system of record.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3669169"
+    }
+  ],
+  "value": {
+    "fqn": "dateTime",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

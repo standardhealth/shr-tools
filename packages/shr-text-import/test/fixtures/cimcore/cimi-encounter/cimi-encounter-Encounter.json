@@ -1,0 +1,232 @@
+{
+  "fileType": "DataElement",
+  "name": "Encounter",
+  "namespace": "cimi.encounter",
+  "fqn": "cimi.encounter.Encounter",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A description of an interaction between a patient and healthcare provider(s) for the purpose of providing healthcare service(s) or assessing the health status of a patient.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.core.Content",
+    "cimi.core.InformationEntry"
+  ],
+  "basedOn": [
+    "cimi.core.InformationEntry"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.core.SubjectOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "type": {
+          "fqn": "cimi.encounter.PatientOrGroup",
+          "onValue": false,
+          "lastModifiedBy": "cimi.encounter.Encounter"
+        }
+      },
+      "inheritance": {
+        "status": "overridden",
+        "from": "cimi.core.InformationEntry"
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.encounter.PatientOrGroup",
+              "onValue": false,
+              "lastModifiedBy": "cimi.encounter.Encounter"
+            },
+            "source": "cimi.encounter.Encounter"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.core.SourceOfInformation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.element.Annotation",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.RecordStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Recorded",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Signed",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Cosigned",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.core.Verified",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.core.InformationEntry"
+      }
+    },
+    {
+      "fqn": "cimi.encounter.EncounterClass",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.encounter.EncounterType",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "shr.core.TimePeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.Status",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/encounter-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.encounter.Encounter"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/encounter-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.encounter.Encounter"
+            },
+            "source": "cimi.encounter.Encounter"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.element.PartOf",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "cimi.core.Independent": {
+            "type": {
+              "fqn": "cimi.encounter.Encounter",
+              "onValue": false,
+              "lastModifiedBy": "cimi.encounter.Encounter"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "type": [
+          {
+            "constraint": {
+              "fqn": "cimi.encounter.Encounter",
+              "onValue": false,
+              "lastModifiedBy": "cimi.encounter.Encounter"
+            },
+            "source": "cimi.encounter.Encounter"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.encounter.Diagnosis",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.statement.ClinicalNote",
+      "valueType": "RefValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

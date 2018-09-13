@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Actual",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Actual",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "True if the group is an actual group (as opposed to definitional).",
+  "value": {
+    "fqn": "boolean",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

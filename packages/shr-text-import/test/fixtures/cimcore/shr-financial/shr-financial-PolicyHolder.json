@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "PolicyHolder",
+  "namespace": "shr.financial",
+  "fqn": "shr.financial.PolicyHolder",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Owner of the policy",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "cimi.entity.Patient",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.RelatedPerson",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Organization",
+        "valueType": "RefValue"
+      }
+    ]
+  }
+}

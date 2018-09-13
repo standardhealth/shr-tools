@@ -1,0 +1,24 @@
+{
+  "fileType": "DataElement",
+  "name": "RequestIntent",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.RequestIntent",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Indicates the level of authority/intentionality associated with the request and where the request fits into the workflow chain.",
+  "value": {
+    "fqn": "code",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://hl7.org/fhir/ValueSet/request-intent",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.context.RequestIntent"
+      }
+    }
+  }
+}

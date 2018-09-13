@@ -1,0 +1,84 @@
+{
+  "fileType": "ValueSet",
+  "name": "HealthcareRoleVS",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.HealthcareRoleVS",
+  "url": "http://standardhealthrecord.org/cimi/entity/vs/#HealthcareRoleVS",
+  "values": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0079382",
+      "description": "Friend"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0008935",
+      "description": "Clergy"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0037444",
+      "description": "Social worker"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0687694",
+      "description": "Case manager"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0086530",
+      "description": "Lawyer"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0023226",
+      "description": "Legal guardian"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0337468",
+      "description": "Foster parent"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0030697",
+      "description": "Patient ombudsman"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2348942",
+      "description": "Payer"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0040757",
+      "description": "Transportation provider"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0204977",
+      "description": "Provider of home care"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0508797",
+      "description": "Medication assistance"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0871042",
+      "description": "Parole officer"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0042799",
+      "description": "Visting nurse"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1552023",
+      "description": "Emergency contact"
+    }
+  ]
+}

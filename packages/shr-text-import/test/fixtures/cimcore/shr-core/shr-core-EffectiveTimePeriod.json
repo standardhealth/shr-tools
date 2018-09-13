@@ -1,0 +1,47 @@
+{
+  "fileType": "DataElement",
+  "name": "EffectiveTimePeriod",
+  "namespace": "shr.core",
+  "fqn": "shr.core.EffectiveTimePeriod",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The date and time span for which something is active, valid, or in force.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2985763"
+    }
+  ],
+  "hierarchy": [
+    "shr.core.TimePeriod"
+  ],
+  "basedOn": [
+    "shr.core.TimePeriod"
+  ],
+  "fields": [
+    {
+      "fqn": "shr.core.TimePeriodStart",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.TimePeriod"
+      }
+    },
+    {
+      "fqn": "shr.core.TimePeriodEnd",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "shr.core.TimePeriod"
+      }
+    }
+  ]
+}

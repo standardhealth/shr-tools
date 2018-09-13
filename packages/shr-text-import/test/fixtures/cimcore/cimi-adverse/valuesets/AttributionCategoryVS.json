@@ -1,0 +1,35 @@
+{
+  "fileType": "ValueSet",
+  "name": "AttributionCategoryVS",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.AttributionCategoryVS",
+  "description": "Whether the adverse event is attributed to a treatment, course of the disease, medical error, unrelated to either, or unknown.",
+  "url": "http://standardhealthrecord.org/cimi/adverse/vs/#AttributionCategoryVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/adverse/cs/#AttributionCategoryCS",
+      "code": "treatment",
+      "description": "Adverse event is attributed to an intervention or treatment."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/adverse/cs/#AttributionCategoryCS",
+      "code": "disease",
+      "description": "Adverse event is attributed to the course of the disease"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/adverse/cs/#AttributionCategoryCS",
+      "code": "error",
+      "description": "Adverse event is attributed to a medical error"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/adverse/cs/#AttributionCategoryCS",
+      "code": "unrelated",
+      "description": "Adverse event is attributed to an cause unrelated to the treatment, disease, or medical error."
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/adverse/cs/#AttributionCategoryCS",
+      "code": "unknown",
+      "description": "The causal category of the adverse event is unknown"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "fileType": "Mapping",
+  "name": "BodyStructureAbsenceStatement",
+  "namespace": "shr.condition",
+  "fqn": "shr.condition.BodyStructureAbsenceStatement",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "Basic",
+  "inheritance": {
+    "status": "inherited",
+    "from": "cimi.statement.ConditionAbsenceStatement"
+  }
+}

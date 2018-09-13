@@ -1,0 +1,45 @@
+{
+  "fileType": "ValueSet",
+  "name": "DeltaFlagVS",
+  "namespace": "cimi.procedure",
+  "fqn": "cimi.procedure.DeltaFlagVS",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1705241"
+    }
+  ],
+  "url": "http://standardhealthrecord.org/cimi/procedure/vs/#DeltaFlagVS",
+  "values": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C2346711",
+      "description": "About the same"
+    },
+    {
+      "system": "urn:tbd",
+      "code": "TBD",
+      "description": "Significant change"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0332272",
+      "description": "Better"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1457868",
+      "description": "Worse"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3854148",
+      "description": "Significant change up"
+    },
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C3854147",
+      "description": "Significant change down"
+    }
+  ]
+}

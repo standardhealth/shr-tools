@@ -1,0 +1,35 @@
+{
+  "fileType": "ValueSet",
+  "name": "HER2byIHCScoreVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.HER2byIHCScoreVS",
+  "description": "Value set containing possible scores resulting from determining HER2 status by immunohistochemistry. Based on LNC#LL4396-9 answer list.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#HER2byIHCScoreVS",
+  "values": [
+    {
+      "system": "http://loinc.org",
+      "code": "LA6111-4",
+      "description": "0"
+    },
+    {
+      "system": "http://loinc.org",
+      "code": "LA11841-6",
+      "description": "1+"
+    },
+    {
+      "system": "http://loinc.org",
+      "code": "LA11842-4",
+      "description": "2+"
+    },
+    {
+      "system": "http://loinc.org",
+      "code": "LA11843-2",
+      "description": "3+"
+    },
+    {
+      "system": "http://loinc.org",
+      "code": "LA11884-6",
+      "description": "Indeterminate"
+    }
+  ]
+}

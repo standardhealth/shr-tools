@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Affiliation",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Affiliation",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Membership, association, or connection to an organization.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0932026"
+    }
+  ],
+  "value": {
+    "fqn": "cimi.entity.Organization",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "fileType": "ValueSet",
+  "name": "TimeUnitOfMeasureVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.TimeUnitOfMeasureVS",
+  "description": "Units of measure related to time.",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#TimeUnitOfMeasureVS",
+  "values": [
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "us",
+      "description": "Microsecond"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "ms",
+      "description": "Millisecond"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "s",
+      "description": "Second"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "min",
+      "description": "Minute"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "h",
+      "description": "Hour"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "wk",
+      "description": "Week"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "mo",
+      "description": "Month"
+    },
+    {
+      "system": "http://unitsofmeasure.org",
+      "code": "a",
+      "description": "Year"
+    }
+  ]
+}

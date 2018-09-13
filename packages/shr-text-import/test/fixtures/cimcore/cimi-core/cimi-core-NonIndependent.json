@@ -1,0 +1,15 @@
+{
+  "fileType": "DataElement",
+  "name": "NonIndependent",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.NonIndependent",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Parent for classes in CIMI that do not have enough context to stand alone. These reusable building blocks/data elements can be used to create classes by composition.",
+  "hierarchy": [
+    "cimi.core.Locatable"
+  ],
+  "basedOn": [
+    "cimi.core.Locatable"
+  ]
+}

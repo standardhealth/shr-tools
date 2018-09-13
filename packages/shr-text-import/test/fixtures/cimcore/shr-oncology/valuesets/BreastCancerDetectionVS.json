@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "BreastCancerDetectionVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.BreastCancerDetectionVS",
+  "description": "Basis for cancer detection, from HL7 CDA® R2 Implementation Guide: Clinical Oncology Treatment Plan and Summary, Release 1 - US Realm Standard for Trial Use Release 3, October 2016, Volume 2 — Templates and Supporting Material.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#BreastCancerDetectionVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "360156006",
+      "description": "Screening"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "160237006",
+      "description": "History/Symptoms"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "261087003",
+      "description": "Incidental"
+    }
+  ]
+}

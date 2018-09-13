@@ -1,0 +1,5 @@
+{
+  "fileType": "Namespace",
+  "name": "cimi.context",
+  "description": "The Context Package defines the high-level clinical statement context classes. Three types of contexts are currently defined in CIMI (1) Finding Contexts, (2) Action Contexts, and (3) Event Concepts. Finding contexts are used to specify whether a finding was observed to be present or absent. Action contexts are used to specify whether a clinical activity was performed, ordered, planned, or perhaps not performed. The Event context is experimental and has not yet been formally modeled."
+}

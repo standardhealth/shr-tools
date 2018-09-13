@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "FictionalPersonFlag",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.FictionalPersonFlag",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Flag indicating if this record represents a fictional (synthetic, not real) person.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0887933"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/shr/core/vs/YesNoVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.entity.FictionalPersonFlag"
+      }
+    }
+  }
+}

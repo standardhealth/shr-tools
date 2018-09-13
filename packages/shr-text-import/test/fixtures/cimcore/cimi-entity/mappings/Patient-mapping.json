@@ -1,0 +1,155 @@
+{
+  "fileType": "Mapping",
+  "name": "Patient",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Patient",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.ActiveFlag"
+        ],
+        "target": "active",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "shr.core.HumanName"
+        ],
+        "target": "name",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.AdministrativeGender"
+        ],
+        "target": "gender",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.Headshot"
+        ],
+        "target": "photo",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "shr.core.Address"
+        ],
+        "target": "address",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "shr.core.ContactPoint"
+        ],
+        "target": "telecom",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.LanguageUsed"
+        ],
+        "target": "communication",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Person",
+          "cimi.entity.DateOfBirth"
+        ],
+        "target": "birthDate",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.PlaceOfBirth"
+        ],
+        "target": "http://hl7.org/fhir/StructureDefinition/birthPlace",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MultipleBirth"
+        ],
+        "target": "multipleBirth[x].boolean",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MultipleBirth",
+          "cimi.entity.MultipleBirthOrder"
+        ],
+        "target": "multipleBirth[x].integer",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.BirthSex"
+        ],
+        "target": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Race"
+        ],
+        "target": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Ethnicity"
+        ],
+        "target": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MaritalStatus"
+        ],
+        "target": "maritalStatus",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MothersMaidenName"
+        ],
+        "target": "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.MedicalInterpreterNeeded"
+        ],
+        "target": "http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Deceased"
+        ],
+        "target": "deceased[x].boolean",
+        "lastModifiedBy": "cimi.entity.Patient"
+      },
+      {
+        "sourcePath": [
+          "cimi.entity.Deceased",
+          "cimi.entity.DateOfDeath"
+        ],
+        "target": "deceased[x].dateTime",
+        "lastModifiedBy": "cimi.entity.Patient"
+      }
+    ]
+  }
+}

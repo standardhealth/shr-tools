@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "IsActiveIngredient",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.IsActiveIngredient",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "True if the ingredient is an active ingredient in the medication.",
+  "value": {
+    "fqn": "boolean",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

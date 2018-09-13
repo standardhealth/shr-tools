@@ -1,0 +1,9 @@
+{
+  "fileType": "DataElement",
+  "name": "Locatable",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.Locatable",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Abstract top level class in the CIMI hierarchy. The Locatable class reflects CIMI's implementation using Archetype Description Language (ADL). Its attributes (archetype_node_id, name, and archetype_details) are necessary to serialize CIMI definitions in ADL, but have no clinical relevance. To avoid complicating the profiles with irrelevant extensions, the attributes of Locatable have been omitted."
+}

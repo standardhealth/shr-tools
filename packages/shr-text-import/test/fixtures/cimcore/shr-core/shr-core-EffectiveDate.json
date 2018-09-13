@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "EffectiveDate",
+  "namespace": "shr.core",
+  "fqn": "shr.core.EffectiveDate",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The date when something is to take effect.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1301880"
+    }
+  ],
+  "value": {
+    "fqn": "date",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

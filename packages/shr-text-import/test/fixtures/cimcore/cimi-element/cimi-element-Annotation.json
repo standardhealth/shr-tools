@@ -1,0 +1,35 @@
+{
+  "fileType": "DataElement",
+  "name": "Annotation",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.Annotation",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An added or follow-up note, often after the fact, that contains metadata about who made the statement and when.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.element.Author",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.core.OccurrenceTime",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

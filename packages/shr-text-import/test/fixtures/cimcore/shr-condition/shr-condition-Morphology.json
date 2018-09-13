@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Morphology",
+  "namespace": "shr.condition",
+  "fqn": "shr.condition.Morphology",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The kind of structure being represented. This can define both normal and abnormal morphologies.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

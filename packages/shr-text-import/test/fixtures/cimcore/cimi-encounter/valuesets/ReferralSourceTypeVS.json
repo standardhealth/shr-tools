@@ -1,0 +1,54 @@
+{
+  "fileType": "ValueSet",
+  "name": "ReferralSourceTypeVS",
+  "namespace": "cimi.encounter",
+  "fqn": "cimi.encounter.ReferralSourceTypeVS",
+  "url": "http://standardhealthrecord.org/cimi/encounter/vs/#ReferralSourceTypeVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReferralSourceTypeCS",
+      "code": "self",
+      "description": "Self, or personal associated, such as family or friend"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReferralSourceTypeCS",
+      "code": "pcp",
+      "description": "General Practitioner or Primary Care Physician"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReferralSourceTypeCS",
+      "code": "specialist",
+      "description": "Provider other than Primary Care Physician"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReferralSourceTypeCS",
+      "code": "fed",
+      "description": "Federal agency"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReferralSourceTypeCS",
+      "code": "cps",
+      "description": "Child Protective Service"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReferralSourceTypeCS",
+      "code": "court",
+      "description": "Criminal justice"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReferralSourceTypeCS",
+      "code": "comm",
+      "description": "Community agency"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReferralSourceTypeCS",
+      "code": "hp",
+      "description": "Health Plan"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReferralSourceTypeCS",
+      "code": "employer",
+      "description": "Employer"
+    }
+  ]
+}

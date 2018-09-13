@@ -1,0 +1,29 @@
+{
+  "fileType": "ValueSet",
+  "name": "ReasonEncounterDidNotHappenVS",
+  "namespace": "cimi.encounter",
+  "fqn": "cimi.encounter.ReasonEncounterDidNotHappenVS",
+  "url": "http://standardhealthrecord.org/cimi/encounter/vs/#ReasonEncounterDidNotHappenVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReasonEncounterDidNotHappenCS",
+      "code": "cancelled",
+      "description": "Patient cancelled appointment"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReasonEncounterDidNotHappenCS",
+      "code": "lost_touch",
+      "description": "Lost touch with patient"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReasonEncounterDidNotHappenCS",
+      "code": "withdrew",
+      "description": "Patient withdrew from trial"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/encounter/cs/#ReasonEncounterDidNotHappenCS",
+      "code": "hospitalized",
+      "description": "Patient was hospitalized"
+    }
+  ]
+}

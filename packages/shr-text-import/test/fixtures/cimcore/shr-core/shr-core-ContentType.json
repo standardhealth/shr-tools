@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "ContentType",
+  "namespace": "shr.core",
+  "fqn": "shr.core.ContentType",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Mime type of the content, with charset etc.",
+  "value": {
+    "fqn": "code",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

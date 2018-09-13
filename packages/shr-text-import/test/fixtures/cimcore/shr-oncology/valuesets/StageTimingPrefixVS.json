@@ -1,0 +1,30 @@
+{
+  "fileType": "ValueSet",
+  "name": "StageTimingPrefixVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.StageTimingPrefixVS",
+  "description": "When staging was done, relative to treatment events.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#StageTimingPrefixVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StageTimingPrefixCS",
+      "code": "cli",
+      "description": "Staging performed prior to surgery, based on evidence such as physical examination, imaging, and/or biopsy."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StageTimingPrefixCS",
+      "code": "path",
+      "description": "Staging performed based on examination of tissue samples removed during surgery, in addition to physical examination and imaging."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StageTimingPrefixCS",
+      "code": "postther_cli",
+      "description": "Post-therapeutic (post-neoadjuvant) clinical staging based on clinical examination after the first treatment with systemic drugs or radiation, when no surgery has been performed."
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/oncology/cs/#StageTimingPrefixCS",
+      "code": "postther_path",
+      "description": "Post-therapeutic (post-neoadjuvant) pathologic staging, based  on tissue samples removed during surgery after the first treatment with systemic drugs or radiation."
+    }
+  ]
+}

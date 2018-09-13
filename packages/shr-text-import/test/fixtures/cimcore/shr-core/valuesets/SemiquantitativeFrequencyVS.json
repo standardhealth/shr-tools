@@ -1,0 +1,74 @@
+{
+  "fileType": "ValueSet",
+  "name": "SemiquantitativeFrequencyVS",
+  "namespace": "shr.core",
+  "fqn": "shr.core.SemiquantitativeFrequencyVS",
+  "url": "http://standardhealthrecord.org/shr/core/vs/#SemiquantitativeFrequencyVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "never",
+      "description": "Never"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "less_than_yearly",
+      "description": "Less than yearly"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "yearly",
+      "description": "Yearly"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "mot_yearly",
+      "description": "More than once yearly"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "monthly",
+      "description": "Monthly"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "weekly",
+      "description": "Weekly"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "mto_weekly",
+      "description": "More than once weekly"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "daily",
+      "description": "Daily"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "mto_daily",
+      "description": "More than once daily"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "hourly",
+      "description": "Hourly"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "mto_hourly",
+      "description": "More than once hourly"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "minutely",
+      "description": "Every minute"
+    },
+    {
+      "system": "http://standardhealthrecord.org/shr/core/cs/#SemiquantitativeFrequencyCS",
+      "code": "continuously",
+      "description": "Continuously"
+    }
+  ]
+}

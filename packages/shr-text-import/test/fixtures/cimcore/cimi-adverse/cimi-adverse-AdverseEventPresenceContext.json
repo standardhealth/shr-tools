@@ -1,0 +1,185 @@
+{
+  "fileType": "DataElement",
+  "name": "AdverseEventPresenceContext",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.AdverseEventPresenceContext",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The context for an adverse event that is known, suspected, or possibly occurred.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.NonIndependent",
+    "cimi.context.StatementContext",
+    "cimi.context.FindingContext",
+    "cimi.context.AssertionContext",
+    "cimi.context.PresenceContext"
+  ],
+  "basedOn": [
+    "cimi.context.PresenceContext"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.context.ContextCode",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/cimi/context/vs/PresenceContextVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.context.PresenceContext"
+            }
+          }
+        }
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.StatementContext"
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/cimi/context/vs/PresenceContextVS",
+              "bindingStrength": "REQUIRED"
+            },
+            "source": "cimi.context.PresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.encounter.Encounter",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.FindingContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.VerificationStatus",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Onset",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Abatement",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.context.Certainty",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "inheritance": {
+        "status": "inherited",
+        "from": "cimi.context.PresenceContext"
+      }
+    },
+    {
+      "fqn": "cimi.adverse.AdverseEventGrade",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.adverse.SeriousAdverseEvent",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.Outcome",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/adverse-event-outcome",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.adverse.AdverseEventPresenceContext"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/adverse-event-outcome",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "cimi.adverse.AdverseEventPresenceContext"
+            },
+            "source": "cimi.adverse.AdverseEventPresenceContext"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.adverse.CauseCategory",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.adverse.AdverseEventAttribution",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    },
+    {
+      "fqn": "cimi.adverse.ActionTaken",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0
+      }
+    }
+  ]
+}

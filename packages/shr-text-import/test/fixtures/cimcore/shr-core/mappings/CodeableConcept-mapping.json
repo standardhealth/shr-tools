@@ -1,0 +1,26 @@
+{
+  "fileType": "Mapping",
+  "name": "CodeableConcept",
+  "namespace": "shr.core",
+  "fqn": "shr.core.CodeableConcept",
+  "targetSpec": "FHIR_STU_3",
+  "targetItem": "CodeableConcept",
+  "mappings": {
+    "fieldMapping": [
+      {
+        "sourcePath": [
+          "shr.core.Coding"
+        ],
+        "target": "coding",
+        "lastModifiedBy": "shr.core.CodeableConcept"
+      },
+      {
+        "sourcePath": [
+          "shr.core.DisplayText"
+        ],
+        "target": "text",
+        "lastModifiedBy": "shr.core.CodeableConcept"
+      }
+    ]
+  }
+}

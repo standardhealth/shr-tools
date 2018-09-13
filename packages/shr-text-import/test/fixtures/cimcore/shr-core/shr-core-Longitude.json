@@ -1,0 +1,23 @@
+{
+  "fileType": "DataElement",
+  "name": "Longitude",
+  "namespace": "shr.core",
+  "fqn": "shr.core.Longitude",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An imaginary great circle on the surface of a heavenly body passing through the poles at right angles to the equator. Measured with with WGS84 datum.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1657623"
+    }
+  ],
+  "value": {
+    "fqn": "decimal",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

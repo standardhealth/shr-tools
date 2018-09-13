@@ -1,0 +1,25 @@
+{
+  "fileType": "ValueSet",
+  "name": "NottinghamCombinedGradeVS",
+  "namespace": "shr.oncology",
+  "fqn": "shr.oncology.NottinghamCombinedGradeVS",
+  "description": "Combined score from the Nottingham grading system.",
+  "url": "http://standardhealthrecord.org/shr/oncology/vs/#NottinghamCombinedGradeVS",
+  "values": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "369790002",
+      "description": "Nottingham Combined Grade I: 3-5 points (finding)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "369791003",
+      "description": "Nottingham Combined Grade II: 6-7 points (finding)"
+    },
+    {
+      "system": "http://snomed.info/sct",
+      "code": "369792005",
+      "description": "Nottingham Combined Grade III: 8-9 points (finding)"
+    }
+  ]
+}

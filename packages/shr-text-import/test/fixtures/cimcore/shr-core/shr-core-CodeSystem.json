@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "CodeSystem",
+  "namespace": "shr.core",
+  "fqn": "shr.core.CodeSystem",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A formal terminology system.",
+  "value": {
+    "fqn": "uri",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

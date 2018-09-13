@@ -1,0 +1,19 @@
+{
+  "fileType": "DataElement",
+  "name": "ActionTaken",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.ActionTaken",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The action taken as a result of the adverse reaction. May include changing or discontinuing medication, reducing dose, etc.",
+  "fields": [
+    {
+      "fqn": "shr.core.Details",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

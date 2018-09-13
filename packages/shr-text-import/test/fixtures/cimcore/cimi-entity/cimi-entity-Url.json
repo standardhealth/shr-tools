@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Url",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Url",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A unique URL on which the device may be contacted directly.",
+  "value": {
+    "fqn": "uri",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

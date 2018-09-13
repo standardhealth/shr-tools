@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "Capacity",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Capacity",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Container volume or size.",
+  "value": {
+    "fqn": "shr.core.SimpleQuantity",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

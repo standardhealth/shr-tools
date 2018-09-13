@@ -1,0 +1,15 @@
+{
+  "fileType": "DataElement",
+  "name": "Independent",
+  "namespace": "cimi.core",
+  "fqn": "cimi.core.Independent",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Base class for classes in CIMI that include enough context to stand alone. Analogous to FHIR's DomainResource.",
+  "hierarchy": [
+    "cimi.core.Locatable"
+  ],
+  "basedOn": [
+    "cimi.core.Locatable"
+  ]
+}

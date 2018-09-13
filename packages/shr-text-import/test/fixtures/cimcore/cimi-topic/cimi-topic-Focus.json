@@ -1,0 +1,26 @@
+{
+  "fileType": "DataElement",
+  "name": "Focus",
+  "namespace": "cimi.topic",
+  "fqn": "cimi.topic.Focus",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The aspect or attribute of the subject of information that the finding relates to, other than an anatomical location. For example, the finding could deal with a condition, a behavior, a wound, or tumor. These are entities that are implied by clinical statements (see cimi.entity.MaterializedAssertion)",
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "shr.core.CodeableConcept",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "cimi.entity.EntityOrRole",
+        "valueType": "RefValue"
+      }
+    ]
+  }
+}

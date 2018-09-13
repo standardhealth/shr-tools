@@ -1,0 +1,30 @@
+{
+  "fileType": "DataElement",
+  "name": "SeriousAdverseEvent",
+  "namespace": "cimi.adverse",
+  "fqn": "cimi.adverse.SeriousAdverseEvent",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Clinical significance of adverse event usually associated with events that pose a threat to a patient's life or functioning. Seriousness of adverse event serves as a primary guide for defining regulatory reporting obligations and changes in medicinal product development and usage.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1710056"
+    }
+  ],
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "constraints": {
+      "valueSet": {
+        "uri": "http://standardhealthrecord.org/shr/core/vs/YesNoUnknownVS",
+        "bindingStrength": "REQUIRED",
+        "lastModifiedBy": "cimi.adverse.SeriousAdverseEvent"
+      }
+    }
+  }
+}

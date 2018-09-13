@@ -1,0 +1,27 @@
+{
+  "fileType": "DataElement",
+  "name": "Narrative",
+  "namespace": "shr.base",
+  "fqn": "shr.base.Narrative",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A human-readable narrative, potentially including images, that contains a summary of the resource, and may be used to represent the content of the resource to a human.",
+  "value": {
+    "fqn": "xhtml",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "shr.base.NarrativeQualifier",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

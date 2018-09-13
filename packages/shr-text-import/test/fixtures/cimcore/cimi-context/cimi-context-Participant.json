@@ -1,0 +1,49 @@
+{
+  "fileType": "DataElement",
+  "name": "Participant",
+  "namespace": "cimi.context",
+  "fqn": "cimi.context.Participant",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "An entity (usually a Practitioner, Patient, or Organization but potentially a device or other entity) that participates in a healthcare task or activity.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1550369"
+    }
+  ],
+  "value": {
+    "fqn": "cimi.entity.EntityOrRole",
+    "valueType": "RefValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "fields": [
+    {
+      "fqn": "cimi.context.ParticipationType",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.context.ParticipationPeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.OnBehalfOf",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ]
+}

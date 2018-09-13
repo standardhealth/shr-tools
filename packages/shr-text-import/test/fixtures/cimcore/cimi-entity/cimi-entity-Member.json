@@ -1,0 +1,63 @@
+{
+  "fileType": "DataElement",
+  "name": "Member",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.Member",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "A person or entity in a group.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C0682343",
+      "display": "Member of Target Group"
+    }
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "cimi.entity.Patient",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Practitioner",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Device",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Medication",
+        "valueType": "RefValue"
+      },
+      {
+        "fqn": "cimi.entity.Substance",
+        "valueType": "RefValue"
+      }
+    ]
+  },
+  "fields": [
+    {
+      "fqn": "cimi.context.ParticipationPeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.entity.ActiveFlag",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+}

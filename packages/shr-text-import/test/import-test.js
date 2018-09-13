@@ -1,6 +1,6 @@
 const fs = require('fs');
 const {expect} = require('chai');
-const {importFromFilePath, importConfigFromFilePath, setLogger} = require('../index');
+const {importFromFilePath, importConfigFromFilePath, importCIMCOREFromFilePath, setLogger} = require('../index');
 const {Version, DataElement, Value, RefValue, ChoiceValue, IncompleteValue, Identifier, PrimitiveIdentifier, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, CardConstraint, TBD, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
 const err = require('shr-test-helpers/errors');
 
@@ -1006,6 +1006,48 @@ describe('#importConfigFromFilePath', () => {
   });
 });
 
+describe('#importCimcoreFromFilePath', () => {
+  it('should be able to correctly import specifications instance and then export to identical cimcore', () => {
+    const [importedConfigSpecifications, importedSpecifications] = importCimcoreFolder();
+
+    //This is the cimcore produced from importedSpecs. Used for verifying fidelity
+    const cimcoreSpecifications = convertSpecsToCimcore(importedConfigSpecifications, importedSpecifications);
+
+    //All CIMCORE files are verified through string comparison. This is perhaps not ideal as they can still be
+    //valid files if the same elemenets are outputted in a different order. However, this should not be a problem
+    //for now, as the process that produced the original fixtures and the process that produces the unit test are
+    //identical in their ordering of outputs. This change should be a considered update in the future.
+
+    const origProjectJSON = importCimcoreProjectFile();
+    expect(JSON.stringify(cimcoreSpecifications.projectInfo, null, 2)).to.eql(origProjectJSON);
+
+    //meta namespace files
+    for (const ns in cimcoreSpecifications.namespaces) { //namespace files
+      const origNsJSON = importCimcoreNSFile(ns);
+      expect(JSON.stringify(cimcoreSpecifications.namespaces[ns], null, 2)).to.eql(origNsJSON);
+    }
+
+    //data elements
+    for (const de of cimcoreSpecifications.dataElements) { //namespace files
+      const origDeJSON = importCimcoreDEFile(de.namespace, de.name);
+      expect(JSON.stringify(de, null, 2)).to.eql(origDeJSON);
+    }
+
+    //valuesets
+    for (const vs of cimcoreSpecifications.valueSets) {
+      const origVsJSON = importCimcoreVSFile(vs.namespace, vs.name);
+      expect(JSON.stringify(vs, null, 2)).to.eql(origVsJSON);
+    }
+
+    //mappings
+    for (const mapping of [...cimcoreSpecifications.mappings]) {
+      const origMapJSON = importCimcoreMapFile(mapping.namespace, mapping.name);
+      expect(JSON.stringify(mapping, null, 2)).to.eql(origMapJSON);
+    }
+
+  });
+});
+
 // Shorthand Identifier constructor for more concise code
 function id(namespace, name) {
   return new Identifier(namespace, name);
@@ -1140,8 +1182,96 @@ function importConfigurationFolder(name, numExpectedErrors = 0) {
   return configuration;
 }
 
+function importCimcoreNSFile(namespace, numExpectedErrors = 0) {
+  namespace = namespace.replace(/\./g,'-');
+  const configuration = fs.readFileSync(`${__dirname}/fixtures/cimcore/${namespace}/${namespace}.json`, 'utf8');
+  checkImportErrors(numExpectedErrors);
+  return configuration;
+}
+
+function importCimcoreDEFile(namespace, name, numExpectedErrors = 0) {
+  namespace = namespace.replace(/\./g,'-');
+  const configuration = fs.readFileSync(`${__dirname}/fixtures/cimcore/${namespace}/${namespace}-${name}.json`, 'utf8');
+  checkImportErrors(numExpectedErrors);
+  return configuration;
+}
+
+function importCimcoreVSFile(namespace, name, numExpectedErrors = 0) {
+  namespace = namespace.replace(/\./g,'-');
+  const configuration = fs.readFileSync(`${__dirname}/fixtures/cimcore/${namespace}/valuesets/${name}.json`, 'utf8');
+  checkImportErrors(numExpectedErrors);
+  return configuration;
+}
+
+function importCimcoreMapFile(namespace, name, numExpectedErrors = 0) {
+  namespace = namespace.replace(/\./g,'-');
+  const configuration = fs.readFileSync(`${__dirname}/fixtures/cimcore/${namespace}/mappings/${name}-mapping.json`, 'utf8');
+  checkImportErrors(numExpectedErrors);
+  return configuration;
+
+}
+
+function importCimcoreProjectFile(numExpectedErrors = 0) {
+  const configuration = fs.readFileSync(`${__dirname}/fixtures/cimcore/project.json`, 'utf8');
+  checkImportErrors(numExpectedErrors);
+  return configuration;
+}
+
+function importCimcoreFolder(numExpectedErrors = 0) {
+  const configuration = importCIMCOREFromFilePath(`${__dirname}/fixtures/cimcore/`);
+  checkImportErrors(numExpectedErrors);
+  return configuration;
+}
+
 function checkImportErrors(numExpectedErrors = 0) {
   const errors = err.errors();
   const message = `Import Errors: ${errors.map(e => e.msg).join('; ')}`;
   expect(errors.length, message).to.equal(numExpectedErrors);
+}
+
+//THIS IS A HORRIBLE HACK. THIS AND THE CORRESPONDING SECTION IN shr-cli SHOULD
+//BE REPLACED WITH A STANDARD shr-model METHOD AS SOON AS WE REFACTOR shr-models.
+function convertSpecsToCimcore(configSpecifications, expSpecifications) {
+  const cimcoreSpecifications = {
+    'dataElements': [],
+    'valueSets': [],
+    'mappings': [],
+    'namespaces': {},
+  //also includes 'projectInfo'
+  };
+
+  //meta project file
+  let versionInfo = {
+    'CIMPL_version': '5.6.0',   //TODO: Update these to use an accurate constant. Current mode constant is on 4.0.0
+    'CIMCORE_version': '1.1'    //TODO: Update these to use an accurate constant. Current mode constant is on 4.0.0
+  };
+
+  let projectMetaOutput = Object.assign({ 'fileType': 'ProjectInfo' }, configSpecifications, versionInfo); //project meta information
+  cimcoreSpecifications['projectInfo'] = projectMetaOutput;
+
+  //meta namespace files
+  for (const ns of expSpecifications.namespaces.all) { //namespace files
+    let out = Object.assign({ 'fileType': 'Namespace' }, ns.toJSON());
+    cimcoreSpecifications.namespaces[ns.namespace] = out;
+  }
+
+  //data elements
+  for (const de of expSpecifications.dataElements.all) {
+    let out = Object.assign({ 'fileType': 'DataElement' }, de.toJSON());
+    cimcoreSpecifications.dataElements.push(out);
+  }
+
+  //valuesets
+  for (const vs of expSpecifications.valueSets.all) {
+    let out = Object.assign({ 'fileType': 'ValueSet' }, vs.toJSON());
+    cimcoreSpecifications.valueSets.push(out);
+  }
+
+  //mappings
+  for (const mapping of [...expSpecifications.maps._targetMap][0][1].all) {
+    let out = Object.assign({ 'fileType': 'Mapping' }, mapping.toJSON());
+    cimcoreSpecifications.mappings.push(out);
+  }
+
+  return cimcoreSpecifications;
 }

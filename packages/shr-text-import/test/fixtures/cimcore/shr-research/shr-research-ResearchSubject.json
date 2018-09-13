@@ -1,0 +1,106 @@
+{
+  "fileType": "DataElement",
+  "name": "ResearchSubject",
+  "namespace": "shr.research",
+  "fqn": "shr.research.ResearchSubject",
+  "isEntry": true,
+  "isAbstract": false,
+  "description": "Record of a subject's enrollment and participation in a research study.",
+  "hierarchy": [
+    "cimi.core.Locatable",
+    "cimi.core.Independent",
+    "cimi.entity.EntityOrRole",
+    "cimi.entity.Entity"
+  ],
+  "basedOn": [
+    "cimi.entity.Entity"
+  ],
+  "fields": [
+    {
+      "fqn": "cimi.entity.Patient",
+      "valueType": "RefValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.research.Study",
+      "valueType": "RefValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "cimi.element.Status",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "code": {
+            "valueSet": {
+              "uri": "http://hl7.org/fhir/ValueSet/research-subject-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.research.ResearchSubject"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://hl7.org/fhir/ValueSet/research-subject-status",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.research.ResearchSubject"
+            },
+            "source": "shr.research.ResearchSubject"
+          }
+        ]
+      }
+    },
+    {
+      "fqn": "cimi.context.ParticipationPeriod",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    {
+      "fqn": "shr.research.TerminationReason",
+      "valueType": "IdentifiableValue",
+      "card": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "subpaths": {
+          "shr.core.CodeableConcept": {
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/shr/research/vs/ResearchSubjectTerminationReasonVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.research.ResearchSubject"
+            }
+          }
+        }
+      },
+      "constraintHistory": {
+        "valueSet": [
+          {
+            "constraint": {
+              "uri": "http://standardhealthrecord.org/shr/research/vs/ResearchSubjectTerminationReasonVS",
+              "bindingStrength": "REQUIRED",
+              "lastModifiedBy": "shr.research.ResearchSubject"
+            },
+            "source": "shr.research.ResearchSubject"
+          }
+        ]
+      }
+    }
+  ]
+}

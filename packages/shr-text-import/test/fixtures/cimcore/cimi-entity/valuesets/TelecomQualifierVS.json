@@ -1,0 +1,69 @@
+{
+  "fileType": "ValueSet",
+  "name": "TelecomQualifierVS",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.TelecomQualifierVS",
+  "url": "http://standardhealthrecord.org/cimi/entity/vs/#TelecomQualifierVS",
+  "values": [
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "primary",
+      "description": "Primary (preferred) method of contact"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "secondary",
+      "description": "Secondary method of contact"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "prefer_call",
+      "description": "Prefer voice calls"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "prefer_text",
+      "description": "Prefer texting"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "personal",
+      "description": "Personal (home) use"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "work",
+      "description": "Work use"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "no_message",
+      "description": "Do not leave messages at this phone number"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "alert",
+      "description": "Use this contact method for reminders, alerts, and notifications"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "telecare",
+      "description": "Use for telecare encounters"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "shared",
+      "description": "A shared telecom address, e.g., facility telephone or family email"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "direct",
+      "description": "An encrypted DIRECT email address"
+    },
+    {
+      "system": "http://standardhealthrecord.org/cimi/entity/cs/#TelecomQualifierCS",
+      "code": "portal",
+      "description": "Portal-based secure messaging address"
+    }
+  ]
+}

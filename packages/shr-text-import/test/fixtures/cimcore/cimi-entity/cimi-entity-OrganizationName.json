@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "OrganizationName",
+  "namespace": "cimi.entity",
+  "fqn": "cimi.entity.OrganizationName",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "The name of the organization.",
+  "value": {
+    "fqn": "string",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}

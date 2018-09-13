@@ -1,0 +1,39 @@
+{
+  "fileType": "DataElement",
+  "name": "AsNeededIndicator",
+  "namespace": "cimi.medication",
+  "fqn": "cimi.medication.AsNeededIndicator",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Indicates the pre-condition under which the drug or intervention should be used.",
+  "concepts": [
+    {
+      "system": "http://ncimeta.nci.nih.gov",
+      "code": "C1883728"
+    }
+  ],
+  "value": {
+    "valueType": "ChoiceValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    },
+    "options": [
+      {
+        "fqn": "boolean",
+        "valueType": "IdentifiableValue"
+      },
+      {
+        "fqn": "shr.core.CodeableConcept",
+        "valueType": "IdentifiableValue",
+        "constraints": {
+          "valueSet": {
+            "uri": "http://hl7.org/fhir/ValueSet/medication-as-needed-reason",
+            "bindingStrength": "EXAMPLE",
+            "lastModifiedBy": "cimi.medication.AsNeededIndicator"
+          }
+        }
+      }
+    ]
+  }
+}

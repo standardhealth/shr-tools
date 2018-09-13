@@ -1,0 +1,17 @@
+{
+  "fileType": "DataElement",
+  "name": "PreferredFlag",
+  "namespace": "cimi.element",
+  "fqn": "cimi.element.PreferredFlag",
+  "isEntry": false,
+  "isAbstract": false,
+  "description": "Code indicating the preference associated with the use of this name.",
+  "value": {
+    "fqn": "shr.core.CodeableConcept",
+    "valueType": "IdentifiableValue",
+    "card": {
+      "min": 1,
+      "max": 1
+    }
+  }
+}
