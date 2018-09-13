@@ -778,11 +778,11 @@ describe('#expand()', () => {
           .withConstraint(new models.TypeConstraint(id('shr.test', 'SubB')))
       );
     let subSubA = new models.DataElement(id('shr.test', 'SubSubA'), true)
-    .withBasedOn(id('shr.test', 'SubA'))
-    .withField(
-      new models.IdentifiableValue(id('shr.test', 'SubB')).withMinMax(0, 1)
-        .withConstraint(new models.TypeConstraint(id('shr.test', 'SubSubB')))
-    );
+      .withBasedOn(id('shr.test', 'SubA'))
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'SubB')).withMinMax(0, 1)
+          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubSubB')))
+      );
     add(b, subB, subSubB, a, subA, subSubA);
 
     doExpandWithConstraintHistory();
@@ -798,7 +798,7 @@ describe('#expand()', () => {
       .withInheritance(models.OVERRIDDEN)
       .withInheritedFrom(a.identifier);
     expectedField.constraintHistory.add(
-      new models.TypeConstraint(id('shr.test', 'SubB')),
+      new models.TypeConstraint(id('shr.test', 'SubB')).withLastModifiedBy(id('shr.test', 'SubA')),
       id('shr.test', 'SubA')
     );
     expectedField.constraintHistory.add(
@@ -865,10 +865,16 @@ describe('#expand()', () => {
     expect(eSubX.value).to.eql(
       new models.ChoiceValue().withMinMax(0, 1)
         .withOption(new models.IdentifiableValue(id('shr.test', 'A'))
-          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubA'), [], false))
+          .withConstraint(
+            new models.TypeConstraint(id('shr.test', 'SubA'), [], false)
+              .withLastModifiedBy(id('shr.test', 'SubX'))
+          )
         )
         .withOption(new models.IdentifiableValue(id('shr.test', 'A'))
-          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubA2'), [], false))
+          .withConstraint(
+            new models.TypeConstraint(id('shr.test', 'SubA2'), [], false)
+              .withLastModifiedBy(id('shr.test', 'SubX'))
+          )
         )
         .withInheritance(models.OVERRIDDEN)
         .withInheritedFrom(x.identifier)
@@ -1089,7 +1095,8 @@ describe('#expand()', () => {
       .withInheritedFrom(x.identifier)
       .withOption(new models.IdentifiableValue(id('shr.test', 'A')))
         .withOption(new models.IdentifiableValue(id('shr.test', 'C'))
-          .withConstraint(new models.ValueSetConstraint('http://foo.org', [id('shr.core', 'CodeableConcept')]))
+          .withConstraint(new models.ValueSetConstraint('http://foo.org', [id('shr.core', 'CodeableConcept')])
+            .withLastModifiedBy(id('shr.test', 'X')))
         )
         .withMinMax(0, 1)
         .withInheritance(models.OVERRIDDEN)
@@ -1132,7 +1139,10 @@ describe('#expand()', () => {
       .withInheritedFrom(x.identifier)
       .withOption(new models.IdentifiableValue(id('shr.test', 'A')))
         .withOption(new models.IdentifiableValue(id('shr.test', 'C'))
-          .withConstraint(new models.ValueSetConstraint('http://foo.org', [id('shr.core', 'CodeableConcept')]))
+          .withConstraint(
+            new models.ValueSetConstraint('http://foo.org', [id('shr.core', 'CodeableConcept')])
+              .withLastModifiedBy(id('shr.test', 'SubX'))
+          )
         )
         .withMinMax(0, 1)
         .withInheritance(models.OVERRIDDEN)
@@ -1178,13 +1188,22 @@ describe('#expand()', () => {
       new models.ChoiceValue()
       .withInheritedFrom(x.identifier)
       .withOption(new models.IdentifiableValue(id('shr.test', 'A'))
-          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubA'), [], false))
+          .withConstraint(
+            new models.TypeConstraint(id('shr.test', 'SubA'), [], false)
+              .withLastModifiedBy(id('shr.test', 'SubX'))
+          )
         )
         .withOption(new models.IdentifiableValue(id('shr.test', 'A'))
-          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubA2'), [], false))
+          .withConstraint(
+            new models.TypeConstraint(id('shr.test', 'SubA2'), [], false)
+              .withLastModifiedBy(id('shr.test', 'SubX'))
+          )
         )
         .withOption(new models.IdentifiableValue(id('shr.test', 'C'))
-          .withConstraint(new models.TypeConstraint(id('shr.test', 'SubC'), [], false))
+          .withConstraint(
+            new models.TypeConstraint(id('shr.test', 'SubC'), [], false)
+              .withLastModifiedBy(id('shr.test', 'SubX'))
+          )
         )
         .withOption(new models.IdentifiableValue(id('shr.test', 'D')))
         .withMinMax(0, 1)

@@ -76,9 +76,7 @@ class Expander {
           let inheritance = null;
           for (const parent of parents) {
             if (parent.value) {
-              // if (!(parent.value instanceof models.TBD)) {
               inheritance = models.OVERRIDDEN;
-              // }
               if (parent.value.equals(de.value, true)) {
                 inheritance = models.INHERITED;
                 break;
@@ -376,6 +374,24 @@ class Expander {
               }
             }
           }
+
+          if (child.options) {
+            if (!parent.options) {
+              setCurrentElementAsOriginalModifier(child);
+            } else {
+              for (const childOption of child.options) {
+                const matchedParentOption = parent.options.find(p=>p.identifier.fqn == childOption.identifier.fqn);
+                for (const c of childOption.constraints) {
+                  const matchedParentOptionConstraint = matchedParentOption.constraints.find(p => p.equals(c));
+                  if (matchedParentOptionConstraint && matchedParentOptionConstraint.lastModifiedBy) {
+                    c.lastModifiedBy = matchedParentOptionConstraint.lastModifiedBy;
+                  } else {
+                    c.lastModifiedBy = element.identifier;
+                  }
+                }
+              }
+            }
+          }
         };
 
         /*
@@ -387,33 +403,29 @@ class Expander {
         const manageCardHistory = (parent, child) => {
           if (!child.card || !child.effectiveCard) return; //defensive programming against null cards
 
-          if (child.effectiveCard.equals(child.card)) {
-            // return;
-          } else {
-            if (parent.constraintsFilter.own.card.hasConstraints) {
-              const oldCard = parent.constraintsFilter.own.card.constraints[0].card.clone();
-              oldCard.source = parent.constraintsFilter.own.card.constraints[0].lastModifiedBy;
-              if (!parent.card.history.find(h => h.source == oldCard.source || (h.min == oldCard.min && h.max == oldCard.max))) { //if unique
-                parent.card.withHistory(oldCard);
-              }
+          if (!child.effectiveCard.equals(child.card) || child.constraintsFilter.own.card.hasConstraints) { // The second check on child's own constraints is needed because value.card occasionally matches value.effectiveCard even with a CardConstraint
+            if (!child.card.history) child.card.history = [];
+
+            // Initialize child cardinality history with parent cardinality
+            if (parent.card.history) {
+              // If parent had history, inherit it
+              child.card.history.unshift(...parent.card.history);
             } else {
-              //Add original parent card into history (since card and effectiveCard are different and no history was inherited, this is definitely new)
+              // Otherwise, add original parent card into history.
+              // Because child.card and child.effectiveCard are different and the
+              // parent had no history, this is definitely unique
               const oldCard = parent.card.clone();
               oldCard.source = base.identifier;
               child.card.withHistory(oldCard);
+            }
 
-              //if any child constraints exist, add them to history
-              if (child.constraintsFilter.own.card.hasConstraints) {
+            // If the child has any new constraints, add them to history
+            if (child.constraintsFilter.own.card.hasConstraints) {
+              if (child.constraintsFilter.own.card.constraints[0].lastModifiedBy.equals(element.identifier)) {
                 const newCard = child.constraintsFilter.own.card.constraints[0].card.clone();
                 newCard.source = child.constraintsFilter.own.card.constraints[0].lastModifiedBy;
                 child.card.withHistory(newCard);
               }
-            }
-
-            //prepend child history with inherited parent history
-            if (parent.card.history) {
-              if (!child.card.history) child.card.history = [];
-              child.card.history.unshift(...parent.card.history);
             }
           }
         };
