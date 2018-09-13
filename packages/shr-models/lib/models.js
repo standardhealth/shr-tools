@@ -383,8 +383,8 @@ class Namespace {
   toJSON() {
     return {
       'name': this.namespace,
-      'description': this.description,
-      'external_dependencies': undefined
+      'description': this.description
+      // 'external_dependencies' : undefined
     };
   }
 }
@@ -775,6 +775,9 @@ class Constraint {
     for (const p of this._path) {
       clone._path.push(p.clone());
     }
+    if (this.lastModifiedBy) {
+      clone.lastModifiedBy = this.lastModifiedBy;
+    }
   }
 
   _pathsAreEqual(other) {
@@ -853,7 +856,7 @@ class ValueSetConstraint extends Constraint {
   }
 
   toString() {
-    return `ValueSetConstraint (${this.valueSet}, binding strength:${this.bindingStrength}, on path:${this.path.map(p => p.name).join('.')})`
+    return `ValueSetConstraint (${this.valueSet}, binding strength:${this.bindingStrength}, on path:${this.path.map(p => p.name).join('.')})`;
   }
 }
 
@@ -891,7 +894,7 @@ class CodeConstraint extends Constraint {
   }
 
   toString() {
-    return `CodeConstraint (${this.code.system}#${this.code.code}, on path:${this.path.map(p => p.name).join('.')})`
+    return `CodeConstraint (${this.code.system}#${this.code.code}, on path:${this.path.map(p => p.name).join('.')})`;
   }
 }
 
@@ -926,7 +929,7 @@ class IncludesCodeConstraint extends Constraint {
   }
 
   toString() {
-    return `IncludesCodeConstraint (${this.code.system}#${this.code.code}, on path:${this.path.map(p => p.name).join('.')})`
+    return `IncludesCodeConstraint (${this.code.system}#${this.code.code}, on path:${this.path.map(p => p.name).join('.')})`;
   }
 }
 
@@ -963,7 +966,7 @@ class BooleanConstraint extends Constraint {
   }
 
   toString() {
-    return `BooleanConstraint (${this.value}, on path:${this.path.map(p => p.name).join('.')})`
+    return `BooleanConstraint (${this.value}, on path:${this.path.map(p => p.name).join('.')})`;
   }
 }
 
@@ -1009,7 +1012,7 @@ class TypeConstraint extends Constraint {
   }
 
   toString() {
-    return `TypeConstraint (${this.isA.fqn}, on value: ${this.onValue}, on path:${this.path.map(p => p.name).join('.')})`
+    return `TypeConstraint (${this.isA.fqn}, on value: ${this.onValue}, on path:${this.path.map(p => p.name).join('.')})`;
   }
 }
 
@@ -1053,7 +1056,7 @@ class IncludesTypeConstraint extends Constraint {
   }
 
   toString() {
-    return `IncludesTypeConstraint (${this.card.toString()} ${this.isA.fqn}, on value: ${this.onValue}, on path:${this.path.map(p => p.name).join('.')})`
+    return `IncludesTypeConstraint (${this.card.toString()} ${this.isA.fqn}, on value: ${this.onValue}, on path:${this.path.map(p => p.name).join('.')})`;
   }
 }
 
@@ -1083,7 +1086,7 @@ class CardConstraint extends Constraint {
   }
 
   toString() {
-    return `CardConstraint (${this.card.toString()}, on path:${this.path.map(p => p.name).join('.')})`
+    return `CardConstraint (${this.card.toString()}, on path:${this.path.map(p => p.name).join('.')})`;
   }
 }
 
@@ -1204,9 +1207,12 @@ class ConstraintHistoryItem {
   }
 
   toJSON() {
+    const constraintWithPath = Object.assign(this.constraint.toJSON(), {
+      path: this.constraint.path ? this.constraint.path.map(p=>p.fqn) : undefined
+    });
     return {
-      constraint: this.constraint.toJSON(),
-      source: this.source.fqn
+      constraint: constraintWithPath,
+      source: this.source.fqn,
     };
   }
 }
@@ -2535,7 +2541,7 @@ class Version {
 
 // Versioning constants
 const VERSION = new Version(4, 0, 0);
-const GRAMMAR_VERSION = new Version(4, 0, 0);
+const GRAMMAR_VERSION = new Version(5, 0, 0);
 
 // Value set binding strength constants (inspired by FHIR)
 const REQUIRED = 'REQUIRED';

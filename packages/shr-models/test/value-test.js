@@ -10,13 +10,13 @@ describe('#Concept', () => {
     expect(code2.display).to.eql(code.display);
     expect(code2.equals(code)).to.be.true;
 
-    code2.display = 'Another name for the code.'
+    code2.display = 'Another name for the code.';
     expect(code2.equals(code)).to.be.true;
 
-    code2.code = '6789'
+    code2.code = '6789';
     expect(code2.equals(code)).to.be.false;
   });
-})
+});
 
 describe('#Value', () => {
   it('should correctly set and get cardinalities', () => {
@@ -324,6 +324,7 @@ describe('#ChoiceValue', () => {
         .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
         .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(1,1)));
     const consumer = new mdl.DataElement(new mdl.Identifier('shr.test', 'Consumer'))
+      .withBasedOn(base.identifier)
       .withValue(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'ChoiceValue'))
         .withConstraint(new mdl.TypeConstraint(new mdl.Identifier('shr.test', 'Bar')).withOnValue(true)));
 
