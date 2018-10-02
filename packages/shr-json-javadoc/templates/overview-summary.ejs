@@ -26,7 +26,6 @@
   <a name="navbar_top_firstrow"></a>
   <ul class="navList" title="Navigation">
     <li class="navBarCell1Rev">Overview</li>
-    <!-- <li class="navBarCell1Rev"><a href="/../" target="_top">Back to <%= metaData.projectShorthand %> Website</a></li> -->
   </ul>
   <div class="aboutLanguage">
     <em><strong><%= metaData.projectShorthand %>&nbsp;Reference&nbsp;Model</strong></em>
@@ -34,26 +33,9 @@
 </div>
 <div class="subNav">
   <ul class="navList">
-    <li><a href="index.html" target="_top">Frames</a></li>
-    <li><a href="overview-summary.html" target="_top">No Frames</a></li>
+    <li><a href="index.html" class="frameToggler">Frames</a></li>
+    <li><a href="overview-summary.html" class="frameToggler">No Frames</a></li>
   </ul>
-  <!-- <ul class="navList" id="allclasses_navbar_top">
-    <li><a href="allclasses-noframe.html">All Classes</a></li>
-  </ul> --> <!-- This is doesn't link to anything -->
-  <div>
-    <script type="text/javascript">
-      //<![CDATA[
-      allClassesLink = document.getElementById("allclasses_navbar_top");
-      if(window==top) {
-        allClassesLink.style.display = "block";
-      }
-      else {
-        allClassesLink.style.display = "none";
-      }
-
-    //]]>
-    </script>
-  </div>
   <a name="skip-navbar_top"></a>
   </a>
 </div>
@@ -114,22 +96,19 @@
     <li></li>
   </ul>
   <ul class="navList">
-    <li><a href="index.html" target="_top">Frames</a></li>
-    <li><a href="overview-summary.html" target="_top">No Frames</a></li>
+    <li><a href="index.html" class="frameToggler">Frames</a></li>
+    <li><a href="overview-summary.html" class="frameToggler">No Frames</a></li>
   </ul>
-  <!-- <ul class="navList" id="allclasses_navbar_bottom">
-    <li><a href="allclasses-noframe.html">All Classes</a></li>
-  </ul> --> <!-- This is doesn't link to anything -->
   <div>
     <script type="text/javascript">
     //<![CDATA[
-
-      allClassesLink = document.getElementById("allclasses_navbar_bottom");
-      if(window==top) {
-        allClassesLink.style.display = "block";
-      }
-      else {
-        allClassesLink.style.display = "none";
+      // Code to determine how to target the frames / no frames link.  This must support cases where the modeldoc
+      // is standalone or when it's embedded in an iframe (like in a FHIR IG).
+      // If the parent is its frameset, then target the parent, else target itself
+      var frameTogglerTarget = (window.parent.frames.length === 3) ? '_parent' : '_self';
+      var frameTogglers = document.getElementsByClassName('frameToggler');
+      for (var i=0; i < frameTogglers.length; i++) {
+        frameTogglers[i].target=frameTogglerTarget;
       }
     //]]>
     </script>
