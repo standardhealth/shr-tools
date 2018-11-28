@@ -613,11 +613,11 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
                   arrayDef.maxItems = constraintInfo.constraint.card.max;
                 }
                 currentAllOf.push(arrayDef);
-                if (constraintInfo.constraint.card.min) {
+                if (parentAllOf && constraintInfo.constraint.card.min) {
                   parentAllOf.push({ required: [constraintInfo.constraintPath[constraintInfo.constraintPath.length - 1]] });
                 }
               } else {
-                if (constraintInfo.constraint.card.min) {
+                if (parentAllOf && constraintInfo.constraint.card.min) {
                   parentAllOf.push({ required: [constraintInfo.constraintPath[constraintInfo.constraintPath.length - 1]] });
                 }
               }
@@ -1074,8 +1074,16 @@ function isOrWasAList(value) {
  * @returns {Value?} The first option in the choice that matches the specified optionId.
  */
 function findOptionInChoice(choice, optionId, dataElementSpecs) {
+  // First look for a direct match
   for (const option of choice.aggregateOptions) {
-    if (optionId.equals(option.identifier) || checkHasBaseType(option.identifier, optionId, dataElementSpecs)) {
+    if (optionId.equals(option.identifier)) {
+      return option;
+    }
+  }
+  // Then look for a match on one of the selected options's base types
+  // E.g., if choice has Quantity but selected option is IntegerQuantity
+  for (const option of choice.aggregateOptions) {
+    if (checkHasBaseType(optionId, option.identifier, dataElementSpecs)) {
       return option;
     }
   }
