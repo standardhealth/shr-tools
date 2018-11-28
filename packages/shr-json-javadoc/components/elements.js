@@ -127,6 +127,11 @@ class Elements {
     // Iterate over fields, handle valueType TBD separately
     element.fields.forEach((field) => {
       let inherited = false;
+      // We treat the "special" fields inherited because the element is an Entry as normal non-inherited fields
+      const isSpecialEntryField =
+        'inheritance' in field
+        && field.inheritance.from === 'shr.base.Entry'
+        && typeof hierarchyFields['shr.base.Entry'] === 'undefined';
       if (field.valueType === 'TBD') {
         field.title = field.fqn;
         field.path = '';
@@ -135,7 +140,7 @@ class Elements {
         field.name = fieldElement.name;
         field.description = fieldElement.description;
         field.path = fieldElement.namespacePath;
-        if ('inheritance' in field) {
+        if ('inheritance' in field && !isSpecialEntryField) {
           inherited = true;
           hierarchyFields[field.inheritance.from].push(field);
         }
@@ -143,7 +148,7 @@ class Elements {
       this.addToUsedBy(field.fqn, element);
       const cs = new Constraints(field, this.elements, this.config, inherited, this.configureForIG);
       field.pConstraints = cs.constraints;
-      if ('inheritance' in field && field.inheritance.status === 'overridden')
+      if ('inheritance' in field && field.inheritance.status === 'overridden' && !isSpecialEntryField)
         element.overridden = element.overridden.concat(cs.constraints);
     });
 
