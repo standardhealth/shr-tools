@@ -21,7 +21,11 @@ class Expander {
     this._expanded = new models.Specifications();
     this._exporterMap = new Map();
     for (const exp of exporters) {
-      this._exporterMap.set(exp.TARGET, exp);
+      if (exp.TARGET) {
+        this._exporterMap.set(exp.TARGET, exp);
+      } else if (exp.TARGETS) {
+        exp.TARGETS.forEach(t => this._exporterMap.set(t, exp));
+      }
     }
   }
 
@@ -142,9 +146,10 @@ class Expander {
               if (!de.fields[i].inheritance) {
                 if (!field.equals(de.fields[i])) {
                   de.fields[i].inheritance = models.OVERRIDDEN;
+                  de.fields[i].inheritedFrom = entryDE.identifier.clone();
                 } else {
                   de.fields[i].inheritance = models.INHERITED;
-
+                  de.fields[i].inheritedFrom = entryDE.identifier.clone();
                 }
               }
             }
@@ -1298,7 +1303,7 @@ class Expander {
           } else if (typeof map.targetItem === 'undefined') {
             map.targetItem = basedOnMap.targetItem;
           } else if (map.targetItem !== basedOnMap.targetItem) {
-            if (! this._exporterMap.get(target).isTargetBasedOn(map.targetItem, basedOnMap.targetItem)) {
+            if (! this._exporterMap.get(target).isTargetBasedOn(map.targetItem, basedOnMap.targetItem, target)) {
               logger.debug('Skipping mismatched targets: %s maps to %s, but based on class (%s) maps to %s, and %s is not based on %s in %s. ERROR_CODE:02001',
                 map.identifier.fqn, map.targetItem, basedOnMap.identifier.fqn, basedOnMap.targetItem, map.targetItem, basedOnMap.targetItem, map.targetSpec);
               continue;

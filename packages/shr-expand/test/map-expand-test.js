@@ -356,7 +356,7 @@ describe('#expandMap()', () => {
 
     // make a dummy expander to confirm that target a2 is based on target a
     //const isTargetBasedOn = (target, baseTarget) => target === 'a2' && baseTarget === 'a';
-    const isTargetBasedOn = (target, baseTarget) => true;
+    const isTargetBasedOn = (target, baseTarget, targetSpec) => true;
     doExpand({ TARGET: 'TEST', isTargetBasedOn });
 
     expect(err.errors()).to.have.length(0);
