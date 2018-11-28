@@ -81,7 +81,7 @@ class Preprocessor extends SHRDataElementParserVisitor {
         }
 
         configFile[key] = defaults[key];
-        logger.warn('Configuration file missing key: %s, using default key: %s instead. ERROR_CODE:01002', key, defaults[key]);
+        logger.warn('Configuration file missing key: %s, using default key: %s instead. ERROR_CODE:01002', key, JSON.stringify(defaults[key]));
       } else {
         //Additional compatibility logic
         if ( (key === 'projectURL' || key === 'fhirURL' ) && configFile[key].endsWith('/')) {
