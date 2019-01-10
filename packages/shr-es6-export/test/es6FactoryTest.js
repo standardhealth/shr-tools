@@ -1,17 +1,21 @@
 const {expect} = require('chai');
-const { importResult } = require('./test_utils');
 const setup = require('./setup');
 require('babel-register')({
   presets: [ 'es2015' ]
 });
 
-setup('./test/fixtures/spec', './build/test', true);
-
 describe('#Factory()', () => {
 
+  let context;
+  before(() => context = setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true));
+
   describe('#ObjectFactory()', () => {
-    const ObjectFactory = importResult('ObjectFactory');
-    const StringValueEntry = importResult('shr/simple/StringValueEntry');
+
+    let ObjectFactory, StringValueEntry;
+    before(() => {
+      ObjectFactory = context.importResult('ObjectFactory');
+      StringValueEntry = context.importResult('shr/simple/StringValueEntry');
+    });
 
     it('should create classes by name', () => {
       const pv = ObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry');
@@ -31,8 +35,12 @@ describe('#Factory()', () => {
   });
 
   describe('#NamespaceObjectFactory()', () => {
-    const ShrSimpleTestObjectFactory = importResult('shr/simple/ShrSimpleObjectFactory');
-    const StringValueEntry = importResult('shr/simple/StringValueEntry');
+
+    let ShrSimpleTestObjectFactory, StringValueEntry;
+    before(() => {
+      ShrSimpleTestObjectFactory = context.importResult('shr/simple/ShrSimpleObjectFactory');
+      StringValueEntry = context.importResult('shr/simple/StringValueEntry');
+    });
 
     it('should create classes by name', () => {
       const pv = ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry');

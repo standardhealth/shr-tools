@@ -1,25 +1,33 @@
 const {expect} = require('chai');
-const { TestContext, importResult } = require('./test_utils');
 const setup = require('./setup');
 require('babel-register')({
   presets: [ 'es2015' ]
 });
 
-setup('./test/fixtures/spec', './build/test', true);
-const context = new TestContext();
-context.setupAjv('./build/test/schema');
+let context;
 
 describe('#ToJSON', () => {
-  
+
+  before(() => {
+    context = setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true);
+    context.setupAjvJson('./build/test/schema');
+  });
+
   describe('#StringValueEntryClass()', () => {
-    const StringValueEntry = importResult('shr/simple/StringValueEntry');
+
+    let StringValueEntry;
+    before(() => StringValueEntry = context.importResult('shr/simple/StringValueEntry'));
+
     it('should serialize a JSON instance', () => {
       testJSONRoundtrip('StringValueEntry', 'StringValueEntry', StringValueEntry);
     });
   });
 
   describe('#CodeValueEntryClass()', () => {
-    const CodeValueEntry = importResult('shr/simple/CodeValueEntry');
+
+    let CodeValueEntry;
+    before(() => CodeValueEntry = context.importResult('shr/simple/CodeValueEntry'));
+
     it('should serialize a JSON instance with a string code', () => {
       testJSONRoundtrip('CodeStringValueEntry', 'CodeStringValueEntry', CodeValueEntry);
     });
@@ -29,7 +37,7 @@ describe('#ToJSON', () => {
       const json = context.getJSON('CodeObjectValueEntry');
       const entry = CodeValueEntry.fromJSON(json);
       expect(entry).instanceOf(CodeValueEntry);
-      
+
       let gen_json = entry.toJSON();
       context.validateJSON('CodeObjectValueEntry', gen_json);
       expect(gen_json['EntryType']).to.eql({Value: 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry'});
@@ -38,7 +46,10 @@ describe('#ToJSON', () => {
   });
 
   describe('#CodingValueEntryClass()', () => {
-    const CodingValueEntry = importResult('shr/simple/CodingValueEntry');
+
+    let CodingValueEntry;
+    before(() => CodingValueEntry = context.importResult('shr/simple/CodingValueEntry'));
+
     it('should serialize a JSON instance with a string code', () => {
       testJSONRoundtrip('CodingStringValueEntry', 'CodingStringValueEntry', CodingValueEntry);
     });
@@ -48,8 +59,8 @@ describe('#ToJSON', () => {
       const json = context.getJSON('CodingObjectValueEntry');
       const entry = CodingValueEntry.fromJSON(json);
       expect(entry).instanceOf(CodingValueEntry);
-      
-      
+
+
       let gen_json = entry.toJSON();
       context.validateJSON('CodingObjectValueEntry', gen_json);
       expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry' });
@@ -58,7 +69,10 @@ describe('#ToJSON', () => {
   });
 
   describe('#CodeableConceptValueEntryClass()', () => {
-    const CodeableConceptValueEntry = importResult('shr/simple/CodeableConceptValueEntry');
+
+    let CodeableConceptValueEntry;
+    before(() => CodeableConceptValueEntry = context.importResult('shr/simple/CodeableConceptValueEntry'));
+
     it('should serialize a JSON instance with a string code', () => {
       testJSONRoundtrip('CodeableConceptStringValueEntry', 'CodeableConceptStringValueEntry', CodeableConceptValueEntry);
     });
@@ -68,7 +82,7 @@ describe('#ToJSON', () => {
       const json = context.getJSON('CodeableConceptObjectValueEntry');
       const entry = CodeableConceptValueEntry.fromJSON(json);
       expect(entry).instanceOf(CodeableConceptValueEntry);
-      
+
       let gen_json = entry.toJSON();
       context.validateJSON('CodeableConceptObjectValueEntry', gen_json);
       expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/CodeableConceptValueEntry' });
@@ -101,14 +115,20 @@ describe('#ToJSON', () => {
   });
 
   describe('#ElementValueEntryClass()', () => {
-    const ElementValueEntry = importResult('shr/simple/ElementValueEntry');
+
+    let ElementValueEntry;
+    before(() => ElementValueEntry = context.importResult('shr/simple/ElementValueEntry'));
+
     it('should serialize a JSON instance', () => {
       testJSONRoundtrip('ElementValueEntry', 'ElementValueEntry', ElementValueEntry);
     });
   });
 
   describe('#RecursiveEntryClass()', () => {
-    const RecursiveEntry = importResult('shr/simple/RecursiveEntry');
+
+    let RecursiveEntry;
+    before(() => RecursiveEntry = context.importResult('shr/simple/RecursiveEntry'));
+
     it('should serialize a JSON instance', () => {
       // This one is special cased because you're working with recursive entries
       const json = context.getJSON('RecursiveEntry');
@@ -117,7 +137,7 @@ describe('#ToJSON', () => {
       let gen_json = entry.toJSON();
       context.validateJSON('RecursiveEntry', gen_json);
       expect(gen_json).to.eql(json);
-      
+
       // Recursive child 1
       const child1 = entry.recursiveEntry[0];
       expect(child1).instanceOf(RecursiveEntry);
@@ -146,8 +166,13 @@ describe('#ToJSON', () => {
   });
 
   describe('#SingleRecursiveEntryClass()', () => {
-    const RecursiveEntry = importResult('shr/simple/RecursiveEntry');
-    const SingleRecursiveEntry = importResult('shr/simple/SingleRecursiveEntry');
+
+    let RecursiveEntry, SingleRecursiveEntry;
+    before(() => {
+      RecursiveEntry = context.importResult('shr/simple/RecursiveEntry');
+      SingleRecursiveEntry = context.importResult('shr/simple/SingleRecursiveEntry');
+    });
+
     it('should serialize a JSON instance', () => {
       // This one is special cased because you're working with recursive entries
       const json = context.getJSON('SingleRecursiveEntry');
@@ -172,35 +197,50 @@ describe('#ToJSON', () => {
   });
 
   describe('#ReferenceEntryClass()', () => {
-    const ReferenceEntry = importResult('shr/simple/ReferenceEntry');
+
+    let ReferenceEntry;
+    before(() => ReferenceEntry = context.importResult('shr/simple/ReferenceEntry'));
+
     it('should serialize a JSON instance', () => {
       testJSONRoundtrip('ReferenceEntry', 'ReferenceEntry', ReferenceEntry);
     });
   });
 
   describe('#BasedOnIntegerValueElementEntryClass()', () => {
-    const BasedOnIntegerValueElementEntry = importResult('shr/simple/BasedOnIntegerValueElementEntry');
+
+    let BasedOnIntegerValueElementEntry;
+    before(() => BasedOnIntegerValueElementEntry = context.importResult('shr/simple/BasedOnIntegerValueElementEntry'));
+
     it('should serialize a JSON instance', () => {
       testJSONRoundtrip('BasedOnIntegerValueElementEntry', 'BasedOnIntegerValueElementEntry', BasedOnIntegerValueElementEntry);
     });
   });
 
   describe('#InheritBasedOnIntegerValueElementEntryClass()', () => {
-    const BasedOnIntegerValueElementEntry = importResult('shr/simple/BasedOnIntegerValueElementEntry');
+
+    let BasedOnIntegerValueElementEntry;
+    before(() => BasedOnIntegerValueElementEntry = context.importResult('shr/simple/BasedOnIntegerValueElementEntry'));
+
     it('should serialize a JSON instance', () => {
       testJSONRoundtrip('BasedOnIntegerValueElementEntry', 'BasedOnIntegerValueElementEntry', BasedOnIntegerValueElementEntry);
     });
   });
 
   describe('#OverrideBasedOnIntegerValueElementEntryClass()', () => {
-    const OverrideBasedOnIntegerValueElementEntry = importResult('shr/simple/OverrideBasedOnIntegerValueElementEntry');
+
+    let OverrideBasedOnIntegerValueElementEntry;
+    before(() => OverrideBasedOnIntegerValueElementEntry = context.importResult('shr/simple/OverrideBasedOnIntegerValueElementEntry'));
+
     it('should serialize a JSON instance', () => {
       testJSONRoundtrip('OverrideBasedOnIntegerValueElementEntry', 'OverrideBasedOnIntegerValueElementEntry', OverrideBasedOnIntegerValueElementEntry);
     });
   });
 
   describe('#ChoiceValueEntryClass()', () => {
-    const ChoiceValueEntry = importResult('shr/simple/ChoiceValueEntry');
+
+    let ChoiceValueEntry;
+    before(() => ChoiceValueEntry = context.importResult('shr/simple/ChoiceValueEntry'));
+
     it('should serialize a JSON instance with a string', () => {
       testJSONRoundtrip('ChoiceValueStringEntry', 'ChoiceValueEntry', ChoiceValueEntry);
     });
@@ -211,7 +251,10 @@ describe('#ToJSON', () => {
   });
 
   describe('#ChoiceValueEntryListClass()', () => {
-    const ChoiceValueListEntry = importResult('shr/simple/ChoiceValueListEntry');
+
+    let ChoiceValueListEntry;
+    before(() => ChoiceValueListEntry = context.importResult('shr/simple/ChoiceValueListEntry'));
+
     it('should serialize a JSON instance with a list of strings/Codings', () => {
       testJSONRoundtrip('ChoiceValueListEntry', 'ChoiceValueListEntry', ChoiceValueListEntry);
     });
@@ -237,7 +280,10 @@ describe('#ToJSON', () => {
   });
 
   describe('#OptionalIntegerValueEntryClass()', () => {
-    const OptionalIntegerValueEntry = importResult('shr/simple/OptionalIntegerValueEntry');
+
+    let OptionalIntegerValueEntry;
+    before(() => OptionalIntegerValueEntry = context.importResult('shr/simple/OptionalIntegerValueEntry'));
+
     it('should serialize a JSON instance with a normal integer value', () => {
       testJSONRoundtrip('OptionalIntegerValueEntry', 'OptionalIntegerValueEntry', OptionalIntegerValueEntry);
     });
@@ -263,7 +309,10 @@ describe('#ToJSON', () => {
   });
 
   describe('#OptionalElementValueEntryClass()', () => {
-    const OptionalElementValueEntry = importResult('shr/simple/OptionalElementValueEntry');
+
+    let OptionalElementValueEntry;
+    before(() => OptionalElementValueEntry = context.importResult('shr/simple/OptionalElementValueEntry'));
+
     it('should serialize a JSON instance with a normal integer value', () => {
       testJSONRoundtrip('OptionalElementValueEntry', 'OptionalElementValueEntry', OptionalElementValueEntry);
     });
@@ -285,7 +334,10 @@ describe('#ToJSON', () => {
   });
 
   describe('#OptionalChoiceValueEntryClass()', () => {
-    const OptionalChoiceValueEntry = importResult('shr/simple/OptionalChoiceValueEntry');
+
+    let OptionalChoiceValueEntry;
+    before(() => OptionalChoiceValueEntry = context.importResult('shr/simple/OptionalChoiceValueEntry'));
+
     it('should serialize a JSON instance with a normal value', () => {
       testJSONRoundtrip('OptionalChoiceValueEntry', 'OptionalChoiceValueEntry', OptionalChoiceValueEntry);
     });
@@ -315,7 +367,10 @@ describe('#ToJSON', () => {
   });
 
   describe('#OptionalFieldEntryClass()', () => {
-    const OptionalFieldEntry = importResult('shr/simple/OptionalFieldEntry');
+
+    let OptionalFieldEntry;
+    before(() => OptionalFieldEntry = context.importResult('shr/simple/OptionalFieldEntry'));
+
     it('should serialize a JSON instance with a normal integer value', () => {
       testJSONRoundtrip('OptionalFieldEntry', 'OptionalFieldEntry', OptionalFieldEntry);
     });
@@ -338,10 +393,10 @@ describe('#ToJSON', () => {
 });
 
 /**
- * 
+ *
  * @param {string} jsonName
  * @param {string} validationName
- * @param {Object} clazz 
+ * @param {Object} clazz
  */
 function testJSONRoundtrip(jsonName, validationName, clazz) {
   const json = context.getJSON(jsonName);

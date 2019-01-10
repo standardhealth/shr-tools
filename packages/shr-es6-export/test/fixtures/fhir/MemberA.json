@@ -1,0 +1,9 @@
+{
+  "resourceType": "Observation",
+  "id": "4",
+  "meta": {
+    "profile": [
+      "http://es6-export.com/fhir/StructureDefinition/shr-slicing-MemberA"
+    ]
+  }
+}

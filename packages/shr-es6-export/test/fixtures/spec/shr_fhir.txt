@@ -1,0 +1,35 @@
+Grammar:    DataElement 5.0
+Namespace:  shr.fhir
+Uses: shr.simple
+
+// contains sample elements that exercise FHIR mappings
+
+EntryElement:   PatientEntry
+Description:    "Maps to the Patient resource with constraints"
+Value:          date                // test mapping to value case
+1..1            BooleanValue        // test simple constraint
+1..1            StringValue         // test mapping into nested field (name.text)
+1..1            Deceased            // test constraining choice to a single type
+0..*            PhotoNote           // test array mapping
+1..1            IntegerValueElement // test simple extension
+1..1            DecimalValueElement // test simple extension
+1..1            ComplexExtension    // test complex extension
+
+Element:        Deceased           // to support constraining choice types on patient
+Value:          boolean
+
+Element:        PhotoNote          // to support array map tests in Patient
+Value:          string
+
+Element:        ComplexExtension
+1..1            StringValue
+1..1            BooleanValue
+
+EntryElement:   PatientDirectMapEntry
+Description:    "Maps directly to the Patient resource (no profile needed)"
+0..1            BooleanValue       // test no profile being created
+
+EntryElement:   PractitionerEntry
+Description:    "Maps to Practiioner"
+1..1            DoubleNestedBooleanValue  // test deply nested elements
+1..1            NestedStringValue       // tests more complex nesting

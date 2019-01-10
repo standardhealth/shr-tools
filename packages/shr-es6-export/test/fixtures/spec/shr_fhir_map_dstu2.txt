@@ -1,0 +1,22 @@
+Grammar:   Map 5.0
+Namespace: shr.fhir
+Target:    FHIR_DSTU_2
+
+PatientEntry maps to Patient:
+	Value maps to birthDate
+	BooleanValue maps to active
+	constrain name to 1..1
+	StringValue maps to name.text
+	Deceased maps to deceased[x]
+	PhotoNote maps to photo
+
+PhotoNote maps to Attachment:
+    Value maps to title
+
+PatientDirectMapEntry maps to Patient:
+	BooleanValue maps to active
+
+PractitionerEntry maps to Practitioner:
+	constrain name to 1..1
+	NestedStringValue maps to name.text
+    DoubleNestedBooleanValue.NestedBooleanValue.BooleanValue maps to active

@@ -1,0 +1,52 @@
+Grammar:    DataElement 5.0
+Namespace:  shr.slicing
+Uses: shr.simple, shr.core, shr.fhir
+
+CodeSystem:     LNC = http://loinc.org
+
+EntryElement: BloodPressureSliceByNumber
+0..1 SystolicPressure
+0..1 DiastolicPressure
+
+EntryElement: BloodPressureSliceByValue
+0..1 SystolicPressure
+0..1 DiastolicPressure
+
+Element:	SystolicPressure
+Based on: EvaluationComponent
+Concept:	LNC#8480-6
+ComponentCode is LNC#8480-6
+
+Element:	DiastolicPressure
+Based on: EvaluationComponent
+Concept:	LNC#8462-4
+ComponentCode is LNC#8462-4
+
+Element:  EvaluationComponent
+Value:    Quantity
+1..1      ComponentCode
+
+Element:  ComponentCode
+Value:    CodeableConcept
+
+EntryElement: 		Observation
+0..1			ref(PatientEntry)
+
+EntryElement: MemberA
+Based on: Observation
+
+EntryElement: MemberB
+Based on: Observation
+
+Element: Panel
+Based on: Observation
+0..1 PanelMembers
+
+EntryElement: PanelSliceByProfile
+Based on: Panel
+PanelMembers.Observation
+  includes 0..1 ref(MemberA)
+  includes 0..1 ref(MemberB)
+
+Element: PanelMembers
+0..* ref(Observation)

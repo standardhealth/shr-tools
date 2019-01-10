@@ -1,0 +1,20 @@
+Grammar:   Map 5.0
+Namespace: shr.core
+Target:    FHIR_DSTU_2
+
+Coding maps to Coding:
+  Value maps to code
+  CodeSystem maps to system
+  CodeSystemVersion maps to version
+  DisplayText maps to display
+
+CodeableConcept maps to CodeableConcept:
+  Coding maps to coding
+  DisplayText maps to text
+
+Quantity maps to Quantity:
+  Value maps to value
+  Comparator maps to comparator
+  Units.Coding.code maps to code
+  Units.Coding.CodeSystem maps to system
+  Units.Coding.DisplayText maps to unit

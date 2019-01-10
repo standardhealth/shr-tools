@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://standardhealth.org/fhir/json-schema/PractitionerEntry",
+  "$ref": "#/definitions/PractitionerEntry",
+  "definitions": {
+    "PractitionerEntry": {
+      "description": "A simple entry that constrains a FHIR resource",
+      "properties": {
+        "resourceType": {
+          "description": "Patient resource type",
+          "type": "string",
+          "enum": ["Practitioner"]
+        },
+        "active": {
+          "description": "Active bit",
+          "type": "boolean"
+        },
+        "name": {
+          "descripiton": "name",
+          "type": "object",
+          "properties": {
+            "text": {
+              "description": "name",
+              "type": "string"
+            }
+          },
+          "required": ["text"]
+        }
+      },
+      "required": ["resourceType", "active", "name"]
+    }
+  }
+}

@@ -8,7 +8,7 @@ const { factoryName } = require('./common.js');
  */
 function generateFactory(namespaces) {
   const cw = new CodeWriter();
-  cw.ln(`import { getNamespaceAndName } from './json-helper';`);
+  cw.ln(`import { getNamespaceAndName, getNamespaceAndNameFromFHIR, uuid } from './json-helper';`);
   for (const ns of namespaces) {
     const factory = factoryName(ns.namespace);
     cw.ln(`import ${factory} from './${ns.namespace.split('.').join('/')}/${factory}';`);
@@ -35,6 +35,28 @@ function generateFactory(namespaces) {
             .ln('}');
 
         });
+
+      cw.ln();
+
+      cw.blComment(() => {
+        cw.ln('Create an instance of a class from its FHIR representation.')
+          .ln('@param {Object} fhir - The element data in FHIR format (use `{}` and provide `type` for a blank instance)')
+          .ln(`@param {string} [type] - The (optional) type of the element (e.g., 'http://standardhealthrecord.org/spec/shr/demographics/PersonOfRecord').  This is only used if the type cannot be extracted from the JSON.`)
+          .ln('@returns {Object} An instance of the requested class populated with the provided data');
+      })
+        .bl('static createInstanceFromFHIR(fhir, type, shrId=uuid(), allEntries=[], mappedResources={}, referencesOut=[], asExtension=false)', () => {
+          cw.ln('const { namespace } = getNamespaceAndNameFromFHIR(fhir, type);')
+            .ln('switch (namespace) {');
+          for (const ns of namespaces) {
+            const factory = factoryName(ns.namespace);
+            cw.ln(`case '${ns.namespace}': return ${factory}.createInstanceFromFHIR(fhir, type, shrId, allEntries, mappedResources, referencesOut, asExtension);`);
+          }
+          cw.ln(`case 'primitive': return fhir;`);
+          cw.ln(`default: throw new Error(\`Unsupported namespace: \${namespace}\`);`)
+            .ln('}');
+
+        });
+
     });
 
   return cw.toString();

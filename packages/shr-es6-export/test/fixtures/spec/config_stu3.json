@@ -4,6 +4,7 @@
     "projectURL": "http://es6-export.com",
     "fhirURL": "http://es6-export.com/fhir",
     "entryTypeURL": "http://es6-export.com/spec",
+    "fhirTarget": "FHIR_STU_3",
     "implementationGuide": {
       "indexContent": "es6ExportIndexContent.html"
     },

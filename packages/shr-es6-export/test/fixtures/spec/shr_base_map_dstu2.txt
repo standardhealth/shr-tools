@@ -1,0 +1,8 @@
+Grammar:   Map 5.0
+Namespace: shr.base
+Target:    FHIR_DSTU_2
+
+
+Entry maps to DomainResource:
+	EntryId maps to id
+	constrain meta to 1..1

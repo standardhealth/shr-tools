@@ -1,18 +1,28 @@
 const fs = require('fs');
 const path = require('path');
-const generateClass = require('./generateClass');
+const generateClass = require('./generateClass').generateClass;
 const generateNamespaceFactory = require('./generateNamespaceFactory');
 const generateFactory = require('./generateFactory');
-const { className, factoryName } = require('./common.js');
+const CodeWriter = require('./CodeWriter');
+const { className, factoryName, stringify } = require('./common.js');
 const {MODELS_INFO} = require('shr-models');
+
+/**
+ * Sets the logger to use
+ * @param {Object} bunyanLogger - the bunyan logger to use
+ */
+function setLogger(bunyanLogger) {
+  require('./generateClass').setLogger(bunyanLogger);
+}
 
 /**
  * Exports SHR namespaces and elements to a set of ES6 classes for using within SHR-aware applications.
  * @param {Specifications} specifications - The SHR specifications to export to ES6 code
+ * @param {Object} fhir - Exported FHIR information from shr-fhir-export; required for fhir serialization & deserialization
  * @returns {Object} An object representing the file hierarchy on disk, with file contents as the leaves
  */
-function exportToES6(specifications) {
-  const exporter = new ES6Exporter(specifications);
+function exportToES6(specifications, fhir) {
+  const exporter = new ES6Exporter(specifications, fhir);
   return exporter.export();
 }
 
@@ -23,9 +33,11 @@ class ES6Exporter {
   /**
    * Constructs an ES6Exporter with the given SHR specification definitions
    * @param {Specifications} specifications - The SHR specifications to export to ES6 code
+   * @param {Object} fhir - Exported FHIR information from shr-fhir-export; required for fhir serialization & deserialization
    */
-  constructor(specifications) {
+  constructor(specifications, fhir) {
     this._specs = specifications;
+    this._fhir = fhir;
     this._currentNamespace = '';
   }
 
@@ -56,15 +68,63 @@ class ES6Exporter {
       const defs = this._specs.dataElements.byNamespace(ns.namespace);
       container[`${factoryName(ns.namespace)}.js`] = generateNamespaceFactory(ns, defs);
       for (const def of defs) {
-        container[`${className(def.identifier.name)}.js`] = generateClass(def);
+        container[`${className(def.identifier.name)}.js`] = generateClass(def, this._specs, this._fhir);
       }
     }
 
     // Generate the top-level factory
     es6Defs['ObjectFactory.js'] = generateFactory(namespaces);
 
+    es6Defs['valueSets.js'] = this.collectValueSets(this._fhir);
+
     return es6Defs;
+  }
+
+  /**
+   * Exports a file definition for a mapping of all value set URL : list of codes.
+   * Determining a slice based on its code inclusion in a value set is tricky if you can't access the value set.
+   * This approach is a little cleaner than trying to include the value set codes in each place they are used.
+   */
+  collectValueSets(fhir) {
+    const cw = new CodeWriter();
+    cw.ln('export const ALL_KNOWN_VALUE_SETS = {')
+      .indent();
+
+    const alreadySeen = new Set;
+
+    const allValueSets = [...fhir.valueSets, ...fhir.base.valueSets];
+    for (const vs of allValueSets) {
+      if (alreadySeen.has(vs.url)) { // fhir.base.valueSets includes dups for each vs (the map includes 1 with the full url, 1 with short name)
+        continue;
+      }
+      alreadySeen.add(vs.url);
+
+      const codes = [];
+      if (vs.codeSystem && vs.codeSystem.concept) {
+        codes.push(...vs.codeSystem.concept.map(c => c.code));
+      }
+
+      if (vs.compose && vs.compose.include) {
+        // NOTE that this flattens multiple systems down into one list. each "include" has one system
+        for (const inc of vs.compose.include) {
+          if (inc && inc.concept) {
+            inc.concept.forEach(c => codes.push(c.code));
+          }
+        }
+      }
+
+      // don't bother adding valuesets with no codes. the lookup logic will just return an empty array anyway
+      if (codes.length > 0) {
+        // write the map out line-by-line
+        cw.ln(`'${vs.url}': [${codes.map(stringify).join(', ')}],`);
+      }
+    }
+
+    cw.outdent()
+      .ln('};');
+
+    return cw.toString();
   }
 }
 
-module.exports = {exportToES6, MODELS_INFO};
+module.exports = {exportToES6, setLogger, MODELS_INFO};

@@ -1,0 +1,22 @@
+{
+    "projectName": "ES6 Export Test Project",
+    "projectShorthand": "ES6",
+    "projectURL": "http://es6-export.com",
+    "fhirURL": "http://es6-export.com/fhir",
+    "entryTypeURL": "http://es6-export.com/spec",
+    "fhirTarget": "FHIR_DSTU_2",
+    "implementationGuide": {
+      "indexContent": "es6ExportIndexContent.html"
+    },
+    "publisher": "SHR Testers",
+    "contact": [
+        {
+            "telecom": [
+                {
+                    "system": "url",
+                    "value": "http://es6-export.com"
+                }
+            ]
+        }
+    ]
+}

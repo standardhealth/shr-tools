@@ -1,0 +1,27 @@
+{
+  "resourceType": "Observation",
+  "id": "1-1",
+  "meta": {
+    "profile": [
+      "http://es6-export.com/fhir/StructureDefinition/shr-slicing-BloodPressureSliceByNumber"
+    ]
+  },
+  "component": [
+    {
+      "code": { "coding": [{ "system": "http://loinc.org", "code": "8480-6" }] },
+      "valueQuantity": {
+        "value": 120.0,
+        "system": "http://unitsofmeasure.org",
+        "code": "mm[Hg]"
+      }
+    },
+    {
+      "code": { "coding": [{ "system": "http://loinc.org", "code": "8462-4" }] },
+      "valueQuantity": {
+        "value": 80.0,
+        "system": "http://unitsofmeasure.org",
+        "code": "mm[Hg]"
+      }
+    }
+  ]
+}

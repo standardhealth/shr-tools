@@ -1,15 +1,19 @@
 const {expect} = require('chai');
-const { importResult } = require('./test_utils');
 const setup = require('./setup');
 require('babel-register')({
   presets: [ 'es2015' ]
 });
 
-setup('./test/fixtures/spec', './build/test', true);
-
 describe('#Class', () => {
+
+  let context;
+  before(() => context = setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true));
+
   describe('#StringValueClass()', () => {
-    const StringValueEntry = importResult('shr/simple/StringValueEntry');
+
+    let StringValueEntry;
+    before(() => StringValueEntry = context.importResult('shr/simple/StringValueEntry'));
+
     it('should construct to empty instance', () => {
       const pv = new StringValueEntry();
       expect(pv).instanceOf(StringValueEntry);
@@ -52,7 +56,10 @@ describe('#Class', () => {
   });
 
   describe('#ReservedWordEntryClass()', () => {
-    const ReservedWordEntry = importResult('shr/reserved/ReservedWordEntry');
+
+    let ReservedWordEntry;
+    before(() => ReservedWordEntry = context.importResult('shr/reserved/ReservedWordEntry'));
+
     it('should not use any keywords as variable names', () => {
       // This test should have thrown an error by now if there is a reserved word violation, but just in case...
       const pds = Object.getOwnPropertyDescriptors(ReservedWordEntry.prototype);

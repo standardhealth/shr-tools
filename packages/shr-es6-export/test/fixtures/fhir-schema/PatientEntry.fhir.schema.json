@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://standardhealth.org/fhir/json-schema/PatientConstraintsEntry",
+  "$ref": "#/definitions/PatientConstraintsEntry",
+  "definitions": {
+    "PatientConstraintsEntry": {
+      "description": "A simple entry that constrains a FHIR resource",
+      "properties": {
+        "resourceType": {
+          "description": "Patient resource type",
+          "type": "string",
+          "enum": ["Patient"]
+        },
+        "active": {
+          "description": "Active bit",
+          "type": "boolean"
+        },
+        "birthDate": {
+          "description": "birthdate",
+          "type": "string"
+        },
+        "deceasedBoolean": {
+          "description": "Deceased",
+          "type": "boolean"
+        },
+        "name": {
+          "descripiton": "name",
+          "type": "object",
+          "properties": {
+            "text": {
+              "description": "name",
+              "type": "string"
+            }
+          },
+          "required": ["text"]
+        },
+        "photo": {
+          "descripiton": "photo",
+          "type": "array",
+          "items": [
+            {    
+              "type": "object",
+              "properties": {
+                "title": {
+                  "description": "title",
+                  "type": "string"
+                }
+              },
+              "required": ["title"]
+            }
+          ]
+        },
+        "extension": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "description": "url",
+                  "type": "string"
+                },
+                "valueInteger": {
+                  "description": "integer",
+                  "type": "number",
+                  "enum": [19]
+                }
+              },
+              "required": ["url","valueInteger"]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "description": "url",
+                  "type": "string"
+                },
+                "valueDecimal": {
+                  "description": "decimal",
+                  "type": "number",
+                  "enum": [12.1]
+                }
+              },
+              "required": ["url","valueDecimal"]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "description": "url",
+                  "type": "string"
+                },
+                "extension": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "description": "url",
+                          "type": "string"
+                        },
+                        "valueString": {
+                          "description": "value string",
+                          "type": "string",
+                          "enum": ["MyString"]
+                        }
+                      },
+                      "required": ["url","valueString"]
+                    },
+                    {
+                      "type": "object",
+                      "proprties": {
+                        "url": {
+                          "description": "url",
+                          "type": "string"
+                        },
+                        "valueBoolean": {
+                          "description": "value boolean",
+                          "type": "boolean",
+                          "enum": [true]
+                        }
+                      },
+                      "required": ["url","valueBoolean"]
+                    }
+                  ],
+                  "additionalItems": false
+                }
+              },
+              "required": ["url","extension"]
+            }
+          ],
+          "minItems": 3,
+          "maxItems": 3,
+          "additionalItems": false
+        }
+      },
+      "required": ["resourceType", "active", "birthDate", "name", "deceasedBoolean","extension"]
+    }
+  }
+}

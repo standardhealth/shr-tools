@@ -1,0 +1,25 @@
+Grammar:	Map 5.1
+Namespace:	shr.slicing
+Target:		FHIR_STU_3
+
+Observation maps to Observation:
+ PatientEntry maps to subject
+
+PanelSliceByProfile:
+PanelMembers.Observation maps to related.target (slice at = related; slice on = target.reference.resolve(); slice strategy = includes; slice on type = profile)
+
+BloodPressureSliceByNumber maps to http://hl7.org/fhir/StructureDefinition/bp:
+SystolicPressure maps to component (slice # = 1)
+SystolicPressure.ComponentCode maps to component.code
+SystolicPressure.Value maps to component.valueQuantity
+DiastolicPressure maps to component (slice # = 2)
+DiastolicPressure.ComponentCode maps to component.code
+DiastolicPressure.Value maps to component.valueQuantity
+
+BloodPressureSliceByValue maps to Observation:
+SystolicPressure maps to component (slice on = code.coding.code)
+SystolicPressure.ComponentCode maps to component.code
+SystolicPressure.Value maps to component.value[x]
+DiastolicPressure maps to component
+DiastolicPressure.ComponentCode maps to component.code
+DiastolicPressure.Value maps to component.value[x]

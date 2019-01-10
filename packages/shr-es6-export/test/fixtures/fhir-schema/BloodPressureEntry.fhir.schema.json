@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://standardhealth.org/fhir/json-schema/BloodPressureEntry",
+  "$ref": "#/definitions/BloodPressureEntry",
+  "definitions": {
+    "BloodPressureEntry": {
+      "description": "A simple entry that constrains a FHIR resource",
+      "properties": {
+        "resourceType": {
+          "description": "Observation resource type",
+          "type": "string",
+          "enum": ["Observation"]
+        },
+        "component": {
+          "type": "array",
+          "items": [
+            {
+              "type": "string",
+              "enum": ["Systolic", "Diastolic"]
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        }
+      },
+      "required": ["resourceType", "component"]
+    }
+  }
+}

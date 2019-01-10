@@ -1,0 +1,50 @@
+{
+  "EntryId": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId"
+    },
+    "Value": "1-1"
+  },
+  "ShrId": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId"
+    },
+    "Value": "1"
+  },
+  "CreationTime": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"
+    },
+    "Value": "2018-08-06T12:34:56Z"
+  },
+  "LastUpdated": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"
+    },
+    "Value": "2018-08-06T12:34:56Z"
+  },
+  "EntryType": {
+    "Value": "http://standardhealthrecord.org/spec/shr/fhir/PanelSliceByProfile"
+  },
+  "PanelMembers": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/slicing/PanelMembers"
+    },
+    "Observation": [
+      {
+        "_ShrId": "4-1",
+        "_EntryId": "4",
+        "_EntryType": {
+          "Value": "http://standardhealthrecord.org/spec/shr/slicing/MemberA"
+        }
+      },
+      {
+        "_ShrId": "5-1",
+        "_EntryId": "5",
+        "_EntryType": {
+          "Value": "http://standardhealthrecord.org/spec/shr/slicing/MemberB"
+        }
+      }
+    ]
+  }
+}

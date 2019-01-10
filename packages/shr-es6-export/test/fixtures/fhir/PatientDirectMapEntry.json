@@ -1,0 +1,10 @@
+{
+  "resourceType": "Patient",
+  "id": "1-1",
+  "meta": {
+    "profile": [
+      "http://es6-export.com/fhir/StructureDefinition/shr-fhir-PatientDirectMapEntry"
+    ]
+  },
+  "active": true
+}

@@ -1,0 +1,105 @@
+{
+  "EntryId": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId"
+    },
+    "Value": "1-1"
+  },
+  "ShrId": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId"
+    },
+    "Value": "1"
+  },
+  "CreationTime": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"
+    },
+    "Value": "2018-08-06T12:34:56Z"
+  },
+  "LastUpdated": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"
+    },
+    "Value": "2018-08-06T12:34:56Z"
+  },
+  "EntryType": {
+    "Value": "http://standardhealthrecord.org/spec/shr/fhir/BloodPressureSliceByNumber"
+  },
+  "SystolicPressure": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/slicing/SystolicPressure"
+    },
+    "Value": {
+      "EntryType": {
+        "Value": "http://standardhealthrecord.org/spec/shr/core/Quantity"
+      },
+      "Value": 120.0,
+      "Units": {
+        "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Units" },
+        "Value": {
+          "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
+          "CodeSystem": {
+            "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
+            "Value": "http://unitsofmeasure.org"
+          },
+          "Value": "mm[Hg]"
+        }
+      }
+    },
+    "ComponentCode" : {
+      "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/slicing/ComponentCode" },
+      "Value": {
+        "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeableConcept" },
+        "Coding": [
+          {
+            "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
+            "CodeSystem": {
+              "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
+              "Value": "http://loinc.org"
+            },
+            "Value": { "code": "8480-6", "codeSystem": "http://loinc.org" }
+          }
+        ]
+      }
+    }
+  },
+  "DiastolicPressure": {
+    "EntryType": {
+      "Value": "http://standardhealthrecord.org/spec/shr/slicing/DiastolicPressure"
+    },
+    "Value": {
+      "EntryType": {
+        "Value": "http://standardhealthrecord.org/spec/shr/core/Quantity"
+      },
+      "Value": 80.0,
+      "Units": {
+        "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Units" },
+        "Value": {
+          "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
+          "CodeSystem": {
+            "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
+            "Value": "http://unitsofmeasure.org"
+          },
+          "Value": "mm[Hg]"
+        }
+      }
+    },
+    "ComponentCode" : {
+      "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/slicing/ComponentCode" },
+      "Value": {
+        "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeableConcept" },
+        "Coding": [
+          {
+            "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
+            "CodeSystem": {
+              "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
+              "Value": "http://loinc.org"
+            },
+            "Value": { "code": "8462-4", "codeSystem": "http://loinc.org" }
+          }
+        ]
+      }
+    }
+  }
+}

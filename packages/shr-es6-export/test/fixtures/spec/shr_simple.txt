@@ -5,6 +5,9 @@ Uses:         shr.core
 Element:      StringValue
 Value:        string
 
+Element:      NestedStringValue
+Value:        StringValue
+
 EntryElement: StringValueEntry
 Value:        string
 
@@ -34,6 +37,9 @@ Value:        ref(StringValueEntry)
 
 Element:      IntegerValueElement
 Value:        integer
+
+Element:      DecimalValueElement
+Value:        decimal
 
 EntryElement: OptionalIntegerValueEntry
 Value:        0..1 integer
@@ -66,3 +72,12 @@ Value:        0..* string or StringValue
 
 EntryElement: InheritBasedOnIntegerValueElementEntry
 Based on:     BasedOnIntegerValueElementEntry
+
+Element:      BooleanValue
+Value:        boolean
+
+Element:      NestedBooleanValue
+1..1          BooleanValue
+
+Element:      DoubleNestedBooleanValue
+1..1          NestedBooleanValue

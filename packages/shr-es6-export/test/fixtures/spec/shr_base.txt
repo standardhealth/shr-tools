@@ -2,16 +2,6 @@ Grammar:    DataElement 5.0
 Namespace:  shr.base
 Uses:       shr.core
 
-Element: 	Entry
-1..1			ShrId
-1..1			EntryId
-
-  Element: ShrId
-  Value:   id
-
-  Element: EntryId
-  Value:   id
-
 Element: 		Entry
 1..1			ShrId
 1..1			EntryId

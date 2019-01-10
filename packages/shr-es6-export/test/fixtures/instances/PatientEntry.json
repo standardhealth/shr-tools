@@ -1,0 +1,55 @@
+{
+  "EntryId": {
+    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId" },
+    "Value": "1-1"
+  },
+  "ShrId": {
+    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId" },
+    "Value": "1"
+  },
+  "CreationTime": {
+    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"},
+    "Value": "2017-11-30T12:34:56Z"
+  },
+  "LastUpdated": {
+    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"},
+    "Value": "2017-12-05T23:45:01Z"
+  },
+  "BooleanValue": {
+    "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/simple/BooleanValue" },
+    "Value": true
+  },
+  "StringValue": {
+    "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/simple/StringValue" },
+    "Value": "MyString"
+  },
+  "Deceased": {
+    "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/fhir/Deceased" },
+    "Value": true
+  },
+  "PhotoNote": [{
+    "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/fhir/PhotoNote" },
+    "Value": "Photo Note"
+  }],
+  "IntegerValueElement": {
+    "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/simple/IntegerValueElement"},
+    "Value": 19
+  },
+  "DecimalValueElement": {
+    "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/simple/DecimalValueElement"},
+    "Value": 12.1
+  },
+  "ComplexExtension": {
+    "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/fhir/ComplexExtension" },
+    "StringValue": {
+      "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/simple/StringValue" },
+      "Value": "MyString"
+    },
+    "BooleanValue": {
+      "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/simple/BooleanValue" },
+      "Value": true
+    }
+  },
+  "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/fhir/PatientEntry" },
+  "Value": "2017-12-05"
+}

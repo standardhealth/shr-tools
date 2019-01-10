@@ -1,0 +1,17 @@
+Grammar:	Map 5.1
+Namespace:	shr.slicing
+Target:		FHIR_DSTU_2
+
+Observation maps to Observation:
+ PatientEntry maps to subject
+
+PanelSliceByProfile:
+PanelMembers.Observation maps to related.target (slice at = related; slice on = target.reference.resolve(); slice strategy = includes; slice on type = profile)
+
+BloodPressureSliceByValue maps to Observation:
+SystolicPressure maps to component (slice on = code.coding.code)
+SystolicPressure.ComponentCode maps to component.code
+SystolicPressure.Value maps to component.value[x]
+DiastolicPressure maps to component
+DiastolicPressure.ComponentCode maps to component.code
+DiastolicPressure.Value maps to component.value[x]

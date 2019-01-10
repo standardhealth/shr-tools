@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://standardhealth.org/fhir/json-schema/BarAEntry",
+  "$ref": "#/definitions/BarAEntry",
+  "definitions": {
+    "BarAEntry": {
+      "description": "A simple entry that constrains a FHIR resource",
+      "properties": {
+        "resourceType": {
+          "description": "Observation resource type",
+          "type": "string",
+          "enum": ["Observation"]
+        },
+        "related": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "oneOf":[
+              {
+                "description": "One possible element in the 'related' array",
+                "properties": {
+                  "target": {
+                    "type": "object",
+                    "properties": {
+                      "shrId": {
+                        "type": "string",
+                        "const": "4-1"
+                      },
+                      "entryId": {
+                        "type": "string",
+                        "const": "4"
+                      },
+                      "entryType": {
+                        "type": "object",
+                        "properties": {
+                          "Value": {
+                            "type": "string",
+                            "const": "http://standardhealthrecord.org/spec/shr/slicing/FooA"
+                          }
+                        }
+                      }
+                    },
+                    "required": ["shrId", "entryId", "entryType"]
+                  }
+                }
+              },
+              {
+                "description": "One possible element in the 'related' array",
+                "properties": {
+                  "target": {
+                    "type": "object",
+                    "properties": {
+                      "shrId": {
+                        "type": "string",
+                        "const": "5-1"
+                      },
+                      "entryId": {
+                        "type": "string",
+                        "const": "5"
+                      },
+                      "entryType": {
+                        "type": "object",
+                        "properties": {
+                          "Value": {
+                            "type": "string",
+                            "const": "http://standardhealthrecord.org/spec/shr/slicing/FooB"
+                          }
+                        }
+                      }
+                    },
+                    "required": ["shrId", "entryId", "entryType"]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "required": ["resourceType", "related"]
+    }
+  }
+}

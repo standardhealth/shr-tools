@@ -9,7 +9,7 @@ const { className, factoryName } = require('./common.js');
  */
 function generateNamespaceFactory(ns, defs) {
   const cw = new CodeWriter();
-  cw.ln(`import { getNamespaceAndName } from '${relativeImportPath(ns.namespace, 'json-helper')}';`);
+  cw.ln(`import { getNamespaceAndName, getNamespaceAndNameFromFHIR, uuid } from '${relativeImportPath(ns.namespace, 'json-helper')}';`);
   for (const def of defs) {
     const name = className(def.identifier.name);
     cw.ln(`import ${name} from './${name}';`);
@@ -33,6 +33,28 @@ function generateNamespaceFactory(ns, defs) {
           for (const def of defs) {
             const elName = className(def.identifier.name);
             cw.ln(`case '${elName}': return ${elName}.fromJSON(json);`);
+          }
+          cw.ln(`default: throw new Error(\`Unsupported type in ${factory}: \${type}\`);`)
+            .ln('}');
+        });
+
+      cw.ln();
+
+      cw.blComment(() => {
+        cw.ln('Convert an instance of a class from its FHIR representation.')
+          .ln('@param {Object} fhir - The element data in JSON format (use `{}` and provide `type` for a blank instance)')
+          .ln(`@param {string} [type] - The (optional) type of the element (e.g., 'http://standardhealthrecord.org/spec/shr/demographics/PersonOfRecord').  This is only used if the type cannot be extracted from the JSON.`)
+          .ln('@returns {Object} An instance of the requested class populated with the provided data');
+      })
+        .bl('static createInstanceFromFHIR(fhir, type, shrId=uuid(), allEntries=[], mappedResources={}, referencesOut=[], asExtension=false)', () => {
+          cw.ln('const { namespace, elementName } = getNamespaceAndNameFromFHIR(fhir, type);')
+            .bl(`if (namespace !== '${ns.namespace}')`, () => {
+              cw.ln(`throw new Error(\`Unsupported type in ${factory}: \${type}\`);`);
+            })
+            .ln('switch (elementName) {');
+          for (const def of defs) {
+            const elName = className(def.identifier.name);
+            cw.ln(`case '${elName}': return ${elName}.fromFHIR(fhir, shrId, allEntries, mappedResources, referencesOut, asExtension);`);
           }
           cw.ln(`default: throw new Error(\`Unsupported type in ${factory}: \${type}\`);`)
             .ln('}');

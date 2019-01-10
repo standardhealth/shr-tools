@@ -1,18 +1,23 @@
 const {expect} = require('chai');
 const setup = require('./setup');
-const { TestContext, importResult } = require('./test_utils');
 require('babel-register')({
   presets: [ 'es2015' ]
 });
 
-setup('./test/fixtures/spec', './build/test', true);
-const context = new TestContext();
-context.setupAjv('./build/test/schema');
+let context;
 
 describe('#FromJSON', () => {
 
+  before(() => {
+    context = setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true);
+    context.setupAjvJson('./build/test/schema');
+  });
+
   describe('#StringValueEntryClass()', () => {
-    const StringValueEntry = importResult('shr/simple/StringValueEntry');
+
+    let StringValueEntry;
+    before(() => StringValueEntry = context.importResult('shr/simple/StringValueEntry'));
+
     it('should deserialize a JSON instance', () => {
       const json = context.getJSON('StringValueEntry');
       const entry = StringValueEntry.fromJSON(json);
@@ -23,7 +28,10 @@ describe('#FromJSON', () => {
   });
 
   describe('#CodeValueEntryClass()', () => {
-    const CodeValueEntry = importResult('shr/simple/CodeValueEntry');
+
+    let CodeValueEntry;
+    before(() => CodeValueEntry = context.importResult('shr/simple/CodeValueEntry'));
+
     it('should deserialize a JSON instance with a string code', () => {
       const json = context.getJSON('CodeStringValueEntry');
       const entry = CodeValueEntry.fromJSON(json);
@@ -41,7 +49,10 @@ describe('#FromJSON', () => {
   });
 
   describe('#CodingValueEntryClass()', () => {
-    const CodingValueEntry = importResult('shr/simple/CodingValueEntry');
+
+    let CodingValueEntry;
+    before(() => CodingValueEntry = context.importResult('shr/simple/CodingValueEntry'));
+
     it('should deserialize a JSON instance with a string code', () => {
       const json = context.getJSON('CodingStringValueEntry');
       const entry = CodingValueEntry.fromJSON(json);
@@ -59,7 +70,10 @@ describe('#FromJSON', () => {
   });
 
   describe('#CodeableConceptValueEntryClass()', () => {
-    const CodeableConceptValueEntry = importResult('shr/simple/CodeableConceptValueEntry');
+
+    let CodeableConceptValueEntry;
+    before(() => CodeableConceptValueEntry = context.importResult('shr/simple/CodeableConceptValueEntry'));
+
     it('should deserialize a JSON instance with a string code', () => {
       const json = context.getJSON('CodeableConceptStringValueEntry');
       const entry = CodeableConceptValueEntry.fromJSON(json);
@@ -89,7 +103,10 @@ describe('#FromJSON', () => {
   });
 
   describe('#ElementValueEntryClass()', () => {
-    const ElementValueEntry = importResult('shr/simple/ElementValueEntry');
+
+    let ElementValueEntry;
+    before(() => ElementValueEntry = context.importResult('shr/simple/ElementValueEntry'));
+
     it('should deserialize a JSON instance', () => {
       const json = context.getJSON('ElementValueEntry');
       const entry = ElementValueEntry.fromJSON(json);
@@ -101,7 +118,10 @@ describe('#FromJSON', () => {
   });
 
   describe('#RecursiveEntryClass()', () => {
-    const RecursiveEntry = importResult('shr/simple/RecursiveEntry');
+
+    let RecursiveEntry;
+    before(() => RecursiveEntry = context.importResult('shr/simple/RecursiveEntry'));
+
     it('should deserialize a JSON instance', () => {
       const json = context.getJSON('RecursiveEntry');
       const entry = RecursiveEntry.fromJSON(json);
@@ -131,7 +151,10 @@ describe('#FromJSON', () => {
   });
 
   describe('#ReferenceEntryClass()', () => {
-    const ReferenceEntry = importResult('shr/simple/ReferenceEntry');
+
+    let ReferenceEntry;
+    before(() => ReferenceEntry = context.importResult('shr/simple/ReferenceEntry'));
+
     it('should deserialize a JSON instance', () => {
       const json = context.getJSON('ReferenceEntry');
       const entry = ReferenceEntry.fromJSON(json);
@@ -158,7 +181,10 @@ describe('#FromJSON', () => {
   });
 
   describe('#BasedOnIntegerValueElementEntryClass()', () => {
-    const BasedOnIntegerValueElementEntry = importResult('shr/simple/BasedOnIntegerValueElementEntry');
+
+    let BasedOnIntegerValueElementEntry;
+    before(() => BasedOnIntegerValueElementEntry = context.importResult('shr/simple/BasedOnIntegerValueElementEntry'));
+
     it('should deserialize a JSON instance', () => {
       const json = context.getJSON('BasedOnIntegerValueElementEntry');
       const entry = BasedOnIntegerValueElementEntry.fromJSON(json);
@@ -171,8 +197,13 @@ describe('#FromJSON', () => {
   });
 
   describe('#InheritBasedOnIntegerValueElementEntryClass()', () => {
-    const BasedOnIntegerValueElementEntry = importResult('shr/simple/InheritBasedOnIntegerValueElementEntry');
-    const InheritBasedOnIntegerValueElementEntry = importResult('shr/simple/InheritBasedOnIntegerValueElementEntry');
+
+    let BasedOnIntegerValueElementEntry, InheritBasedOnIntegerValueElementEntry;
+    before(() => {
+      BasedOnIntegerValueElementEntry = context.importResult('shr/simple/InheritBasedOnIntegerValueElementEntry');
+      InheritBasedOnIntegerValueElementEntry = context.importResult('shr/simple/InheritBasedOnIntegerValueElementEntry');
+    });
+
     it('should deserialize a JSON instance', () => {
       const json = context.getJSON('InheritBasedOnIntegerValueElementEntry');
       const entry = InheritBasedOnIntegerValueElementEntry.fromJSON(json);
@@ -185,7 +216,10 @@ describe('#FromJSON', () => {
   });
 
   describe('#OverrideBasedOnIntegerValueElementEntryClass()', () => {
-    const OverrideBasedOnIntegerValueElementEntry = importResult('shr/simple/OverrideBasedOnIntegerValueElementEntry');
+
+    let OverrideBasedOnIntegerValueElementEntry;
+    before(() => OverrideBasedOnIntegerValueElementEntry = context.importResult('shr/simple/OverrideBasedOnIntegerValueElementEntry'));
+
     it('should deserialize a JSON instance', () => {
       const json = context.getJSON('OverrideBasedOnIntegerValueElementEntry');
       const entry = OverrideBasedOnIntegerValueElementEntry.fromJSON(json);
@@ -198,7 +232,10 @@ describe('#FromJSON', () => {
   });
 
   describe('#ChoiceValueEntryClass()', () => {
-    const ChoiceValueEntry = importResult('shr/simple/ChoiceValueEntry');
+
+    let ChoiceValueEntry;
+    before(() => ChoiceValueEntry = context.importResult('shr/simple/ChoiceValueEntry'));
+
     it('should deserialize a JSON instance with a string', () => {
       const json = context.getJSON('ChoiceValueStringEntry');
       const entry = ChoiceValueEntry.fromJSON(json);
@@ -218,7 +255,7 @@ describe('#FromJSON', () => {
 
 function expectInstanceOf(inst, fqn) {
   const fqnAsPath = fqn.split('.').join('/');
-  expect(inst).to.be.instanceOf(importResult(fqnAsPath));
+  expect(inst).to.be.instanceOf(context.importResult(fqnAsPath));
 }
 
 function expectStandardEntryInfoValues(entry, type) {
@@ -312,7 +349,7 @@ function expectCodeableConceptValue(element, codings, display) {
 }
 
 function expectReference(reference, expected) {
-  const Reference = importResult('Reference');
+  const Reference = context.importResult('Reference');
   expect(reference).to.be.instanceOf(Reference);
   expect(reference.shrId).to.equal(expected.shrId);
   expect(reference.entryId).to.equal(expected.entryId);
