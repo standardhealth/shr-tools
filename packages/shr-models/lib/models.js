@@ -62,6 +62,23 @@ class Specifications {
   get valueSets() { return this._valueSets; }
   get codeSystems() { return this._codeSystems; }
   get maps() { return this._maps; }
+
+  /**
+   * Exports Specifications to CIMPL5
+   *
+   * @param {string} filepath - the output destination for the export.
+   */
+  toCIMPL5(filePath) {
+    const {Cimpl5Exporter} = require('./export/cimpl5Exporter');
+    const cimplExporter = new Cimpl5Exporter(this);
+    cimplExporter.exportToPath(filePath);
+  }
+
+  toCIMPL6(filePath) {
+    const {Cimpl6Exporter} = require('./export/cimpl6Exporter');
+    const cimplExporter = new Cimpl6Exporter(this);
+    cimplExporter.exportToPath(filePath);
+  }
 }
 
 class NamespaceSpecifications {
@@ -2330,7 +2347,6 @@ class ElementMapping {
           currDict = currDict[key]
       }
       currDict["target"] = m.target;
-
       return dict;
     }, {})
     */
@@ -2539,10 +2555,10 @@ class Version {
   }
 }
 
+
 // Versioning constants
 const VERSION = new Version(4, 0, 0);
-const GRAMMAR_VERSION = new Version(5, 0, 0);
-
+const GRAMMAR_VERSION = new Version(5, 0, 1);
 // Value set binding strength constants (inspired by FHIR)
 const REQUIRED = 'REQUIRED';
 const EXTENSIBLE = 'EXTENSIBLE';
