@@ -8,7 +8,8 @@ let context;
 
 describe('#FromJSON', () => {
 
-  before(() => {
+  before(function() {
+    this.timeout(5000);
     context = setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true);
     context.setupAjvJson('./build/test/schema');
   });

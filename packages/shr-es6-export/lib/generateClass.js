@@ -1171,7 +1171,7 @@ function getFieldAndMethodChain(mapping, def, specs, element) {
         break;
       }
 
-      if (currDef.value instanceof IdentifiableValue && elementIdentifier.equals(currDef.value.effectiveIdentifier)) {
+      if (currDef.value instanceof IdentifiableValue && matchesEffectiveIdentifierOrIncludesTypes(currDef.value, elementIdentifier)) {
         methodName = 'value';
         field = currDef.value;
       } else {
@@ -1182,7 +1182,7 @@ function getFieldAndMethodChain(mapping, def, specs, element) {
           field = matchingChoice;
         } else {
           // look for it in all the fields
-          field = currDef.fields.find(f => elementIdentifier.equals(f.effectiveIdentifier));
+          field = currDef.fields.find(f => matchesEffectiveIdentifierOrIncludesTypes(f, elementIdentifier));
 
           if (field) {
             methodName = toSymbol(field.effectiveIdentifier.name);
@@ -1193,7 +1193,6 @@ function getFieldAndMethodChain(mapping, def, specs, element) {
       if (!field) {
         logger.error(`Unable to find field with identifer ${elementIdentifier} on element ${currDef.identifier}\n` +
                      `Original Element: ${def.identifier} ; full mapping: ${mapping} ; FHIR Path: ${element.path} ID: ${element.id || 'n/a'}`);
-        // implementation note: there were a lot of instances of this in earlier versions of the spec, but as of the latest there don't seem to be any
         break;
       }
 
@@ -1205,6 +1204,29 @@ function getFieldAndMethodChain(mapping, def, specs, element) {
     return {field, fieldChain, classMethodChain, fieldMapPath};
   }
   return {};
+}
+
+/**
+ * Checks if an IdentifiableValue field is a match for an identifier, taking into account includesType constraints.
+ * NOTE: EffectiveIdentifier is checked instead of identifier because the mapping should always use the effectiveIdentifier.
+ * NOTE: Does not work with ChoiceValues.  Thos should be handled separately.
+ * @param {IdentifiableValue} identifiableValueField - an IdentifiableValueField to check for a match against an identifier
+ * @param {Identifier} identifier - the identifier to match against
+ */
+function matchesEffectiveIdentifierOrIncludesTypes(identifiableValueField, identifier) {
+  // First check the effectiveIdentifier
+  if (identifier.equals(identifiableValueField.effectiveIdentifier)) {
+    return true;
+  }
+  // Now check the includesType constraints (if applicable)
+  const includesTypeConstraints = identifiableValueField.constraintsFilter.own.includesType.constraints;
+  for (const itc of includesTypeConstraints) {
+    if (identifier.equals(itc.isA)) {
+      return true;
+    }
+  }
+  // No match
+  return false;
 }
 
 

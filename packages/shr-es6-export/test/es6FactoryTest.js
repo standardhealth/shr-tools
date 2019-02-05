@@ -7,7 +7,10 @@ require('babel-register')({
 describe('#Factory()', () => {
 
   let context;
-  before(() => context = setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true));
+  before(function() {
+    this.timeout(5000);
+    context = setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true);
+  });
 
   describe('#ObjectFactory()', () => {
 

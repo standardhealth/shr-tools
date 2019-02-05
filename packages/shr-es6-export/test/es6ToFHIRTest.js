@@ -7,7 +7,8 @@ require('babel-register')({
 describe('#ToFHIR', () => {
 
   let context;
-  before(() => {
+  before(function() {
+    this.timeout(5000);
     context = setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true);
     context.setupAjvFhir('./test/fixtures/fhir-schema', 'FHIR_STU_3');
   });

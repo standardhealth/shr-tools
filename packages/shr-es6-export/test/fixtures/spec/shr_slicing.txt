@@ -12,6 +12,11 @@ EntryElement: BloodPressureSliceByValue
 0..1 SystolicPressure
 0..1 DiastolicPressure
 
+EntryElement: BloodPressureSliceByValueAndIncludesStrategy
+0..* EvaluationComponent
+includes 0..1 SystolicPressure
+includes 0..1 DiastolicPressure
+
 Element:	SystolicPressure
 Based on: EvaluationComponent
 Concept:	LNC#8480-6

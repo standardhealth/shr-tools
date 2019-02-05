@@ -4,7 +4,10 @@ const setup = require('./setup');
 
 describe.skip('#ESLint()', () => {
 
-  before(() => setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true));
+  before(function() {
+    this.timeout(5000);
+    setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true);
+  });
 
   it('should not have any linter errors or warnings', () => {
     const cli = new CLIEngine();
