@@ -24,7 +24,8 @@ function cardToString(card) {
  *  Takes the field/value, element map, and whether the field is inherited
  */
 class Constraints {
-  constructor(field, elements, config, inherited=false, configureForIG=false) {
+  constructor(element, field, elements, config, inherited=false, configureForIG=false) {
+    this.element = element;
     this.field = field;
     this.config = config;
     this.inherited = inherited;
@@ -234,6 +235,17 @@ class Constraints {
   parse() {
     if (!this.inherited)
       this.initializeConstraints();
+    // Card constraints aren't put in the constraints field because they're already reflected in the card
+    // So first look in the constraintHistory for card constraint on this element
+    if (this.field.constraintHistory && this.field.constraintHistory.card) {
+      const modConstraint = this.field.constraintHistory.card.map(c => c.constraint).find(c => {
+        return c.lastModifiedBy === this.element.fqn;
+      });
+      if (modConstraint) {
+        this.switchConstraintType(modConstraint, 'card', this.field.name);
+      }
+    }
+    // Now look at the rest of the constraints
     if ('constraints' in this.field) {
       Object.keys(this.field.constraints).forEach((cType) => {
         const constraint = this.field.constraints[cType];

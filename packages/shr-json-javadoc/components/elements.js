@@ -51,7 +51,7 @@ class Elements {
   }
 
   // Adds information to value object to be parsed for constraints
-  valueConstraints(value, title) {
+  valueConstraints(element, value, title) {
     if (value.fqn in this.elements) {
       const valueElement = this.get(value.fqn);
       value.path = valueElement.namespacePath;
@@ -61,7 +61,7 @@ class Elements {
     }
     value.title = title;
     value.description = '';
-    const cs = new Constraints(value, this.elements, this.config, false, this.configureForIG);
+    const cs = new Constraints(element, value, this.elements, this.config, false, this.configureForIG);
     value.pConstraints = cs.constraints;
     return value;
   }
@@ -88,12 +88,12 @@ class Elements {
     } else if (value.valueType === 'ChoiceValue') {
       value.options.forEach((option, index) => {
         this.addToUsedBy(option.fqn, element);
-        option = this.valueConstraints(option, `Value (Choice ${index+1})`);
+        option = this.valueConstraints(element, option, `Value (Choice ${index+1})`);
         element.pValue.push(option);
       });
     } else {
       this.addToUsedBy(value.fqn, element);
-      value = this.valueConstraints(element.value, 'Value');
+      value = this.valueConstraints(element, element.value, 'Value');
       element.pValue.push(value);
     }
   }
@@ -146,7 +146,7 @@ class Elements {
         }
       }
       this.addToUsedBy(field.fqn, element);
-      const cs = new Constraints(field, this.elements, this.config, inherited, this.configureForIG);
+      const cs = new Constraints(element, field, this.elements, this.config, inherited, this.configureForIG);
       field.pConstraints = cs.constraints;
       if ('inheritance' in field && field.inheritance.status === 'overridden' && !isSpecialEntryField)
         element.overridden = element.overridden.concat(cs.constraints);
