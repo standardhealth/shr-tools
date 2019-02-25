@@ -50,6 +50,7 @@ class Cimpl6Exporter {
   exportToPath(path) {
     let substituteHash = {};
     const validNamespaces = this.namespaces.filter(ns => ns.namespace.trim().length > 0);
+//console.log("valid namespaces = "+JSON.stringify(validNamespaces));
     /* For loop which will go through 2 iterations. The first is to fill out the
       substituteHash object and the second is so that the object can be used to make
       the necessary substitutions to the exported CIMPL 6.0 files generated.
@@ -73,10 +74,12 @@ class Cimpl6Exporter {
     }, {});
 
     const currentNamespace = this.namespaces.find(ns => ns.namespace == namespace);
+//console.log("current namespace = "+JSON.stringify(currentNamespace));   
     const namespaceFormatter = new NamespaceFormatterCimpl6(currentNamespace, this.specs, nsDataElements, nsValueSets, nsMappings);
 
     if (nsDataElements.length > 0) {
       const formattedDataElementFile = namespaceFormatter.formatDataElementFile(substituteHash);
+//console.log("formattedDataElementFile = "+JSON.stringify(formattedDataElementFile));   
       this.exportDataElementFileToNamespace(formattedDataElementFile, namespace, path);
     }
 
@@ -97,8 +100,10 @@ class Cimpl6Exporter {
     let ns = namespace.replace(/\./, '_');
 
     const hierarchyPath = `${filePath}/${ns}.txt`;
+//console.log("hierarchyPath = "+JSON.stringify(hierarchyPath));  
     mkdirp.sync(hierarchyPath.substring(0, hierarchyPath.lastIndexOf('/')));
     fs.writeFileSync(hierarchyPath, formattedFile);
+//console.log("DONE WRITING FILE");  
   }
 
   /*exportValueSetFileToNamespace(formattedFile, namespace, filePath) {

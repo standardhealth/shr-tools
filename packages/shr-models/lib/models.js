@@ -88,6 +88,7 @@ class NamespaceSpecifications {
   }
 
   add(namespace) {
+  //  console.log("Adding namespace = "+JSON.stringify(namespace));   
     this._nsMap.set(namespace.namespace, namespace);
   }
 
@@ -109,6 +110,7 @@ class DataElementSpecifications {
   get namespaces() { return Array.from(this._nsMap.keys()); }
 
   add(dataElement) {
+  //console.log("Adding data element = "+JSON.stringify(dataElement));  
     const id = dataElement.identifier;
     if (!this._nsMap.has(id.namespace)) {
       this._nsMap.set(id.namespace, new Map());
@@ -180,6 +182,7 @@ class ValueSetSpecifications {
   get grammarVersions() { return Array.from(this._grammarVersions.values()); }
 
   add(valueSet) {
+  //  console.log("Adding valueSet = "+JSON.stringify(valueSet));  
     const id = valueSet.identifier;
     if (!this._nsMap.has(id.namespace)) {
       this._nsMap.set(id.namespace, new Map());
@@ -230,6 +233,7 @@ class CodeSystemSpecifications {
   get grammarVersions() { return Array.from(this._grammarVersions.values()); }
 
   add(codeSystem) {
+  //  console.log("Adding codeSystem = "+JSON.stringify(codeSystem));   
     const id = codeSystem.identifier;
     if (!this._nsMap.has(id.namespace)) {
       this._nsMap.set(id.namespace, new Map());

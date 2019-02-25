@@ -67,12 +67,22 @@ class DataElementFormatterCimpl6 {
     return id;
   }
 
+  // MK: not sure what the purpose of this is. 
   getVSFromURIAndTrackUsed(vs) {
-    const ns = vs.match(/standardhealthrecord\.org\/(.*)\/vs\/#[A-Za-z0-9]*/)[1].replace('/', '.');
-    this.uses.pushNew(ns);
-
-    const name = vs.split('/').pop().replace('#', '');
-    return name;
+//console.log("vs = "+JSON.stringify(vs));
+//    const ns = vs.match(/standardhealthrecord\.org\/(.*)\/vs\/#[A-Za-z0-9]*/)[1].replace('/', '.');
+    const matchArray = vs.match(/standardhealthrecord\.org\/(.*)\/vs\/#[A-Za-z0-9]*/);
+    if(matchArray && matchArray.length > 1) {
+      const ns = matchArray[1].replace('/', '.');
+      this.uses.pushNew(ns);
+//console.log("namespace = "+JSON.stringify(ns));          
+      const name = vs.split('/').pop().replace('#', '');
+//console.log("name = "+JSON.stringify(name));    
+      return name;
+    }
+    else {
+      return vs;
+    }
   }
 
   formattedCodeFromCncpt(concept) {
@@ -152,7 +162,8 @@ class DataElementFormatterCimpl6 {
   arrangeValuesByConstraintPaths(value, de) {
     // Ignore inherited constraints that aren't modified by this data element.
     let constraintsByPaths = value.constraints.reduce((out, constraint, i) => {
-      if (constraint.lastModifiedBy.fqn != de.identifier.fqn) {
+//      if (constraint.lastModifiedBy.fqn != de.identifier.fqn) {
+        if (!constraint.lastModifiedBy || (constraint.lastModifiedBy.fqn != de.identifier.fqn)) {
         return out;
       }
 
@@ -616,7 +627,10 @@ class DataElementFormatterCimpl6 {
     let formattedWithConstraintTerms = [];
     let formattedWithConstraint = '';
     for (const con of value.constraints) {
-      if (con.lastModifiedBy.fqn == de.identifier.fqn) {
+//  console.log("con = "+JSON.stringify(con));
+//  console.log("de = "+JSON.stringify(de));
+//      if (con.lastModifiedBy.fqn == de.identifier.fqn) {
+    if (con.fqn == de.fqn || con.lastModifiedBy.fqn == de.identifier.fqn) {
         counter += 1;
         if (con.constructor.name === 'IncludesTypeConstraint') {
           if (counter > 1) {
