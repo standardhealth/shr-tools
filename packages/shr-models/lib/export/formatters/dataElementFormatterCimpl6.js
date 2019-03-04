@@ -67,7 +67,7 @@ class DataElementFormatterCimpl6 {
     return id;
   }
 
-  // MK: not sure what the purpose of this is. 
+  // MK: not sure what the purpose of this is.
   getVSFromURIAndTrackUsed(vs) {
 //console.log("vs = "+JSON.stringify(vs));
 //    const ns = vs.match(/standardhealthrecord\.org\/(.*)\/vs\/#[A-Za-z0-9]*/)[1].replace('/', '.');
@@ -75,9 +75,9 @@ class DataElementFormatterCimpl6 {
     if(matchArray && matchArray.length > 1) {
       const ns = matchArray[1].replace('/', '.');
       this.uses.pushNew(ns);
-//console.log("namespace = "+JSON.stringify(ns));          
+//console.log("namespace = "+JSON.stringify(ns));
       const name = vs.split('/').pop().replace('#', '');
-//console.log("name = "+JSON.stringify(name));    
+//console.log("name = "+JSON.stringify(name));
       return name;
     }
     else {
@@ -458,10 +458,14 @@ class DataElementFormatterCimpl6 {
   }
 
   formatValue(value, de, formatAsField, path, substituteHash) {
+    //console.log(value.constructor.name);
     let formattedValue = this.formatValueByType(value, de, substituteHash);
+    //console.log(`formattedValue is ${formattedValue}`);
     //first do card
-    if ('card' in value) {
-      if (value.effectiveCard.max == 0) {
+    if (value.card) {
+      //console.log(`value has the card ${value.card}`);
+      //console.log('card' in value);
+      if (value.effectiveCard && value.effectiveCard.max == 0) {
         if (!formatAsField) {
           return `Value ${rightPad('0..0', this.maxRightPad)}`;
         } else {
@@ -582,6 +586,8 @@ class DataElementFormatterCimpl6 {
     case 'IdentifiableValue':
       return value.identifier.name;
     case 'RefValue':
+      return value.identifier.name;
+    case 'IncompleteValue':
       return value.identifier.name;
     case 'ChoiceValue': {
       let choiceStrings = [];
