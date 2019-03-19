@@ -1185,7 +1185,9 @@ function getFieldAndMethodChain(mapping, def, specs, element) {
           field = currDef.fields.find(f => matchesEffectiveIdentifierOrIncludesTypes(f, elementIdentifier));
 
           if (field) {
-            methodName = toSymbol(field.effectiveIdentifier.name);
+            // the method name used here should be the base identifier, not the effectiveIdentifier,
+            // because in the case of "x is type y" x is the base, y is the effective type, but the field is still called x
+            methodName = toSymbol(field.identifier.name);
           }
         }
       }

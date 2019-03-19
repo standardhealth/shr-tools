@@ -104,6 +104,29 @@ describe('#FromFHIR_STU3', () => {
     });
   });
 
+  describe('#Overriden Is Type Entry()', () => {
+    let OverrideBasedOnIntegerValueElementEntry, StringValueChild;
+
+    before(() => {
+      OverrideBasedOnIntegerValueElementEntry = context.importResult('shr/simple/OverrideBasedOnIntegerValueElementEntry');
+      StringValueChild = context.importResult('shr/simple/StringValueChild');
+    });
+
+    it('should deserialize a FHIR JSON instance', () => {
+      const json = context.getFHIR('OverrideBasedOnIntegerValueElementEntry');
+      const entry = OverrideBasedOnIntegerValueElementEntry.fromFHIR(json);
+      expect(entry).instanceOf(OverrideBasedOnIntegerValueElementEntry);
+
+      const expected = new OverrideBasedOnIntegerValueElementEntry()
+        .withStringValue(new StringValueChild().withValue('sample text'));
+
+      fixExpectedEntryInfo(expected, 'http://standardhealthrecord.org/spec/shr/simple/OverrideBasedOnIntegerValueElementEntry', entry, context);
+
+      expect(entry).to.eql(expected);
+    });
+  });
+
+
   describe('#BloodPressureSliceByNumber()', () => {
 
     let BloodPressureSliceByNumber, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, CodeableConcept, Coding, CodeSystem;
