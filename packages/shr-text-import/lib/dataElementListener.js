@@ -26,13 +26,18 @@ class DataElementImporter extends SHRDataElementParserListener {
     this._usesNs = [];
     // The currently active grammar version
     this._currentGrammarVersion = '';
+    // The relative path to the current file
+    this._currentFile = '';
     // The currently active definition (DataElement)
     this._currentDef = null;
   }
 
   get specifications() { return this._specs; }
 
-  importFile(file) {
+  importFile(file, filePath) {
+    // Set current file, removing excess file path
+    this._currentFile = file.replace(filePath, '');
+
     // Setup a child logger to associate logs with the current file
     const lastLogger = logger;
     logger = rootLogger.child({ file: file });
@@ -538,8 +543,7 @@ class DataElementImporter extends SHRDataElementParserListener {
     if (this._specs.dataElements.findByIdentifier(this._currentDef.identifier) != null) {
       logger.error('Name "%s" already exists. ERROR_CODE:11033', this._currentDef.identifier.name);
     }
-    this._specs.dataElements.add(this._currentDef);
-    this._currentDef = null;
+    this._specs.dataElements.add(this._currentDef, this._currentFile);
   }
 }
 

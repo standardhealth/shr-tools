@@ -31,7 +31,7 @@ function importFromFilePath(filePath, configuration=[], specifications = new Spe
   }
   const importer = new DataElementImporter(preprocessor.data, specifications);
   for (const file of filesByType.dataElement) {
-    importer.importFile(file);
+    importer.importFile(file, filePath);
   }
   const mappingImporter = new MappingImporter(specifications);
   for (const file of filesByType.map) {
