@@ -103,19 +103,25 @@ class DataElementSpecifications {
 
   constructor() {
     this._nsMap = new Map();
+    this._fileMap = new Map();
     this._grammarVersions = new Map();
   }
 
   get grammarVersions() { return Array.from(this._grammarVersions.values()); }
   get namespaces() { return Array.from(this._nsMap.keys()); }
+  get files() { return Array.from(this._fileMap.keys()); }
 
-  add(dataElement) {
+  add(dataElement, file) {
   //console.log("Adding data element = "+JSON.stringify(dataElement));  
     const id = dataElement.identifier;
     if (!this._nsMap.has(id.namespace)) {
       this._nsMap.set(id.namespace, new Map());
     }
     this._nsMap.get(id.namespace).set(id.name, dataElement);
+    if (!this._fileMap.has(file)) {
+      this._fileMap.set(file, []);
+    }
+    this._fileMap.get(file).push(dataElement);
     if (typeof dataElement.grammarVersion !== 'undefined') {
       this._grammarVersions.set(dataElement.grammarVersion.toString(), dataElement.grammarVersion);
     }
@@ -143,6 +149,13 @@ class DataElementSpecifications {
   entriesByNamespace(namespace) {
     if (this._nsMap.has(namespace)) {
       return this.byNamespace(namespace).filter(de => de.isEntry);
+    }
+    return [];
+  }
+
+  byFile(file) {
+    if (this._fileMap.has(file)) {
+      return this._fileMap.get(file);
     }
     return [];
   }
@@ -514,7 +527,6 @@ class DataElement {
     this._hierarchy = hierarchy;
   }
 
-
   clone() {
     const clone = new DataElement(this._identifier.clone(), this._isEntry, this._isAbstract);
     if (this._description) {
@@ -550,7 +562,7 @@ class DataElement {
       'hierarchy':    this._hierarchy, //full hierarchy
       'basedOn':      this.basedOn.map(b => b.fqn || b.toString()),
       'value':        this.value != null ? this.value.toJSON() : undefined,
-      'fields':       this._fields.map(f => f.toJSON()),
+      'fields':       this._fields.map(f => f.toJSON())
     };
 
     clearEmptyFields(output, true);
