@@ -6,6 +6,7 @@ const {Preprocessor, VERSION, GRAMMAR_VERSION} = require('./preprocessor');
 const {DataElementImporter} = require('./dataElementListener');
 const {ValueSetImporter} = require('./valueSetListener');
 const {MappingImporter} = require('./mappingListener');
+const {ContentProfileImporter} = require('./contentProfileListener');
 const {CimcoreImporter} = require('./cimcore/cimcoreImport');
 
 var logger = bunyan.createLogger({name: 'shr-text-import'});
@@ -15,6 +16,7 @@ function setLogger(bunyanLogger) {
   require('./dataElementListener').setLogger(logger);
   require('./valueSetListener').setLogger(logger);
   require('./mappingListener').setLogger(logger);
+  require('./contentProfileListener').setLogger(logger);
   require('./cimcore/cimcoreImport').setLogger(logger);
 }
 
@@ -36,6 +38,17 @@ function importFromFilePath(filePath, configuration=[], specifications = new Spe
   const mappingImporter = new MappingImporter(specifications);
   for (const file of filesByType.map) {
     mappingImporter.importFile(file);
+  }
+  const contentProfileImporter = new ContentProfileImporter(specifications);
+  let contentProfileFound = false;
+  for (const file of filesByType.contentProfile) {
+    if (configuration && (path.basename(file) === configuration.contentProfile)) {
+      contentProfileFound = true;
+      contentProfileImporter.importFile(file);
+    }
+  }
+  if (configuration && configuration.contentProfile && !contentProfileFound) {
+    logger.error('Could not find content profile file: %s. ERROR_CODE:11037', configuration.contentProfile);
   }
   return specifications;
 }
