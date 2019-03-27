@@ -30,7 +30,7 @@ class Expander {
   }
 
   expand() {
-    // First just copy over clones of the namespace, value set, and code system definitions (they don't need expansion)
+    // First just copy over clones of the namespace, value set, code system, and content profile definitions (they don't need expansion)
     for (const ns of this._unexpanded.namespaces.all) {
       this._expanded.namespaces.add(ns.clone());
     }
@@ -39,6 +39,9 @@ class Expander {
     }
     for (const cs of this._unexpanded.codeSystems.all) {
       this._expanded.codeSystems.add(cs.clone());
+    }
+    for (const cp of this._unexpanded.contentProfiles.all) {
+      this._expanded.contentProfiles.add(cp.clone());
     }
     // Now expand all of the data elements
     for (const de of this._unexpanded.dataElements.all) {
