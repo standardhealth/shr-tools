@@ -54,6 +54,7 @@ class Specifications {
     this._dataElements = new DataElementSpecifications();
     this._valueSets = new ValueSetSpecifications();
     this._codeSystems = new CodeSystemSpecifications();
+    this._contentProfiles = new ContentProfileSpecifications();
     this._maps = new MapSpecifications();
   }
 
@@ -61,12 +62,13 @@ class Specifications {
   get dataElements() { return this._dataElements; }
   get valueSets() { return this._valueSets; }
   get codeSystems() { return this._codeSystems; }
+  get contentProfiles() { return this._contentProfiles; }
   get maps() { return this._maps; }
 
   /**
    * Exports Specifications to CIMPL5
    *
-   * @param {string} filepath - the output destination for the export.
+   * @param {string} filePath - the output destination for the export.
    */
   toCIMPL5(filePath) {
     const {Cimpl5Exporter} = require('./export/cimpl5Exporter');
@@ -88,7 +90,7 @@ class NamespaceSpecifications {
   }
 
   add(namespace) {
-  //  console.log("Adding namespace = "+JSON.stringify(namespace));   
+  //  console.log("Adding namespace = "+JSON.stringify(namespace));
     this._nsMap.set(namespace.namespace, namespace);
   }
 
@@ -195,7 +197,7 @@ class ValueSetSpecifications {
   get grammarVersions() { return Array.from(this._grammarVersions.values()); }
 
   add(valueSet) {
-  //  console.log("Adding valueSet = "+JSON.stringify(valueSet));  
+  //  console.log("Adding valueSet = "+JSON.stringify(valueSet));
     const id = valueSet.identifier;
     if (!this._nsMap.has(id.namespace)) {
       this._nsMap.set(id.namespace, new Map());
@@ -246,7 +248,7 @@ class CodeSystemSpecifications {
   get grammarVersions() { return Array.from(this._grammarVersions.values()); }
 
   add(codeSystem) {
-  //  console.log("Adding codeSystem = "+JSON.stringify(codeSystem));   
+  //  console.log("Adding codeSystem = "+JSON.stringify(codeSystem));
     const id = codeSystem.identifier;
     if (!this._nsMap.has(id.namespace)) {
       this._nsMap.set(id.namespace, new Map());
@@ -281,6 +283,77 @@ class CodeSystemSpecifications {
 
   findByURL(url) {
     return this._urlMap.get(url);
+  }
+}
+
+class ContentProfileSpecifications {
+
+  constructor() {
+    this._nsMap = new Map();
+    this._grammarVersions = new Map();
+  }
+
+  get grammarVersions() { return Array.from(this._grammarVersions.values()); }
+  get namespaces() { return Array.from(this._nsMap.keys()); }
+
+  add(contentProfile) {
+  //console.log("Adding content profile = "+JSON.stringify(contentProfile));
+    const id = contentProfile.identifier;
+    if (!this._nsMap.has(id.namespace)) {
+      this._nsMap.set(id.namespace, new Map());
+    }
+    this._nsMap.get(id.namespace).set(id.name, contentProfile);
+    if (typeof contentProfile.grammarVersion !== 'undefined') {
+      this._grammarVersions.set(contentProfile.grammarVersion.toString(), contentProfile.grammarVersion);
+    }
+  }
+
+  get all() {
+    const all = [];
+    for (const ns of this._nsMap.values()) {
+      all.push(...ns.values());
+    }
+    return all;
+  }
+
+  byNamespace(namespace) {
+    if (this._nsMap.has(namespace)) {
+      return Array.from(this._nsMap.get(namespace).values());
+    }
+    return [];
+  }
+
+  find(namespace, name) {
+    if (this._nsMap.has(namespace)) {
+      return this._nsMap.get(namespace).get(name);
+    }
+  }
+
+  findByIdentifier(identifier) {
+    if (identifier) {
+      return this.find(identifier.namespace, identifier.name);
+    }
+  }
+
+  findRulesByIdentifierAndField(identifier, field) {
+    if (identifier && field) {
+      const cp = this.findByIdentifier(identifier);
+      if (cp) {
+        return cp.rules.filter(r => r.path[0].equals(field));
+      }
+    }
+    return [];
+  }
+
+  findRuleByIdentifierAndPath(identifier, path) {
+    if (identifier && path) {
+      const cp = this.findByIdentifier(identifier);
+      if (cp) {
+        return cp.rules.find(r => {
+          r.path.length === path.length && r.path.every((id, index) => id.equals(path[index]));
+        });
+      }
+    }
   }
 }
 
@@ -563,6 +636,102 @@ class DataElement {
       'basedOn':      this.basedOn.map(b => b.fqn || b.toString()),
       'value':        this.value != null ? this.value.toJSON() : undefined,
       'fields':       this._fields.map(f => f.toJSON())
+    };
+
+    clearEmptyFields(output, true);
+
+    return output;
+  }
+}
+
+class ContentProfile {
+  constructor(identifier) {
+    this._identifier = identifier; // Identifier
+    this._rules = []; // ContentProfileRule[]
+    // also contains _grammarVersion
+  }
+  // identifier is the unique Identifier (namespace+name) for the ContentProfile
+  get identifier() { return this._identifier; }
+
+  // Content profiles should have a set of rules (e.g., Foo.Bar MS).
+  get rules() { return this._rules; }
+  set rules(rules) {
+    this._rules = rules;
+  }
+  addRule(rule) {
+    this._rules.push(rule);
+  }
+  // withRule is a convenience function for chaining
+  withRule(rule) {
+    this.addRule(rule);
+    return this;
+  }
+
+  // the Version of the grammar used to define this element
+  get grammarVersion() { return this._grammarVersion; }
+  set grammarVersion(grammarVersion) {
+    this._grammarVersion = grammarVersion;
+  }
+  // withGrammarVersion is a convenience function for chaining
+  withGrammarVersion(grammarVersion) {
+    this.grammarVersion = grammarVersion;
+    return this;
+  }
+
+  clone() {
+    const clone = new ContentProfile(this._identifier.clone());
+    for (const rule of this._rules) {
+      clone._rules.push(rule.clone());
+    }
+    if (this._grammarVersion) {
+      clone._grammarVersion = this._grammarVersion.clone();
+    }
+    return clone;
+  }
+
+  toJSON() {
+    var output = {
+      'name':         this.identifier.name,
+      'namespace':    this.identifier.namespace,
+      'fqn':          this.identifier.fqn,
+      'rules':        this._rules.map(r => r.toJSON()),
+    };
+
+    clearEmptyFields(output, true);
+
+    return output;
+  }
+}
+
+class ContentProfileRule {
+  constructor(path = []) {
+    this._path = path; // Identifier[]
+    this._mustSupport = false; // boolean
+  }
+  // path is the array of Identifiers (namespace+name) corresponding to the field/path this rule applies to
+  get path() { return this._path; }
+
+  // Content profiles should have a set of rules (e.g., Foo.Bar MS).
+  get mustSupport() { return this._mustSupport; }
+  set mustSupport(mustSupport) {
+    this._mustSupport = mustSupport;
+  }
+  // withMustSupport is a convenience function for chaining
+  withMustSupport(mustSupport) {
+    this.mustSupport = mustSupport;
+    return this;
+  }
+
+  clone() {
+    const clone = new ContentProfileRule(this._path.map(id => id.clone()));
+    clone.mustSupport = this._mustSupport;
+    return clone;
+  }
+
+  toJSON() {
+    var output = {
+      'path':         this.path.map(id => id.name).join('.'),
+      'mustSupport':  this.mustSupport
     };
 
     clearEmptyFields(output, true);
@@ -2590,4 +2759,4 @@ const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt
 const INHERITED = 'inherited';
 const OVERRIDDEN = 'overridden';
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, Namespace, DataElement, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, ConstraintHistory, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, ContentProfileSpecifications, Namespace, DataElement, ContentProfile, ContentProfileRule, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, ConstraintHistory, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
