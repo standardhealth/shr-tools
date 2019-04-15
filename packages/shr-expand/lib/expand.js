@@ -44,10 +44,12 @@ class Expander {
       this._expanded.contentProfiles.add(cp.clone());
     }
     // Now expand all of the data elements
-    for (const de of this._unexpanded.dataElements.all) {
-      const expandedDE = this._expanded.dataElements.findByIdentifier(de.identifier);
-      if (typeof expandedDE === 'undefined') {
-        this.expandElement(de);
+    for (const file of this._unexpanded.dataElements.files) {
+      for (const de of this._unexpanded.dataElements.byFile(file)) {
+        const expandedDE = this._expanded.dataElements.findByIdentifier(de.identifier);
+        if (typeof expandedDE === 'undefined') {
+          this.expandElement(de, file);
+        }
       }
     }
 
@@ -177,7 +179,7 @@ class Expander {
     return this._expanded;
   }
 
-  expandElement(element) {
+  expandElement(element, file) {
     // Setup a child logger to associate logs with the current element
     const lastLogger = logger;
     logger = rootLogger.child({ shrId: element.identifier.fqn });
@@ -237,7 +239,7 @@ class Expander {
       expanded.fields = mergedFields;
       this.expandHierarchy(expanded);
       this.captureConstraintHistories(expanded);
-      this._expanded.dataElements.add(expanded);
+      this._expanded.dataElements.add(expanded, file);
       return expanded;
     } finally {
       logger.debug('Done expanding element');
@@ -1148,7 +1150,13 @@ class Expander {
       // We didn't find it, so look in the unexpanded elements, then expand it
       const unexpanded = this._unexpanded.dataElements.findByIdentifier(identifier);
       if (typeof unexpanded !== 'undefined') {
-        return this.expandElement(unexpanded);
+        for (const file of this._unexpanded.dataElements.files) {
+          for (const de of this._unexpanded.dataElements.byFile(file)) {
+            if (de.identifier.equals(identifier)) {
+              return this.expandElement(unexpanded, file);
+            }
+          }
+        }
       }
       return unexpanded;
     }
