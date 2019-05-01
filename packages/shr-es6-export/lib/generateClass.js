@@ -751,13 +751,13 @@ function writeFromFhirExtension(def, specs, fhir, fhirExtension, cw) {
   //   [{url: 'http://extension, valueInteger: 12}]
   //   asExtension tells which way to import it depending where in the parent class this exists (extension or not)
   cw.bl(`if (asExtension)`, () => {
-    fhirExtension.differential.element.forEach( (element, i) => {
+    fhirExtension.snapshot.element.forEach( (element, i) => {
       if(element.path.startsWith('Extension.value') && element.path !== 'Extension.value[x]'){
         // Simple extension with a valueType
         let name = element.path.split('.')[1];
 
         cw.ln(`inst.value = fhir['${name}'];`);
-      } else if(element.path === 'Extension.extension' && element.max != '0'){
+      } else if(element.path === 'Extension.extension' && element.max != '0' && !element.slicing){
         // Complex extension
 
         // The current implementation only seems to reference nested extensions, which promotes reuse of
@@ -765,25 +765,46 @@ function writeFromFhirExtension(def, specs, fhir, fhirExtension, cw) {
         // If this changes, this code could need to be more generic to traverse the extension tree recursively
         // Need to figure out the name of the field we are looking at by grabbing the extension and looking at the identifier
         // This seemed better than parsing the URL, which seems like a somewhat arbitrary format
+
+        // note that we ignore the slice root here since it contains no useful information
+        // and will only look at the individual slices, which are sliced on url
         let matchingExtension;
+        let profileUrl;
 
         if (fhirExtension.fhirVersion === '1.0.2') {
           // DSTU2, element.type.profile is `0..*`:
           // http://hl7.org/fhir/DSTU2/elementdefinition-definitions.html#ElementDefinition.type.profile
-          matchingExtension = fhir.extensions.find(e => e.url === element.type[0].profile[0]);
+
+          if (element.type && element.type[0] && element.type[0].profile && element.type[0].profile[0]) {
+            profileUrl = element.type[0].profile[0];
+          } else {
+            logger.error(`No profile to match on, for extension ${def.identifier} element: ${element.id || element.path}`);
+            return;
+          }
         } else {
           // assume STU3 until it crashes
           // STU3, `element.type.profile` is `0..1`:
           // http://hl7.org/fhir/STU3/elementdefinition-definitions.html#ElementDefinition.type.profile
-          matchingExtension = fhir.extensions.find(e => e.url === element.type[0].profile);
+          if (element.type && element.type[0] && element.type[0].profile) {
+            profileUrl = element.type[0].profile;
+          } else {
+            logger.error(`No profile to match on, for extension ${def.identifier} element: ${element.id || element.path}`);
+            return;
+          }
+        }
+
+        matchingExtension = fhir.extensions.find(e => e.url === profileUrl);
+
+        if (!matchingExtension) {
+          logger.error(`Unable to find matching extension with url ${profileUrl}`);
+          return;
         }
 
         let instance = matchingExtension.identifier[0].value;
         let methodName = toSymbol(instance.split('.')[instance.split('.').length-1]);
         // find the right extension in the list
-        const url = element.type[0].profile;
         const varName = `match_${i}`; // ensure a unique variable name here
-        cw.ln(`const ${varName} = fhir['extension'].find(e => e.url == '${url}');`);
+        cw.ln(`const ${varName} = fhir['extension'].find(e => e.url == '${profileUrl}');`);
         cw.bl(`if (${varName} != null)`, () => {
           cw.ln(`inst.${methodName} = FHIRHelper.createInstanceFromFHIR('${instance}', ${varName}, shrId, allEntries, mappedResources, referencesOut, true);`); // asExtension = true here, false(default value) everywhere else
         });
