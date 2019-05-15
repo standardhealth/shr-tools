@@ -419,7 +419,7 @@ class DataElementImporter extends SHRDataElementParserListener {
     if (ctx.fullyQualifiedCode()) {
       code = this.processFullyQualifiedCode(ctx.fullyQualifiedCode());
     } else if (ctx.code()) {
-      code = new Concept(null, ctx.code().CODE().getText().substr(1)); // substr to skip the '#'
+      code = new Concept(null, ctx.code().CODE().getText().substr(1).trim()); // substr to skip the '#'
       if (ctx.code().STRING()) {
         code.display = stripDelimitersFromToken(ctx.code().STRING());
       }
@@ -438,7 +438,7 @@ class DataElementImporter extends SHRDataElementParserListener {
       } else {
         cs = resolution.url;
       }
-      const code = ctx.code().CODE().getText().substr(1); // substr to skip the '#'
+      const code = ctx.code().CODE().getText().substr(1).trim(); // substr to skip the '#'
       const concept = new Concept(cs, code);
       if (ctx.code().STRING()) {
         concept.display = stripDelimitersFromToken(ctx.code().STRING());
