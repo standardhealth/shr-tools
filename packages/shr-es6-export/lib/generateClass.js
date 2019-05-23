@@ -771,22 +771,21 @@ function writeFromFhirExtension(def, specs, fhir, fhirExtension, cw) {
         let matchingExtension;
         let profileUrl;
 
-        if (fhirExtension.fhirVersion === '1.0.2') {
-          // DSTU2, element.type.profile is `0..*`:
-          // http://hl7.org/fhir/DSTU2/elementdefinition-definitions.html#ElementDefinition.type.profile
-
-          if (element.type && element.type[0] && element.type[0].profile && element.type[0].profile[0]) {
-            profileUrl = element.type[0].profile[0];
+        if (fhirExtension.fhirVersion === '3.0.0' || fhirExtension.fhirVersion === '3.0.1') {
+          // STU3, `element.type.profile` is `0..1`:
+          // http://hl7.org/fhir/STU3/elementdefinition-definitions.html#ElementDefinition.type.profile
+          if (element.type && element.type[0] && element.type[0].profile) {
+            profileUrl = element.type[0].profile;
           } else {
             logger.error(`No profile to match on, for extension ${def.identifier} element: ${element.id || element.path}`);
             return;
           }
         } else {
-          // assume STU3 until it crashes
-          // STU3, `element.type.profile` is `0..1`:
-          // http://hl7.org/fhir/STU3/elementdefinition-definitions.html#ElementDefinition.type.profile
-          if (element.type && element.type[0] && element.type[0].profile) {
-            profileUrl = element.type[0].profile;
+          // Assume DSTU2 or R4, element.type.profile is `0..*`:
+          // http://hl7.org/fhir/DSTU2/elementdefinition-definitions.html#ElementDefinition.type.profile
+          // http://hl7.org/fhir/R4/elementdefinition-definitions.html#ElementDefinition.type.targetProfile
+          if (element.type && element.type[0] && element.type[0].profile && element.type[0].profile[0]) {
+            profileUrl = element.type[0].profile[0];
           } else {
             logger.error(`No profile to match on, for extension ${def.identifier} element: ${element.id || element.path}`);
             return;
@@ -873,22 +872,79 @@ function createVariableName(path) {
 }
 
 /**
+ * Helper to get the profile for a FHIR reference type, across different FHIR versions.
+ * @param {ElementDefinition} fhirElement - FHIR element to get the profile for
+ * @param {string} fhirVersion - The FHIR version (1.0.2 (DSTU2), 3.0.0/3.0.1 (STU3), 4.0.0 (R4))
+ * @returns {string} profile URL
+ * @private
+ */
+function getProfile(fhirElement, fhirVersion) {
+  if (fhirVersion === '3.0.0' || fhirVersion === '3.0.1') {
+    // STU3, use `element.type.profile`, 0..1
+    // http://hl7.org/fhir/STU3/elementdefinition-definitions.html#ElementDefinition.type.targetProfile
+    return fhirElement.type[0].profile;
+  } else {
+    // DSTU2 or R4, both use element.type.profile, 0..*
+    // http://hl7.org/fhir/DSTU2/elementdefinition-definitions.html#ElementDefinition.type.profile
+    // http://hl7.org/fhir/R4/elementdefinition-definitions.html#ElementDefinition.type.targetProfile
+    if (fhirElement.type[0].profile) {
+      return fhirElement.type[0].profile[0];
+    }
+  }
+}
+
+/**
  * Helper to get the target profile for a FHIR reference type, across different FHIR versions.
  * @param {ElementDefinition} fhirElement - FHIR element to get the target profile for
- * @param {boolean} isDstu2 - Whether the given element comes from a DSTU2 definition. Assume if it's not DSTU2 then it's STU3.
+ * @param {string} fhirVersion - The FHIR version (1.0.2 (DSTU2), 3.0.0/3.0.1 (STU3), 4.0.0 (R4))
  * @returns {string} target profile URL
  * @private
  */
-function getTargetProfile(fhirElement, isDstu2) {
-  if (isDstu2) {
+function getTargetProfile(fhirElement, fhirVersion) {
+  if (fhirVersion === '1.0.2') {
     // DSTU2, use element.type.profile, 0..*
     // http://hl7.org/fhir/DSTU2/elementdefinition-definitions.html#ElementDefinition.type.profile
-    return fhirElement.type[0].profile[0];
-  } else {
-    // assume STU3 until it crashes
+    if (fhirElement.type[0].profile) {
+      return fhirElement.type[0].profile[0];
+    }
+  } else if (fhirVersion === '3.0.0' || fhirVersion === '3.0.1') {
     // STU3, use `element.type.targetProfile`, 0..1
     // http://hl7.org/fhir/STU3/elementdefinition-definitions.html#ElementDefinition.type.targetProfile
     return fhirElement.type[0].targetProfile;
+  } else {
+    // Assume R4
+    // R4, use `element.type.targetProfile`, 0..*
+    // http://hl7.org/fhir/R4/elementdefinition-definitions.html#ElementDefinition.type.targetProfile
+    if (fhirElement.type[0].targetProfile) {
+      return fhirElement.type[0].targetProfile[0];
+    }
+  }
+}
+
+/**
+ * Helper to get the binding valueset URI on an element.
+ * @param {ElementDefinition} fhirElement - FHIR element to get the binding valueset URI for
+ * @returns {string|undefined} valueset URI, if present
+ * @private
+ */
+function getValueSetURI(fhirElement) {
+  if (fhirElement && fhirElement.binding) {
+    if (fhirElement.binding.valueSetReference) {
+      // DSTU2 or STU3, uses valueSetReference.reference
+      // http://hl7.org/fhir/DSTU2/elementdefinition-definitions.html#ElementDefinition.binding.valueSet_x_
+      // http://hl7.org/fhir/STU3/elementdefinition-definitions.html#ElementDefinition.binding.valueSet_x_
+      return fhirElement.binding.valueSetReference.reference;
+    } else if (fhirElement.binding.valueSetUri) {
+      // DSTU2 or STU3, uses valueSetUri
+      // NOTE: This doesn't seem to actually be used in practice, but handle it just in case
+      // http://hl7.org/fhir/DSTU2/elementdefinition-definitions.html#ElementDefinition.binding.valueSet_x_
+      // http://hl7.org/fhir/STU3/elementdefinition-definitions.html#ElementDefinition.binding.valueSet_x_
+      return fhirElement.binding.valueSetUri;
+    } else {
+      // Assume R4, uses valueSet
+      // http://hl7.org/fhir/R4/elementdefinition-definitions.html#ElementDefinition.binding.valueSet
+      return fhirElement.binding.valueSet;
+    }
   }
 }
 
@@ -1006,15 +1062,7 @@ function preprocessSlicing(fhirProfile) {
         } else if (element.path.endsWith('.extension') && pathMatchesDiscriminator(`${element.path}.url`, sliceGroup.slicing.discriminator)) {
           // extensions slice on .url, which doesn't necessarily have its own element definition. use the extension
 
-          let url;
-          if (isDstu2) {
-            if (element.type[0].profile) {
-              url = element.type[0].profile[0];
-            }
-          } else {
-            url = element.type[0].profile;
-          }
-
+          const url = getProfile(element, fhirProfile.fhirVersion);
           if (url) {
             sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: `${element.path}.url`, value: url } );
           }
@@ -1029,8 +1077,11 @@ function preprocessSlicing(fhirProfile) {
           // possibly sliced on code.coding.code, but the sub-coding.code fields weren't included.
           // check for a value set binding here
 
-          if (element.binding && element.binding.strength === 'required' && element.binding.valueSetReference && element.binding.valueSetReference.reference) {
-            sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: `${element.path}.coding.code`, valueSet: element.binding.valueSetReference.reference } );
+          if (element.binding && element.binding.strength === 'required') {
+            const vsURI = getValueSetURI(element);
+            if (vsURI) {
+              sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: `${element.path}.coding.code`, valueSet: vsURI } );
+            }
           }
 
         } else if (
@@ -1043,7 +1094,7 @@ function preprocessSlicing(fhirProfile) {
         ) {
           sliceGroup.elements[sliceGroup.currentSlice].unshift( {
             path: `${element.path}.reference`,
-            profile: getTargetProfile(element, isDstu2),
+            profile: getTargetProfile(element, fhirProfile.fhirVersion),
             resolve: sliceGroup.slicing.discriminator.some(d => d.path.startsWith(`${element.path}.reference.resolve()`))
           } );
         }
@@ -1444,15 +1495,15 @@ function writeToFhir(def, specs, fhir, fhirProfile, fhirExtension, cw) {
 
           let matchingExtension;
 
-          if (fhirExtension.fhirVersion === '1.0.2') {
-            // DSTU2, element.type.profile is `0..*`:
-            // http://hl7.org/fhir/DSTU2/elementdefinition-definitions.html#ElementDefinition.type.profile
-            matchingExtension = fhir.extensions.find(e => e.url === element.type[0].profile[0]);
-          } else {
-            // assume STU3 until it crashes
+          if (fhirExtension.fhirVersion === '3.0.0' || fhirExtension.fhirVersion === '3.0.1') {
             // STU3, `element.type.profile` is `0..1`:
             // http://hl7.org/fhir/STU3/elementdefinition-definitions.html#ElementDefinition.type.profile
             matchingExtension = fhir.extensions.find(e => e.url === element.type[0].profile);
+          } else {
+            // Assume DSTU2 or R4, element.type.profile is `0..*`:
+            // http://hl7.org/fhir/DSTU2/elementdefinition-definitions.html#ElementDefinition.type.profile
+            // http://hl7.org/fhir/R4/elementdefinition-definitions.html#ElementDefinition.type.targetProfile
+            matchingExtension = fhir.extensions.find(e => e.url === element.type[0].profile[0]);
           }
           let instance = matchingExtension.identifier[0].value;
           let methodName = toSymbol(instance.split('.')[instance.split('.').length-1]);
@@ -1649,7 +1700,7 @@ function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElem
     cw.bl('if (!mappedResources[entryId])', () => {
       cw.ln('const referencedEntry = allEntries.find(e => e.fullUrl === entryId);');
       cw.bl('if (referencedEntry)', () => {
-        const profileUrl = getTargetProfile(fhirElement, (fhirProfile.fhirVersion === '1.0.2'));
+        const profileUrl = getTargetProfile(fhirElement, fhirProfile.fhirVersion);
         const parts = profileUrl.split('/');
         shrType = parts[parts.length - 1].replace(/-/g, '.');
 
