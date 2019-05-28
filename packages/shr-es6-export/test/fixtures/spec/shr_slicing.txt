@@ -36,6 +36,10 @@ Value:    CodeableConcept
 
 EntryElement: 		Observation
 0..1			ref(PatientEntry)
+0..1      DataValue
+
+Element:  DataValue
+Value:  CodeableConcept or Quantity or string or time or dateTime
 
 EntryElement: MemberA
 Based on: Observation

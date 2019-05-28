@@ -17,6 +17,7 @@
     "lint:fix": "./node_modules/.bin/eslint . --fix"
   },
   "dependencies": {
+    "chai-spies": "^1.0.0",
     "reserved-words": "^0.1.2"
   },
   "devDependencies": {

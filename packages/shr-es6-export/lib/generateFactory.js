@@ -40,16 +40,17 @@ function generateFactory(namespaces) {
 
       cw.blComment(() => {
         cw.ln('Create an instance of a class from its FHIR representation.')
+          .ln(`@param {string} shrType - The type of the element (e.g., 'shr.core.CodeableConcept').  This is only used if the type cannot be extracted from the JSON.`)
           .ln('@param {Object} fhir - The element data in FHIR format (use `{}` and provide `type` for a blank instance)')
-          .ln(`@param {string} [type] - The (optional) type of the element (e.g., 'http://standardhealthrecord.org/spec/shr/demographics/PersonOfRecord').  This is only used if the type cannot be extracted from the JSON.`)
+          .ln(`@param {string} fhirType - the type of the FHIR object that was passed in, in case not otherwise identifiable from the object itself`)
           .ln('@returns {Object} An instance of the requested class populated with the provided data');
       })
-        .bl('static createInstanceFromFHIR(fhir, type, shrId=uuid(), allEntries=[], mappedResources={}, referencesOut=[], asExtension=false)', () => {
-          cw.ln('const { namespace } = getNamespaceAndNameFromFHIR(fhir, type);')
+        .bl('static createInstanceFromFHIR(shrType, fhir, fhirType, shrId=uuid(), allEntries=[], mappedResources={}, referencesOut=[], asExtension=false)', () => {
+          cw.ln('const { namespace } = getNamespaceAndNameFromFHIR(fhir, shrType);')
             .ln('switch (namespace) {');
           for (const ns of namespaces) {
             const factory = factoryName(ns.namespace);
-            cw.ln(`case '${ns.namespace}': return ${factory}.createInstanceFromFHIR(fhir, type, shrId, allEntries, mappedResources, referencesOut, asExtension);`);
+            cw.ln(`case '${ns.namespace}': return ${factory}.createInstanceFromFHIR(shrType, fhir, fhirType, shrId, allEntries, mappedResources, referencesOut, asExtension);`);
           }
           cw.ln(`case 'primitive': return fhir;`);
           cw.ln(`default: throw new Error(\`Unsupported namespace: \${namespace}\`);`)

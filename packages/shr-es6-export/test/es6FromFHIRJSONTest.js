@@ -1,4 +1,7 @@
-const { expect } = require('chai');
+const chai = require('chai');
+const expect = chai.expect;
+const spies = require('chai-spies');
+chai.use(spies);
 const setup = require('./setup');
 require('babel-register')({
   presets: [ 'es2015' ]
@@ -370,7 +373,7 @@ describe('#FromFHIR_STU3', () => {
       const allEntries = [json, memberA, memberB].map(j => {
         return { fullUrl: `http://example.org/fhir/Observation/${j.id}`, resource:  j };
       });
-      const entry = PanelSliceByProfile.fromFHIR(json, '12345', allEntries);
+      const entry = PanelSliceByProfile.fromFHIR(json, 'Observation', '12345', allEntries);
       expect(entry).instanceOf(PanelSliceByProfile);
 
       const expected = new PanelSliceByProfile()
@@ -409,18 +412,19 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#Observation()', () => {
 
-    let Observation, Reference, ShrId, EntryId, EntryType;
+    let Observation, Reference, ShrId, EntryId, EntryType, DataValue;
     before(() => {
       Observation = context.importResult('shr/slicing/Observation');
       Reference = context.importResult('Reference');
       ShrId = context.importResult('shr/base/ShrId');
       EntryId = context.importResult('shr/base/EntryId');
       EntryType = context.importResult('shr/base/EntryType');
+      DataValue = context.importResult('shr/slicing/DataValue');
     });
 
     it('should deserialize a FHIR JSON instance', () => {
       const json = context.getFHIR('Observation');
-      const entry = Observation.fromFHIR(json, '1-1');
+      const entry = Observation.fromFHIR(json, 'Observation', '1-1');
       expect(entry).instanceOf(Observation);
 
       const expected = new Observation()
@@ -434,6 +438,30 @@ describe('#FromFHIR_STU3', () => {
       fixExpectedEntryInfo(expected, 'http://standardhealthrecord.org/spec/shr/slicing/Observation', entry, context);
 
       expect(entry).to.eql(expected);
+    });
+
+    it('should correctly pass the FHIR type to nested object fromFHIR', () => {
+
+      const spy = chai.spy.on(DataValue, 'fromFHIR');
+      const json1 = context.getFHIR('Observation_valueString');
+      try {
+        // TODO: fix the bug that causes this to throw
+        // this will error out because DataValue.fromFHIR doesn't know what to do with the given fhir (yet)
+        // but at this point all we care about is that it's passed the right parameter
+        Observation.fromFHIR(json1, 'Observation', '1-1');
+      } catch (e) {} 
+
+      expect(spy).to.have.been.called.with('string');
+
+      const json2 = context.getFHIR('Observation_valueCodeableConcept');
+      try {
+        // TODO: fix the bug that causes this to throw
+        // this will error out because DataValue.fromFHIR doesn't know what to do with the given fhir (yet)
+        // but at this point all we care about is that it's passed the right parameter
+        Observation.fromFHIR(json2, 'Observation', '1-1');
+      } catch (e) {} 
+
+      expect(spy).to.have.been.called.with('CodeableConcept');
     });
   });
 });
@@ -462,7 +490,7 @@ describe('#FromFHIR_DSTU2', () => {
 
     it('should deserialize a FHIR JSON instance', () => {
       const json = context.getFHIR('Observation');
-      const entry = Observation.fromFHIR(json, '1-1');
+      const entry = Observation.fromFHIR(json, 'Observation', '1-1');
       expect(entry).instanceOf(Observation);
 
       const expected = new Observation()

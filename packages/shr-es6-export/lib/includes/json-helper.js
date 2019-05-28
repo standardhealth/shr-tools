@@ -194,20 +194,20 @@ export const FHIRHelper = {
 
   /**
    * Creates an ES6 class instance based on a value extracted from the JSON.
-   * @param {string} key - the original key under which the value was stored.  This is used as a backup in case the value
-   *   does not declare its type.
-   * @param {object} value - the FHIR data to create an ES6 class instance for
+   * @param {string} shrType - the fqn of the class to be instantiated
+   * @param {object} fhir - the FHIR data to create an ES6 class instance for
+   * @param {string} fhirType - the type of the FHIR object passed in, just in case it's not otherwise available by inspecting the object
    * @returns {object} an instance of an ES6 class representing the data
    * @private
    */
-  createInstanceFromFHIR: function(key, value, shrId, allEntries=[], mappedResources={}, referencesOut=[], asExtension=false) {
-    if (Array.isArray(value)) {
-      return value.map(v => FHIRHelper.createInstanceFromFHIR(key, v, shrId, allEntries, mappedResources, referencesOut, asExtension));
+  createInstanceFromFHIR: function(shrType, fhir, fhirType, shrId, allEntries=[], mappedResources={}, referencesOut=[], asExtension=false) {
+    if (Array.isArray(fhir)) {
+      return fhir.map(v => FHIRHelper.createInstanceFromFHIR(shrType, v, fhirType, shrId, allEntries, mappedResources, referencesOut, asExtension));
     }
     if (OBJECT_FACTORY == null) {
       throw new Error(`SHR ES6 module is not initialized.  Import 'init' before using the ES6 factories and classes`);
     }
-    return OBJECT_FACTORY.createInstanceFromFHIR(value, key, shrId, allEntries, mappedResources, referencesOut, asExtension);
+    return OBJECT_FACTORY.createInstanceFromFHIR(shrType, fhir, fhirType, shrId, allEntries, mappedResources, referencesOut, asExtension);
   },
 
   /**

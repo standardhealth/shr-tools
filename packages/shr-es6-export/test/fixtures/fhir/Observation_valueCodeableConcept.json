@@ -1,0 +1,12 @@
+{
+  "resourceType": "Observation",
+  "id": "0000-0000",
+  "subject": { "reference": "abcd-1234" },
+  "valueCodeableConcept": {
+    "coding": [{
+      "system": "SNOMED-CT",
+      "code": "1234567890",
+      "display": "Dummy SNOMED Code"
+    }]
+  }
+}

@@ -153,13 +153,14 @@ function generateClassBody(def, specs, fhir, fhirProfile, fhirExtension, cw) {
     cw.ln(`Deserializes FHIR JSON data to an instance of the ${clazzName} class.`)
       .ln(`The FHIR must be valid against the ${clazzName} FHIR profile, although this is not validated by the function.`)
       .ln(`@param {object} fhir - the FHIR JSON data to deserialize`)
+      .ln(`@param {string} fhirType - the type of the FHIR object that was passed in, in case not otherwise identifiable from the object itself`)
       .ln(`@param {string} shrId - a unique, persistent, permanent identifier for the overall health record belonging to the Patient; will be auto-generated if not provided`)
       .ln(`@param {Array} allEntries - the list of all entries that references in 'fhir' refer to`)
       .ln(`@param {object} mappedResources - any resources that have already been mapped to SHR objects. Format is { fhir_key: {shr_obj} }`)
       .ln(`@param {Array} referencesOut - list of all SHR ref() targets that were instantiated during this function call`)
       .ln(`@param {boolean} asExtension - Whether the provided instance is an extension`)
       .ln(`@returns {${clazzName}} An instance of ${clazzName} populated with the FHIR data`);
-  }).bl('static fromFHIR(fhir, shrId=uuid(), allEntries=[], mappedResources={}, referencesOut=[], asExtension=false)', () => writeFromFhir(def, specs, fhir, fhirProfile, fhirExtension, cw))
+  }).bl('static fromFHIR(fhir, fhirType, shrId=uuid(), allEntries=[], mappedResources={}, referencesOut=[], asExtension=false)', () => writeFromFhir(def, specs, fhir, fhirProfile, fhirExtension, cw))
     .ln();
 }
 
@@ -474,13 +475,13 @@ function writeFromFhir(def, specs, fhir, fhirProfile, fhirExtension, cw) {
   cw.ln(`const inst = new ${className(def.identifier.name)}();`);
 
   if (def.isEntry) {
-    cw.ln(`inst.entryInfo = FHIRHelper.createInstanceFromFHIR('shr.base.Entry', {});`); // do it this way so we don't have to import Entry
-    cw.ln(`inst.entryInfo.shrId = FHIRHelper.createInstanceFromFHIR('shr.base.ShrId', shrId);`);
-    cw.ln(`inst.entryInfo.entryId = FHIRHelper.createInstanceFromFHIR('shr.base.EntryId', fhir['id'] || uuid());`); // re-use the FHIR id if it exists, otherwise generate a new uuid
+    cw.ln(`inst.entryInfo = FHIRHelper.createInstanceFromFHIR('shr.base.Entry', {}, null);`); // do it this way so we don't have to import Entry
+    cw.ln(`inst.entryInfo.shrId = FHIRHelper.createInstanceFromFHIR('shr.base.ShrId', shrId, 'string');`);
+    cw.ln(`inst.entryInfo.entryId = FHIRHelper.createInstanceFromFHIR('shr.base.EntryId', fhir['id'] || uuid(), 'string');`); // re-use the FHIR id if it exists, otherwise generate a new uuid
 
     // copied from writeToJson above --- should this URL be configurable?
     const url = `http://standardhealthrecord.org/spec/${def.identifier.namespace.replace('.', '/')}/${className(def.identifier.name)}`;
-    cw.ln(`inst.entryInfo.entryType = FHIRHelper.createInstanceFromFHIR('shr.base.EntryType', '${url}');`);
+    cw.ln(`inst.entryInfo.entryType = FHIRHelper.createInstanceFromFHIR('shr.base.EntryType', '${url}', 'uri');`);
   }
 
   if(fhirProfile){
@@ -655,7 +656,7 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
       if(mapping.map === '<Value>'){
         // Mapping to the value of this es6 instance
         if (def.value instanceof IdentifiableValue && def.value.identifier.isPrimitive) {
-          generateFromFHIRAssignment(def.value, element, fhirElementPath, [], 'value', fhirProfile, null, cw);
+          generateFromFHIRAssignment(def.value, element, fhirElementPath, [], 'value', fhirProfile, null, cw, fhir);
         } else {
           logger.error('Value referenced in mapping but none exist on this element.');
         }
@@ -697,13 +698,13 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
           }
 
           if (i == mapping.fieldChain.length - 1) { // if it's the last field in the chain
-            generateFromFHIRAssignment(field, element, fhirElementPath, mapping.fieldMapPath, shrElementPath, fhirProfile, slicing, cw);
+            generateFromFHIRAssignment(field, element, fhirElementPath, mapping.fieldMapPath, shrElementPath, fhirProfile, slicing, cw, fhir);
           } else {
             // if it's not the last element in the field chain, it's an intermediate one so we just want to initialize the value so it's not null
             const dec = field.card.isList ? 'const ' : ''; // if in a list, we need to declare the new variable, so do `const x = new()`
             const nullCheck = field.card.isList ? '' : `${shrElementPath} || `; // if not in a list, consider that the field was already init'ed, so do `x = x || new()`
 
-            let rhs = `FHIRHelper.createInstanceFromFHIR('${field.effectiveIdentifier.fqn}', {}, shrId)`;
+            let rhs = `FHIRHelper.createInstanceFromFHIR('${field.effectiveIdentifier.fqn}', {}, null, shrId)`;
             if (field instanceof RefValue) {
               rhs = `FHIRHelper.createReference( ${rhs}, referencesOut)`;
             }
@@ -805,7 +806,7 @@ function writeFromFhirExtension(def, specs, fhir, fhirExtension, cw) {
         const varName = `match_${i}`; // ensure a unique variable name here
         cw.ln(`const ${varName} = fhir['extension'].find(e => e.url == '${profileUrl}');`);
         cw.bl(`if (${varName} != null)`, () => {
-          cw.ln(`inst.${methodName} = FHIRHelper.createInstanceFromFHIR('${instance}', ${varName}, shrId, allEntries, mappedResources, referencesOut, true);`); // asExtension = true here, false(default value) everywhere else
+          cw.ln(`inst.${methodName} = FHIRHelper.createInstanceFromFHIR('${instance}', ${varName}, 'Extension', shrId, allEntries, mappedResources, referencesOut, true);`); // asExtension = true here, false(default value) everywhere else
         });
       }
     });
@@ -827,12 +828,12 @@ function writeFromFhirValue(def, specs, cw) {
         cw.ln(`inst.value = fhir;`);
       } else {
         const shrType = def.value.effectiveIdentifier.fqn;
-        cw.ln(`inst.value = FHIRHelper.createInstanceFromFHIR('${shrType}', fhir, shrId, allEntries, mappedResources, referencesOut);`);
+        cw.ln(`inst.value = FHIRHelper.createInstanceFromFHIR('${shrType}', fhir, fhirType, shrId, allEntries, mappedResources, referencesOut);`);
       }
     } else {
       // it could be any of the options, and we can't necessarily tell which one here
       // so just call createInstance to leverage the logic that looks up profiles
-      cw.ln(`inst.value = FHIRHelper.createInstanceFromFHIR(null, fhir, shrId, allEntries, mappedResources, referencesOut);`);
+      cw.ln(`inst.value = FHIRHelper.createInstanceFromFHIR(null, fhir, fhirType, shrId, allEntries, mappedResources, referencesOut);`);
     }
   });
 }
@@ -1683,8 +1684,9 @@ function generateToFHIRAssignment(cardIsList, baseCardIsList, constraintsLength,
  * @param {StructureDefinition} fhirProfile - the FHIR profile the element comes from
  * @param {Object} slicing - information on this element related to slicing, if any
  * @param {CodeWriter} cw - the CodeWriter that is writing the file for this element
+ * @param {object} fhir - All exported FHIR profiles and extensions.
  */
-function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElementMapping, shrElementPath, fhirProfile, slicing, cw) {
+function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElementMapping, shrElementPath, fhirProfile, slicing, cw, fhir) {
   const cardIsList = field.card.isList;
   const isRef = field instanceof RefValue;
   const fhirPathString = bracketNotation(fhirElementPath);
@@ -1702,9 +1704,14 @@ function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElem
       cw.bl('if (referencedEntry)', () => {
         const profileUrl = getTargetProfile(fhirElement, fhirProfile.fhirVersion);
         const parts = profileUrl.split('/');
-        shrType = parts[parts.length - 1].replace(/-/g, '.');
+        shrType = parts[parts.length - 1];
 
-        cw.ln(`mappedResources[entryId] = FHIRHelper.createInstanceFromFHIR('${shrType}', referencedEntry['resource'], shrId, allEntries, mappedResources, referencesOut);`);
+        const allFHIRProfiles = [...fhir.profiles, ...fhir._noDiffProfiles];
+        const matchingProfile = allFHIRProfiles.find(p => p.id === shrType);
+        const fhirType = matchingProfile ? `'${matchingProfile.type}'` : null;
+
+        shrType = shrType.replace(/-/g, '.');
+        cw.ln(`mappedResources[entryId] = FHIRHelper.createInstanceFromFHIR('${shrType}', referencedEntry['resource'], ${fhirType}, shrId, allEntries, mappedResources, referencesOut);`);
       });
     });
 
@@ -1740,7 +1747,8 @@ function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElem
       if (shrType.isPrimitive && !isExtension) {
         rhs = fhirPathString;
       } else {
-        rhs = `FHIRHelper.createInstanceFromFHIR('${shrType.fqn}', ${fhirPathString}, shrId, allEntries, mappedResources, referencesOut, ${isExtension})`;
+        const fhirType = fhirElement.type[0].code;
+        rhs = `FHIRHelper.createInstanceFromFHIR('${shrType.fqn}', ${fhirPathString}, '${fhirType}', shrId, allEntries, mappedResources, referencesOut, ${isExtension})`;
       }
       if (isRef) {
         rhs = `FHIRHelper.createReference( ${rhs}, referencesOut)`;

@@ -4,6 +4,7 @@ Target:		FHIR_DSTU_2
 
 Observation maps to Observation:
  PatientEntry maps to subject
+ DataValue maps to value[x]
 
 PanelSliceByProfile:
 PanelMembers.Observation maps to related.target (slice at = related; slice on = target.reference.resolve(); slice strategy = includes; slice on type = profile)

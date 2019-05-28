@@ -1,0 +1,6 @@
+{
+  "resourceType": "Observation",
+  "id": "0000-0000",
+  "subject": { "reference": "abcd-1234" },
+  "valueString": "something or other"
+}
