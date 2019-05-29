@@ -1,5 +1,5 @@
 const CodeWriter = require('./CodeWriter');
-const { className, factoryName } = require('./common.js');
+const { factoryName } = require('./common.js');
 
 /**
  * Generates a namespace-level factory class for instantiating ES6 classes based on element name and entry data.
@@ -13,7 +13,7 @@ function generateNamespaceFactory(ns, defs) {
     .ln(`// Manual modification is NOT RECOMMENDED as changes will be overwritten the next time the classes are generated.`)
     .ln();
   cw.ln(`import { getNamespaceAndName, getNamespaceAndNameFromFHIR, uuid } from '${relativeImportPath(ns.namespace, 'json-helper')}';`);
-  cw.ln(`import ClassRegistry from '${relativeImportPath(ns.namespace, 'ClassRegistry')}';`)
+  cw.ln(`import ClassRegistry from '${relativeImportPath(ns.namespace, 'ClassRegistry')}';`);
 
   const factory = factoryName(ns.namespace);
   cw.ln()

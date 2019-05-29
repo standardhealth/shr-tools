@@ -449,7 +449,7 @@ describe('#FromFHIR_STU3', () => {
         // this will error out because DataValue.fromFHIR doesn't know what to do with the given fhir (yet)
         // but at this point all we care about is that it's passed the right parameter
         Observation.fromFHIR(json1, 'Observation', '1-1');
-      } catch (e) {} 
+      } catch (e) { /* for now do nothing */ }
 
       expect(spy).to.have.been.called.with('string');
 
@@ -459,7 +459,7 @@ describe('#FromFHIR_STU3', () => {
         // this will error out because DataValue.fromFHIR doesn't know what to do with the given fhir (yet)
         // but at this point all we care about is that it's passed the right parameter
         Observation.fromFHIR(json2, 'Observation', '1-1');
-      } catch (e) {} 
+      } catch (e) { /* for now do nothing */ }
 
       expect(spy).to.have.been.called.with('CodeableConcept');
     });
@@ -475,7 +475,6 @@ describe('#FromFHIR_STU3', () => {
     });
 
     it('should correctly call a class registered in the class registry', () => {
-      const json = context.getFHIR('Observation');
       const anonymousSubclass = class extends Observation {
         static fromFHIR(fhir, fhirType, shrId=null, allEntries=null, mappedResources=null, referencesOut=null, asExtension=null) {
           // do nothing, we don't care about the result just that it was called

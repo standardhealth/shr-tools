@@ -1,1 +1,3 @@
 # /node_modules/* and /bower_components/* ignored by default
+# comment out the line below to see lint errors on generated code
+/build

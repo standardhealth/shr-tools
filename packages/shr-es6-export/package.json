@@ -1,6 +1,6 @@
 {
   "name": "shr-es6-export",
-  "version": "5.7.0",
+  "version": "5.7.1",
   "description": "Exports ES6 classes represent SHR data elements",
   "author": "",
   "license": "Apache-2.0",
@@ -17,7 +17,6 @@
     "lint:fix": "./node_modules/.bin/eslint . --fix"
   },
   "dependencies": {
-    "chai-spies": "^1.0.0",
     "reserved-words": "^0.1.2"
   },
   "devDependencies": {
@@ -26,6 +25,7 @@
     "babel-register": "^6.26.0",
     "bunyan": "^1.8.9",
     "chai": "^3.5.0",
+    "chai-spies": "^1.0.0",
     "eslint": "^4.15.0",
     "fs-extra": "^4.0.2",
     "mocha": "^3.2.0",
