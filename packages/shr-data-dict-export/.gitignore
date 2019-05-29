@@ -1,0 +1,6 @@
+/.vscode
+/.project
+/package-lock.json
+/yarn-error.log
+/node_modules
+/.settings
