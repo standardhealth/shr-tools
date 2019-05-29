@@ -30,6 +30,10 @@ function generateClass(def, specs, fhir) {
   try {
     const cw = new CodeWriter();
 
+    cw.ln(`// GENERATED CODE`)
+      .ln(`// Manual modification is NOT RECOMMENDED as changes will be overwritten the next time the class is generated.`)
+      .ln();
+
     const imports = ['setPropertiesFromJSON', 'uuid'];
 
     const defFhirID = fhirID(def.identifier);

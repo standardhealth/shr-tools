@@ -1,5 +1,6 @@
 import {setObjectFactory} from './json-helper';
 import ObjectFactory from './ObjectFactory';
+// import ClassRegistry from './ClassRegistry';
 
 /**
  * The init function initializes the ES helper functions with the necessary dependencies for creating
@@ -10,6 +11,10 @@ import ObjectFactory from './ObjectFactory';
  */
 function init() {
   setObjectFactory(ObjectFactory);
+
+  // Overwrite any classes in the class registry as needed here:
+  // for example,
+  // ClassRegistry['namespace']['SomeClass'] = SomeClassExtended;
 }
 
 init();

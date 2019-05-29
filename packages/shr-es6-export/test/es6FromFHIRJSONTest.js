@@ -464,6 +464,35 @@ describe('#FromFHIR_STU3', () => {
       expect(spy).to.have.been.called.with('CodeableConcept');
     });
   });
+
+  describe('#ClassRegistry', () => {
+    let ClassRegistry, ObjectFactory, Observation;
+
+    before(() => {
+      ClassRegistry = context.importResult('ClassRegistry');
+      ObjectFactory = context.importResult('ObjectFactory');
+      Observation = context.importResult('shr/slicing/Observation');
+    });
+
+    it('should correctly call a class registered in the class registry', () => {
+      const json = context.getFHIR('Observation');
+      const anonymousSubclass = class extends Observation {
+        static fromFHIR(fhir, fhirType, shrId=null, allEntries=null, mappedResources=null, referencesOut=null, asExtension=null) {
+          // do nothing, we don't care about the result just that it was called
+        }
+      };
+
+      ClassRegistry['shr.slicing']['Observation'] = anonymousSubclass;
+
+      const spyOriginalClass = chai.spy.on(Observation, 'fromFHIR');
+      const spyReplacementClass = chai.spy.on(anonymousSubclass, 'fromFHIR');
+
+      ObjectFactory.createInstanceFromFHIR('shr.slicing.Observation', {}, null);
+
+      expect(spyOriginalClass).to.not.have.been.called();
+      expect(spyReplacementClass).to.have.been.called();
+    });
+  });
 });
 
 describe('#FromFHIR_DSTU2', () => {

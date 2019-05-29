@@ -8,6 +8,9 @@ const { factoryName } = require('./common.js');
  */
 function generateFactory(namespaces) {
   const cw = new CodeWriter();
+  cw.ln(`// GENERATED CODE`)
+    .ln(`// Manual modification is NOT RECOMMENDED as changes will be overwritten the next time the classes are generated.`)
+    .ln();
   cw.ln(`import { getNamespaceAndName, getNamespaceAndNameFromFHIR, uuid } from './json-helper';`);
   for (const ns of namespaces) {
     const factory = factoryName(ns.namespace);

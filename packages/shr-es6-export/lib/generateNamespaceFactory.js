@@ -9,11 +9,12 @@ const { className, factoryName } = require('./common.js');
  */
 function generateNamespaceFactory(ns, defs) {
   const cw = new CodeWriter();
+  cw.ln(`// GENERATED CODE`)
+    .ln(`// Manual modification is NOT RECOMMENDED as changes will be overwritten the next time the classes are generated.`)
+    .ln();
   cw.ln(`import { getNamespaceAndName, getNamespaceAndNameFromFHIR, uuid } from '${relativeImportPath(ns.namespace, 'json-helper')}';`);
-  for (const def of defs) {
-    const name = className(def.identifier.name);
-    cw.ln(`import ${name} from './${name}';`);
-  }
+  cw.ln(`import ClassRegistry from '${relativeImportPath(ns.namespace, 'ClassRegistry')}';`)
+
   const factory = factoryName(ns.namespace);
   cw.ln()
     .blComment(`Generated object factory for the ${ns.namespace} namespace.`)
@@ -29,13 +30,11 @@ function generateNamespaceFactory(ns, defs) {
             .bl(`if (namespace !== '${ns.namespace}')`, () => {
               cw.ln(`throw new Error(\`Unsupported type in ${factory}: \${type}\`);`);
             })
-            .ln('switch (elementName) {');
-          for (const def of defs) {
-            const elName = className(def.identifier.name);
-            cw.ln(`case '${elName}': return ${elName}.fromJSON(json);`);
-          }
-          cw.ln(`default: throw new Error(\`Unsupported type in ${factory}: \${type}\`);`)
-            .ln('}');
+            .ln(`const klass = ClassRegistry['${ns.namespace}'][elementName];`)
+            .bl(`if (!klass)`, ()=> {
+              cw.ln(`throw new Error(\`Unsupported type in ${factory}: \${type}\`);`);
+            })
+            .ln(`return klass.fromJSON(json);`);
         });
 
       cw.ln();
@@ -52,13 +51,11 @@ function generateNamespaceFactory(ns, defs) {
             .bl(`if (namespace !== '${ns.namespace}')`, () => {
               cw.ln(`throw new Error(\`Unsupported type in ${factory}: \${shrType}\`);`);
             })
-            .ln('switch (elementName) {');
-          for (const def of defs) {
-            const elName = className(def.identifier.name);
-            cw.ln(`case '${elName}': return ${elName}.fromFHIR(fhir, fhirType, shrId, allEntries, mappedResources, referencesOut, asExtension);`);
-          }
-          cw.ln(`default: throw new Error(\`Unsupported type in ${factory}: \${shrType}\`);`)
-            .ln('}');
+            .ln(`const klass = ClassRegistry['${ns.namespace}'][elementName];`)
+            .bl(`if (!klass)`, ()=> {
+              cw.ln(`throw new Error(\`Unsupported type in ${factory}: \${shrType}\`);`);
+            })
+            .ln(`return klass.fromFHIR(fhir, fhirType, shrId, allEntries, mappedResources, referencesOut, asExtension);`);
         });
     });
   return cw.toString();

@@ -76,6 +76,7 @@ class ES6Exporter {
     es6Defs['ObjectFactory.js'] = generateFactory(namespaces);
 
     es6Defs['valueSets.js'] = this.collectValueSets(this._fhir);
+    es6Defs['ClassRegistry.js'] = this.createClassRegistry(namespaces);
 
     return es6Defs;
   }
@@ -87,7 +88,10 @@ class ES6Exporter {
    */
   collectValueSets(fhir) {
     const cw = new CodeWriter();
-    cw.ln('export const ALL_KNOWN_VALUE_SETS = {')
+    cw.ln(`// GENERATED CODE`)
+      .ln(`// Manual modification is NOT RECOMMENDED as changes will be overwritten the next time the classes are generated.`)
+      .ln()
+      .ln('export const ALL_KNOWN_VALUE_SETS = {')
       .indent();
 
     const alreadySeen = new Set;
@@ -125,6 +129,53 @@ class ES6Exporter {
 
     return cw.toString();
   }
+
+  /**
+   * Build up a "registry" of classes given their names.
+   * The idea here is that there are known bugs with the exporter
+   * and in many cases it's much quicker to manually apply fixes
+   * to the generated classes than fix the actual bug in the exporter.
+   * Users of the classes should subclass the affected classes, then update the class registry
+   * (in a separate location, since the file is generated)
+   * with a reference to the new class. This makes it easier to preserve the fixes
+   * across re-generations of the classes.
+   *
+   * Format: { 'namespace1': { 'ClassName': ClassObject, ... }, ... }
+   */
+  createClassRegistry(namespaces) {
+    const cw = new CodeWriter();
+
+    cw.ln(`// GENERATED CODE`)
+      .ln(`// Manual modification is NOT RECOMMENDED as changes will be overwritten the next time the classes are generated.`)
+      .ln()
+      .ln('const ClassRegistry = {')
+      .indent();
+
+    for (const ns of namespaces) {
+      cw.ln(`'${ns.namespace}': {`)
+        .indent();
+
+      const defs = this._specs.dataElements.byNamespace(ns.namespace);
+
+      for (const def of defs) {
+        const elName = className(def.identifier.name);
+        // import the files directly in the map for brevity.
+        // the alternative is a long list of imports at the top and separate references in the map
+        cw.ln(`'${elName}': require('./${def.identifier.fqn.split('.').join('/')}').default,`);
+      }
+
+      cw.outdent()
+        .ln('},');
+    }
+
+    cw.outdent()
+      .ln('};')
+      .ln()
+      .ln('export default ClassRegistry;');
+
+    return cw.toString();
+  }
+
 }
 
 module.exports = {exportToES6, setLogger, MODELS_INFO};
