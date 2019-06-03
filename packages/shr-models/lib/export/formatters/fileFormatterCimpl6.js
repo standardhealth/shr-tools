@@ -1,97 +1,58 @@
-//  /$$   /$$
-// | $$$ | $$
-// | $$$$| $$  /$$$$$$  /$$$$$$/$$$$   /$$$$$$   /$$$$$$$  /$$$$$$   /$$$$$$   /$$$$$$$  /$$$$$$
-// | $$ $$ $$ |____  $$| $$_  $$_  $$ /$$__  $$ /$$_____/ /$$__  $$ |____  $$ /$$_____/ /$$__  $$
-// | $$  $$$$  /$$$$$$$| $$ \ $$ \ $$| $$$$$$$$|  $$$$$$ | $$  \ $$  /$$$$$$$| $$      | $$$$$$$$
-// | $$\  $$$ /$$__  $$| $$ | $$ | $$| $$_____/ \____  $$| $$  | $$ /$$__  $$| $$      | $$_____/
-// | $$ \  $$|  $$$$$$$| $$ | $$ | $$|  $$$$$$$ /$$$$$$$/| $$$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$$
-// |__/  \__/ \_______/|__/ |__/ |__/ \_______/|_______/ | $$____/  \_______/ \_______/ \_______/
-//                                                       | $$
-//                                                       | $$
-//                                                       |__/
-
 //const models = require('shr-models');
 const { rightPad, shorthandFromCodesystem } = require('./commons');
 const { DataElementFormatterCimpl6 } = require('./dataElementFormatterCimpl6');
-const { MappingFormatter } = require('./mappingFormatter');
-const { ValueSetFormatter } = require('./valueSetFormatter');
 const DEFAULT_MAX_PLACE = 20;
 
-class NamespaceFormatterCimpl6 {
-  constructor(ns, specs, nsDataElements, nsValueSets, nsMappings) {
-
-    this.ns = ns;
-
+class FileFormatterCimpl6 {
+  constructor(specs, nsValueSets, nsMappings) {
     this.specs = specs;
 
-    this.nsDataElements = nsDataElements;
     this.nsValueSets = nsValueSets;
     this.nsMappings = nsMappings;
+    this._namespaces = specs.namespaces.all;
 
     this.headerFormatter = new FileHeaderFormatter(specs);
     this.dataElementFormatter = new DataElementFormatterCimpl6(specs);
-    this.valueSetFormatter = new ValueSetFormatter(specs);
-    this.mappingFormatter = new MappingFormatter(specs);
   }
 
-  formatHeader(fileType) {
+  get namespaces() { return this._namespaces; }
+
+  formatHeader(fileType, file_ns, file_uses, file_cs) {
     switch (fileType) {
     case 'DataElement': {
-      return this.headerFormatter.formatDataElementFileHeader(this.ns, this.dataElementFormatter.uses, this.dataElementFormatter._codesystems);
-    }
-    case 'ValueSet': {
-      return this.headerFormatter.formatValueSetFileHeader(this.ns, this.valueSetFormatter.codesystems);
-    }
-    case 'Map': {
-      return this.headerFormatter.formatMappingFileHeader(this.ns, this.mappingFormatter.target);
+      return this.headerFormatter.formatDataElementFileHeader(file_ns, file_uses, file_cs);
     }
     default:
       return;
     }
   }
 
+
   formatDataElementFile(substituteHash) {
     this.dataElementFormatter.reset();
 
-    const formattedDataElements = [];
-    for (const de of this.nsDataElements) {
-      const formattedDE = this.dataElementFormatter.formatDataElement(de, substituteHash);
-      formattedDataElements.push(formattedDE);
-    }
-
-    const fileHeader = this.formatHeader('DataElement');
-
-    return [fileHeader, ...formattedDataElements].join('\r\n\r\n');
-  }
-
-  formatValueSetFile() {
-    this.valueSetFormatter.reset();
-
-    const formattedValueSets = [];
-    for (const vs of this.nsValueSets) {
-      const formattedVS = this.valueSetFormatter.formatValueSet(vs);
-      formattedValueSets.push(formattedVS);
-    }
-
-    const fileHeader = this.formatHeader('ValueSet');
-
-    return [fileHeader, ...formattedValueSets].join('\r\n\r\n');
-  }
-
-  formatMappingsFile(target) {
-    this.mappingFormatter.target = target;
-
-    const formattedMappings = [];
-    for (const map of this.nsMappings[target]) {
-      if (map.inheritance != 'inherited') {
-        const formattedMap = this.mappingFormatter.formatMapping(map);
-        formattedMappings.push(formattedMap);
-      }
-    }
-
-    const fileHeader = this.formatHeader('Map');
-
-    return [fileHeader, ...formattedMappings].join('\r\n\r\n');
+    const formattedDataElementsHash = {};
+    this.specs.dataElements.files.forEach(f => {
+      let h = f.substr(f.lastIndexOf('\\') + 1);
+      formattedDataElementsHash[h] = [];
+      const fileDataElements = [];
+      let c = 0;
+      let currentNamespace;
+      this.specs.dataElements.byFile(f).forEach(de => {
+        const formattedDE = this.dataElementFormatter.formatDataElement(de, substituteHash);
+        fileDataElements.push(formattedDE);
+        //Get the namespace of the file by getting the namespace of the first data element declared in the file.
+        if (c == 0) {
+          currentNamespace = this.namespaces.find(ns => ns.namespace == de.identifier.namespace);
+        }
+        //Increment the variable c so that the namespace will only needed to be found once per file.
+        c += 1;
+      });
+      const header = this.formatHeader('DataElement', currentNamespace, this.dataElementFormatter.uses, this.dataElementFormatter.codesystems);
+      formattedDataElementsHash[h].push([header, ...fileDataElements].join('\r\n\r\n'));
+      this.dataElementFormatter.reset();
+    });
+    return formattedDataElementsHash;
   }
 }
 
@@ -184,4 +145,4 @@ class FileHeaderFormatter {
   }
 }
 
-module.exports = { NamespaceFormatterCimpl6 };
+module.exports = { FileFormatterCimpl6 };

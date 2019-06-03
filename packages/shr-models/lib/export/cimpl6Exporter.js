@@ -10,8 +10,9 @@
 
 const fs = require('fs');
 const mkdirp = require('mkdirp');
+const path = require('path');
 
-const { NamespaceFormatterCimpl6 } = require('./formatters/namespaceFormatterCimpl6');
+const { FileFormatterCimpl6 } = require('./formatters/fileFormatterCimpl6');
 
 /**
  * The CIMPL 6 exporter
@@ -47,10 +48,9 @@ class Cimpl6Exporter {
    *
    * @param {string} path - the output destination for the formatted export.
    */
-  exportToPath(path) {
+  exportToPath(outputPath) {
     let substituteHash = {};
     const validNamespaces = this.namespaces.filter(ns => ns.namespace.trim().length > 0);
-//console.log("valid namespaces = "+JSON.stringify(validNamespaces));
     /* For loop which will go through 2 iterations. The first is to fill out the
       substituteHash object and the second is so that the object can be used to make
       the necessary substitutions to the exported CIMPL 6.0 files generated.
@@ -60,66 +60,30 @@ class Cimpl6Exporter {
         if(!substituteHash.hasOwnProperty(ns.namespace)) {
           substituteHash[ns.namespace] = {};
         }
-        this.exportNamespaceToPath(ns.namespace, path, substituteHash);
+        this.exportDataElementFilesToPath(ns.namespace, outputPath, substituteHash);
       }
     }
   }
 
-  exportNamespaceToPath(namespace, path, substituteHash) {
-    const nsDataElements = this.elements.filter(de => de.identifier.namespace == namespace).map(de=>de.clone()); // this.specs.dataElements.byNamespace(namespace);
+  exportDataElementFilesToPath(namespace, outputPath, substituteHash) {
     const nsValueSets = this.valuesets.filter(vs => vs.identifier.namespace == namespace).map(vs=>vs.clone()); // this.specs.dataElements.byNamespace(namespace);
     const nsMappings = Object.keys(this.mappings).reduce((out, target) => {
       out[target] = this.mappings[target].filter(m => m.identifier.namespace == namespace).map(m=>m.clone());
       return out;
     }, {});
-
-    const currentNamespace = this.namespaces.find(ns => ns.namespace == namespace);
-//console.log("current namespace = "+JSON.stringify(currentNamespace));   
-    const namespaceFormatter = new NamespaceFormatterCimpl6(currentNamespace, this.specs, nsDataElements, nsValueSets, nsMappings);
-
-    if (nsDataElements.length > 0) {
-      const formattedDataElementFile = namespaceFormatter.formatDataElementFile(substituteHash);
-//console.log("formattedDataElementFile = "+JSON.stringify(formattedDataElementFile));   
-      this.exportDataElementFileToNamespace(formattedDataElementFile, namespace, path);
+    const fileFormatter = new FileFormatterCimpl6(this.specs, nsValueSets, nsMappings);
+    const formattedDataElementFileHash = fileFormatter.formatDataElementFile(substituteHash);
+    for (let k in formattedDataElementFileHash) {
+      this.exportDataElementFile(formattedDataElementFileHash[k], k.split('.')[0], outputPath);
     }
-
-    /*if (nsValueSets.length > 0) {
-      const formattedValueSetFile = namespaceFormatter.formatValueSetFile();
-      this.exportValueSetFileToNamespace(formattedValueSetFile, namespace, path);
-    }*/
-
-    /*for (const target in nsMappings) {
-      if (nsMappings[target].length > 0) {
-        const formattedMappingsFile = namespaceFormatter.formatMappingsFile(target);
-        this.exportMappingsFileToNamespace(formattedMappingsFile, namespace, path);
-      }
-    }*/
   }
 
-  exportDataElementFileToNamespace(formattedFile, namespace, filePath) {
+  exportDataElementFile(formattedFile, namespace, filePath) {
     let ns = namespace.replace(/\./, '_');
-
-    const hierarchyPath = `${filePath}/${ns}.txt`;
-//console.log("hierarchyPath = "+JSON.stringify(hierarchyPath));  
-    mkdirp.sync(hierarchyPath.substring(0, hierarchyPath.lastIndexOf('/')));
+    const hierarchyPath = path.join(filePath, `${ns}.txt`);
+    mkdirp.sync(path.dirname(hierarchyPath));
     fs.writeFileSync(hierarchyPath, formattedFile);
-//console.log("DONE WRITING FILE");  
   }
-
-  /*exportValueSetFileToNamespace(formattedFile, namespace, filePath) {
-    let ns = namespace.replace(/\./, '_');
-
-    const hierarchyPath = `${filePath}/${ns}_vs.txt`;
-    mkdirp.sync(hierarchyPath.substring(0, hierarchyPath.lastIndexOf('/')));
-    fs.writeFileSync(hierarchyPath, formattedFile);
-  }*/
-
-  /*exportMappingsFileToNamespace(formattedFile, namespace, filePath) {
-    let ns = namespace.replace(/\./, '-');
-    const hierarchyPath = `${filePath}/${ns}_map.txt`;
-    mkdirp.sync(hierarchyPath.substring(0, hierarchyPath.lastIndexOf('/')));
-    fs.writeFileSync(hierarchyPath, formattedFile);
-  }*/
 }
 
 

@@ -114,7 +114,6 @@ class DataElementSpecifications {
   get files() { return Array.from(this._fileMap.keys()); }
 
   add(dataElement, file) {
-  //console.log("Adding data element = "+JSON.stringify(dataElement));  
     const id = dataElement.identifier;
     if (!this._nsMap.has(id.namespace)) {
       this._nsMap.set(id.namespace, new Map());
