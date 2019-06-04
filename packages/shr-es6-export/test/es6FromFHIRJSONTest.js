@@ -481,7 +481,7 @@ describe('#FromFHIR_STU3', () => {
         }
       };
 
-      ClassRegistry['shr.slicing']['Observation'] = anonymousSubclass;
+      ClassRegistry.set('shr.slicing', 'Observation', anonymousSubclass);
 
       const spyOriginalClass = chai.spy.on(Observation, 'fromFHIR');
       const spyReplacementClass = chai.spy.on(anonymousSubclass, 'fromFHIR');

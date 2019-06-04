@@ -131,7 +131,7 @@ class ES6Exporter {
   }
 
   /**
-   * Build up a "registry" of classes given their names.
+   * Build up a "registry" of classes given their namespace/name.
    * The idea here is that there are known bugs with the exporter
    * and in many cases it's much quicker to manually apply fixes
    * to the generated classes than fix the actual bug in the exporter.
@@ -140,7 +140,7 @@ class ES6Exporter {
    * with a reference to the new class. This makes it easier to preserve the fixes
    * across re-generations of the classes.
    *
-   * Format: { 'namespace1': { 'ClassName': ClassObject, ... }, ... }
+   * Underlying format: { 'namespace1': { 'ClassName': ClassObject, ... }, ... }
    */
   createClassRegistry(namespaces) {
     const cw = new CodeWriter();
@@ -148,30 +148,72 @@ class ES6Exporter {
     cw.ln(`// GENERATED CODE`)
       .ln(`// Manual modification is NOT RECOMMENDED as changes will be overwritten the next time the classes are generated.`)
       .ln()
-      .ln('const ClassRegistry = {')
-      .indent();
-
-    for (const ns of namespaces) {
-      cw.ln(`'${ns.namespace}': {`)
-        .indent();
-
-      const defs = this._specs.dataElements.byNamespace(ns.namespace);
-
-      for (const def of defs) {
-        const elName = className(def.identifier.name);
-        // import the files directly in the map for brevity.
-        // the alternative is a long list of imports at the top and separate references in the map
-        cw.ln(`'${elName}': require('./${def.identifier.fqn.split('.').join('/')}').default,`);
-      }
-
-      cw.outdent()
-        .ln('},');
-    }
-
-    cw.outdent()
-      .ln('};')
       .ln()
+      .blComment(() => {
+        cw.ln('The Class Registry concept is designed to allow for users of the SHR ES6 classes to fix bugs and add extensions')
+          .ln('in a way that makes maintaining those changes across re-generations easier.')
+          .ln('Users should subclass any relevant classes, then update the class registry')
+          .ln('(in a separate location, since the file is generated)')
+          .ln('with a reference to the new class.')
+          .ln('Note: this class structure is needed to avoid circular dependency issues,')
+          .ln('as this refers to all the individual ES6 classes, and the individual ES6 classes all refer to this.');
+      })
+      .bl('class Registry', () => {
+
+        cw.bl('initialize()', () => {
+          cw.ln('this.internalRegistry = {')
+            .indent();
+
+          for (const ns of namespaces) {
+            cw.ln(`'${ns.namespace}': {`)
+              .indent();
+
+            const defs = this._specs.dataElements.byNamespace(ns.namespace);
+
+            for (const def of defs) {
+              const elName = className(def.identifier.name);
+              // import the files directly in the map for brevity.
+              // the alternative is a long list of imports at the top and separate references in the map
+              cw.ln(`'${elName}': require('./${def.identifier.fqn.split('.').join('/')}').default,`);
+            }
+
+            cw.outdent()
+              .ln('},');
+          }
+
+          cw.outdent()
+            .ln('};');
+        })
+          .ln()
+          .blComment(() => {
+            cw.ln('Get the class object for the given namespace and model class name.')
+              .ln('I.e., the actual class is returned, not an instance of it.')
+              .ln('In most cases this will be the original class,')
+              .ln('but when a subclass has been defined and registered then it will be returned here.')
+              .ln('@param {string} namespace - The full namespace of the desired class, ex. \'shr.base\'.')
+              .ln('@param {string} name - The name of the class, ex. \'Entry\'')
+              .ln('@return {Class} the desired class or a subclass of it with fixes/extensions');
+          })
+          .bl('get(namespace, name)', () => {
+            cw.ln('return this.internalRegistry[namespace][name];');
+          })
+          .ln()
+          .blComment(() => {
+            cw.ln('Register a replacement class object for the given namespace and model class name.')
+              .ln('Note that this does no validation that the given class is a true drop-in replacement of the original class')
+              .ln('@param {string} namespace - The full namespace of the class, ex. \'shr.base\'.')
+              .ln('@param {string} name - The name of the class, ex. \'Entry\'')
+              .ln('@param {Class} klass - The new class object to be returned when ');
+          })
+          .bl('set(namespace, name, klass)', () => {
+            cw.ln('this.internalRegistry[namespace][name] = klass;');
+          });
+      })
+      .ln()
+      .ln('// singleton pattern')
+      .ln('const ClassRegistry = new Registry();')
       .ln('export default ClassRegistry;');
+
 
     return cw.toString();
   }

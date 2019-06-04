@@ -50,6 +50,8 @@ function generateClass(def, specs, fhir) {
     }
 
     cw.ln(`import { ${imports.join(', ')} } from '${relativeImportPath(def.identifier, 'json-helper')}';`).ln();
+    cw.ln(`import ClassRegistry from '${relativeImportPath(def.identifier, 'ClassRegistry')}';`).ln();
+
     const clazzName = className(def.identifier.name);
     let superClass;
     if (def.basedOn.length) {
@@ -297,7 +299,8 @@ function writeGetterAndSetter(cw, clazzName, formalDefOrName, publicSymbol, desc
  * @private
  */
 function writeFromJson(def, cw) {
-  cw.ln(`const inst = new ${className(def.identifier.name)}();`);
+  cw.ln(`const klass = ClassRegistry.get('${def.identifier.namespace}', '${className(def.identifier.name)}');`);
+  cw.ln(`const inst = new klass();`);
   cw.ln('setPropertiesFromJSON(inst, json);');
   cw.ln('return inst;');
 }
@@ -476,7 +479,8 @@ function childElementsOf(parent, allElements) {
  * @private
  */
 function writeFromFhir(def, specs, fhir, fhirProfile, fhirExtension, cw) {
-  cw.ln(`const inst = new ${className(def.identifier.name)}();`);
+  cw.ln(`const klass = ClassRegistry.get('${def.identifier.namespace}', '${className(def.identifier.name)}');`);
+  cw.ln(`const inst = new klass();`);
 
   if (def.isEntry) {
     cw.ln(`inst.entryInfo = FHIRHelper.createInstanceFromFHIR('shr.base.Entry', {}, null);`); // do it this way so we don't have to import Entry

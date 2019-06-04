@@ -30,7 +30,7 @@ function generateNamespaceFactory(ns, defs) {
             .bl(`if (namespace !== '${ns.namespace}')`, () => {
               cw.ln(`throw new Error(\`Unsupported type in ${factory}: \${type}\`);`);
             })
-            .ln(`const klass = ClassRegistry['${ns.namespace}'][elementName];`)
+            .ln(`const klass = ClassRegistry.get('${ns.namespace}', elementName);`)
             .bl(`if (!klass)`, ()=> {
               cw.ln(`throw new Error(\`Unsupported type in ${factory}: \${type}\`);`);
             })
@@ -51,7 +51,7 @@ function generateNamespaceFactory(ns, defs) {
             .bl(`if (namespace !== '${ns.namespace}')`, () => {
               cw.ln(`throw new Error(\`Unsupported type in ${factory}: \${shrType}\`);`);
             })
-            .ln(`const klass = ClassRegistry['${ns.namespace}'][elementName];`)
+            .ln(`const klass = ClassRegistry.get('${ns.namespace}', elementName);`)
             .bl(`if (!klass)`, ()=> {
               cw.ln(`throw new Error(\`Unsupported type in ${factory}: \${shrType}\`);`);
             })
