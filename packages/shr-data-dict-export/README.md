@@ -15,7 +15,7 @@ $ yarn install
 
 # License
 
-Copyright 2017 The MITRE Corporation
+Copyright 2019 The MITRE Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

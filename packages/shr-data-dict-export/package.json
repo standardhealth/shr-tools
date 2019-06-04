@@ -1,6 +1,6 @@
 {
   "name": "shr-data-dict-export",
-  "version": "1.0.0",
+  "version": "5.0.0",
   "description": "SHR Data Dictionary Exporter",
   "main": "index.js",
   "license": "Apache-2.0",
@@ -8,7 +8,6 @@
     "bunyan": "^1.8.12",
     "exceljs": "^1.11.0",
     "mkdirp": "^0.5.1",
-    "path": "^0.12.7",
-    "shr-models": "^5.8.0"
+    "shr-models": "^5.9.0"
   }
 }

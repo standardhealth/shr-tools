@@ -68,7 +68,17 @@ function getCardinalityInfo(card) {
   let multiplicity = '';
   if (card) {
     requirement = (card.min && card.min > 0) ? 'required' : 'required if known';
-    multiplicity = (card.max && card.max === 1) ? 'single' : 'multiple';
+    switch (card.max) {
+      case 0:
+        multiplicity = 'none';
+        break;
+      case 1:
+        multiplicity = 'single';
+        break;
+      default:
+        multiplicity = 'multiple';
+        break;
+    }
   }
   return { requirement, multiplicity };
 }
@@ -79,22 +89,10 @@ function getDataType(de, path, specs, endOfPathElement) {
   typeConstraints = value.constraintsFilter.type.constraints;
   if (typeConstraints.length === 0) {
     // It may be on the value...
-    let valueId = choiceFriendlyEffectiveIdentifier(value);
-    if (valueId == null && value instanceof ChoiceValue) {
-      valueId = value.aggregateOptions.find(o => ['CodeableConcept', 'Coding', 'code'].indexOf(o.identifier.name) !== -1);
-    }
-    if (valueId) {
-      const valueDE = specs.dataElements.findByIdentifier(valueId);
-      if (valueDE.value) {
-        const newValue = mergeConstraintsToChild(value.constraints, valueDE.value, true);
-        const newTypeConstraints = newValue.constraintsFilter.type.constraints;
-        typeConstraints = newTypeConstraints.filter(c => !c.onValue);
-      }
-    }
+    typeConstraints = getConstraintOnValue(value, specs.dataElements, 'dataType');
   }
-  
   let type = '';
-  if (typeConstraints.length > 0) {
+  if (typeConstraints && typeConstraints.length > 0) {
     type = typeConstraints.map(c => c.isA.name).join(' or ');
   } else if (endOfPathElement.value instanceof IdentifiableValue) {
     type = endOfPathElement.value.effectiveIdentifier.name;
@@ -113,21 +111,10 @@ function getVsInfo(de, path, specs, projectURL) {
   }
   if (!constraint) {
     // It may be on the value...
-    let valueId = choiceFriendlyEffectiveIdentifier(value);
-    if (valueId == null && value instanceof ChoiceValue) {
-      valueId = value.aggregateOptions.find(o => ['CodeableConcept', 'Coding', 'code'].indexOf(o.identifier.name) !== -1);
-    }
-    if (valueId) {
-      const valueDE = specs.dataElements.findByIdentifier(valueId);
-      if (valueDE.value) {
-        const newValue = mergeConstraintsToChild(value.constraints, valueDE.value, true);
-        const newVsConstraints = newValue.constraintsFilter.valueSet.constraints;
-        constraint = newVsConstraints.find(c => !c.onValue && c.path.length === 0);
-      }
-    }
+    constraint = getConstraintOnValue(value, specs.dataElements, 'vsInfo');
   }
   if (constraint) {
-    const url = constraint.valueSet.startsWith(projectURL) ? constraint.valueSet.split('/')[constraint.valueSet.split('/').length-1] : constraint.valueSet;
+    const url = constraint.valueSet.startsWith(projectURL) ? constraint.valueSet.slice(constraint.valueSet.lastIndexOf('/')+1) : constraint.valueSet;
     const vs = specs.valueSets.findByURL(constraint.valueSet);
     return { url, strength: constraint.bindingStrength, vs };
   }
@@ -136,34 +123,50 @@ function getVsInfo(de, path, specs, projectURL) {
 function getUnit(de, path, specs, projectURL) {
   const value = findValueByPath(specs, path, de);
   let constraint;
-  const codeConstraints = value.constraintsFilter.constraints;
-  if (codeConstraints && codeConstraints.length > 0) {
-    constraint = codeConstraints.find(c => !c.onValue && c.path.some(e => e.equals(new Identifier('shr.core', 'Units'))));
+  const constraints = value.constraintsFilter.constraints;
+  if (constraints && constraints.length > 0) {
+    constraint = constraints.find(c => !c.onValue && c.path.some(e => e.equals(new Identifier('shr.core', 'Units'))));
   }
   if (!constraint) {
     // It may be on the value...
-    let valueId = choiceFriendlyEffectiveIdentifier(value);
-    if (valueId == null && value instanceof ChoiceValue) {
-      valueId = value.aggregateOptions.find(o => ['CodeableConcept', 'Coding', 'code'].indexOf(o.identifier.name) !== -1);
-    }
-    if (valueId) {
-      const valueDE = specs.dataElements.findByIdentifier(valueId);
-      if (valueDE.value) {
-        const newValue = mergeConstraintsToChild(value.constraints, valueDE.value, true);
-        const newCodeConstraints = newValue.constraintsFilter.code.constraints;
-        constraint = newCodeConstraints.find(c => !c.onValue && c.path.some(e => e.equals('shr.core', 'Units')));
-      }
-    }
+    constraint = getConstraintOnValue(value, specs.dataElements, 'unit');
   }
   if (constraint) {
     let units = '';
     if (constraint.code) {
-      units = `${constraint.code.display}`;
+      units = constraint.code.display ? `"${constraint.code.display}"` : constraint.code.code;
     } else if (constraint.valueSet) {
-      units = constraint.valueSet.startsWith(projectURL) ? constraint.valueSet.split('/')[constraint.valueSet.split('/').length-1] : constraint.valueSet;
+      units = constraint.valueSet.startsWith(projectURL) ? constraint.valueSet.slice(constraint.valueSet.lastIndexOf('/')+1) : constraint.valueSet;
     }
     return units;
   }
+}
+
+function getConstraintOnValue(value, dataElements, useCase) {
+  let valueId = choiceFriendlyEffectiveIdentifier(value);
+  if (valueId == null && value instanceof ChoiceValue) {
+    valueId = value.aggregateOptions.find(o => ['CodeableConcept', 'Coding', 'code'].indexOf(o.identifier.name) !== -1);
+  }
+  if (valueId) {
+    const valueDE = dataElements.findByIdentifier(valueId);
+    if (valueDE.value) {
+      const newValue = mergeConstraintsToChild(value.constraints, valueDE.value, true);
+      switch (useCase) {
+        case 'dataType':
+          const newTypeConstraints = newValue.constraintsFilter.type.constraints;
+          return newTypeConstraints.filter(c => !c.onValue);
+        case 'vsInfo':
+          const newVsConstraints = newValue.constraintsFilter.valueSet.constraints;
+          return newVsConstraints.find(c => !c.onValue && c.path.length === 0);
+        case 'unit':
+          const newConstraints = newValue.constraintsFilter.constraints;
+          return newConstraints.find(c => !c.onValue && c.path.some(e => e.equals('shr.core', 'Units')));
+        default:
+          break;
+      }
+    }
+  }
+  return;
 }
 
 function choiceFriendlyEffectiveIdentifier(value) {
@@ -263,9 +266,6 @@ function findValueByIdentifier(identifier, values) {
             } else {
               value = new IdentifiableValue(itc.isA).withCard(itc.card).withConstraints(constraintsToCopy);
             }
-            // Apply special marker used only in FHIR Exporter.  There is probably a more elegant way, but the
-            // alternative right now seems to require a ton of code
-            value._derivedFromIncludesTypeConstraint = true;
             break;
           }
         }
@@ -311,11 +311,6 @@ function mergeConstraintsToChild(parentConstraints, childValue, childIsElementVa
     return childValue;
   }
   const mergedChild = childValue.clone();
-  // Preserve special marker used only in FHIR Exporter.  There is probably a more elegant way, but the
-  // alternative right now seems to require a ton of code
-  if (childValue._derivedFromIncludesTypeConstraint) {
-    mergedChild._derivedFromIncludesTypeConstraint = true;
-  }
   for (const cst of mergedChild.constraints) {
     const siblings = new ConstraintsFilter(constraints).withPath(cst.path).constraints;
     if (siblings.some(c => c.constructor.name == cst.constructor.name)) {
@@ -402,63 +397,57 @@ function fillElementLines(dataElementLines, profileLines, vsMap, de, specs, conf
 }
 
 function fillValueSetLines(vs, valueSetLines, valueSetDetailsLines) {
+  let codeSystems = new Set();
   for (const rule of vs.rulesFilter.includesCode.rules) {
+    const system = urlsToNames[rule.code.system] ? urlsToNames[rule.code.system] : rule.code.system;
     valueSetDetailsLines.push([
       vs.identifier.name,
-      urlsToNames[rule.code.system] ? urlsToNames[rule.code.system] : rule.code.system,
+      system,
       `${rule.code.code}`,
-      `${rule.code.display}`
+      `"${rule.code.display}"`
     ]);
+    codeSystems.add(system);
   }
   for (const rule of vs.rulesFilter.includesDescendents.rules) {
+    const system = urlsToNames[rule.code.system] ? urlsToNames[rule.code.system] : rule.code.system;
     valueSetDetailsLines.push([
       vs.identifier.name,
-      urlsToNames[rule.code.system] ? urlsToNames[rule.code.system] : rule.code.system,
+      system,
       `includes codes descending from ${rule.code.code}`,
-      `${rule.code.display}`
+      `"${rule.code.display}"`
     ]);
+    codeSystems.add(system);
   }
   for (const rule of vs.rulesFilter.includesFromCode.rules) {
     valueSetDetailsLines.push([
       vs.identifier.name,
-      urlsToNames[rule.code.system] ? urlsToNames[rule.code.system] : rule.code.system,
+      system,
       `includes codes from code ${rule.code.code}`,
-      `${rule.code.display}`
+      `"${rule.code.display}"`
     ]);
+    codeSystems.add(system);
   }
   for (const rule of vs.rulesFilter.includesFromCodeSystem.rules) {
+    const system = urlsToNames[rule.system] ? urlsToNames[rule.system] : rule.system;
     valueSetDetailsLines.push([
       vs.identifier.name,
-      urlsToNames[rule.system] ? urlsToNames[rule.system] : rule.system,
+      system,
       `includes codes from code system ${urlsToNames[rule.system] ? urlsToNames[rule.system] : rule.system}`,
       ''
     ]);
+    codeSystems.add(system);
   }
   for (const rule of vs.rulesFilter.excludesDescendents.rules) {
+    const system = urlsToNames[rule.code.system] ? urlsToNames[rule.code.system] : rule.code.system;
     valueSetDetailsLines.push([
       vs.identifier.name,
-      urlsToNames[rule.code.system] ? urlsToNames[rule.code.system] : rule.code.system,
+      system,
       `excludes codes descending from ${rule.code.code}`,
-      `${rule.code.display}`
+      `"${rule.code.display}"`
     ]);
+    codeSystems.add(system);
   }
 
-  let codeSystems = new Set();
-  for (const rule of vs.rulesFilter.includesCode.rules) {
-    codeSystems.add(urlsToNames[rule.code.system]);
-  }
-  for (const rule of vs.rulesFilter.includesDescendents.rules) {
-    codeSystems.add(urlsToNames[rule.code.system]);
-  }
-  for (const rule of vs.rulesFilter.includesFromCode.rules) {
-    codeSystems.add(urlsToNames[rule.code.system]);
-  }
-  for (const rule of vs.rulesFilter.includesFromCodeSystem.rules) {
-    codeSystems.add(urlsToNames[rule.system]);
-  }
-  for (const rule of vs.rulesFilter.excludesDescendents.rules) {
-    codeSystems.add(urlsToNames[rule.code.system]);
-  }
   codeSystems.delete(null);
   codeSystems.delete(undefined);
   valueSetLines.push([
