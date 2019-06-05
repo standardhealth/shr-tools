@@ -38,27 +38,22 @@
       "Units": {
         "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Units" },
         "Value": {
-          "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
-          "CodeSystem": {
-            "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
-            "Value": "http://unitsofmeasure.org"
-          },
-          "Value": "mm[Hg]"
+          "coding": [
+            {
+              "system": "http://unitsofmeasure.org",
+              "code": "mm[Hg]"
+            }
+          ]
         }
       }
     },
     "ComponentCode" : {
       "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/slicing/ComponentCode" },
       "Value": {
-        "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeableConcept" },
-        "Coding": [
+        "coding": [
           {
-            "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
-            "CodeSystem": {
-              "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
-              "Value": "http://loinc.org"
-            },
-            "Value": { "code": "8480-6", "codeSystem": "http://loinc.org" }
+            "system": "http://loinc.org",
+            "code": "8480-6"
           }
         ]
       }
@@ -76,27 +71,22 @@
       "Units": {
         "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Units" },
         "Value": {
-          "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
-          "CodeSystem": {
-            "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
-            "Value": "http://unitsofmeasure.org"
-          },
-          "Value": "mm[Hg]"
+          "coding": [
+            {
+              "system": "http://unitsofmeasure.org",
+              "code": "mm[Hg]"
+            }
+          ]
         }
       }
     },
     "ComponentCode" : {
       "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/slicing/ComponentCode" },
       "Value": {
-        "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeableConcept" },
-        "Coding": [
+        "coding": [
           {
-            "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
-            "CodeSystem": {
-              "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
-              "Value": "http://loinc.org"
-            },
-            "Value": { "code": "8462-4", "codeSystem": "http://loinc.org" }
+            "system": "http://loinc.org",
+            "code": "8462-4"
           }
         ]
       }

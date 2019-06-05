@@ -1,61 +1,61 @@
-Grammar:    DataElement 5.0
-Namespace:  shr.slicing
-Uses: shr.simple, shr.core, shr.fhir
+Grammar:           DataElement 6.0
+Namespace:         shr.slicing
+Uses:              shr.core, shr.fhir
+CodeSystem:        LNC = http://loinc.org
 
-CodeSystem:     LNC = http://loinc.org
+Entry:             BloodPressureSliceByNumber
+Property:          SystolicPressure 0..1
+Property:          DiastolicPressure 0..1
 
-EntryElement: BloodPressureSliceByNumber
-0..1 SystolicPressure
-0..1 DiastolicPressure
+Entry:             BloodPressureSliceByValue
+Property:          SystolicPressure 0..1
+Property:          DiastolicPressure 0..1
 
-EntryElement: BloodPressureSliceByValue
-0..1 SystolicPressure
-0..1 DiastolicPressure
+Entry:             BloodPressureSliceByValueAndIncludesStrategy
+Property:          EvaluationComponent 0..*
+                   EvaluationComponent
+                   includes SystolicPressure 0..1
+                   includes DiastolicPressure 0..1
 
-EntryElement: BloodPressureSliceByValueAndIncludesStrategy
-0..* EvaluationComponent
-includes 0..1 SystolicPressure
-includes 0..1 DiastolicPressure
+Element:           EvaluationComponent
+Value:             Quantity
+Property:          ComponentCode 1..1
 
-Element:	SystolicPressure
-Based on: EvaluationComponent
-Concept:	LNC#8480-6
-ComponentCode is LNC#8480-6
+Element:           ComponentCode
+Value:             concept
 
-Element:	DiastolicPressure
-Based on: EvaluationComponent
-Concept:	LNC#8462-4
-ComponentCode is LNC#8462-4
+Element:           SystolicPressure
+Parent:            EvaluationComponent
+Concept:           LNC#8480-6
+                   ComponentCode = LNC#8480-6
 
-Element:  EvaluationComponent
-Value:    Quantity
-1..1      ComponentCode
+Element:           DiastolicPressure
+Parent:            EvaluationComponent
+Concept:           LNC#8462-4
+                   ComponentCode = LNC#8462-4
 
-Element:  ComponentCode
-Value:    CodeableConcept
+Entry:             Observation
+Property:          PatientEntry 0..1
+Property:          DataValue 0..1
 
-EntryElement: 		Observation
-0..1			ref(PatientEntry)
-0..1      DataValue
+Element:           DataValue
+Value:             concept or Quantity or string or time or dateTime
 
-Element:  DataValue
-Value:  CodeableConcept or Quantity or string or time or dateTime
+Entry:             MemberA
+Parent:            Observation
 
-EntryElement: MemberA
-Based on: Observation
+Entry:             MemberB
+Parent:            Observation
 
-EntryElement: MemberB
-Based on: Observation
+Group:             Panel
+Parent:            Observation
+Property:          PanelMembers 0..1
 
-Element: Panel
-Based on: Observation
-0..1 PanelMembers
+Group:             PanelMembers
+Property:          Observation 0..*
 
-EntryElement: PanelSliceByProfile
-Based on: Panel
-PanelMembers.Observation
-  includes 0..1 ref(MemberA)
-  includes 0..1 ref(MemberB)
-
-Element: PanelMembers
-0..* ref(Observation)
+Entry:             PanelSliceByProfile
+Parent:            Panel
+                   PanelMembers.Observation
+                   includes MemberA 0..1
+                   includes MemberB 0..1

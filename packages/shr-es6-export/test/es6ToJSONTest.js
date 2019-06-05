@@ -24,93 +24,46 @@ describe('#ToJSON', () => {
     });
   });
 
-  describe('#CodeValueEntryClass()', () => {
+  describe('#ConceptValueEntryClass()', () => {
 
-    let CodeValueEntry;
-    before(() => CodeValueEntry = context.importResult('shr/simple/CodeValueEntry'));
+    let ConceptValueEntry;
+    before(() => ConceptValueEntry = context.importResult('shr/simple/ConceptValueEntry'));
 
-    it('should serialize a JSON instance with a string code', () => {
-      testJSONRoundtrip('CodeStringValueEntry', 'CodeStringValueEntry', CodeValueEntry);
-    });
-    it('should serialize a JSON instance with an object code', () => {
-      // This one is special-cased; this JSON doesn't roundtrip
-      // because of the way Code objects are handled
-      const json = context.getJSON('CodeObjectValueEntry');
-      const entry = CodeValueEntry.fromJSON(json);
-      expect(entry).instanceOf(CodeValueEntry);
-
-      let gen_json = entry.toJSON();
-      context.validateJSON('CodeObjectValueEntry', gen_json);
-      expect(gen_json['EntryType']).to.eql({Value: 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry'});
-      expect(gen_json['Value']).to.equal('foo');
-    });
-  });
-
-  describe('#CodingValueEntryClass()', () => {
-
-    let CodingValueEntry;
-    before(() => CodingValueEntry = context.importResult('shr/simple/CodingValueEntry'));
-
-    it('should serialize a JSON instance with a string code', () => {
-      testJSONRoundtrip('CodingStringValueEntry', 'CodingStringValueEntry', CodingValueEntry);
-    });
     it('should serialize a JSON instance with an object code', () => {
       // This one is special-cased; this JSON doesn't roundtrip
       // because of the way Coding objects are handled
-      const json = context.getJSON('CodingObjectValueEntry');
-      const entry = CodingValueEntry.fromJSON(json);
-      expect(entry).instanceOf(CodingValueEntry);
+      const json = context.getJSON('ConceptValueEntry');
+      const entry = ConceptValueEntry.fromJSON(json);
+      expect(entry).instanceOf(ConceptValueEntry);
 
 
       let gen_json = entry.toJSON();
-      context.validateJSON('CodingObjectValueEntry', gen_json);
-      expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry' });
-      expect(gen_json['Value']['Value']).to.eql('foo');
+      context.validateJSON('ConceptValueEntry', gen_json);
+      expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry' });
+      expect(gen_json['Value']).to.eql({ coding: [{ code: 'foo', system: 'http://foo.org/bar', display: 'Foo' }] });
     });
   });
 
-  describe('#CodeableConceptValueEntryClass()', () => {
+  describe('#MultiConceptValueEntryClass()', () => {
 
-    let CodeableConceptValueEntry;
-    before(() => CodeableConceptValueEntry = context.importResult('shr/simple/CodeableConceptValueEntry'));
+    let MultiConceptValueEntry;
+    before(() => MultiConceptValueEntry = context.importResult('shr/simple/MultiConceptValueEntry'));
 
-    it('should serialize a JSON instance with a string code', () => {
-      testJSONRoundtrip('CodeableConceptStringValueEntry', 'CodeableConceptStringValueEntry', CodeableConceptValueEntry);
-    });
     it('should serialize a JSON instance with an object code', () => {
       // This one is special-cased; this JSON doesn't roundtrip
       // because of the way Code objects are handled
-      const json = context.getJSON('CodeableConceptObjectValueEntry');
-      const entry = CodeableConceptValueEntry.fromJSON(json);
-      expect(entry).instanceOf(CodeableConceptValueEntry);
+      const json = context.getJSON('MultiConceptValueEntry');
+      const entry = MultiConceptValueEntry.fromJSON(json);
+      expect(entry).instanceOf(MultiConceptValueEntry);
 
       let gen_json = entry.toJSON();
-      context.validateJSON('CodeableConceptObjectValueEntry', gen_json);
-      expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/CodeableConceptValueEntry' });
-      expect(gen_json['Value']['Coding']).to.be.an('array');
-      expect(gen_json['Value']['Coding']).to.include({
-        'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/Coding' },
-        'CodeSystem': {
-          'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/CodeSystem' },
-          Value: 'http://foo.org/bar'
-        },
-        'DisplayText': {
-          'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/DisplayText' },
-          Value: 'Foo'
-        },
-        Value: 'foo'
-      });
-      expect(gen_json['Value']['Coding']).to.include({
-        'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/Coding' },
-        'CodeSystem': {
-          'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/CodeSystem' },
-          Value: 'http://foo.org/bar'
-        },
-        'DisplayText': {
-          'EntryType': { Value: 'http://standardhealthrecord.org/spec/shr/core/DisplayText' },
-          Value: 'Bar'
-        },
-        Value: 'bar'
+      context.validateJSON('MultiConceptValueEntry', gen_json);
+      expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/MultiConceptValueEntry' });
+      expect(gen_json['Value']).to.eql({
+        coding: [
+          { code: 'foo', system: 'http://foo.org/bar', display: 'Foo' },
+          { code: 'bar', system: 'http://foo.org/bar', display: 'Bar' }
+        ]
       });
     });
   });
@@ -248,89 +201,6 @@ describe('#ToJSON', () => {
 
     it('should serialize a JSON instance with an integer', () => {
       testJSONRoundtrip('ChoiceValueIntEntry', 'ChoiceValueEntry', ChoiceValueEntry);
-    });
-  });
-
-  describe('#ChoiceValueEntryListClass()', () => {
-
-    let ChoiceValueListEntry;
-    before(() => ChoiceValueListEntry = context.importResult('shr/simple/ChoiceValueListEntry'));
-
-    it('should serialize a JSON instance with a list of strings/Codings', () => {
-      testJSONRoundtrip('ChoiceValueListEntry', 'ChoiceValueListEntry', ChoiceValueListEntry);
-    });
-
-    it('should serialize a JSON instance with no value', () => {
-      testJSONRoundtrip('ChoiceValueListEntryBlank', 'ChoiceValueListEntry', ChoiceValueListEntry);
-    });
-
-    it('should serialize a JSON instance with a value of []', () => {
-      testJSONRoundtrip('ChoiceValueListEntryEmpty', 'ChoiceValueListEntryEmpty', ChoiceValueListEntry);
-    });
-
-    it('should serialize a JSON instance with a null value', () => {
-      // This is special because null values are not allowed by the schema.
-      const json = context.getJSON('ChoiceValueListEntryBlank');
-      const entry = ChoiceValueListEntry.fromJSON(json);
-      expect(entry).instanceOf(ChoiceValueListEntry);
-      entry.value = null;
-      const gen_json = entry.toJSON();
-      context.validateJSON('ChoiceValueListEntryBlank', gen_json);
-      expect(gen_json).to.eql(json);
-    });
-  });
-
-  describe('#OptionalIntegerValueEntryClass()', () => {
-
-    let OptionalIntegerValueEntry;
-    before(() => OptionalIntegerValueEntry = context.importResult('shr/simple/OptionalIntegerValueEntry'));
-
-    it('should serialize a JSON instance with a normal integer value', () => {
-      testJSONRoundtrip('OptionalIntegerValueEntry', 'OptionalIntegerValueEntry', OptionalIntegerValueEntry);
-    });
-
-    it('should serialize a JSON instance with no value', () => {
-      testJSONRoundtrip('OptionalIntegerValueEntryBlank', 'OptionalIntegerValueEntry', OptionalIntegerValueEntry);
-    });
-
-    it('should serialize a JSON instance with a value of 0', () => {
-      testJSONRoundtrip('OptionalIntegerValueEntryZero', 'OptionalIntegerValueEntry', OptionalIntegerValueEntry);
-    });
-
-    it('should serialize a JSON instance with a null value', () => {
-      // This is special because null values are not allowed by the schema or the integer datatype.
-      const json = context.getJSON('OptionalIntegerValueEntryBlank');
-      const entry = OptionalIntegerValueEntry.fromJSON(json);
-      expect(entry).instanceOf(OptionalIntegerValueEntry);
-      entry.value = null;
-      const gen_json = entry.toJSON();
-      context.validateJSON('OptionalIntegerValueEntryBlank', gen_json);
-      expect(gen_json).to.eql(json);
-    });
-  });
-
-  describe('#OptionalElementValueEntryClass()', () => {
-
-    let OptionalElementValueEntry;
-    before(() => OptionalElementValueEntry = context.importResult('shr/simple/OptionalElementValueEntry'));
-
-    it('should serialize a JSON instance with a normal integer value', () => {
-      testJSONRoundtrip('OptionalElementValueEntry', 'OptionalElementValueEntry', OptionalElementValueEntry);
-    });
-
-    it('should serialize a JSON instance with no value', () => {
-      testJSONRoundtrip('OptionalElementValueEntryBlank', 'OptionalElementValueEntry', OptionalElementValueEntry);
-    });
-
-    it('should serialize a JSON instance with a value set to null', () => {
-      // This is special because null values are not allowed by the schema or the integer datatype.
-      const json = context.getJSON('OptionalElementValueEntryBlank');
-      const entry = OptionalElementValueEntry.fromJSON(json);
-      expect(entry).instanceOf(OptionalElementValueEntry);
-      entry.value = null;
-      const gen_json = entry.toJSON();
-      context.validateJSON('OptionalElementValueEntryBlank', gen_json);
-      expect(gen_json).to.eql(json);
     });
   });
 

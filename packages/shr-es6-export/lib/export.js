@@ -48,8 +48,10 @@ class ES6Exporter {
   export() {
     const es6Defs = {};
 
-    // Copy over Reference
+    // Copy over core classes
     es6Defs['Reference.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Reference.js'), 'utf8');
+    es6Defs['Concept.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Concept.js'), 'utf8');
+    es6Defs['Coding.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Coding.js'), 'utf8');
     es6Defs['json-helper.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'json-helper.js'), 'utf8');
     es6Defs['init.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'init.js'), 'utf8');
 

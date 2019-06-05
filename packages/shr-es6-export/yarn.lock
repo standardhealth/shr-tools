@@ -1404,34 +1404,40 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
 
-shr-expand@^5.8.1:
-  version "5.8.1"
-  resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-5.8.1.tgz#99aa50b7c9d8dfbe7d2c996740b8770e3d23527c"
+shr-expand@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-6.0.0.tgz#a2072f971e19b9f221e012c0056ee389a78633d7"
+  integrity sha512-zzjli5uVY23J4jHnr5Cr+iLkZ7+6RsHk3kQMksBPUR4ly96NXlCRgillJ3IszbdP3dHpBuWymcrAOjyz4C/lRA==
 
-shr-fhir-export@^5.14.0:
-  version "5.14.0"
-  resolved "https://registry.yarnpkg.com/shr-fhir-export/-/shr-fhir-export-5.14.0.tgz#1217931ebfb736059f2b5c4c9e943a932881ae54"
+shr-fhir-export@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/shr-fhir-export/-/shr-fhir-export-6.0.0.tgz#61cd6e1b08721514950f293a53fbd162f93e236c"
+  integrity sha512-ZNFnkxOvb26Rq2lIvXsuVSnoPfZsVsCgim7BrytqiNUK0jUXnvSa8oOomXYAILVKb631AK3KCMr3ZQ47ZvKcIQ==
   dependencies:
     fs-extra "^2.0.0"
     lodash "^4.17.5"
 
-shr-json-schema-export@^5.3.2:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/shr-json-schema-export/-/shr-json-schema-export-5.3.2.tgz#8840b62eb6a882cb242043e93733e1f3bd472a21"
+shr-json-schema-export@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/shr-json-schema-export/-/shr-json-schema-export-6.0.0.tgz#08e969c5debf5719b298c59c2b1ef83f1c52fa3e"
+  integrity sha512-megbVDNpi/PenTVFHFbkqgAmud8LwToveyUaKL0qabnEJ1QzwUuik3aZFz007kC7iidyAVKGo0GcKUBb0k1RQg==
 
-shr-models@^5.8.0:
-  version "5.8.0"
-  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-5.8.0.tgz#b2438c52340f1e167513334169d51c88bdcef5e7"
+shr-models@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-6.0.0.tgz#6ffe6a48ae6bcf6c20e25dbfcc5b2954fca7d661"
+  integrity sha512-k8tU/YghNoFdpHxzC1ZpfpHMEMAJPZyGGAMd9QfOcCqDsETUyK9u76GuXoSlhXHjDM5CXOCeq6LmxWCQhK95iw==
 
-shr-test-helpers@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/shr-test-helpers/-/shr-test-helpers-5.2.2.tgz#31c18d3db71a0181cd18e74105b42881756f5834"
+shr-test-helpers@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/shr-test-helpers/-/shr-test-helpers-6.0.0.tgz#03cc56f2e6abe5b7f6e3c3459e6fbd3243c440f5"
+  integrity sha512-4CFQsZMM4PWBgcr+BO9yepCNKp6WMX4bBzavHqYfceAA7pA7WsMpKiAnXYUs/tFH4fZbbU7ZX/kAJcPPi4uLbQ==
   dependencies:
     fs-extra "^5.0.0"
 
-shr-text-import@^5.7.0:
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/shr-text-import/-/shr-text-import-5.7.0.tgz#e2ab11b1fa183aa5a06b4b751205da8e1800b307"
+shr-text-import@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/shr-text-import/-/shr-text-import-6.0.0.tgz#79aea057d8be13571ea9c4c833172268f52e85a8"
+  integrity sha512-6OhJaV/3cr8eMaQ6fm7YtDM94tEHAJoq9O43/Neulq0JPAPOrzbSkdgUTryM3TzMH3Eaup93EwvBhKwla9xsqQ==
   dependencies:
     antlr4 "~4.6.0"
 

@@ -1,6 +1,6 @@
 const bunyan = require('bunyan');
 const reserved = require('reserved-words');
-const { Value, IdentifiableValue, RefValue, ChoiceValue, TBD, INHERITED, Identifier, PrimitiveIdentifier } = require('shr-models');
+const { Value, IdentifiableValue, ChoiceValue, TBD, INHERITED, Identifier, PrimitiveIdentifier } = require('shr-models');
 const CodeWriter = require('./CodeWriter');
 const { sanitizeName, className, upperCaseFirst, stringify } = require('./common.js');
 
@@ -98,24 +98,24 @@ function generateClassBody(def, specs, fhir, fhirProfile, fhirExtension, cw) {
 
   const clazzName = className(def.identifier.name);
   if (def.isEntry) {
-    writeGetterAndSetter(cw, clazzName, 'shr.base.Entry', 'entryInfo', 'entry information', '_entryInfo', 'Entry');
+    writeGetterAndSetter(cw, clazzName, 'shr.base.Entry', specs, 'entryInfo', 'entry information', '_entryInfo', 'Entry');
   }
 
   // Don't repeat properties that were purely inherited (without overriding).  Although overrides actually don't
   // affect the definitions now, they may in the future, so we'll leave them in.
   if (def.value && def.value.inheritance !== INHERITED) {
     if (def.value instanceof ChoiceValue) {
-      writeGetterAndSetter(cw, clazzName, def.value, 'value');
+      writeGetterAndSetter(cw, clazzName, def.value, specs, 'value');
     } else if (def.value instanceof IdentifiableValue) {
       // If it's the "Value" keyword, we can just rely on an inherited getter/setter
       if (!def.value.identifier.isValueKeyWord) {
         const symbol = toSymbol(def.value.identifier.name);
-        writeGetterAndSetter(cw, clazzName, def.value, 'value', `value (aliases ${symbol})`, `_${symbol}`);
-        writeGetterAndSetter(cw, clazzName, def.value);
+        writeGetterAndSetter(cw, clazzName, def.value, specs, 'value', `value (aliases ${symbol})`, `_${symbol}`);
+        writeGetterAndSetter(cw, clazzName, def.value, specs);
       }
     } else {
       // This should only happen for TBDs
-      writeGetterAndSetter(cw, clazzName, def.value);
+      writeGetterAndSetter(cw, clazzName, def.value, specs);
     }
   }
 
@@ -123,7 +123,7 @@ function generateClassBody(def, specs, fhir, fhirProfile, fhirExtension, cw) {
     // Don't repeat properties that were purely inherited (without overriding).  Although overrides actually don't
     // affect the definitions now, they may in the future, so we'll leave them in
     if (field.inheritance !== INHERITED) {
-      writeGetterAndSetter(cw, clazzName, field);
+      writeGetterAndSetter(cw, clazzName, field, specs);
     }
   }
 
@@ -175,6 +175,7 @@ function generateClassBody(def, specs, fhir, fhirProfile, fhirExtension, cw) {
  * @param {CodeWriter} cw - The CodeWriter instance to use during generation
  * @param {string} clazzName - The name of the class.
  * @param {Value|string} formalDefOrName - The `Value` or a string representing the thing to generate get/set for
+ * @param {Specifications} specs - All SHR specifications, to be used for lookups and xrefs.
  * @param {string=} publicSymbol - The symbol which other classes will use to access the property.  If undefined, it will
  *    be generated using sensible defaults.
  * @param {string=} descriptiveName - The descriptive name, used in the generated comments for the get/set functions.  If
@@ -185,7 +186,7 @@ function generateClassBody(def, specs, fhir, fhirProfile, fhirExtension, cw) {
  *    set.  If undefined, it will be generated using sensible defaults.
  * @private
  */
-function writeGetterAndSetter(cw, clazzName, formalDefOrName, publicSymbol, descriptiveName, privateSymbol, typeName) {
+function writeGetterAndSetter(cw, clazzName, formalDefOrName, specs, publicSymbol, descriptiveName, privateSymbol, typeName) {
   if (formalDefOrName instanceof TBD) {
     cw.ln(`// Ommitting getter/setter for TBD: ${formalDefOrName.text}`).ln();
     return;
@@ -201,7 +202,7 @@ function writeGetterAndSetter(cw, clazzName, formalDefOrName, publicSymbol, desc
       return;
     }
     formalName = 'choice value; one of: ' + options.map(o => {
-      return `${o.effectiveIdentifier.fqn}${o instanceof RefValue ? ' reference' : ''}`;
+      return `${o.effectiveIdentifier.fqn}${fieldIsRef(o, specs) ? ' reference' : ''}`;
     }).join(', ');
     if (typeof publicSymbol === 'undefined') {
       publicSymbol = toSymbol(options.map(o => o.identifier.name).join('Or'));
@@ -210,7 +211,7 @@ function writeGetterAndSetter(cw, clazzName, formalDefOrName, publicSymbol, desc
       // Create the set of types, squashing all references into one Reference type
       const typeMap = {};
       for (const o of options) {
-        if (o instanceof RefValue) {
+        if (fieldIsRef(o, specs)) {
           typeMap['Reference'] = true;
         } else {
           typeMap[o.effectiveIdentifier.name] = true;
@@ -222,7 +223,7 @@ function writeGetterAndSetter(cw, clazzName, formalDefOrName, publicSymbol, desc
     if (typeof descriptiveName === 'undefined') {
       descriptiveName = formalName;
     }
-  } else if (formalDefOrName instanceof RefValue){
+  } else if (fieldIsRef(formalDefOrName, specs)){
     // References get a special treatment too
     formalName = `${formalDefOrName.effectiveIdentifier.fqn} reference`;
     if (typeof typeName === 'undefined') {
@@ -335,7 +336,11 @@ function writeToJson(def, cw) {
       });
     } else if (def.value instanceof IdentifiableValue && def.value.identifier.isPrimitive) {
       cw.bl(`if (this.value != null)`, () => {
-        cw.ln(`inst['Value'] = this.value;`);
+        if (def.value.identifier.name === 'concept') {
+          cw.ln(`inst['Value'] = this.value.toJSON();`);
+        } else {
+          cw.ln(`inst['Value'] = this.value;`);
+        }
       });
     } else {
       generateAssignmentIfList(def.value.card, 'Value', 'value', cw);
@@ -540,6 +545,8 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
   const allFhirElements = preProcessChoiceFields(fhirProfile.snapshot.element, specs, fhir);
   preProcessFieldMappings(allFhirElements, specs, def);
 
+  // Determine isQuantity outside of the iteration loop so it is more efficient.  See note below for reason we need isQuantity.
+  const isQuantity = checkIsQuantity(def.identifier, specs);
   for (const element of allFhirElements) {
 
     if (element === allFhirElements[0]) {
@@ -547,6 +554,26 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
 
       elementHierarchy.unshift({ element, didOpenBlock: false, fhirBasePath: 'fhir' });
       continue; // we know that the top-level element does not have a mapping
+    }
+
+    // The FHIR mapping for Quantity needs to be special cased because SHR Quantity.Units concept value actually needs to be
+    // split across FHIR Quantity code, system, and unit.  Since SHR concept is a "primitive" however, there is currently no
+    // way to say that correctly in the mapping language (since primitives have no fields).  So we must hand-jam the
+    // appropriate fromFHIR code here.
+    if (isQuantity && /[^.]+\.code/.test(element.path) && element.mapping.some(m => m.identity === 'shr' && m.map === '<shr.core.Units>')) {
+      cw.ln(`let coding = {};`);
+      const writeFieldSetter = (quantityAttr, codingAttr) => {
+        cw.bl(`if (fhir['${quantityAttr}'] != null)`, () => {
+          cw.ln(`coding.${codingAttr} = fhir['${quantityAttr}'];`);
+        });
+      };
+      writeFieldSetter('code', 'code');
+      writeFieldSetter('system', 'system');
+      writeFieldSetter('unit', 'display');
+      cw.bl(`if (Object.keys(coding).length > 0)`, () => {
+        cw.ln(`inst.units = FHIRHelper.createInstanceFromFHIR('shr.core.Units', coding, 'Coding', shrId, allEntries, mappedResources, referencesOut, false);`);
+      });
+      continue;
     }
 
     while (elementHierarchy.length > 0 &&
@@ -664,7 +691,7 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
       if(mapping.map === '<Value>'){
         // Mapping to the value of this es6 instance
         if (def.value instanceof IdentifiableValue && def.value.identifier.isPrimitive) {
-          generateFromFHIRAssignment(def.value, element, fhirElementPath, [], 'value', fhirProfile, null, cw, fhir);
+          generateFromFHIRAssignment(def.value, element, fhirElementPath, [], 'value', fhirProfile, null, cw, specs, fhir);
         } else {
           logger.error('Value referenced in mapping but none exist on this element.');
         }
@@ -674,6 +701,8 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
         for (let i = 0 ; i < mapping.fieldChain.length ; i++) {
           const field = mapping.fieldChain[i];
           const method = mapping.classMethodChain[i];
+
+          const isRef = fieldIsRef(field, specs);
 
           shrElementPath = shrElementPath + '.' + method;
 
@@ -706,14 +735,14 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
           }
 
           if (i == mapping.fieldChain.length - 1) { // if it's the last field in the chain
-            generateFromFHIRAssignment(field, element, fhirElementPath, mapping.fieldMapPath, shrElementPath, fhirProfile, slicing, cw, fhir);
+            generateFromFHIRAssignment(field, element, fhirElementPath, mapping.fieldMapPath, shrElementPath, fhirProfile, slicing, cw, specs, fhir);
           } else {
             // if it's not the last element in the field chain, it's an intermediate one so we just want to initialize the value so it's not null
             const dec = field.card.isList ? 'const ' : ''; // if in a list, we need to declare the new variable, so do `const x = new()`
             const nullCheck = field.card.isList ? '' : `${shrElementPath} || `; // if not in a list, consider that the field was already init'ed, so do `x = x || new()`
 
             let rhs = `FHIRHelper.createInstanceFromFHIR('${field.effectiveIdentifier.fqn}', {}, null, shrId)`;
-            if (field instanceof RefValue) {
+            if (isRef) {
               rhs = `FHIRHelper.createReference( ${rhs}, referencesOut)`;
             }
             cw.ln(`${dec}${shrElementPath} = ${nullCheck}${rhs};`);
@@ -724,7 +753,7 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
             cw.ln(`${elementHierarchy[0].shrElementPath}.push(${shrElementPath});`);
           }
 
-          if (field instanceof RefValue) {
+          if (isRef) {
             // it's a Reference, so we need to follow the pointer to get to the real object
             // the simplest approach is update the path going forward by adding '.reference' to the end
             // (if we were manually writing code we'd probably define another variable, but this is a lot easier to implement)
@@ -743,6 +772,14 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
       cw.outdent().ln('}');
     }
   }
+}
+
+function fieldIsRef(field, specs) {
+  if (field instanceof IdentifiableValue && !field.identifier.isPrimitive) {
+    const de = specs.dataElements.findByIdentifier(field.effectiveIdentifier);
+    return de && de.isEntry;
+  }
+  return false;
 }
 
 /**
@@ -833,7 +870,11 @@ function writeFromFhirValue(def, specs, cw) {
     if (def.value.effectiveIdentifier != null) {
       if (def.value.effectiveIdentifier.isPrimitive) {
         // it's a primitive value means we can set it directly
-        cw.ln(`inst.value = fhir;`);
+        if (def.value.effectiveIdentifier.name === 'concept') {
+          cw.ln(`inst.value = FHIRHelper.createConcept(fhir);`);
+        } else {
+          cw.ln(`inst.value = fhir;`);
+        }
       } else {
         const shrType = def.value.effectiveIdentifier.fqn;
         cw.ln(`inst.value = FHIRHelper.createInstanceFromFHIR('${shrType}', fhir, fhirType, shrId, allEntries, mappedResources, referencesOut);`);
@@ -1351,14 +1392,18 @@ function validTypesForChoices(shrMappings, fhirTypes, specs, fhir) {
 
     const de = specs.dataElements.byNamespace(identifier.namespace).find(e => e.identifier.equals(identifier));
 
+    const isConceptMatch = (identifier, type) => {
+      return identifier.name === 'concept' && ['code', 'Coding', 'CodeableConcept'].indexOf(type.code) >= 0;
+    };
+
     if (de.value instanceof IdentifiableValue) {
-      const match = fhirTypes.find(t => t.code == de.value.effectiveIdentifier.fqn);
+      const match = fhirTypes.find(t => t.code == de.value.effectiveIdentifier.fqn || isConceptMatch(de.value.identifier, t));
       if (match) {
         currMappingTypes.push(match.code);
       }
     } else if (de.value instanceof ChoiceValue) {
       for (const choice of de.value.options) {
-        const matches = fhirTypes.filter(t => t.code == choice.effectiveIdentifier.fqn || t.code == choice.effectiveIdentifier.name);
+        const matches = fhirTypes.filter(t => t.code == choice.effectiveIdentifier.fqn || t.code == choice.effectiveIdentifier.name || isConceptMatch(choice.identifier, t));
         // note that the name check matches on, eg "Quantity" and "shr.core.Quantity".
         // TODO: is this a safe assumption that if an SHR type name matches a FHIR type name they are related?
         if (matches) {
@@ -1375,7 +1420,7 @@ function validTypesForChoices(shrMappings, fhirTypes, specs, fhir) {
       }
     }
 
-    const match = fhirTypes.find(t => t.code == de.identifier.fqn || t.code == de.identifier.name);
+    const match = fhirTypes.find(t => t.code == de.identifier.fqn || t.code == de.identifier.name || isConceptMatch(de.identifier, t));
     if (match) {
       currMappingTypes.push(match.code);
     }
@@ -1692,11 +1737,13 @@ function generateToFHIRAssignment(cardIsList, baseCardIsList, constraintsLength,
  * @param {StructureDefinition} fhirProfile - the FHIR profile the element comes from
  * @param {Object} slicing - information on this element related to slicing, if any
  * @param {CodeWriter} cw - the CodeWriter that is writing the file for this element
+ * @param {Specifications} specs - All SHR specifications, to be used for lookups and xrefs.
  * @param {object} fhir - All exported FHIR profiles and extensions.
  */
-function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElementMapping, shrElementPath, fhirProfile, slicing, cw, fhir) {
+function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElementMapping, shrElementPath, fhirProfile, slicing, cw, specs, fhir) {
+  // HANDLE concept HERE? MAYBE
   const cardIsList = field.card.isList;
-  const isRef = field instanceof RefValue;
+  const isRef = fieldIsRef(field, specs);
   const fhirPathString = bracketNotation(fhirElementPath);
 
   const dec = cardIsList ? 'const ' : ''; // if it's a list, we are declaring a variable
@@ -1746,14 +1793,22 @@ function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElem
 
   } else {
     if (shrElementPath == 'value' && shrElementMapping.length == 0) { // "primitive" values that do not map to an SHR type
-      cw.ln(`inst.value = ${fhirPathString};`);
+      if (field.identifier.isPrimitive && field.identifier.name === 'concept') {
+        cw.ln(`inst.value = FHIRHelper.createConcept(${fhirPathString});`);
+      } else {
+        cw.ln(`inst.value = ${fhirPathString};`);
+      }
     } else {
       const shrMapping = shrElementMapping[shrElementMapping.length - 1];
       const shrType = fhirMappingToIdentifier(shrMapping);
       const isExtension = fhirElement.path.endsWith('.extension');
       let rhs;
       if (shrType.isPrimitive && !isExtension) {
-        rhs = fhirPathString;
+        if (shrType.name === 'concept') {
+          rhs = `FHIRHelper.createConcept(${fhirPathString})`;
+        } else {
+          rhs = fhirPathString;
+        }
       } else {
         const fhirType = fhirElement.type[0].code;
         rhs = `FHIRHelper.createInstanceFromFHIR('${shrType.fqn}', ${fhirPathString}, '${fhirType}', shrId, allEntries, mappedResources, referencesOut, ${isExtension})`;
@@ -1764,6 +1819,32 @@ function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElem
       cw.ln(`${dec}${shrElementPath} = ${rhs};`);
     }
   }
+}
+
+/**
+ * Determines if the identifier represents a Quantity element or something based on the Quantity element
+ * @param {Identifier} identifier - the SHR identifier to check if it is a quantity or based on a quantity
+ * @param {Specifications} specs - the SHR specifications containing all of the definitions
+ * @param {List<Identifier>} alreadyProcessed - the list of identifiers already processed (to avoid recursion)
+ */
+function checkIsQuantity(identifier, specs, alreadyProcessed = []) {
+  if (identifier.fqn === 'shr.core.Quantity') {
+    return true;
+  }
+  // If it's primitive or we've already processed this one, don't go further (avoid circular dependencies)
+  if (identifier.isPrimitive || alreadyProcessed.some(id => id.equals(identifier))) {
+    return false;
+  }
+  // We haven't processed it, so look it up
+  const element = specs.dataElements.findByIdentifier(identifier);
+  if (typeof element === 'undefined') {
+    logger.error('Cannot resolve element definition for %s.', identifier.fqn);
+    return false;
+  }
+  // Add it to the already processed list (again, to avoid circular dependencies)
+  alreadyProcessed.push(identifier);
+  // Now recursively check the BasedOns to see if they are a Quantity
+  return element.basedOn.some(b => checkIsQuantity(b, specs, alreadyProcessed));
 }
 
 /**

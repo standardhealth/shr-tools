@@ -7,7 +7,7 @@
     "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId" },
     "Value": "1-1"
   },
-  "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry" },
+  "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry" },
   "CreationTime": {
     "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"},
     "Value": "2017-11-30T12:34:56Z"
@@ -17,15 +17,10 @@
     "Value": "2017-12-05T23:45:01Z"
   },
   "Value": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Coding" },
-    "CodeSystem": {
-      "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CodeSystem"},
-      "Value": "http://foo.org/bar"
-    },
-    "DisplayText": {
-      "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/DisplayText"},
-      "Value": "Foo"
-    },
-    "Value": "foo"
+    "coding": [{
+      "system": "http://foo.org/bar",
+      "display": "Foo",
+      "code": "foo"
+    }]
   }
 }

@@ -1,83 +1,74 @@
-Grammar:      DataElement 5.0
-Namespace:    shr.simple
-Uses:         shr.core
+Grammar:           DataElement 6.0
+Namespace:         shr.simple
+Uses:              shr.core
 
-Element:      StringValue
-Value:        string
+Element:           StringValue
+Value:             string
 
-Element:      NestedStringValue
-Value:        StringValue
+Element:           NestedStringValue
+Value:             StringValue
 
-EntryElement: StringValueEntry
-Value:        string
+Entry:             StringValueEntry
+Value:             string
 
-EntryElement: ElementValueEntry
-Value:        StringValue
+Entry:             ElementValueEntry
+Value:             StringValue
 
-EntryElement: CodeValueEntry
-Value:        code
+Entry:             MultiConceptValueEntry
+Value:             concept
 
-EntryElement: CodeableConceptValueEntry
-Value:        CodeableConcept
+Entry:             ConceptValueEntry
+Value:             concept
 
-EntryElement: CodingValueEntry
-Value:        Coding
+Entry:             RecursiveEntry
+Value:             integer
+Property:          RecursiveEntry 0..*
 
-EntryElement: RecursiveEntry
-Value:        integer
-0..*          RecursiveEntry
+Entry:             SingleRecursiveEntry
+Parent:            RecursiveEntry
+                   RecursiveEntry 0..1
 
-EntryElement: SingleRecursiveEntry
-Based on:     RecursiveEntry
-0..1          RecursiveEntry
+Entry:             ReferenceEntry
+Value:             StringValueEntry
+Property:          ConceptValueEntry 0..*
 
-EntryElement: ReferenceEntry
-Value:        ref(StringValueEntry)
-0..*          ref(CodeValueEntry)
+Element:           IntegerValueElement
+Value:             integer
 
-Element:      IntegerValueElement
-Value:        integer
+Element:           DecimalValueElement
+Value:             decimal
 
-Element:      DecimalValueElement
-Value:        decimal
+Entry:             IntegerValueEntry
+Value:             integer
 
-EntryElement: OptionalIntegerValueEntry
-Value:        0..1 integer
+Entry:             OptionalChoiceValueEntry
+Value:             integer or string
 
-EntryElement: OptionalChoiceValueEntry
-Value:        0..1 integer or string
+Entry:             OptionalFieldEntry
+Property:          IntegerValueElement 0..1
 
-EntryElement: OptionalFieldEntry
-0..1          IntegerValueElement
+Entry:             BasedOnIntegerValueElementEntry
+Parent:            IntegerValueElement
+Property:          StringValue 0..1
 
-EntryElement: OptionalElementValueEntry
-Value:        0..1 IntegerValueElement
+Element:           StringValueChild
+Parent:            StringValue
 
-EntryElement: BasedOnIntegerValueElementEntry
-Based on:     IntegerValueElement
-0..1          StringValue
+Entry:             OverrideBasedOnIntegerValueElementEntry
+Parent:            BasedOnIntegerValueElementEntry
+                   StringValue substitute StringValueChild
 
-Element:      StringValueChild
-Based on:     StringValue
+Entry:             ChoiceValueEntry
+Value:             string or decimal
 
-EntryElement: OverrideBasedOnIntegerValueElementEntry
-Based on:     BasedOnIntegerValueElementEntry
-StringValue is type StringValueChild
+Entry:             InheritBasedOnIntegerValueElementEntry
+Parent:            BasedOnIntegerValueElementEntry
 
-EntryElement: ChoiceValueEntry
-Value:        string or decimal
+Element:           BooleanValue
+Value:             boolean
 
-EntryElement: ChoiceValueListEntry
-Value:        0..* string or StringValue
+Group:             NestedBooleanValue
+Property:          BooleanValue 1..1
 
-EntryElement: InheritBasedOnIntegerValueElementEntry
-Based on:     BasedOnIntegerValueElementEntry
-
-Element:      BooleanValue
-Value:        boolean
-
-Element:      NestedBooleanValue
-1..1          BooleanValue
-
-Element:      DoubleNestedBooleanValue
-1..1          NestedBooleanValue
+Group:             DoubleNestedBooleanValue
+Property:          NestedBooleanValue 1..1

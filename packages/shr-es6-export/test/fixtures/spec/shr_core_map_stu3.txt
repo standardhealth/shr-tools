@@ -1,20 +1,10 @@
-Grammar:   Map 5.0
+Grammar:   Map 5.1
 Namespace: shr.core
 Target:    FHIR_STU_3
-
-Coding maps to Coding:
-  Value maps to code
-  CodeSystem maps to system
-  CodeSystemVersion maps to version
-  DisplayText maps to display
-
-CodeableConcept maps to CodeableConcept:
-  Coding maps to coding
-  DisplayText maps to text
 
 Quantity maps to Quantity:
   Value maps to value
   Comparator maps to comparator
-  Units.Coding.code maps to code
-  Units.Coding.CodeSystem maps to system
-  Units.Coding.DisplayText maps to unit
+  Units maps to code
+
+Age maps to Age:

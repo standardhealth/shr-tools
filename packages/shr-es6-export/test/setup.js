@@ -22,7 +22,7 @@ function setup(inDir='./test/fixtures/spec', configFile='config_stu3.json', outD
   shrJSE.setLogger(errLogger);
 
   const configSpecs = shrTI.importConfigFromFilePath(inDir, configFile);
-  const specs = shrEx.expand(shrTI.importFromFilePath(inDir, configSpecs));
+  const specs = shrEx.expand(shrTI.importFromFilePath(inDir, configSpecs), shrFE);
 
   // Generate the JSON schemas
   const baseSchemaNamespace = 'https://standardhealthrecord.org/schema';

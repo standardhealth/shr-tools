@@ -1,35 +1,39 @@
-Grammar:    DataElement 5.0
-Namespace:  shr.fhir
-Uses: shr.simple
+Grammar:           DataElement 6.0
+Namespace:         shr.fhir
+Uses:              shr.simple, shr.core
 
-// contains sample elements that exercise FHIR mappings
+Entry:             PatientEntry
+Description:       "Maps to the Patient resource with constraints"
+Value:             date
+Property:          BooleanValue 1..1
+Property:          StringValue 1..1
+Property:          Deceased 1..1
+Property:          PhotoNote 0..*
+Property:          IntegerValueElement 1..1
+Property:          DecimalValueElement 1..1
+Property:          ComplexExtension 1..1
 
-EntryElement:   PatientEntry
-Description:    "Maps to the Patient resource with constraints"
-Value:          date                // test mapping to value case
-1..1            BooleanValue        // test simple constraint
-1..1            StringValue         // test mapping into nested field (name.text)
-1..1            Deceased            // test constraining choice to a single type
-0..*            PhotoNote           // test array mapping
-1..1            IntegerValueElement // test simple extension
-1..1            DecimalValueElement // test simple extension
-1..1            ComplexExtension    // test complex extension
+Element:           Deceased
+Value:             boolean
 
-Element:        Deceased           // to support constraining choice types on patient
-Value:          boolean
+Element:           PhotoNote
+Value:             string
 
-Element:        PhotoNote          // to support array map tests in Patient
-Value:          string
+Group:             ComplexExtension
+Property:          StringValue 1..1
+Property:          BooleanValue 1..1
 
-Element:        ComplexExtension
-1..1            StringValue
-1..1            BooleanValue
+Entry:             PatientDirectMapEntry
+Description:       "Maps directly to the Patient resource (no profile needed)"
+Property:          BooleanValue 0..1
 
-EntryElement:   PatientDirectMapEntry
-Description:    "Maps directly to the Patient resource (no profile needed)"
-0..1            BooleanValue       // test no profile being created
+Entry:             PractitionerEntry
+Description:       "Maps to Practiioner"
+Property:          DoubleNestedBooleanValue 1..1
+Property:          NestedStringValue 1..1
 
-EntryElement:   PractitionerEntry
-Description:    "Maps to Practiioner"
-1..1            DoubleNestedBooleanValue  // test deply nested elements
-1..1            NestedStringValue       // tests more complex nesting
+Element:           Onset
+Value:             Age
+
+Entry:             ConditionEntry
+Property:          Onset 0..1

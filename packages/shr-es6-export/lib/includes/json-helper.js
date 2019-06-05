@@ -1,5 +1,7 @@
 import Reference from './Reference';
 import { ALL_KNOWN_VALUE_SETS } from './valueSets';
+import Concept from './Concept';
+import Coding from './Coding';
 
 // A variable to hold the root ObjectFactory.  This can be set via the exported setObjectFactory function,
 // but should typically be set by importing the module's init file.
@@ -179,10 +181,9 @@ function createInstance(key, value) {
     if (value._ShrId && value._EntryId && value._EntryType) {
       // It's a reference, so just return the reference
       return new Reference(value._ShrId, value._EntryId, value._EntryType);
-    } else if (value.code && value.codeSystem) {
-      // It's really the one-off representation of code.  Return just the code.  We toss codeSystem and display
-      // because in SHR, a 'code' really is *just* a string.  The JSON schema probably needs to be adjusted.
-      return value.code;
+    } else if (value.EntryType == null && Array.isArray(value.coding)) {
+      // It's a concept, so return an instance of Concept
+      return new Concept(value.coding.map(c => new Coding(c.code, c.system, c.display)));
     }
     if (OBJECT_FACTORY == null) {
       throw new Error(`SHR ES6 module is not initialized.  Import 'init' before using the ES6 factories and classes`);
@@ -217,8 +218,12 @@ export const FHIRHelper = {
 
   /**
    * Given an SHR object, return a Reference that points to that object, and add the object to the given list.
+   *
+   * @param {Object} shrObject - the SHR object to reference
+   * @param {List<Object>} referenceList - the list of objects that are referenced
+   * @returns {Reference} the reference
    */
-  createReference: function(shrObject, referenceList=[], setReference=true) {
+  createReference: function(shrObject, referenceList=[]) {
     if (!shrObject) {
       return null;
     }
@@ -229,12 +234,43 @@ export const FHIRHelper = {
     return ref;
   },
 
+  /**
+   * Returns a reference to an SHR entry
+   * @param {string} shrId - the SHR ID for the thing being referenced
+   * @param {string} entryId - the Entry ID for the thing being referenced
+   * @param {string} entryType - the entry type for the thing being referenced
+   * @returns {Reference} the reference
+   */
   createReferenceWithoutObject: function(shrId, entryId, entryType) {
     return new Reference(
       createInstance('shr.base.ShrId', { Value: shrId }),
       createInstance('shr.base.EntryId', { Value: entryId }),
       createInstance('shr.base.EntryType', { Value: entryType })
     );
+  },
+
+  /**
+   * Creates and SHR Concept from a FHIR code, Coding, or CodeableConcept
+   *
+   * @param {string|Object} fhir - the FHIR code, Coding, or CodeableConcept
+   * @returns {Concept} the corresponding SHR Concept instance
+   */
+  createConcept: function(fhir) {
+    if (fhir == null) {
+      return fhir;
+    } else if (typeof fhir === 'string') {
+      // create Concept from FHIR code
+      return new Concept().withCoding([new Coding().withCode(fhir)]);
+    } else if (fhir && (fhir.code || fhir.system || fhir.display)) {
+      // create Concept from FHIR Coding
+      return new Concept().withCoding([new Coding(fhir.code, fhir.system, fhir.display)]);
+    } else if (fhir && (fhir.coding || fhir.text)) {
+      const concept = new Concept();
+      if (fhir.coding) {
+        concept.coding = fhir.coding.map(c => new Coding(c.code, c.system, c.display));
+      }
+      return concept;
+    }
   },
 
   /**

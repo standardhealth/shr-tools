@@ -21,16 +21,16 @@
     "_EntryId": "1-2",
     "_EntryType": "http://standardhealthrecord.org/spec/shr/simple/StringValueEntry"
   },
-  "CodeValueEntry": [
+  "ConceptValueEntry": [
     {
       "_ShrId": "1",
       "_EntryId": "1-3",
-      "_EntryType": "http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry"
+      "_EntryType": "http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry"
     },
     {
       "_ShrId": "1",
       "_EntryId": "1-4",
-      "_EntryType": "http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry"
+      "_EntryType": "http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry"
     }
   ]
 }

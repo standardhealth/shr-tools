@@ -1,4 +1,5 @@
 const {expect} = require('chai');
+//const Concept = require('../lib/includes/Concept');
 const setup = require('./setup');
 require('babel-register')({
   presets: [ 'es2015' ]
@@ -28,77 +29,35 @@ describe('#FromJSON', () => {
     });
   });
 
-  describe('#CodeValueEntryClass()', () => {
+  describe('#ConceptValueEntryClass()', () => {
 
-    let CodeValueEntry;
-    before(() => CodeValueEntry = context.importResult('shr/simple/CodeValueEntry'));
+    let ConceptValueEntry;
+    before(() => ConceptValueEntry = context.importResult('shr/simple/ConceptValueEntry'));
 
-    it('should deserialize a JSON instance with a string code', () => {
-      const json = context.getJSON('CodeStringValueEntry');
-      const entry = CodeValueEntry.fromJSON(json);
-      expect(entry).instanceOf(CodeValueEntry);
-      expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry');
-      expectCodeValue(entry, 'foo');
-    });
     it('should deserialize a JSON instance with an object code', () => {
-      const json = context.getJSON('CodeObjectValueEntry');
-      const entry = CodeValueEntry.fromJSON(json);
-      expect(entry).instanceOf(CodeValueEntry);
-      expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry');
-      expectCodeValue(entry, 'foo');
+      const json = context.getJSON('ConceptValueEntry');
+      const entry = ConceptValueEntry.fromJSON(json);
+      expect(entry).instanceOf(ConceptValueEntry);
+      expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry');
+      expectConceptValue(entry, [{ code: 'foo', system: 'http://foo.org/bar', display: 'Foo' }]);
     });
   });
 
-  describe('#CodingValueEntryClass()', () => {
+  describe('#MultiConceptValueEntryClass()', () => {
 
-    let CodingValueEntry;
-    before(() => CodingValueEntry = context.importResult('shr/simple/CodingValueEntry'));
+    let MultiConceptValueEntry;
+    before(() => MultiConceptValueEntry = context.importResult('shr/simple/MultiConceptValueEntry'));
 
-    it('should deserialize a JSON instance with a string code', () => {
-      const json = context.getJSON('CodingStringValueEntry');
-      const entry = CodingValueEntry.fromJSON(json);
-      expect(entry).instanceOf(CodingValueEntry);
-      expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry');
-      expectCodingValue(entry, { code: 'foo', codeSystem: 'http://foo.org/bar', displayText: 'Foo' });
-    });
     it('should deserialize a JSON instance with an object code', () => {
-      const json = context.getJSON('CodingObjectValueEntry');
-      const entry = CodingValueEntry.fromJSON(json);
-      expect(entry).instanceOf(CodingValueEntry);
-      expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodingValueEntry');
-      expectCodingValue(entry, { code: 'foo', codeSystem: 'http://foo.org/bar', displayText: 'Foo' });
-    });
-  });
-
-  describe('#CodeableConceptValueEntryClass()', () => {
-
-    let CodeableConceptValueEntry;
-    before(() => CodeableConceptValueEntry = context.importResult('shr/simple/CodeableConceptValueEntry'));
-
-    it('should deserialize a JSON instance with a string code', () => {
-      const json = context.getJSON('CodeableConceptStringValueEntry');
-      const entry = CodeableConceptValueEntry.fromJSON(json);
-      expect(entry).instanceOf(CodeableConceptValueEntry);
-      expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodeableConceptValueEntry');
-      expectCodeableConceptValue(entry,
+      const json = context.getJSON('MultiConceptValueEntry');
+      const entry = MultiConceptValueEntry.fromJSON(json);
+      expect(entry).instanceOf(MultiConceptValueEntry);
+      expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/MultiConceptValueEntry');
+      expectConceptValue(entry,
         [
-          { code: 'foo', codeSystem: 'http://foo.org/bar', displayText: 'Foo' },
-          { code: 'bar', codeSystem: 'http://foo.org/bar', displayText: 'Bar' }
-        ],
-        'FooBar'
-      );
-    });
-    it('should deserialize a JSON instance with an object code', () => {
-      const json = context.getJSON('CodeableConceptObjectValueEntry');
-      const entry = CodeableConceptValueEntry.fromJSON(json);
-      expect(entry).instanceOf(CodeableConceptValueEntry);
-      expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/CodeableConceptValueEntry');
-      expectCodeableConceptValue(entry,
-        [
-          { code: 'foo', codeSystem: 'http://foo.org/bar', displayText: 'Foo' },
-          { code: 'bar', codeSystem: 'http://foo.org/bar', displayText: 'Bar' }
-        ],
-        'FooBar'
+          { code: 'foo', system: 'http://foo.org/bar', display: 'Foo' },
+          { code: 'bar', system: 'http://foo.org/bar', display: 'Bar' }
+        ]
       );
     });
   });
@@ -166,17 +125,17 @@ describe('#FromJSON', () => {
         entryId: '1-2',
         entryType: 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry'
       }, 'stringValueEntry');
-      const cveRefs = entry.codeValueEntry;
+      const cveRefs = entry.conceptValueEntry;
       expect(cveRefs).to.have.length(2);
       expectReference(cveRefs[0], {
         shrId: '1',
         entryId: '1-3',
-        entryType: 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry'
+        entryType: 'http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry'
       });
       expectReference(cveRefs[1], {
         shrId: '1',
         entryId: '1-4',
-        entryType: 'http://standardhealthrecord.org/spec/shr/simple/CodeValueEntry'
+        entryType: 'http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry'
       });
     });
   });
@@ -289,11 +248,6 @@ function expectStringValue(element, string) {
   expect(element.string).to.equal(string);
 }
 
-function expectCodeValue(element, code) {
-  expect(element.value).to.equal(code);
-  expect(element.code).to.equal(code);
-}
-
 function expectIdValue(element, id) {
   expect(element.value).to.equal(id);
   expect(element.id).to.equal(id);
@@ -321,32 +275,23 @@ function expectInstantValue(element, instant) {
 }
 
 function expectCoding(coding, expected) {
-  expectInstanceOf(coding, 'shr/core/Coding');
-  expectCodeValue(coding, expected.code);
-  expectInstanceOf(coding.codeSystem, 'shr/core/CodeSystem');
-  expectUriValue(coding.codeSystem, expected.codeSystem);
-  expectInstanceOf(coding.displayText, 'shr/core/DisplayText');
-  expectStringValue(coding.displayText, expected.displayText);
+  expectInstanceOf(coding, 'Coding');
+  expect(coding.code).to.equal(expected.code);
+  expect(coding.system).to.equal(expected.system);
+  expect(coding.display).to.equal(expected.display);
 }
 
-function expectCodingValue(element, expected) {
-  expectCoding(element.value, expected);
-  expect(element.coding).to.equal(element.value);
-}
-
-function expectCodeableConcept(concept, codings, display) {
-  expectInstanceOf(concept, 'shr/core/CodeableConcept');
-  expect(concept.coding).to.have.length(codings.length);
-  for (let i=0; i < codings.length; i++) {
-    expectCoding(concept.coding[i], codings[i]);
+function expectConcept(concept, coding) {
+  expectInstanceOf(concept, 'Concept');
+  expect(concept.coding).to.have.length(coding.length);
+  for (let i=0; i < coding.length; i++) {
+    expectCoding(concept.coding[i], coding[i]);
   }
-  expectInstanceOf(concept.displayText, 'shr/core/DisplayText');
-  expectStringValue(concept.displayText, display);
 }
 
-function expectCodeableConceptValue(element, codings, display) {
-  expectCodeableConcept(element.value, codings, display);
-  expect(element.codeableConcept).to.equal(element.value);
+function expectConceptValue(element, coding) {
+  expectConcept(element.value, coding);
+  expect(element.concept).to.equal(element.value);
 }
 
 function expectReference(reference, expected) {

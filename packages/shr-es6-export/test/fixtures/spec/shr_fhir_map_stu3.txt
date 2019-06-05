@@ -1,4 +1,4 @@
-Grammar:   Map 5.0
+Grammar:   Map 5.1
 Namespace: shr.fhir
 Target:    FHIR_STU_3
 
@@ -20,3 +20,6 @@ PractitionerEntry maps to Practitioner:
 	constrain name to 1..1
 	NestedStringValue maps to name.text
     DoubleNestedBooleanValue.NestedBooleanValue.BooleanValue maps to active
+
+ConditionEntry maps to Condition:
+    Onset maps to onset[x]

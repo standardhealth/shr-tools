@@ -11,7 +11,7 @@ describe('#FromFHIR_STU3', () => {
 
   let context;
   before(function() {
-    this.timeout(5000);
+    this.timeout(10000);
     context = setup('./test/fixtures/spec', 'config_stu3.json', './build/test', true);
     context.setupAjvJson('./build/test/schema');
     context.setupAjvFhir('./test/fixtures/fhir-schema', 'FHIR_STU_3');
@@ -132,7 +132,7 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#BloodPressureSliceByNumber()', () => {
 
-    let BloodPressureSliceByNumber, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, CodeableConcept, Coding, CodeSystem;
+    let BloodPressureSliceByNumber, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, Concept, Coding;
     before(() => {
       BloodPressureSliceByNumber = context.importResult('shr/slicing/BloodPressureSliceByNumber');
       SystolicPressure = context.importResult('shr/slicing/SystolicPressure');
@@ -140,9 +140,8 @@ describe('#FromFHIR_STU3', () => {
       ComponentCode = context.importResult('shr/slicing/ComponentCode');
       Quantity = context.importResult('shr/core/Quantity');
       Units = context.importResult('shr/core/Units');
-      CodeableConcept = context.importResult('shr/core/CodeableConcept');
-      Coding = context.importResult('shr/core/Coding');
-      CodeSystem = context.importResult('shr/core/CodeSystem');
+      Concept = context.importResult('Concept');
+      Coding = context.importResult('Coding');
     });
 
     // TODO: skipping this test since there seems to be an issue upstream.
@@ -161,18 +160,18 @@ describe('#FromFHIR_STU3', () => {
               new Quantity()
                 .withValue(120.0)
                 .withUnits(
-                  new Units().withCoding(
+                  new Units().withCoding([
                     new Coding()
-                      .withCodeSystem(new CodeSystem().withValue('http://unitsofmeasure.org'))
+                      .withSystem('http://unitsofmeasure.org')
                       .withCode('mm[Hg]')
-                  )
+                  ])
                 )
             )
             .withComponentCode(new ComponentCode()
-              .withValue(new CodeableConcept()
+              .withValue(new Concept()
                 .withCoding([
                   new Coding()
-                    .withCodeSystem(new CodeSystem().withValue('http://loinc.org'))
+                    .withSystem('http://loinc.org')
                     .withCode('8480-6')
                 ])
               )
@@ -184,18 +183,18 @@ describe('#FromFHIR_STU3', () => {
               new Quantity()
                 .withValue(80.0)
                 .withUnits(
-                  new Units().withCoding(
+                  new Units().withCoding([
                     new Coding()
-                      .withCodeSystem(new CodeSystem().withValue('http://unitsofmeasure.org'))
+                      .withSystem('http://unitsofmeasure.org')
                       .withCode('mm[Hg]')
-                  )
+                  ])
                 )
             )
             .withComponentCode(new ComponentCode()
-              .withValue(new CodeableConcept()
+              .withValue(new Concept()
                 .withCoding([
                   new Coding()
-                    .withCodeSystem(new CodeSystem().withValue('http://loinc.org'))
+                    .withSystem('http://loinc.org')
                     .withCode('8462-4')
                 ])
               )
@@ -209,7 +208,7 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#BloodPressureSliceByValue()', () => {
 
-    let BloodPressureSliceByValue, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, CodeableConcept, Coding, CodeSystem;
+    let BloodPressureSliceByValue, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, Concept, Coding;
     before(() => {
       BloodPressureSliceByValue = context.importResult('shr/slicing/BloodPressureSliceByValue');
       SystolicPressure = context.importResult('shr/slicing/SystolicPressure');
@@ -217,9 +216,8 @@ describe('#FromFHIR_STU3', () => {
       ComponentCode = context.importResult('shr/slicing/ComponentCode');
       Quantity = context.importResult('shr/core/Quantity');
       Units = context.importResult('shr/core/Units');
-      CodeableConcept = context.importResult('shr/core/CodeableConcept');
-      Coding = context.importResult('shr/core/Coding');
-      CodeSystem = context.importResult('shr/core/CodeSystem');
+      Concept = context.importResult('Concept');
+      Coding = context.importResult('Coding');
     });
 
     it('should deserialize a FHIR JSON instance', () => {
@@ -234,18 +232,22 @@ describe('#FromFHIR_STU3', () => {
               new Quantity()
                 .withValue(120.0)
                 .withUnits(
-                  new Units().withCoding(
-                    new Coding()
-                      .withCodeSystem(new CodeSystem().withValue('http://unitsofmeasure.org'))
-                      .withCode('mm[Hg]')
-                  )
+                  new Units()
+                    .withValue(
+                      new Concept()
+                        .withCoding([
+                          new Coding()
+                            .withSystem('http://unitsofmeasure.org')
+                            .withCode('mm[Hg]')
+                        ])
+                    )
                 )
             )
             .withComponentCode(new ComponentCode()
-              .withValue(new CodeableConcept()
+              .withValue(new Concept()
                 .withCoding([
                   new Coding()
-                    .withCodeSystem(new CodeSystem().withValue('http://loinc.org'))
+                    .withSystem('http://loinc.org')
                     .withCode('8480-6')
                 ])
               )
@@ -257,18 +259,22 @@ describe('#FromFHIR_STU3', () => {
               new Quantity()
                 .withValue(80.0)
                 .withUnits(
-                  new Units().withCoding(
-                    new Coding()
-                      .withCodeSystem(new CodeSystem().withValue('http://unitsofmeasure.org'))
-                      .withCode('mm[Hg]')
-                  )
+                  new Units()
+                    .withValue(
+                      new Concept()
+                        .withCoding([
+                          new Coding()
+                            .withSystem('http://unitsofmeasure.org')
+                            .withCode('mm[Hg]')
+                        ])
+                    )
                 )
             )
             .withComponentCode(new ComponentCode()
-              .withValue(new CodeableConcept()
+              .withValue(new Concept()
                 .withCoding([
                   new Coding()
-                    .withCodeSystem(new CodeSystem().withValue('http://loinc.org'))
+                    .withSystem('http://loinc.org')
                     .withCode('8462-4')
                 ])
               )
@@ -282,7 +288,7 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#BloodPressureSliceByValueAndIncludesStrategy()', () => {
 
-    let BloodPressureSliceByValueAndIncludesStrategy, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, CodeableConcept, Coding, CodeSystem;
+    let BloodPressureSliceByValueAndIncludesStrategy, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, Concept, Coding;
     before(() => {
       BloodPressureSliceByValueAndIncludesStrategy = context.importResult('shr/slicing/BloodPressureSliceByValueAndIncludesStrategy');
       SystolicPressure = context.importResult('shr/slicing/SystolicPressure');
@@ -290,9 +296,8 @@ describe('#FromFHIR_STU3', () => {
       ComponentCode = context.importResult('shr/slicing/ComponentCode');
       Quantity = context.importResult('shr/core/Quantity');
       Units = context.importResult('shr/core/Units');
-      CodeableConcept = context.importResult('shr/core/CodeableConcept');
-      Coding = context.importResult('shr/core/Coding');
-      CodeSystem = context.importResult('shr/core/CodeSystem');
+      Concept = context.importResult('Concept');
+      Coding = context.importResult('Coding');
     });
 
     it('should deserialize a FHIR JSON instance', () => {
@@ -307,18 +312,22 @@ describe('#FromFHIR_STU3', () => {
               new Quantity()
                 .withValue(120.0)
                 .withUnits(
-                  new Units().withCoding(
-                    new Coding()
-                      .withCodeSystem(new CodeSystem().withValue('http://unitsofmeasure.org'))
-                      .withCode('mm[Hg]')
-                  )
+                  new Units()
+                    .withValue(
+                      new Concept()
+                        .withCoding([
+                          new Coding()
+                            .withSystem('http://unitsofmeasure.org')
+                            .withCode('mm[Hg]')
+                        ])
+                    )
                 )
             )
             .withComponentCode(new ComponentCode()
-              .withValue(new CodeableConcept()
+              .withValue(new Concept()
                 .withCoding([
                   new Coding()
-                    .withCodeSystem(new CodeSystem().withValue('http://loinc.org'))
+                    .withSystem('http://loinc.org')
                     .withCode('8480-6')
                 ])
               )
@@ -328,18 +337,22 @@ describe('#FromFHIR_STU3', () => {
               new Quantity()
                 .withValue(80.0)
                 .withUnits(
-                  new Units().withCoding(
-                    new Coding()
-                      .withCodeSystem(new CodeSystem().withValue('http://unitsofmeasure.org'))
-                      .withCode('mm[Hg]')
-                  )
+                  new Units()
+                    .withValue(
+                      new Concept()
+                        .withCoding([
+                          new Coding()
+                            .withSystem('http://unitsofmeasure.org')
+                            .withCode('mm[Hg]')
+                        ])
+                    )
                 )
             )
             .withComponentCode(new ComponentCode()
-              .withValue(new CodeableConcept()
+              .withValue(new Concept()
                 .withCoding([
                   new Coding()
-                    .withCodeSystem(new CodeSystem().withValue('http://loinc.org'))
+                    .withSystem('http://loinc.org')
                     .withCode('8462-4')
                 ])
               )
@@ -462,6 +475,48 @@ describe('#FromFHIR_STU3', () => {
       } catch (e) { /* for now do nothing */ }
 
       expect(spy).to.have.been.called.with('CodeableConcept');
+    });
+  });
+
+  describe('#ConditionEntry()', () => {
+
+    let ConditionEntry, Onset, Age, Units, Concept, Coding;
+    before(() => {
+      ConditionEntry = context.importResult('shr/fhir/ConditionEntry');
+      Onset = context.importResult('shr/fhir/Onset');
+      Age = context.importResult('shr/core/Age');
+      Units = context.importResult('shr/core/Units');
+      Concept = context.importResult('Concept');
+      Coding = context.importResult('Coding');
+    });
+
+    it('should deserialize a FHIR JSON instance', () => {
+      const json = context.getFHIR('ConditionEntry');
+      const entry = ConditionEntry.fromFHIR(json);
+      expect(entry).instanceOf(ConditionEntry);
+
+      const expected = new ConditionEntry()
+        .withOnset(
+          new Onset().withValue(
+            new Age()
+              .withValue(25)
+              .withUnits(
+                new Units()
+                  .withValue(
+                    new Concept()
+                      .withCoding([
+                        new Coding()
+                          .withSystem('http://unitsofmeasure.org')
+                          .withCode('a')
+                          .withDisplay('years')
+                      ])
+                  )
+              )
+          )
+        );
+      fixExpectedEntryInfo(expected, 'http://standardhealthrecord.org/spec/shr/fhir/ConditionEntry', entry, context);
+
+      expect(entry).to.eql(expected);
     });
   });
 
