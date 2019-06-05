@@ -192,80 +192,25 @@ describe('#IdentifiableValue', () => {
   });
 });
 
-describe('#RefValue', () => {
-  it('should correctly get the identifier', () => {
-    const val = new mdl.RefValue(new mdl.Identifier('shr.test', 'Foo'))
-      .withMinMax(1,1);
-    expect(val.identifier).to.eql(new mdl.Identifier('shr.test', 'Foo'));
-  });
-
-  it('should correctly get the constrained type when getting effective identifier', () => {
-    const val = new mdl.RefValue(new mdl.Identifier('shr.test', 'Foo'))
-      .withMinMax(1,1);
-    expect(val.identifier).to.eql(new mdl.Identifier('shr.test', 'Foo'));
-    expect(val.effectiveIdentifier).to.eql(new mdl.Identifier('shr.test', 'Foo'));
-    val.addConstraint(new mdl.TypeConstraint(new mdl.Identifier('shr.test', 'SonOfFoo')));
-    expect(val.identifier).to.eql(new mdl.Identifier('shr.test', 'Foo'));
-    expect(val.effectiveIdentifier).to.eql(new mdl.Identifier('shr.test', 'SonOfFoo'));
-  });
-
-  it('should correctly clone its properties', () => {
-    const val = new mdl.RefValue(new mdl.Identifier('shr.test', 'Foo'))
-      .withMinMax(1,1);
-    const val2 = val.clone();
-    // Ensure they're not the same instance ('equal'), but they have equal values ('eql')
-    expect(val2).not.to.equal(val);
-    expect(val2).to.eql(val);
-    expect(val2.identifier).not.to.equal(val.identifier);
-    expect(val2.identifier).to.eql(val.identifier);
-    expect(val2.equals(val)).to.be.true;
-  });
-
-  it('should toString its class and identifier', () => {
-    const val = new mdl.RefValue(new mdl.Identifier('shr.test', 'Foo'))
-      .withMinMax(1,1);
-    const str = val.toString();
-    expect(str).to.equal('ref(Foo)');
-  });
-
-  it('should not equal a similar IndentifiableValue', () => {
-    const val = new mdl.RefValue(new mdl.Identifier('shr.test', 'Foo'))
-        .withMinMax(1,1);
-    const ival = new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo'))
-        .withMinMax(1,1);
-    expect(val.equals(ival)).to.be.false;
-    expect(ival.equals(val)).to.be.false;
-  });
-
-  it('should ignore inheritance during equality when asked', () => {
-    const val = new mdl.RefValue(new mdl.Identifier('shr.test', 'Foo'))
-        .withMinMax(1,1);
-    const val2 = val.clone();
-    val.inheritance = mdl.OVERRIDDEN;
-    expect(val2.equals(val)).to.be.false;
-    expect(val2.equals(val, true)).to.be.true;
-  });
-});
-
 describe('#ChoiceValue', () => {
   it('should correctly set and get options', () => {
     // AddOption
     let val = new mdl.ChoiceValue().withMinMax(1,1);
     val.addOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1));
-    val.addOption(new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
+    val.addOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
     expect(val.options).to.eql([
       new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1),
-      new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1)
+      new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1)
     ]);
 
     // WithOption
     val = new mdl.ChoiceValue()
       .withMinMax(1,1)
       .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
-      .withOption(new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
+      .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
     expect(val.options).to.eql([
       new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1),
-      new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1)
+      new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1)
     ]);
   });
 
@@ -273,7 +218,7 @@ describe('#ChoiceValue', () => {
     const val = new mdl.ChoiceValue()
         .withMinMax(1,1)
         .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
-        .withOption(new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
+        .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
     const val2 = val.clone();
     return {val, val2};
   }
@@ -293,9 +238,9 @@ describe('#ChoiceValue', () => {
     const val = new mdl.ChoiceValue()
       .withMinMax(1,1)
       .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
-      .withOption(new mdl.RefValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
+      .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
     const str = val.toString();
-    expect(str).to.equal('Choice(Foo, ref(Bar))');
+    expect(str).to.equal('Choice(Foo, Bar)');
   });
 
   it('should ignore inheritance during equality when asked', () => {

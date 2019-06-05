@@ -13,16 +13,12 @@
     },
     "constraints": {
       "subpaths": {
-        "shr.test.Coding": {
-          "subpaths": {
-            "code": {
-              "fixedValue": {
-                "type": "code",
-                "value": {
-                  "system": "http://foo.org",
-                  "code": "bar"
-                }
-              }
+        "concept": {
+          "fixedValue": {
+            "type": "code",
+            "value": {
+              "system": "http://foo.org",
+              "code": "bar"
             }
           }
         }

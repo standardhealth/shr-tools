@@ -22,17 +22,13 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.test.Coding": {
-            "subpaths": {
-              "code": {
-                "includesCode": [
-                  {
-                    "system": "http://foo.org",
-                    "code": "bar"
-                  }
-                ]
+          "concept": {
+            "includesCode": [
+              {
+                "system": "http://foo.org",
+                "code": "bar"
               }
-            }
+            ]
           }
         }
       }

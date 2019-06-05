@@ -168,7 +168,7 @@ class DataElementSpecifications {
       if (id.isEntryKeyWord) {
         [namespace, name] = ['shr.base', 'Entry'];
       } else if (id.isConceptKeyWord) {
-        [namespace, name] = ['shr.core', 'CodeableConcept'];
+        [namespace, name] = ['primitive', 'concept'];
       }
     }
     if (this._nsMap.has(namespace)) {
@@ -1012,7 +1012,7 @@ class Constraint {
   }
 }
 
-// ValueSetConstraint only makes sense on a code or Coding type value
+// ValueSetConstraint only makes sense on a concept type value
 class ValueSetConstraint extends Constraint {
 
   constructor(valueSet, path, bindingStrength=REQUIRED) {
@@ -1061,7 +1061,7 @@ class ValueSetConstraint extends Constraint {
   }
 }
 
-// CodeConstraint only makes sense on a code or Coding type value
+// CodeConstraint only makes sense on a concept type value
 class CodeConstraint extends Constraint {
 
   constructor(code, path) {
@@ -1099,7 +1099,7 @@ class CodeConstraint extends Constraint {
   }
 }
 
-// IncludesCodeConstraint only makes sense on an array of code or Coding
+// IncludesCodeConstraint only makes sense on an array of concept
 class IncludesCodeConstraint extends Constraint {
 
   constructor(code, path) {
@@ -1886,23 +1886,6 @@ class IdentifiableValue extends Value {
       },
       super.toJSON()
     );
-  }
-}
-
-class RefValue extends IdentifiableValue {
-
-  constructor(identifier) {
-    super(identifier);
-  }
-
-  clone() {
-    const clone = new RefValue();
-    super._clonePropertiesTo(clone);
-    return clone;
-  }
-
-  toString() {
-    return `ref(${this.identifier.name})`;
   }
 }
 
@@ -2751,11 +2734,11 @@ const EXAMPLE = 'EXAMPLE';
 
 // Primitive constants
 const PRIMITIVE_NS = 'primitive';
-const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'code', 'id',
+const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt', 'string', 'markdown', 'concept', 'id',
   'oid', 'uri', 'base64Binary', 'date', 'dateTime', 'instant', 'time', 'xhtml'];
 
 // Inheritance constants
 const INHERITED = 'inherited';
 const OVERRIDDEN = 'overridden';
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, ContentProfileSpecifications, Namespace, DataElement, ContentProfile, ContentProfileRule, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, RefValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, ConstraintHistory, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, ContentProfileSpecifications, Namespace, DataElement, ContentProfile, ContentProfileRule, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, ConstraintHistory, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};

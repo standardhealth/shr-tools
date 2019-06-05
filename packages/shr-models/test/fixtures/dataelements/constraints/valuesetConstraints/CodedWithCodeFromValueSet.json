@@ -5,7 +5,7 @@
   "isEntry": false,
   "isAbstract": false,
   "value": {
-    "fqn": "shr.test.Coding",
+    "fqn": "shr.test.CodedThing",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -13,7 +13,7 @@
     },
     "constraints": {
       "subpaths": {
-        "code": {
+        "concept": {
           "valueSet": {
             "uri": "http://standardhealthrecord.org/test/vs/Coded",
             "bindingStrength": "REQUIRED"

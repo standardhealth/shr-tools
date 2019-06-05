@@ -14,7 +14,7 @@
       }
     },
     {
-      "fqn": "shr.test.Coding",
+      "fqn": "shr.test.CodedThing",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -22,7 +22,7 @@
       },
       "constraints": {
         "subpaths": {
-          "code": {
+          "concept": {
             "fixedValue": {
               "type": "code",
               "value": {
