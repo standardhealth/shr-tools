@@ -1,0 +1,11 @@
+Grammar:   DataElement 6.0
+Namespace: StringConstraintOnFieldChild2
+
+Element:  ConstraintOnString
+Description: "Simple example with a fixed string without the element reference."
+Value:   SimpleString
+Value = "myString"
+
+Element: SimpleString
+Value:  string
+

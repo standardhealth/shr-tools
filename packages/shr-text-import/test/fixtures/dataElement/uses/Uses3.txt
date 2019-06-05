@@ -1,6 +1,5 @@
-Grammar:    DataElement 5.0
+Grammar:    DataElement 6.0
 Namespace:  shr.test.three
 
 CodeSystem:     MOO = http://moo.org
 CodeSystem:     ZOO = http://zoo.org
-

@@ -110,7 +110,7 @@
     },
     {
       "fqn": "cimi.entity.Facility",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
         "max": 1

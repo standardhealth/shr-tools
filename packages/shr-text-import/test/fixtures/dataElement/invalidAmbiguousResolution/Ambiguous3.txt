@@ -1,0 +1,6 @@
+Grammar:   DataElement 6.0
+Namespace: shr.test.three
+
+Element:        Foo
+Description:    "It is a Foo from shr.test.three"
+Value:          string

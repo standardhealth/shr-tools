@@ -1,0 +1,19 @@
+Grammar:    DataElement 6.0
+Namespace:  typeConstraintOnFieldChild
+
+
+Entry:    TypeConstraintOnFieldChild
+Description:  "This tests a cardinality and a type constraint on Complex.Simple"
+Property: Complex 0..1
+          Complex.Simple substitute Simple2
+          Complex.Simple 1..2
+
+Entry:        Complex
+Property:     Simple 0..2
+
+Element:      Simple
+Value:        string
+
+Element:      Simple2
+Parent:       Simple
+Value:        string

@@ -57,7 +57,7 @@ var literalNames = [ 'null', "'Grammar:'", "'Map'", "'Namespace:'", "'TBD'",
                      "'_Concept'", "'_Entry'", "'_Value'", "'.'", "'*'", 
                      "'['", "']'", "':'", "'..'", "'boolean'", "'integer'", 
                      "'string'", "'decimal'", "'uri'", "'base64Binary'", 
-                     "'instant'", "'date'", "'dateTime'", "'time'", "'code'", 
+                     "'instant'", "'date'", "'dateTime'", "'time'", "'concept'", 
                      "'oid'", "'id'", "'markdown'", "'unsignedInt'", "'positiveInt'", 
                      "'xhtml'", 'null', 'null', 'null', 'null', 'null', 
                      'null', 'null', 'null', "'\n'" ];
@@ -68,10 +68,10 @@ var symbolicNames = [ 'null', "KW_GRAMMAR", "KW_G_MAP", "KW_NAMESPACE",
                       "KW_BAR_VALUE", "DOT", "STAR", "OPEN_BRACKET", "CLOSE_BRACKET", 
                       "COLON", "RANGE", "KW_BOOLEAN", "KW_INTEGER", "KW_STRING", 
                       "KW_DECIMAL", "KW_URI", "KW_BASE64_BINARY", "KW_INSTANT", 
-                      "KW_DATE", "KW_DATE_TIME", "KW_TIME", "KW_CODE", "KW_OID", 
-                      "KW_ID", "KW_MARKDOWN", "KW_UNSIGNED_INT", "KW_POSITIVE_INT", 
-                      "KW_XHTML", "WHOLE_NUMBER", "ALL_CAPS", "UPPER_WORD", 
-                      "LOWER_WORD", "DOT_SEPARATED_LW", "DOT_SEPARATED_UW", 
+                      "KW_DATE", "KW_DATE_TIME", "KW_TIME", "KW_CONCEPT_CODE", 
+                      "KW_OID", "KW_ID", "KW_MARKDOWN", "KW_UNSIGNED_INT", 
+                      "KW_POSITIVE_INT", "KW_XHTML", "WHOLE_NUMBER", "ALL_CAPS", 
+                      "UPPER_WORD", "LOWER_WORD", "DOT_SEPARATED_LW", "DOT_SEPARATED_UW", 
                       "STRING", "WS", "NEWLINE", "COMMENT", "LINE_COMMENT", 
                       "TARGET_PHRASE", "WS2", "TARGET_WORD", "WS3", "TARGET_WORD_2", 
                       "TARGET_PHRASE_2", "WS4" ];
@@ -130,7 +130,7 @@ SHRMapParser.KW_INSTANT = 25;
 SHRMapParser.KW_DATE = 26;
 SHRMapParser.KW_DATE_TIME = 27;
 SHRMapParser.KW_TIME = 28;
-SHRMapParser.KW_CODE = 29;
+SHRMapParser.KW_CONCEPT_CODE = 29;
 SHRMapParser.KW_OID = 30;
 SHRMapParser.KW_ID = 31;
 SHRMapParser.KW_MARKDOWN = 32;
@@ -761,7 +761,7 @@ SHRMapParser.prototype.mappingRule = function() {
         case SHRMapParser.KW_DATE:
         case SHRMapParser.KW_DATE_TIME:
         case SHRMapParser.KW_TIME:
-        case SHRMapParser.KW_CODE:
+        case SHRMapParser.KW_CONCEPT_CODE:
         case SHRMapParser.KW_OID:
         case SHRMapParser.KW_ID:
         case SHRMapParser.KW_MARKDOWN:
@@ -1181,7 +1181,7 @@ SHRMapParser.prototype.sourceWord = function() {
         case SHRMapParser.KW_DATE:
         case SHRMapParser.KW_DATE_TIME:
         case SHRMapParser.KW_TIME:
-        case SHRMapParser.KW_CODE:
+        case SHRMapParser.KW_CONCEPT_CODE:
         case SHRMapParser.KW_OID:
         case SHRMapParser.KW_ID:
         case SHRMapParser.KW_MARKDOWN:
@@ -1906,8 +1906,8 @@ PrimitiveContext.prototype.KW_TIME = function() {
     return this.getToken(SHRMapParser.KW_TIME, 0);
 };
 
-PrimitiveContext.prototype.KW_CODE = function() {
-    return this.getToken(SHRMapParser.KW_CODE, 0);
+PrimitiveContext.prototype.KW_CONCEPT_CODE = function() {
+    return this.getToken(SHRMapParser.KW_CONCEPT_CODE, 0);
 };
 
 PrimitiveContext.prototype.KW_OID = function() {
@@ -1968,7 +1968,7 @@ SHRMapParser.prototype.primitive = function() {
         this.enterOuterAlt(localctx, 1);
         this.state = 135;
         _la = this._input.LA(1);
-        if(!(((((_la - 19)) & ~0x1f) == 0 && ((1 << (_la - 19)) & ((1 << (SHRMapParser.KW_BOOLEAN - 19)) | (1 << (SHRMapParser.KW_INTEGER - 19)) | (1 << (SHRMapParser.KW_STRING - 19)) | (1 << (SHRMapParser.KW_DECIMAL - 19)) | (1 << (SHRMapParser.KW_URI - 19)) | (1 << (SHRMapParser.KW_BASE64_BINARY - 19)) | (1 << (SHRMapParser.KW_INSTANT - 19)) | (1 << (SHRMapParser.KW_DATE - 19)) | (1 << (SHRMapParser.KW_DATE_TIME - 19)) | (1 << (SHRMapParser.KW_TIME - 19)) | (1 << (SHRMapParser.KW_CODE - 19)) | (1 << (SHRMapParser.KW_OID - 19)) | (1 << (SHRMapParser.KW_ID - 19)) | (1 << (SHRMapParser.KW_MARKDOWN - 19)) | (1 << (SHRMapParser.KW_UNSIGNED_INT - 19)) | (1 << (SHRMapParser.KW_POSITIVE_INT - 19)) | (1 << (SHRMapParser.KW_XHTML - 19)))) !== 0))) {
+        if(!(((((_la - 19)) & ~0x1f) == 0 && ((1 << (_la - 19)) & ((1 << (SHRMapParser.KW_BOOLEAN - 19)) | (1 << (SHRMapParser.KW_INTEGER - 19)) | (1 << (SHRMapParser.KW_STRING - 19)) | (1 << (SHRMapParser.KW_DECIMAL - 19)) | (1 << (SHRMapParser.KW_URI - 19)) | (1 << (SHRMapParser.KW_BASE64_BINARY - 19)) | (1 << (SHRMapParser.KW_INSTANT - 19)) | (1 << (SHRMapParser.KW_DATE - 19)) | (1 << (SHRMapParser.KW_DATE_TIME - 19)) | (1 << (SHRMapParser.KW_TIME - 19)) | (1 << (SHRMapParser.KW_CONCEPT_CODE - 19)) | (1 << (SHRMapParser.KW_OID - 19)) | (1 << (SHRMapParser.KW_ID - 19)) | (1 << (SHRMapParser.KW_MARKDOWN - 19)) | (1 << (SHRMapParser.KW_UNSIGNED_INT - 19)) | (1 << (SHRMapParser.KW_POSITIVE_INT - 19)) | (1 << (SHRMapParser.KW_XHTML - 19)))) !== 0))) {
         this._errHandler.recoverInline(this);
         }
         else {

@@ -1,0 +1,35 @@
+Grammar:   DataElement 6.0
+Namespace: valueOnlyConstraintInheritedSingleChoice
+Uses:      shr.test  // namespace for value sets
+
+Element:    ChoiceElement
+Description:    "A element with three choices"
+Value:      ValueParent
+
+    Element:    ValueParent
+    Value:      concept
+
+Element:  ReducedChoiceElement
+Parent:   ChoiceElement
+Description:    "A child element whose value choices are subclasses of the value of the parent"
+Value[ValueParent] substitute ValueChild2
+
+    Element:    ValueChild1
+    Parent:     ValueParent
+    Value[concept] from TestVS1
+
+    Element:    ValueChild2
+    Parent:     ValueParent
+    Value[concept] from TestVS2 
+
+    Element:    ValueChild3
+    Parent:     ValueParent
+    Value[concept] from TestVS3 
+
+    Element:    ValueChild4
+    Parent:     ValueParent
+    Value[concept] from TestVS4  
+
+    Element:    ValueChild5
+    Parent:     ValueParent
+    Value[concept] from TestVS5 

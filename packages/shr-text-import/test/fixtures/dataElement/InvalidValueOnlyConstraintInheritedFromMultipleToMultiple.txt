@@ -1,0 +1,41 @@
+Grammar:   DataElement 6.0
+Namespace: invalidValueOnlyConstraintInheritedFromMultipleToMultiple
+Uses:      shr.test  // namespace for value sets
+
+Element:    ChoiceElement
+Description:"A element with three choices"
+Value:      ValueParent1 or ValueParent2
+
+    Element:    ValueParent1
+    Value:      concept
+
+    Element:    ValueParent2
+    Value:      concept
+
+Element:  ReducedChoiceElement
+Parent:   ChoiceElement
+Description:    "A child element whose value choices are subclasses of the values of the parent"
+Value only ValueChild2 or ValueChild4
+
+// Children of ValueParent1
+    Element:    ValueChild1
+    Parent:     ValueParent1
+    Value[concept] from TestVS1
+
+    Element:    ValueChild2
+// invalid    
+    Parent:     ChoiceElement
+    Value[concept] from TestVS2 
+
+// Children of ValueParent2
+    Element:    ValueChild3
+    Parent:     ValueParent2
+    Value[concept] from TestVS3 
+
+    Element:    ValueChild4
+    Parent:     ValueParent2
+    Value[concept] from TestVS4  
+
+    Element:    ValueChild5
+    Parent:     ValueParent2
+    Value[concept] from TestVS5 

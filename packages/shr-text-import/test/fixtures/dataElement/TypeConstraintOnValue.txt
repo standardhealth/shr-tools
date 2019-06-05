@@ -1,0 +1,19 @@
+Grammar:    DataElement 6.0
+Namespace:  typeConstraintOnValue
+
+Element:      SimpleBase
+Value:        Simple
+
+Element:    TypeConstraintOnValue
+Parent:     SimpleBase
+Description:  "It is a simple element based on SimpleBase and specializing the value"
+Value[Simple] substitute Simple2
+
+
+Element:      Simple
+Value:        string
+
+Element:      Simple2
+Parent:       Simple
+Value:        string
+

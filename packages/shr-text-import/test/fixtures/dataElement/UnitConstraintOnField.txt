@@ -1,0 +1,12 @@
+Grammar:   DataElement 6.0
+Namespace: unitConstraintOnField
+Uses:      shr.core
+
+CodeSystem:		  UCUM = http://unitsofmeasure.org
+
+
+Entry:        UnitConstraintOnField
+Description:  "It is a group entry with a unit constraint on a field"
+Property:     Quantity 0..1
+              Quantity.Units = UCUM#dl "DeciLiter"
+

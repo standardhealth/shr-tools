@@ -33,11 +33,11 @@
       },
       {
         "fqn": "cimi.entity.Substance",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.statement.ActionPerformedStatement",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   },

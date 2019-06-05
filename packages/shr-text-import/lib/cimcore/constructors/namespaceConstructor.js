@@ -14,12 +14,11 @@
 
 const models = require('shr-models');
 
-const bunyan = require('bunyan');
+/*const bunyan = require('bunyan');
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
-var logger = rootLogger;
 function setLogger(bunyanLogger) {
-  rootLogger = logger = bunyanLogger;
-}
+  rootLogger = bunyanLogger;
+}*/
 
 class NamespaceConstructor {
 
@@ -44,4 +43,4 @@ class NamespaceConstructor {
 
 }
 
-module.exports = { NamespaceConstructor, setLogger };
+module.exports = { NamespaceConstructor };

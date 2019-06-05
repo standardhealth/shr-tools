@@ -1,0 +1,14 @@
+Grammar:    DataElement 6.0
+Namespace:  cardConstraintOnFieldChild
+
+
+Entry:        CardConstraintOnFieldChild
+Description:  "It is a group entry with a card constraint on a field's child"
+Property:     Thing1 0..*
+              Thing1.Thing2 1..2
+
+Group:        Thing1   // Changed Element to Group
+Property:     Thing2 0..*
+
+Element:      Thing2
+Value:        string

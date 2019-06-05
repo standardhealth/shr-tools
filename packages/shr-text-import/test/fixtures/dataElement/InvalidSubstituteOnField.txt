@@ -1,0 +1,18 @@
+Grammar:   DataElement 6.0
+Namespace: shr.test
+
+// invalid because ClassToSubstitute is not a child of ClassToBeSubstituted
+
+Entry:      TheParent
+Property:   ClassToBeSubstituted
+
+    Element:    ClassToBeSubstituted
+    Value:      boolean
+
+    Element:    ClassToSubstitute
+    Value:      boolean
+
+Entry:    TheChild
+Parent:   TheParent
+ClassToBeSubstituted substitute ClassToSubstitute
+

@@ -22,23 +22,23 @@
     "options": [
       {
         "fqn": "cimi.entity.Patient",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.entity.Practitioner",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.entity.Device",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.entity.Medication",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.entity.Substance",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   },

@@ -81,9 +81,6 @@ class DataElementConstructor {
     case 'IdentifiableValue':
       constructedValue = new models.IdentifiableValue(idFromFQN(value.fqn));
       break;
-    case 'RefValue':
-      constructedValue = new models.RefValue(idFromFQN(value.fqn));
-      break;
     case 'ChoiceValue': {
       let cValue = new models.ChoiceValue();
       for (const opt of value.options) {

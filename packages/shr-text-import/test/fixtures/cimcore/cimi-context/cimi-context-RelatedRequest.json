@@ -8,7 +8,7 @@
   "description": "The proposal, order, or plan that is partly or wholly fulfilled by the performance of this act.",
   "value": {
     "fqn": "cimi.statement.ActionRequestedStatement",
-    "valueType": "RefValue",
+    "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
       "max": 1

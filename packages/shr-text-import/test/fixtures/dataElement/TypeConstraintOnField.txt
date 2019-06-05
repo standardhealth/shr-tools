@@ -1,0 +1,20 @@
+Grammar:    DataElement 6.0
+Namespace:  typeConstraintOnField
+
+Entry:      GroupBase
+Property:   Simple 0..1
+Property:   CodedFromValueSet 0..1
+
+Entry:      TypeConstraintOnField
+Parent:     GroupBase
+            Simple substitute Simple2
+
+Element:      Simple
+Value:        string
+
+Element:      Simple2
+Parent:       Simple
+Value:        string
+
+Element:      CodedFromValueSet
+Value:        concept

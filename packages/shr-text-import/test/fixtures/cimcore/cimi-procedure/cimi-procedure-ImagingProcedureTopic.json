@@ -178,7 +178,7 @@
     },
     {
       "fqn": "cimi.entity.Device",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       },

@@ -31,7 +31,6 @@ function setLogger(bunyanLogger) {
   require('./constructors/dataElementConstructor').setLogger(logger);
   require('./constructors/valueSetConstructor').setLogger(logger);
   require('./constructors/mappingConstructor').setLogger(logger);
-  require('./constructors/namespaceConstructor').setLogger(logger);
 }
 
 class CimcoreImporter {

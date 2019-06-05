@@ -24,7 +24,7 @@
   "fields": [
     {
       "fqn": "cimi.entity.Person",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
         "max": 1

@@ -23,11 +23,11 @@
     "options": [
       {
         "fqn": "cimi.entity.Practitioner",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.entity.RelatedPerson",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   }

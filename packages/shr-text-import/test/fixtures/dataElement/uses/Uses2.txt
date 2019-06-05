@@ -1,8 +1,9 @@
-Grammar:    DataElement 5.0
+Grammar:    DataElement 6.0
 Namespace:  shr.test.two
 Uses:       shr.test.three
 
-EntryElement:   Two
-Concept:        ZOO #bear
+Element:        Two
+Concept:        ZOO#bear
 Description:    "It is an entry that uses other namespaces too"
 Value:          string
+

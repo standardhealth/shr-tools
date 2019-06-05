@@ -1,0 +1,16 @@
+Grammar:   DataElement 6.0
+Namespace: codeConstraintOnField
+
+CodeSystem:     FOO = http://foo.org
+
+Entry:          CodeConstraintOnField
+Description:    "It is a group entry with a code constraint on a field"
+Property:       Simple 0..1
+Property:       CodedFromValueSet 0..1
+                CodedFromValueSet = FOO#bar "FooBar"
+
+Element:        Simple
+Value:          string
+
+Element:        CodedFromValueSet
+Value:          concept from http://standardhealthrecord.org/shr/test/vs/Coded (required)

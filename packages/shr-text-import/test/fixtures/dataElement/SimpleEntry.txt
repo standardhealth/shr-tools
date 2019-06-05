@@ -1,0 +1,13 @@
+Grammar:     DataElement 6.0
+Namespace:   simpleEntry
+Description: "The SHR test namespace"
+
+ CodeSystem:     FOO = http://foo.org
+
+Entry:          SimpleEntry
+Concept:        FOO #bar "Foobar"
+Description:    "It is a simple entry"
+Property:       Bar 0..1
+
+Element:        Bar
+Value:          boolean

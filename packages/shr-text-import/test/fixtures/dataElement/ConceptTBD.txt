@@ -1,0 +1,12 @@
+Grammar:   DataElement 6.0
+Namespace: conceptTBD
+
+CodeSystem:     FOO = http://foo.org
+
+Entry:          ConceptTBD
+Concept:        TBD
+Property:       Simple 1..2
+
+Element:        Simple
+Value:          string
+

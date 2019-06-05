@@ -9,7 +9,7 @@
   "fields": [
     {
       "fqn": "cimi.statement.EvaluationResultRecorded",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       }

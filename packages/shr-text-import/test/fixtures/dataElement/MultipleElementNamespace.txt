@@ -1,10 +1,12 @@
-Grammar:   DataElement 5.0
-Namespace: shr.test
+Grammar:   DataElement 6.0
+Namespace: multipleElementNamespace
 
-EntryElement:   SimpleDate
+// Test is nothing more than having two elements in one namespace
+
+Element:        SimpleDate
 Description:    "It is a simple date entry"
 Value:          date
 
 Element:        Coded
 Description:    "It is a coded element"
-Value:          code from http://standardhealthrecord.org/test/vs/Coded
+Value:          concept from http://standardhealthrecord.org/shr/test/vs/Coded (required)

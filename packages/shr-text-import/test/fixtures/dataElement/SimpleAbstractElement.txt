@@ -1,9 +1,12 @@
-Grammar:    DataElement 5.0
-Namespace:  shr.test
+Grammar:    DataElement 6.0
+Namespace:  simpleAbstractElement
 
 CodeSystem:     FOO = http://foo.org
 
-Abstract Element:        Simple
+Abstract:       Simple
 Concept:        FOO #bar
-Description:    "It is a simple element"
+Description:    "It is an abstract entry"
+Property:       Bar 0..*
+
+Element:        Bar
 Value:          string

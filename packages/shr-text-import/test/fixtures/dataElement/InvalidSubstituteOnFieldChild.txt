@@ -1,0 +1,23 @@
+Grammar:   DataElement 6.0
+Namespace: shr.test
+
+Entry:      TheParent
+Property:   TheProperty
+
+    Group:      TheProperty
+    Property:   Simple1
+
+    Group:      TheProperty
+    Property:   Simple2
+
+    Element:    Simple1
+    Value:      boolean
+
+    Element:    Simple2
+    Value:      boolean
+
+Entry:    TheChild
+Parent:   TheParent
+Description: "Not valid because Simple2 is not a subclass of Simple1"
+TheProperty.Simple1 substitute TheProperty.Simple2
+

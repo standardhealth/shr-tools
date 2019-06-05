@@ -8,7 +8,7 @@
   "description": "Identifier for the source specimen from which this specimen was derived.",
   "value": {
     "fqn": "cimi.entity.Specimen",
-    "valueType": "RefValue",
+    "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
       "max": 1

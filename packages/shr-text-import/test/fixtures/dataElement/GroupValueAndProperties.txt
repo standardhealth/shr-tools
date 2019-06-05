@@ -1,0 +1,24 @@
+Grammar:   DataElement 6.0
+Namespace: groupValueAndProperties
+
+// Mixing Value and Properties will be denigrated beyond 6.1
+Entry:        GroupValueAndProperties
+Value:        concept
+Property:     Simple 0..1
+Property:     Coded 0..*
+Property:     Simple2 1..*
+Property:     Thing 1..1
+
+Element:        Simple
+Value:          string
+
+Element:        Coded
+Value:          concept
+
+Element:        Simple2
+Value:          string
+
+Element:        Thing
+Value:          boolean
+
+

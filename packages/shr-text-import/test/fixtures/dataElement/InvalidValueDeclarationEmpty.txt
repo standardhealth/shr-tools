@@ -1,0 +1,9 @@
+Grammar:   DataElement 6.0
+Namespace: shr.test
+
+Element:          InvalidValueDeclaration
+Description:    "Can't have an empty value."
+Value:        // missing  
+
+Element:    Simple
+Value:      boolean

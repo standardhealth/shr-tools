@@ -25,7 +25,7 @@
     "options": [
       {
         "fqn": "cimi.entity.EntityOrRole",
-        "valueType": "RefValue",
+        "valueType": "IdentifiableValue",
         "constraints": {
           "type": {
             "fqn": "cimi.entity.Patient",
@@ -46,7 +46,7 @@
       },
       {
         "fqn": "cimi.entity.EntityOrRole",
-        "valueType": "RefValue",
+        "valueType": "IdentifiableValue",
         "constraints": {
           "type": {
             "fqn": "cimi.entity.Group",

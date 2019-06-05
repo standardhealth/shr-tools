@@ -1,0 +1,13 @@
+Grammar:    DataElement 6.0
+Namespace:  choiceTypeConstraintToNonPrimitive
+
+
+Entry:    ThingWithChoiceField
+Property: ChoiceElement 1..1
+ChoiceElement only DateTimeString  // choices not supported yet
+
+Element:  ChoiceElement
+Value:    date or dateTime or DateTimeString
+
+    Element:  DateTimeString
+    Value:    string

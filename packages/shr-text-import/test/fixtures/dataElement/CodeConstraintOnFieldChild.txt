@@ -1,0 +1,18 @@
+Grammar:   DataElement 6.0
+Namespace: codeConstraintOnFieldChild
+
+CodeSystem:     FOO = http://foo.org
+
+Entry:          CodeConstraintOnFieldChild
+Property:       Simple 0..1
+Property:       CodedFromValueSet 0..1
+CodedFromValueSet.CodedFromVS2 = FOO#bar "FooBar"
+
+Element:        Simple
+Value:          string
+
+Group:          CodedFromValueSet  // Changed Element to Group
+Property:       CodedFromVS2 0..1
+
+Element:        CodedFromVS2
+Value:          concept from http://standardhealthrecord.org/shr/test/vs/Coded (required)

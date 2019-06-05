@@ -4,7 +4,9 @@
     "projectURL": "http://example.com",
     "fhirURL": "http://example.com/fhir",
     "implementationGuide": {
-      "indexContent": "exampleIndexContent.html"
+      "indexContent": "exampleIndexContent.html",
+      "npmName": "example-npm-name",
+      "version": "0.0.1"
     },
     "publisher": "Example Publisher",
     "contact": [

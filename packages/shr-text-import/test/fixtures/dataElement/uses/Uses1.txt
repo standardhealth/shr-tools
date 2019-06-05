@@ -1,10 +1,10 @@
-Grammar:    DataElement 5.0
-Namespace:  shr.test.one
+Grammar:    DataElement 6.0
+Namespace:  uses
 Uses:       shr.test.two, shr.test.three
 
 CodeSystem:     FOO = http://foo.org
 
-EntryElement:   One
+Element:          One
 Concept:        FOO #bar, MOO #car
 Description:    "It is an entry that uses other namespaces"
-Value:          Two
+Value:        Two

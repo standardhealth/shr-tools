@@ -1,5 +1,0 @@
-Grammar:   DataElement 5.0
-Namespace: shr.test.two
-
-CodeSystem:     FOO = http://foo.net
-CodeSystem:     MOO = http://moo.org

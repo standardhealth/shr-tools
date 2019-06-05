@@ -1,6 +1,0 @@
-Grammar:   DataElement 5.0
-Namespace: shr.test.three
-
-EntryElement:   Foo
-Description:    "It is a Foo from shr.test.three"
-Value:          string

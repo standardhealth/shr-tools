@@ -1,0 +1,15 @@
+Grammar:   DataElement 6.0
+Namespace: shr.test
+
+Grammar:    DataElement 6.0
+Namespace:  shr.test
+
+
+Entry:      TheChild
+Parent:     TBD
+Description:    "Parent class cannot be TBD"
+Property:   Simple
+
+    Element:  Simple
+    Value:    string
+

@@ -1,0 +1,12 @@
+Grammar:   DataElement 6.0
+Namespace: booleanConstraintOnValueChild
+
+
+Element:     BooleanConstraintOnValueChild
+Description: "It is an entry with a boolean constraint on the value's child"
+Value:       SimpleBoolean
+             SimpleBoolean[boolean] = false
+
+Element:     SimpleBoolean
+Value:       boolean
+

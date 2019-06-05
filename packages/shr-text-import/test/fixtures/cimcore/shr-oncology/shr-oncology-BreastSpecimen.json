@@ -270,7 +270,7 @@
     },
     {
       "fqn": "cimi.entity.SpecimenContainer",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       },

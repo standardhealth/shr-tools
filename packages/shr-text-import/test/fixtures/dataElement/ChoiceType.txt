@@ -1,0 +1,9 @@
+Grammar:    DataElement 6.0
+Namespace:  choiceType
+
+// Testing the 'or' syntax 
+Element:  ChoiceElement
+Value:    date or dateTime or DateTimeString
+
+    Element:  DateTimeString
+    Value:    string

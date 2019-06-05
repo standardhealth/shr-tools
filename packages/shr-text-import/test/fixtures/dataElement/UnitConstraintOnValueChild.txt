@@ -1,0 +1,13 @@
+Grammar:   DataElement 6.0
+Namespace: unitConstraintOnValueChild
+Uses:      shr.core
+
+CodeSystem:		  UCUM = http://unitsofmeasure.org
+
+Element:   UnitConstraintOnValueChild
+Description:    "It is an entry with a unit constraint on the value's child"
+Value:          Volume
+Value[Volume][Quantity].Units = UCUM#dl "DeciLiter"
+
+Element:        Volume
+Value:          Quantity

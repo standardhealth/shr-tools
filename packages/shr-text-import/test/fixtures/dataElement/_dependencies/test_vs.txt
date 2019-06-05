@@ -3,3 +3,9 @@ Namespace:  shr.test
 
 // These are just dummy value sets so that value set resolution works in the tests
 ValueSet:   Coded
+ValueSet:   Coded2
+ValueSet:   TestVS1
+ValueSet:   TestVS2
+ValueSet:   TestVS3
+ValueSet:   TestVS4
+ValueSet:   TestVS5

@@ -24,7 +24,7 @@
   "fields": [
     {
       "fqn": "cimi.statement.ClinicalStatement",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       }

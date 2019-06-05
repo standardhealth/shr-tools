@@ -1,0 +1,8 @@
+Namespace:  shr.test
+Grammar:    DataElement 6.0
+
+Entry:          Simple
+Property:       Simple2  0..1
+
+Element:        Simple2
+Value:          concept

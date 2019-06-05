@@ -1,0 +1,13 @@
+Grammar:   DataElement 6.0
+Namespace: shr.test
+
+Entry:   BasedOn
+Property:   Simple
+
+Entry:    InvalidInheritanceValueOverride
+Parent:  BasedOn
+Simple2 from http://standardhealthrecord.org/test/vs/Coded (required)
+
+Element:    Simple
+Value:      concept
+

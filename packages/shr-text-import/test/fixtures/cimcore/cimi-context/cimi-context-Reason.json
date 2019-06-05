@@ -29,7 +29,7 @@
       },
       {
         "fqn": "cimi.statement.ClinicalStatement",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   }

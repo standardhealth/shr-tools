@@ -25,11 +25,11 @@
       },
       {
         "fqn": "cimi.entity.Substance",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.entity.Medication",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   },

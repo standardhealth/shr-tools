@@ -1,0 +1,9 @@
+Grammar:    DataElement 6.0
+Namespace:  valueIsElement
+
+Element:          ValueIsElement
+Description:    "Value is a reference to a simple element"
+Value:          Simple
+
+Element:        Simple
+Value:          string

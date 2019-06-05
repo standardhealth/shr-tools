@@ -1,8 +1,8 @@
-Grammar:    DataElement 5.0
-Namespace:  shr.test
+Grammar:    DataElement 6.0
+Namespace:  codedFromPathValueSet
 
-Path: TESTVS = http://standardhealthrecord.org/test/vs
+Path: TESTVS = http://standardhealthrecord.org/shr/test/vs
 
-EntryElement:   CodedFromPathValueSet
+Element:        CodedFromPathValueSet
 Description:    "It is a coded entry that uses a valueset with a path"
-Value:          code from TESTVS/Coded
+Value:          concept from TESTVS/Coded (required)

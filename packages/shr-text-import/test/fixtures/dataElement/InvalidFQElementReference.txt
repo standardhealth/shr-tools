@@ -1,9 +1,9 @@
-Grammar:    DataElement 5.0
+Grammar:    DataElement 6.0
 Namespace:  shr.test
 
 CodeSystem:     FOO = http://foo.org
 
-EntryElement:   Simple
-Concept:        FOO #bar
-Description:    "It is a simple entry with invalid fully qualified element reference"
-Value:          other.ns.Complex
+Element:      Simple
+Concept:      FOO#bar
+Description:  "It is a simple entry with invalid fully qualified element reference"
+Value:        other.ns.Complex

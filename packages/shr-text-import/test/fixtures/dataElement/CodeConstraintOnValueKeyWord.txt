@@ -1,15 +1,14 @@
-Grammar:     DataElement 5.0
-Namespace:   shr.test
-Uses:      shr.core
+Grammar:     DataElement 6.0
+Namespace:   codeConstraintOnValueKeyWord
 
 CodeSystem:     FOO = http://foo.org
 
-EntryElement:   BaseElement
-Value:          CodedElement
+Element:     BaseElement
+Value:  CodedElement
 
-EntryElement:   ChildElement
-Based on:       BaseElement
-_Value is FOO#bar "FooBar"
+Element:   ChildElement
+Parent:   BaseElement
+Value[CodedElement] = FOO#bar "FooBar"
 
 Element:   CodedElement
-Value:     Coding from http://standardhealthrecord.org/test/vs/Coded
+Value:     concept from http://standardhealthrecord.org/shr/test/vs/Coded (required)

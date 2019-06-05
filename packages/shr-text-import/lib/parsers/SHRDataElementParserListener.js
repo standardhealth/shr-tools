@@ -92,6 +92,24 @@ SHRDataElementParserListener.prototype.exitDataDef = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRDataElementParser#groupDef.
+SHRDataElementParserListener.prototype.enterGroupDef = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#groupDef.
+SHRDataElementParserListener.prototype.exitGroupDef = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRDataElementParser#groupHeader.
+SHRDataElementParserListener.prototype.enterGroupHeader = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#groupHeader.
+SHRDataElementParserListener.prototype.exitGroupHeader = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRDataElementParser#elementDef.
 SHRDataElementParserListener.prototype.enterElementDef = function(ctx) {
 };
@@ -125,6 +143,24 @@ SHRDataElementParserListener.prototype.enterEntryHeader = function(ctx) {
 
 // Exit a parse tree produced by SHRDataElementParser#entryHeader.
 SHRDataElementParserListener.prototype.exitEntryHeader = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRDataElementParser#abstractDef.
+SHRDataElementParserListener.prototype.enterAbstractDef = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#abstractDef.
+SHRDataElementParserListener.prototype.exitAbstractDef = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRDataElementParser#abstractHeader.
+SHRDataElementParserListener.prototype.enterAbstractHeader = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#abstractHeader.
+SHRDataElementParserListener.prototype.exitAbstractHeader = function(ctx) {
 };
 
 
@@ -182,21 +218,30 @@ SHRDataElementParserListener.prototype.exitField = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRDataElementParser#fieldType.
-SHRDataElementParserListener.prototype.enterFieldType = function(ctx) {
+// Enter a parse tree produced by SHRDataElementParser#propertyField.
+SHRDataElementParserListener.prototype.enterPropertyField = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRDataElementParser#fieldType.
-SHRDataElementParserListener.prototype.exitFieldType = function(ctx) {
+// Exit a parse tree produced by SHRDataElementParser#propertyField.
+SHRDataElementParserListener.prototype.exitPropertyField = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRDataElementParser#basedOnProp.
-SHRDataElementParserListener.prototype.enterBasedOnProp = function(ctx) {
+// Enter a parse tree produced by SHRDataElementParser#propertyFieldType.
+SHRDataElementParserListener.prototype.enterPropertyFieldType = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRDataElementParser#basedOnProp.
-SHRDataElementParserListener.prototype.exitBasedOnProp = function(ctx) {
+// Exit a parse tree produced by SHRDataElementParser#propertyFieldType.
+SHRDataElementParserListener.prototype.exitPropertyFieldType = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRDataElementParser#parentProp.
+SHRDataElementParserListener.prototype.enterParentProp = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#parentProp.
+SHRDataElementParserListener.prototype.exitParentProp = function(ctx) {
 };
 
 
@@ -281,15 +326,6 @@ SHRDataElementParserListener.prototype.exitSimpleOrFQName = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRDataElementParser#ref.
-SHRDataElementParserListener.prototype.enterRef = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRDataElementParser#ref.
-SHRDataElementParserListener.prototype.exitRef = function(ctx) {
-};
-
-
 // Enter a parse tree produced by SHRDataElementParser#code.
 SHRDataElementParserListener.prototype.enterCode = function(ctx) {
 };
@@ -317,12 +353,12 @@ SHRDataElementParserListener.prototype.exitCodeOrFQCode = function(ctx) {
 };
 
 
-// Enter a parse tree produced by SHRDataElementParser#bindingInfix.
-SHRDataElementParserListener.prototype.enterBindingInfix = function(ctx) {
+// Enter a parse tree produced by SHRDataElementParser#bindingStrength.
+SHRDataElementParserListener.prototype.enterBindingStrength = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRDataElementParser#bindingInfix.
-SHRDataElementParserListener.prototype.exitBindingInfix = function(ctx) {
+// Exit a parse tree produced by SHRDataElementParser#bindingStrength.
+SHRDataElementParserListener.prototype.exitBindingStrength = function(ctx) {
 };
 
 
@@ -344,12 +380,39 @@ SHRDataElementParserListener.prototype.exitElementWithConstraint = function(ctx)
 };
 
 
-// Enter a parse tree produced by SHRDataElementParser#elementPath.
-SHRDataElementParserListener.prototype.enterElementPath = function(ctx) {
+// Enter a parse tree produced by SHRDataElementParser#elementBracketPathFirstPart.
+SHRDataElementParserListener.prototype.enterElementBracketPathFirstPart = function(ctx) {
 };
 
-// Exit a parse tree produced by SHRDataElementParser#elementPath.
-SHRDataElementParserListener.prototype.exitElementPath = function(ctx) {
+// Exit a parse tree produced by SHRDataElementParser#elementBracketPathFirstPart.
+SHRDataElementParserListener.prototype.exitElementBracketPathFirstPart = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRDataElementParser#elementBracketPathSecondPart.
+SHRDataElementParserListener.prototype.enterElementBracketPathSecondPart = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#elementBracketPathSecondPart.
+SHRDataElementParserListener.prototype.exitElementBracketPathSecondPart = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRDataElementParser#elementBracketPathThirdPart.
+SHRDataElementParserListener.prototype.enterElementBracketPathThirdPart = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#elementBracketPathThirdPart.
+SHRDataElementParserListener.prototype.exitElementBracketPathThirdPart = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRDataElementParser#elementBracketPath.
+SHRDataElementParserListener.prototype.enterElementBracketPath = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#elementBracketPath.
+SHRDataElementParserListener.prototype.exitElementBracketPath = function(ctx) {
 };
 
 
@@ -359,15 +422,6 @@ SHRDataElementParserListener.prototype.enterElementConstraint = function(ctx) {
 
 // Exit a parse tree produced by SHRDataElementParser#elementConstraint.
 SHRDataElementParserListener.prototype.exitElementConstraint = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRDataElementParser#legacyWithCode.
-SHRDataElementParserListener.prototype.enterLegacyWithCode = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRDataElementParser#legacyWithCode.
-SHRDataElementParserListener.prototype.exitLegacyWithCode = function(ctx) {
 };
 
 
@@ -416,21 +470,21 @@ SHRDataElementParserListener.prototype.exitElementTypeConstraint = function(ctx)
 };
 
 
+// Enter a parse tree produced by SHRDataElementParser#elementUrlConstraint.
+SHRDataElementParserListener.prototype.enterElementUrlConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#elementUrlConstraint.
+SHRDataElementParserListener.prototype.exitElementUrlConstraint = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRDataElementParser#elementIncludesTypeConstraint.
 SHRDataElementParserListener.prototype.enterElementIncludesTypeConstraint = function(ctx) {
 };
 
 // Exit a parse tree produced by SHRDataElementParser#elementIncludesTypeConstraint.
 SHRDataElementParserListener.prototype.exitElementIncludesTypeConstraint = function(ctx) {
-};
-
-
-// Enter a parse tree produced by SHRDataElementParser#elementWithUnitsConstraint.
-SHRDataElementParserListener.prototype.enterElementWithUnitsConstraint = function(ctx) {
-};
-
-// Exit a parse tree produced by SHRDataElementParser#elementWithUnitsConstraint.
-SHRDataElementParserListener.prototype.exitElementWithUnitsConstraint = function(ctx) {
 };
 
 

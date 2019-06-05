@@ -8,7 +8,7 @@
   "description": "The full staging information",
   "value": {
     "fqn": "cimi.statement.EvaluationResultRecorded",
-    "valueType": "RefValue",
+    "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
       "max": 1

@@ -1,0 +1,7 @@
+Grammar:   DataElement 6.0
+Namespace: shr.test.one
+Uses:      shr.test.two, shr.test.three
+
+Entry:          Ambiguous
+Description:    "It is an entry that uses an ambiguous reference"
+Property:        Foo

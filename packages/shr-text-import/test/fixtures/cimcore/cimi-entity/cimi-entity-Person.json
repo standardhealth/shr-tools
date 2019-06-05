@@ -100,7 +100,7 @@
     },
     {
       "fqn": "cimi.entity.ExternalHealthRecord",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       }

@@ -5,8 +5,8 @@ const {SHRDataElementParser} = require('./parsers/SHRDataElementParser');
 const {SHRDataElementParserVisitor} = require('./parsers/SHRDataElementParserVisitor');
 const {Version} = require('shr-models');
 
-const VERSION = new Version(5, 3, 0);
-const GRAMMAR_VERSION = new Version(5, 1, 0);
+const VERSION = new Version(6, 0, 0);
+const GRAMMAR_VERSION = new Version(6, 0, 0);
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
 var logger = rootLogger;
@@ -41,54 +41,32 @@ class Preprocessor extends SHRDataElementParserVisitor {
       return defaults;
     }
 
-    //Fill in config dictionary with default values, if necessary (with some special logic)
-    for (var key in defaults) {
-      if (configFile[key] == null) {
-        if (key === 'fhirURL' && configFile['projectURL'] != null) { //special logic
-          configFile['fhirURL'] = `${configFile['projectURL']}/fhir`;
-          continue;
-        }
-
-        //handle old ig fields
-        // TODO remove this handling once we fully deprecate the old ig fields
-        if (key === 'implementationGuide') {
-          let igObject = {};
-          if (configFile['igIndexContent'] != null) {
-            logger.warn(`Configuration file 'igIndexContent' field will be deprecated. Use 'implementationGuide.indexContent' instead.`);
-            igObject.indexContent = configFile['igIndexContent'];
-          } else { // since we use continue at end of old ig field conditional, we need to handle the case of implementationGuide.indexContent separately
-            logger.warn('Configuration file missing key: implementationGuide.indexContent, using default key: %s instead. ERROR_CODE:01002', defaults['implementationGuide']['indexContent']);
-            igObject.indexContent = defaults['implementationGuide']['indexContent'];
-          }
-
-          if (configFile['igLogicalModels'] != null) {
-            logger.warn(`Configuration file 'igLogicalModels' field will be deprecated. Use 'implementationGuide.includeLogicalModels' instead.`);
-            igObject.includeLogicalModels = configFile['igLogicalModels'];
-          }
-
-          if (configFile['igModelDoc'] != null) {
-            logger.warn(`Configuration file 'igModelDoc' field will be deprecated. Use 'implementationGuide.includeModelDoc' instead.`);
-            igObject.includeModelDoc = configFile['igModelDoc'];
-          }
-
-          if (configFile['igPrimarySelectionStrategy'] != null) {
-            logger.warn(`Configuration file 'igPrimarySelectionStrategy' field will be deprecated. Use 'implementationGuide.primarySelectionStrategy' instead.`);
-            igObject.primarySelectionStrategy = configFile['igPrimarySelectionStrategy'];
-          }
-
-          configFile['implementationGuide'] = igObject;
-          continue;
-        }
-
-        configFile[key] = defaults[key];
-        logger.warn('Configuration file missing key: %s, using default key: %s instead. ERROR_CODE:01002', key, JSON.stringify(defaults[key]));
-      } else {
-        //Additional compatibility logic
-        if ( (key === 'projectURL' || key === 'fhirURL' ) && configFile[key].endsWith('/')) {
-          configFile[key] = configFile[key].slice(0, -1);
-        }
+    // Fix config where necessary
+    // [1] Translate old IG fields to new IG fields
+    const checkIgProperty = (oldPropertyName, igPropertyName) => {
+      if (configFile[oldPropertyName] != null) {
+        logger.warn(`Configuration file '${oldPropertyName}' field will be deprecated. Use 'implementationGuide.${igPropertyName}' instead.`);
+        configFile.implementationGuide = configFile.implementationGuide || {};
+        configFile.implementationGuide[igPropertyName] = configFile[oldPropertyName];
+        delete configFile[oldPropertyName];
+      }
+    };
+    checkIgProperty('igIndexContent', 'indexContent');
+    checkIgProperty('igLogicalModels', 'includeLogicalModels');
+    checkIgProperty('igModelDoc', 'includeModelDoc');
+    checkIgProperty('igPrimarySelectionStrategy', 'primarySelectionStrategy');
+    // [2] Remove trailing slashes from projectURL and fhirURL
+    for (let key of ['projectURL', 'fhirURL']) {
+      if (configFile[key] && configFile[key].endsWith('/')) {
+        configFile[key] = configFile[key].slice(0, -1);
       }
     }
+    // [3] Create fhirURL from projectURL if necessary
+    if (configFile.fhirURL == null && configFile.projectURL != null) {
+      configFile.fhirURL = `${configFile['projectURL']}/fhir`;
+    }
+    // [4] Fill in default data where it is missing
+    fillInDefaultData(defaults, configFile);
 
     this._config = configFile;
 
@@ -117,12 +95,16 @@ class Preprocessor extends SHRDataElementParserVisitor {
   }
 
   visitDoc(ctx) {
-    if (!this.checkVersion(ctx.docHeader().version())) {
-      return;
+    if (ctx.docHeader().version()) {
+      if (!this.checkVersion(ctx.docHeader().version())) {
+        return;
+      }
     }
-    const ns = ctx.docHeader().namespace().getText();
-    logger.debug({shrId: ns}, 'Start preprocessing namespace');
-
+    let ns = '';
+    if(ctx.docHeader().namespace()) {
+      ns = ctx.docHeader().namespace().getText();
+      logger.debug({shrId: ns}, 'Start preprocessing namespace');
+    }
     try {
       if (ctx.pathDefs()) {
         const removeTrailingSlash = function(url) {
@@ -158,6 +140,12 @@ class Preprocessor extends SHRDataElementParserVisitor {
           this._data.registerDefinition(ns, name);
         } else if (def.elementDef()) {
           const name = def.elementDef().elementHeader().simpleName().getText();
+          this._data.registerDefinition(ns, name);
+        } else if (def.abstractDef()) {
+          const name = def.abstractDef().abstractHeader().simpleName().getText();
+          this._data.registerDefinition(ns, name);
+        } else if (def.groupDef()) {
+          const name = def.groupDef().groupHeader().simpleName().getText();
           this._data.registerDefinition(ns, name);
         }
       }
@@ -289,6 +277,19 @@ class PreprocessedData {
       result['error'] = `Found conflicting definitions for ${name} in multiple namespaces: ${foundNamespaces}. ERROR_CODE:11022`;
     }
     return result;
+  }
+}
+
+function fillInDefaultData(defaultData, configData, parentKeys = []) {
+  //Fill in config dictionary with default values, if necessary (with some special logic)
+  for (let key in defaultData) {
+    if (typeof defaultData[key] === 'object' && configData[key] != null) {
+      // Need to drill in further to see if subkeys are missing
+      fillInDefaultData(defaultData[key], configData[key], [...parentKeys, key]);
+    } else if (configData[key] == null) {
+      configData[key] = defaultData[key];
+      logger.warn('Configuration file missing key: %s, using default value: %s. ERROR_CODE:01002', [...parentKeys, key].join('.'), JSON.stringify(configData[key]));
+    }
   }
 }
 

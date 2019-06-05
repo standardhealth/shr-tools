@@ -6,12 +6,12 @@ const err = require('shr-test-helpers/errors');
 // Set the logger -- this is needed for detecting and checking errors
 setLogger(err.logger());
 
-describe('#importFromFilePath()', () => {
+describe('#importMapping', () => {
   beforeEach(function() {
     err.clear();
   });
 
-  it('should correctly import a simple mapping', () => {
+  it('Map1: should correctly import a simple mapping', () => {
     const specifications =  importFixture('SimpleMapping');
     expectVersions(specifications, new mdls.Version(4,1));
     expectTargets(specifications, 'TEST');
@@ -23,7 +23,7 @@ describe('#importFromFilePath()', () => {
     ]);
   });
 
-  it('should correctly import a mapping with deep paths', () => {
+  it('Map2: should correctly import a mapping with deep paths', () => {
     const specifications =  importFixture('DeepPathMapping');
     expectVersions(specifications, new mdls.Version(4,1));
     expectTargets(specifications, 'TEST');
@@ -35,7 +35,7 @@ describe('#importFromFilePath()', () => {
     ]);
   });
 
-  it('should correctly import a mapping with special words', () => {
+  it('Map3: should correctly import a mapping with special words', () => {
     const specifications =  importFixture('SpecialWordMapping');
     expectVersions(specifications, new mdls.Version(5,1));
     expectTargets(specifications, 'TEST');
@@ -55,7 +55,7 @@ describe('#importFromFilePath()', () => {
     ]);
   });
 
-  it('should correctly import a mapping with paths and choices', () => {
+  it('Map4: should correctly import a mapping with paths and choices', () => {
     const specifications =  importFixture('ChoicePathMapping');
     expectVersions(specifications, new mdls.Version(4,1));
     expectTargets(specifications, 'TEST');

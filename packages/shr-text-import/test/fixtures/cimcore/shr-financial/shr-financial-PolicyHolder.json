@@ -15,15 +15,15 @@
     "options": [
       {
         "fqn": "cimi.entity.Patient",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.entity.RelatedPerson",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.entity.Organization",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   }

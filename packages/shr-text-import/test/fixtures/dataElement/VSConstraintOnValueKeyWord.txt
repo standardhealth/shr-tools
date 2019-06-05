@@ -1,12 +1,12 @@
-Grammar:     DataElement 5.0
-Namespace:   shr.test
+Grammar:     DataElement 6.0
+Namespace:   vSConstraintOnValueKeyWord
 
-EntryElement:   BaseElement
-Value:          CodedElement
+Element:    BaseElement
+Value:    CodedElement
 
-EntryElement:   ChildElement
-Based on:       BaseElement
-_Value from http://standardhealthrecord.org/test/vs/Coded
+Element:    ChildElement
+Parent:   BaseElement
+Value[CodedElement] from http://standardhealthrecord.org/shr/test/vs/Coded (required)
 
 Element:   CodedElement
-Value:     code
+Value:     concept

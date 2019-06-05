@@ -124,7 +124,7 @@
     },
     {
       "fqn": "cimi.entity.Device",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
         "max": 1
@@ -136,7 +136,7 @@
     },
     {
       "fqn": "cimi.entity.Specimen",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
         "max": 1

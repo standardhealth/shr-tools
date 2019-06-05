@@ -1,0 +1,21 @@
+{
+    "projectName":"Test Project",
+    "projectShorthand":"TEST",
+    "projectURL":"http://test.org",
+    "fhirURL": "http://test.org/fhir",
+    "igIndexContent": "basicindexcontent.html",
+    "igLogicalModels": false,
+    "igModelDoc": false,
+    "igPrimarySelectionStrategy":{
+      "strategy": "hybrid",
+			"primary": ["test"],
+      "hideSupporting": true
+		},
+    "publisher":"Test Publisher",
+    "contact":[{
+        "telecom":[{
+          "system":"url",
+          "value":"http://test.org"
+        }]
+    }]
+}

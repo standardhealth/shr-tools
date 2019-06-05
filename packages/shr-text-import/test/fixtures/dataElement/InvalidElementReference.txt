@@ -1,9 +1,5 @@
-Grammar:    DataElement 5.0
+Grammar:    DataElement 6.0
 Namespace:  shr.test
 
-CodeSystem:     FOO = http://foo.org
-
-EntryElement:   Simple
-Concept:        FOO #bar
-Description:    "It is a simple entry with invalid element reference"
-Value:          Complex
+Element:        Simple
+Value:          Nonexistent

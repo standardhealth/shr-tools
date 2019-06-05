@@ -1,9 +1,0 @@
-Grammar:    DataElement 5.0
-Namespace:  shr.test
-
-EntryElement:   SimpleReference
-Description:    "It is a reference to a simple element"
-Value:          ref(Simple)
-
-Element:        Simple
-Value:          string

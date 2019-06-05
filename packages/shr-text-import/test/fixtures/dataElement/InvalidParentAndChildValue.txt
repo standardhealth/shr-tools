@@ -1,0 +1,17 @@
+Grammar:   DataElement 6.0
+Namespace: invalidParentAndChildValue
+
+// In this counterexample, both parent and child declare a value with different elements.
+
+Element:      Child
+Parent:       Base
+Value:        Simple
+
+Element:      Base
+Value:        Simple2
+
+Element:      Simple
+Value:        string
+
+Element:      Simple2
+Value:        string

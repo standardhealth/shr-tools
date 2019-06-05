@@ -4,4 +4,4 @@ if (process.argv.length < 3) {
   console.error('Missing path to SHR definition folder or file');
 }
 
-const result = importFromFilePath(process.argv[2]);
+importFromFilePath(process.argv[2]);

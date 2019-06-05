@@ -1,26 +1,23 @@
-Grammar:   DataElement 5.0
-Namespace: shr.test
+Grammar:   DataElement 6.0
+Namespace: basedOn
 
-CodeSystem:     FOO = http://foo.org
-CodeSystem:     BOO = http://boo.org
+// Need counterexample where the parent class doesn't exist (mlt: created Neg25)
+// Need counterexample where both the parent and child declare a value (mlt: created Neg26)
+// Need counterexample where child declares a property that exists in a parent (mlt: created Neg27)
 
-EntryElement: SimpleBasedOn
-Based on:     SimpleBase
-Concept:      FOO #bar
-Description:  "It is a simple definition based on SimpleBase"
-Value:        Simple
+Entry:        Child
+Parent:       Base
+Property:     Simple 0..1
 
-Element:      SimpleBase
-Concept:      BOO #far
-Description:  "It is a base for SimpleBasedOn"
-0..*    Coded
-1..*    Simple2
+Entry:        Base
+Property:     Coded 0..*
+Property:     Simple2 1..2
 
-Element:        Simple
-Value:          string
+Element:       Simple
+Value:         string
 
-Element:        Coded
-Value:          code
+Element:       Coded
+Value:         concept
 
-Element:        Simple2
-Value:          string
+Element:       Simple2
+Value:         string

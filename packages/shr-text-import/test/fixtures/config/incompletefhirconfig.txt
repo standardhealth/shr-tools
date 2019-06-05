@@ -3,6 +3,8 @@
     "projectShorthand":"TEST",
     "projectURL":"http://test.org",
     "implementationGuide": {
+      "npmName": "basic",
+      "version": "1.2.3",
       "indexContent": "basicindexcontent.html"
     },
     "publisher":"Test Publisher",

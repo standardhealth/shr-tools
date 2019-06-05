@@ -8,7 +8,7 @@
   "description": "Patient findings documented during the performance of the procedure.",
   "value": {
     "fqn": "cimi.statement.FindingStatement",
-    "valueType": "RefValue",
+    "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
       "max": 1

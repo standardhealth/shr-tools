@@ -1,0 +1,11 @@
+Grammar:   DataElement 6.0
+Namespace: constraintOnChoiceValue
+
+CodeSystem:     FOO = http://foo.org
+
+Element:  ConstraintOnChoiceValue
+Description: "Must specify which value choice is being constrained, even when the type make it obvious."
+Value:   boolean or concept
+Value[boolean] = true
+Value[concept] = FOO#baz
+

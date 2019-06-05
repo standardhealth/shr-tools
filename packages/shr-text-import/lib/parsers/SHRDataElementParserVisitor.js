@@ -57,6 +57,16 @@ SHRDataElementParserVisitor.prototype.visitDataDef = function(ctx) {
 };
 
 
+// Visit a parse tree produced by SHRDataElementParser#groupDef.
+SHRDataElementParserVisitor.prototype.visitGroupDef = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRDataElementParser#groupHeader.
+SHRDataElementParserVisitor.prototype.visitGroupHeader = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRDataElementParser#elementDef.
 SHRDataElementParserVisitor.prototype.visitElementDef = function(ctx) {
 };
@@ -74,6 +84,16 @@ SHRDataElementParserVisitor.prototype.visitEntryDef = function(ctx) {
 
 // Visit a parse tree produced by SHRDataElementParser#entryHeader.
 SHRDataElementParserVisitor.prototype.visitEntryHeader = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRDataElementParser#abstractDef.
+SHRDataElementParserVisitor.prototype.visitAbstractDef = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRDataElementParser#abstractHeader.
+SHRDataElementParserVisitor.prototype.visitAbstractHeader = function(ctx) {
 };
 
 
@@ -107,13 +127,18 @@ SHRDataElementParserVisitor.prototype.visitField = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRDataElementParser#fieldType.
-SHRDataElementParserVisitor.prototype.visitFieldType = function(ctx) {
+// Visit a parse tree produced by SHRDataElementParser#propertyField.
+SHRDataElementParserVisitor.prototype.visitPropertyField = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRDataElementParser#basedOnProp.
-SHRDataElementParserVisitor.prototype.visitBasedOnProp = function(ctx) {
+// Visit a parse tree produced by SHRDataElementParser#propertyFieldType.
+SHRDataElementParserVisitor.prototype.visitPropertyFieldType = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRDataElementParser#parentProp.
+SHRDataElementParserVisitor.prototype.visitParentProp = function(ctx) {
 };
 
 
@@ -162,11 +187,6 @@ SHRDataElementParserVisitor.prototype.visitSimpleOrFQName = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRDataElementParser#ref.
-SHRDataElementParserVisitor.prototype.visitRef = function(ctx) {
-};
-
-
 // Visit a parse tree produced by SHRDataElementParser#code.
 SHRDataElementParserVisitor.prototype.visitCode = function(ctx) {
 };
@@ -182,8 +202,8 @@ SHRDataElementParserVisitor.prototype.visitCodeOrFQCode = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRDataElementParser#bindingInfix.
-SHRDataElementParserVisitor.prototype.visitBindingInfix = function(ctx) {
+// Visit a parse tree produced by SHRDataElementParser#bindingStrength.
+SHRDataElementParserVisitor.prototype.visitBindingStrength = function(ctx) {
 };
 
 
@@ -197,18 +217,28 @@ SHRDataElementParserVisitor.prototype.visitElementWithConstraint = function(ctx)
 };
 
 
-// Visit a parse tree produced by SHRDataElementParser#elementPath.
-SHRDataElementParserVisitor.prototype.visitElementPath = function(ctx) {
+// Visit a parse tree produced by SHRDataElementParser#elementBracketPathFirstPart.
+SHRDataElementParserVisitor.prototype.visitElementBracketPathFirstPart = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRDataElementParser#elementBracketPathSecondPart.
+SHRDataElementParserVisitor.prototype.visitElementBracketPathSecondPart = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRDataElementParser#elementBracketPathThirdPart.
+SHRDataElementParserVisitor.prototype.visitElementBracketPathThirdPart = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRDataElementParser#elementBracketPath.
+SHRDataElementParserVisitor.prototype.visitElementBracketPath = function(ctx) {
 };
 
 
 // Visit a parse tree produced by SHRDataElementParser#elementConstraint.
 SHRDataElementParserVisitor.prototype.visitElementConstraint = function(ctx) {
-};
-
-
-// Visit a parse tree produced by SHRDataElementParser#legacyWithCode.
-SHRDataElementParserVisitor.prototype.visitLegacyWithCode = function(ctx) {
 };
 
 
@@ -237,13 +267,13 @@ SHRDataElementParserVisitor.prototype.visitElementTypeConstraint = function(ctx)
 };
 
 
-// Visit a parse tree produced by SHRDataElementParser#elementIncludesTypeConstraint.
-SHRDataElementParserVisitor.prototype.visitElementIncludesTypeConstraint = function(ctx) {
+// Visit a parse tree produced by SHRDataElementParser#elementUrlConstraint.
+SHRDataElementParserVisitor.prototype.visitElementUrlConstraint = function(ctx) {
 };
 
 
-// Visit a parse tree produced by SHRDataElementParser#elementWithUnitsConstraint.
-SHRDataElementParserVisitor.prototype.visitElementWithUnitsConstraint = function(ctx) {
+// Visit a parse tree produced by SHRDataElementParser#elementIncludesTypeConstraint.
+SHRDataElementParserVisitor.prototype.visitElementIncludesTypeConstraint = function(ctx) {
 };
 
 

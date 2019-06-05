@@ -4,6 +4,8 @@
     "projectURL":"http://test.org",
     "fhirURL": "http://test.org/fhir",
     "implementationGuide": {
+      "npmName": "basic",
+      "version": "1.2.3",
       "indexContent": "basicindexcontent.html"
     },
     "publisher":"Test Publisher",

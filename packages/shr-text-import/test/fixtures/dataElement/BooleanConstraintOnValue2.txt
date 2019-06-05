@@ -1,0 +1,8 @@
+Grammar:   DataElement 6.0
+Namespace: booleanConstraintOnValue2
+
+Element:        BooleanConstraintOnValue
+Description:    "It is an entry with a boolean constraint on the value"
+Value:          boolean
+Value[boolean] = true
+

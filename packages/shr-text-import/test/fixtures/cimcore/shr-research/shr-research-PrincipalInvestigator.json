@@ -8,7 +8,7 @@
   "description": "Indicates the individual who has primary oversite of the execution of the study.",
   "value": {
     "fqn": "cimi.entity.Practitioner",
-    "valueType": "RefValue",
+    "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
       "max": 1

@@ -15,11 +15,11 @@
     "options": [
       {
         "fqn": "cimi.entity.Entity",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.entity.Organization",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   }

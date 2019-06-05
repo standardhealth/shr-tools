@@ -1,0 +1,8 @@
+Grammar:   DataElement 6.0
+Namespace: codeConstraintOnValue
+
+CodeSystem:     FOO = http://foo.org
+
+Element:        CodeConstraintOnValue
+Description:    "It is an entry with a code constraint on the value"
+Value:          concept = FOO#bar "FooBar"

@@ -1,0 +1,12 @@
+Grammar:   DataElement 6.0
+Namespace: conceptSingle
+
+CodeSystem:     FOO = http://foo.org
+
+Entry:          ConceptSingle
+Concept:        FOO#bar
+Property:       Simple 0..1
+
+Element:        Simple
+Value:          string
+

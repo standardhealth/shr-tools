@@ -1,0 +1,16 @@
+Grammar:   DataElement 6.0
+Namespace: shr.test
+
+Grammar:    DataElement 6.0
+Namespace:  shr.test
+
+
+Entry:      Choice
+Description:    "Not valid because properties cannot be choices."
+Property:   StringElement or ConceptElement
+
+    Element:  StringElement
+    Value:    string
+
+    Element:  ConceptElement
+    Value:    concept

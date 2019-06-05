@@ -19,7 +19,7 @@
       },
       {
         "fqn": "cimi.entity.Organization",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   }

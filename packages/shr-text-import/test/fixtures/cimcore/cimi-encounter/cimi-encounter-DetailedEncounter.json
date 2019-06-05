@@ -244,7 +244,7 @@
     },
     {
       "fqn": "cimi.statement.ClinicalNote",
-      "valueType": "RefValue",
+      "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
         "max": 1

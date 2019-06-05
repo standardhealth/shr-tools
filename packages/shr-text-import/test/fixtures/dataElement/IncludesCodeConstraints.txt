@@ -1,0 +1,14 @@
+Grammar:    DataElement 6.0
+Namespace:  includesCodeConstraints
+
+CodeSystem:     FOO = http://foo.org
+
+
+Entry:          IncludesCodeConstraintOnField
+Description:    "It is a group entry with an includes code constraint on a field"
+Property:       Coded 1..*
+                Coded += FOO#bar "FooBar"
+                Coded += FOO#baz "FooBaz"
+
+Element:        Coded
+Value:          concept from http://standardhealthrecord.org/shr/test/vs/Coded (example)

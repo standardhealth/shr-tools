@@ -10,6 +10,7 @@ const {ContentProfileImporter} = require('./contentProfileListener');
 const {CimcoreImporter} = require('./cimcore/cimcoreImport');
 
 var logger = bunyan.createLogger({name: 'shr-text-import'});
+
 function setLogger(bunyanLogger) {
   logger = bunyanLogger;
   require('./preprocessor').setLogger(logger);
@@ -33,7 +34,7 @@ function importFromFilePath(filePath, configuration=[], specifications = new Spe
   }
   const importer = new DataElementImporter(preprocessor.data, specifications);
   for (const file of filesByType.dataElement) {
-    importer.importFile(file, filePath);
+    importer.importFile(file, path.dirname(filePath));
   }
   const mappingImporter = new MappingImporter(specifications);
   for (const file of filesByType.map) {

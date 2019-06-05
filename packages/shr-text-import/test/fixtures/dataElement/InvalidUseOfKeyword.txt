@@ -1,0 +1,10 @@
+Grammar:    DataElement 6.0
+Namespace:  InvalidUseOfKeyword
+
+CodeSystem:     FOO = http://foo.org
+
+Entry:    KeywordAbuse
+Property: Value 1..1
+
+Element:    Value
+Value:      string

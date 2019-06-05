@@ -5,7 +5,7 @@ const {SHRDataElementLexer} = require('./parsers/SHRDataElementLexer');
 const {SHRDataElementParser} = require('./parsers/SHRDataElementParser');
 const {SHRDataElementParserListener} = require('./parsers/SHRDataElementParserListener');
 const {SHRErrorListener} = require('./errorListener.js');
-const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, RefValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, TBD, PRIMITIVES, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
+const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, TBD, PRIMITIVES, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
 var logger = rootLogger;
@@ -62,9 +62,16 @@ class DataElementImporter extends SHRDataElementParserListener {
     }
   }
 
+
   enterDoc(ctx) {
     // Process the namespace
-    const ns = ctx.docHeader().namespace().getText();
+    let ns = '';
+    if (ctx.docHeader().namespace()) {
+      ns = ctx.docHeader().namespace().getText();
+    }
+    else {
+      logger.error('Namespace declaration not found. ERROR_CODE:11038');
+    }
     this._currentNs = ns;
     let nsDef = this._specs.namespaces.find(ns);
     if (typeof nsDef === 'undefined') {
@@ -76,12 +83,18 @@ class DataElementImporter extends SHRDataElementParserListener {
     }
 
     // Process the version
-    const version = ctx.docHeader().version();
-    const major = parseInt(version.WHOLE_NUMBER()[0], 10);
-    const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
-    this._currentGrammarVersion = new Version(major, minor);
+    let docHeader = ctx.docHeader();
+    if (docHeader.version()) {
+      const version = docHeader.version();
+      const major = parseInt(version.WHOLE_NUMBER()[0], 10);
+      const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
+      this._currentGrammarVersion = new Version(major, minor);
 
-    logger.debug({shrId: ns, version: this._currentGrammarVersion.toString()}, 'Start importing data element namespace');
+      logger.debug({shrId: ns, version: this._currentGrammarVersion.toString()}, 'Start importing data element namespace');
+    }
+    else {
+      logger.error('Grammar declaration not found. ERROR_CODE 11039');
+    }
   }
 
   exitDoc(ctx) {
@@ -98,7 +111,7 @@ class DataElementImporter extends SHRDataElementParserListener {
 
   enterElementDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.elementHeader().simpleName().getText());
-    this._currentDef = new DataElement(id, false, ctx.elementHeader().KW_ABSTRACT() != null).withGrammarVersion(this._currentGrammarVersion);
+    this._currentDef = new DataElement(id, false, false).withGrammarVersion(this._currentGrammarVersion);
 
     // Setup a child logger to associate logs with the current element
     const lastLogger = logger;
@@ -118,18 +131,72 @@ class DataElementImporter extends SHRDataElementParserListener {
     }
   }
 
+  enterAbstractDef(ctx) {
+    const id = new Identifier(this._currentNs, ctx.abstractHeader().simpleName().getText());
+    this._currentDef = new DataElement(id, false, true).withGrammarVersion(this._currentGrammarVersion);
+    // Setup a child logger to associate logs with the current element
+    const lastLogger = logger;
+    logger = logger.child({ shrId: id.fqn });
+    logger.parent = lastLogger;
+    logger.debug('Start importing data element');
+
+    if (ctx.abstractHeader().simpleName().LOWER_WORD()) { logger.error('Element name "%s" should begin with a capital letter. ERROR_CODE:11001', ctx.elementHeader().simpleName().getText()); }
+  }
+
+  exitAbstractDef(ctx) {
+    try {
+      this.pushCurrentDefinition();
+    } finally {
+      logger.debug('Done importing data element');
+      logger = logger.parent;
+    }
+  }
+
+  enterGroupDef(ctx) {
+    const id = new Identifier(this._currentNs, ctx.groupHeader().simpleName().getText());
+    this._currentDef = new DataElement(id, false, false).withGrammarVersion(this._currentGrammarVersion);
+
+    // Setup a child logger to associate logs with the current element
+    const lastLogger = logger;
+    logger = logger.child({ shrId: id.fqn });
+    logger.parent = lastLogger;
+    logger.debug('Start importing data element');
+
+    if (ctx.groupHeader().simpleName().LOWER_WORD()) { logger.error('Element name "%s" should begin with a capital letter. ERROR_CODE:11001', ctx.groupHeader().simpleName().getText()); }
+  }
+
+  exitGroupDef(ctx) {
+    try {
+      this.pushCurrentDefinition();
+    } finally {
+      logger.debug('Done importing data element');
+      logger = logger.parent;
+    }
+  }
+
   enterEntryDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.entryHeader().simpleName().getText());
     this._currentDef = new DataElement(id, true).withGrammarVersion(this._currentGrammarVersion);
+
+    // Setup a child logger to associate logs with the current element
+    const lastLogger = logger;
+    logger = logger.child({ shrId: id.fqn });
+    logger.parent = lastLogger;
+    logger.debug('Start importing data element');
 
     if (ctx.entryHeader().simpleName().LOWER_WORD()) { logger.error('Entry Element name "%s" should begin with a capital letter. ERROR_CODE:11002', ctx.entryHeader().simpleName().getText()); }
   }
 
   exitEntryDef(ctx) {
-    this.pushCurrentDefinition();
+    try {
+      this.pushCurrentDefinition();
+    } finally {
+      logger.debug('Done importing data element');
+      logger = logger.parent;
+    }
   }
 
-  enterBasedOnProp(ctx) {
+  enterParentProp(ctx) {
     const identifier = this.resolveToIdentifierOrTBD(ctx);
     if (identifier.isSpecialKeyWord) {
       logger.error(`Elements cannot be based on "${identifier.name}" keyword. ERROR_CODE:11023`);
@@ -153,23 +220,178 @@ class DataElementImporter extends SHRDataElementParserListener {
   }
 
   enterValue(ctx) {
-    const value = this.processCountAndTypes(ctx.count(), ctx.valueType());
-    if (ctx.count() == null) {
-      value.setMinMax(1, 1);
-    }
+    const value = this.processCountAndTypesForValue(ctx);
     this._currentDef.value = value;
   }
 
-  enterField(ctx) {
-    const field = this.processCountAndTypes(ctx.count(), ctx.fieldType());
-    if (field instanceof IncompleteValue && field.identifier && field.identifier.isValueKeyWord) {
-      if (this._currentDef.value) {
-        logger.error('Elements cannot use "Value:" modifier and specify "_Value" field at same time. ERROR_CODE:11024');
-        return;
+  processElementWithConstraint(ctx) {
+    let value;
+    let path = [];
+    let min, max;
+    if (ctx.count()) {
+      [min, max] = this.getMinMax(ctx.count());
+    }
+    if (ctx.simpleOrFQName() || ctx.specialWord()) {
+      const idText = ctx.simpleOrFQName() ? ctx.simpleOrFQName().getText() : ctx.specialWord().getText();
+      const identifier = this.resolveToIdentifier(idText);
+      if (identifier.isValueKeyWord) {
+        value = new IncompleteValue(identifier);
+      } else {
+        value = new IdentifiableValue(identifier);
       }
-      this._currentDef.value = field;
-    } else {
-      this.addFieldToCurrentDef(field);
+      if (typeof min !== 'undefined') {
+        value.setMinMax(min, max);
+      }
+    } else if (ctx.primitive()) {
+      value = new IdentifiableValue(new PrimitiveIdentifier(ctx.primitive().getText()));
+      if (typeof min !== 'undefined') {
+        value.setMinMax(min, max);
+      }
+    } else if (ctx.elementBracketPath()) {
+      const ebp = ctx.elementBracketPath();
+      const ebpFirst = ebp.elementBracketPathFirstPart();
+      const idText = ebpFirst.simpleOrFQName() ? ebpFirst.simpleOrFQName().getText() : ebpFirst.specialWord().getText();
+      value = new IncompleteValue(this.resolveToIdentifier(idText));
+      if (ebp.elementBracketPathSecondPart()) {
+        const ebpSecond = ebp.elementBracketPathSecondPart();
+        for(let i = 0; i < ebpSecond.length; i++) {
+          if (i > 0 || idText != 'Value') {
+            if (ebpSecond[i].simpleName()) {
+              path.push(this.resolveToIdentifier(ebpSecond[i].simpleName().getText()));
+            }
+            else if (ebpSecond[i].primitive()) {
+              path.push(new PrimitiveIdentifier(ebpSecond[i].primitive().getText()));
+            }
+          }
+          else if (i == 0 && idText == 'Value') {
+            if (ebpSecond[i].simpleName()) {
+              value = new IncompleteValue(this.resolveToIdentifier(ebpSecond[i].simpleName().getText()));
+            }
+            else if (ebpSecond[i].primitive()) {
+              value = new IncompleteValue(new PrimitiveIdentifier(ebpSecond[i].primitive().getText()));
+            }
+          }
+        }
+      }
+      if (ebp.elementBracketPathThirdPart()) {
+        const ebpThird = ebp.elementBracketPathThirdPart();
+        for(let i = 0; i < ebpThird.length; i++) {
+          path.push(this.resolveToIdentifier(ebpThird[i].simpleName().getText()));
+          if (ebpThird[i].elementBracketPathSecondPart()) {
+            let secondPart = ebpThird[i].elementBracketPathSecondPart();
+            for (let j = 0; j < secondPart.length; j++) {
+              if (secondPart[j].simpleName()) {
+                path.push(this.resolveToIdentifier(secondPart[j].simpleName().getText()));
+              }
+
+              if (secondPart[j].primitive()) {
+                path.push(new PrimitiveIdentifier(secondPart[j].primitive().getText()));
+              }
+            }
+          }
+        }
+      }
+    }
+    if (ctx.elementConstraint()) {
+      const cst = ctx.elementConstraint();
+      if (cst.elementTypeConstraint()) {
+        const newIdentifier = this.resolveToIdentifierOrTBD(cst.elementTypeConstraint());
+        if (newIdentifier.isSpecialKeyWord) {
+          logger.error(`Fields cannot be constrained to type "${newIdentifier.name}". ERROR_CODE:11025`);
+        } else {
+          const onValue = cst.elementTypeConstraint().KW_ONLY() ? true : false;
+          value.addConstraint(new TypeConstraint(newIdentifier, path, onValue));
+        }
+      } else if (cst.elementIncludesTypeConstraint()) {
+        for (const typeConstraint of cst.elementIncludesTypeConstraint().typeConstraint()) {
+          const newIdentifier = this.resolveToIdentifierOrTBD(typeConstraint);
+          if (newIdentifier.isSpecialKeyWord) {
+            logger.error(`Fields cannot be constrained to type "${newIdentifier.name}". ERROR_CODE:11025`);
+          } else {
+            [min, max] = this.getMinMax(typeConstraint.count());
+            const isOnValue = (path.length > 0 && path[0].isValueKeyWord);
+            value.addConstraint(new IncludesTypeConstraint(newIdentifier, new Cardinality(min, max), path, isOnValue));
+          }
+        }
+      } else if (cst.elementCodeVSConstraint()) {
+        const vsConstraint = cst.elementCodeVSConstraint();
+        const vs = this.resolveValueSetForVSConstraint(vsConstraint); // TODO: Fix
+        const strength = this.resolveBindingStrengthForVSConstraint(vsConstraint); // TODO: Fix
+        // NOTE: The contraint may be on a non-code-like element.  The "expander" will adjust the path as necessary.
+        value.addConstraint(new ValueSetConstraint(vs, path, strength));
+      } else if (cst.elementCodeValueConstraint()) {
+        const code = this.processFullyQualifiedCode(cst.elementCodeValueConstraint().fullyQualifiedCode());
+        const conceptIdentifier = new PrimitiveIdentifier('concept');
+        const tailIdentifier = path.length > 0 ? path[path.length-1] : value.identifier;
+        if (!conceptIdentifier.equals(tailIdentifier)) {
+          path.push(conceptIdentifier);
+        }
+        value.addConstraint(new CodeConstraint(code, path));
+      } else if (cst.elementIncludesCodeValueConstraint()) {
+        for (const fqCode of cst.elementIncludesCodeValueConstraint().fullyQualifiedCode()) {
+          const code = this.processFullyQualifiedCode(fqCode);
+          value.addConstraint(new IncludesCodeConstraint(code, path));
+        }
+      } else if (cst.elementBooleanConstraint()) {
+        const b = cst.elementBooleanConstraint().KW_TRUE() ? true : false;
+        value.addConstraint(new BooleanConstraint(b, path));
+      }
+    }
+    else if(ctx.count()) {
+      value.addConstraint(new CardConstraint(new Cardinality(min, max), path));
+    }
+    return value;
+  }
+
+  enterField(ctx) {
+    if (ctx.propertyField()) {
+      const field = this.processCountAndTypes(ctx.propertyField().count(), [ctx.propertyField().propertyFieldType()]);
+      if (this._currentDef.fields.some(f => f.identifier && f.identifier.equals(field.identifier))) {
+        logger.error('Property "%s" already exists. ERROR_CODE:11040', field.identifier.name);
+      }
+      else {
+        this.addFieldToCurrentDef(field);
+      }
+    }
+    else if (ctx.elementWithConstraint()) {
+      const field = this.processElementWithConstraint(ctx.elementWithConstraint());
+      if (ctx.elementWithConstraint().getText().startsWith('Value')) {
+        if (this._currentDef.value) {
+          if (this._currentDef.value instanceof ChoiceValue) {
+            let marked = false;
+            let options = this._currentDef.value.options;
+            options.forEach(function(element) {
+              if (ctx.elementWithConstraint().getText().includes(`[${element.identifier.name}]`)) {
+                marked = true;
+              }
+            });
+            if(!marked) {
+              logger.error('Choice value constrained without specifying the specific choice. ERROR_CODE:11041');
+            }
+          }
+
+          field.constraints.forEach(c => this._currentDef.value.addConstraint(c));
+        }
+        else {
+          this._currentDef.value = field;
+          this._currentDef.value.setMinMax(1,1);
+        }
+      }
+      else {
+        const match = this._currentDef.fields.find(f => f.effectiveIdentifier && f.effectiveIdentifier.equals(field.identifier));
+        if (match) {
+          field.constraints.forEach(c => match.addConstraint(c));
+        }
+        else {
+          const secondMatch = this._currentDef.fields.find(f => f.identifier && f.identifier.equals(field.identifier));
+          if (secondMatch) {
+            logger.error('Constraint refers to previous identifier. ERROR_CODE:11042');
+          }
+          else {
+            this.addFieldToCurrentDef(field);
+          }
+        }
+      }
     }
   }
 
@@ -234,100 +456,30 @@ class DataElementImporter extends SHRDataElementParserListener {
     return this.processType(typeCtxArr[0], min, max);
   }
 
-  processType(ctx, min, max) {
-    if (ctx.elementWithConstraint()) {
-      const ewc = ctx.elementWithConstraint();
-      let value;
-      let path = [];
-      if (ewc.simpleOrFQName() || ewc.specialWord()) {
-        const idText = ewc.simpleOrFQName() ? ewc.simpleOrFQName().getText() : ewc.specialWord().getText();
-        const identifier = this.resolveToIdentifier(idText);
-        if (identifier.isValueKeyWord) {
-          value = new IncompleteValue(identifier);
-        } else {
-          value = new IdentifiableValue(identifier);
-        }
-        if (typeof min !== 'undefined') {
-          value.setMinMax(min, max);
-        }
-      } else if (ctx.ref()) {
-        const refIdentifier = this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText());
-        if (refIdentifier.isSpecialKeyWord) {
-          logger.error(`ref(${refIdentifier.name}) is an unsupported construct; treating as ${refIdentifier.name} without the reference. ERROR_CODE:11026`);
-          value = new IdentifiableValue(refIdentifier);
-        } else {
-          value = new RefValue(refIdentifier);
-        }
-        if (typeof min !== 'undefined') {
-          value.setMinMax(min, max);
-        }
-      } else if (ewc.primitive()) {
-        value = new IdentifiableValue(new PrimitiveIdentifier(ewc.primitive().getText()));
-        if (typeof min !== 'undefined') {
-          value.setMinMax(min, max);
-        }
-      } else {
-        // This is a dotted path constraint -- so we must use an IncompleteValue
-        const ep = ewc.elementPath();
-        const idText = ep.simpleOrFQName() ? ep.simpleOrFQName().getText() : ep.specialWord().getText();
-        value = new IncompleteValue(this.resolveToIdentifier(idText));
-        if (ep.simpleName()) {
-          path = ep.simpleName().map(ctx => this.resolveToIdentifier(ctx.getText()));
-        }
-        if (ep.primitive()) {
-          path.push(new PrimitiveIdentifier(ep.primitive().getText()));
-        }
-        if (typeof min !== 'undefined') {
-          value.addConstraint(new CardConstraint(new Cardinality(min, max), path));
-        }
+  processCountAndTypesForValue(ctx) {
+    const typeCtxArr = ctx.valueType();
+    if (typeCtxArr.length > 1 || ctx.KW_ONLY()) {
+      const value = new ChoiceValue();
+      for (const t of typeCtxArr) {
+        value.addOption(this.processType(t, 1, 1));
       }
-
-      if (ewc.elementConstraint()) {
-        const cst = ewc.elementConstraint();
-        if (cst.elementTypeConstraint()) {
-          const newIdentifier = this.resolveToIdentifierOrTBD(cst.elementTypeConstraint());
-          if (newIdentifier.isSpecialKeyWord) {
-            logger.error(`Fields cannot be constrained to type "${newIdentifier.name}". ERROR_CODE:11025`);
-          } else {
-            const onValue = cst.elementTypeConstraint().KW_VALUE_IS_TYPE() ? true : false;
-            value.addConstraint(new TypeConstraint(newIdentifier, path, onValue));
-          }
-        } else if (cst.elementIncludesTypeConstraint()) {
-          for (const typeConstraint of cst.elementIncludesTypeConstraint().typeConstraint()) {
-            const newIdentifier = this.resolveToIdentifierOrTBD(typeConstraint);
-            if (newIdentifier.isSpecialKeyWord) {
-              logger.error(`Fields cannot be constrained to type "${newIdentifier.name}". ERROR_CODE:11025`);
-            } else {
-              [min, max] = this.getMinMax(typeConstraint.count());
-              const isOnValue = (path.length > 0 && path[0].isValueKeyWord);
-              value.addConstraint(new IncludesTypeConstraint(newIdentifier, new Cardinality(min, max), path, isOnValue));
-            }
-          }
-        } else if (cst.elementCodeVSConstraint()) {
-          const vsConstraint = cst.elementCodeVSConstraint();
-          const vs = this.resolveValueSetForVSConstraint(vsConstraint); // TODO: Fix
-          const strength = this.resolveBindingStrengthForVSConstraint(vsConstraint); // TODO: Fix
-          // NOTE: The contraint may be on a non-code-like element.  The "expander" will adjust the path as necessary.
-          value.addConstraint(new ValueSetConstraint(vs, path, strength));
-        } else if (cst.elementCodeValueConstraint()) {
-          const code = this.processCodeOrFQCode(cst.elementCodeValueConstraint().codeOrFQCode());
-          value.addConstraint(new CodeConstraint(code, path));
-        } else if (cst.elementWithUnitsConstraint()) {
-          const code = this.processFullyQualifiedCode(cst.elementWithUnitsConstraint().fullyQualifiedCode());
-          value.addConstraint(new CodeConstraint(code, [...path, new Identifier('shr.core', 'Units'), new Identifier('shr.core', 'Coding')]));
-        } else if (cst.elementIncludesCodeValueConstraint()) {
-          for (const codeOrFQCode of cst.elementIncludesCodeValueConstraint().codeOrFQCode()) {
-            const code = this.processCodeOrFQCode(codeOrFQCode);
-            value.addConstraint(new IncludesCodeConstraint(code, path));
-          }
-        } else if (cst.elementBooleanConstraint()) {
-          const b = cst.elementBooleanConstraint().KW_TRUE() ? true : false;
-          value.addConstraint(new BooleanConstraint(b, path));
-        }
-      }
+      value.setMinMax(1,1);
       return value;
     }
+    let match = typeCtxArr[0].getText().match(/\d+\.\.(\d+|\*)/);
+    if (match) {
+      logger.error('Value should not be declaring cardinality. ERROR:11043');
+    }
+    else if (typeCtxArr[0].getText().length == 0) {
+      logger.error('Missing a value element. ERROR:11044');
+    }
+    else {
+      return this.processType(typeCtxArr[0], 1, 1);
+    }
+  }
 
+
+  processType(ctx, min, max) {
     let value;
     if (ctx.simpleOrFQName() || (typeof ctx.specialWord === 'function' && ctx.specialWord())) {
       const idText = ctx.simpleOrFQName() ? ctx.simpleOrFQName().getText() : ctx.specialWord().getText();
@@ -337,24 +489,18 @@ class DataElementImporter extends SHRDataElementParserListener {
       } else {
         value = new IdentifiableValue(identifier);
       }
-    } else if (ctx.ref()) {
-      const refIdentifier = this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText());
-      if (refIdentifier.isSpecialKeyWord) {
-        logger.error(`ref(${refIdentifier.name}) is an unsupported construct; treating as ${refIdentifier.name} without the reference. ERROR_CODE:11026`);
-        value = new IdentifiableValue(refIdentifier);
-      } else {
-        value = new RefValue(refIdentifier);
-      }
-    } else if (ctx.tbd()) {
+    }  else if (ctx.tbd()) {
       if (ctx.tbd().STRING()) {
         value = new TBD(stripDelimitersFromToken(ctx.tbd().STRING()));
       } else {
         value = new TBD();
       }
-    } else if (ctx.primitive()) {
+    } else if (typeof ctx.primitive === 'function' && ctx.primitive()) {
       value = new IdentifiableValue(new PrimitiveIdentifier(ctx.getText()));
     }
-
+    else if (typeof ctx.elementWithConstraint === 'function' && ctx.elementWithConstraint()) {
+      value = this.processElementWithConstraint(ctx.elementWithConstraint());
+    }
     if (typeof min !== 'undefined') {
       value.setMinMax(min, max);
     }
@@ -399,19 +545,21 @@ class DataElementImporter extends SHRDataElementParserListener {
   }
 
   resolveBindingStrengthForVSConstraint(vsConstraint) {
-    if (vsConstraint.bindingInfix()) {
-      const bindingCtx = vsConstraint.bindingInfix();
-      if (bindingCtx.KW_MUST_BE()) {
-        return vsConstraint.KW_IF_COVERED() ? EXTENSIBLE : REQUIRED;
-      } else if (bindingCtx.KW_SHOULD_BE()) {
+    if (vsConstraint.bindingStrength()) {
+      const bindingCtx = vsConstraint.bindingStrength();
+      if (bindingCtx.KW_REQUIRED()) {
+        return REQUIRED;
+      } else if (bindingCtx.KW_PREFERRED()) {
         return PREFERRED;
-      } else if (bindingCtx.KW_COULD_BE()) {
+      } else if (bindingCtx.KW_EXAMPLE()) {
         return EXAMPLE;
+      } else if (bindingCtx.KW_EXTENSIBLE()) {
+        return EXTENSIBLE;
       }
       // This error should never occur unless the ANTLR grammar changes
       logger.error('Unsupported binding strength: %s.  Defaulting to REQUIRED. ERROR_CODE:11004', bindingCtx.getText());
     }
-    return vsConstraint.KW_IF_COVERED() ? EXTENSIBLE : REQUIRED;
+    return REQUIRED;
   }
 
   processCodeOrFQCode(ctx) {
@@ -455,19 +603,21 @@ class DataElementImporter extends SHRDataElementParserListener {
 
   getMinMax(countCtx) {
     const cards = countCtx.WHOLE_NUMBER();
-    const min = parseInt(cards[0].getText(), 10);
-    var max;
-    if (cards.length == 2) {
-      max = parseInt(cards[1].getText(), 10);
+    if (cards[0]) {
+      const min = parseInt(cards[0].getText(), 10);
+      var max;
+      if (cards.length == 2) {
+        max = parseInt(cards[1].getText(), 10);
+      }
+      return [min, max];
     }
-    return [min, max];
+    // No card, but return [undefined, undefined] so spread assignment works
+    return [undefined, undefined];
   }
 
   resolveToIdentifierOrTBD(ctx) {
     if (ctx.simpleOrFQName()) {
       return this.resolveToIdentifier(ctx.simpleOrFQName().getText());
-    } else if (typeof ctx.ref === 'function' && ctx.ref()) {
-      return this.resolveToIdentifier(ctx.ref().simpleOrFQName().getText());
     } else if (typeof ctx.primitive === 'function' && ctx.primitive()) {
       return new PrimitiveIdentifier(ctx.primitive().getText());
     } else if (ctx.tbd() && ctx.tbd().STRING()) {
@@ -488,7 +638,6 @@ class DataElementImporter extends SHRDataElementParserListener {
       }
       return new Identifier(ns, name);
     }
-
     // No specified namespace -- is either special word (e.g. _Value), primitive, or something we need to resolve
     if (ref.startsWith('_')) {
       return new Identifier('', ref);

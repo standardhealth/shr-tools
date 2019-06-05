@@ -15,11 +15,11 @@
     "options": [
       {
         "fqn": "cimi.medication.MedicationDispenseRequestedStatement",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       },
       {
         "fqn": "cimi.medication.MedicationUsedStatement",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   }

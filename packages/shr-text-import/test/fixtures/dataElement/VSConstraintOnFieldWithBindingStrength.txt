@@ -1,17 +1,21 @@
-Grammar:    DataElement 5.0
-Namespace:  shr.test
+Grammar:    DataElement 6.0
+Namespace:  vSConstraintOnFieldWithBindingStrength
 
-EntryElement: RequiredVSConstraintOnField
-0..1    CodedThing must be from http://standardhealthrecord.org/test/vs/Coded2
+Entry: RequiredVSConstraintOnField
+Property: CodedThing 0..1
+CodedThing from http://standardhealthrecord.org/test/vs/Coded2 (required)
 
-EntryElement: ExtensibleVSConstraintOnField
-0..1    CodedThing must be from http://standardhealthrecord.org/test/vs/Coded2 if covered
+Entry: ExtensibleVSConstraintOnField
+Property: CodedThing 0..1
+CodedThing from http://standardhealthrecord.org/test/vs/Coded2 (extensible)
 
-EntryElement: PreferredVSConstraintOnField
-0..1    CodedThing should be from http://standardhealthrecord.org/test/vs/Coded2
+Entry: PreferredVSConstraintOnField
+Property: CodedThing 0..1
+CodedThing from http://standardhealthrecord.org/test/vs/Coded2 (preferred)
 
-EntryElement: ExampleVSConstraintOnField
-0..1    CodedThing could be from http://standardhealthrecord.org/test/vs/Coded2
+Entry: ExampleVSConstraintOnField
+Property: CodedThing 0..1
+CodedThing from http://standardhealthrecord.org/test/vs/Coded2 (example)
 
 Element:   CodedThing
-Value:     code
+Value:     concept

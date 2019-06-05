@@ -1,9 +1,9 @@
-Grammar:    DataElement 5.0
+Grammar:    DataElement 6.0
 Namespace:  shr.test
 
 CodeSystem:     FOO = http://foo.org
 
-EntryElement:   Simple
-Concept:        ZOO #bear
+Element:        Simple
+Concept:        ZOO#bear
 Description:    "It is a simple entry with invalid vocab"
 Value:          string

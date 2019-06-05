@@ -8,7 +8,7 @@
   "description": "The related clinical trial or other formal study.",
   "value": {
     "fqn": "shr.research.Study",
-    "valueType": "RefValue",
+    "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
       "max": 1

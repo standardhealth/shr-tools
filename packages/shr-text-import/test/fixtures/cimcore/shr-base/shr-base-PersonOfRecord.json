@@ -8,7 +8,7 @@
   "description": "The person this entry belongs to.",
   "value": {
     "fqn": "cimi.entity.Patient",
-    "valueType": "RefValue",
+    "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
       "max": 1

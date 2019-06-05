@@ -1,0 +1,13 @@
+Grammar:   DataElement 6.0
+Namespace: conceptMultiple
+
+CodeSystem:     FOO = http://foo.org
+CodeSystem:     BOO = http://boo.org
+
+Entry:          ConceptMultiple
+Concept:        FOO#bar, BOO#baz
+Property:       Simple 0..1
+
+Element:        Simple
+Value:          string
+

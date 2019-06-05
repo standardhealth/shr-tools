@@ -1,6 +1,0 @@
-Grammar:    DataElement 5.0
-Namespace:  shr.test
-
-EntryElement:   MultiString
-Description:    "It is a multi-string entry"
-Value:          1..* string

@@ -19,7 +19,7 @@
       },
       {
         "fqn": "cimi.statement.EvaluationResultRecorded",
-        "valueType": "RefValue"
+        "valueType": "IdentifiableValue"
       }
     ]
   }

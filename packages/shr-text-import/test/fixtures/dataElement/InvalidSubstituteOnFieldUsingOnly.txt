@@ -1,0 +1,17 @@
+Grammar:   DataElement 6.0
+Namespace: shr.test
+
+Entry:      TheParent
+Property:   ClassToBeSubstituted
+
+    Element:    ClassToBeSubstituted
+    Value:      boolean
+
+    Element:    ClassToSubstitute
+    Parent:     ClassToBeSubstituted
+    Value:      boolean
+
+Entry:    TheChild
+Parent:   TheParent
+ClassToBeSubstituted only ClassToSubstitute
+// NOT OK to use the only keyword to substitute 

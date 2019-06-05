@@ -1,0 +1,12 @@
+Grammar:    DataElement 6.0
+Namespace:  shr.test
+
+Entry:      BasedOn
+Property:   Simple 0..1
+
+Entry:      InheritedDuplicateProperty
+Parent:     BasedOn
+Property:   Simple 0..1
+
+Element:     Simple
+Value:       boolean

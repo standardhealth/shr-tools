@@ -1,0 +1,12 @@
+Grammar:   DataElement 6.0
+Namespace: valueOnlyConstraintSingleChoice
+Uses:       shr.test
+
+Element:    ChoiceElement
+Description:"A element with three choices"
+Value:      boolean or concept or integer
+
+Element:   ReducedChoiceElement
+Parent:    ChoiceElement
+Value only concept
+Value[concept] from TestVS3 (extensible)

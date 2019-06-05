@@ -1,0 +1,22 @@
+Grammar:   DataElement 6.0
+Namespace: invalidChildProperty
+
+// In this counterexample, the child declares a property that exists in a parent
+
+Entry:        Child
+Parent:       Base
+Property:     Coded
+Value:        Simple
+
+Entry:        Base
+Property:     Coded 0..*
+Property:     Simple2 1..2
+
+Element:       Simple
+Value:         string
+
+Element:       Coded
+Value:         code
+
+Element:       Simple2
+Value:         string

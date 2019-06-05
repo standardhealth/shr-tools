@@ -1,0 +1,21 @@
+Grammar:    DataElement 6.0
+Namespace:  typeConstraintOnValueChild
+
+Element:      ComplexBase
+Value:        Complex
+
+Element:      TypeConstraintOnValueChild
+Parent:       ComplexBase
+Description:  "It is a simple element based on SimpleBase and specializing the value's child"
+Value[Complex].Simple substitute Simple2
+
+Element:      Simple
+Value:        string
+
+Element:      Simple2
+Parent:       Simple
+Value:        string
+
+Element:      Complex
+Property:     Simple 0..1
+

@@ -1,0 +1,12 @@
+Grammar:    DataElement 6.0
+Namespace:  simpleAbstractElement
+
+CodeSystem:     FOO = http://foo.org
+
+Abstract:       Simple
+Concept:        FOO #bar
+Description:    "It is an abstract entry"
+Property:       Bar
+
+Element:        Bar
+Value:          string

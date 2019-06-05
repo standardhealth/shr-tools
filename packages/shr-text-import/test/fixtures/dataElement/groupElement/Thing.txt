@@ -1,5 +1,0 @@
-Grammar:   DataElement 5.0
-Namespace: other.ns
-
-Element:        Thing
-Value:          boolean

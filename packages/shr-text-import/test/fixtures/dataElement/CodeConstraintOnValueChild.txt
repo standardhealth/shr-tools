@@ -1,0 +1,13 @@
+Grammar:   DataElement 6.0
+Namespace: codeConstraintOnValueChild
+
+CodeSystem:     FOO = http://foo.org
+
+Element:        CodeConstraintOnValueChild
+Description:    "It is an entry with a code constraint on the value's child"
+Value:          CodedFromValueSet
+// it's wrong to say CodedFromValueSet = FOO#bar and that should trigger an error
+Value[CodedFromValueSet] = FOO#bar "FooBar"
+
+Element:        CodedFromValueSet
+Value:          concept from http://standardhealthrecord.org/shr/test/vs/Coded (required)
