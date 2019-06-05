@@ -1,8 +1,9 @@
 const bunyan = require('bunyan');
 const models = require('shr-models');
 
-var rootLogger = bunyan.createLogger({name: 'shr-fhir-export'});
+var rootLogger = bunyan.createLogger({name: 'shr-expand'});
 var logger = rootLogger;
+
 function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
@@ -12,7 +13,7 @@ function expand(specifications, ...exporters) {
   return expander.expand();
 }
 
-const CODE = new models.PrimitiveIdentifier('code');
+const CONCEPT = new models.PrimitiveIdentifier('concept');
 const BOOLEAN = new models.PrimitiveIdentifier('boolean');
 
 class Expander {
@@ -486,8 +487,7 @@ class Expander {
     const sameValueType = newValue.constructor.name === oldValue.constructor.name;
     const newValueIsIncomplete = newValue instanceof models.IncompleteValue;
     const oneValueIsChoice = oldValue instanceof models.ChoiceValue || newValue instanceof models.ChoiceValue;
-    const identifiableValueConstrainingReference = oldValue instanceof models.RefValue && newValue instanceof models.IdentifiableValue;
-    if (!(sameValueType || newValueIsIncomplete || oneValueIsChoice || identifiableValueConstrainingReference)) {
+    if (!(sameValueType || newValueIsIncomplete || oneValueIsChoice)) {
       logger.error('Cannot override %s with %s. ERROR_CODE:12005', oldValue.toString(), newValue.toString());
       return mergedValue;
     }
@@ -543,7 +543,10 @@ class Expander {
 
     // If the newValue cardinality doesn't match the old value cardinality, it should be a constraint.
     if (newValue.card && oldValue.card && !newValue.card.equals(oldValue.card)) {
-      mergedValue.addConstraint(new models.CardConstraint(newValue.card));
+      const cardConstraint = new models.CardConstraint(newValue.card);
+      if (!newValue.constraintsFilter.card.constraints.some(c => c.equals(cardConstraint))) {
+        mergedValue.addConstraint(cardConstraint);
+      }
     }
 
     // Now add the constraints from the new value
@@ -563,7 +566,7 @@ class Expander {
         if (result) {
           return result;
         }
-      } else if (option instanceof models.IdentifiableValue && option.constructor.name == value.constructor.name) {
+      } else if (option instanceof models.IdentifiableValue && (option.constructor.name == value.constructor.name || value instanceof models.IncompleteValue)) {
         const oldOption = option.clone();
         if (!option.identifier.equals(value.effectiveIdentifier)) {
           if (this.checkHasBaseType(value.effectiveIdentifier, oldOption.effectiveIdentifier)) {
@@ -803,11 +806,18 @@ class Expander {
     let targetLabel = this.constraintTargetLabel(value, constraint.path);
 
     let constraints = previousConstraints;
-    if (!(target instanceof models.IdentifiableValue)) {
+    let match;
+    if (target instanceof models.ChoiceValue) {
+      match = target.options.find(t => this.supportsCodeConstraint(t.identifier));
+      if(match) {
+        target = match;
+      }
+    }
+    if (!(target instanceof models.IdentifiableValue) && !match) {
       logger.error('Cannot constrain valueset of %s since it has no identifier. ERROR_CODE:12022', targetLabel);
       return constraints;
     } else if (!this.supportsCodeConstraint(target.identifier)) {
-      // Isn't directly a code/Coding/CodeableConcept, so try its value
+      // Isn't directly a concept, so try its value
       const targetValue = this.constraintTargetValue(value, constraint.path);
       let valID = this.valueIdentifier(targetValue);
       if (typeof valID === 'undefined' && targetValue instanceof models.ChoiceValue) {
@@ -821,7 +831,7 @@ class Expander {
       }
 
       if (!this.supportsCodeConstraint(valID)) {
-        logger.error('Cannot constrain valueset of %s since neither it nor its value is a code, Coding, or CodeableConcept. ERROR_CODE:12023', targetLabel);
+        logger.error('Cannot constrain valueset of %s since neither it nor its value is a concept. ERROR_CODE:12023', targetLabel);
         return constraints;
       }
       // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
@@ -862,18 +872,27 @@ class Expander {
 
     // Determine if the constraint is on the specific target or its value
     if (!this.supportsCodeConstraint(target.identifier)) {
-      // Isn't directly a code/Coding/CodeableConcept, so try its value
-      const valID = this.constraintTargetValueIdentifier(value, constraint.path);
+      // Isn't directly a concept, so try its value
+      let valID = this.constraintTargetValueIdentifier(value, constraint.path);
+      if(!valID && value instanceof models.ChoiceValue) {
+        let valOption = value.options.find(v => this.supportsCodeConstraint(v.identifier));
+        if(valOption) {
+          valID = valOption.identifier;
+        }
+      }
       if (!this.supportsCodeConstraint(valID)) {
-        logger.error('Cannot constrain code of %s since neither it nor its value is a code, based on a Coding, or based on CodeableConcept. ERROR_CODE:12025', targetLabel);
+        logger.error('Cannot constrain code of %s since neither it nor its value is a concept. ERROR_CODE:12025', targetLabel);
         return previousConstraints;
       }
       // Populate the target constraints in case they are needed
-      targetConstraints = this.constraintTargetValue(value, constraint.path).constraints.map(c => {
-        const clone = c.clone();
-        clone.path.splice(0, 0, valID);
-        return clone;
-      });
+      // TODO handle this in a more effective manner.
+      if(!value instanceof models.ChoiceValue) {
+        targetConstraints = this.constraintTargetValue(value, constraint.path).constraints.map(c => {
+          const clone = c.clone();
+          clone.path.splice(0, 0, valID);
+          return clone;
+        });
+      }
       // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
       constraint.path.push(valID);
       target = this.constraintTarget(value, constraint.path);
@@ -909,10 +928,10 @@ class Expander {
 
     // Determine if the constraint is on the specific target or its value
     if (!this.supportsCodeConstraint(target.identifier)) {
-      // Isn't directly a code/Coding/CodeableConcept, so try its value
+      // Isn't directly a concept, so try its value
       const valID = this.constraintTargetValueIdentifier(value, constraint.path);
       if (!this.supportsCodeConstraint(valID)) {
-        logger.error('Cannot constrain included code of %s since neither it nor its value is a code, based on a Coding, or based on CodeableConcept. ERROR_CODE:12026', targetLabel);
+        logger.error('Cannot constrain included code of %s since neither it nor its value is a concept. ERROR_CODE:12026', targetLabel);
         return previousConstraints;
       }
       // Populate the target constraints in case they are needed
@@ -972,7 +991,13 @@ class Expander {
     // Determine if the constraint is on the specific target or its value
     if (!this.supportsBooleanConstraint(target.identifier)) {
       // Isn't directly a boolean, so try its value
-      const valID = this.constraintTargetValueIdentifier(value, constraint.path);
+      let valID = this.constraintTargetValueIdentifier(value, constraint.path);
+      if(!valID && value instanceof models.ChoiceValue) {
+        let valOption = value.options.find(v => this.supportsBooleanConstraint(v.identifier));
+        if(valOption) {
+          valID = valOption.identifier;
+        }
+      }
       if (!this.supportsBooleanConstraint(valID)) {
         logger.error('Cannot constrain boolean value of %s since neither it nor its value is a boolean. ERROR_CODE:12027', targetLabel);
         return previousConstraints;
@@ -1056,7 +1081,6 @@ class Expander {
         // It's an IncludesTypeConstraint.  Create a new Value to represent it.
         return new models.IdentifiableValue(ictCst.isA).withCard(ictCst.card);
       }
-      return;
     }
     // No path, just return the value back
     return value;
@@ -1102,8 +1126,7 @@ class Expander {
   }
 
   supportsCodeConstraint(identifier) {
-    return CODE.equals(identifier) || this.checkHasBaseType(identifier, new models.Identifier('shr.core', 'Coding'))
-      || this.checkHasBaseType(identifier, new models.Identifier('shr.core', 'CodeableConcept'));
+    return CONCEPT.equals(identifier);
   }
 
   supportsBooleanConstraint(identifier) {
