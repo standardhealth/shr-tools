@@ -79,8 +79,7 @@ class Constraints {
   // Creates datatype and cardinality constraint for non inherrited fields
   // Done separately because these occur outside of constraints object
   initializeConstraints() {
-    const isRef = this.field.valueType === 'RefValue';
-    const dValue = isRef ? `ref(${this.field.name})` : this.field.name;
+    const dValue = this.field.name;
     const path = this.field.name;
 
     // Datatype constraint
@@ -154,7 +153,7 @@ class Constraints {
 
     const element = this.elements[constraint.fqn];
     if (element) {
-      constraintName = (this.field.valueType === 'RefValue') ? `ref(${element.name})` : element.name;
+      constraintName = element.name;
 
       href = `../${element.namespacePath}/${element.name}.html`;
     } else if (constraint.fqn.indexOf('.') == -1) { //If primitive FQN
