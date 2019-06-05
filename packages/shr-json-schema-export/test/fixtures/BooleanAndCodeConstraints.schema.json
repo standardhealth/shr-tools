@@ -1,185 +1,282 @@
 {
+  "https://standardhealthrecord.org/schema/cimpl/builtin": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/schema/cimpl/builtin",
+    "title": "CIMPL Builtin Schema",
+    "definitions": {
+      "Concept": {
+        "type": "object",
+        "properties": {
+          "coding": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/definitions/Coding"
+            }
+          }
+        },
+        "required": [
+          "coding"
+        ]
+      },
+      "Coding": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "system": {
+            "type": "string",
+            "format": "uri"
+          },
+          "display": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
   "https://standardhealthrecord.org/test/shr/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
-    "type": "object",
-    "anyOf": [
-      { "$ref": "#/definitions/BooleanAndCodeConstraints" },
-      { "$ref": "#/definitions/Coded" },
-      { "$ref": "#/definitions/ElementValue" },
-      { "$ref": "#/definitions/ForeignElementValue" },
-      { "$ref": "#/definitions/Group" },
-      { "$ref": "#/definitions/Simple" }
-    ],
     "definitions": {
+      "Bool": {
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "boolean"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "description": "A boolean element.",
+        "required": [
+          "EntryType"
+        ]
+      },
       "BooleanAndCodeConstraints": {
-        "description": "It has boolean and code constraints.",
         "allOf": [
-          { "$ref": "#/definitions/Group" },
+          {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry"
+          },
+          {
+            "$ref": "#/definitions/Group"
+          },
           {
             "type": "object",
             "properties": {
               "Value": {
                 "allOf": [
-                  { "type": "boolean" },
-                  { "enum": [ true ] }
-                ]
-              },
-              "Bool": {
-                "allOf": [
                   {
-                    "properties": {
-                      "Value": { "enum": [ false ] }
-                    }
+                    "type": "boolean"
                   },
-                  { "$ref": "#/definitions/Bool" }
+                  {
+                    "enum": [
+                      true
+                    ]
+                  }
                 ]
               },
               "Coded": {
                 "properties": {
                   "Value": {
-                    "code": { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"}
+                    "code": {
+                      "code": "bar",
+                      "system": "http://foo.org",
+                      "display": "Foobar"
+                    }
                   }
                 }
+              },
+              "Bool": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "Value": {
+                        "enum": [
+                          false
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "$ref": "#/definitions/Bool"
+                  }
+                ]
               }
             },
-            "required": ["Value"]
+            "required": [
+              "Value"
+            ]
           }
-        ]
-      },
-      "Bool": {
-        "type": "object",
-        "description": "A boolean element.",
-        "properties": {
-          "EntryType": {"$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
-          "Value": {
-            "type": "boolean"
-          }
-        },
-        "required": ["EntryType"]
-      },
-      "Group": {
-        "description": "It is a group of elements",
-        "concepts": [
-          { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"},
-          { "code": "far", "codeSystem": "http://boo.org", "displayText": "Boofar"}
         ],
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
-            "type": "object",
-            "properties": {
-              "Simple": { "$ref": "#/definitions/Simple" },
-              "Coded": { "$ref": "#/definitions/Coded" },
-              "ElementValue": {
-                "type": "array",
-                "minItems": 0,
-                "items": {
-                  "$ref": "#/definitions/ElementValue"
-                }
-              }
-            },
-            "required": ["Simple"]
-          }
-        ]
-      },
-      "Simple": {
-        "description": "It is a simple element",
-        "concepts": [ { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"}],
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
-            "type": "object",
-            "properties": {
-              "Value": {
-                "type": "string"
-              }
-            },
-            "required": ["Value"]
-          }
-        ]
+        "description": "It has boolean and code constraints."
       },
       "Coded": {
+        "type": "object",
+        "properties": {
+          "Value": {
+            "$ref": "https://standardhealthrecord.org/schema/cimpl/builtin#/definitions/Concept",
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/test/vs/Coded",
+              "strength": "REQUIRED"
+            }
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
         "description": "It is a coded element",
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
-            "type": "object",
-            "properties": {
-              "Value": {
-                "type": "object",
-                "properties": {
-                  "code": { "type": "string" },
-                  "codeSystem": { "type": "string", "format": "uri" },
-                  "displayText": { "type": "string" }
-                },
-                "required": [ "code", "codeSystem" ],
-                "valueSet": {
-                  "uri": "http://standardhealthrecord.org/test/vs/Coded",
-                  "strength": "REQUIRED"
-                }
-              }
-            },
-            "required": ["Value"]
-          }
-        ]
-      },
-      "ForeignElementValue": {
-        "description": "It is an element with a foreign element value",
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
-            "type": "object",
-            "properties": {
-              "Value": {
-                "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple"
-              }
-            },
-            "required": ["Value"]
-          }
+        "required": [
+          "Value",
+          "EntryType"
         ]
       },
       "ElementValue": {
-        "description": "It is an element with an element value",
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
-            "type": "object",
-            "properties": {
-              "Value": {
-                "$ref": "#/definitions/Simple"
-              }
-            },
-            "required": ["Value"]
+        "type": "object",
+        "properties": {
+          "Value": {
+            "$ref": "#/definitions/Simple"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
           }
+        },
+        "description": "It is an element with an element value",
+        "required": [
+          "Value",
+          "EntryType"
+        ]
+      },
+      "ForeignElementValue": {
+        "type": "object",
+        "properties": {
+          "Value": {
+            "$ref": "https://standardhealthrecord.org/test/shr/other/test#/definitions/Simple"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "description": "It is an element with a foreign element value",
+        "required": [
+          "Value",
+          "EntryType"
+        ]
+      },
+      "Group": {
+        "type": "object",
+        "properties": {
+          "Simple": {
+            "$ref": "#/definitions/Simple"
+          },
+          "Coded": {
+            "$ref": "#/definitions/Coded"
+          },
+          "ElementValue": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/definitions/ElementValue"
+            }
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "concepts": [
+          {
+            "coding": [
+              {
+                "code": "bar",
+                "system": "http://foo.org",
+                "display": "Foobar"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "code": "far",
+                "system": "http://boo.org",
+                "display": "Boofar"
+              }
+            ]
+          }
+        ],
+        "description": "It is a group of elements",
+        "required": [
+          "Simple",
+          "EntryType"
+        ]
+      },
+      "Simple": {
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "concepts": [
+          {
+            "coding": [
+              {
+                "code": "bar",
+                "system": "http://foo.org",
+                "display": "Foobar"
+              }
+            ]
+          }
+        ],
+        "description": "It is a simple element",
+        "required": [
+          "Value",
+          "EntryType"
         ]
       }
-    }
+    },
+    "type": "object",
+    "anyOf": [
+      {
+        "$ref": "#/definitions/BooleanAndCodeConstraints"
+      }
+    ]
   },
   "https://standardhealthrecord.org/test/shr/other/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/other/test",
     "title": "TODO: Figure out what the title should be.",
-    "type": "object",
-    "anyOf": [
-      { "$ref": "#/definitions/Simple" }
-    ],
     "definitions": {
       "Simple": {
-        "description": "It is a simple element",
-        "concepts": [ { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"}],
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
-            "type": "object",
-            "properties": {
-              "Value": {
-                "type": "string"
-              }
-            },
-            "required": ["Value"]
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
           }
+        },
+        "concepts": [
+          {
+            "coding": [
+              {
+                "code": "bar",
+                "system": "http://foo.org",
+                "display": "Foobar"
+              }
+            ]
+          }
+        ],
+        "description": "It is a simple element",
+        "required": [
+          "Value",
+          "EntryType"
         ]
       }
     }

@@ -1,17 +1,67 @@
 {
+  "https://standardhealthrecord.org/schema/cimpl/builtin": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/schema/cimpl/builtin",
+    "title": "CIMPL Builtin Schema",
+    "definitions": {
+      "Concept": {
+        "type": "object",
+        "properties": {
+          "coding": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/definitions/Coding"
+            }
+          }
+        },
+        "required": [
+          "coding"
+        ]
+      },
+      "Coding": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "system": {
+            "type": "string",
+            "format": "uri"
+          },
+          "display": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
   "https://standardhealthrecord.org/test/shr/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
-    "type": "object",
-    "anyOf": [
-      { "$ref": "#/definitions/NestedListCardConstraints" }
-    ],
     "definitions": {
+      "ListField": {
+        "type": "object",
+        "properties": {
+          "OptionalList": {
+            "$ref": "#/definitions/OptionalList"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "description": "An element with a list field.",
+        "required": [
+          "OptionalList",
+          "EntryType"
+        ]
+      },
       "NestedListCardConstraints": {
-        "description": "It has a field with a nested card constraint on a list.",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry"
+          },
           {
             "type": "object",
             "properties": {
@@ -30,45 +80,53 @@
                               }
                             }
                           },
-                          { "required": ["Value"] }
+                          {
+                            "required": [
+                              "Value"
+                            ]
+                          }
                         ]
                       }
                     }
                   },
-                  { "$ref": "#/definitions/ListField" }
+                  {
+                    "$ref": "#/definitions/ListField"
+                  }
                 ]
               }
             },
-            "required": ["ListField"]
+            "required": [
+              "ListField"
+            ]
           }
-        ]
-      },
-      "ListField": {
-        "description": "An element with a list field.",
-        "type": "object",
-        "properties": {
-          "EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
-          "OptionalList": {
-            "$ref": "#/definitions/OptionalList"
-          }
-        },
-        "required": ["OptionalList", "EntryType"]
+        ],
+        "description": "It has a field with a nested card constraint on a list."
       },
       "OptionalList": {
-        "description": "An element with an optional list.",
         "type": "object",
         "properties": {
-          "EntryType": { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType" },
           "Value": {
             "type": "array",
             "minItems": 0,
             "items": {
               "type": "string"
             }
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
           }
         },
-        "required": ["EntryType"]
+        "description": "An element with an optional list.",
+        "required": [
+          "EntryType"
+        ]
       }
-    }
+    },
+    "type": "object",
+    "anyOf": [
+      {
+        "$ref": "#/definitions/NestedListCardConstraints"
+      }
+    ]
   }
 }

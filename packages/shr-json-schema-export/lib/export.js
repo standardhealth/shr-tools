@@ -3,9 +3,8 @@
 // Derived from export SHR specification content as a hierarchy in JSON format by Greg Quinn
 
 const bunyan = require('bunyan');
-const {Identifier, IdentifiableValue, RefValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, DataElement, Namespace, DataElementSpecifications, Specifications, BooleanConstraint, MODELS_INFO, PrimitiveIdentifier, PRIMITIVE_NS} = require('shr-models');
-
-const CODE = new PrimitiveIdentifier('code');
+const {Identifier, IdentifiableValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, BooleanConstraint, MODELS_INFO, PRIMITIVE_NS} = require('shr-models');
+const builtinSchema = require('./schemas/cimpl.builtin.schema.json');
 
 var rootLogger = bunyan.createLogger({name: 'shr-json-schema-export'});
 var logger = rootLogger;
@@ -23,7 +22,9 @@ function setLogger(bunyanLogger) {
  * @return {Object.<string, Object>} A mapping of schema ids to JSON Schema definitions.
  */
 function exportToJSONSchema(expSpecifications, baseSchemaURL, baseTypeURL, flat = false) {
-  const namespaceResults = {};
+  const namespaceResults = {
+    'https://standardhealthrecord.org/schema/cimpl/builtin': builtinSchema
+  };
   const endOfTypeURL = baseTypeURL[baseTypeURL.length - 1];
   if (endOfTypeURL !== '#' && endOfTypeURL !== '/') {
     baseTypeURL += '/';
@@ -63,7 +64,7 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
   let schema = {
     $schema: 'http://json-schema.org/draft-04/schema#',
     id: schemaId,
-    title: "TODO: Figure out what the title should be.",
+    title: 'TODO: Figure out what the title should be.',
     definitions: {}
   };
   const entryRef = makeRef(new Identifier('shr.base', 'Entry'), ns, baseSchemaURL);
@@ -242,7 +243,7 @@ function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL
   let schema = {
     $schema: 'http://json-schema.org/draft-04/schema#',
     id: schemaId,
-    title: "TODO: Figure out what the title should be.",
+    title: 'TODO: Figure out what the title should be.',
     definitions: {}
   };
   const expandedEntry = makeExpandedEntryDefinitions(ns, baseSchemaURL);
@@ -399,7 +400,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     for (const option of valueDef.options) {
       if (option.effectiveCard && (!option.effectiveCard.isExactlyOne)) {
         logger.error('Choices with options with cardinalities that are not exactly one are illegal "%s". Ignoring option %s.', valueDef.toString(), option.toString());
-      } else if (option instanceof RefValue) {
+      } else if (isRef(option, dataElementsSpecs)) {
         refOptions.push(option);
       } else {
         normalOptions.push(option);
@@ -420,7 +421,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
         value[ent] = single[ent];
       }
     }
-  } else if (valueDef instanceof RefValue) {
+  } else if (isRef(valueDef, dataElementsSpecs)) {
     // TODO: What should the value of EntryType be? The schema URL may not be portable across data types.
     makeShrRefObject([valueDef], baseTypeURL, value);
   } else if (valueDef instanceof IdentifiableValue) {
@@ -521,153 +522,154 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     }
   }
 
-  if (valueDef.constraints && valueDef.constraints.length) {
-    function constraintDfs (node, currentAllOf, parentAllOf = null) {
-      for (const path in node) {
-        if (path !== '$self') {
-          if (!currentAllOf[0].properties[path]) {
-            currentAllOf[0].properties[path] = {
-              allOf: [
-                { properties: {} }
-              ]
-            };
-          }
-          constraintDfs(node[path], currentAllOf[0].properties[path].allOf, currentAllOf);
-        } else {
-          currentAllOf[0].constraints = [];
-          let includesConstraints = null;
-          let includesCodeConstraints = null;
-          for (const constraintInfo of node.$self) {
-            if (constraintInfo.constraint instanceof TypeConstraint) {
-              if (constraintInfo.constraintTarget instanceof RefValue) {
-                const refid = constraintInfo.constraint.isA;
-                if (isOrWasAList(constraintInfo.constraintTarget)) {
-                  currentAllOf.push({ items: { refType: [`${baseTypeURL}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]}});
-                } else {
-                  currentAllOf.push({ refType: [`${baseTypeURL}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]});
-                }
-              } else if (constraintInfo.constraintTarget instanceof IdentifiableValue) {
-                let schemaConstraint = null;
-                if (constraintInfo.constraint.isA.isPrimitive) {
-                  schemaConstraint = makePrimitiveObject(constraintInfo.constraint.isA);
-                } else {
-                  schemaConstraint = {$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)};
-                }
-                if (isOrWasAList(constraintInfo.constraintTarget)) {
-                  currentAllOf.push({ items: schemaConstraint });
-                } else {
-                  currentAllOf.push(schemaConstraint);
-                }
-              } else {
-                logger.error('Internal error unexpected constraint target: %s for constraint %s', constraintInfo.constraintTarget.toString(), constraintInfo.constraint.toString());
-              }
-            } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
-              if (!includesConstraints) {
-                includesConstraints = {refs: [], types: [], min: 0, max: 0};
-              }
-              includesConstraints.min += constraintInfo.constraint.card.min;
-              if (includesConstraints.max !== null) {
-                if (constraintInfo.constraint.card.isMaxUnbounded) {
-                  includesConstraints.max = null;
-                } else {
-                  includesConstraints.max += constraintInfo.constraint.card.max;
-                }
-              }
-
-              if (constraintInfo.constraint.isA instanceof RefValue) {
-                includesConstraints.refs.push(constraintInfo.constraint);
-              } else {
-                includesConstraints.types.push(constraintInfo.constraint);
-              }
-            } else if (constraintInfo.constraint instanceof IncludesCodeConstraint) {
-              if (!includesCodeConstraints) {
-                includesCodeConstraints = [];
-              }
-              includesCodeConstraints.push(constraintInfo.constraint);
-            } else if (constraintInfo.constraint instanceof ValueSetConstraint) {
-              if (currentAllOf[0].valueSet) {
-                logger.error(`Multiple valueset constraints found on a single element %s.`, constraintInfo.constraint);
-                continue;
-              }
-              currentAllOf[0].valueSet = {
-                uri: constraintInfo.constraint.valueSet,
-                strength: constraintInfo.constraint.bindingStrength
-              };
-            } else if (constraintInfo.constraint instanceof CodeConstraint) {
-              // Maybe TODO: For entry elements this can have some level of enforcement by ANDing the exact contents of the EntryType field with an enum for this value/field.
-              if (currentAllOf[0].code) {
-                logger.error(`Multiple code constraints found on a single element %s.`, constraintInfo.constraint);
-                continue;
-              }
-              currentAllOf[0].code = makeConceptEntry(constraintInfo.constraint.code);
-            } else if (constraintInfo.constraint instanceof BooleanConstraint) {
-              currentAllOf.push({ enum: [constraintInfo.constraint.value]});
-            } else if (constraintInfo.constraint instanceof CardConstraint) {
-              // TODO: 0..0
+  function constraintDfs (node, currentAllOf, parentAllOf = null) {
+    for (const path in node) {
+      if (path !== '$self') {
+        if (!currentAllOf[0].properties[path]) {
+          currentAllOf[0].properties[path] = {
+            allOf: [
+              { properties: {} }
+            ]
+          };
+        }
+        constraintDfs(node[path], currentAllOf[0].properties[path].allOf, currentAllOf);
+      } else {
+        currentAllOf[0].constraints = [];
+        let includesConstraints = null;
+        let includesCodeConstraints = null;
+        for (const constraintInfo of node.$self) {
+          if (constraintInfo.constraint instanceof TypeConstraint) {
+            if (isRef(constraintInfo.constraintTarget, dataElementsSpecs)) {
+              const refid = constraintInfo.constraint.isA;
               if (isOrWasAList(constraintInfo.constraintTarget)) {
-                const arrayDef = {
-                  type: 'array',
-                  minItems: constraintInfo.constraint.card.min,
-                };
-                if (constraintInfo.constraint.card.max) {
-                  arrayDef.maxItems = constraintInfo.constraint.card.max;
-                }
-                currentAllOf.push(arrayDef);
-                if (parentAllOf && constraintInfo.constraint.card.min) {
-                  parentAllOf.push({ required: [constraintInfo.constraintPath[constraintInfo.constraintPath.length - 1]] });
-                }
+                currentAllOf.push({ items: { refType: [`${baseTypeURL}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]}});
               } else {
-                if (parentAllOf && constraintInfo.constraint.card.min) {
-                  parentAllOf.push({ required: [constraintInfo.constraintPath[constraintInfo.constraintPath.length - 1]] });
-                }
+                currentAllOf.push({ refType: [`${baseTypeURL}${namespaceToURLPathSegment(refid.namespace)}/${refid.name}`]});
+              }
+            } else if (constraintInfo.constraintTarget instanceof IdentifiableValue) {
+              let schemaConstraint = null;
+              if (constraintInfo.constraint.isA.isPrimitive) {
+                schemaConstraint = makePrimitiveObject(constraintInfo.constraint.isA);
+              } else {
+                schemaConstraint = {$ref: makeRef(constraintInfo.constraint.isA, enclosingNamespace, baseSchemaURL)};
+              }
+              if (isOrWasAList(constraintInfo.constraintTarget)) {
+                currentAllOf.push({ items: schemaConstraint });
+              } else {
+                currentAllOf.push(schemaConstraint);
               }
             } else {
-              currentAllOf[0].constraints.push(constraintInfo.constraint);
+              logger.error('Internal error unexpected constraint target: %s for constraint %s', constraintInfo.constraintTarget.toString(), constraintInfo.constraint.toString());
             }
-          }
-
-          if (includesConstraints) {
-            currentAllOf[0].includesTypes = [];
-            const includesTypesArrayDef = {
-              type: 'array',
-              minItems: includesConstraints.min,
-              items: { anyOf: [] }
-            };
-            currentAllOf.push(includesTypesArrayDef);
+          } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
+            if (!includesConstraints) {
+              includesConstraints = {refs: [], types: [], min: 0, max: 0};
+            }
+            includesConstraints.min += constraintInfo.constraint.card.min;
             if (includesConstraints.max !== null) {
-              includesTypesArrayDef.maxItems = includesConstraints.max;
-            }
-            if (includesConstraints.refs.length) {
-              includesTypesArrayDef.items.anyOf.push(makeShrRefObject(includesConstraints.refs.map((ref) => ref.isA), baseTypeURL));
-              for (const ref of includesConstraints.refs) {
-                const includesType = {
-                  items: `ref(${makeShrDefinitionURL(ref.isA, baseSchemaURL)})`,
-                  minItems: ref.card.min
-                };
-                if (!ref.card.isMaxUnbounded) {
-                  includesType.maxItems = ref.card.max;
-                }
-                currentAllOf[0].includesTypes.push(includesType);
+              if (constraintInfo.constraint.card.isMaxUnbounded) {
+                includesConstraints.max = null;
+              } else {
+                includesConstraints.max += constraintInfo.constraint.card.max;
               }
             }
-            for (const val of includesConstraints.types) {
-              includesTypesArrayDef.items.anyOf.push({ $ref: makeRef(val.isA, enclosingNamespace, baseSchemaURL) });
-              const includesType = {
-                items: `${baseTypeURL}${namespaceToURLPathSegment(val.isA.namespace)}/${val.isA.name}`,
-                minItems: val.card.min
+
+            if (isRef(constraintInfo.constraint.isA, dataElementsSpecs)) {
+              includesConstraints.refs.push(constraintInfo.constraint);
+            } else {
+              includesConstraints.types.push(constraintInfo.constraint);
+            }
+          } else if (constraintInfo.constraint instanceof IncludesCodeConstraint) {
+            if (!includesCodeConstraints) {
+              includesCodeConstraints = [];
+            }
+            includesCodeConstraints.push(constraintInfo.constraint);
+          } else if (constraintInfo.constraint instanceof ValueSetConstraint) {
+            if (currentAllOf[0].valueSet) {
+              logger.error(`Multiple valueset constraints found on a single element %s.`, constraintInfo.constraint);
+              continue;
+            }
+            currentAllOf[0].valueSet = {
+              uri: constraintInfo.constraint.valueSet,
+              strength: constraintInfo.constraint.bindingStrength
+            };
+          } else if (constraintInfo.constraint instanceof CodeConstraint) {
+            // Maybe TODO: For entry elements this can have some level of enforcement by ANDing the exact contents of the EntryType field with an enum for this value/field.
+            if (currentAllOf[0].code) {
+              logger.error(`Multiple code constraints found on a single element %s.`, constraintInfo.constraint);
+              continue;
+            }
+            currentAllOf[0].code = makeCodingEntry(constraintInfo.constraint.code);
+          } else if (constraintInfo.constraint instanceof BooleanConstraint) {
+            currentAllOf.push({ enum: [constraintInfo.constraint.value]});
+          } else if (constraintInfo.constraint instanceof CardConstraint) {
+            // TODO: 0..0
+            if (isOrWasAList(constraintInfo.constraintTarget)) {
+              const arrayDef = {
+                type: 'array',
+                minItems: constraintInfo.constraint.card.min,
               };
-              if (!val.card.isMaxUnbounded) {
-                includesType.maxItems = val.card.max;
+              if (constraintInfo.constraint.card.max) {
+                arrayDef.maxItems = constraintInfo.constraint.card.max;
+              }
+              currentAllOf.push(arrayDef);
+              if (parentAllOf && constraintInfo.constraint.card.min) {
+                parentAllOf.push({ required: [constraintInfo.constraintPath[constraintInfo.constraintPath.length - 1]] });
+              }
+            } else {
+              if (parentAllOf && constraintInfo.constraint.card.min) {
+                parentAllOf.push({ required: [constraintInfo.constraintPath[constraintInfo.constraintPath.length - 1]] });
+              }
+            }
+          } else {
+            currentAllOf[0].constraints.push(constraintInfo.constraint);
+          }
+        }
+
+        if (includesConstraints) {
+          currentAllOf[0].includesTypes = [];
+          const includesTypesArrayDef = {
+            type: 'array',
+            minItems: includesConstraints.min,
+            items: { anyOf: [] }
+          };
+          currentAllOf.push(includesTypesArrayDef);
+          if (includesConstraints.max !== null) {
+            includesTypesArrayDef.maxItems = includesConstraints.max;
+          }
+          if (includesConstraints.refs.length) {
+            includesTypesArrayDef.items.anyOf.push(makeShrRefObject(includesConstraints.refs.map((ref) => ref.isA), baseTypeURL));
+            for (const ref of includesConstraints.refs) {
+              const includesType = {
+                items: `ref(${makeShrDefinitionURL(ref.isA, baseSchemaURL)})`,
+                minItems: ref.card.min
+              };
+              if (!ref.card.isMaxUnbounded) {
+                includesType.maxItems = ref.card.max;
               }
               currentAllOf[0].includesTypes.push(includesType);
             }
           }
-          if (includesCodeConstraints) {
-            currentAllOf[0].includesCodes = includesCodeConstraints.map((it) => makeConceptEntry(it.code));
+          for (const val of includesConstraints.types) {
+            includesTypesArrayDef.items.anyOf.push({ $ref: makeRef(val.isA, enclosingNamespace, baseSchemaURL) });
+            const includesType = {
+              items: `${baseTypeURL}${namespaceToURLPathSegment(val.isA.namespace)}/${val.isA.name}`,
+              minItems: val.card.min
+            };
+            if (!val.card.isMaxUnbounded) {
+              includesType.maxItems = val.card.max;
+            }
+            currentAllOf[0].includesTypes.push(includesType);
           }
+        }
+        if (includesCodeConstraints) {
+          currentAllOf[0].includesCodes = includesCodeConstraints.map((it) => makeCodingEntry(it.code));
         }
       }
     }
+  }
+
+  if (valueDef.constraints && valueDef.constraints.length) {
     constraintDfs(constraintStructure, allOf);
     if (isList) {
       for (const includesConstraintDef of allOf) {
@@ -759,6 +761,14 @@ function tbdValueToString(tbd) {
   }
 }
 
+function isRef(value, dataElementsSpecs) {
+  if (value && value.effectiveIdentifier) {
+    const de = dataElementsSpecs.findByIdentifier(value.effectiveIdentifier);
+    return de && de.isEntry;
+  }
+  return false;
+}
+
 /**
  * Create a JSON Schema reference to the specified type.
  *
@@ -825,14 +835,8 @@ function makePrimitiveObject(id, target = {}) {
   case 'time':
     target.type = 'string';
     break;
-  case 'code':
-    target.type = 'object';
-    target.properties = {
-      code: { type: 'string' },
-      codeSystem: { type: 'string', format: 'uri' },
-      displayText: { type: 'string' }
-    };
-    target.required = ['code', 'codeSystem'];
+  case 'concept':
+    target['$ref'] = 'https://standardhealthrecord.org/schema/cimpl/builtin#/definitions/Concept';
     break;
   case 'oid':
   case 'id':
@@ -1030,22 +1034,32 @@ function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
 }
 
 /**
- * Converts a concept into a code entry for the schema. (Codes are also represented as Concepts in the object model.)
+ * Converts a DataElement concept into a code entry for the schema. (Codes are also represented as Concepts in the object model.)
  *
  * @param {Concept|TBD} concept - The concept to convert.
- * @return {{code: string, codeSystem: string, displayText: (string|undefined)}} The converted object. Display is optional.
+ * @return {{coding: List<{code: string, system: string, display: (string|undefined)}>}} The converted object. Display is optional.
  */
 function makeConceptEntry(concept) {
+  return { coding: [ makeCodingEntry(concept) ]};
+}
+
+/**
+ * Converts a concept into a coding entry for the schema (used in code constraints and includes code constraints)
+ *
+ * @param {Concept|TBD} concept - The concept to convert.
+ * @return {{code: string, system: string, display: (string|undefined)}} The converted object. Display is optional.
+ */
+function makeCodingEntry(concept) {
   if (concept instanceof TBD) {
-    const ret = { code: 'TBD', codeSystem: 'urn:tbd' };
+    const ret = { code: 'TBD', system: 'urn:tbd' };
     if (concept.text) {
-      ret.displayText = concept.text;
+      ret.display = concept.text;
     }
     return ret;
   } else {
-    const ret = { code: concept.code, codeSystem: concept.system };
+    const ret = { code: concept.code, system: concept.system };
     if (concept.display) {
-      ret.displayText = concept.display;
+      ret.display = concept.display;
     }
     return ret;
   }
@@ -1088,38 +1102,6 @@ function findOptionInChoice(choice, optionId, dataElementSpecs) {
     }
   }
   return null;
-}
-
-// stealing from shr-expand
-/**
- * Determine if a type supports a code constraint.
- *
- * @param {Identifier} identifier - The identifier of the type to check.
- * @param {DataElementSpecifications} dataElementSpecs - The available DataElement specs.
- * @return {boolean} Whether or not the given type supports a code constraint.
- */
-function supportsCodeConstraint(identifier, dataElementSpecs) {
-  if (CODE.equals(identifier) || checkHasBaseType(identifier, new Identifier('shr.core', 'Coding'), dataElementSpecs)
-      || checkHasBaseType(identifier, new Identifier('shr.core', 'CodeableConcept'), dataElementSpecs)) {
-    return true;
-  }
-  const element = dataElementSpecs.findByIdentifier(identifier);
-  if (element.value) {
-    if (element.value instanceof IdentifiableValue) {
-      return CODE.equals(element.value.identifier) || checkHasBaseType(element.value.identifier, new Identifier('shr.core', 'Coding'), dataElementSpecs)
-          || checkHasBaseType(element.value.identifier, new Identifier('shr.core', 'CodeableConcept'), dataElementSpecs);
-    } else if (element.value instanceof ChoiceValue) {
-      for (const value of element.value.aggregateOptions) {
-        if (value instanceof IdentifiableValue) {
-          if (CODE.equals(value.identifier) || checkHasBaseType(value.identifier, new Identifier('shr.core', 'Coding'), dataElementSpecs)
-              || checkHasBaseType(value.identifier, new Identifier('shr.core', 'CodeableConcept'), dataElementSpecs)) {
-            return true;
-          }
-        }
-      }
-    }
-  }
-  return false;
 }
 
 function checkHasBaseType(identifier, baseIdentifier, dataElementSpecs) {

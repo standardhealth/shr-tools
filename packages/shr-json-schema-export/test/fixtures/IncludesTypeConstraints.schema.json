@@ -1,38 +1,75 @@
 {
+  "https://standardhealthrecord.org/schema/cimpl/builtin": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/schema/cimpl/builtin",
+    "title": "CIMPL Builtin Schema",
+    "definitions": {
+      "Concept": {
+        "type": "object",
+        "properties": {
+          "coding": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/definitions/Coding"
+            }
+          }
+        },
+        "required": [
+          "coding"
+        ]
+      },
+      "Coding": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "system": {
+            "type": "string",
+            "format": "uri"
+          },
+          "display": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
   "https://standardhealthrecord.org/test/shr/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
-    "type": "object",
-    "anyOf": [
-      { "$ref": "#/definitions/IncludesTypesList" },
-      { "$ref": "#/definitions/Simple" },
-      { "$ref": "#/definitions/SimpleChild" },
-      { "$ref": "#/definitions/SimpleChild2" }
-    ],
     "definitions": {
       "IncludesTypesList": {
-        "description": "An entry with a includes types constraints.",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry"
+          },
           {
             "type": "object",
             "properties": {
               "Value": {
                 "type": "array",
                 "minItems": 0,
-                "maxItems": 3,
                 "items": {
                   "allOf": [
-                    { "$ref": "#/definitions/Simple" },
+                    {
+                      "$ref": "#/definitions/Simple"
+                    },
                     {
                       "anyOf": [
-                        { "$ref": "#/definitions/SimpleChild" },
-                        { "$ref": "#/definitions/SimpleChild2" }
+                        {
+                          "$ref": "#/definitions/SimpleChild"
+                        },
+                        {
+                          "$ref": "#/definitions/SimpleChild2"
+                        }
                       ]
                     }
                   ]
                 },
+                "maxItems": 3,
                 "includesTypes": [
                   {
                     "items": "http://standardhealthrecord.org/spec/shr/test/SimpleChild",
@@ -48,44 +85,66 @@
               }
             }
           }
-        ]
+        ],
+        "description": "An entry with a includes types constraints."
       },
       "Simple": {
-        "description": "It is a simple element",
-        "concepts": [ { "code": "bar", "codeSystem": "http://foo.org", "displayText": "Foobar"}],
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
-            "type": "object",
-            "properties": {
-              "Value": {
-                "type": "string"
-              }
-            },
-            "required": ["Value"]
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "string"
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
           }
+        },
+        "concepts": [
+          {
+            "coding": [
+              {
+                "code": "bar",
+                "system": "http://foo.org",
+                "display": "Foobar"
+              }
+            ]
+          }
+        ],
+        "description": "It is a simple element",
+        "required": [
+          "Value",
+          "EntryType"
         ]
       },
       "SimpleChild": {
-        "description": "A derivative of the simple type.",
         "allOf": [
-          { "$ref": "#/definitions/Simple" },
+          {
+            "$ref": "#/definitions/Simple"
+          },
           {
             "type": "object",
             "properties": {}
           }
-        ]
+        ],
+        "description": "A derivative of the simple type."
       },
       "SimpleChild2": {
-        "description": "A derivative of the simple type.",
         "allOf": [
-          { "$ref": "#/definitions/Simple" },
+          {
+            "$ref": "#/definitions/Simple"
+          },
           {
             "type": "object",
             "properties": {}
           }
-        ]
+        ],
+        "description": "A derivative of the simple type."
       }
-    }
+    },
+    "type": "object",
+    "anyOf": [
+      {
+        "$ref": "#/definitions/IncludesTypesList"
+      }
+    ]
   }
 }

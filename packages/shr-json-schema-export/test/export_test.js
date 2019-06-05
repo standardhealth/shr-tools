@@ -65,7 +65,7 @@ function importFixture(name, ext='.schema.json') {
     }
     const valid = validator(instance);
     if (!valid) {
-      assert.fail(false, true, 'Errors validating instance: ' + ajv.errorsText(validator.errors));
+      assert.fail(false, true, `Errors validating instance in fixtures/instances/${name}.json: ` + ajv.errorsText(validator.errors));
     }
   }
   return fixture;

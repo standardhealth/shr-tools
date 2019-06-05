@@ -1,19 +1,51 @@
 {
+  "https://standardhealthrecord.org/schema/cimpl/builtin": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/schema/cimpl/builtin",
+    "title": "CIMPL Builtin Schema",
+    "definitions": {
+      "Concept": {
+        "type": "object",
+        "properties": {
+          "coding": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/definitions/Coding"
+            }
+          }
+        },
+        "required": [
+          "coding"
+        ]
+      },
+      "Coding": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "system": {
+            "type": "string",
+            "format": "uri"
+          },
+          "display": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
   "https://standardhealthrecord.org/test/shr/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
-    "type": "object",
-    "anyOf": [
-      { "$ref": "#/definitions/ChoiceValueSetConstraint" },
-      { "$ref": "#/definitions/Coded" },
-      { "$ref": "#/definitions/CodedChoice" }
-    ],
     "definitions": {
       "ChoiceValueSetConstraint": {
-        "description": "It has valueset constraints on a choice field.",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry"
+          },
           {
             "type": "object",
             "properties": {
@@ -29,63 +61,64 @@
                       }
                     }
                   },
-                  { "$ref": "#/definitions/CodedChoice" }
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "CodedChoice": {
-        "description": "An element with a choice of code fields.",
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
-            "type": "object",
-            "properties": {
-              "Value": {
-                "anyOf": [
-                  { "$ref": "#/definitions/Coded" },
                   {
-                    "type": "object",
-                    "properties": {
-                      "code": { "type": "string" },
-                      "codeSystem": { "type": "string", "format": "uri" },
-                      "displayText": { "type": "string" }
-                    },
-                    "required": [ "code", "codeSystem" ]
+                    "$ref": "#/definitions/CodedChoice"
                   }
                 ]
               }
             }
           }
-        ]
+        ],
+        "description": "It has valueset constraints on a choice field."
       },
       "Coded": {
-        "description": "It is a coded element",
-        "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
-          {
-            "type": "object",
-            "properties": {
-              "Value": {
-                "type": "object",
-                "properties": {
-                  "code": { "type": "string" },
-                  "codeSystem": { "type": "string", "format": "uri" },
-                  "displayText": { "type": "string" }
-                },
-                "required": [ "code", "codeSystem" ],
-                "valueSet": {
-                  "uri": "http://standardhealthrecord.org/test/vs/Coded",
-                  "strength": "REQUIRED"
-                }
-              }
-            },
-            "required": ["Value"]
+        "type": "object",
+        "properties": {
+          "Value": {
+            "$ref": "https://standardhealthrecord.org/schema/cimpl/builtin#/definitions/Concept",
+            "valueSet": {
+              "uri": "http://standardhealthrecord.org/test/vs/Coded",
+              "strength": "REQUIRED"
+            }
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
           }
+        },
+        "description": "It is a coded element",
+        "required": [
+          "Value",
+          "EntryType"
+        ]
+      },
+      "CodedChoice": {
+        "type": "object",
+        "properties": {
+          "Value": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/Coded"
+              },
+              {
+                "$ref": "https://standardhealthrecord.org/schema/cimpl/builtin#/definitions/Concept"
+              }
+            ]
+          },
+          "EntryType": {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          }
+        },
+        "description": "An element with a choice of code fields.",
+        "required": [
+          "EntryType"
         ]
       }
-    }
+    },
+    "type": "object",
+    "anyOf": [
+      {
+        "$ref": "#/definitions/ChoiceValueSetConstraint"
+      }
+    ]
   }
 }

@@ -1,37 +1,71 @@
 {
+  "https://standardhealthrecord.org/schema/cimpl/builtin": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/schema/cimpl/builtin",
+    "title": "CIMPL Builtin Schema",
+    "definitions": {
+      "Concept": {
+        "type": "object",
+        "properties": {
+          "coding": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/definitions/Coding"
+            }
+          }
+        },
+        "required": [
+          "coding"
+        ]
+      },
+      "Coding": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "system": {
+            "type": "string",
+            "format": "uri"
+          },
+          "display": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
   "https://standardhealthrecord.org/test/shr/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
     "title": "TODO: Figure out what the title should be.",
-    "type": "object",
-    "anyOf": [
-      { "$ref": "#/definitions/ChoiceOfChoice" }
-    ],
     "definitions": {
       "ChoiceOfChoice": {
-        "description": "It is an element with a choice containing a choice",
         "allOf": [
-          { "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry" },
+          {
+            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry"
+          },
           {
             "type": "object",
             "properties": {
               "Value": {
                 "anyOf": [
-                  { "type": "string" },
+                  {
+                    "type": "string"
+                  },
                   {
                     "anyOf": [
-                      { "type": "integer" },
-                      { "type": "number" }
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "number"
+                      }
                     ]
                   },
                   {
-                    "type": "object",
-                    "properties": {
-                      "code": { "type": "string" },
-                      "codeSystem": { "type": "string", "format": "uri" },
-                      "displayText": { "type": "string" }
-                    },
-                    "required": [ "code", "codeSystem" ],
+                    "$ref": "https://standardhealthrecord.org/schema/cimpl/builtin#/definitions/Concept",
                     "valueSet": {
                       "uri": "http://standardhealthrecord.org/test/vs/CodeChoice",
                       "strength": "REQUIRED"
@@ -40,10 +74,19 @@
                 ]
               }
             },
-            "required": ["Value"]
+            "required": [
+              "Value"
+            ]
           }
-        ]
+        ],
+        "description": "It is an element with a choice containing a choice"
       }
-    }
+    },
+    "type": "object",
+    "anyOf": [
+      {
+        "$ref": "#/definitions/ChoiceOfChoice"
+      }
+    ]
   }
 }

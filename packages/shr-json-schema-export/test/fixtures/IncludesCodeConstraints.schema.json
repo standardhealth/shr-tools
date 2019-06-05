@@ -1,4 +1,41 @@
 {
+  "https://standardhealthrecord.org/schema/cimpl/builtin": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://standardhealthrecord.org/schema/cimpl/builtin",
+    "title": "CIMPL Builtin Schema",
+    "definitions": {
+      "Concept": {
+        "type": "object",
+        "properties": {
+          "coding": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/definitions/Coding"
+            }
+          }
+        },
+        "required": [
+          "coding"
+        ]
+      },
+      "Coding": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "system": {
+            "type": "string",
+            "format": "uri"
+          },
+          "display": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
   "https://standardhealthrecord.org/test/shr/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
@@ -16,23 +53,17 @@
                 "type": "array",
                 "minItems": 0,
                 "items": {
-                  "allOf": [
+                  "$ref": "https://standardhealthrecord.org/schema/cimpl/builtin#/definitions/Concept",
+                  "includesCodes": [
                     {
-                      "includesCodes": [
-                        {
-                          "code": "bar",
-                          "codeSystem": "http://foo.org",
-                          "displayText": "Foobar"
-                        },
-                        {
-                          "code": "far",
-                          "codeSystem": "http://boo.org",
-                          "displayText": "Boofar"
-                        }
-                      ]
+                      "code": "bar",
+                      "system": "http://foo.org",
+                      "display": "Foobar"
                     },
                     {
-                      "$ref": "https://standardhealthrecord.org/test/shr/core#/definitions/CodeableConcept"
+                      "code": "far",
+                      "system": "http://boo.org",
+                      "display": "Boofar"
                     }
                   ]
                 }
@@ -49,118 +80,5 @@
         "$ref": "#/definitions/IncludesCodesList"
       }
     ]
-  },
-  "https://standardhealthrecord.org/test/shr/core": {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "https://standardhealthrecord.org/test/shr/core",
-    "title": "TODO: Figure out what the title should be.",
-    "definitions": {
-      "CodeableConcept": {
-        "type": "object",
-        "properties": {
-          "Coding": {
-            "type": "array",
-            "minItems": 0,
-            "items": {
-              "$ref": "#/definitions/Coding"
-            }
-          },
-          "DisplayText": {
-            "$ref": "#/definitions/DisplayText"
-          },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
-          }
-        },
-        "required": [
-          "EntryType"
-        ]
-      },
-      "CodeSystem": {
-        "type": "object",
-        "properties": {
-          "Value": {
-            "type": "string",
-            "format": "uri"
-          },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
-          }
-        },
-        "required": [
-          "Value",
-          "EntryType"
-        ]
-      },
-      "CodeSystemVersion": {
-        "type": "object",
-        "properties": {
-          "Value": {
-            "type": "string"
-          },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
-          }
-        },
-        "required": [
-          "Value",
-          "EntryType"
-        ]
-      },
-      "Coding": {
-        "type": "object",
-        "properties": {
-          "Value": {
-            "type": "object",
-            "properties": {
-              "code": {
-                "type": "string"
-              },
-              "codeSystem": {
-                "type": "string",
-                "format": "uri"
-              },
-              "displayText": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "code",
-              "codeSystem"
-            ]
-          },
-          "CodeSystem": {
-            "$ref": "#/definitions/CodeSystem"
-          },
-          "CodeSystemVersion": {
-            "$ref": "#/definitions/CodeSystemVersion"
-          },
-          "DisplayText": {
-            "$ref": "#/definitions/DisplayText"
-          },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
-          }
-        },
-        "required": [
-          "EntryType"
-        ]
-      },
-      "DisplayText": {
-        "type": "object",
-        "properties": {
-          "Value": {
-            "type": "string"
-          },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
-          }
-        },
-        "required": [
-          "Value",
-          "EntryType"
-        ]
-      }
-    }
   }
 }

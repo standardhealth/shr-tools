@@ -4,5 +4,5 @@
   "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/Coded"},
   "CreationTime": { "Value": "2017-11-30T12:34:56Z", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"} },
   "LastUpdated": { "Value": "2017-11-30T12:34:56Z", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"} },
-  "Value": { "code": "bar", "codeSystem": "urn:some-namespace:foo" }
+  "Value": { "coding": [{ "code": "bar", "system": "urn:some-namespace:foo" }] }
 }
