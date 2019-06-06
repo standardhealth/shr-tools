@@ -1,4 +1,4 @@
-const { Identifier, IdentifiableValue, ChoiceValue, TypeConstraint, CardConstraint, IncludesTypeConstraint, ConstraintsFilter, RefValue, Cardinality } = require('shr-models');
+const { Identifier, IdentifiableValue, ChoiceValue, TypeConstraint, CardConstraint, IncludesTypeConstraint, ConstraintsFilter, Cardinality } = require('shr-models');
 const mkdirp = require('mkdirp');
 const path = require('path');
 const exceljs = require('exceljs');
@@ -145,7 +145,7 @@ function getUnit(de, path, specs, projectURL) {
 function getConstraintOnValue(value, dataElements, useCase) {
   let valueId = choiceFriendlyEffectiveIdentifier(value);
   if (valueId == null && value instanceof ChoiceValue) {
-    valueId = value.aggregateOptions.find(o => ['CodeableConcept', 'Coding', 'code'].indexOf(o.identifier.name) !== -1);
+    valueId = value.aggregateOptions.find(o => o.identifier.isPrimitive && o.identifier.name === 'concept');
   }
   if (valueId) {
     const valueDE = dataElements.findByIdentifier(valueId);
@@ -205,11 +205,7 @@ function findValueByPath(specs, path, def, valueOnly=false, parentConstraints=[]
 
         value = findValueByIdentifier(itc.path[0], fieldsToSearch);
         if (value !== undefined) {
-          if (value instanceof RefValue) {
-            value = new RefValue(itc.isA).withCard(itc.card).withConstraints(value.constraints);
-          } else {
-            value = new IdentifiableValue(itc.isA).withCard(itc.card).withConstraints(value.constraints);
-          }
+          value = new IdentifiableValue(itc.isA).withCard(itc.card).withConstraints(value.constraints);
         }
       }
     }
@@ -261,11 +257,7 @@ function findValueByIdentifier(identifier, values) {
                 && !(c instanceof TypeConstraint)
                 && !(c instanceof CardConstraint);
             });
-            if (value instanceof RefValue) {
-              value = new RefValue(itc.isA).withCard(itc.card).withConstraints(constraintsToCopy);
-            } else {
-              value = new IdentifiableValue(itc.isA).withCard(itc.card).withConstraints(constraintsToCopy);
-            }
+            value = new IdentifiableValue(itc.isA).withCard(itc.card).withConstraints(constraintsToCopy);
             break;
           }
         }
@@ -324,7 +316,7 @@ function mergeConstraintsToChild(parentConstraints, childValue, childIsElementVa
 
 function getAggregateEffectiveCardinality(elementIdentifier, path, specs) {
   const cards = [];
-  
+
   const def = specs.dataElements.findByIdentifier(elementIdentifier);
   for (let i=0; i < path.length; i++) {
     const sourceValue = findValueByPath(specs, path.slice(0, i+1), def);
