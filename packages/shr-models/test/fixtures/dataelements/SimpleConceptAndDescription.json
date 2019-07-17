@@ -4,6 +4,7 @@
     "fqn": "shr.test.SimpleElement",
     "isEntry": false,
     "isAbstract": false,
+    "isGroup": false,
     "description": "It is a simple element",
     "concepts": [
       {

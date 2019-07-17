@@ -4,6 +4,7 @@
   "fqn": "shr.test.TypeConstraintOnFieldValue",
   "isEntry": true,
   "isAbstract": false,
+  "isGroup": false,
   "fields": [
     {
       "fqn": "shr.test.HasSimpleValue",

@@ -4,6 +4,7 @@
   "fqn": "shr.test.IncludesCodeConstraintOnValueChild",
   "isEntry": true,
   "isAbstract": false,
+  "isGroup": false,
   "value": {
     "fqn": "shr.test.MultiCodedFromValueSet",
     "valueType": "IdentifiableValue",

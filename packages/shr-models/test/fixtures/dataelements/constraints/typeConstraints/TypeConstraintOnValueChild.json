@@ -4,6 +4,7 @@
   "fqn": "shr.test.TypeConstraintOnValueChild",
   "isEntry": true,
   "isAbstract": false,
+  "isGroup": false,
   "value": {
     "fqn": "shr.test.Complex",
     "valueType": "IdentifiableValue",

@@ -4,6 +4,7 @@
     "fqn": "shr.test.MultiString",
     "isEntry": true,
     "isAbstract": false,
+    "isGroup": false,
     "description": "It is a multi-string entry",
     "value": {
         "fqn": "string",

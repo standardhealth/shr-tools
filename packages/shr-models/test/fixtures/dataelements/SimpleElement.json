@@ -4,6 +4,7 @@
   "fqn": "shr.test.SimpleElement",
   "isEntry": false,
   "isAbstract": false,
+  "isGroup": false,
   "value": {
     "fqn": "string",
     "valueType": "IdentifiableValue",

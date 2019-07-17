@@ -4,6 +4,7 @@
   "fqn": "shr.test.CodedFromValueSet",
   "isEntry": true,
   "isAbstract": false,
+  "isGroup": false,
   "value": {
     "fqn": "concept",
     "valueType": "IdentifiableValue",

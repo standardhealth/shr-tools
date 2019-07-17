@@ -4,6 +4,7 @@
     "fqn": "shr.test.SimpleChoiceField",
     "isEntry": true,
     "isAbstract": false,
+    "isGroup": false,
     "value": {
         "fqn": "string",
         "valueType": "IdentifiableValue",

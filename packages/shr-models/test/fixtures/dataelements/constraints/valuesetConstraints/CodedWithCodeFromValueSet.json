@@ -4,6 +4,7 @@
   "fqn": "shr.test.CodedWithCodeFromValueSet",
   "isEntry": false,
   "isAbstract": false,
+  "isGroup": false,
   "value": {
     "fqn": "shr.test.CodedThing",
     "valueType": "IdentifiableValue",

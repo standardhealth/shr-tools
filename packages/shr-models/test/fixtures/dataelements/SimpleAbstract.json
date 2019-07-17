@@ -4,6 +4,7 @@
   "fqn": "shr.test.SimpleAbstract",
   "isEntry": false,
   "isAbstract": true,
+  "isGroup": false,
   "value": {
     "fqn": "string",
     "valueType": "IdentifiableValue",

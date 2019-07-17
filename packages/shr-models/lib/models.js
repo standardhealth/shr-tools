@@ -64,23 +64,6 @@ class Specifications {
   get codeSystems() { return this._codeSystems; }
   get contentProfiles() { return this._contentProfiles; }
   get maps() { return this._maps; }
-
-  /**
-   * Exports Specifications to CIMPL5
-   *
-   * @param {string} filePath - the output destination for the export.
-   */
-  toCIMPL5(filePath) {
-    const {Cimpl5Exporter} = require('./export/cimpl5Exporter');
-    const cimplExporter = new Cimpl5Exporter(this);
-    cimplExporter.exportToPath(filePath);
-  }
-
-  toCIMPL6(filePath) {
-    const {Cimpl6Exporter} = require('./export/cimpl6Exporter');
-    const cimplExporter = new Cimpl6Exporter(this);
-    cimplExporter.exportToPath(filePath);
-  }
 }
 
 class NamespaceSpecifications {
@@ -496,10 +479,11 @@ class Namespace {
 }
 
 class DataElement {
-  constructor(identifier, isEntry=false, isAbstract=false) {
+  constructor(identifier, isEntry=false, isAbstract=false, isGroup=false) {
     this._identifier = identifier; // Identifier
     this._isEntry = isEntry; // boolean
     this._isAbstract = isAbstract; // boolean
+    this._isGroup = isGroup; // boolean
     this._basedOn = [];      // Identifier[]
     this._concepts = [];     // Concept[]
     this._fields = [];       // Value[] (and its subclasses) -- excluding primitive values
@@ -513,13 +497,39 @@ class DataElement {
   get isEntry() { return this._isEntry; }
   set isEntry(isEntry) {
     this._isEntry = isEntry;
+    if (this._isEntry) {
+      this._isAbstract = false;
+      this._isGroup = false;
+    }
   }
 
   // isAbstract is a boolean flag indicating if this element is abstract and non-instantiable
   get isAbstract() { return this._isAbstract; }
   set isAbstract(isAbstract) {
     this._isAbstract = isAbstract;
+    if (this._isAbstract) {
+      this._isEntry = false;
+      this._isGroup = false;
+    }
   }
+
+  // isGroup is a boolean flag indicating if this element is a group.  An element should be a Group if
+  // - it is not an Entry
+  // - it is not an Abstract
+  // - it does not define a Value
+  // - it has only Properties
+  // Technically you can derive this by looking at the element, but setting it explicitly allows
+  // us to more easily detect when the author *intended* for it to be a group (in CIMPL), but it
+  // violates the group rules.
+  get isGroup() { return this._isGroup; }
+  set isGroup(isGroup) {
+    this._isGroup = isGroup;
+    if (this._isGroup) {
+      this._isEntry = false;
+      this._isAbstract = false;
+    }
+  }
+
   // basedOn is an array of identifiers that the data element is based on.  This means that it takes on the value
   // and fields of any data element it is based on, and can potentially override/constrain it.
   get basedOn() { return this._basedOn; }
@@ -600,7 +610,7 @@ class DataElement {
   }
 
   clone() {
-    const clone = new DataElement(this._identifier.clone(), this._isEntry, this._isAbstract);
+    const clone = new DataElement(this._identifier.clone(), this._isEntry, this._isAbstract, this._isGroup);
     if (this._description) {
       clone._description = this._description;
     }
@@ -629,6 +639,7 @@ class DataElement {
       'fqn':          this.identifier.fqn,
       'isEntry':      this.isEntry,
       'isAbstract':   this.isAbstract,
+      'isGroup':      this.isGroup,
       'description':  this.description,
       'concepts':     this.concepts.map(c => c.toJSON()),
       'hierarchy':    this._hierarchy, //full hierarchy

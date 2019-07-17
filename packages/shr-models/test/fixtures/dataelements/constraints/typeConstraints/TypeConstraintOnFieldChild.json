@@ -4,6 +4,7 @@
   "fqn": "shr.test.TypeConstraintOnFieldChild",
   "isEntry": true,
   "isAbstract": false,
+  "isGroup": false,
   "fields": [
     {
       "fqn": "shr.test.Complex",

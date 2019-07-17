@@ -4,6 +4,7 @@
     "fqn": "shr.test.Simple",
     "isEntry": true,
     "isAbstract": false,
+    "isGroup": false,
     "description": "It is a multi-concept entry",
     "concepts": [
       {

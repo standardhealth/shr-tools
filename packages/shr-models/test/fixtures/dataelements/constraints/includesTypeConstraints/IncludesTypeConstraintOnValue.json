@@ -4,6 +4,7 @@
   "fqn": "shr.test.IncludesTypeConstraintOnValue",
   "isEntry": true,
   "isAbstract": false,
+  "isGroup": false,
   "value": {
     "fqn": "shr.test.Components",
     "valueType": "IdentifiableValue",
