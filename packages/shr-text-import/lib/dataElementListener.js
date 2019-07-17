@@ -111,7 +111,7 @@ class DataElementImporter extends SHRDataElementParserListener {
 
   enterElementDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.elementHeader().simpleName().getText());
-    this._currentDef = new DataElement(id, false, false).withGrammarVersion(this._currentGrammarVersion);
+    this._currentDef = new DataElement(id, false, false, false).withGrammarVersion(this._currentGrammarVersion);
 
     // Setup a child logger to associate logs with the current element
     const lastLogger = logger;
@@ -133,7 +133,7 @@ class DataElementImporter extends SHRDataElementParserListener {
 
   enterAbstractDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.abstractHeader().simpleName().getText());
-    this._currentDef = new DataElement(id, false, true).withGrammarVersion(this._currentGrammarVersion);
+    this._currentDef = new DataElement(id, false, true, false).withGrammarVersion(this._currentGrammarVersion);
     // Setup a child logger to associate logs with the current element
     const lastLogger = logger;
     logger = logger.child({ shrId: id.fqn });
@@ -154,7 +154,7 @@ class DataElementImporter extends SHRDataElementParserListener {
 
   enterGroupDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.groupHeader().simpleName().getText());
-    this._currentDef = new DataElement(id, false, false).withGrammarVersion(this._currentGrammarVersion);
+    this._currentDef = new DataElement(id, false, false, true).withGrammarVersion(this._currentGrammarVersion);
 
     // Setup a child logger to associate logs with the current element
     const lastLogger = logger;
@@ -176,7 +176,7 @@ class DataElementImporter extends SHRDataElementParserListener {
 
   enterEntryDef(ctx) {
     const id = new Identifier(this._currentNs, ctx.entryHeader().simpleName().getText());
-    this._currentDef = new DataElement(id, true).withGrammarVersion(this._currentGrammarVersion);
+    this._currentDef = new DataElement(id, true, false, false).withGrammarVersion(this._currentGrammarVersion);
 
     // Setup a child logger to associate logs with the current element
     const lastLogger = logger;
@@ -201,6 +201,28 @@ class DataElementImporter extends SHRDataElementParserListener {
     if (identifier.isSpecialKeyWord) {
       logger.error(`Elements cannot be based on "${identifier.name}" keyword. ERROR_CODE:11023`);
     } else {
+      const parentInfo = this._preprocessedData.resolveDefinition(identifier.name, identifier.namespace);
+      if (this._currentDef.isEntry) {
+        // Entries can only inherit from another Entry or an Abstract
+        if (parentInfo.type !== 'entry' && parentInfo.type !== 'abstract') {
+          logger.error('Entry %s cannot declare %s as its parent since %s is not an Entry or Abstract.  ERROR_CODE:11050', this._currentDef.identifier.name, identifier.name, identifier.name);
+        }
+      } else if (this._currentDef.isAbstract) {
+        // Abstracts can only inherit from another Abstract
+        if (parentInfo.type !== 'abstract') {
+          logger.error('Abstract %s cannot declare %s as its parent since %s is not an Abstract.  ERROR_CODE:11051', this._currentDef.identifier.name, identifier.name, identifier.name);
+        }
+      } else if (this._currentDef.isGroup) {
+        // Groups can only inherit from another Group
+        if (parentInfo.type !== 'group') {
+          logger.error('Group %s cannot declare %s as its parent since %s is not a Group.  ERROR_CODE:11052', this._currentDef.identifier.name, identifier.name, identifier.name);
+        }
+      } else /* is an element */ {
+        // Elements can only inherit from another Element
+        if (parentInfo.type !== 'element') {
+          logger.error('Element %s cannot declare %s as its parent since %s is not an Element.  ERROR_CODE:11053', this._currentDef.identifier.name, identifier.name, identifier.name);
+        }
+      }
       this._currentDef.addBasedOn(identifier);
     }
   }
@@ -220,6 +242,18 @@ class DataElementImporter extends SHRDataElementParserListener {
   }
 
   enterValue(ctx) {
+    // Perform two checks for correct usage:
+    // 1) Only Element can declare a Value; anything else is an error.
+    //    NOTE: This could (or maybe should) be enforced in the ANTLR grammar, but for now,
+    //    we don't want to make any changes in the grammar.  Consider changing in 6.1.
+    // 2) Check to ensure it does not have a parent (in which case it cannot redeclare Value).
+    //    Check for ctx.COLON() because the grammar re-uses this rule for the KW_ONLY constraint too.
+    //    NOTE: This check relies on the current grammar requiring parents be declared before values.
+    if (this._currentDef.isGroup || this._currentDef.isEntry || this._currentDef.isAbstract) {
+      logger.error('Cannot declare Value on a non-Element.  ERROR_CODE:11054');
+    } else if (ctx.COLON() && this._currentDef.basedOn.length > 0) {
+      logger.error('Cannot redeclare Value on Element that has a parent.  Constrain Value instead.  ERROR_CODE:11055');
+    }
     const value = this.processCountAndTypesForValue(ctx);
     this._currentDef.value = value;
   }
@@ -344,7 +378,14 @@ class DataElementImporter extends SHRDataElementParserListener {
   }
 
   enterField(ctx) {
+    const isElement = !this._currentDef.isGroup && !this._currentDef.isEntry && !this._currentDef.isAbstract;
     if (ctx.propertyField()) {
+      // If it's an element, you cannot declare properties (using Property:) on it.
+      // NOTE: This could potentially be enforced in the ANTLR grammar, but for now, we don't want
+      // to make any changes in the grammar.  Consider changing in 6.1.
+      if (isElement) {
+        logger.error('Cannot declare properties on an Element since Elements do not have properties.  ERROR_CODE:11056');
+      }
       const field = this.processCountAndTypes(ctx.propertyField().count(), [ctx.propertyField().propertyFieldType()]);
       if (this._currentDef.fields.some(f => f.identifier && f.identifier.equals(field.identifier))) {
         logger.error('Property "%s" already exists. ERROR_CODE:11040', field.identifier.name);
@@ -355,7 +396,13 @@ class DataElementImporter extends SHRDataElementParserListener {
     }
     else if (ctx.elementWithConstraint()) {
       const field = this.processElementWithConstraint(ctx.elementWithConstraint());
-      if (ctx.elementWithConstraint().getText().startsWith('Value')) {
+      if (/^Value([.\[\s].*)?$/.test(ctx.elementWithConstraint().getText())) {
+        // If it's not an element, you cannot constrain Value.
+        // NOTE: This could potentially be enforced in the ANTLR grammar, but for now, we don't want
+        // to make any changes in the grammar.  Consider changing in 6.1.
+        if (!isElement) {
+          logger.error('Cannot constrain Value on a non-Element since non-Elements do not have Values.  ERROR_CODE:11057');
+        }
         if (this._currentDef.value) {
           if (this._currentDef.value instanceof ChoiceValue) {
             let marked = false;
@@ -378,6 +425,13 @@ class DataElementImporter extends SHRDataElementParserListener {
         }
       }
       else {
+        // If it's an element, you cannot constrain Properties (except Value) -- since Elements
+        // don't have properties.
+        // NOTE: This could potentially be enforced in the ANTLR grammar, but for now, we don't want
+        // to make any changes in the grammar.  Consider changing in 6.1.
+        if (isElement) {
+          logger.error('Cannot constrain properties on Elements since Elements only have Values.  ERROR_CODE:11058');
+        }
         const match = this._currentDef.fields.find(f => f.effectiveIdentifier && f.effectiveIdentifier.equals(field.identifier));
         if (match) {
           field.constraints.forEach(c => match.addConstraint(c));

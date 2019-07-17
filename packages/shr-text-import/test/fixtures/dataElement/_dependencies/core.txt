@@ -3,7 +3,7 @@ Namespace:  shr.core
 
 // These are just dummy (incomplete) definitions to satisfy common dependencies
 
-Element:		Quantity
+Group:	      	Quantity
 Property:       Number 0..1
 Property:       Units 0..1
 
@@ -12,4 +12,3 @@ Property:       Units 0..1
 
 		Element:		Units
 		Value:			concept
-        

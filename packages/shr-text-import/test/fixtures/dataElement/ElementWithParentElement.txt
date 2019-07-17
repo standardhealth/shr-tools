@@ -1,0 +1,9 @@
+Grammar:     DataElement 6.0
+Namespace:   elementWithParentElement
+Description: "The SHR test namespace"
+
+Element:        ParentElement
+Value:          string
+
+Element:        ChildElement
+Parent:         ParentElement

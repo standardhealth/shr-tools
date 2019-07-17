@@ -1,0 +1,6 @@
+Grammar:     DataElement 6.0
+Namespace:   invalidAbstractWithValue
+Description: "The SHR test namespace"
+
+Abstract:       AbstractWithValue
+Value:          string

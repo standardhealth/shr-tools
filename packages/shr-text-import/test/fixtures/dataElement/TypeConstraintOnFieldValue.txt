@@ -1,10 +1,10 @@
 Grammar:    DataElement 6.0
 Namespace:  typeConstraintOnFieldValue
 
-Element:      Group2
+Group:      Group2
 Property:     HasSimpleValue 0..1
 
-Entry:    TypeConstraintOnFieldValue
+Group:    TypeConstraintOnFieldValue
 Parent:   Group2
 Description:  "It is a group entry with a type constraint on a field's value"
      HasSimpleValue[Simple] substitute Simple2
@@ -14,7 +14,6 @@ Value:        string
 
 Element:      Simple2
 Parent:       Simple
-Value:        string
 
 Element:      HasSimpleValue
 Value:        Simple

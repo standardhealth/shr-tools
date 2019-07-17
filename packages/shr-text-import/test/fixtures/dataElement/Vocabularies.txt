@@ -5,9 +5,9 @@ CodeSystem:     FOOURL = http://foo.org
 CodeSystem:     FOOURN = urn:iso:std:iso:4217
 CodeSystem:     FOOOID = urn:oid:2.16.840.1.114222.4.11.826
 
-Entry:          Simple
+Element:        Simple
 Concept:        FOOURL #bar "Foobar"
 Concept:        FOOURN #baz "Foobaz"
 Concept:        FOOOID #bam "Foobam"
-Description:    "It is a simple entry"
+Description:    "It is a simple element"
 Value:          string

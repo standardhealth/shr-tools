@@ -14,7 +14,6 @@ Value:        string
 
 Element:      Simple2
 Parent:       Simple
-Value:        string
 
 Element:      CodedFromValueSet
 Value:        concept

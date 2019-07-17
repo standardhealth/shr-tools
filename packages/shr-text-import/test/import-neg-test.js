@@ -152,8 +152,73 @@ describe('#importDataElementNegatives', () => {
     importFixture('InvalidValueOnlyConstraintInheritedFromMultipleToMultiple', dir, true);
   });
 
+  it('Neg33: should produce an error message (not a traceback) when an element attempts to redeclare Value instead of constraining it.', () => {
+    importFixture('InvalidValueRedeclaration', dir, true);
+  });
 
+  it('Neg34: should produce an error message (not a traceback) when an Abstract declares an Element as parent.', () => {
+    importFixture('InvalidAbstractWithParentElement', dir, true);
+  });
 
+  it('Neg35: should produce an error message (not a traceback) when an Abstract declares an Entry as parent.', () => {
+    importFixture('InvalidAbstractWithParentEntry', dir, true);
+  });
+
+  it('Neg36: should produce an error message (not a traceback) when an Abstract declares a Group as parent.', () => {
+    importFixture('InvalidAbstractWithParentGroup', dir, true);
+  });
+
+  it('Neg37: should produce an error message (not a traceback) when an Element declares an Abstract as parent.', () => {
+    importFixture('InvalidElementWithParentAbstract', dir, true);
+  });
+
+  it('Neg38: should produce an error message (not a traceback) when an Element declares an Entry as parent.', () => {
+    importFixture('InvalidElementWithParentEntry', dir, true);
+  });
+
+  it('Neg39: should produce an error message (not a traceback) when an Element declares a Group as parent.', () => {
+    importFixture('InvalidElementWithParentGroup', dir, true);
+  });
+
+  it('Neg40: should produce an error message (not a traceback) when an Entry declares an Element as parent.', () => {
+    importFixture('InvalidEntryWithParentElement', dir, true);
+  });
+
+  it('Neg41: should produce an error message (not a traceback) when an Element declares an Group as parent.', () => {
+    importFixture('InvalidElementWithParentGroup', dir, true);
+  });
+
+  it('Neg42: should produce an error message (not a traceback) when an Element declares an Abstract as parent.', () => {
+    importFixture('InvalidGroupWithParentAbstract', dir, true);
+  });
+
+  it('Neg43: should produce an error message (not a traceback) when an Element declares an Entry as parent.', () => {
+    importFixture('InvalidGroupWithParentEntry', dir, true);
+  });
+
+  it('Neg44: should produce an error message (not a traceback) when an Element declares a Element as parent.', () => {
+    importFixture('InvalidGroupWithParentElement', dir, true);
+  });
+
+  it('Neg45: should produce an error message (not a traceback) when an Element declares a Property.', () => {
+    importFixture('InvalidElementWithProperty', dir, true);
+  });
+
+  it('Neg45: should produce an error message (not a traceback) when an Element constrains a Property.', () => {
+    importFixture('InvalidElementWithPropertyConstraint', dir, true);
+  });
+
+  it('Neg46: should produce an error message (not a traceback) when an Abstract declares a Value.', () => {
+    importFixture('InvalidAbstractWithValue', dir, true);
+  });
+
+  it('Neg46: should produce an error message (not a traceback) when an Entry declares a Value.', () => {
+    importFixture('InvalidEntryWithValue', dir, true);
+  });
+
+  it('Neg46: should produce an error message (not a traceback) when a Group declares a Value.', () => {
+    importFixture('InvalidGroupWithValue', dir, true);
+  });
 
 // end of negative examples
 });

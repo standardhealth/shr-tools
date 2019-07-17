@@ -14,8 +14,7 @@ Value:        string
 
 Element:      Simple2
 Parent:       Simple
-Value:        string
 
-Element:      Complex
+Group:        Complex
 Property:     Simple 0..1
 

@@ -1,0 +1,9 @@
+Grammar:    DataElement 6.0
+Namespace:  shr.test
+
+Element:        SimpleParent
+Value:          string
+
+Element:        SimpleChild
+Parent:         SimpleParent
+Value:          string

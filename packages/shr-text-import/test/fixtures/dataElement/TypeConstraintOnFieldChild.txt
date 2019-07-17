@@ -16,4 +16,3 @@ Value:        string
 
 Element:      Simple2
 Parent:       Simple
-Value:        string

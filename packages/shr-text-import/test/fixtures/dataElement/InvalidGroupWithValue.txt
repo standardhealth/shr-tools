@@ -1,0 +1,6 @@
+Grammar:     DataElement 6.0
+Namespace:   invalidGroupWithValue
+Description: "The SHR test namespace"
+
+Group:          GroupWithValue
+Value:          string

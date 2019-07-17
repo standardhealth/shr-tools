@@ -137,16 +137,16 @@ class Preprocessor extends SHRDataElementParserVisitor {
       for (const def of ctx.dataDefs().dataDef()) {
         if (def.entryDef()) {
           const name = def.entryDef().entryHeader().simpleName().getText();
-          this._data.registerDefinition(ns, name);
+          this._data.registerDefinition(ns, name, 'entry');
         } else if (def.elementDef()) {
           const name = def.elementDef().elementHeader().simpleName().getText();
-          this._data.registerDefinition(ns, name);
+          this._data.registerDefinition(ns, name, 'element');
         } else if (def.abstractDef()) {
           const name = def.abstractDef().abstractHeader().simpleName().getText();
-          this._data.registerDefinition(ns, name);
+          this._data.registerDefinition(ns, name, 'abstract');
         } else if (def.groupDef()) {
           const name = def.groupDef().groupHeader().simpleName().getText();
-          this._data.registerDefinition(ns, name);
+          this._data.registerDefinition(ns, name, 'group');
         }
       }
     } finally {
@@ -169,7 +169,7 @@ class PreprocessedData {
   constructor() {
     this._paths = {}; //map[namespace]map[name]url
     this._vocabularies = {}; // map[namespace]map[name]url
-    this._definitions = {}; // map[namespace]map[name]boolean
+    this._definitions = {}; // map[namespace]map[name]type
   }
 
   registerPath(namespace, name, url) {
@@ -190,13 +190,13 @@ class PreprocessedData {
     ns[name] = url;
   }
 
-  registerDefinition(namespace, name) {
+  registerDefinition(namespace, name, type) {
     let ns = this._definitions[namespace];
     if (typeof ns == 'undefined') {
       ns = {};
       this._definitions[namespace] = ns;
     }
-    ns[name] = true;
+    ns[name] = type;
   }
 
   resolvePath(name, ...namespace) {
@@ -267,6 +267,7 @@ class PreprocessedData {
       if (this._definitions[ns] && this._definitions[ns][name]) {
         if (!result.hasOwnProperty('namespace')) {
           result['namespace'] = ns;
+          result['type'] = this._definitions[ns][name];
         }
         foundNamespaces.push(ns);
       }

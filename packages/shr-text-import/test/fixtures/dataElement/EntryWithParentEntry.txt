@@ -1,0 +1,12 @@
+Grammar:     DataElement 6.0
+Namespace:   entryWithParentEntry
+Description: "The SHR test namespace"
+
+Entry:          ParentEntry
+Property:       Bar 0..1
+
+Entry:          ChildEntry
+Parent:         ParentEntry
+
+Element:        Bar
+Value:          boolean

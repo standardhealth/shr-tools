@@ -5,7 +5,7 @@ Namespace: booleanConstraintOnValueChild
 Element:     BooleanConstraintOnValueChild
 Description: "It is an entry with a boolean constraint on the value's child"
 Value:       SimpleBoolean
-             SimpleBoolean[boolean] = false
+             Value[SimpleBoolean] = false
 
 Element:     SimpleBoolean
 Value:       boolean

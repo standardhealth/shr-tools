@@ -17,7 +17,7 @@ describe('#preprocessFile', () => {
       'simpleEntry': { 'FOO': 'http://foo.org' }
     });
     expect(data._definitions).to.eql({
-      'simpleEntry': { 'SimpleEntry': true, 'Bar':true }
+      'simpleEntry': { 'SimpleEntry': 'entry', 'Bar': 'element' }
     });
   });
 
@@ -28,7 +28,7 @@ describe('#preprocessFile', () => {
       'simpleAbstractElement': { 'FOO': 'http://foo.org' }
     });
     expect(data._definitions).to.eql({
-      'simpleAbstractElement': { 'Simple': true, 'Bar':true }
+      'simpleAbstractElement': { 'Simple': 'abstract', 'Bar': 'element' }
     });
   });
 
@@ -39,7 +39,7 @@ describe('#preprocessFile', () => {
       'simpleElement': { 'FOO': 'http://foo.org' }
     });
     expect(data._definitions).to.eql({
-      'simpleElement': { 'Simple': true }
+      'simpleElement': { 'Simple': 'element' }
     });
   });
 
@@ -50,7 +50,7 @@ describe('#preprocessFile', () => {
     });
     expect(data._vocabularies).to.eql({});
     expect(data._definitions).to.eql({
-      'codedFromPathValueSet': { 'CodedFromPathValueSet': true }
+      'codedFromPathValueSet': { 'CodedFromPathValueSet': 'element' }
     });
   });
 
@@ -66,10 +66,10 @@ describe('#preprocessFile', () => {
     });
     expect(data._definitions).to.eql({
       'codeSystems': {
-        'SimpleGroup': true,
-        'Simple': true,
-        'Coded': true,
-        'Simple2': true,
+        'SimpleGroup': 'entry',
+        'Simple': 'element',
+        'Coded': 'element',
+        'Simple2': 'element',
       }
     });
   });

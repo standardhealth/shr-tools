@@ -1,0 +1,13 @@
+Grammar:     DataElement 6.0
+Namespace:   invalidElementWithPropertyConstraint
+Description: "The SHR test namespace"
+
+Element:        ParentElement
+Value:          string
+
+Element:        ChildElement
+Parent:         ParentElement
+Bar 0..1
+
+Element:        Bar
+Value:          string
