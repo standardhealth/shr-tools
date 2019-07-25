@@ -15,6 +15,7 @@ function expand(specifications, ...exporters) {
 
 const CONCEPT = new models.PrimitiveIdentifier('concept');
 const BOOLEAN = new models.PrimitiveIdentifier('boolean');
+const STRING = new models.PrimitiveIdentifier('string');
 
 class Expander {
   constructor(specs, ...exporters) {
@@ -604,6 +605,8 @@ class Expander {
         consolidateFn = this.consolidateIncludesCodeConstraint;
       } else if (constraint instanceof models.BooleanConstraint) {
         consolidateFn = this.consolidateBooleanConstraint;
+      } else if (constraint instanceof models.FixedValueConstraint) {
+        consolidateFn = this.consolidateFixedValueConstraint;
       } else {
         logger.error('Unsupported constraint type: %s. ERROR_CODE:12009', constraint.constructor.name);
         continue;
@@ -1029,6 +1032,52 @@ class Expander {
     return constraints;
   }
 
+  consolidateFixedValueConstraint(element, value, constraint, previousConstraints) {
+    constraint = constraint.clone();
+    let target = this.constraintTarget(value, constraint.path);
+    let targetLabel = this.constraintTargetLabel(value, constraint.path);
+
+    // Determine if the constraint is on the specific target or its value
+    if (!this.supportsFixedValueConstraint(target.identifier)) {
+      // Isn't directly a fixed value, so try its value
+      let valID = this.constraintTargetValueIdentifier(value, constraint.path);
+      if(!valID && value instanceof models.ChoiceValue) {
+        let valOption = value.options.find(v => this.supportsFixedValueConstraint(v.identifier));
+        if(valOption) {
+          valID = valOption.identifier;
+        }
+      }
+      if (!this.supportsFixedValueConstraint(valID)) {
+        logger.error('Cannot constrain string value of %s since neither it nor its value is a string. ERROR_CODE:12041', targetLabel);
+        return previousConstraints;
+      }
+      // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
+      constraint.path.push(valID);
+      target = this.constraintTarget(value, constraint.path);
+      targetLabel = this.constraintTargetLabel(value, constraint.path);
+    }
+
+    // We do not allow previous fixed constraints to be overridden with a different value
+    let constraints = previousConstraints;
+    const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).fixedValue.constraints;
+    for (const previous of filtered) {
+      if (previous.value != constraint.value) {
+        logger.error('Cannot constrain string value of %s to %s since a previous constraint constrains it to %s. ERROR_CODE:12042', targetLabel, constraint.value, previous.value);
+        return previousConstraints;
+      }
+      // Remove the previous type constraint since this one supercedes it
+      constraints = constraints.filter(cst => cst !== previous);
+    }
+
+    // As a constraint is a fixed value, we no longer need to retain value set constraints
+    const vsConstraints = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).valueSet.constraints;
+    vsConstraints.forEach(prev => constraints = constraints.filter(cst => cst !== prev));
+
+    constraints.push(constraint);
+
+    return constraints;
+  }
+
   findMatchingIncludesType(value, path = [], typeToMatch) {
     if (!value || !typeToMatch) {
       return;
@@ -1131,6 +1180,10 @@ class Expander {
 
   supportsBooleanConstraint(identifier) {
     return BOOLEAN.equals(identifier);
+  }
+
+  supportsFixedValueConstraint(identifier) {
+    return STRING.equals(identifier);
   }
 
   checkHasBaseType(identifier, baseIdentifier) {

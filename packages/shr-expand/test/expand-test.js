@@ -3255,6 +3255,148 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.be.empty;
   });
 
+   // Valid Fixed String Constraints
+
+   it('should keep valid fixed string constraints on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+          .withConstraint(new models.FixedValueConstraint('foo bar', 'string'))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+        .withInheritedFrom(a.identifier)
+        .withConstraint(new models.FixedValueConstraint('foo bar', 'string')
+          .withLastModifiedBy(id('shr.test', 'SubA')))
+        .withInheritance(models.OVERRIDDEN)
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should make implicit value fixed string constraints explicit on values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+          .withConstraint(new models.FixedValueConstraint('foo bar', 'string'))
+      );
+    add(a, x);
+
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const eX = findExpanded('shr.test', 'X');
+    expect(eX.identifier).to.eql(id('shr.test', 'X'));
+    expect(eX.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'A')).withMinMax(0, 1)
+        .withConstraint(new models.FixedValueConstraint('foo bar', 'string', [pid('string')])
+          .withLastModifiedBy(id('shr.test', 'X')))
+    );
+    expect(eX.fields).to.be.empty;
+  });
+
+  it('should consolidate fixed string constraints on value specifying the same value', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+          .withConstraint(new models.FixedValueConstraint('foo bar', 'string'))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+          .withConstraint(new models.FixedValueConstraint('foo bar', 'string')
+          .withLastModifiedBy(id('shr.test', 'A')))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+        .withInheritedFrom(a.identifier)
+        .withConstraint(new models.FixedValueConstraint('foo bar', 'string')
+          .withLastModifiedBy(id('shr.test', 'A')))
+        .withInheritance(models.INHERITED)
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  // Invalid Fixed String Constraints
+
+  it('should report an error when overriding prior fixed string constraint with different value', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(
+        new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+          .withConstraint(new models.FixedValueConstraint('foo bar', 'string'))
+      );
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+          .withConstraint(new models.FixedValueConstraint('bar foo', 'string'))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(err.errors()).to.have.length(1);
+    expect(err.errors()[0].msg).to.contain('string').and.to.contain('value');
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(pid('string')).withMinMax(0, 1)
+        .withInheritedFrom(a.identifier)
+        .withInheritance(models.INHERITED)
+        .withConstraint(new models.FixedValueConstraint('foo bar', 'string')
+          .withLastModifiedBy(id('shr.test', 'A')))
+    );
+    expect(eSubA.fields).to.be.empty;
+  });
+
+  it('should report an error when putting a fixed string constraint on a non-string value', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1));
+    let subA = new models.DataElement(id('shr.test', 'SubA'), true)
+      .withBasedOn(id('shr.test', 'A'))
+      .withValue(
+        new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+          .withConstraint(new models.FixedValueConstraint('foo bar', 'string'))
+      );
+    add(a, subA);
+
+    doExpand();
+
+    expect(err.errors()).to.have.length(1);
+    expect(err.errors()[0].msg).to.contain('string').and.to.contain('boolean');
+    const eSubA = findExpanded('shr.test', 'SubA');
+    expect(eSubA.identifier).to.eql(id('shr.test', 'SubA'));
+    expect(eSubA.basedOn).to.eql([id('shr.test', 'A')]);
+    expect(eSubA.value).to.eql(
+      new models.IdentifiableValue(pid('boolean')).withMinMax(0, 1)
+    .withInheritedFrom(a.identifier)
+      .withInheritance(models.INHERITED)
+  ); // No constraint
+    expect(eSubA.fields).to.be.empty;
+  });
+
   it('should properly deal with inherited TBD values', () => {
     let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.TBD('Not ready yet!')
