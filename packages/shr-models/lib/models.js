@@ -830,6 +830,12 @@ class Identifier {
     return this._namespace === '' && (this._name.startsWith('_') || this._name === 'Entry' || this._name === 'Value');
   }
 
+  get isQuantity() {
+    // NOTE: Parts of the framework need special handling for quantity, so we need a consistent way to identify it.
+    // In addtion, we also want to support it in the old namespace (shr.core) for backwards-compatibility.
+    return this._name === 'Quantity' && (this._namespace === 'obf.datatype' || this._namespace === 'shr.core');
+  }
+
   equals(other) {
     if (typeof other === 'undefined' || other == null || !(other instanceof Identifier)) {
       return false;
@@ -1182,6 +1188,47 @@ class BooleanConstraint extends Constraint {
   }
 }
 
+// FixedValueConstraint only makes sense when fixing a value
+class FixedValueConstraint extends Constraint {
+
+  constructor(value, type, path) {
+    super(path);
+    this._value = value;
+    this._type = type;
+  }
+
+  get value() { return this._value; }
+  get type() { return this._type; }
+
+  clone() {
+    const clone = new FixedValueConstraint(this._value, this._type);
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
+
+  equals(other) {
+    return (other instanceof FixedValueConstraint) &&
+        this._value == other.value &&
+        this._type == other.type &&
+        this._pathsAreEqual(other);
+  }
+
+  toJSON() {
+    var constraint = super.toJSON();
+    delete constraint['path'];
+
+    return Object.assign({
+      'type': 'fixed-value',
+      'valueType': this.type,
+      'value': this.value,
+    }, constraint);
+  }
+
+  toString() {
+    return `FixedValueConstraint of type (${this.type}) and value (${this.value}, on path:${this.path.map(p => p.name).join('.')})`;
+  }
+}
+
 class TypeConstraint extends Constraint {
 
   constructor(isA, path, onValue = false) {
@@ -1342,6 +1389,10 @@ class ConstraintsFilter {
 
   get boolean() {
     return new ConstraintsFilter(this._constraints.filter(c => c instanceof BooleanConstraint));
+  }
+
+  get fixedValue() {
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof FixedValueConstraint));
   }
 
   get type() {
@@ -1512,6 +1563,7 @@ class ConstraintHistory {
     this._code = new ConstraintHistoryFilter();
     this._includesCode = new ConstraintHistoryFilter();
     this._boolean = new ConstraintHistoryFilter();
+    this._fixedValue = new ConstraintHistoryFilter();
     this._type = new ConstraintHistoryFilter();
     this._includesType = new ConstraintHistoryFilter();
     this._card = new ConstraintHistoryFilter();
@@ -1521,6 +1573,7 @@ class ConstraintHistory {
   get code() { return this._code; }
   get includesCode() { return this._includesCode; }
   get boolean() { return this._boolean; }
+  get fixedValue() { return this._fixedValue; }
   get type() { return this._type; }
   get includesType() { return this._includesType; }
   get card() { return this._card; }
@@ -1539,6 +1592,8 @@ class ConstraintHistory {
       this._includesCode.add(constraint, source, unique);
     } else if (constraint instanceof BooleanConstraint) {
       this._boolean.add(constraint, source, unique);
+    } else if (constraint instanceof FixedValueConstraint) {
+      this._fixedValue.add(constraint, source, unique);
     } else if (constraint instanceof TypeConstraint) {
       this._type.add(constraint, source, unique);
     } else if (constraint instanceof IncludesTypeConstraint) {
@@ -1776,7 +1831,7 @@ class Value {
 
       const arrConstraints  = ['includesType', 'includesCode'];
       const dicConstraints  = ['type', 'valueSet', 'card'];
-      const valConstraints  = ['boolean', 'code'];
+      const valConstraints  = ['boolean', 'code', 'fixedValue'];
 
       const addToPath = (outputDict, skipCard=false) => {
         if (skipCard && key == 'card') return;
@@ -2752,4 +2807,4 @@ const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt
 const INHERITED = 'inherited';
 const OVERRIDDEN = 'overridden';
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, ContentProfileSpecifications, Namespace, DataElement, ContentProfile, ContentProfileRule, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, ConstraintHistory, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, ContentProfileSpecifications, Namespace, DataElement, ContentProfile, ContentProfileRule, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, ConstraintHistory, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, FixedValueConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
