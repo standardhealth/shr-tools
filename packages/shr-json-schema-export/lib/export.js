@@ -3,7 +3,7 @@
 // Derived from export SHR specification content as a hierarchy in JSON format by Greg Quinn
 
 const bunyan = require('bunyan');
-const {Identifier, IdentifiableValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, BooleanConstraint, MODELS_INFO, PRIMITIVE_NS} = require('shr-models');
+const {Identifier, IdentifiableValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, BooleanConstraint, FixedValueConstraint, MODELS_INFO, PRIMITIVE_NS} = require('shr-models');
 const builtinSchema = require('./schemas/cimpl.builtin.schema.json');
 
 var rootLogger = bunyan.createLogger({name: 'shr-json-schema-export'});
@@ -601,6 +601,8 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
             }
             currentAllOf[0].code = makeCodingEntry(constraintInfo.constraint.code);
           } else if (constraintInfo.constraint instanceof BooleanConstraint) {
+            currentAllOf.push({ enum: [constraintInfo.constraint.value]});
+          } else if (constraintInfo.constraint instanceof FixedValueConstraint) {
             currentAllOf.push({ enum: [constraintInfo.constraint.value]});
           } else if (constraintInfo.constraint instanceof CardConstraint) {
             // TODO: 0..0
