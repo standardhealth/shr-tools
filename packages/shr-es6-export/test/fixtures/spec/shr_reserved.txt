@@ -14,7 +14,7 @@ Element:           Await
 Value:             boolean
 
 Entry:             ReservedWordEntry
-Value:             Package
+Property:          Package 1..1
 Property:          Class 0..1
 Property:          Enum 0..1
 Property:          Await 0..1

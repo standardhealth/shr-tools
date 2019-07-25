@@ -547,6 +547,7 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
 
   // Determine isQuantity outside of the iteration loop so it is more efficient.  See note below for reason we need isQuantity.
   const isQuantity = checkIsQuantity(def.identifier, specs);
+  const quantityNS = getQuantityNamespace(specs);
   for (const element of allFhirElements) {
 
     if (element === allFhirElements[0]) {
@@ -560,7 +561,7 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
     // split across FHIR Quantity code, system, and unit.  Since SHR concept is a "primitive" however, there is currently no
     // way to say that correctly in the mapping language (since primitives have no fields).  So we must hand-jam the
     // appropriate fromFHIR code here.
-    if (isQuantity && /[^.]+\.code/.test(element.path) && element.mapping.some(m => m.identity === 'shr' && m.map === '<shr.core.Units>')) {
+    if (isQuantity && /[^.]+\.code/.test(element.path) && element.mapping.some(m => m.identity === 'shr' && m.map === `<${quantityNS}.Units>`)) {
       cw.ln(`let coding = {};`);
       const writeFieldSetter = (quantityAttr, codingAttr) => {
         cw.bl(`if (fhir['${quantityAttr}'] != null)`, () => {
@@ -571,7 +572,7 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
       writeFieldSetter('system', 'system');
       writeFieldSetter('unit', 'display');
       cw.bl(`if (Object.keys(coding).length > 0)`, () => {
-        cw.ln(`inst.units = FHIRHelper.createInstanceFromFHIR('shr.core.Units', coding, 'Coding', shrId, allEntries, mappedResources, referencesOut, false);`);
+        cw.ln(`inst.units = FHIRHelper.createInstanceFromFHIR('${quantityNS}.Units', coding, 'Coding', shrId, allEntries, mappedResources, referencesOut, false);`);
       });
       continue;
     }
@@ -1264,7 +1265,7 @@ function buildDiscriminatorCheck(element, slicing, fhirElementPath, allFhirEleme
 /**
  * Given a list of mappings, get the object representing the field definition found by traversing those mappings,
  * plus a single "method chain" that represents the path to that field.
- * @param {string} mapping - A mapping string taken directly from a FHIR element mapping, ex "<shr.core.Something>.<shr.pkg.OtherThing>"
+ * @param {string} mapping - A mapping string taken directly from a FHIR element mapping, ex "<obf.Something>.<shr.pkg.OtherThing>"
  * @param {DataElement} def - The definition of the SHR element currently being processed
  * @param {Specifications} specs - All SHR specifications, to be used for lookups and xrefs.
  * @param {ElementDefinition} element - Element the mapping belongs to, currently only used for debugging and logging
@@ -1361,10 +1362,10 @@ function matchesEffectiveIdentifierOrIncludesTypes(identifiableValueField, ident
  * Example 1: (in pseudo-FHIR)
  *  mcode.Tumor.value[x]
  *   - type: [Quantity, CodeableConcept, string, Range, Ratio, time, dateTime, Period]
- *   - mapping: [shr.core.Quantity, shr.core.CodeableConcept, shr.core.Range, shr.core.Ratio, shr.core.TimePeriod]
+ *   - mapping: [obf.datatype.Quantity, obf.datatype.CodeableConcept, obf.datatype.Range, obf.datatype.Ratio, obf.datatype.TimePeriod]
  *
  * result:
- *  { shr.core.Quantity => [Quantity], shr.core.CodeableConcept => CodeableConcept, shr.core.Range => Range, shr.core.Ratio => Ration, shr.core.TimePeriod => Period }
+ *  { obf.datatype.Quantity => [Quantity], obf.datatype.CodeableConcept => CodeableConcept, obf.datatype.Range => Range, obf.datatype.Ratio => Ration, obf.datatype.TimePeriod => Period }
  *
  * Example 2:
  *  mcode.CancerDisorder.onset[x]
@@ -1404,7 +1405,7 @@ function validTypesForChoices(shrMappings, fhirTypes, specs, fhir) {
     } else if (de.value instanceof ChoiceValue) {
       for (const choice of de.value.options) {
         const matches = fhirTypes.filter(t => t.code == choice.effectiveIdentifier.fqn || t.code == choice.effectiveIdentifier.name || isConceptMatch(choice.identifier, t));
-        // note that the name check matches on, eg "Quantity" and "shr.core.Quantity".
+        // note that the name check matches on, eg "Quantity", "obf.datatype.Quantity", and "shr.core.Quantity".
         // TODO: is this a safe assumption that if an SHR type name matches a FHIR type name they are related?
         if (matches) {
           currMappingTypes.push(...matches.map(m => m.code));
@@ -1828,7 +1829,7 @@ function generateFromFHIRAssignment(field, fhirElement, fhirElementPath, shrElem
  * @param {List<Identifier>} alreadyProcessed - the list of identifiers already processed (to avoid recursion)
  */
 function checkIsQuantity(identifier, specs, alreadyProcessed = []) {
-  if (identifier.fqn === 'shr.core.Quantity') {
+  if (identifier && identifier.isQuantity) {
     return true;
   }
   // If it's primitive or we've already processed this one, don't go further (avoid circular dependencies)
@@ -1845,6 +1846,21 @@ function checkIsQuantity(identifier, specs, alreadyProcessed = []) {
   alreadyProcessed.push(identifier);
   // Now recursively check the BasedOns to see if they are a Quantity
   return element.basedOn.some(b => checkIsQuantity(b, specs, alreadyProcessed));
+}
+
+/**
+ * Since we support both the old Quantity namespace (shr.core) and the new one (obf.datatype), we need to
+ * determine which one this CIMPL source uses.  If bother are present in the spec, prefer obf.datatype.
+ * @param {Specifications} specs - the SHR specifications containing all of the definitions
+ */
+function getQuantityNamespace(specs) {
+  if (specs.dataElements.find('obf.datatype', 'Quantity') != null) {
+    return 'obf.datatype';
+  }
+  if (specs.dataElements.find('shr.core', 'Quantity') != null) {
+    return 'shr.core';
+  }
+  return 'obf.datatype';
 }
 
 /**

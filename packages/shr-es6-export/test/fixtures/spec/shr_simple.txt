@@ -1,6 +1,6 @@
 Grammar:           DataElement 6.0
 Namespace:         shr.simple
-Uses:              shr.core
+Uses:              obf.datatype
 
 Element:           StringValue
 Value:             string
@@ -9,19 +9,19 @@ Element:           NestedStringValue
 Value:             StringValue
 
 Entry:             StringValueEntry
-Value:             string
+Property:          StringValue 1..1
 
-Entry:             ElementValueEntry
-Value:             StringValue
-
-Entry:             MultiConceptValueEntry
+Element:           ConceptValue
 Value:             concept
 
 Entry:             ConceptValueEntry
-Value:             concept
+Property:          ConceptValue 1..1
+
+Entry:             MultiConceptValueEntry
+Property:          ConceptValue 1..1  // Note ConceptValue is still 1..1; there are multiple codes in the concept
 
 Entry:             RecursiveEntry
-Value:             integer
+Property:          IntegerValueElement 0..1
 Property:          RecursiveEntry 0..*
 
 Entry:             SingleRecursiveEntry
@@ -29,7 +29,7 @@ Parent:            RecursiveEntry
                    RecursiveEntry 0..1
 
 Entry:             ReferenceEntry
-Value:             StringValueEntry
+Property:          StringValueEntry 1..1
 Property:          ConceptValueEntry 0..*
 
 Element:           IntegerValueElement
@@ -39,16 +39,19 @@ Element:           DecimalValueElement
 Value:             decimal
 
 Entry:             IntegerValueEntry
-Value:             integer
+Property:          IntegerValueElement 1..1
 
 Entry:             OptionalChoiceValueEntry
+Property:          OptionalChoiceValue 0..1
+
+Element:           OptionalChoiceValue
 Value:             integer or string
 
 Entry:             OptionalFieldEntry
 Property:          IntegerValueElement 0..1
 
 Entry:             BasedOnIntegerValueElementEntry
-Parent:            IntegerValueElement
+Parent:            IntegerValueEntry
 Property:          StringValue 0..1
 
 Element:           StringValueChild
@@ -59,6 +62,9 @@ Parent:            BasedOnIntegerValueElementEntry
                    StringValue substitute StringValueChild
 
 Entry:             ChoiceValueEntry
+Property:          ChoiceValue 1..1
+
+Element:           ChoiceValue
 Value:             string or decimal
 
 Entry:             InheritBasedOnIntegerValueElementEntry

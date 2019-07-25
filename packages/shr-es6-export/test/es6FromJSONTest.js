@@ -25,7 +25,8 @@ describe('#FromJSON', () => {
       const entry = StringValueEntry.fromJSON(json);
       expect(entry).instanceOf(StringValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry');
-      expectStringValue(entry, 'Hello World!');
+      expectInstanceOf(entry.stringValue, 'shr/simple/StringValue');
+      expectStringValue(entry.stringValue, 'Hello World!');
     });
   });
 
@@ -39,7 +40,8 @@ describe('#FromJSON', () => {
       const entry = ConceptValueEntry.fromJSON(json);
       expect(entry).instanceOf(ConceptValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry');
-      expectConceptValue(entry, [{ code: 'foo', system: 'http://foo.org/bar', display: 'Foo' }]);
+      expectInstanceOf(entry.conceptValue, 'shr/simple/ConceptValue');
+      expectConceptValue(entry.conceptValue, [{ code: 'foo', system: 'http://foo.org/bar', display: 'Foo' }]);
     });
   });
 
@@ -53,27 +55,13 @@ describe('#FromJSON', () => {
       const entry = MultiConceptValueEntry.fromJSON(json);
       expect(entry).instanceOf(MultiConceptValueEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/MultiConceptValueEntry');
-      expectConceptValue(entry,
+      expectInstanceOf(entry.conceptValue, 'shr/simple/ConceptValue');
+      expectConceptValue(entry.conceptValue,
         [
           { code: 'foo', system: 'http://foo.org/bar', display: 'Foo' },
           { code: 'bar', system: 'http://foo.org/bar', display: 'Bar' }
         ]
       );
-    });
-  });
-
-  describe('#ElementValueEntryClass()', () => {
-
-    let ElementValueEntry;
-    before(() => ElementValueEntry = context.importResult('shr/simple/ElementValueEntry'));
-
-    it('should deserialize a JSON instance', () => {
-      const json = context.getJSON('ElementValueEntry');
-      const entry = ElementValueEntry.fromJSON(json);
-      expect(entry).instanceOf(ElementValueEntry);
-      expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/ElementValueEntry');
-      expectInstanceOf(entry.value, 'shr/simple/StringValue');
-      expectStringValue(entry.value, 'Hello Cleveland!');
     });
   });
 
@@ -88,25 +76,25 @@ describe('#FromJSON', () => {
       expect(entry).instanceOf(RecursiveEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/RecursiveEntry');
       expect(entry.recursiveEntry).to.have.length(2);
-      expectIntegerValue(entry, 1);
+      expectIntegerValue(entry.integerValueElement, 1);
       // Recursive child 1
       const child1 = entry.recursiveEntry[0];
       expect(child1).instanceOf(RecursiveEntry);
       expectStandardEntryInfoValues(child1, 'http://standardhealthrecord.org/spec/shr/simple/RecursiveEntry');
       expect(child1.recursiveEntry).to.have.length(1);
-      expectIntegerValue(child1, 10);
+      expectIntegerValue(child1.integerValueElement, 10);
       // Recursive grandchild 1
       const grandchild1 = child1.recursiveEntry[0];
       expect(grandchild1).instanceOf(RecursiveEntry);
       expectStandardEntryInfoValues(grandchild1, 'http://standardhealthrecord.org/spec/shr/simple/RecursiveEntry');
       expect(grandchild1.recursiveEntry).to.be.empty;
-      expectIntegerValue(grandchild1, 11);
+      expectIntegerValue(grandchild1.integerValueElement, 11);
       // Recursive child 2
       const child2 = entry.recursiveEntry[1];
       expect(child2).instanceOf(RecursiveEntry);
       expectStandardEntryInfoValues(child2, 'http://standardhealthrecord.org/spec/shr/simple/RecursiveEntry');
       expect(child2.recursiveEntry).to.be.empty;
-      expectIntegerValue(child2, 20);
+      expectIntegerValue(child2.integerValueElement, 20);
     });
   });
 
@@ -120,11 +108,11 @@ describe('#FromJSON', () => {
       const entry = ReferenceEntry.fromJSON(json);
       expect(entry).instanceOf(ReferenceEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/ReferenceEntry');
-      expectReferenceValue(entry, {
+      expectReference(entry.stringValueEntry, {
         shrId: '1',
         entryId: '1-2',
         entryType: 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry'
-      }, 'stringValueEntry');
+      }, 'StringValueEntry');
       const cveRefs = entry.conceptValueEntry;
       expect(cveRefs).to.have.length(2);
       expectReference(cveRefs[0], {
@@ -150,7 +138,8 @@ describe('#FromJSON', () => {
       const entry = BasedOnIntegerValueElementEntry.fromJSON(json);
       expect(entry).instanceOf(BasedOnIntegerValueElementEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/BasedOnIntegerValueElementEntry');
-      expectIntegerValue(entry, 43);
+      expectInstanceOf(entry.integerValueElement, 'shr/simple/IntegerValueElement');
+      expectIntegerValue(entry.integerValueElement, 43);
       expectInstanceOf(entry.stringValue, 'shr/simple/StringValue');
       expectStringValue(entry.stringValue, 'Hello!');
     });
@@ -169,7 +158,8 @@ describe('#FromJSON', () => {
       const entry = InheritBasedOnIntegerValueElementEntry.fromJSON(json);
       expect(entry).instanceOf(InheritBasedOnIntegerValueElementEntry);
       expect(entry).instanceOf(BasedOnIntegerValueElementEntry);
-      expectIntegerValue(entry, 43);
+      expectInstanceOf(entry.integerValueElement, 'shr/simple/IntegerValueElement');
+      expectIntegerValue(entry.integerValueElement, 43);
       expectInstanceOf(entry.stringValue, 'shr/simple/StringValue');
       expectStringValue(entry.stringValue, 'Hello!');
     });
@@ -185,7 +175,8 @@ describe('#FromJSON', () => {
       const entry = OverrideBasedOnIntegerValueElementEntry.fromJSON(json);
       expect(entry).instanceOf(OverrideBasedOnIntegerValueElementEntry);
       expectStandardEntryInfoValues(entry, 'http://standardhealthrecord.org/spec/shr/simple/OverrideBasedOnIntegerValueElementEntry');
-      expectIntegerValue(entry, 43);
+      expectIntegerValue(entry.integerValueElement, 43);
+      expectInstanceOf(entry.stringValue, 'shr/simple/StringValue');
       expectInstanceOf(entry.stringValue, 'shr/simple/StringValueChild');
       expectStringValue(entry.stringValue, 'Hello!');
     });
@@ -200,14 +191,14 @@ describe('#FromJSON', () => {
       const json = context.getJSON('ChoiceValueStringEntry');
       const entry = ChoiceValueEntry.fromJSON(json);
       expect(entry).instanceOf(ChoiceValueEntry);
-      expect(entry.value).to.equal('Hello!');
+      expect(entry.choiceValue.value).to.equal('Hello!');
     });
 
     it('should deserialize a JSON instance with an integer', () => {
       const json = context.getJSON('ChoiceValueIntEntry');
       const entry = ChoiceValueEntry.fromJSON(json);
       expect(entry).instanceOf(ChoiceValueEntry);
-      expect(entry.value).to.equal(35);
+      expect(entry.choiceValue.value).to.equal(35);
     });
   });
 
@@ -237,7 +228,7 @@ function expectEntryInfo(entry, expected) {
   expectIdValue(entryInfo.entryId, expected.entryId);
   expectInstanceOf(entryInfo.entryType, 'shr/base/EntryType');
   expectUriValue(entryInfo.entryType, expected.entryType);
-  expectInstanceOf(entryInfo.creationTime, 'shr/core/CreationTime');
+  expectInstanceOf(entryInfo.creationTime, 'obf/datatype/CreationTime');
   expectDateTimeValue(entryInfo.creationTime, expected.creationTime);
   expectInstanceOf(entryInfo.lastUpdated, 'shr/base/LastUpdated');
   expectInstantValue(entryInfo.lastUpdated, expected.lastUpdated);

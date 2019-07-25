@@ -14,22 +14,22 @@ describe('#Factory()', () => {
 
   describe('#ObjectFactory()', () => {
 
-    let ObjectFactory, StringValueEntry;
+    let ObjectFactory, StringValue;
     before(() => {
       ObjectFactory = context.importResult('ObjectFactory');
-      StringValueEntry = context.importResult('shr/simple/StringValueEntry');
+      StringValue = context.importResult('shr/simple/StringValue');
     });
 
     it('should create classes by name', () => {
-      const pv = ObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry');
-      expect(pv).instanceOf(StringValueEntry);
+      const pv = ObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/simple/StringValue');
+      expect(pv).instanceOf(StringValue);
       expect(pv.entryInfo).to.be.undefined;
       expect(pv.value).to.be.undefined;
       expect(pv.string).to.be.undefined;
     });
 
     it('should throw when you request an element in the wrong namespace', () => {
-      expect(() => ObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/base/StringValueEntry')).to.throw();
+      expect(() => ObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/base/StringValue')).to.throw();
     });
 
     it('should throw when you request an unknown element', () => {
@@ -39,22 +39,22 @@ describe('#Factory()', () => {
 
   describe('#NamespaceObjectFactory()', () => {
 
-    let ShrSimpleTestObjectFactory, StringValueEntry;
+    let ShrSimpleTestObjectFactory, StringValue;
     before(() => {
       ShrSimpleTestObjectFactory = context.importResult('shr/simple/ShrSimpleObjectFactory');
-      StringValueEntry = context.importResult('shr/simple/StringValueEntry');
+      StringValue = context.importResult('shr/simple/StringValue');
     });
 
     it('should create classes by name', () => {
-      const pv = ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/simple/StringValueEntry');
-      expect(pv).instanceOf(StringValueEntry);
+      const pv = ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/simple/StringValue');
+      expect(pv).instanceOf(StringValue);
       expect(pv.entryInfo).to.be.undefined;
       expect(pv.value).to.be.undefined;
       expect(pv.string).to.be.undefined;
     });
 
     it('should throw when you request an element from a different namespace', () => {
-      expect(() => ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/base/StringValueEntry')).to.throw();
+      expect(() => ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/base/StringValue')).to.throw();
     });
 
     it('should throw when you request an unknown element', () => {

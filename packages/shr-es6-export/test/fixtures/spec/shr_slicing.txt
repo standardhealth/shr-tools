@@ -1,6 +1,6 @@
 Grammar:           DataElement 6.0
 Namespace:         shr.slicing
-Uses:              shr.core, shr.fhir
+Uses:              obf.datatype, shr.fhir
 CodeSystem:        LNC = http://loinc.org
 
 Entry:             BloodPressureSliceByNumber
@@ -17,19 +17,19 @@ Property:          EvaluationComponent 0..*
                    includes SystolicPressure 0..1
                    includes DiastolicPressure 0..1
 
-Element:           EvaluationComponent
-Value:             Quantity
+Group:             EvaluationComponent
+Property:          Quantity 1..1
 Property:          ComponentCode 1..1
 
 Element:           ComponentCode
 Value:             concept
 
-Element:           SystolicPressure
+Group:             SystolicPressure
 Parent:            EvaluationComponent
 Concept:           LNC#8480-6
                    ComponentCode = LNC#8480-6
 
-Element:           DiastolicPressure
+Group:             DiastolicPressure
 Parent:            EvaluationComponent
 Concept:           LNC#8462-4
                    ComponentCode = LNC#8462-4
@@ -47,7 +47,7 @@ Parent:            Observation
 Entry:             MemberB
 Parent:            Observation
 
-Group:             Panel
+Entry:             Panel
 Parent:            Observation
 Property:          PanelMembers 0..1
 

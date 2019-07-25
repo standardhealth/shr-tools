@@ -17,7 +17,7 @@
 	"CreationTime": {
 		"Value": "2017-11-30T12:34:56Z",
 		"EntryType": {
-			"Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"
+			"Value": "http://standardhealthrecord.org/spec/obf/datatype/CreationTime"
 		}
 	},
 	"LastUpdated": {
@@ -26,5 +26,10 @@
 			"Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"
 		}
 	},
-	"Value": "Hello!"
+	"ChoiceValue": {
+		"Value": "Hello!",
+		"EntryType": {
+			"Value": "http://standardhealthrecord.org/spec/shr/simple/ChoiceValue"
+		}
+	}
 }

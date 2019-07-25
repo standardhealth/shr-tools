@@ -1111,13 +1111,14 @@ lodash.keys@^3.0.0:
     lodash.isarguments "^3.0.0"
     lodash.isarray "^3.0.0"
 
+lodash@^4.17.14:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+
 lodash@^4.17.4, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
-
-lodash@^4.17.5:
-  version "4.17.11"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 
 loose-envify@^1.0.0:
   version "1.3.1"
@@ -1409,23 +1410,23 @@ shr-expand@^6.0.0:
   resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-6.0.0.tgz#a2072f971e19b9f221e012c0056ee389a78633d7"
   integrity sha512-zzjli5uVY23J4jHnr5Cr+iLkZ7+6RsHk3kQMksBPUR4ly96NXlCRgillJ3IszbdP3dHpBuWymcrAOjyz4C/lRA==
 
-shr-fhir-export@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/shr-fhir-export/-/shr-fhir-export-6.0.0.tgz#61cd6e1b08721514950f293a53fbd162f93e236c"
-  integrity sha512-ZNFnkxOvb26Rq2lIvXsuVSnoPfZsVsCgim7BrytqiNUK0jUXnvSa8oOomXYAILVKb631AK3KCMr3ZQ47ZvKcIQ==
+shr-fhir-export@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/shr-fhir-export/-/shr-fhir-export-6.2.0.tgz#43aa24118b06e1513b68e980e95644d879e67e92"
+  integrity sha512-qslcasEr4NcoikNkn034S0/NmSRpUKpQAgTjkeBtvvIouKRlUOqbZ7bdPOsgXAVgE9r96nHCnmlWKwXrOFNxow==
   dependencies:
     fs-extra "^2.0.0"
-    lodash "^4.17.5"
+    lodash "^4.17.14"
 
-shr-json-schema-export@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/shr-json-schema-export/-/shr-json-schema-export-6.0.0.tgz#08e969c5debf5719b298c59c2b1ef83f1c52fa3e"
-  integrity sha512-megbVDNpi/PenTVFHFbkqgAmud8LwToveyUaKL0qabnEJ1QzwUuik3aZFz007kC7iidyAVKGo0GcKUBb0k1RQg==
+shr-json-schema-export@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/shr-json-schema-export/-/shr-json-schema-export-6.1.0.tgz#64e3cd2072d94d66f7519fc5553efe87e09cde5e"
+  integrity sha512-8EoiZ/BeEN+JqDLFtde1tWGaVJUI0I5VqxUQtZxDNKlvhHJ3riBx9urviTQv7eOwULinJQO/wz0tXW7KuLFPrg==
 
-shr-models@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-6.0.0.tgz#6ffe6a48ae6bcf6c20e25dbfcc5b2954fca7d661"
-  integrity sha512-k8tU/YghNoFdpHxzC1ZpfpHMEMAJPZyGGAMd9QfOcCqDsETUyK9u76GuXoSlhXHjDM5CXOCeq6LmxWCQhK95iw==
+shr-models@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-6.2.0.tgz#1f66f3bc8a16c15328607e5b05a99cf7a3bc53fe"
+  integrity sha512-h7u7PpKuxd5epy+cMHzjnGAesPo/GmtQnUjeZHMuIfoNzJ82mrvMpZ8P3EdiKLD+y12nMzCX54wg8iAjDmzO5g==
 
 shr-test-helpers@^6.0.0:
   version "6.0.0"
@@ -1434,10 +1435,10 @@ shr-test-helpers@^6.0.0:
   dependencies:
     fs-extra "^5.0.0"
 
-shr-text-import@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/shr-text-import/-/shr-text-import-6.0.0.tgz#79aea057d8be13571ea9c4c833172268f52e85a8"
-  integrity sha512-6OhJaV/3cr8eMaQ6fm7YtDM94tEHAJoq9O43/Neulq0JPAPOrzbSkdgUTryM3TzMH3Eaup93EwvBhKwla9xsqQ==
+shr-text-import@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/shr-text-import/-/shr-text-import-6.2.0.tgz#10645c149c941beed065b1e8e11fba621e5b05d9"
+  integrity sha512-JgAILHzmuTgWUkaV8il+o3dzcuLvD8rqS2/WLjL1qngvUbNhK4hWIIqRzk7FQYKmE4HfS/Hi8gQyjKSNB0casg==
   dependencies:
     antlr4 "~4.6.0"
 

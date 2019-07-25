@@ -13,7 +13,7 @@
   },
   "CreationTime": {
     "EntryType": {
-      "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"
+      "Value": "http://standardhealthrecord.org/spec/obf/datatype/CreationTime"
     },
     "Value": "2018-08-06T12:34:56Z"
   },
@@ -30,13 +30,16 @@
     "EntryType": {
       "Value": "http://standardhealthrecord.org/spec/shr/slicing/SystolicPressure"
     },
-    "Value": {
+    "Quantity": {
       "EntryType": {
-        "Value": "http://standardhealthrecord.org/spec/shr/core/Quantity"
+        "Value": "http://standardhealthrecord.org/spec/obf/datatype/Quantity"
       },
-      "Value": 120.0,
+      "Number": {
+        "EntryType": { "Value": "http://standardhealthrecord.org/spec/obf/datatype/Number" },
+        "Value": 120.0
+      },
       "Units": {
-        "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Units" },
+        "EntryType": { "Value": "http://standardhealthrecord.org/spec/obf/datatype/Units" },
         "Value": {
           "coding": [
             {
@@ -63,13 +66,16 @@
     "EntryType": {
       "Value": "http://standardhealthrecord.org/spec/shr/slicing/DiastolicPressure"
     },
-    "Value": {
+    "Quantity": {
       "EntryType": {
-        "Value": "http://standardhealthrecord.org/spec/shr/core/Quantity"
+        "Value": "http://standardhealthrecord.org/spec/obf/datatype/Quantity"
       },
-      "Value": 80.0,
+      "Number": {
+        "EntryType": { "Value": "http://standardhealthrecord.org/spec/obf/datatype/Number" },
+        "Value": 80.0
+      },
       "Units": {
-        "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/Units" },
+        "EntryType": { "Value": "http://standardhealthrecord.org/spec/obf/datatype/Units" },
         "Value": {
           "coding": [
             {

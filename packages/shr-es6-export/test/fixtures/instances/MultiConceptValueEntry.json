@@ -9,25 +9,28 @@
   },
   "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/MultiConceptValueEntry" },
   "CreationTime": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"},
+    "EntryType": { "Value": "http://standardhealthrecord.org/spec/obf/datatype/CreationTime"},
     "Value": "2017-11-30T12:34:56Z"
   },
   "LastUpdated": {
     "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"},
     "Value": "2017-12-05T23:45:01Z"
   },
-  "Value": {
-    "coding": [
-      {
-        "system": "http://foo.org/bar",
-        "display": "Foo",
-        "code": "foo"
-      },
-      {
-        "system": "http://foo.org/bar",
-        "display": "Bar",
-        "code": "bar"
-      }
-    ]
+  "ConceptValue": {
+    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/ConceptValue"},
+    "Value": {
+      "coding": [
+        {
+          "system": "http://foo.org/bar",
+          "display": "Foo",
+          "code": "foo"
+        },
+        {
+          "system": "http://foo.org/bar",
+          "display": "Bar",
+          "code": "bar"
+        }
+      ]
+    }
   }
 }

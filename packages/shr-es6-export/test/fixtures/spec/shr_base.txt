@@ -1,6 +1,6 @@
 Grammar:           DataElement 6.0
 Namespace:         shr.base
-Uses:              shr.core
+Uses:              obf.datatype
 
 Group:             Entry
 Property:          ShrId 1..1

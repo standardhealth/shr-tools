@@ -13,7 +13,7 @@
   },
   "CreationTime": {
     "EntryType": {
-      "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"
+      "Value": "http://standardhealthrecord.org/spec/obf/datatype/CreationTime"
     },
     "Value": "2018-08-06T12:34:56Z"
   },

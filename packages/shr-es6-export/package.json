@@ -1,6 +1,6 @@
 {
   "name": "shr-es6-export",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "Exports ES6 classes represent SHR data elements",
   "author": "",
   "license": "Apache-2.0",
@@ -30,14 +30,14 @@
     "fs-extra": "^4.0.2",
     "mocha": "^3.2.0",
     "shr-expand": "^6.0.0",
-    "shr-fhir-export": "^6.0.0",
-    "shr-json-schema-export": "^6.0.0",
-    "shr-models": "^6.0.0",
+    "shr-fhir-export": "^6.2.0",
+    "shr-json-schema-export": "^6.1.0",
+    "shr-models": "^6.2.0",
     "shr-test-helpers": "^6.0.0",
-    "shr-text-import": "^6.0.0"
+    "shr-text-import": "^6.2.0"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9",
-    "shr-models": "^6.0.0"
+    "shr-models": "^6.2.0"
   }
 }

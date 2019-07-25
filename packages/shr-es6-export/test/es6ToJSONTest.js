@@ -14,7 +14,7 @@ describe('#ToJSON', () => {
     context.setupAjvJson('./build/test/schema');
   });
 
-  describe('#StringValueEntryClass()', () => {
+  describe('#StringValueClass()', () => {
 
     let StringValueEntry;
     before(() => StringValueEntry = context.importResult('shr/simple/StringValueEntry'));
@@ -40,7 +40,7 @@ describe('#ToJSON', () => {
       let gen_json = entry.toJSON();
       context.validateJSON('ConceptValueEntry', gen_json);
       expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry' });
-      expect(gen_json['Value']).to.eql({ coding: [{ code: 'foo', system: 'http://foo.org/bar', display: 'Foo' }] });
+      expect(gen_json['ConceptValue']['Value']).to.eql({ coding: [{ code: 'foo', system: 'http://foo.org/bar', display: 'Foo' }] });
     });
   });
 
@@ -59,22 +59,12 @@ describe('#ToJSON', () => {
       let gen_json = entry.toJSON();
       context.validateJSON('MultiConceptValueEntry', gen_json);
       expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/MultiConceptValueEntry' });
-      expect(gen_json['Value']).to.eql({
+      expect(gen_json['ConceptValue']['Value']).to.eql({
         coding: [
           { code: 'foo', system: 'http://foo.org/bar', display: 'Foo' },
           { code: 'bar', system: 'http://foo.org/bar', display: 'Bar' }
         ]
       });
-    });
-  });
-
-  describe('#ElementValueEntryClass()', () => {
-
-    let ElementValueEntry;
-    before(() => ElementValueEntry = context.importResult('shr/simple/ElementValueEntry'));
-
-    it('should serialize a JSON instance', () => {
-      testJSONRoundtrip('ElementValueEntry', 'ElementValueEntry', ElementValueEntry);
     });
   });
 

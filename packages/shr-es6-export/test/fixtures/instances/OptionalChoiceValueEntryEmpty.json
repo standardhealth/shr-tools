@@ -9,12 +9,17 @@
   },
   "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/OptionalChoiceValueEntry" },
   "CreationTime": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"},
+    "EntryType": { "Value": "http://standardhealthrecord.org/spec/obf/datatype/CreationTime"},
     "Value": "2017-11-30T12:34:56Z"
   },
   "LastUpdated": {
     "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"},
     "Value": "2017-12-05T23:45:01Z"
   },
-  "Value": ""
+  "OptionalChoiceValue": {
+		"Value": "",
+		"EntryType": {
+			"Value": "http://standardhealthrecord.org/spec/shr/simple/OptionalChoiceValue"
+		}
+	}
 }

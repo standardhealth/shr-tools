@@ -12,7 +12,7 @@ PanelMembers.Observation maps to related.target (slice at = related; slice on = 
 BloodPressureSliceByValue maps to Observation:
 SystolicPressure maps to component (slice on = code.coding.code)
 SystolicPressure.ComponentCode maps to component.code
-SystolicPressure.Value maps to component.value[x]
+SystolicPressure.Quantity maps to component.value[x]
 DiastolicPressure maps to component
 DiastolicPressure.ComponentCode maps to component.code
-DiastolicPressure.Value maps to component.value[x]
+DiastolicPressure.Quantity maps to component.value[x]

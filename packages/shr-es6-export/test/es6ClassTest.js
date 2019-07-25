@@ -14,26 +14,26 @@ describe('#Class', () => {
 
   describe('#StringValueClass()', () => {
 
-    let StringValueEntry;
-    before(() => StringValueEntry = context.importResult('shr/simple/StringValueEntry'));
+    let StringValue;
+    before(() => StringValue = context.importResult('shr/simple/StringValue'));
 
     it('should construct to empty instance', () => {
-      const pv = new StringValueEntry();
-      expect(pv).instanceOf(StringValueEntry);
+      const pv = new StringValue();
+      expect(pv).instanceOf(StringValue);
       expect(pv.entryInfo).to.be.undefined;
       expect(pv.value).to.be.undefined;
       expect(pv.string).to.be.undefined;
     });
 
     it('should get/set entryInfo', () => {
-      const pv = new StringValueEntry();
+      const pv = new StringValue();
       // NOTE: This is not a REAL Entry class, we're just testing getter/setter for now
       pv.entryInfo = 'the entry info';
       expect(pv.entryInfo).to.equal('the entry info');
     });
 
     it('should get/set value', () => {
-      const pv = new StringValueEntry();
+      const pv = new StringValue();
       pv.value = 'a value';
       expect(pv.value).to.equal('a value');
       // value should really be a proxy for string
@@ -41,7 +41,7 @@ describe('#Class', () => {
     });
 
     it('should get/set string', () => {
-      const pv = new StringValueEntry();
+      const pv = new StringValue();
       pv.string = 'a value';
       expect(pv.string).to.equal('a value');
       // value should really be a proxy for string
@@ -49,7 +49,7 @@ describe('#Class', () => {
     });
 
     it('should support chaining a string', () => {
-      const pv = new StringValueEntry();
+      const pv = new StringValue();
       const shouldBeThis = pv.withString('a value');
       expect(pv.string).to.equal('a value');
       // value should really be a proxy for string

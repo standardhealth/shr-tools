@@ -1,14 +1,17 @@
 Grammar:           DataElement 6.0
-Namespace:         shr.core
+Namespace:         obf.datatype
 
-Element:           Quantity
-Value:             decimal
+Group:             Quantity
+Property:          Number 0..1
 Property:          Comparator 0..1
 Property:          Units 0..1
 
-Element:           Age
+Group:             Age
 Parent:            Quantity
                    Units from http://hl7.org/fhir/ValueSet/age-units (extensible)
+
+Element:           Number
+Value:             decimal
 
 Element:           Comparator
 Value:             concept from http://hl7.org/fhir/ValueSet/quantity-comparator (required)

@@ -40,9 +40,10 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#PatientEntry()', () => {
 
-    let PatientEntry, IntegerValueElement, DecimalValueElement, ComplexExtension, StringValue, BooleanValue, Deceased, PhotoNote;
+    let PatientEntry, BirthDate, IntegerValueElement, DecimalValueElement, ComplexExtension, StringValue, BooleanValue, Deceased, PhotoNote;
     before(() => {
       PatientEntry = context.importResult('shr/fhir/PatientEntry');
+      BirthDate = context.importResult('shr/fhir/BirthDate');
       IntegerValueElement = context.importResult('shr/simple/IntegerValueElement');
       DecimalValueElement = context.importResult('shr/simple/DecimalValueElement');
       ComplexExtension = context.importResult('shr/fhir/ComplexExtension');
@@ -58,7 +59,7 @@ describe('#FromFHIR_STU3', () => {
       expect(entry).instanceOf(PatientEntry);
 
       const expected = new PatientEntry()
-        .withValue('2017-12-05')
+        .withBirthDate(new BirthDate().withValue('2017-12-05'))
         .withIntegerValueElement(new IntegerValueElement().withValue(19))
         .withDecimalValueElement(new DecimalValueElement().withValue(12.1))
         .withComplexExtension(new ComplexExtension()
@@ -132,14 +133,15 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#BloodPressureSliceByNumber()', () => {
 
-    let BloodPressureSliceByNumber, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, Concept, Coding;
+    let BloodPressureSliceByNumber, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Number, Units, Concept, Coding;
     before(() => {
       BloodPressureSliceByNumber = context.importResult('shr/slicing/BloodPressureSliceByNumber');
       SystolicPressure = context.importResult('shr/slicing/SystolicPressure');
       DiastolicPressure = context.importResult('shr/slicing/DiastolicPressure');
       ComponentCode = context.importResult('shr/slicing/ComponentCode');
-      Quantity = context.importResult('shr/core/Quantity');
-      Units = context.importResult('shr/core/Units');
+      Quantity = context.importResult('obf/datatype/Quantity');
+      Number = context.importResult('obf/datatype/Number');
+      Units = context.importResult('obf/datatype/Units');
       Concept = context.importResult('Concept');
       Coding = context.importResult('Coding');
     });
@@ -158,7 +160,9 @@ describe('#FromFHIR_STU3', () => {
           new SystolicPressure()
             .withValue(
               new Quantity()
-                .withValue(120.0)
+                .withNumber(
+                  new Number().withValue(120.0)
+                )
                 .withUnits(
                   new Units().withCoding([
                     new Coding()
@@ -181,8 +185,10 @@ describe('#FromFHIR_STU3', () => {
           new DiastolicPressure()
             .withValue(
               new Quantity()
-                .withValue(80.0)
-                .withUnits(
+              .withNumber(
+                new Number().withValue(80.0)
+              )
+              .withUnits(
                   new Units().withCoding([
                     new Coding()
                       .withSystem('http://unitsofmeasure.org')
@@ -208,14 +214,15 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#BloodPressureSliceByValue()', () => {
 
-    let BloodPressureSliceByValue, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, Concept, Coding;
+    let BloodPressureSliceByValue, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Number, Units, Concept, Coding;
     before(() => {
       BloodPressureSliceByValue = context.importResult('shr/slicing/BloodPressureSliceByValue');
       SystolicPressure = context.importResult('shr/slicing/SystolicPressure');
       DiastolicPressure = context.importResult('shr/slicing/DiastolicPressure');
       ComponentCode = context.importResult('shr/slicing/ComponentCode');
-      Quantity = context.importResult('shr/core/Quantity');
-      Units = context.importResult('shr/core/Units');
+      Quantity = context.importResult('obf/datatype/Quantity');
+      Number = context.importResult('obf/datatype/Number');
+      Units = context.importResult('obf/datatype/Units');
       Concept = context.importResult('Concept');
       Coding = context.importResult('Coding');
     });
@@ -228,9 +235,11 @@ describe('#FromFHIR_STU3', () => {
       const expected = new BloodPressureSliceByValue()
         .withSystolicPressure(
           new SystolicPressure()
-            .withValue(
+            .withQuantity(
               new Quantity()
-                .withValue(120.0)
+                .withNumber(
+                  new Number().withValue(120.0)
+                )
                 .withUnits(
                   new Units()
                     .withValue(
@@ -255,9 +264,11 @@ describe('#FromFHIR_STU3', () => {
         )
         .withDiastolicPressure(
           new DiastolicPressure()
-            .withValue(
+            .withQuantity(
               new Quantity()
-                .withValue(80.0)
+                .withNumber(
+                  new Number().withValue(80.0)
+                )
                 .withUnits(
                   new Units()
                     .withValue(
@@ -288,14 +299,15 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#BloodPressureSliceByValueAndIncludesStrategy()', () => {
 
-    let BloodPressureSliceByValueAndIncludesStrategy, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Units, Concept, Coding;
+    let BloodPressureSliceByValueAndIncludesStrategy, SystolicPressure, DiastolicPressure, ComponentCode, Quantity, Number, Units, Concept, Coding;
     before(() => {
       BloodPressureSliceByValueAndIncludesStrategy = context.importResult('shr/slicing/BloodPressureSliceByValueAndIncludesStrategy');
       SystolicPressure = context.importResult('shr/slicing/SystolicPressure');
       DiastolicPressure = context.importResult('shr/slicing/DiastolicPressure');
       ComponentCode = context.importResult('shr/slicing/ComponentCode');
-      Quantity = context.importResult('shr/core/Quantity');
-      Units = context.importResult('shr/core/Units');
+      Quantity = context.importResult('obf/datatype/Quantity');
+      Number = context.importResult('obf/datatype/Number');
+      Units = context.importResult('obf/datatype/Units');
       Concept = context.importResult('Concept');
       Coding = context.importResult('Coding');
     });
@@ -308,9 +320,11 @@ describe('#FromFHIR_STU3', () => {
       const expected = new BloodPressureSliceByValueAndIncludesStrategy()
         .withEvaluationComponent([
           new SystolicPressure()
-            .withValue(
+            .withQuantity(
               new Quantity()
-                .withValue(120.0)
+                .withNumber(
+                  new Number().withValue(120.0)
+                )
                 .withUnits(
                   new Units()
                     .withValue(
@@ -333,9 +347,11 @@ describe('#FromFHIR_STU3', () => {
               )
             ),
           new DiastolicPressure()
-            .withValue(
+            .withQuantity(
               new Quantity()
-                .withValue(80.0)
+                .withNumber(
+                  new Number().withValue(80.0)
+                )
                 .withUnits(
                   new Units()
                     .withValue(
@@ -480,12 +496,13 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#ConditionEntry()', () => {
 
-    let ConditionEntry, Onset, Age, Units, Concept, Coding;
+    let ConditionEntry, Onset, Age, Number, Units, Concept, Coding;
     before(() => {
       ConditionEntry = context.importResult('shr/fhir/ConditionEntry');
       Onset = context.importResult('shr/fhir/Onset');
-      Age = context.importResult('shr/core/Age');
-      Units = context.importResult('shr/core/Units');
+      Age = context.importResult('obf/datatype/Age');
+      Number = context.importResult('obf/datatype/Number');
+      Units = context.importResult('obf/datatype/Units');
       Concept = context.importResult('Concept');
       Coding = context.importResult('Coding');
     });
@@ -499,7 +516,9 @@ describe('#FromFHIR_STU3', () => {
         .withOnset(
           new Onset().withValue(
             new Age()
-              .withValue(25)
+              .withNumber(
+                new Number().withValue(25)
+              )
               .withUnits(
                 new Units()
                   .withValue(

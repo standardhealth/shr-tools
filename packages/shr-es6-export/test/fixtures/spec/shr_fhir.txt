@@ -1,10 +1,10 @@
 Grammar:           DataElement 6.0
 Namespace:         shr.fhir
-Uses:              shr.simple, shr.core
+Uses:              shr.simple, obf.datatype
 
 Entry:             PatientEntry
 Description:       "Maps to the Patient resource with constraints"
-Value:             date
+Property:          BirthDate 1..1
 Property:          BooleanValue 1..1
 Property:          StringValue 1..1
 Property:          Deceased 1..1
@@ -12,6 +12,9 @@ Property:          PhotoNote 0..*
 Property:          IntegerValueElement 1..1
 Property:          DecimalValueElement 1..1
 Property:          ComplexExtension 1..1
+
+Element:           BirthDate
+Value:             date
 
 Element:           Deceased
 Value:             boolean
