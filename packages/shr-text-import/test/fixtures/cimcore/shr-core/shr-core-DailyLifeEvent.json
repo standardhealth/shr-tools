@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "DailyLifeEvent",
-  "namespace": "shr.core",
-  "fqn": "shr.core.DailyLifeEvent",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.DailyLifeEvent",
   "isEntry": false,
   "isAbstract": false,
   "description": "A quotidian landmark, such as rising, mealtime, or bedtime, when an event should take place.",
@@ -17,7 +17,7 @@
       "valueSet": {
         "uri": "http://hl7.org/fhir/ValueSet/event-timing",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.DailyLifeEvent"
+        "lastModifiedBy": "obf.datatype.DailyLifeEvent"
       }
     }
   }

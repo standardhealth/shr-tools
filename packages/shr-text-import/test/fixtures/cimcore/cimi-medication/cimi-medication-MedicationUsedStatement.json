@@ -147,14 +147,14 @@
           "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
         },
         "subpaths": {
-          "shr.core.Category": {
+          "obf.datatype.Category": {
             "card": {
               "min": 0,
               "max": 1,
               "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
             },
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://hl7.org/fhir/ValueSet/medication-statement-category",
                   "bindingStrength": "PREFERRED",

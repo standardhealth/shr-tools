@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "A description and/or code explaining the premature termination of the study.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

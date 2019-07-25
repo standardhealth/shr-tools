@@ -20,11 +20,11 @@
     },
     "options": [
       {
-        "fqn": "shr.core.Age",
+        "fqn": "obf.datatype.Age",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.AgeRange",
+        "fqn": "obf.datatype.AgeRange",
         "valueType": "IdentifiableValue"
       }
     ]

@@ -1,16 +1,16 @@
 {
   "fileType": "DataElement",
   "name": "Money",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Money",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Money",
   "isEntry": false,
   "isAbstract": false,
   "description": "Representation of an amount of currency or monetary value.",
   "hierarchy": [
-    "shr.core.Quantity"
+    "obf.datatype.Quantity"
   ],
   "basedOn": [
-    "shr.core.Quantity"
+    "obf.datatype.Quantity"
   ],
   "value": {
     "fqn": "decimal",
@@ -21,12 +21,12 @@
     },
     "inheritance": {
       "status": "inherited",
-      "from": "shr.core.Quantity"
+      "from": "obf.datatype.Quantity"
     }
   },
   "fields": [
     {
-      "fqn": "shr.core.Comparator",
+      "fqn": "obf.datatype.Comparator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -34,11 +34,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       }
     },
     {
-      "fqn": "shr.core.Units",
+      "fqn": "obf.datatype.Units",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -46,28 +46,28 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
-              "uri": "http://standardhealthrecord.org/shr/core/vs/CurrencyVS",
+              "uri": "http://standardhealthrecord.org/obf/datatype/vs/CurrencyVS",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Money"
+              "lastModifiedBy": "obf.datatype.Money"
             }
           }
         }
       },
       "inheritance": {
         "status": "overridden",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       },
       "constraintHistory": {
         "valueSet": [
           {
             "constraint": {
-              "uri": "http://standardhealthrecord.org/shr/core/vs/CurrencyVS",
+              "uri": "http://standardhealthrecord.org/obf/datatype/vs/CurrencyVS",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Money"
+              "lastModifiedBy": "obf.datatype.Money"
             },
-            "source": "shr.core.Money"
+            "source": "obf.datatype.Money"
           }
         ]
       }

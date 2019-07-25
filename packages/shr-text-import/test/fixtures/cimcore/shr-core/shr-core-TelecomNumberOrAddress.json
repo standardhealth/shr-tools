@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "TelecomNumberOrAddress",
-  "namespace": "shr.core",
-  "fqn": "shr.core.TelecomNumberOrAddress",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.TelecomNumberOrAddress",
   "isEntry": false,
   "isAbstract": false,
   "description": "A user name or other identifier on a telecommunication network, such as a telephone number (including country code and extension, if necessary), email address, or SkypeID.",

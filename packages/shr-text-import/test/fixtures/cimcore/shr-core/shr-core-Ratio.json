@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Ratio",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Ratio",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Ratio",
   "isEntry": false,
   "isAbstract": false,
   "description": "A unit of measurement for the quotient of the amount of one entity to another.",
@@ -14,7 +14,7 @@
   ],
   "fields": [
     {
-      "fqn": "shr.core.Numerator",
+      "fqn": "obf.datatype.Numerator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -22,7 +22,7 @@
       }
     },
     {
-      "fqn": "shr.core.Denominator",
+      "fqn": "obf.datatype.Denominator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,

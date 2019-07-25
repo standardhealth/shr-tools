@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "BodyPosition",
-  "namespace": "shr.core",
-  "fqn": "shr.core.BodyPosition",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.BodyPosition",
   "isEntry": false,
   "isAbstract": false,
   "description": "The position or physical attitude of the body.",
@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -21,9 +21,9 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/BodyPositionVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/BodyPositionVS",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.BodyPosition"
+        "lastModifiedBy": "obf.datatype.BodyPosition"
       }
     }
   }

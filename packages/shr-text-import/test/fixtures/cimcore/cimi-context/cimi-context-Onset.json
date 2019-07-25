@@ -24,15 +24,15 @@
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.Age",
+        "fqn": "obf.datatype.Age",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.TimePeriod",
+        "fqn": "obf.datatype.TimePeriod",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.Range",
+        "fqn": "obf.datatype.Range",
         "valueType": "IdentifiableValue"
       },
       {

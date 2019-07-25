@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "A code used to relate entries to categories or workflows. Applications are not required to consider the tags when interpreting the meaning of an entry.",
   "value": {
-    "fqn": "shr.core.Coding",
+    "fqn": "obf.datatype.Coding",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

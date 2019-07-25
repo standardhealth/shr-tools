@@ -1,19 +1,19 @@
 {
   "fileType": "DataElement",
   "name": "OccurrencePeriod",
-  "namespace": "shr.core",
-  "fqn": "shr.core.OccurrencePeriod",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.OccurrencePeriod",
   "isEntry": false,
   "isAbstract": false,
   "description": "The point in time or span of time in which something happens.",
   "hierarchy": [
-    "shr.core.OccurrenceTimeOrPeriod"
+    "obf.datatype.OccurrenceTimeOrPeriod"
   ],
   "basedOn": [
-    "shr.core.OccurrenceTimeOrPeriod"
+    "obf.datatype.OccurrenceTimeOrPeriod"
   ],
   "value": {
-    "fqn": "shr.core.TimePeriod",
+    "fqn": "obf.datatype.TimePeriod",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -21,7 +21,7 @@
     },
     "inheritance": {
       "status": "overridden",
-      "from": "shr.core.OccurrenceTimeOrPeriod"
+      "from": "obf.datatype.OccurrenceTimeOrPeriod"
     }
   }
 }

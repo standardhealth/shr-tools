@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "QualitativeLikelihood",
-  "namespace": "shr.core",
-  "fqn": "shr.core.QualitativeLikelihood",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.QualitativeLikelihood",
   "isEntry": false,
   "isAbstract": false,
   "description": "A qualitative (subjective) likelihood.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -15,9 +15,9 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/QualitativeLikelihoodVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/QualitativeLikelihoodVS",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.QualitativeLikelihood"
+        "lastModifiedBy": "obf.datatype.QualitativeLikelihood"
       }
     }
   }

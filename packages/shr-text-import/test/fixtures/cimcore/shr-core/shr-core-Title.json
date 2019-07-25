@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Title",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Title",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Title",
   "isEntry": false,
   "isAbstract": false,
   "description": "A distinguishing word or group of words naming an item.",

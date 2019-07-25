@@ -1,8 +1,8 @@
 {
   "fileType": "ValueSet",
   "name": "BodyPositionVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.BodyPositionVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.BodyPositionVS",
   "description": "The body position with respect to gravity.",
   "concepts": [
     {
@@ -10,7 +10,7 @@
       "code": "8361-8"
     }
   ],
-  "url": "http://standardhealthrecord.org/shr/core/vs/#BodyPositionVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#BodyPositionVS",
   "values": [
     {
       "system": "http://ncimeta.nci.nih.gov",

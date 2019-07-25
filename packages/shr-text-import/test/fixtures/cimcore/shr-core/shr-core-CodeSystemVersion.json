@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "CodeSystemVersion",
-  "namespace": "shr.core",
-  "fqn": "shr.core.CodeSystemVersion",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.CodeSystemVersion",
   "isEntry": false,
   "isAbstract": false,
   "description": "The version of the vocabulary being used, if applicable.",

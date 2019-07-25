@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "Origin",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Origin",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Origin",
   "isEntry": false,
   "isAbstract": false,
   "description": "The base quantity that a measured value of zero represents. In addition, this provides the units of the entire measurement series.",
   "value": {
-    "fqn": "shr.core.SimpleQuantity",
+    "fqn": "obf.datatype.SimpleQuantity",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

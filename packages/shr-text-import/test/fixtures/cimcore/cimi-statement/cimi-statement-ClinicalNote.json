@@ -131,7 +131,7 @@
           "lastModifiedBy": "cimi.statement.ClinicalNote"
         },
         "subpaths": {
-          "shr.core.Details": {
+          "obf.datatype.Details": {
             "card": {
               "min": 1,
               "max": 1,

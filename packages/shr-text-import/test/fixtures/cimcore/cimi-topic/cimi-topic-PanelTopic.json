@@ -42,7 +42,7 @@
       }
     },
     {
-      "fqn": "shr.core.Details",
+      "fqn": "obf.datatype.Details",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -54,14 +54,14 @@
       }
     },
     {
-      "fqn": "shr.core.Category",
+      "fqn": "obf.datatype.Category",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/observation-category",
               "bindingStrength": "EXTENSIBLE",

@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Units",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Units",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Units",
   "isEntry": false,
   "isAbstract": false,
   "description": "Code for the unit of measure of the quantity.",
@@ -14,24 +14,24 @@
     },
     "options": [
       {
-        "fqn": "shr.core.Coding",
+        "fqn": "obf.datatype.Coding",
         "valueType": "IdentifiableValue",
         "constraints": {
           "valueSet": {
             "uri": "http://hl7.org/fhir/ValueSet/ucum-units",
             "bindingStrength": "REQUIRED",
-            "lastModifiedBy": "shr.core.Units"
+            "lastModifiedBy": "obf.datatype.Units"
           }
         }
       },
       {
-        "fqn": "shr.core.Coding",
+        "fqn": "obf.datatype.Coding",
         "valueType": "IdentifiableValue",
         "constraints": {
           "valueSet": {
-            "uri": "http://standardhealthrecord.org/shr/core/vs/CurrencyVS",
+            "uri": "http://standardhealthrecord.org/obf/datatype/vs/CurrencyVS",
             "bindingStrength": "REQUIRED",
-            "lastModifiedBy": "shr.core.Units"
+            "lastModifiedBy": "obf.datatype.Units"
           }
         }
       }

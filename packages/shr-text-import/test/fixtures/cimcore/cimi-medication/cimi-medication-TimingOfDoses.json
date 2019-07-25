@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "When doses of medication should be administered.",
   "value": {
-    "fqn": "shr.core.Timing",
+    "fqn": "obf.datatype.Timing",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

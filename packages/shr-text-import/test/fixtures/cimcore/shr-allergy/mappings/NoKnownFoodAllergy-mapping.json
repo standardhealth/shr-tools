@@ -38,7 +38,7 @@
       {
         "sourcePath": [
           "_Entry",
-          "shr.core.CreationTime"
+          "obf.datatype.CreationTime"
         ],
         "target": "assertedDate",
         "lastModifiedBy": "shr.allergy.NoAdverseSensitivityToSubstance"

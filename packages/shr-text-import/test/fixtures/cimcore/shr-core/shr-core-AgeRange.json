@@ -1,14 +1,14 @@
 {
   "fileType": "DataElement",
   "name": "AgeRange",
-  "namespace": "shr.core",
-  "fqn": "shr.core.AgeRange",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.AgeRange",
   "isEntry": false,
   "isAbstract": false,
   "description": "A quantitative range of ages. One of the two ages must be specified.",
   "fields": [
     {
-      "fqn": "shr.core.UpperBound",
+      "fqn": "obf.datatype.UpperBound",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -16,18 +16,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Quantity": {
+          "obf.datatype.Quantity": {
             "type": {
-              "fqn": "shr.core.Age",
+              "fqn": "obf.datatype.Age",
               "onValue": false,
-              "lastModifiedBy": "shr.core.AgeRange"
+              "lastModifiedBy": "obf.datatype.AgeRange"
             }
           }
         }
       }
     },
     {
-      "fqn": "shr.core.LowerBound",
+      "fqn": "obf.datatype.LowerBound",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -35,11 +35,11 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Quantity": {
+          "obf.datatype.Quantity": {
             "type": {
-              "fqn": "shr.core.Age",
+              "fqn": "obf.datatype.Age",
               "onValue": false,
-              "lastModifiedBy": "shr.core.AgeRange"
+              "lastModifiedBy": "obf.datatype.AgeRange"
             }
           }
         }

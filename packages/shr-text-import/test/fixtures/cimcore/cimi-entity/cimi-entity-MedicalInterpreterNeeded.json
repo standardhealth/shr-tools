@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -21,7 +21,7 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/YesNoUnknownVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/YesNoUnknownVS",
         "bindingStrength": "REQUIRED",
         "lastModifiedBy": "cimi.entity.MedicalInterpreterNeeded"
       }
@@ -29,7 +29,7 @@
   },
   "fields": [
     {
-      "fqn": "shr.core.Language",
+      "fqn": "obf.datatype.Language",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,

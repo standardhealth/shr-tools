@@ -13,7 +13,7 @@
     "cimi.element.AnatomicalLocation"
   ],
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -93,7 +93,7 @@
       }
     },
     {
-      "fqn": "shr.core.ClockDirection",
+      "fqn": "obf.datatype.ClockDirection",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

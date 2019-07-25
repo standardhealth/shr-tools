@@ -34,7 +34,7 @@
       {
         "sourcePath": [
           "_Entry",
-          "shr.core.CreationTime"
+          "obf.datatype.CreationTime"
         ],
         "target": "assertedDate",
         "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
@@ -50,7 +50,7 @@
       {
         "sourcePath": [
           "shr.allergy.AdverseSensitivityTopic",
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "type",
         "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
@@ -125,7 +125,7 @@
         "sourcePath": [
           "shr.allergy.AdverseSensitivityPresenceContext",
           "shr.allergy.AdverseReaction",
-          "shr.core.Details"
+          "obf.datatype.Details"
         ],
         "target": "reaction.description",
         "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"
@@ -134,7 +134,7 @@
         "sourcePath": [
           "shr.allergy.AdverseSensitivityPresenceContext",
           "shr.allergy.AdverseReaction",
-          "shr.core.OccurrenceTime"
+          "obf.datatype.OccurrenceTime"
         ],
         "target": "reaction.onset",
         "lastModifiedBy": "shr.allergy.AdverseSensitivityToSubstance"

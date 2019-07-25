@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The relative match of the mapped concept to the original (target) concept. Examples include broader (i.e., the mapped term is more general than the original), equivalent, narrower (e.g. mapped concept is 'atypical diabetes mellitus' and the original term is 'diabetes mellitus'), or unknown.",
   "value": {
-    "fqn": "shr.core.Coding",
+    "fqn": "obf.datatype.Coding",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

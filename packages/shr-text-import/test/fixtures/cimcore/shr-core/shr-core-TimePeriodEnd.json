@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "TimePeriodEnd",
-  "namespace": "shr.core",
-  "fqn": "shr.core.TimePeriodEnd",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.TimePeriodEnd",
   "isEntry": false,
   "isAbstract": false,
   "description": "The time at which something is to end or did end. Boundary is considered inclusive.",

@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "TimeOfDay",
-  "namespace": "shr.core",
-  "fqn": "shr.core.TimeOfDay",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.TimeOfDay",
   "isEntry": false,
   "isAbstract": false,
   "description": "Time of day the event should take place on the designated day(s). TimeOfDay should only be specified if the RecurrenceInterval and/or DayOfWeek establishes the day when the event should take place.",

@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "State",
-  "namespace": "shr.core",
-  "fqn": "shr.core.State",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.State",
   "isEntry": false,
   "isAbstract": false,
   "description": "Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (i.e. US 2 letter state codes). (Source: HL7 FHIR).",
@@ -13,10 +13,10 @@
     }
   ],
   "hierarchy": [
-    "shr.core.GeopoliticalLocation"
+    "obf.datatype.GeopoliticalLocation"
   ],
   "basedOn": [
-    "shr.core.GeopoliticalLocation"
+    "obf.datatype.GeopoliticalLocation"
   ],
   "value": {
     "fqn": "string",

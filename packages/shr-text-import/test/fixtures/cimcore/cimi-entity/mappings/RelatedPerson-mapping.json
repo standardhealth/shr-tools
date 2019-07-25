@@ -18,7 +18,7 @@
       {
         "sourcePath": [
           "cimi.entity.Person",
-          "shr.core.HumanName"
+          "obf.datatype.HumanName"
         ],
         "target": "name",
         "lastModifiedBy": "cimi.entity.RelatedPerson"
@@ -42,7 +42,7 @@
       {
         "sourcePath": [
           "cimi.entity.Person",
-          "shr.core.Address"
+          "obf.datatype.Address"
         ],
         "target": "address",
         "lastModifiedBy": "cimi.entity.RelatedPerson"
@@ -58,7 +58,7 @@
       {
         "sourcePath": [
           "cimi.entity.Person",
-          "shr.core.ContactPoint"
+          "obf.datatype.ContactPoint"
         ],
         "target": "telecom",
         "lastModifiedBy": "cimi.entity.RelatedPerson"
@@ -72,7 +72,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.EffectiveTimePeriod"
+          "obf.datatype.EffectiveTimePeriod"
         ],
         "target": "period",
         "lastModifiedBy": "cimi.entity.RelatedPerson"

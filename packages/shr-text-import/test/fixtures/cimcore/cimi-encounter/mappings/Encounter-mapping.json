@@ -30,7 +30,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.TimePeriod"
+          "obf.datatype.TimePeriod"
         ],
         "target": "period",
         "lastModifiedBy": "cimi.encounter.Encounter"

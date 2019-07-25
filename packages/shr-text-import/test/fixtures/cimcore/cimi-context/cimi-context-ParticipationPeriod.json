@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The point in time or span of time the participant is involved.",
   "value": {
-    "fqn": "shr.core.TimePeriod",
+    "fqn": "obf.datatype.TimePeriod",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

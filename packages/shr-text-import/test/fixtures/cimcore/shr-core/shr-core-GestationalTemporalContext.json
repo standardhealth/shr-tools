@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "GestationalTemporalContext",
-  "namespace": "shr.core",
-  "fqn": "shr.core.GestationalTemporalContext",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.GestationalTemporalContext",
   "isEntry": false,
   "isAbstract": false,
   "description": "A named gestational time period, or a gestational age.",
@@ -14,11 +14,11 @@
     },
     "options": [
       {
-        "fqn": "shr.core.GestationalAge",
+        "fqn": "obf.datatype.GestationalAge",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.GestationalTimePeriod",
+        "fqn": "obf.datatype.GestationalTimePeriod",
         "valueType": "IdentifiableValue"
       }
     ]

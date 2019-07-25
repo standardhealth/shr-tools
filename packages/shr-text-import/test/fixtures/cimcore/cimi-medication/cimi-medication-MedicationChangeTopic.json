@@ -28,7 +28,7 @@
       }
     },
     {
-      "fqn": "shr.core.Category",
+      "fqn": "obf.datatype.Category",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -40,7 +40,7 @@
       }
     },
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -48,7 +48,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://standardhealthrecord.org/cimi/medication/vs/MedicationChangeTypeVS",
               "bindingStrength": "REQUIRED",

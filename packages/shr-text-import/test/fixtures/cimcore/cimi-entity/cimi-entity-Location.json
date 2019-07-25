@@ -29,15 +29,15 @@
     },
     "options": [
       {
-        "fqn": "shr.core.Address",
+        "fqn": "obf.datatype.Address",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.Geoposition",
+        "fqn": "obf.datatype.Geoposition",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.GeopoliticalLocation",
+        "fqn": "obf.datatype.GeopoliticalLocation",
         "valueType": "IdentifiableValue"
       }
     ]

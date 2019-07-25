@@ -17,7 +17,7 @@
   ],
   "fields": [
     {
-      "fqn": "shr.core.Title",
+      "fqn": "obf.datatype.Title",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "fqn": "shr.core.Details",
+      "fqn": "obf.datatype.Details",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -109,7 +109,7 @@
       }
     },
     {
-      "fqn": "shr.core.EffectiveTimePeriod",
+      "fqn": "obf.datatype.EffectiveTimePeriod",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -133,7 +133,7 @@
       }
     },
     {
-      "fqn": "shr.core.ContactDetail",
+      "fqn": "obf.datatype.ContactDetail",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0

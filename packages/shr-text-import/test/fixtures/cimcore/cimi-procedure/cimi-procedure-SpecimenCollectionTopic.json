@@ -26,7 +26,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/us/core/ValueSet/us-core-procedure-code",
               "bindingStrength": "EXTENSIBLE",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "fqn": "shr.core.Category",
+      "fqn": "obf.datatype.Category",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Numerator",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Numerator",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Numerator",
   "isEntry": false,
   "isAbstract": false,
   "description": "The dividend of a fraction.",
@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.Quantity",
+    "fqn": "obf.datatype.Quantity",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

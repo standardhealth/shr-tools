@@ -24,7 +24,7 @@
     "cimi.topic.ConditionTopic"
   ],
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -60,7 +60,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "fixedValue": {
               "type": "code",
               "value": {
@@ -114,7 +114,7 @@
       }
     },
     {
-      "fqn": "shr.core.Details",
+      "fqn": "obf.datatype.Details",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -126,16 +126,16 @@
       }
     },
     {
-      "fqn": "shr.core.Category",
+      "fqn": "obf.datatype.Category",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
-              "uri": "http://standardhealthrecord.org/shr/core/vs/ConditionCategoryVS",
+              "uri": "http://standardhealthrecord.org/obf/datatype/vs/ConditionCategoryVS",
               "bindingStrength": "REQUIRED",
               "lastModifiedBy": "cimi.topic.ConditionTopic"
             }
@@ -150,7 +150,7 @@
         "valueSet": [
           {
             "constraint": {
-              "uri": "http://standardhealthrecord.org/shr/core/vs/ConditionCategoryVS",
+              "uri": "http://standardhealthrecord.org/obf/datatype/vs/ConditionCategoryVS",
               "bindingStrength": "REQUIRED"
             },
             "source": "cimi.topic.ConditionTopic"

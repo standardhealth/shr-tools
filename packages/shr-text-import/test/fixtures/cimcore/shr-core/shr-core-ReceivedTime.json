@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "ReceivedTime",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ReceivedTime",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ReceivedTime",
   "isEntry": false,
   "isAbstract": false,
   "description": "Time the item was delivered to, or accepted by, the receiving facility or unit.",

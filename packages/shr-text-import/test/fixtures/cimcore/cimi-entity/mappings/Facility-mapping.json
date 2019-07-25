@@ -17,7 +17,7 @@
       {
         "sourcePath": [
           "cimi.entity.Location",
-          "shr.core.Address"
+          "obf.datatype.Address"
         ],
         "target": "address",
         "lastModifiedBy": "cimi.entity.Facility"
@@ -25,8 +25,8 @@
       {
         "sourcePath": [
           "cimi.entity.Location",
-          "shr.core.Geoposition",
-          "shr.core.Latitude"
+          "obf.datatype.Geoposition",
+          "obf.datatype.Latitude"
         ],
         "target": "position.latitude",
         "lastModifiedBy": "cimi.entity.Facility"
@@ -34,8 +34,8 @@
       {
         "sourcePath": [
           "cimi.entity.Location",
-          "shr.core.Geoposition",
-          "shr.core.Longitude"
+          "obf.datatype.Geoposition",
+          "obf.datatype.Longitude"
         ],
         "target": "position.longitude",
         "lastModifiedBy": "cimi.entity.Facility"
@@ -43,15 +43,15 @@
       {
         "sourcePath": [
           "cimi.entity.Location",
-          "shr.core.Geoposition",
-          "shr.core.Altitude"
+          "obf.datatype.Geoposition",
+          "obf.datatype.Altitude"
         ],
         "target": "position.altitude",
         "lastModifiedBy": "cimi.entity.Facility"
       },
       {
         "sourcePath": [
-          "shr.core.ContactPoint"
+          "obf.datatype.ContactPoint"
         ],
         "target": "telecom",
         "lastModifiedBy": "cimi.entity.Facility"
@@ -65,7 +65,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "type",
         "lastModifiedBy": "cimi.entity.Facility"

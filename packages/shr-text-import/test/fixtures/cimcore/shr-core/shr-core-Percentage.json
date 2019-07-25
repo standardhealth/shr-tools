@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Percentage",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Percentage",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Percentage",
   "isEntry": false,
   "isAbstract": false,
   "description": "A percentage value where 100.0 represents 100%.",
@@ -13,11 +13,11 @@
     }
   ],
   "hierarchy": [
-    "shr.core.Quantity",
-    "shr.core.SimpleQuantity"
+    "obf.datatype.Quantity",
+    "obf.datatype.SimpleQuantity"
   ],
   "basedOn": [
-    "shr.core.SimpleQuantity"
+    "obf.datatype.SimpleQuantity"
   ],
   "value": {
     "fqn": "decimal",
@@ -28,24 +28,24 @@
     },
     "inheritance": {
       "status": "inherited",
-      "from": "shr.core.Quantity"
+      "from": "obf.datatype.Quantity"
     }
   },
   "fields": [
     {
-      "fqn": "shr.core.Comparator",
+      "fqn": "obf.datatype.Comparator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
         "max": 0,
         "history": [
           {
-            "source": "shr.core.Quantity",
+            "source": "obf.datatype.Quantity",
             "min": 0,
             "max": 1
           },
           {
-            "source": "shr.core.SimpleQuantity",
+            "source": "obf.datatype.SimpleQuantity",
             "min": 0,
             "max": 0
           }
@@ -53,7 +53,7 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       },
       "constraintHistory": {
         "card": [
@@ -62,13 +62,13 @@
               "min": 0,
               "max": 0
             },
-            "source": "shr.core.SimpleQuantity"
+            "source": "obf.datatype.SimpleQuantity"
           }
         ]
       }
     },
     {
-      "fqn": "shr.core.Units",
+      "fqn": "obf.datatype.Units",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -76,21 +76,21 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "fixedValue": {
               "type": "code",
               "value": {
                 "system": "http://unitsofmeasure.org",
                 "code": "%"
               },
-              "lastModifiedBy": "shr.core.Percentage"
+              "lastModifiedBy": "obf.datatype.Percentage"
             }
           }
         }
       },
       "inheritance": {
         "status": "overridden",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       },
       "constraintHistory": {
         "code": [
@@ -101,9 +101,9 @@
                 "system": "http://unitsofmeasure.org",
                 "code": "%"
               },
-              "lastModifiedBy": "shr.core.Percentage"
+              "lastModifiedBy": "obf.datatype.Percentage"
             },
-            "source": "shr.core.Percentage"
+            "source": "obf.datatype.Percentage"
           }
         ]
       }

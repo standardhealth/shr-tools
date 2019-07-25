@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Coding",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Coding",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Coding",
   "isEntry": false,
   "isAbstract": false,
   "description": "Coding of a concept, drawn from a controlled vocabulary. Includes the vocabulary and version, if applicable. May include a display text, and a descriptor expressing the intended interpretation of the code.",
@@ -22,7 +22,7 @@
   },
   "fields": [
     {
-      "fqn": "shr.core.CodeSystem",
+      "fqn": "obf.datatype.CodeSystem",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -30,7 +30,7 @@
       }
     },
     {
-      "fqn": "shr.core.CodeSystemVersion",
+      "fqn": "obf.datatype.CodeSystemVersion",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -38,7 +38,7 @@
       }
     },
     {
-      "fqn": "shr.core.DisplayText",
+      "fqn": "obf.datatype.DisplayText",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

@@ -31,7 +31,7 @@
       }
     },
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -39,7 +39,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/v3-ServiceDeliveryLocationRoleType",
               "bindingStrength": "REQUIRED",
@@ -78,7 +78,7 @@
       }
     },
     {
-      "fqn": "shr.core.ContactPoint",
+      "fqn": "obf.datatype.ContactPoint",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

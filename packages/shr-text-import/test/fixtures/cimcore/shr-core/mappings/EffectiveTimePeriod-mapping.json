@@ -1,29 +1,29 @@
 {
   "fileType": "Mapping",
   "name": "EffectiveTimePeriod",
-  "namespace": "shr.core",
-  "fqn": "shr.core.EffectiveTimePeriod",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.EffectiveTimePeriod",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Period",
   "inheritance": {
     "status": "inherited",
-    "from": "shr.core.TimePeriod"
+    "from": "obf.datatype.TimePeriod"
   },
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.TimePeriodStart"
+          "obf.datatype.TimePeriodStart"
         ],
         "target": "start",
-        "lastModifiedBy": "shr.core.TimePeriod"
+        "lastModifiedBy": "obf.datatype.TimePeriod"
       },
       {
         "sourcePath": [
-          "shr.core.TimePeriodEnd"
+          "obf.datatype.TimePeriodEnd"
         ],
         "target": "end",
-        "lastModifiedBy": "shr.core.TimePeriod"
+        "lastModifiedBy": "obf.datatype.TimePeriod"
       }
     ]
   }

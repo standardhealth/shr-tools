@@ -18,7 +18,7 @@
       {
         "sourcePath": [
           "cimi.entity.Person",
-          "shr.core.HumanName"
+          "obf.datatype.HumanName"
         ],
         "target": "name",
         "lastModifiedBy": "cimi.entity.Patient"
@@ -42,7 +42,7 @@
       {
         "sourcePath": [
           "cimi.entity.Person",
-          "shr.core.Address"
+          "obf.datatype.Address"
         ],
         "target": "address",
         "lastModifiedBy": "cimi.entity.Patient"
@@ -50,7 +50,7 @@
       {
         "sourcePath": [
           "cimi.entity.Person",
-          "shr.core.ContactPoint"
+          "obf.datatype.ContactPoint"
         ],
         "target": "telecom",
         "lastModifiedBy": "cimi.entity.Patient"

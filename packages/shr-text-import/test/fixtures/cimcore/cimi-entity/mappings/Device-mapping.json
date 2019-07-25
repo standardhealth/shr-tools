@@ -9,7 +9,7 @@
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "type",
         "lastModifiedBy": "cimi.entity.Device"
@@ -51,7 +51,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.Version"
+          "obf.datatype.Version"
         ],
         "target": "version",
         "lastModifiedBy": "cimi.entity.Device"

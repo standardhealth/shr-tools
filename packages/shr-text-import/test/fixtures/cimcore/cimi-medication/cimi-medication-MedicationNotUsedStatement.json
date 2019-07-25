@@ -147,14 +147,14 @@
           "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
         },
         "subpaths": {
-          "shr.core.Category": {
+          "obf.datatype.Category": {
             "card": {
               "min": 0,
               "max": 1,
               "lastModifiedBy": "cimi.medication.MedicationNotUsedStatement"
             },
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://hl7.org/fhir/ValueSet/medication-statement-category",
                   "bindingStrength": "PREFERRED",
@@ -233,7 +233,7 @@
         "subpaths": {
           "cimi.context.Reason": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://standardhealthrecord.org/cimi/medication/vs/MedicationNotUsedReasonVS",
                   "bindingStrength": "REQUIRED",

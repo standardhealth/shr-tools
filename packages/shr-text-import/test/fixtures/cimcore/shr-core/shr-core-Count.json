@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Count",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Count",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Count",
   "isEntry": false,
   "isAbstract": false,
   "description": "The number of items (0 or more), as an integer.",

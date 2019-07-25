@@ -40,7 +40,7 @@
       }
     },
     {
-      "fqn": "shr.core.OccurrenceTimeOrPeriod",
+      "fqn": "obf.datatype.OccurrenceTimeOrPeriod",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,

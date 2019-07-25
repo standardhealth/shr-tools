@@ -120,9 +120,9 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Category": {
+          "obf.datatype.Category": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {

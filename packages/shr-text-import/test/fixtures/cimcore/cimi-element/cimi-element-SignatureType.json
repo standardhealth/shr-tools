@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.Coding",
+    "fqn": "obf.datatype.Coding",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "DayOfWeek",
-  "namespace": "shr.core",
-  "fqn": "shr.core.DayOfWeek",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.DayOfWeek",
   "isEntry": false,
   "isAbstract": false,
   "description": "A day of the week that the pattern should take place.",
@@ -17,7 +17,7 @@
       "valueSet": {
         "uri": "http://hl7.org/fhir/ValueSet/days-of-week",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.DayOfWeek"
+        "lastModifiedBy": "obf.datatype.DayOfWeek"
       }
     }
   }

@@ -18,7 +18,7 @@
       {
         "sourcePath": [
           "_Entry",
-          "shr.core.CreationTime"
+          "obf.datatype.CreationTime"
         ],
         "target": "dateAsserted  // date asserted and date recorded may not be the same",
         "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
@@ -42,7 +42,7 @@
       {
         "sourcePath": [
           "cimi.medication.MedicationUseTopic",
-          "shr.core.Category"
+          "obf.datatype.Category"
         ],
         "target": "category",
         "lastModifiedBy": "cimi.medication.MedicationUsedStatement"
@@ -58,7 +58,7 @@
       {
         "sourcePath": [
           "cimi.context.PerformedContext",
-          "shr.core.OccurrenceTimeOrPeriod"
+          "obf.datatype.OccurrenceTimeOrPeriod"
         ],
         "target": "effective[x]",
         "lastModifiedBy": "cimi.medication.MedicationUsedStatement"

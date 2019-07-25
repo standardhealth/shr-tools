@@ -26,7 +26,7 @@
   },
   "fields": [
     {
-      "fqn": "shr.core.Purpose",
+      "fqn": "obf.datatype.Purpose",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -34,7 +34,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/identifier-use",
               "bindingStrength": "REQUIRED",
@@ -61,7 +61,7 @@
       }
     },
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -69,7 +69,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/identifier-type",
               "bindingStrength": "EXTENSIBLE",
@@ -96,7 +96,7 @@
       }
     },
     {
-      "fqn": "shr.core.CodeSystem",
+      "fqn": "obf.datatype.CodeSystem",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -108,7 +108,7 @@
       }
     },
     {
-      "fqn": "shr.core.EffectiveTimePeriod",
+      "fqn": "obf.datatype.EffectiveTimePeriod",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

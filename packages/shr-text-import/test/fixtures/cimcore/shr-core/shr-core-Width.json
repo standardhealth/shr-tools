@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Width",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Width",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Width",
   "isEntry": false,
   "isAbstract": false,
   "description": "The measurement or extent of something from side to side.",
@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.Quantity",
+    "fqn": "obf.datatype.Quantity",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -21,16 +21,16 @@
     },
     "constraints": {
       "subpaths": {
-        "shr.core.Units": {
+        "obf.datatype.Units": {
           "subpaths": {
-            "shr.core.Coding": {
+            "obf.datatype.Coding": {
               "fixedValue": {
                 "type": "code",
                 "value": {
                   "system": "http://unitsofmeasure.org",
                   "code": "TBD"
                 },
-                "lastModifiedBy": "shr.core.Width"
+                "lastModifiedBy": "obf.datatype.Width"
               }
             }
           }

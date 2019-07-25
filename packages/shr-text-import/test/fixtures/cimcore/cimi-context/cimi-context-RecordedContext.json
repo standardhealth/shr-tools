@@ -25,7 +25,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "fixedValue": {
               "type": "code",
               "value": {

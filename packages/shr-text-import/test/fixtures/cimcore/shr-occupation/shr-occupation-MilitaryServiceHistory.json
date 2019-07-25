@@ -148,9 +148,9 @@
               "lastModifiedBy": "cimi.statement.NonLabCodedEvaluationResultRecorded"
             }
           },
-          "shr.core.Category": {
+          "obf.datatype.Category": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {
@@ -164,7 +164,7 @@
           },
           "cimi.topic.TopicCode": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {
@@ -366,7 +366,7 @@
         "subpaths": {
           "cimi.context.ResultValue": {
             "type": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true,
               "lastModifiedBy": "cimi.statement.CodedEvaluationResultRecorded"
             }
@@ -388,7 +388,7 @@
           },
           {
             "constraint": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true
             },
             "source": "cimi.statement.CodedEvaluationResultRecorded"

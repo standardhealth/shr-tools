@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "District",
-  "namespace": "shr.core",
-  "fqn": "shr.core.District",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.District",
   "isEntry": false,
   "isAbstract": false,
   "description": "The name of the administrative area at a level below that of a state but above that of a city or town. In the US, a county. Outside the US, a district or the equivalent. (Source: HL7 FHIR).",
@@ -13,10 +13,10 @@
     }
   ],
   "hierarchy": [
-    "shr.core.GeopoliticalLocation"
+    "obf.datatype.GeopoliticalLocation"
   ],
   "basedOn": [
-    "shr.core.GeopoliticalLocation"
+    "obf.datatype.GeopoliticalLocation"
   ],
   "value": {
     "fqn": "string",

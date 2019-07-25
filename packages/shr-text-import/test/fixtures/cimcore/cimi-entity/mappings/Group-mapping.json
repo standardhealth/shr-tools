@@ -16,7 +16,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "type",
         "lastModifiedBy": "cimi.entity.Group"
@@ -30,7 +30,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.Title"
+          "obf.datatype.Title"
         ],
         "target": "name",
         "lastModifiedBy": "cimi.entity.Group"
@@ -61,7 +61,7 @@
       {
         "sourcePath": [
           "cimi.entity.GroupCharacteristic",
-          "shr.core.TimePeriod"
+          "obf.datatype.TimePeriod"
         ],
         "target": "characteristic.period",
         "lastModifiedBy": "cimi.entity.Group"
@@ -124,7 +124,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.Count"
+          "obf.datatype.Count"
         ],
         "target": "quantity",
         "lastModifiedBy": "cimi.entity.Group"

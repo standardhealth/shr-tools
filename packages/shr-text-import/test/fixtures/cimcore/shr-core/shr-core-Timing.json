@@ -1,21 +1,21 @@
 {
   "fileType": "DataElement",
   "name": "Timing",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Timing",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Timing",
   "isEntry": false,
   "isAbstract": false,
   "description": "A timing schedule that specifies an event that may occur multiple times. Timing offers a choice of multiple OccurrenceTime (used is used to specify specific times), or recurrence patterns.",
   "fields": [
     {
-      "fqn": "shr.core.OccurrenceTime",
+      "fqn": "obf.datatype.OccurrenceTime",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       }
     },
     {
-      "fqn": "shr.core.TimingCode",
+      "fqn": "obf.datatype.TimingCode",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -23,7 +23,7 @@
       }
     },
     {
-      "fqn": "shr.core.EventDuration",
+      "fqn": "obf.datatype.EventDuration",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -31,7 +31,7 @@
       }
     },
     {
-      "fqn": "shr.core.RecurrencePattern",
+      "fqn": "obf.datatype.RecurrencePattern",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -39,7 +39,7 @@
       }
     },
     {
-      "fqn": "shr.core.RecurrenceRange",
+      "fqn": "obf.datatype.RecurrenceRange",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

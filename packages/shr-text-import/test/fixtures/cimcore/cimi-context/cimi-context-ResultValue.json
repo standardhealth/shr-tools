@@ -14,11 +14,11 @@
     },
     "options": [
       {
-        "fqn": "shr.core.Quantity",
+        "fqn": "obf.datatype.Quantity",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.CodeableConcept",
+        "fqn": "obf.datatype.CodeableConcept",
         "valueType": "IdentifiableValue"
       },
       {
@@ -30,11 +30,11 @@
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.Range",
+        "fqn": "obf.datatype.Range",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.Ratio",
+        "fqn": "obf.datatype.Ratio",
         "valueType": "IdentifiableValue"
       },
       {
@@ -46,7 +46,7 @@
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.TimePeriod",
+        "fqn": "obf.datatype.TimePeriod",
         "valueType": "IdentifiableValue"
       }
     ]

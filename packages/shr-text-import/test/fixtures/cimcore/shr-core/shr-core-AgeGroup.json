@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "AgeGroup",
-  "namespace": "shr.core",
-  "fqn": "shr.core.AgeGroup",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.AgeGroup",
   "isEntry": false,
   "isAbstract": false,
   "description": "Subgroups of populations based on age.",
@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -21,9 +21,9 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/AgeGroupVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/AgeGroupVS",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.AgeGroup"
+        "lastModifiedBy": "obf.datatype.AgeGroup"
       }
     }
   }

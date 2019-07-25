@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "EffectiveTimePeriod",
-  "namespace": "shr.core",
-  "fqn": "shr.core.EffectiveTimePeriod",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.EffectiveTimePeriod",
   "isEntry": false,
   "isAbstract": false,
   "description": "The date and time span for which something is active, valid, or in force.",
@@ -13,14 +13,14 @@
     }
   ],
   "hierarchy": [
-    "shr.core.TimePeriod"
+    "obf.datatype.TimePeriod"
   ],
   "basedOn": [
-    "shr.core.TimePeriod"
+    "obf.datatype.TimePeriod"
   ],
   "fields": [
     {
-      "fqn": "shr.core.TimePeriodStart",
+      "fqn": "obf.datatype.TimePeriodStart",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -28,11 +28,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.TimePeriod"
+        "from": "obf.datatype.TimePeriod"
       }
     },
     {
-      "fqn": "shr.core.TimePeriodEnd",
+      "fqn": "obf.datatype.TimePeriodEnd",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -40,7 +40,7 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.TimePeriod"
+        "from": "obf.datatype.TimePeriod"
       }
     }
   ]

@@ -1,25 +1,25 @@
 {
   "fileType": "Mapping",
   "name": "CodeableConcept",
-  "namespace": "shr.core",
-  "fqn": "shr.core.CodeableConcept",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.CodeableConcept",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "CodeableConcept",
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.Coding"
+          "obf.datatype.Coding"
         ],
         "target": "coding",
-        "lastModifiedBy": "shr.core.CodeableConcept"
+        "lastModifiedBy": "obf.datatype.CodeableConcept"
       },
       {
         "sourcePath": [
-          "shr.core.DisplayText"
+          "obf.datatype.DisplayText"
         ],
         "target": "text",
-        "lastModifiedBy": "shr.core.CodeableConcept"
+        "lastModifiedBy": "obf.datatype.CodeableConcept"
       }
     ]
   }

@@ -10,7 +10,7 @@
       {
         "sourcePath": [
           "_Entry",
-          "shr.core.CreationTime"
+          "obf.datatype.CreationTime"
         ],
         "target": "assertedDate",
         "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
@@ -33,7 +33,7 @@
       {
         "sourcePath": [
           "cimi.topic.ConditionTopic",
-          "shr.core.Category"
+          "obf.datatype.Category"
         ],
         "target": "category",
         "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"
@@ -114,7 +114,7 @@
         "sourcePath": [
           "cimi.context.ConditionPresenceContext",
           "cimi.context.Stage",
-          "shr.core.CodeableConcept"
+          "obf.datatype.CodeableConcept"
         ],
         "target": "stage.summary",
         "lastModifiedBy": "cimi.statement.ConditionPresenceStatement"

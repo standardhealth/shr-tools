@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The country, state or other region taking legal responsibility for the conduct of the study.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

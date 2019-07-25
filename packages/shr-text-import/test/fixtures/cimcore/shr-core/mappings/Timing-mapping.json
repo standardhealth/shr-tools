@@ -1,127 +1,127 @@
 {
   "fileType": "Mapping",
   "name": "Timing",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Timing",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Timing",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Timing",
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.OccurrenceTime"
+          "obf.datatype.OccurrenceTime"
         ],
         "target": "event",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.TimingCode"
+          "obf.datatype.TimingCode"
         ],
         "target": "code",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.EventDuration",
-          "shr.core.DurationRange",
-          "shr.core.LowerBound"
+          "obf.datatype.EventDuration",
+          "obf.datatype.DurationRange",
+          "obf.datatype.LowerBound"
         ],
         "target": "repeat.duration",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.EventDuration",
-          "shr.core.DurationRange",
-          "shr.core.UpperBound"
+          "obf.datatype.EventDuration",
+          "obf.datatype.DurationRange",
+          "obf.datatype.UpperBound"
         ],
         "target": "repeat.durationMax",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.EventDuration",
-          "shr.core.DurationRange",
-          "shr.core.LowerBound",
-          "shr.core.Quantity",
-          "shr.core.Units",
-          "shr.core.Coding",
+          "obf.datatype.EventDuration",
+          "obf.datatype.DurationRange",
+          "obf.datatype.LowerBound",
+          "obf.datatype.Quantity",
+          "obf.datatype.Units",
+          "obf.datatype.Coding",
           "code"
         ],
         "target": "repeat.durationUnit",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.RecurrencePattern",
-          "shr.core.RecurrenceInterval",
-          "shr.core.Duration"
+          "obf.datatype.RecurrencePattern",
+          "obf.datatype.RecurrenceInterval",
+          "obf.datatype.Duration"
         ],
         "target": "repeat.period",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.RecurrencePattern",
-          "shr.core.RecurrenceInterval",
-          "shr.core.Duration",
-          "shr.core.Units",
-          "shr.core.Coding",
+          "obf.datatype.RecurrencePattern",
+          "obf.datatype.RecurrenceInterval",
+          "obf.datatype.Duration",
+          "obf.datatype.Units",
+          "obf.datatype.Coding",
           "code"
         ],
         "target": "repeat.periodUnit",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.RecurrencePattern",
-          "shr.core.DayOfWeek"
+          "obf.datatype.RecurrencePattern",
+          "obf.datatype.DayOfWeek"
         ],
         "target": "repeat.dayOfWeek",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.RecurrencePattern",
-          "shr.core.TimeOfDay"
+          "obf.datatype.RecurrencePattern",
+          "obf.datatype.TimeOfDay"
         ],
         "target": "repeat.timeOfDay",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.RecurrencePattern",
-          "shr.core.DailyLifeEvent"
+          "obf.datatype.RecurrencePattern",
+          "obf.datatype.DailyLifeEvent"
         ],
         "target": "repeat.when",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.RecurrencePattern",
-          "shr.core.LifeEventOffset"
+          "obf.datatype.RecurrencePattern",
+          "obf.datatype.LifeEventOffset"
         ],
         "target": "repeat.offset",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.RecurrencePattern",
-          "shr.core.CountPerInterval",
-          "shr.core.MinCount"
+          "obf.datatype.RecurrencePattern",
+          "obf.datatype.CountPerInterval",
+          "obf.datatype.MinCount"
         ],
         "target": "repeat.frequency",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       },
       {
         "sourcePath": [
-          "shr.core.RecurrencePattern",
-          "shr.core.CountPerInterval",
-          "shr.core.MaxCount"
+          "obf.datatype.RecurrencePattern",
+          "obf.datatype.CountPerInterval",
+          "obf.datatype.MaxCount"
         ],
         "target": "repeat.frequencyMax",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       }
     ],
     "cardMapping": [
@@ -131,7 +131,7 @@
           "max": 0
         },
         "target": "repeat.periodMax",
-        "lastModifiedBy": "shr.core.Timing"
+        "lastModifiedBy": "obf.datatype.Timing"
       }
     ]
   }

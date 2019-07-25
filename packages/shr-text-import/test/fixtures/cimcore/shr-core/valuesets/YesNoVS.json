@@ -1,18 +1,18 @@
 {
   "fileType": "ValueSet",
   "name": "YesNoVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.YesNoVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.YesNoVS",
   "description": "Code set indicating yes or no.",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#YesNoVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#YesNoVS",
   "values": [
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#YesNoCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#YesNoCS",
       "code": "yes",
       "description": "Yes, or true"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#YesNoCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#YesNoCS",
       "code": "no",
       "description": "No, or false"
     }

@@ -1,20 +1,20 @@
 {
   "fileType": "DataElement",
   "name": "UnitedStatesAddress",
-  "namespace": "shr.core",
-  "fqn": "shr.core.UnitedStatesAddress",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.UnitedStatesAddress",
   "isEntry": false,
   "isAbstract": false,
   "description": "An address for a place in the USA, conforming to US mail postal conventions. (Source: HL7 FHIR).",
   "hierarchy": [
-    "shr.core.Address"
+    "obf.datatype.Address"
   ],
   "basedOn": [
-    "shr.core.Address"
+    "obf.datatype.Address"
   ],
   "fields": [
     {
-      "fqn": "shr.core.Purpose",
+      "fqn": "obf.datatype.Purpose",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -22,18 +22,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/address-use",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Address"
+              "lastModifiedBy": "obf.datatype.Address"
             }
           }
         }
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       },
       "constraintHistory": {
         "valueSet": [
@@ -41,15 +41,15 @@
             "constraint": {
               "uri": "http://hl7.org/fhir/ValueSet/address-use",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Address"
+              "lastModifiedBy": "obf.datatype.Address"
             },
-            "source": "shr.core.UnitedStatesAddress"
+            "source": "obf.datatype.UnitedStatesAddress"
           }
         ]
       }
     },
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -57,18 +57,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/address-type",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Address"
+              "lastModifiedBy": "obf.datatype.Address"
             }
           }
         }
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       },
       "constraintHistory": {
         "valueSet": [
@@ -76,15 +76,15 @@
             "constraint": {
               "uri": "http://hl7.org/fhir/ValueSet/address-type",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Address"
+              "lastModifiedBy": "obf.datatype.Address"
             },
-            "source": "shr.core.UnitedStatesAddress"
+            "source": "obf.datatype.UnitedStatesAddress"
           }
         ]
       }
     },
     {
-      "fqn": "shr.core.DisplayText",
+      "fqn": "obf.datatype.DisplayText",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -92,11 +92,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       }
     },
     {
-      "fqn": "shr.core.AddressLine",
+      "fqn": "obf.datatype.AddressLine",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -104,11 +104,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       }
     },
     {
-      "fqn": "shr.core.City",
+      "fqn": "obf.datatype.City",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -116,11 +116,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       }
     },
     {
-      "fqn": "shr.core.District",
+      "fqn": "obf.datatype.District",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -128,23 +128,23 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       }
     },
     {
-      "fqn": "shr.core.State",
+      "fqn": "obf.datatype.State",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
         "max": 1,
         "history": [
           {
-            "source": "shr.core.Address",
+            "source": "obf.datatype.Address",
             "min": 0,
             "max": 1
           },
           {
-            "source": "shr.core.UnitedStatesAddress",
+            "source": "obf.datatype.UnitedStatesAddress",
             "min": 1,
             "max": 1
           }
@@ -152,24 +152,24 @@
       },
       "constraints": {
         "type": {
-          "fqn": "shr.core.UnitedStatesState",
+          "fqn": "obf.datatype.UnitedStatesState",
           "onValue": false,
-          "lastModifiedBy": "shr.core.UnitedStatesAddress"
+          "lastModifiedBy": "obf.datatype.UnitedStatesAddress"
         }
       },
       "inheritance": {
         "status": "overridden",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       },
       "constraintHistory": {
         "type": [
           {
             "constraint": {
-              "fqn": "shr.core.UnitedStatesState",
+              "fqn": "obf.datatype.UnitedStatesState",
               "onValue": false,
-              "lastModifiedBy": "shr.core.UnitedStatesAddress"
+              "lastModifiedBy": "obf.datatype.UnitedStatesAddress"
             },
-            "source": "shr.core.UnitedStatesAddress"
+            "source": "obf.datatype.UnitedStatesAddress"
           }
         ],
         "card": [
@@ -177,15 +177,15 @@
             "constraint": {
               "min": 1,
               "max": 1,
-              "lastModifiedBy": "shr.core.UnitedStatesAddress"
+              "lastModifiedBy": "obf.datatype.UnitedStatesAddress"
             },
-            "source": "shr.core.UnitedStatesAddress"
+            "source": "obf.datatype.UnitedStatesAddress"
           }
         ]
       }
     },
     {
-      "fqn": "shr.core.PostalCode",
+      "fqn": "obf.datatype.PostalCode",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -193,11 +193,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       }
     },
     {
-      "fqn": "shr.core.Country",
+      "fqn": "obf.datatype.Country",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -205,11 +205,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       }
     },
     {
-      "fqn": "shr.core.EffectiveTimePeriod",
+      "fqn": "obf.datatype.EffectiveTimePeriod",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -217,7 +217,7 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Address"
+        "from": "obf.datatype.Address"
       }
     }
   ]

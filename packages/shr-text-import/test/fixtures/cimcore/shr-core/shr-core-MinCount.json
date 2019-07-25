@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "MinCount",
-  "namespace": "shr.core",
-  "fqn": "shr.core.MinCount",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.MinCount",
   "isEntry": false,
   "isAbstract": false,
   "description": "Lower bound on a count.",

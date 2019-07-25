@@ -14,11 +14,11 @@
     },
     "options": [
       {
-        "fqn": "shr.core.SimpleQuantity",
+        "fqn": "obf.datatype.SimpleQuantity",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.Range",
+        "fqn": "obf.datatype.Range",
         "valueType": "IdentifiableValue"
       }
     ]

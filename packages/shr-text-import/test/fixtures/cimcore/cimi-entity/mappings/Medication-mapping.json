@@ -9,7 +9,7 @@
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "code",
         "lastModifiedBy": "cimi.entity.Medication"
@@ -24,7 +24,7 @@
       {
         "sourcePath": [
           "cimi.entity.MedicationIngredient",
-          "shr.core.CodeableConcept"
+          "obf.datatype.CodeableConcept"
         ],
         "target": "ingredient.item[x]",
         "lastModifiedBy": "cimi.entity.Medication"

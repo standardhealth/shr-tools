@@ -141,7 +141,7 @@
           },
           "cimi.topic.TopicCode": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {
@@ -241,14 +241,14 @@
         "subpaths": {
           "cimi.context.ResultValue": {
             "type": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true,
               "lastModifiedBy": "cimi.statement.CodedEvaluationResultRecorded"
             },
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
-                  "uri": "http://standardhealthrecord.org/shr/core/vs/QualitativeFrequencyVS",
+                  "uri": "http://standardhealthrecord.org/obf/datatype/vs/QualitativeFrequencyVS",
                   "bindingStrength": "REQUIRED",
                   "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
                 }
@@ -265,7 +265,7 @@
         "valueSet": [
           {
             "constraint": {
-              "uri": "http://standardhealthrecord.org/shr/core/vs/QualitativeFrequencyVS",
+              "uri": "http://standardhealthrecord.org/obf/datatype/vs/QualitativeFrequencyVS",
               "bindingStrength": "REQUIRED",
               "lastModifiedBy": "cimi.medication.MedicationAdherenceStatement"
             },
@@ -282,7 +282,7 @@
           },
           {
             "constraint": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true
             },
             "source": "cimi.statement.CodedEvaluationResultRecorded"

@@ -1,14 +1,14 @@
 {
   "fileType": "DataElement",
   "name": "CountPerInterval",
-  "namespace": "shr.core",
-  "fqn": "shr.core.CountPerInterval",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.CountPerInterval",
   "isEntry": false,
   "isAbstract": false,
   "description": "How many times the event should take place during one recurrence interval, for example, to specify 3-4 times per day, the CountPerInterval should be 3 to 4.",
   "fields": [
     {
-      "fqn": "shr.core.MinCount",
+      "fqn": "obf.datatype.MinCount",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -16,7 +16,7 @@
       }
     },
     {
-      "fqn": "shr.core.MaxCount",
+      "fqn": "obf.datatype.MaxCount",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

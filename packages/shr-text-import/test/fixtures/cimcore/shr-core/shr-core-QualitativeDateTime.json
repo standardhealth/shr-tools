@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "QualitativeDateTime",
-  "namespace": "shr.core",
-  "fqn": "shr.core.QualitativeDateTime",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.QualitativeDateTime",
   "isEntry": false,
   "isAbstract": false,
   "description": "A point in time, described qualitatively.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -15,9 +15,9 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/QualitativeDateTimeVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/QualitativeDateTimeVS",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.QualitativeDateTime"
+        "lastModifiedBy": "obf.datatype.QualitativeDateTime"
       }
     }
   }

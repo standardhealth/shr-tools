@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The result of performing an action or behavior, for example, an adverse reaction or new finding.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

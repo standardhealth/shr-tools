@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "CreationTime",
-  "namespace": "shr.core",
-  "fqn": "shr.core.CreationTime",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.CreationTime",
   "isEntry": false,
   "isAbstract": false,
   "description": "The point in time when the information was recorded in the system of record.",

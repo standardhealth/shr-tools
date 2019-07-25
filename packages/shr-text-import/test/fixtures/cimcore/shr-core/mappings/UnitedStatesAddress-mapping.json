@@ -1,85 +1,85 @@
 {
   "fileType": "Mapping",
   "name": "UnitedStatesAddress",
-  "namespace": "shr.core",
-  "fqn": "shr.core.UnitedStatesAddress",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.UnitedStatesAddress",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Address",
   "inheritance": {
     "status": "inherited",
-    "from": "shr.core.Address"
+    "from": "obf.datatype.Address"
   },
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.Purpose"
+          "obf.datatype.Purpose"
         ],
         "target": "use",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       },
       {
         "sourcePath": [
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "type",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       },
       {
         "sourcePath": [
-          "shr.core.DisplayText"
+          "obf.datatype.DisplayText"
         ],
         "target": "text",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       },
       {
         "sourcePath": [
-          "shr.core.AddressLine"
+          "obf.datatype.AddressLine"
         ],
         "target": "line",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       },
       {
         "sourcePath": [
-          "shr.core.City"
+          "obf.datatype.City"
         ],
         "target": "city",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       },
       {
         "sourcePath": [
-          "shr.core.District"
+          "obf.datatype.District"
         ],
         "target": "district",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       },
       {
         "sourcePath": [
-          "shr.core.UnitedStatesState"
+          "obf.datatype.UnitedStatesState"
         ],
         "target": "state",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       },
       {
         "sourcePath": [
-          "shr.core.PostalCode"
+          "obf.datatype.PostalCode"
         ],
         "target": "postalCode",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       },
       {
         "sourcePath": [
-          "shr.core.Country"
+          "obf.datatype.Country"
         ],
         "target": "country",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       },
       {
         "sourcePath": [
-          "shr.core.EffectiveTimePeriod"
+          "obf.datatype.EffectiveTimePeriod"
         ],
         "target": "period",
-        "lastModifiedBy": "shr.core.Address"
+        "lastModifiedBy": "obf.datatype.Address"
       }
     ]
   }

@@ -23,7 +23,7 @@
   ],
   "fields": [
     {
-      "fqn": "shr.core.HumanName",
+      "fqn": "obf.datatype.HumanName",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1
@@ -62,7 +62,7 @@
       }
     },
     {
-      "fqn": "shr.core.Address",
+      "fqn": "obf.datatype.Address",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0
@@ -77,7 +77,7 @@
       }
     },
     {
-      "fqn": "shr.core.ContactPoint",
+      "fqn": "obf.datatype.ContactPoint",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0

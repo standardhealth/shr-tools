@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "PostalCode",
-  "namespace": "shr.core",
-  "fqn": "shr.core.PostalCode",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.PostalCode",
   "isEntry": false,
   "isAbstract": false,
   "description": "A sequence of letters and digits used as part of a postal address, often designating a geographic region",

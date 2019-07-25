@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "SemiquantFrequency",
-  "namespace": "shr.core",
-  "fqn": "shr.core.SemiquantFrequency",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.SemiquantFrequency",
   "isEntry": false,
   "isAbstract": false,
   "description": "The frequency of an event, described semi-quantitatively.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -15,9 +15,9 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/SemiquantitativeFrequencyVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/SemiquantitativeFrequencyVS",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.SemiquantFrequency"
+        "lastModifiedBy": "obf.datatype.SemiquantFrequency"
       }
     }
   }

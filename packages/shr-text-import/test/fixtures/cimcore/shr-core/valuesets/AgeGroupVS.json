@@ -1,9 +1,9 @@
 {
   "fileType": "ValueSet",
   "name": "AgeGroupVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.AgeGroupVS",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#AgeGroupVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.AgeGroupVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#AgeGroupVS",
   "values": [
     {
       "system": "http://ncimeta.nci.nih.gov",

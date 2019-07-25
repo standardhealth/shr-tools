@@ -53,7 +53,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/additional-instruction-codes",
               "bindingStrength": "REQUIRED",
@@ -80,7 +80,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/administration-method-codes",
               "bindingStrength": "REQUIRED",

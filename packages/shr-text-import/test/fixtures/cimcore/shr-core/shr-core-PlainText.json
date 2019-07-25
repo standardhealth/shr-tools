@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "PlainText",
-  "namespace": "shr.core",
-  "fqn": "shr.core.PlainText",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.PlainText",
   "isEntry": false,
   "isAbstract": false,
   "description": "A text written in a human language.",
@@ -16,7 +16,7 @@
   },
   "fields": [
     {
-      "fqn": "shr.core.Language",
+      "fqn": "obf.datatype.Language",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

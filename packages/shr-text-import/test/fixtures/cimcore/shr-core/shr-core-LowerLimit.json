@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "LowerLimit",
-  "namespace": "shr.core",
-  "fqn": "shr.core.LowerLimit",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.LowerLimit",
   "isEntry": false,
   "isAbstract": false,
   "description": "The lower limit of detection of the measured points. This is needed if any of the data points have the value 'L' (lower than detection limit).",

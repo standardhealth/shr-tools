@@ -1,0 +1,7 @@
+Grammar:   DataElement 6.0
+Namespace: fixedStringConstraintOnValue2
+
+Element:        FixedStringConstraintOnValue
+Description:    "It is an entry with a string constraint on the value"
+Value:          string
+Value[string] = "foo bar"

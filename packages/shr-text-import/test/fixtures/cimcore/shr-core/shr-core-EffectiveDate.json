@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "EffectiveDate",
-  "namespace": "shr.core",
-  "fqn": "shr.core.EffectiveDate",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.EffectiveDate",
   "isEntry": false,
   "isAbstract": false,
   "description": "The date when something is to take effect.",

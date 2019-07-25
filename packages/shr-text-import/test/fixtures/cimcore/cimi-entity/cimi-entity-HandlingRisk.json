@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Cautions on the handling of this specimen.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

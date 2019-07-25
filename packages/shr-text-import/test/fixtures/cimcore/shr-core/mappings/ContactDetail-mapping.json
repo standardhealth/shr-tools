@@ -1,26 +1,26 @@
 {
   "fileType": "Mapping",
   "name": "ContactDetail",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ContactDetail",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ContactDetail",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "ContactDetail",
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.HumanName",
+          "obf.datatype.HumanName",
           "cimi.element.NameAsText"
         ],
         "target": "name",
-        "lastModifiedBy": "shr.core.ContactDetail"
+        "lastModifiedBy": "obf.datatype.ContactDetail"
       },
       {
         "sourcePath": [
-          "shr.core.ContactPoint"
+          "obf.datatype.ContactPoint"
         ],
         "target": "telecom",
-        "lastModifiedBy": "shr.core.ContactDetail"
+        "lastModifiedBy": "obf.datatype.ContactDetail"
       }
     ]
   }

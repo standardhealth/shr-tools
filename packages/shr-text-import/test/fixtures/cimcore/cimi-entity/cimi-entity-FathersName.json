@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The name of the father as it was or likely to have been recorded on the birth certificate of the subject; most likely the name of the father at the time of birth of the subject.",
   "value": {
-    "fqn": "shr.core.HumanName",
+    "fqn": "obf.datatype.HumanName",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

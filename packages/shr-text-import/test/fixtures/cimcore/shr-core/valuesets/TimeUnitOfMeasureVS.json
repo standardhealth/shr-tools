@@ -1,10 +1,10 @@
 {
   "fileType": "ValueSet",
   "name": "TimeUnitOfMeasureVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.TimeUnitOfMeasureVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.TimeUnitOfMeasureVS",
   "description": "Units of measure related to time.",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#TimeUnitOfMeasureVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#TimeUnitOfMeasureVS",
   "values": [
     {
       "system": "http://unitsofmeasure.org",

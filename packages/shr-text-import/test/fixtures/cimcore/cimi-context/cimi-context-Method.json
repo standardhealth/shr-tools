@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The technique used to carry out an action, for example, the specific imaging technical or assessment vehicle.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

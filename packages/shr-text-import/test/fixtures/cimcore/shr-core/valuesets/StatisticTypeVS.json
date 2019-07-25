@@ -1,10 +1,10 @@
 {
   "fileType": "ValueSet",
   "name": "StatisticTypeVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.StatisticTypeVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.StatisticTypeVS",
   "description": "How to interpret a reported quantity, i.e, whether the quantity is an maximum, minimum, mean, median, etc.",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#StatisticTypeVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#StatisticTypeVS",
   "values": [
     {
       "system": "http://ncimeta.nci.nih.gov",

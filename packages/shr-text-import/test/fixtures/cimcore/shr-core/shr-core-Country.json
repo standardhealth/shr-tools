@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Country",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Country",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Country",
   "isEntry": false,
   "isAbstract": false,
   "description": "Country - a nation as commonly understood or generally accepted, expressed in ISO 3166 Alpha-2 (2-letter) codes.",
@@ -13,10 +13,10 @@
     }
   ],
   "hierarchy": [
-    "shr.core.GeopoliticalLocation"
+    "obf.datatype.GeopoliticalLocation"
   ],
   "basedOn": [
-    "shr.core.GeopoliticalLocation"
+    "obf.datatype.GeopoliticalLocation"
   ],
   "value": {
     "fqn": "string",

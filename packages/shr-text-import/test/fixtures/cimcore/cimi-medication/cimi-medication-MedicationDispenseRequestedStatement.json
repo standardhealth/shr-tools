@@ -166,9 +166,9 @@
               }
             }
           },
-          "shr.core.PriorityRank": {
+          "obf.datatype.PriorityRank": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://hl7.org/fhir/ValueSet/medication-request-priority",
                   "bindingStrength": "REQUIRED",

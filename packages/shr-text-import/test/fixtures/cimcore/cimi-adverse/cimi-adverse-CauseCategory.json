@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Whether the adverse event is attributed to a treatment, course of the disease, unrelated to either, or unknown.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

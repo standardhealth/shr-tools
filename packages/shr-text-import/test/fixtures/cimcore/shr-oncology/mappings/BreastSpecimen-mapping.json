@@ -27,7 +27,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "type",
         "lastModifiedBy": "cimi.entity.Specimen"
@@ -48,7 +48,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.ReceivedTime"
+          "obf.datatype.ReceivedTime"
         ],
         "target": "receivedTime",
         "lastModifiedBy": "cimi.entity.Specimen"
@@ -64,7 +64,7 @@
       {
         "sourcePath": [
           "cimi.entity.SpecimenContainer",
-          "shr.core.Details"
+          "obf.datatype.Details"
         ],
         "target": "container.description",
         "lastModifiedBy": "cimi.entity.Specimen"
@@ -72,7 +72,7 @@
       {
         "sourcePath": [
           "cimi.entity.SpecimenContainer",
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "container.type",
         "lastModifiedBy": "cimi.entity.Specimen"
@@ -111,7 +111,7 @@
       {
         "sourcePath": [
           "shr.oncology.ColdIschemiaTime",
-          "shr.core.TimePeriod"
+          "obf.datatype.TimePeriod"
         ],
         "target": "processing.time[x]",
         "lastModifiedBy": "shr.oncology.BreastSpecimen"

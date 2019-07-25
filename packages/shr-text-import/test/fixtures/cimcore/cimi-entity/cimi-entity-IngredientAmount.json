@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The amount of an ingredient in a mixture, as a ratio. For example, 250 mg per tablet is expressed as a ratio where the numerator is 250mg and the denominator is 1 tablet.",
   "value": {
-    "fqn": "shr.core.Ratio",
+    "fqn": "obf.datatype.Ratio",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

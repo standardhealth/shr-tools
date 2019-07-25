@@ -21,7 +21,7 @@
     "cimi.topic.CodedEvaluationComponent"
   ],
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -57,7 +57,7 @@
       },
       "constraints": {
         "type": {
-          "fqn": "shr.core.CodeableConcept",
+          "fqn": "obf.datatype.CodeableConcept",
           "onValue": true,
           "lastModifiedBy": "cimi.topic.CodedEvaluationComponent"
         }
@@ -70,7 +70,7 @@
         "type": [
           {
             "constraint": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true
             },
             "source": "cimi.topic.CodedEvaluationComponent"
@@ -87,7 +87,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://standardhealthrecord.org/shr/oncology/vs/NottinghamNullVS",
               "bindingStrength": "REQUIRED",

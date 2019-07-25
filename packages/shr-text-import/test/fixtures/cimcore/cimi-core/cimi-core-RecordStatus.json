@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Concept indicating the state of this record, e.g., 'entered in error'.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

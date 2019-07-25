@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Longitude",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Longitude",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Longitude",
   "isEntry": false,
   "isAbstract": false,
   "description": "An imaginary great circle on the surface of a heavenly body passing through the poles at right angles to the equator. Measured with with WGS84 datum.",

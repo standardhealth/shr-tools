@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The kind of structure being represented. This can define both normal and abnormal morphologies.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

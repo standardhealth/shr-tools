@@ -15,7 +15,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/signature-type",
               "bindingStrength": "EXTENSIBLE",
@@ -26,7 +26,7 @@
       }
     },
     {
-      "fqn": "shr.core.CreationTime",
+      "fqn": "obf.datatype.CreationTime",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "fqn": "shr.core.ContentType",
+      "fqn": "obf.datatype.ContentType",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -58,7 +58,7 @@
       }
     },
     {
-      "fqn": "shr.core.BinaryData",
+      "fqn": "obf.datatype.BinaryData",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

@@ -1,25 +1,25 @@
 {
   "fileType": "Mapping",
   "name": "TimePeriod",
-  "namespace": "shr.core",
-  "fqn": "shr.core.TimePeriod",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.TimePeriod",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Period",
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.TimePeriodStart"
+          "obf.datatype.TimePeriodStart"
         ],
         "target": "start",
-        "lastModifiedBy": "shr.core.TimePeriod"
+        "lastModifiedBy": "obf.datatype.TimePeriod"
       },
       {
         "sourcePath": [
-          "shr.core.TimePeriodEnd"
+          "obf.datatype.TimePeriodEnd"
         ],
         "target": "end",
-        "lastModifiedBy": "shr.core.TimePeriod"
+        "lastModifiedBy": "obf.datatype.TimePeriod"
       }
     ]
   }

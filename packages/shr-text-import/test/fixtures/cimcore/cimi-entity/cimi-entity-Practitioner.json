@@ -31,7 +31,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.HumanName": {
+          "obf.datatype.HumanName": {
             "card": {
               "min": 1,
               "max": 1,

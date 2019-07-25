@@ -13,7 +13,7 @@
     "cimi.topic.EvaluationComponent"
   ],
   "value": {
-    "fqn": "shr.core.PercentageRange",
+    "fqn": "obf.datatype.PercentageRange",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

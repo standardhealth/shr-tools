@@ -461,6 +461,15 @@ SHRDataElementParserListener.prototype.exitElementBooleanConstraint = function(c
 };
 
 
+// Enter a parse tree produced by SHRDataElementParser#elementStringConstraint.
+SHRDataElementParserListener.prototype.enterElementStringConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#elementStringConstraint.
+SHRDataElementParserListener.prototype.exitElementStringConstraint = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRDataElementParser#elementTypeConstraint.
 SHRDataElementParserListener.prototype.enterElementTypeConstraint = function(ctx) {
 };

@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Frequency",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Frequency",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Frequency",
   "isEntry": false,
   "isAbstract": false,
   "description": "How many occurrences of an event per unit of time.",
@@ -13,14 +13,14 @@
     }
   ],
   "hierarchy": [
-    "shr.core.Ratio"
+    "obf.datatype.Ratio"
   ],
   "basedOn": [
-    "shr.core.Ratio"
+    "obf.datatype.Ratio"
   ],
   "fields": [
     {
-      "fqn": "shr.core.Numerator",
+      "fqn": "obf.datatype.Numerator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -28,18 +28,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Quantity": {
+          "obf.datatype.Quantity": {
             "subpaths": {
-              "shr.core.Units": {
+              "obf.datatype.Units": {
                 "subpaths": {
-                  "shr.core.Coding": {
+                  "obf.datatype.Coding": {
                     "fixedValue": {
                       "type": "code",
                       "value": {
                         "system": "http://unitsofmeasure.org",
                         "code": "1"
                       },
-                      "lastModifiedBy": "shr.core.Frequency"
+                      "lastModifiedBy": "obf.datatype.Frequency"
                     }
                   }
                 }
@@ -50,7 +50,7 @@
       },
       "inheritance": {
         "status": "overridden",
-        "from": "shr.core.Ratio"
+        "from": "obf.datatype.Ratio"
       },
       "constraintHistory": {
         "code": [
@@ -61,15 +61,15 @@
                 "system": "http://unitsofmeasure.org",
                 "code": "1"
               },
-              "lastModifiedBy": "shr.core.Frequency"
+              "lastModifiedBy": "obf.datatype.Frequency"
             },
-            "source": "shr.core.Frequency"
+            "source": "obf.datatype.Frequency"
           }
         ]
       }
     },
     {
-      "fqn": "shr.core.Denominator",
+      "fqn": "obf.datatype.Denominator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -77,15 +77,15 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Quantity": {
+          "obf.datatype.Quantity": {
             "subpaths": {
-              "shr.core.Units": {
+              "obf.datatype.Units": {
                 "subpaths": {
-                  "shr.core.Coding": {
+                  "obf.datatype.Coding": {
                     "valueSet": {
                       "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
                       "bindingStrength": "REQUIRED",
-                      "lastModifiedBy": "shr.core.Frequency"
+                      "lastModifiedBy": "obf.datatype.Frequency"
                     }
                   }
                 }
@@ -96,7 +96,7 @@
       },
       "inheritance": {
         "status": "overridden",
-        "from": "shr.core.Ratio"
+        "from": "obf.datatype.Ratio"
       },
       "constraintHistory": {
         "valueSet": [
@@ -104,9 +104,9 @@
             "constraint": {
               "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Frequency"
+              "lastModifiedBy": "obf.datatype.Frequency"
             },
-            "source": "shr.core.Frequency"
+            "source": "obf.datatype.Frequency"
           }
         ]
       }

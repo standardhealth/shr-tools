@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "RecurrenceRange",
-  "namespace": "shr.core",
-  "fqn": "shr.core.RecurrenceRange",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.RecurrenceRange",
   "isEntry": false,
   "isAbstract": false,
   "description": "The start and end of the overall recurrence pattern in terms of dates/times or in terms of number of repeats. Could also be an event, such as when all doses are taken.",
@@ -14,11 +14,11 @@
     },
     "options": [
       {
-        "fqn": "shr.core.TimePeriod",
+        "fqn": "obf.datatype.TimePeriod",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.NumberOfRepeats",
+        "fqn": "obf.datatype.NumberOfRepeats",
         "valueType": "IdentifiableValue"
       }
     ]

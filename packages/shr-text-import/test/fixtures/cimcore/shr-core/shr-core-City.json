@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "City",
-  "namespace": "shr.core",
-  "fqn": "shr.core.City",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.City",
   "isEntry": false,
   "isAbstract": false,
   "description": "The name of a municipality, city, town, village or other community or delivery center. (Source: HL7 FHIR).",
@@ -13,10 +13,10 @@
     }
   ],
   "hierarchy": [
-    "shr.core.GeopoliticalLocation"
+    "obf.datatype.GeopoliticalLocation"
   ],
   "basedOn": [
-    "shr.core.GeopoliticalLocation"
+    "obf.datatype.GeopoliticalLocation"
   ],
   "value": {
     "fqn": "string",

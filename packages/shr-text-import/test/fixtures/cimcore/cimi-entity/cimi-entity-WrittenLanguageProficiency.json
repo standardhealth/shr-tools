@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -21,7 +21,7 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/PerformanceGradingScaleVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/PerformanceGradingScaleVS",
         "bindingStrength": "REQUIRED",
         "lastModifiedBy": "cimi.entity.WrittenLanguageProficiency"
       }

@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The route used to access the site of a procedure. It is used to distinguish open, closed, and percutaneous procedures.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

@@ -1,67 +1,67 @@
 {
   "fileType": "Mapping",
   "name": "Attachment",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Attachment",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Attachment",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Attachment",
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.BinaryData"
+          "obf.datatype.BinaryData"
         ],
         "target": "data",
-        "lastModifiedBy": "shr.core.Attachment"
+        "lastModifiedBy": "obf.datatype.Attachment"
       },
       {
         "sourcePath": [
-          "shr.core.ContentType"
+          "obf.datatype.ContentType"
         ],
         "target": "contentType",
-        "lastModifiedBy": "shr.core.Attachment"
+        "lastModifiedBy": "obf.datatype.Attachment"
       },
       {
         "sourcePath": [
-          "shr.core.Language"
+          "obf.datatype.Language"
         ],
         "target": "language",
-        "lastModifiedBy": "shr.core.Attachment"
+        "lastModifiedBy": "obf.datatype.Attachment"
       },
       {
         "sourcePath": [
-          "shr.core.ResourceLocation"
+          "obf.datatype.ResourceLocation"
         ],
         "target": "url",
-        "lastModifiedBy": "shr.core.Attachment"
+        "lastModifiedBy": "obf.datatype.Attachment"
       },
       {
         "sourcePath": [
-          "shr.core.ResourceSize"
+          "obf.datatype.ResourceSize"
         ],
         "target": "size",
-        "lastModifiedBy": "shr.core.Attachment"
+        "lastModifiedBy": "obf.datatype.Attachment"
       },
       {
         "sourcePath": [
-          "shr.core.Hash"
+          "obf.datatype.Hash"
         ],
         "target": "hash",
-        "lastModifiedBy": "shr.core.Attachment"
+        "lastModifiedBy": "obf.datatype.Attachment"
       },
       {
         "sourcePath": [
-          "shr.core.Title"
+          "obf.datatype.Title"
         ],
         "target": "title",
-        "lastModifiedBy": "shr.core.Attachment"
+        "lastModifiedBy": "obf.datatype.Attachment"
       },
       {
         "sourcePath": [
-          "shr.core.CreationTime"
+          "obf.datatype.CreationTime"
         ],
         "target": "creation",
-        "lastModifiedBy": "shr.core.Attachment"
+        "lastModifiedBy": "obf.datatype.Attachment"
       }
     ]
   }

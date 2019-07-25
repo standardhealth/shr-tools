@@ -1,25 +1,25 @@
 {
   "fileType": "Mapping",
   "name": "Range",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Range",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Range",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Range",
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.LowerBound"
+          "obf.datatype.LowerBound"
         ],
         "target": "low",
-        "lastModifiedBy": "shr.core.Range"
+        "lastModifiedBy": "obf.datatype.Range"
       },
       {
         "sourcePath": [
-          "shr.core.UpperBound"
+          "obf.datatype.UpperBound"
         ],
         "target": "high",
-        "lastModifiedBy": "shr.core.Range"
+        "lastModifiedBy": "obf.datatype.Range"
       }
     ]
   }

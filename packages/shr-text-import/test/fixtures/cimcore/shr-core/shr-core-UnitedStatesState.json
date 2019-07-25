@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "UnitedStatesState",
-  "namespace": "shr.core",
-  "fqn": "shr.core.UnitedStatesState",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.UnitedStatesState",
   "isEntry": false,
   "isAbstract": false,
   "description": "A state or territory in the USA expressed by 2-letter US Postal code.",
@@ -13,11 +13,11 @@
     }
   ],
   "hierarchy": [
-    "shr.core.GeopoliticalLocation",
-    "shr.core.State"
+    "obf.datatype.GeopoliticalLocation",
+    "obf.datatype.State"
   ],
   "basedOn": [
-    "shr.core.State"
+    "obf.datatype.State"
   ],
   "value": {
     "fqn": "string",
@@ -28,7 +28,7 @@
     },
     "inheritance": {
       "status": "inherited",
-      "from": "shr.core.State"
+      "from": "obf.datatype.State"
     }
   }
 }

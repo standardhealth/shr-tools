@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Dimensions",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Dimensions",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Dimensions",
   "isEntry": false,
   "isAbstract": false,
   "description": "The number of sample points at each time point. If this value is greater than one, then the dimensions will be interlaced - all the sample points for a point in time will be recorded at once.",

@@ -16,28 +16,28 @@
       },
       {
         "sourcePath": [
-          "shr.core.Purpose"
+          "obf.datatype.Purpose"
         ],
         "target": "use",
         "lastModifiedBy": "cimi.element.Identifier"
       },
       {
         "sourcePath": [
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "type",
         "lastModifiedBy": "cimi.element.Identifier"
       },
       {
         "sourcePath": [
-          "shr.core.CodeSystem"
+          "obf.datatype.CodeSystem"
         ],
         "target": "system",
         "lastModifiedBy": "cimi.element.Identifier"
       },
       {
         "sourcePath": [
-          "shr.core.EffectiveTimePeriod"
+          "obf.datatype.EffectiveTimePeriod"
         ],
         "target": "period",
         "lastModifiedBy": "cimi.element.Identifier"

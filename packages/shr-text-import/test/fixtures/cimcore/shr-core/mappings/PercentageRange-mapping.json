@@ -1,29 +1,29 @@
 {
   "fileType": "Mapping",
   "name": "PercentageRange",
-  "namespace": "shr.core",
-  "fqn": "shr.core.PercentageRange",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.PercentageRange",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Range",
   "inheritance": {
     "status": "inherited",
-    "from": "shr.core.Range"
+    "from": "obf.datatype.Range"
   },
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.LowerBound"
+          "obf.datatype.LowerBound"
         ],
         "target": "low",
-        "lastModifiedBy": "shr.core.Range"
+        "lastModifiedBy": "obf.datatype.Range"
       },
       {
         "sourcePath": [
-          "shr.core.UpperBound"
+          "obf.datatype.UpperBound"
         ],
         "target": "high",
-        "lastModifiedBy": "shr.core.Range"
+        "lastModifiedBy": "obf.datatype.Range"
       }
     ]
   }

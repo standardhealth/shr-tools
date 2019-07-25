@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Denominator",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Denominator",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Denominator",
   "isEntry": false,
   "isAbstract": false,
   "description": "The divisor of a fraction.",
@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.Quantity",
+    "fqn": "obf.datatype.Quantity",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

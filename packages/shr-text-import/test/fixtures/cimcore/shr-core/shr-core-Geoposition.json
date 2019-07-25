@@ -1,14 +1,14 @@
 {
   "fileType": "DataElement",
   "name": "Geoposition",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Geoposition",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Geoposition",
   "isEntry": false,
   "isAbstract": false,
   "description": "The location on the surface of the Earth, described by a latitude and longitude (and optional altitude).",
   "fields": [
     {
-      "fqn": "shr.core.Latitude",
+      "fqn": "obf.datatype.Latitude",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -16,7 +16,7 @@
       }
     },
     {
-      "fqn": "shr.core.Longitude",
+      "fqn": "obf.datatype.Longitude",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -24,7 +24,7 @@
       }
     },
     {
-      "fqn": "shr.core.Altitude",
+      "fqn": "obf.datatype.Altitude",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

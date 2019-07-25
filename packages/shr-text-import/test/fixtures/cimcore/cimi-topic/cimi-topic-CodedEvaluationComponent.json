@@ -22,7 +22,7 @@
       },
       "constraints": {
         "type": {
-          "fqn": "shr.core.CodeableConcept",
+          "fqn": "obf.datatype.CodeableConcept",
           "onValue": true,
           "lastModifiedBy": "cimi.topic.CodedEvaluationComponent"
         }
@@ -35,7 +35,7 @@
         "type": [
           {
             "constraint": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true,
               "lastModifiedBy": "cimi.topic.CodedEvaluationComponent"
             },

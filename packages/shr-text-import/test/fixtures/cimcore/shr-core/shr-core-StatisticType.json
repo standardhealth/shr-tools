@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "StatisticType",
-  "namespace": "shr.core",
-  "fqn": "shr.core.StatisticType",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.StatisticType",
   "isEntry": false,
   "isAbstract": false,
   "description": "The type of statistic that is represented by the value.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -15,9 +15,9 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/StatisticTypeVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/StatisticTypeVS",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.StatisticType"
+        "lastModifiedBy": "obf.datatype.StatisticType"
       }
     }
   }

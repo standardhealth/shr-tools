@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "A description of the morphology and behavioral characteristics of the cancer.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

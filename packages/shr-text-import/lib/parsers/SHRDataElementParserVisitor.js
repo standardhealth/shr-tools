@@ -262,6 +262,11 @@ SHRDataElementParserVisitor.prototype.visitElementBooleanConstraint = function(c
 };
 
 
+// Visit a parse tree produced by SHRDataElementParser#elementStringConstraint.
+SHRDataElementParserVisitor.prototype.visitElementStringConstraint = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRDataElementParser#elementTypeConstraint.
 SHRDataElementParserVisitor.prototype.visitElementTypeConstraint = function(ctx) {
 };

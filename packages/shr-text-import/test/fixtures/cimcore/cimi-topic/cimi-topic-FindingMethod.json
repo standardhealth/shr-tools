@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The technique used to create the finding; for example, the specific imaging technique, lab test code, or assessment vehicle.\n\nCIMI Alignment: In CIMI V0.0.4, this attribute was called 'method'. The value set binding reflects CIMI's preference for LOINC codes.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

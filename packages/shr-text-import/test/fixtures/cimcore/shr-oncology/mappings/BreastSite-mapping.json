@@ -13,7 +13,7 @@
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.CodeableConcept"
+          "obf.datatype.CodeableConcept"
         ],
         "target": "code",
         "lastModifiedBy": "cimi.element.AnatomicalLocation"

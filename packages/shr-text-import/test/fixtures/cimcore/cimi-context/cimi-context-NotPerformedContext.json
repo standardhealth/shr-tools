@@ -48,7 +48,7 @@
       }
     },
     {
-      "fqn": "shr.core.NonOccurrenceTimeOrPeriod",
+      "fqn": "obf.datatype.NonOccurrenceTimeOrPeriod",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,

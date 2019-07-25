@@ -1,14 +1,14 @@
 {
   "fileType": "DataElement",
   "name": "RecurrencePattern",
-  "namespace": "shr.core",
-  "fqn": "shr.core.RecurrencePattern",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.RecurrencePattern",
   "isEntry": false,
   "isAbstract": false,
   "description": "A set of rules that describe when a recurring event is scheduled.",
   "fields": [
     {
-      "fqn": "shr.core.RecurrenceInterval",
+      "fqn": "obf.datatype.RecurrenceInterval",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -16,28 +16,28 @@
       }
     },
     {
-      "fqn": "shr.core.DayOfWeek",
+      "fqn": "obf.datatype.DayOfWeek",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       }
     },
     {
-      "fqn": "shr.core.TimeOfDay",
+      "fqn": "obf.datatype.TimeOfDay",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       }
     },
     {
-      "fqn": "shr.core.DailyLifeEvent",
+      "fqn": "obf.datatype.DailyLifeEvent",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       }
     },
     {
-      "fqn": "shr.core.LifeEventOffset",
+      "fqn": "obf.datatype.LifeEventOffset",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -45,7 +45,7 @@
       }
     },
     {
-      "fqn": "shr.core.CountPerInterval",
+      "fqn": "obf.datatype.CountPerInterval",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

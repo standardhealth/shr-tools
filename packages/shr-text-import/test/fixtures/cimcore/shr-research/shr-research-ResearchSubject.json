@@ -80,7 +80,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://standardhealthrecord.org/shr/research/vs/ResearchSubjectTerminationReasonVS",
               "bindingStrength": "REQUIRED",

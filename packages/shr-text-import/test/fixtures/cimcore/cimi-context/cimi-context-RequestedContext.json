@@ -125,7 +125,7 @@
       }
     },
     {
-      "fqn": "shr.core.PriorityRank",
+      "fqn": "obf.datatype.PriorityRank",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -133,7 +133,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/request-priority",
               "bindingStrength": "PREFERRED",

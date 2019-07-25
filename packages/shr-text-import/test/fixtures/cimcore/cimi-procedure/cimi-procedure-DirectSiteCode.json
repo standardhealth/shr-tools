@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The site where the procedure is performed.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Reason that a value associated with a test or other finding is missing.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

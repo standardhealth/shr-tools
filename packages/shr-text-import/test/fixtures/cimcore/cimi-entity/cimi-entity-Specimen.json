@@ -33,7 +33,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/specimen-status",
               "bindingStrength": "REQUIRED",
@@ -56,7 +56,7 @@
       }
     },
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -64,7 +64,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/v2-0487",
               "bindingStrength": "REQUIRED",
@@ -126,7 +126,7 @@
       }
     },
     {
-      "fqn": "shr.core.ReceivedTime",
+      "fqn": "obf.datatype.ReceivedTime",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

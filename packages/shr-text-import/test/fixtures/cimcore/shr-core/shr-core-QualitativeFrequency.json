@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "QualitativeFrequency",
-  "namespace": "shr.core",
-  "fqn": "shr.core.QualitativeFrequency",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.QualitativeFrequency",
   "isEntry": false,
   "isAbstract": false,
   "description": "The frequency of an event, described qualitatively.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -15,9 +15,9 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/QualitativeFrequencyVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/QualitativeFrequencyVS",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.QualitativeFrequency"
+        "lastModifiedBy": "obf.datatype.QualitativeFrequency"
       }
     }
   }

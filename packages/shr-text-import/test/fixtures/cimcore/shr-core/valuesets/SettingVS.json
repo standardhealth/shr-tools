@@ -1,178 +1,178 @@
 {
   "fileType": "ValueSet",
   "name": "SettingVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.SettingVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.SettingVS",
   "description": "What type of place is found at a given location. More than one descriptor may be applicable.",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#SettingVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#SettingVS",
   "values": [
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "work",
       "description": "At or during work, in a workplace setting."
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "home",
       "description": "At home"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "residental",
       "description": "In a residential setting"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "school",
       "description": "A primary or secondary school"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "vehicle",
       "description": "In a parked or moving vehicle"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "office",
       "description": "An non-manufacturing, indoor business setting"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "factory",
       "description": "A manufacturing-oriented business setting"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "business",
       "description": "A place of business"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "restaurant",
       "description": "A setting where food is served"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "food_prep",
       "description": "A place where food is prepared"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "worksite",
       "description": "Workplace that is primarily outdoors"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "manufacturing",
       "description": "A setting where manufacturing takes place"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "owned",
       "description": "A building or residence that is owned"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "rental",
       "description": "A building or residence that is rented"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "dorm",
       "description": "Shared (unassisted) living residence, such as a dormitory or fraternity"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "foster",
       "description": "Foster care group home"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "assisted",
       "description": "Assisted living or independent living facility"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "snf",
       "description": "Skilled nursing facility or other Long-Term Care"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "shelter",
       "description": "Homeless or other type of shelter"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "hotel",
       "description": "Hotel or motel"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "psh",
       "description": "Permanent supportive housing for formerly homeless persons (such as SHP, S+C, or SRO Mod Rehab)"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "psych",
       "description": "Psychiatric hospital or other psychiatric facility"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "detox",
       "description": "Substance abuse treatment facility or detox center"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "prison",
       "description": "Individual resides in a correctional facility, state hospital, jail, prison, youth authority facility, juvenile hall, boot camp or Boys Ranch."
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "transition",
       "description": "Transitional housing, residential provier program, or any type of halfway house"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "squat",
       "description": "A homeless camp, abandoned building, shantytown, bus/train/subway station/airport, or squatter area"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "outdoors",
       "description": "Outside of any shelter, e.g., on a street"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "agricultural",
       "description": "Agricultural setting"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "farm",
       "description": "A farm with livestock"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "battlefield",
       "description": "On a battlefield"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "deployed",
       "description": "Deployed to a military camp or area"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "ship",
       "description": "On a boat"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "airplane",
       "description": "On an airplane"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#SettingCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#SettingCS",
       "code": "submarine",
       "description": "Aboard a submarine"
     }

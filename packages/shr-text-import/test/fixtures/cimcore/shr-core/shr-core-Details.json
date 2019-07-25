@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Details",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Details",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Details",
   "isEntry": false,
   "isAbstract": false,
   "description": "An text note containing additional details, explanation, description, comment, or summarization. Details can discuss, support, explain changes to, or dispute information.",

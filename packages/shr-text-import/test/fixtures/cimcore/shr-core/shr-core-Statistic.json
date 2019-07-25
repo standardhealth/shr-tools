@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Statistic",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Statistic",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Statistic",
   "isEntry": false,
   "isAbstract": false,
   "description": "A quantity that represents a statistic, e.g. maximum, minimum, mean, median, etc.",
@@ -13,10 +13,10 @@
     }
   ],
   "hierarchy": [
-    "shr.core.Quantity"
+    "obf.datatype.Quantity"
   ],
   "basedOn": [
-    "shr.core.Quantity"
+    "obf.datatype.Quantity"
   ],
   "value": {
     "fqn": "decimal",
@@ -27,12 +27,12 @@
     },
     "inheritance": {
       "status": "inherited",
-      "from": "shr.core.Quantity"
+      "from": "obf.datatype.Quantity"
     }
   },
   "fields": [
     {
-      "fqn": "shr.core.Comparator",
+      "fqn": "obf.datatype.Comparator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -40,11 +40,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       }
     },
     {
-      "fqn": "shr.core.Units",
+      "fqn": "obf.datatype.Units",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -52,11 +52,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       }
     },
     {
-      "fqn": "shr.core.StatisticType",
+      "fqn": "obf.datatype.StatisticType",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,

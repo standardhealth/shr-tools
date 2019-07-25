@@ -1,33 +1,33 @@
 {
   "fileType": "ValueSet",
   "name": "PerformanceGradingScaleVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.PerformanceGradingScaleVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.PerformanceGradingScaleVS",
   "description": "A simple performance grading scale. Also useful for grading quality.",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#PerformanceGradingScaleVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#PerformanceGradingScaleVS",
   "values": [
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#PerformanceGradingScaleCS",
       "code": "excellent",
       "description": "Excellent"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#PerformanceGradingScaleCS",
       "code": "very_good",
       "description": "Very good"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#PerformanceGradingScaleCS",
       "code": "good",
       "description": "Good"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#PerformanceGradingScaleCS",
       "code": "fair",
       "description": "Fair"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#PerformanceGradingScaleCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#PerformanceGradingScaleCS",
       "code": "poor",
       "description": "Poor"
     }

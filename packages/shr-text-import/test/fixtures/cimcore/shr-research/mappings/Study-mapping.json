@@ -9,7 +9,7 @@
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.Title"
+          "obf.datatype.Title"
         ],
         "target": "title",
         "lastModifiedBy": "shr.research.Study"
@@ -44,7 +44,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.EffectiveTimePeriod"
+          "obf.datatype.EffectiveTimePeriod"
         ],
         "target": "period",
         "lastModifiedBy": "shr.research.Study"
@@ -65,7 +65,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.ContactDetail"
+          "obf.datatype.ContactDetail"
         ],
         "target": "contact",
         "lastModifiedBy": "shr.research.Study"
@@ -101,7 +101,7 @@
       {
         "sourcePath": [
           "shr.research.StudyArm",
-          "shr.core.Title"
+          "obf.datatype.Title"
         ],
         "target": "arm.name",
         "lastModifiedBy": "shr.research.Study"
@@ -109,7 +109,7 @@
       {
         "sourcePath": [
           "shr.research.StudyArm",
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "arm.code",
         "lastModifiedBy": "shr.research.Study"
@@ -117,7 +117,7 @@
       {
         "sourcePath": [
           "shr.research.StudyArm",
-          "shr.core.Details"
+          "obf.datatype.Details"
         ],
         "target": "arm.description",
         "lastModifiedBy": "shr.research.Study"

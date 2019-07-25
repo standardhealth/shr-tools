@@ -1,9 +1,9 @@
 {
   "fileType": "ValueSet",
   "name": "ClinicalFindingAbsentVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ClinicalFindingAbsentVS",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#ClinicalFindingAbsentVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ClinicalFindingAbsentVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#ClinicalFindingAbsentVS",
   "rules": {
     "includesDescendants": [
       {

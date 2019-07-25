@@ -32,7 +32,7 @@
       }
     },
     {
-      "fqn": "shr.core.Purpose",
+      "fqn": "obf.datatype.Purpose",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -51,7 +51,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/name-use",
               "bindingStrength": "REQUIRED",
@@ -88,7 +88,7 @@
       }
     },
     {
-      "fqn": "shr.core.EffectiveTimePeriod",
+      "fqn": "obf.datatype.EffectiveTimePeriod",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

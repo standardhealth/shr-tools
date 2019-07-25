@@ -1,10 +1,10 @@
 {
   "fileType": "ValueSet",
   "name": "UpperBoundTypeVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.UpperBoundTypeVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.UpperBoundTypeVS",
   "description": "Indicates the actual value is lt (<) or lte (<=) the given value.",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#UpperBoundTypeVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#UpperBoundTypeVS",
   "values": [
     {
       "system": "http://hl7.org/fhir/quantity-comparator",

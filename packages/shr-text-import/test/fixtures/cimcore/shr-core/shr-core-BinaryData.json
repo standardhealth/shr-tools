@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "BinaryData",
-  "namespace": "shr.core",
-  "fqn": "shr.core.BinaryData",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.BinaryData",
   "isEntry": false,
   "isAbstract": false,
   "description": "The data itself.",

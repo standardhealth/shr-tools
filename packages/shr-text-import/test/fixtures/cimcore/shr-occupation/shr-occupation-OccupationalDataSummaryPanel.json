@@ -155,7 +155,7 @@
           },
           "cimi.topic.TopicCode": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {
@@ -167,9 +167,9 @@
               }
             }
           },
-          "shr.core.Category": {
+          "obf.datatype.Category": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {

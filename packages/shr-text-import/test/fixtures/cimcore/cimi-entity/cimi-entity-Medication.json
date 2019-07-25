@@ -23,7 +23,7 @@
   ],
   "fields": [
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -31,7 +31,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/us/core/ValueSet/us-core-medication-codes",
               "bindingStrength": "EXTENSIBLE",
@@ -117,7 +117,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/medication-package-form",
               "bindingStrength": "EXAMPLE",

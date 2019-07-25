@@ -1,20 +1,20 @@
 {
   "fileType": "DataElement",
   "name": "Attachment",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Attachment",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Attachment",
   "isEntry": false,
   "isAbstract": false,
   "description": "A file that contains audio, video, image, or similar content.",
   "hierarchy": [
-    "shr.core.EmbeddedContent"
+    "obf.datatype.EmbeddedContent"
   ],
   "basedOn": [
-    "shr.core.EmbeddedContent"
+    "obf.datatype.EmbeddedContent"
   ],
   "fields": [
     {
-      "fqn": "shr.core.BinaryData",
+      "fqn": "obf.datatype.BinaryData",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -22,7 +22,7 @@
       }
     },
     {
-      "fqn": "shr.core.ContentType",
+      "fqn": "obf.datatype.ContentType",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -30,7 +30,7 @@
       }
     },
     {
-      "fqn": "shr.core.Language",
+      "fqn": "obf.datatype.Language",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -38,7 +38,7 @@
       }
     },
     {
-      "fqn": "shr.core.ResourceLocation",
+      "fqn": "obf.datatype.ResourceLocation",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -46,7 +46,7 @@
       }
     },
     {
-      "fqn": "shr.core.ResourceSize",
+      "fqn": "obf.datatype.ResourceSize",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -54,7 +54,7 @@
       }
     },
     {
-      "fqn": "shr.core.Hash",
+      "fqn": "obf.datatype.Hash",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -62,7 +62,7 @@
       }
     },
     {
-      "fqn": "shr.core.Title",
+      "fqn": "obf.datatype.Title",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -70,7 +70,7 @@
       }
     },
     {
-      "fqn": "shr.core.CreationTime",
+      "fqn": "obf.datatype.CreationTime",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

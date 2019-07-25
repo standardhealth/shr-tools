@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "GestationalTimePeriod",
-  "namespace": "shr.core",
-  "fqn": "shr.core.GestationalTimePeriod",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.GestationalTimePeriod",
   "isEntry": false,
   "isAbstract": false,
   "description": "A time relative to a pregnancy or childbirth event.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -17,7 +17,7 @@
       "valueSet": {
         "uri": "urn:tbd:GestationalTimePeriodVS",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.GestationalTimePeriod"
+        "lastModifiedBy": "obf.datatype.GestationalTimePeriod"
       }
     }
   }

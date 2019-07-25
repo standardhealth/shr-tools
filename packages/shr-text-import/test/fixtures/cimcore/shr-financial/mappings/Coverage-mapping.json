@@ -16,7 +16,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "type",
         "lastModifiedBy": "shr.financial.Coverage"
@@ -30,7 +30,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.EffectiveTimePeriod"
+          "obf.datatype.EffectiveTimePeriod"
         ],
         "target": "period",
         "lastModifiedBy": "shr.financial.Coverage"

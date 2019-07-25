@@ -41,7 +41,7 @@
       }
     },
     {
-      "fqn": "shr.core.Details",
+      "fqn": "obf.datatype.Details",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

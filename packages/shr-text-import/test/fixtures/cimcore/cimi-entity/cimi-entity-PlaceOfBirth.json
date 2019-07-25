@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.GeopoliticalLocation",
+    "fqn": "obf.datatype.GeopoliticalLocation",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

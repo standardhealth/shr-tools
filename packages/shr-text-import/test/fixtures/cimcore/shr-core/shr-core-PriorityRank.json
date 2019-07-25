@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "PriorityRank",
-  "namespace": "shr.core",
-  "fqn": "shr.core.PriorityRank",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.PriorityRank",
   "isEntry": false,
   "isAbstract": false,
   "description": "An indication of the importance of an action.",
@@ -24,7 +24,7 @@
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.CodeableConcept",
+        "fqn": "obf.datatype.CodeableConcept",
         "valueType": "IdentifiableValue"
       }
     ]

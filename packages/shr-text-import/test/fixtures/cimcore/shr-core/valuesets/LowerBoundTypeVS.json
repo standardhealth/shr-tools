@@ -1,10 +1,10 @@
 {
   "fileType": "ValueSet",
   "name": "LowerBoundTypeVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.LowerBoundTypeVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.LowerBoundTypeVS",
   "description": "Indicates the actual value is gt (>) or gte (>=) the given value.",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#LowerBoundTypeVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#LowerBoundTypeVS",
   "values": [
     {
       "system": "http://hl7.org/fhir/quantity-comparator",

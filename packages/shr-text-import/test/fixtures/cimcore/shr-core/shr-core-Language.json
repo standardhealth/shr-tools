@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Language",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Language",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Language",
   "isEntry": false,
   "isAbstract": false,
   "description": "A human language, spoken or written.",
@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -23,7 +23,7 @@
       "valueSet": {
         "uri": "http://hl7.org/fhir/ValueSet/languages",
         "bindingStrength": "EXTENSIBLE",
-        "lastModifiedBy": "shr.core.Language"
+        "lastModifiedBy": "obf.datatype.Language"
       }
     }
   }

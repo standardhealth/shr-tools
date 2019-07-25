@@ -18,7 +18,7 @@
       {
         "sourcePath": [
           "cimi.entity.Person",
-          "shr.core.HumanName"
+          "obf.datatype.HumanName"
         ],
         "target": "name",
         "lastModifiedBy": "cimi.entity.Practitioner"
@@ -42,7 +42,7 @@
       {
         "sourcePath": [
           "cimi.entity.Person",
-          "shr.core.Address"
+          "obf.datatype.Address"
         ],
         "target": "address",
         "lastModifiedBy": "cimi.entity.Practitioner"
@@ -50,7 +50,7 @@
       {
         "sourcePath": [
           "cimi.entity.Person",
-          "shr.core.ContactPoint"
+          "obf.datatype.ContactPoint"
         ],
         "target": "telecom",
         "lastModifiedBy": "cimi.entity.Practitioner"
@@ -80,7 +80,7 @@
       {
         "sourcePath": [
           "cimi.entity.Qualification",
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "qualification.code",
         "lastModifiedBy": "cimi.entity.Practitioner"
@@ -88,7 +88,7 @@
       {
         "sourcePath": [
           "cimi.entity.Qualification",
-          "shr.core.EffectiveTimePeriod"
+          "obf.datatype.EffectiveTimePeriod"
         ],
         "target": "qualification.period",
         "lastModifiedBy": "cimi.entity.Practitioner"

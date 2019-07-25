@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "SampledData",
-  "namespace": "shr.core",
-  "fqn": "shr.core.SampledData",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.SampledData",
   "isEntry": false,
   "isAbstract": false,
   "description": "Data that comes from a series of measurements taken by a device, which may have upper and lower limits. The data type also supports more than one dimension in the data.",
@@ -16,7 +16,7 @@
   },
   "fields": [
     {
-      "fqn": "shr.core.Origin",
+      "fqn": "obf.datatype.Origin",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -24,7 +24,7 @@
       }
     },
     {
-      "fqn": "shr.core.MillisecondsBetweenSamples",
+      "fqn": "obf.datatype.MillisecondsBetweenSamples",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -32,7 +32,7 @@
       }
     },
     {
-      "fqn": "shr.core.CorrectionFactor",
+      "fqn": "obf.datatype.CorrectionFactor",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -40,7 +40,7 @@
       }
     },
     {
-      "fqn": "shr.core.LowerLimit",
+      "fqn": "obf.datatype.LowerLimit",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -48,7 +48,7 @@
       }
     },
     {
-      "fqn": "shr.core.UpperLimit",
+      "fqn": "obf.datatype.UpperLimit",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -56,7 +56,7 @@
       }
     },
     {
-      "fqn": "shr.core.Dimensions",
+      "fqn": "obf.datatype.Dimensions",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,

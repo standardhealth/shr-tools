@@ -1,22 +1,22 @@
 {
   "fileType": "ValueSet",
   "name": "ThreePriorityVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ThreePriorityVS",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#ThreePriorityVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ThreePriorityVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#ThreePriorityVS",
   "values": [
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#ThreePriorityCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#ThreePriorityCS",
       "code": "primary",
       "description": "The first or primary item or alterative in a preference list."
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#ThreePriorityCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#ThreePriorityCS",
       "code": "secondary",
       "description": "The second or backup preference."
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#ThreePriorityCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#ThreePriorityCS",
       "code": "third_or_lower",
       "description": "An alternative to primary and secondard choices in a preference list."
     }

@@ -1,33 +1,33 @@
 {
   "fileType": "ValueSet",
   "name": "QualitativeFrequencyVS",
-  "namespace": "shr.core",
-  "fqn": "shr.core.QualitativeFrequencyVS",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.QualitativeFrequencyVS",
   "description": "Code set indicating the frequency of an event in qualitative terms.",
-  "url": "http://standardhealthrecord.org/shr/core/vs/#QualitativeFrequencyVS",
+  "url": "http://standardhealthrecord.org/obf/datatype/vs/#QualitativeFrequencyVS",
   "values": [
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#QualitativeFrequencyCS",
       "code": "always",
       "description": "Virtually always or every time"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#QualitativeFrequencyCS",
       "code": "usually",
       "description": "Frequently or often"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#QualitativeFrequencyCS",
       "code": "sometimes",
       "description": "Occasionally or sometimes"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#QualitativeFrequencyCS",
       "code": "rarely",
       "description": "Rarely"
     },
     {
-      "system": "http://standardhealthrecord.org/shr/core/cs/#QualitativeFrequencyCS",
+      "system": "http://standardhealthrecord.org/obf/datatype/cs/#QualitativeFrequencyCS",
       "code": "never",
       "description": "Never"
     }

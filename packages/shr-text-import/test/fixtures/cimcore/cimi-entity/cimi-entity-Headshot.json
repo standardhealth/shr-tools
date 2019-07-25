@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "A photograph showing a person's face.",
   "value": {
-    "fqn": "shr.core.Attachment",
+    "fqn": "obf.datatype.Attachment",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

@@ -27,7 +27,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://standardhealthrecord.org/cimi/context/vs/PresenceContextVS",
               "bindingStrength": "REQUIRED",
@@ -73,7 +73,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/allergy-verification-status",
               "bindingStrength": "REQUIRED",

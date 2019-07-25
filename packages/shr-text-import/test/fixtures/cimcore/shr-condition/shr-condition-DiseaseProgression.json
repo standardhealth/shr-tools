@@ -134,7 +134,7 @@
         "subpaths": {
           "cimi.topic.TopicCode": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {
@@ -149,7 +149,7 @@
           },
           "cimi.topic.Focus": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://hl7.org/fhir/us/core/ValueSet/us-core-problem",
                   "bindingStrength": "EXTENSIBLE",
@@ -278,12 +278,12 @@
         "subpaths": {
           "cimi.context.ResultValue": {
             "type": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true,
               "lastModifiedBy": "shr.condition.DiseaseProgression"
             },
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://standardhealthrecord.org/shr/condition/vs/ProgressionVS",
                   "bindingStrength": "REQUIRED",
@@ -319,7 +319,7 @@
           },
           {
             "constraint": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true,
               "lastModifiedBy": "shr.condition.DiseaseProgression"
             },

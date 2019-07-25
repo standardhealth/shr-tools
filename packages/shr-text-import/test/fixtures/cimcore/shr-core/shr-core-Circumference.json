@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Circumference",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Circumference",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Circumference",
   "isEntry": false,
   "isAbstract": false,
   "description": "The length of such a boundary line of a figure, area, or object.",

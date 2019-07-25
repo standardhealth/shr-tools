@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "OccurrenceDuration",
-  "namespace": "shr.core",
-  "fqn": "shr.core.OccurrenceDuration",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.OccurrenceDuration",
   "isEntry": false,
   "isAbstract": false,
   "description": "The length of time in which something happens.",
   "value": {
-    "fqn": "shr.core.Duration",
+    "fqn": "obf.datatype.Duration",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

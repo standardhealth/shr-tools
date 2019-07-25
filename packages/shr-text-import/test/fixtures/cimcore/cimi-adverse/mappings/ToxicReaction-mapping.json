@@ -31,7 +31,7 @@
       {
         "sourcePath": [
           "cimi.adverse.AdverseEventTopic",
-          "shr.core.Details"
+          "obf.datatype.Details"
         ],
         "target": "description",
         "lastModifiedBy": "cimi.adverse.AdverseEventPresenceStatement"

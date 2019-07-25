@@ -24,11 +24,11 @@
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.Coding",
+        "fqn": "obf.datatype.Coding",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.CodeableConcept",
+        "fqn": "obf.datatype.CodeableConcept",
         "valueType": "IdentifiableValue"
       }
     ]

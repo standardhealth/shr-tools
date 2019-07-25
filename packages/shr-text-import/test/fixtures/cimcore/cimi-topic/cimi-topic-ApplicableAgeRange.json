@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The age at which this reference range is applicable. This is a neonatal age (e.g. number of weeks at term) if the meaning says so.",
   "value": {
-    "fqn": "shr.core.Range",
+    "fqn": "obf.datatype.Range",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

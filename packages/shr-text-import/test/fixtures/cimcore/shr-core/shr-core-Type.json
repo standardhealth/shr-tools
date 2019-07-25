@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Type",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Type",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Type",
   "isEntry": false,
   "isAbstract": false,
   "description": "The most specific code (lowest level term) describing the kind or sort of thing being represented.",
@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

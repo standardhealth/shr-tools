@@ -17,7 +17,7 @@
   ],
   "fields": [
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "fqn": "shr.core.Details",
+      "fqn": "obf.datatype.Details",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

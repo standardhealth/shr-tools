@@ -163,7 +163,7 @@
         "subpaths": {
           "cimi.context.Reason": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://standardhealthrecord.org/cimi/medication/vs/MedicationChangeReasonVS",
                   "bindingStrength": "REQUIRED",

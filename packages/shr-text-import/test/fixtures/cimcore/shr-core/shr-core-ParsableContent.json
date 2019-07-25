@@ -1,16 +1,16 @@
 {
   "fileType": "DataElement",
   "name": "ParsableContent",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ParsableContent",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ParsableContent",
   "isEntry": false,
   "isAbstract": false,
   "description": "A string that follows a formal syntax and can be analyzed and broken into meaningful parts.",
   "hierarchy": [
-    "shr.core.EmbeddedContent"
+    "obf.datatype.EmbeddedContent"
   ],
   "basedOn": [
-    "shr.core.EmbeddedContent"
+    "obf.datatype.EmbeddedContent"
   ],
   "value": {
     "fqn": "string",
@@ -22,7 +22,7 @@
   },
   "fields": [
     {
-      "fqn": "shr.core.Formalism",
+      "fqn": "obf.datatype.Formalism",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,

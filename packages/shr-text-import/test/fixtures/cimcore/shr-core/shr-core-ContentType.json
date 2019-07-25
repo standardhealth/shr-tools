@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "ContentType",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ContentType",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ContentType",
   "isEntry": false,
   "isAbstract": false,
   "description": "Mime type of the content, with charset etc.",

@@ -901,15 +901,15 @@ shelljs@^0.7.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shr-expand@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-6.0.0.tgz#a2072f971e19b9f221e012c0056ee389a78633d7"
-  integrity sha512-zzjli5uVY23J4jHnr5Cr+iLkZ7+6RsHk3kQMksBPUR4ly96NXlCRgillJ3IszbdP3dHpBuWymcrAOjyz4C/lRA==
-
-shr-models@^6.1.0:
+shr-expand@^6.1.0:
   version "6.1.0"
-  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-6.1.0.tgz#9eaf7bae2a86e4ceb2419ae13b5014b29380ed9a"
-  integrity sha512-TuLiwRXD3oIVbvfFwf6maKM5GI9k5JjNQIAmzc1U1ziGfrHf6x6n4wfNzybUzBD7zbSHAA60Btk0grekMqS8Tg==
+  resolved "https://registry.yarnpkg.com/shr-expand/-/shr-expand-6.1.0.tgz#ff62b5753c1f7f15020f101e049599d8cd1eec41"
+  integrity sha512-DawibirT2jYxAuJxNYnUpDUzlb86d4GKQ+IVMqpMAlcuNjhTKTSdZKIGc34uQVZx4rh6iWfr2bqtwtV5uwnkcQ==
+
+shr-models@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-6.2.0.tgz#1f66f3bc8a16c15328607e5b05a99cf7a3bc53fe"
+  integrity sha512-h7u7PpKuxd5epy+cMHzjnGAesPo/GmtQnUjeZHMuIfoNzJ82mrvMpZ8P3EdiKLD+y12nMzCX54wg8iAjDmzO5g==
 
 shr-test-helpers@^6.0.0:
   version "6.0.0"

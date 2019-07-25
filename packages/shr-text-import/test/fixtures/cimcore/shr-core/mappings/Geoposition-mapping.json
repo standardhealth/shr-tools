@@ -1,32 +1,32 @@
 {
   "fileType": "Mapping",
   "name": "Geoposition",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Geoposition",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Geoposition",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-location",
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.Latitude"
+          "obf.datatype.Latitude"
         ],
         "target": "position.latitude",
-        "lastModifiedBy": "shr.core.Geoposition"
+        "lastModifiedBy": "obf.datatype.Geoposition"
       },
       {
         "sourcePath": [
-          "shr.core.Longitude"
+          "obf.datatype.Longitude"
         ],
         "target": "position.longitude",
-        "lastModifiedBy": "shr.core.Geoposition"
+        "lastModifiedBy": "obf.datatype.Geoposition"
       },
       {
         "sourcePath": [
-          "shr.core.Altitude"
+          "obf.datatype.Altitude"
         ],
         "target": "position.altitude",
-        "lastModifiedBy": "shr.core.Geoposition"
+        "lastModifiedBy": "obf.datatype.Geoposition"
       }
     ],
     "cardMapping": [
@@ -36,7 +36,7 @@
           "max": 1
         },
         "target": "position",
-        "lastModifiedBy": "shr.core.Geoposition"
+        "lastModifiedBy": "obf.datatype.Geoposition"
       }
     ]
   }

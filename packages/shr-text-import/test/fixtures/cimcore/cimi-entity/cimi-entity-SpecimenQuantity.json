@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Quantity of specimen within container.",
   "value": {
-    "fqn": "shr.core.SimpleQuantity",
+    "fqn": "obf.datatype.SimpleQuantity",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

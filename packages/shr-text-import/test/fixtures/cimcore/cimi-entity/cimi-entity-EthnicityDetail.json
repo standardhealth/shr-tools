@@ -14,7 +14,7 @@
     },
     "options": [
       {
-        "fqn": "shr.core.CodeableConcept",
+        "fqn": "obf.datatype.CodeableConcept",
         "valueType": "IdentifiableValue",
         "constraints": {
           "valueSet": {
@@ -25,7 +25,7 @@
         }
       },
       {
-        "fqn": "shr.core.CodeableConcept",
+        "fqn": "obf.datatype.CodeableConcept",
         "valueType": "IdentifiableValue",
         "constraints": {
           "valueSet": {

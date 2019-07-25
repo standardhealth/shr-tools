@@ -1,6 +1,6 @@
 Grammar:   DataElement 6.0
 Namespace: unitConstraintOnValue
-Uses:      shr.core
+Uses:      obf.datatype
 
 CodeSystem:		  UCUM = http://unitsofmeasure.org
 

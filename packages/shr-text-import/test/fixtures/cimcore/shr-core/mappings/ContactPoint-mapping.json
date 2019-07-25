@@ -1,46 +1,46 @@
 {
   "fileType": "Mapping",
   "name": "ContactPoint",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ContactPoint",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ContactPoint",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "ContactPoint",
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.TelecomNumberOrAddress"
+          "obf.datatype.TelecomNumberOrAddress"
         ],
         "target": "value",
-        "lastModifiedBy": "shr.core.ContactPoint"
+        "lastModifiedBy": "obf.datatype.ContactPoint"
       },
       {
         "sourcePath": [
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "system",
-        "lastModifiedBy": "shr.core.ContactPoint"
+        "lastModifiedBy": "obf.datatype.ContactPoint"
       },
       {
         "sourcePath": [
-          "shr.core.Purpose"
+          "obf.datatype.Purpose"
         ],
         "target": "use",
-        "lastModifiedBy": "shr.core.ContactPoint"
+        "lastModifiedBy": "obf.datatype.ContactPoint"
       },
       {
         "sourcePath": [
-          "shr.core.PriorityRank"
+          "obf.datatype.PriorityRank"
         ],
         "target": "rank",
-        "lastModifiedBy": "shr.core.ContactPoint"
+        "lastModifiedBy": "obf.datatype.ContactPoint"
       },
       {
         "sourcePath": [
-          "shr.core.EffectiveTimePeriod"
+          "obf.datatype.EffectiveTimePeriod"
         ],
         "target": "period",
-        "lastModifiedBy": "shr.core.ContactPoint"
+        "lastModifiedBy": "obf.datatype.ContactPoint"
       }
     ]
   }

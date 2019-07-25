@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The indirect site for this procedure.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Address",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Address",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Address",
   "isEntry": false,
   "isAbstract": false,
   "description": "An address expressed using postal conventions (as opposed to GPS or other location definition formats). This data type may be used to convey addresses for use in delivering mail as well as for visiting locations and which might not be valid for mail delivery. There are a variety of postal address formats defined around the world. (Source: HL7 FHIR).",
@@ -14,7 +14,7 @@
   ],
   "fields": [
     {
-      "fqn": "shr.core.Purpose",
+      "fqn": "obf.datatype.Purpose",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -22,18 +22,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/address-use",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Address"
+              "lastModifiedBy": "obf.datatype.Address"
             }
           }
         }
       }
     },
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -41,18 +41,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/address-type",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Address"
+              "lastModifiedBy": "obf.datatype.Address"
             }
           }
         }
       }
     },
     {
-      "fqn": "shr.core.DisplayText",
+      "fqn": "obf.datatype.DisplayText",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -60,7 +60,7 @@
       }
     },
     {
-      "fqn": "shr.core.AddressLine",
+      "fqn": "obf.datatype.AddressLine",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -68,7 +68,7 @@
       }
     },
     {
-      "fqn": "shr.core.City",
+      "fqn": "obf.datatype.City",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -76,7 +76,7 @@
       }
     },
     {
-      "fqn": "shr.core.District",
+      "fqn": "obf.datatype.District",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -84,7 +84,7 @@
       }
     },
     {
-      "fqn": "shr.core.State",
+      "fqn": "obf.datatype.State",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -92,7 +92,7 @@
       }
     },
     {
-      "fqn": "shr.core.PostalCode",
+      "fqn": "obf.datatype.PostalCode",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -100,7 +100,7 @@
       }
     },
     {
-      "fqn": "shr.core.Country",
+      "fqn": "obf.datatype.Country",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -108,7 +108,7 @@
       }
     },
     {
-      "fqn": "shr.core.EffectiveTimePeriod",
+      "fqn": "obf.datatype.EffectiveTimePeriod",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

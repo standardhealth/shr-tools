@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "AddressLine",
-  "namespace": "shr.core",
-  "fqn": "shr.core.AddressLine",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.AddressLine",
   "isEntry": false,
   "isAbstract": false,
   "description": "Part of an address that contains the house number, apartment number, street name, street direction, P.O. Box number, delivery hints, and similar address information. (Source: HL7 FHIR).",

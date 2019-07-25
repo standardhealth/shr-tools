@@ -10,7 +10,7 @@
       {
         "sourcePath": [
           "_Entry",
-          "shr.core.CreationTime"
+          "obf.datatype.CreationTime"
         ],
         "target": "authoredOn",
         "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"
@@ -35,7 +35,7 @@
       {
         "sourcePath": [
           "cimi.procedure.ProcedureTopic",
-          "shr.core.Category"
+          "obf.datatype.Category"
         ],
         "target": "category",
         "lastModifiedBy": "cimi.procedure.ProcedureRequestedAgainstStatement"

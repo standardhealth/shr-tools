@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "CorrectionFactor",
-  "namespace": "shr.core",
-  "fqn": "shr.core.CorrectionFactor",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.CorrectionFactor",
   "isEntry": false,
   "isAbstract": false,
   "description": "A correction factor that is applied to the sampled data points before they are added to the origin.",

@@ -14,7 +14,7 @@
       {
         "sourcePath": [
           "cimi.topic.EvaluationResultTopic",
-          "shr.core.Category"
+          "obf.datatype.Category"
         ],
         "target": "category",
         "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
@@ -103,8 +103,8 @@
         "sourcePath": [
           "cimi.topic.EvaluationResultTopic",
           "cimi.topic.ReferenceRange",
-          "shr.core.Range",
-          "shr.core.LowerBound"
+          "obf.datatype.Range",
+          "obf.datatype.LowerBound"
         ],
         "target": "referenceRange.low",
         "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
@@ -113,8 +113,8 @@
         "sourcePath": [
           "cimi.topic.EvaluationResultTopic",
           "cimi.topic.ReferenceRange",
-          "shr.core.Range",
-          "shr.core.UpperBound"
+          "obf.datatype.Range",
+          "obf.datatype.UpperBound"
         ],
         "target": "referenceRange.high",
         "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
@@ -123,7 +123,7 @@
         "sourcePath": [
           "cimi.topic.EvaluationResultTopic",
           "cimi.topic.ReferenceRange",
-          "shr.core.Type"
+          "obf.datatype.Type"
         ],
         "target": "referenceRange.type",
         "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"

@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Code indicating the preference associated with the use of this name.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

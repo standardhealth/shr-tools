@@ -129,9 +129,9 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Category": {
+          "obf.datatype.Category": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {
@@ -145,7 +145,7 @@
           },
           "cimi.topic.TopicCode": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {
@@ -368,12 +368,12 @@
         "subpaths": {
           "cimi.context.ResultValue": {
             "type": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true,
               "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
             },
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://standardhealthrecord.org/shr/oncology/vs/PositiveNegativeEquivocalVS",
                   "bindingStrength": "REQUIRED",
@@ -409,7 +409,7 @@
           },
           {
             "constraint": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true,
               "lastModifiedBy": "shr.oncology.HER2ReceptorStatus"
             },
@@ -426,7 +426,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "fixedValue": {
               "type": "code",
               "value": {

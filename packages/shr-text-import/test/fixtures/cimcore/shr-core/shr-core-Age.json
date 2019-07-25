@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Age",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Age",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Age",
   "isEntry": false,
   "isAbstract": false,
   "description": "How long something has existed in time.",
@@ -13,10 +13,10 @@
     }
   ],
   "hierarchy": [
-    "shr.core.Quantity"
+    "obf.datatype.Quantity"
   ],
   "basedOn": [
-    "shr.core.Quantity"
+    "obf.datatype.Quantity"
   ],
   "value": {
     "fqn": "decimal",
@@ -27,12 +27,12 @@
     },
     "inheritance": {
       "status": "inherited",
-      "from": "shr.core.Quantity"
+      "from": "obf.datatype.Quantity"
     }
   },
   "fields": [
     {
-      "fqn": "shr.core.Comparator",
+      "fqn": "obf.datatype.Comparator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -40,11 +40,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       }
     },
     {
-      "fqn": "shr.core.Units",
+      "fqn": "obf.datatype.Units",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -52,18 +52,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Age"
+              "lastModifiedBy": "obf.datatype.Age"
             }
           }
         }
       },
       "inheritance": {
         "status": "overridden",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       },
       "constraintHistory": {
         "valueSet": [
@@ -71,9 +71,9 @@
             "constraint": {
               "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Age"
+              "lastModifiedBy": "obf.datatype.Age"
             },
-            "source": "shr.core.Age"
+            "source": "obf.datatype.Age"
           }
         ]
       }

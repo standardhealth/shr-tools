@@ -178,7 +178,7 @@
         "subpaths": {
           "cimi.topic.TopicCode": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://standardhealthrecord.org/shr/oncology/vs/BreastCancerTypeVS",
                   "bindingStrength": "REQUIRED",
@@ -189,7 +189,7 @@
           },
           "cimi.topic.FindingMethod": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://standardhealthrecord.org/shr/oncology/vs/BreastCancerDetectionVS",
                   "bindingStrength": "PREFERRED",
@@ -313,7 +313,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://standardhealthrecord.org/shr/oncology/vs/MorphologyBehaviorVS",
               "bindingStrength": "REQUIRED",

@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "UpperLimit",
-  "namespace": "shr.core",
-  "fqn": "shr.core.UpperLimit",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.UpperLimit",
   "isEntry": false,
   "isAbstract": false,
   "description": "The upper limit of detection of the measured points. This is needed if any of the data points have the value 'U' (higher than detection limit).",

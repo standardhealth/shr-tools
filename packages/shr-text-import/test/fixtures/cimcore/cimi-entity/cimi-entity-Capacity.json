@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Container volume or size.",
   "value": {
-    "fqn": "shr.core.SimpleQuantity",
+    "fqn": "obf.datatype.SimpleQuantity",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

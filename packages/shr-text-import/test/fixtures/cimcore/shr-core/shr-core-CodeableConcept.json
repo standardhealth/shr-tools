@@ -1,21 +1,21 @@
 {
   "fileType": "DataElement",
   "name": "CodeableConcept",
-  "namespace": "shr.core",
-  "fqn": "shr.core.CodeableConcept",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.CodeableConcept",
   "isEntry": false,
   "isAbstract": false,
   "description": "A set of codes drawn from different coding systems, representing the same concept.",
   "fields": [
     {
-      "fqn": "shr.core.Coding",
+      "fqn": "obf.datatype.Coding",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0
       }
     },
     {
-      "fqn": "shr.core.DisplayText",
+      "fqn": "obf.datatype.DisplayText",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

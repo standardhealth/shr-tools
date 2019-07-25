@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Version",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Version",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Version",
   "isEntry": false,
   "isAbstract": false,
   "description": "A number or code associated with the product that identifies a particular release iteration.",

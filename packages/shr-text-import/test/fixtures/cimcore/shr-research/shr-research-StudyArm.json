@@ -8,7 +8,7 @@
   "description": "Arm refers to pre-specified group or subgroup of participant(s) in a clinical trial assigned to receive specific intervention(s) (or no intervention) according to a protocol.",
   "fields": [
     {
-      "fqn": "shr.core.Title",
+      "fqn": "obf.datatype.Title",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -16,7 +16,7 @@
       }
     },
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -24,7 +24,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://standardhealthrecord.org/shr/research/vs/StudyArmTypeVS",
               "bindingStrength": "REQUIRED",
@@ -35,7 +35,7 @@
       }
     },
     {
-      "fqn": "shr.core.Details",
+      "fqn": "obf.datatype.Details",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

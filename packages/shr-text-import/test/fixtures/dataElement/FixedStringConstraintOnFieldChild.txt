@@ -1,0 +1,10 @@
+Grammar:   DataElement 6.0
+Namespace: fixedStringConstraintOnFieldChild
+
+Entry:          FixedStringConstraintOnFieldChild
+Description:    "It is a group entry with a string constraint on a field's child"
+Property:       SimpleString 0..1 
+                SimpleString[string] = "foo bar"
+
+Element:        SimpleString
+Value:          string

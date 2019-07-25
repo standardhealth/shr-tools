@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "A substance that causes an allergic reaction or irritation.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

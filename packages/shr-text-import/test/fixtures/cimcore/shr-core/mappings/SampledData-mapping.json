@@ -1,8 +1,8 @@
 {
   "fileType": "Mapping",
   "name": "SampledData",
-  "namespace": "shr.core",
-  "fqn": "shr.core.SampledData",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.SampledData",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "SampledData",
   "mappings": {
@@ -12,49 +12,49 @@
           "string"
         ],
         "target": "data",
-        "lastModifiedBy": "shr.core.SampledData"
+        "lastModifiedBy": "obf.datatype.SampledData"
       },
       {
         "sourcePath": [
-          "shr.core.Origin"
+          "obf.datatype.Origin"
         ],
         "target": "origin",
-        "lastModifiedBy": "shr.core.SampledData"
+        "lastModifiedBy": "obf.datatype.SampledData"
       },
       {
         "sourcePath": [
-          "shr.core.MillisecondsBetweenSamples"
+          "obf.datatype.MillisecondsBetweenSamples"
         ],
         "target": "period",
-        "lastModifiedBy": "shr.core.SampledData"
+        "lastModifiedBy": "obf.datatype.SampledData"
       },
       {
         "sourcePath": [
-          "shr.core.CorrectionFactor"
+          "obf.datatype.CorrectionFactor"
         ],
         "target": "factor",
-        "lastModifiedBy": "shr.core.SampledData"
+        "lastModifiedBy": "obf.datatype.SampledData"
       },
       {
         "sourcePath": [
-          "shr.core.LowerLimit"
+          "obf.datatype.LowerLimit"
         ],
         "target": "lowerLimit",
-        "lastModifiedBy": "shr.core.SampledData"
+        "lastModifiedBy": "obf.datatype.SampledData"
       },
       {
         "sourcePath": [
-          "shr.core.UpperLimit"
+          "obf.datatype.UpperLimit"
         ],
         "target": "upperLimit",
-        "lastModifiedBy": "shr.core.SampledData"
+        "lastModifiedBy": "obf.datatype.SampledData"
       },
       {
         "sourcePath": [
-          "shr.core.Dimensions"
+          "obf.datatype.Dimensions"
         ],
         "target": "dimensions",
-        "lastModifiedBy": "shr.core.SampledData"
+        "lastModifiedBy": "obf.datatype.SampledData"
       }
     ]
   }

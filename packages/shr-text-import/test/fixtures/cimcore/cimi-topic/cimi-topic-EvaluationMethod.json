@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The technique used to create the finding, for example, the specific imaging technical, lab test code, or assessment vehicle.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

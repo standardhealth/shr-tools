@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "EmbeddedContent",
-  "namespace": "shr.core",
-  "fqn": "shr.core.EmbeddedContent",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.EmbeddedContent",
   "isEntry": false,
   "isAbstract": false,
   "description": "Abstract class defining the common metadata of all types of encapsulated data, such as images."

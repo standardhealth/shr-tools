@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.TimePeriod",
+    "fqn": "obf.datatype.TimePeriod",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

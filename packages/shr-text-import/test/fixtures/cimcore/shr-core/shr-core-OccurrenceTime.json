@@ -1,16 +1,16 @@
 {
   "fileType": "DataElement",
   "name": "OccurrenceTime",
-  "namespace": "shr.core",
-  "fqn": "shr.core.OccurrenceTime",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.OccurrenceTime",
   "isEntry": false,
   "isAbstract": false,
   "description": "The point in time in which something happens.",
   "hierarchy": [
-    "shr.core.OccurrenceTimeOrPeriod"
+    "obf.datatype.OccurrenceTimeOrPeriod"
   ],
   "basedOn": [
-    "shr.core.OccurrenceTimeOrPeriod"
+    "obf.datatype.OccurrenceTimeOrPeriod"
   ],
   "value": {
     "fqn": "dateTime",
@@ -21,7 +21,7 @@
     },
     "inheritance": {
       "status": "overridden",
-      "from": "shr.core.OccurrenceTimeOrPeriod"
+      "from": "obf.datatype.OccurrenceTimeOrPeriod"
     }
   }
 }

@@ -25,7 +25,7 @@
       {
         "sourcePath": [
           "cimi.procedure.ProcedureTopic",
-          "shr.core.Category"
+          "obf.datatype.Category"
         ],
         "target": "category",
         "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"
@@ -73,7 +73,7 @@
       {
         "sourcePath": [
           "cimi.procedure.ProcedurePerformedContext",
-          "shr.core.OccurrenceTimeOrPeriod"
+          "obf.datatype.OccurrenceTimeOrPeriod"
         ],
         "target": "performed[x]",
         "lastModifiedBy": "cimi.procedure.ProcedurePerformedStatement"

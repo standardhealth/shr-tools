@@ -74,7 +74,7 @@
       {
         "sourcePath": [
           "cimi.context.RequestedContext",
-          "shr.core.PriorityRank"
+          "obf.datatype.PriorityRank"
         ],
         "target": "priority",
         "lastModifiedBy": "cimi.medication.MedicationDispenseRequestedStatement"

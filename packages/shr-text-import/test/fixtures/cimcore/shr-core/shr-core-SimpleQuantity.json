@@ -1,16 +1,16 @@
 {
   "fileType": "DataElement",
   "name": "SimpleQuantity",
-  "namespace": "shr.core",
-  "fqn": "shr.core.SimpleQuantity",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.SimpleQuantity",
   "isEntry": false,
   "isAbstract": false,
   "description": "A quantity where the comparator is not used, as defined in FHIR",
   "hierarchy": [
-    "shr.core.Quantity"
+    "obf.datatype.Quantity"
   ],
   "basedOn": [
-    "shr.core.Quantity"
+    "obf.datatype.Quantity"
   ],
   "value": {
     "fqn": "decimal",
@@ -21,24 +21,24 @@
     },
     "inheritance": {
       "status": "inherited",
-      "from": "shr.core.Quantity"
+      "from": "obf.datatype.Quantity"
     }
   },
   "fields": [
     {
-      "fqn": "shr.core.Comparator",
+      "fqn": "obf.datatype.Comparator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
         "max": 0,
         "history": [
           {
-            "source": "shr.core.Quantity",
+            "source": "obf.datatype.Quantity",
             "min": 0,
             "max": 1
           },
           {
-            "source": "shr.core.SimpleQuantity",
+            "source": "obf.datatype.SimpleQuantity",
             "min": 0,
             "max": 0
           }
@@ -46,7 +46,7 @@
       },
       "inheritance": {
         "status": "overridden",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       },
       "constraintHistory": {
         "card": [
@@ -54,15 +54,15 @@
             "constraint": {
               "min": 0,
               "max": 0,
-              "lastModifiedBy": "shr.core.SimpleQuantity"
+              "lastModifiedBy": "obf.datatype.SimpleQuantity"
             },
-            "source": "shr.core.SimpleQuantity"
+            "source": "obf.datatype.SimpleQuantity"
           }
         ]
       }
     },
     {
-      "fqn": "shr.core.Units",
+      "fqn": "obf.datatype.Units",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -70,7 +70,7 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       }
     }
   ]

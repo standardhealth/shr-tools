@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "SemiquantDuration",
-  "namespace": "shr.core",
-  "fqn": "shr.core.SemiquantDuration",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.SemiquantDuration",
   "isEntry": false,
   "isAbstract": false,
   "description": "The duration of an event, described semi-quantitatively.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -15,9 +15,9 @@
     },
     "constraints": {
       "valueSet": {
-        "uri": "http://standardhealthrecord.org/shr/core/vs/SemiquantitativeDurationVS",
+        "uri": "http://standardhealthrecord.org/obf/datatype/vs/SemiquantitativeDurationVS",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.SemiquantDuration"
+        "lastModifiedBy": "obf.datatype.SemiquantDuration"
       }
     }
   }

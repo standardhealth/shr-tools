@@ -1,14 +1,14 @@
 {
   "fileType": "DataElement",
   "name": "DurationRange",
-  "namespace": "shr.core",
-  "fqn": "shr.core.DurationRange",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.DurationRange",
   "isEntry": false,
   "isAbstract": false,
   "description": "A range of durations.",
   "fields": [
     {
-      "fqn": "shr.core.LowerBound",
+      "fqn": "obf.datatype.LowerBound",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -16,18 +16,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Quantity": {
+          "obf.datatype.Quantity": {
             "type": {
-              "fqn": "shr.core.Duration",
+              "fqn": "obf.datatype.Duration",
               "onValue": false,
-              "lastModifiedBy": "shr.core.DurationRange"
+              "lastModifiedBy": "obf.datatype.DurationRange"
             }
           }
         }
       }
     },
     {
-      "fqn": "shr.core.UpperBound",
+      "fqn": "obf.datatype.UpperBound",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -35,11 +35,11 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Quantity": {
+          "obf.datatype.Quantity": {
             "type": {
-              "fqn": "shr.core.Duration",
+              "fqn": "obf.datatype.Duration",
               "onValue": false,
-              "lastModifiedBy": "shr.core.DurationRange"
+              "lastModifiedBy": "obf.datatype.DurationRange"
             }
           }
         }

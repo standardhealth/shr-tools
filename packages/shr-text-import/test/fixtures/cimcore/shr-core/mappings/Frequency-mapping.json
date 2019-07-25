@@ -1,29 +1,29 @@
 {
   "fileType": "Mapping",
   "name": "Frequency",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Frequency",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Frequency",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Ratio",
   "inheritance": {
     "status": "inherited",
-    "from": "shr.core.Ratio"
+    "from": "obf.datatype.Ratio"
   },
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.Numerator"
+          "obf.datatype.Numerator"
         ],
         "target": "numerator",
-        "lastModifiedBy": "shr.core.Ratio"
+        "lastModifiedBy": "obf.datatype.Ratio"
       },
       {
         "sourcePath": [
-          "shr.core.Denominator"
+          "obf.datatype.Denominator"
         ],
         "target": "denominator",
-        "lastModifiedBy": "shr.core.Ratio"
+        "lastModifiedBy": "obf.datatype.Ratio"
       }
     ]
   }

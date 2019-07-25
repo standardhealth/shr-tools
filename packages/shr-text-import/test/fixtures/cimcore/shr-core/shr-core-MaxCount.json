@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "MaxCount",
-  "namespace": "shr.core",
-  "fqn": "shr.core.MaxCount",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.MaxCount",
   "isEntry": false,
   "isAbstract": false,
   "description": "Upper bound on a count.",

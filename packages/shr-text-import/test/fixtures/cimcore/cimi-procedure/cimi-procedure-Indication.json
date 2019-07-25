@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Conditions or situations where the procedure is recommended. In the Performed context, the actual indication should be reported.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

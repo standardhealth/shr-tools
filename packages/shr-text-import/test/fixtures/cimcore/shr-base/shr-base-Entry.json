@@ -38,7 +38,7 @@
       }
     },
     {
-      "fqn": "shr.core.Version",
+      "fqn": "obf.datatype.Version",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -61,7 +61,7 @@
       }
     },
     {
-      "fqn": "shr.core.CreationTime",
+      "fqn": "obf.datatype.CreationTime",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -85,7 +85,7 @@
       }
     },
     {
-      "fqn": "shr.core.Language",
+      "fqn": "obf.datatype.Language",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

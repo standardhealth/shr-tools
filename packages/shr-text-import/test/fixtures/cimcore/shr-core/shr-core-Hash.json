@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Hash",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Hash",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Hash",
   "isEntry": false,
   "isAbstract": false,
   "description": "A hash code of the data (sha-1, base64ed)",

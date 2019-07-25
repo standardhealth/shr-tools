@@ -25,7 +25,7 @@
       {
         "sourcePath": [
           "cimi.procedure.ProcedureTopic",
-          "shr.core.Category"
+          "obf.datatype.Category"
         ],
         "target": "category",
         "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"

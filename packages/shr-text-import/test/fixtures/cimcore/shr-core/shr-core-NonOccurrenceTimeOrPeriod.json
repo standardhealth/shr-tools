@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "NonOccurrenceTimeOrPeriod",
-  "namespace": "shr.core",
-  "fqn": "shr.core.NonOccurrenceTimeOrPeriod",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.NonOccurrenceTimeOrPeriod",
   "isEntry": false,
   "isAbstract": false,
   "description": "The point in time or span of time in which something did not happen.",
@@ -22,7 +22,7 @@
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.TimePeriod",
+        "fqn": "obf.datatype.TimePeriod",
         "valueType": "IdentifiableValue"
       }
     ]

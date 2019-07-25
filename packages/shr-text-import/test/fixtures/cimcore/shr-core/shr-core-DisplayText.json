@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "DisplayText",
-  "namespace": "shr.core",
-  "fqn": "shr.core.DisplayText",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.DisplayText",
   "isEntry": false,
   "isAbstract": false,
   "description": "A string meant for reading by a person, for example, accompanying a code.",

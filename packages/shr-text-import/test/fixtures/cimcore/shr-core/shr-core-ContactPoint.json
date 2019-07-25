@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "ContactPoint",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ContactPoint",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ContactPoint",
   "isEntry": false,
   "isAbstract": false,
   "description": "An electronic means of contacting an organization or individual.",
@@ -14,7 +14,7 @@
   ],
   "fields": [
     {
-      "fqn": "shr.core.TelecomNumberOrAddress",
+      "fqn": "obf.datatype.TelecomNumberOrAddress",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -22,7 +22,7 @@
       }
     },
     {
-      "fqn": "shr.core.Type",
+      "fqn": "obf.datatype.Type",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 1,
@@ -30,18 +30,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/contact-point-system",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.ContactPoint"
+              "lastModifiedBy": "obf.datatype.ContactPoint"
             }
           }
         }
       }
     },
     {
-      "fqn": "shr.core.Purpose",
+      "fqn": "obf.datatype.Purpose",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -49,18 +49,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/contact-point-use",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.ContactPoint"
+              "lastModifiedBy": "obf.datatype.ContactPoint"
             }
           }
         }
       }
     },
     {
-      "fqn": "shr.core.PriorityRank",
+      "fqn": "obf.datatype.PriorityRank",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -68,7 +68,7 @@
       }
     },
     {
-      "fqn": "shr.core.EffectiveTimePeriod",
+      "fqn": "obf.datatype.EffectiveTimePeriod",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,

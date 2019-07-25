@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The sequence number for this specimen in a collection of specimens.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

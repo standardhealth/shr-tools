@@ -1,14 +1,14 @@
 {
   "fileType": "DataElement",
   "name": "ContactDetail",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ContactDetail",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ContactDetail",
   "isEntry": false,
   "isAbstract": false,
   "description": "Describes an individual and how to reach them.",
   "fields": [
     {
-      "fqn": "shr.core.HumanName",
+      "fqn": "obf.datatype.HumanName",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -16,7 +16,7 @@
       }
     },
     {
-      "fqn": "shr.core.ContactPoint",
+      "fqn": "obf.datatype.ContactPoint",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0

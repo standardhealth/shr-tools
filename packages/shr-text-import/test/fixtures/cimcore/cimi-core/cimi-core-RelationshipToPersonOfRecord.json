@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The relationship of the SubjectOfInformation to the subject of record.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

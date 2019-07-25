@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Likelihood",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Likelihood",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Likelihood",
   "isEntry": false,
   "isAbstract": false,
   "description": "A measure of the expectation of the occurrence of a particular event, as a percentage.",

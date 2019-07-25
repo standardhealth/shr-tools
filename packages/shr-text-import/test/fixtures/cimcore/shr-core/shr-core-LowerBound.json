@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "LowerBound",
-  "namespace": "shr.core",
-  "fqn": "shr.core.LowerBound",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.LowerBound",
   "isEntry": false,
   "isAbstract": false,
   "description": "The lower limit on a range",
   "value": {
-    "fqn": "shr.core.Quantity",
+    "fqn": "obf.datatype.Quantity",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

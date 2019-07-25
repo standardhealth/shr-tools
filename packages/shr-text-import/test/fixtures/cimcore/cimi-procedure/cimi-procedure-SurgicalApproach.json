@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "The technique used to reach the site of the procedure. Approaches may be through the skin or mucous membrane, through an orifice or external.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

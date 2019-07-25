@@ -132,9 +132,9 @@
           "lastModifiedBy": "cimi.statement.EvaluationResultRecorded"
         },
         "subpaths": {
-          "shr.core.Category": {
+          "obf.datatype.Category": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {
@@ -148,7 +148,7 @@
           },
           "cimi.topic.TopicCode": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "fixedValue": {
                   "type": "code",
                   "value": {
@@ -308,12 +308,12 @@
         "subpaths": {
           "cimi.context.ResultValue": {
             "type": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true,
               "lastModifiedBy": "shr.oncology.HER2byIHC"
             },
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://standardhealthrecord.org/shr/oncology/vs/HER2byIHCScoreVS",
                   "bindingStrength": "REQUIRED",
@@ -324,7 +324,7 @@
           },
           "cimi.context.Interpretation": {
             "subpaths": {
-              "shr.core.CodeableConcept": {
+              "obf.datatype.CodeableConcept": {
                 "valueSet": {
                   "uri": "http://standardhealthrecord.org/shr/oncology/vs/PositiveNegativeEquivocalVS",
                   "bindingStrength": "REQUIRED",
@@ -368,7 +368,7 @@
           },
           {
             "constraint": {
-              "fqn": "shr.core.CodeableConcept",
+              "fqn": "obf.datatype.CodeableConcept",
               "onValue": true,
               "lastModifiedBy": "shr.oncology.HER2byIHC"
             },
@@ -385,7 +385,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.CodeableConcept": {
+          "obf.datatype.CodeableConcept": {
             "fixedValue": {
               "type": "code",
               "value": {

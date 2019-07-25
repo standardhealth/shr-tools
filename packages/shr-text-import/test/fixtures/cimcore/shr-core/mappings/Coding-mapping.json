@@ -1,8 +1,8 @@
 {
   "fileType": "Mapping",
   "name": "Coding",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Coding",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Coding",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Coding",
   "mappings": {
@@ -12,28 +12,28 @@
           "code"
         ],
         "target": "code",
-        "lastModifiedBy": "shr.core.Coding"
+        "lastModifiedBy": "obf.datatype.Coding"
       },
       {
         "sourcePath": [
-          "shr.core.CodeSystem"
+          "obf.datatype.CodeSystem"
         ],
         "target": "system",
-        "lastModifiedBy": "shr.core.Coding"
+        "lastModifiedBy": "obf.datatype.Coding"
       },
       {
         "sourcePath": [
-          "shr.core.CodeSystemVersion"
+          "obf.datatype.CodeSystemVersion"
         ],
         "target": "version",
-        "lastModifiedBy": "shr.core.Coding"
+        "lastModifiedBy": "obf.datatype.Coding"
       },
       {
         "sourcePath": [
-          "shr.core.DisplayText"
+          "obf.datatype.DisplayText"
         ],
         "target": "display",
-        "lastModifiedBy": "shr.core.Coding"
+        "lastModifiedBy": "obf.datatype.Coding"
       }
     ]
   }

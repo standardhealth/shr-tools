@@ -16,7 +16,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.CreationTime"
+          "obf.datatype.CreationTime"
         ],
         "target": "when",
         "lastModifiedBy": "cimi.element.Signature"
@@ -37,14 +37,14 @@
       },
       {
         "sourcePath": [
-          "shr.core.ContentType"
+          "obf.datatype.ContentType"
         ],
         "target": "contentType",
         "lastModifiedBy": "cimi.element.Signature"
       },
       {
         "sourcePath": [
-          "shr.core.BinaryData"
+          "obf.datatype.BinaryData"
         ],
         "target": "blob",
         "lastModifiedBy": "cimi.element.Signature"

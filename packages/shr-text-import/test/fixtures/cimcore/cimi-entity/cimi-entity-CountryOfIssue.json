@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "A country acting as an assuing authority for a document.",
   "value": {
-    "fqn": "shr.core.Country",
+    "fqn": "obf.datatype.Country",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

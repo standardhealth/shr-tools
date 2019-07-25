@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Distance between the feature of interest (e.g., the tumor) and the nipple.",
   "value": {
-    "fqn": "shr.core.Quantity",
+    "fqn": "obf.datatype.Quantity",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,
@@ -15,9 +15,9 @@
     },
     "constraints": {
       "subpaths": {
-        "shr.core.Units": {
+        "obf.datatype.Units": {
           "subpaths": {
-            "shr.core.Coding": {
+            "obf.datatype.Coding": {
               "fixedValue": {
                 "type": "code",
                 "value": {

@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "ResourceSize",
-  "namespace": "shr.core",
-  "fqn": "shr.core.ResourceSize",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.ResourceSize",
   "isEntry": false,
   "isAbstract": false,
   "description": "Number of bytes of content in the resource (if url provided)",

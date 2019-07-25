@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Comparator",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Comparator",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Comparator",
   "isEntry": false,
   "isAbstract": false,
   "value": {
@@ -16,7 +16,7 @@
       "valueSet": {
         "uri": "http://hl7.org/fhir/ValueSet/quantity-comparator",
         "bindingStrength": "REQUIRED",
-        "lastModifiedBy": "shr.core.Comparator"
+        "lastModifiedBy": "obf.datatype.Comparator"
       }
     }
   }

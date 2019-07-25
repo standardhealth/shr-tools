@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "MillisecondsBetweenSamples",
-  "namespace": "shr.core",
-  "fqn": "shr.core.MillisecondsBetweenSamples",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.MillisecondsBetweenSamples",
   "isEntry": false,
   "isAbstract": false,
   "description": "The length of time between sampling times, measured in milliseconds.",

@@ -1,20 +1,20 @@
 {
   "fileType": "DataElement",
   "name": "PercentageRange",
-  "namespace": "shr.core",
-  "fqn": "shr.core.PercentageRange",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.PercentageRange",
   "isEntry": false,
   "isAbstract": false,
   "description": "A range of percentage values.",
   "hierarchy": [
-    "shr.core.Range"
+    "obf.datatype.Range"
   ],
   "basedOn": [
-    "shr.core.Range"
+    "obf.datatype.Range"
   ],
   "fields": [
     {
-      "fqn": "shr.core.LowerBound",
+      "fqn": "obf.datatype.LowerBound",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -22,34 +22,34 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Quantity": {
+          "obf.datatype.Quantity": {
             "type": {
-              "fqn": "shr.core.Percentage",
+              "fqn": "obf.datatype.Percentage",
               "onValue": false,
-              "lastModifiedBy": "shr.core.PercentageRange"
+              "lastModifiedBy": "obf.datatype.PercentageRange"
             }
           }
         }
       },
       "inheritance": {
         "status": "overridden",
-        "from": "shr.core.Range"
+        "from": "obf.datatype.Range"
       },
       "constraintHistory": {
         "type": [
           {
             "constraint": {
-              "fqn": "shr.core.Percentage",
+              "fqn": "obf.datatype.Percentage",
               "onValue": false,
-              "lastModifiedBy": "shr.core.PercentageRange"
+              "lastModifiedBy": "obf.datatype.PercentageRange"
             },
-            "source": "shr.core.PercentageRange"
+            "source": "obf.datatype.PercentageRange"
           }
         ]
       }
     },
     {
-      "fqn": "shr.core.UpperBound",
+      "fqn": "obf.datatype.UpperBound",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -57,28 +57,28 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Quantity": {
+          "obf.datatype.Quantity": {
             "type": {
-              "fqn": "shr.core.Percentage",
+              "fqn": "obf.datatype.Percentage",
               "onValue": false,
-              "lastModifiedBy": "shr.core.PercentageRange"
+              "lastModifiedBy": "obf.datatype.PercentageRange"
             }
           }
         }
       },
       "inheritance": {
         "status": "overridden",
-        "from": "shr.core.Range"
+        "from": "obf.datatype.Range"
       },
       "constraintHistory": {
         "type": [
           {
             "constraint": {
-              "fqn": "shr.core.Percentage",
+              "fqn": "obf.datatype.Percentage",
               "onValue": false,
-              "lastModifiedBy": "shr.core.PercentageRange"
+              "lastModifiedBy": "obf.datatype.PercentageRange"
             },
-            "source": "shr.core.PercentageRange"
+            "source": "obf.datatype.PercentageRange"
           }
         ]
       }

@@ -16,7 +16,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.Version"
+          "obf.datatype.Version"
         ],
         "target": "meta.versionId",
         "lastModifiedBy": "shr.base.Entry"
@@ -37,7 +37,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.Language"
+          "obf.datatype.Language"
         ],
         "target": "language",
         "lastModifiedBy": "shr.base.Entry"

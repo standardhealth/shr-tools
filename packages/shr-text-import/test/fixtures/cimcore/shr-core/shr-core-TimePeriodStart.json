@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "TimePeriodStart",
-  "namespace": "shr.core",
-  "fqn": "shr.core.TimePeriodStart",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.TimePeriodStart",
   "isEntry": false,
   "isAbstract": false,
   "description": "The time at which something is to take effect, start, or did start. Boundary is considered inclusive.",

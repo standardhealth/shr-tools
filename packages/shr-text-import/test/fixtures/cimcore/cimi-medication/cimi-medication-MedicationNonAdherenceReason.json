@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Reason that patient did not adhere to a medication regimen.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

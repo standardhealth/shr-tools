@@ -23,7 +23,7 @@
       },
       {
         "sourcePath": [
-          "shr.core.OccurrenceTime"
+          "obf.datatype.OccurrenceTime"
         ],
         "target": "time",
         "lastModifiedBy": "cimi.element.Annotation"

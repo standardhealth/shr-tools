@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "EventDuration",
-  "namespace": "shr.core",
-  "fqn": "shr.core.EventDuration",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.EventDuration",
   "isEntry": false,
   "isAbstract": false,
   "description": "The length of the recurring event.",
   "value": {
-    "fqn": "shr.core.DurationRange",
+    "fqn": "obf.datatype.DurationRange",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

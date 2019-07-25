@@ -29,7 +29,7 @@
       {
         "sourcePath": [
           "cimi.procedure.SurgicalProcedureTopic",
-          "shr.core.Category"
+          "obf.datatype.Category"
         ],
         "target": "category",
         "lastModifiedBy": "cimi.procedure.ProcedureNotPerformedStatement"

@@ -7,7 +7,7 @@
   "isAbstract": false,
   "description": "Additional information about a person's use of language.",
   "value": {
-    "fqn": "shr.core.CodeableConcept",
+    "fqn": "obf.datatype.CodeableConcept",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

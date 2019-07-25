@@ -1,25 +1,25 @@
 {
   "fileType": "Mapping",
   "name": "Ratio",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Ratio",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Ratio",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "Ratio",
   "mappings": {
     "fieldMapping": [
       {
         "sourcePath": [
-          "shr.core.Numerator"
+          "obf.datatype.Numerator"
         ],
         "target": "numerator",
-        "lastModifiedBy": "shr.core.Ratio"
+        "lastModifiedBy": "obf.datatype.Ratio"
       },
       {
         "sourcePath": [
-          "shr.core.Denominator"
+          "obf.datatype.Denominator"
         ],
         "target": "denominator",
-        "lastModifiedBy": "shr.core.Ratio"
+        "lastModifiedBy": "obf.datatype.Ratio"
       }
     ]
   }

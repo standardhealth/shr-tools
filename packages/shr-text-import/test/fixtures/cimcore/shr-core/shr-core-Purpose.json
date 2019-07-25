@@ -1,13 +1,13 @@
 {
   "fileType": "DataElement",
   "name": "Purpose",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Purpose",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Purpose",
   "isEntry": false,
   "isAbstract": false,
   "description": "Why the item is used.",
   "value": {
-    "fqn": "shr.core.Coding",
+    "fqn": "obf.datatype.Coding",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

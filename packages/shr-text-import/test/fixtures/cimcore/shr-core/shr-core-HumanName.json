@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "HumanName",
-  "namespace": "shr.core",
-  "fqn": "shr.core.HumanName",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.HumanName",
   "isEntry": false,
   "isAbstract": false,
   "description": "The CIMI person name, constrained to map correctly to FHIR.",
@@ -33,7 +33,7 @@
       }
     },
     {
-      "fqn": "shr.core.Purpose",
+      "fqn": "obf.datatype.Purpose",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -52,7 +52,7 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/name-use",
               "bindingStrength": "REQUIRED",
@@ -87,7 +87,7 @@
       }
     },
     {
-      "fqn": "shr.core.EffectiveTimePeriod",
+      "fqn": "obf.datatype.EffectiveTimePeriod",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -144,7 +144,7 @@
             "min": 0
           },
           {
-            "source": "shr.core.HumanName",
+            "source": "obf.datatype.HumanName",
             "min": 0,
             "max": 0
           }
@@ -160,9 +160,9 @@
             "constraint": {
               "min": 0,
               "max": 0,
-              "lastModifiedBy": "shr.core.HumanName"
+              "lastModifiedBy": "obf.datatype.HumanName"
             },
-            "source": "shr.core.HumanName"
+            "source": "obf.datatype.HumanName"
           }
         ]
       }
@@ -179,7 +179,7 @@
             "min": 0
           },
           {
-            "source": "shr.core.HumanName",
+            "source": "obf.datatype.HumanName",
             "min": 0,
             "max": 1
           }
@@ -195,9 +195,9 @@
             "constraint": {
               "min": 0,
               "max": 1,
-              "lastModifiedBy": "shr.core.HumanName"
+              "lastModifiedBy": "obf.datatype.HumanName"
             },
-            "source": "shr.core.HumanName"
+            "source": "obf.datatype.HumanName"
           }
         ]
       }

@@ -19,7 +19,7 @@
     "cimi.topic.EvaluationComponent"
   ],
   "value": {
-    "fqn": "shr.core.Quantity",
+    "fqn": "obf.datatype.Quantity",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

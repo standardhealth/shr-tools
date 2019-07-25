@@ -1,13 +1,13 @@
 {
   "fileType": "Mapping",
   "name": "SimpleQuantity",
-  "namespace": "shr.core",
-  "fqn": "shr.core.SimpleQuantity",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.SimpleQuantity",
   "targetSpec": "FHIR_STU_3",
   "targetItem": "SimpleQuantity",
   "inheritance": {
     "status": "overridden",
-    "from": "shr.core.Quantity"
+    "from": "obf.datatype.Quantity"
   },
   "mappings": {
     "fieldMapping": [
@@ -16,41 +16,41 @@
           "decimal"
         ],
         "target": "value",
-        "lastModifiedBy": "shr.core.Quantity"
+        "lastModifiedBy": "obf.datatype.Quantity"
       },
       {
         "sourcePath": [
-          "shr.core.Units",
-          "shr.core.Coding",
+          "obf.datatype.Units",
+          "obf.datatype.Coding",
           "code"
         ],
         "target": "code",
-        "lastModifiedBy": "shr.core.Quantity"
+        "lastModifiedBy": "obf.datatype.Quantity"
       },
       {
         "sourcePath": [
-          "shr.core.Units",
-          "shr.core.Coding",
-          "shr.core.CodeSystem"
+          "obf.datatype.Units",
+          "obf.datatype.Coding",
+          "obf.datatype.CodeSystem"
         ],
         "target": "system",
-        "lastModifiedBy": "shr.core.Quantity"
+        "lastModifiedBy": "obf.datatype.Quantity"
       },
       {
         "sourcePath": [
-          "shr.core.Units",
-          "shr.core.Coding",
-          "shr.core.DisplayText"
+          "obf.datatype.Units",
+          "obf.datatype.Coding",
+          "obf.datatype.DisplayText"
         ],
         "target": "unit",
-        "lastModifiedBy": "shr.core.Quantity"
+        "lastModifiedBy": "obf.datatype.Quantity"
       },
       {
         "sourcePath": [
-          "shr.core.Comparator"
+          "obf.datatype.Comparator"
         ],
         "target": "comparator",
-        "lastModifiedBy": "shr.core.Quantity"
+        "lastModifiedBy": "obf.datatype.Quantity"
       }
     ]
   }

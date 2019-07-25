@@ -13,7 +13,7 @@
     }
   ],
   "value": {
-    "fqn": "shr.core.HumanName",
+    "fqn": "obf.datatype.HumanName",
     "valueType": "IdentifiableValue",
     "card": {
       "min": 1,

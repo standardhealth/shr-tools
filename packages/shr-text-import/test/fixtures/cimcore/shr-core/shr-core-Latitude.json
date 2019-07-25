@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "Latitude",
-  "namespace": "shr.core",
-  "fqn": "shr.core.Latitude",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.Latitude",
   "isEntry": false,
   "isAbstract": false,
   "description": "The angular distance north or south between an imaginary line around a heavenly body parallel to its equator and the equator itself. Measured with with WGS84 datum.",

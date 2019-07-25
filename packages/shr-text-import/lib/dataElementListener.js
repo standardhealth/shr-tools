@@ -5,7 +5,7 @@ const {SHRDataElementLexer} = require('./parsers/SHRDataElementLexer');
 const {SHRDataElementParser} = require('./parsers/SHRDataElementParser');
 const {SHRDataElementParserListener} = require('./parsers/SHRDataElementParserListener');
 const {SHRErrorListener} = require('./errorListener.js');
-const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, TBD, PRIMITIVES, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
+const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, FixedValueConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, TBD, PRIMITIVES, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
 var logger = rootLogger;
@@ -369,6 +369,9 @@ class DataElementImporter extends SHRDataElementParserListener {
       } else if (cst.elementBooleanConstraint()) {
         const b = cst.elementBooleanConstraint().KW_TRUE() ? true : false;
         value.addConstraint(new BooleanConstraint(b, path));
+      } else if (cst.elementStringConstraint()) {
+        const str = stripDelimitersFromToken(cst.elementStringConstraint().STRING());
+        value.addConstraint(new FixedValueConstraint(str, 'string', path));
       }
     }
     else if(ctx.count()) {

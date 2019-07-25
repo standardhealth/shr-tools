@@ -22,11 +22,11 @@
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.TimePeriod",
+        "fqn": "obf.datatype.TimePeriod",
         "valueType": "IdentifiableValue"
       },
       {
-        "fqn": "shr.core.Timing",
+        "fqn": "obf.datatype.Timing",
         "valueType": "IdentifiableValue"
       }
     ]

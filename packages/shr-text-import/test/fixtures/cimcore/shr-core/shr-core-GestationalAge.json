@@ -1,8 +1,8 @@
 {
   "fileType": "DataElement",
   "name": "GestationalAge",
-  "namespace": "shr.core",
-  "fqn": "shr.core.GestationalAge",
+  "namespace": "obf.datatype",
+  "fqn": "obf.datatype.GestationalAge",
   "isEntry": false,
   "isAbstract": false,
   "description": "The age of the embryo or fetus. This may be assessed by medical history, physical examination, early immunologic pregnancy tests, radiography, ultrasonography, and amniotic fluid analysis.",
@@ -13,11 +13,11 @@
     }
   ],
   "hierarchy": [
-    "shr.core.Quantity",
-    "shr.core.Age"
+    "obf.datatype.Quantity",
+    "obf.datatype.Age"
   ],
   "basedOn": [
-    "shr.core.Age"
+    "obf.datatype.Age"
   ],
   "value": {
     "fqn": "decimal",
@@ -28,12 +28,12 @@
     },
     "inheritance": {
       "status": "inherited",
-      "from": "shr.core.Quantity"
+      "from": "obf.datatype.Quantity"
     }
   },
   "fields": [
     {
-      "fqn": "shr.core.Comparator",
+      "fqn": "obf.datatype.Comparator",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -41,11 +41,11 @@
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       }
     },
     {
-      "fqn": "shr.core.Units",
+      "fqn": "obf.datatype.Units",
       "valueType": "IdentifiableValue",
       "card": {
         "min": 0,
@@ -53,18 +53,18 @@
       },
       "constraints": {
         "subpaths": {
-          "shr.core.Coding": {
+          "obf.datatype.Coding": {
             "valueSet": {
               "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
               "bindingStrength": "REQUIRED",
-              "lastModifiedBy": "shr.core.Age"
+              "lastModifiedBy": "obf.datatype.Age"
             }
           }
         }
       },
       "inheritance": {
         "status": "inherited",
-        "from": "shr.core.Quantity"
+        "from": "obf.datatype.Quantity"
       },
       "constraintHistory": {
         "valueSet": [
@@ -73,7 +73,7 @@
               "uri": "http://hl7.org/fhir/ValueSet/units-of-time",
               "bindingStrength": "REQUIRED"
             },
-            "source": "shr.core.Age"
+            "source": "obf.datatype.Age"
           }
         ]
       }
