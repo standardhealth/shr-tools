@@ -1276,6 +1276,7 @@ class Expander {
       for (let i=0; i < map.rules.length; i++) {
         const rule = map.rules[i];
         if (rule instanceof models.FieldMappingRule) {
+          const deArray = [de];
           let currentDE = de;
           for (let j=0; j < rule.sourcePath.length; j++) {
             let match = this.findMatchInDataElement(currentDE, rule.sourcePath[j]);
@@ -1296,10 +1297,57 @@ class Expander {
               // Now reassign match to the first item in the choice options that matched
               match = match[0];
             }
+            if (match == null) {
+              // Check to see if the requested item is actually an identifier introduced by an includes type constraint
+
+              // If we failed to find something right away (the root of the sourcePath), we need to iterate over all
+              // value/fields looking to see if any are an includes type constraint for what we're looking for
+              if (j === 0) {
+                const values = [currentDE.value, ...currentDE.fields];
+                for (let k=0; k < values.length && match == null; k++) {
+                  if (values[k] == null) {
+                    continue;
+                  }
+                  const itcCsts = values[k].constraintsFilter.includesType.own.constraints;
+                  for (const itc of itcCsts) {
+                    if (itc.isA.equals(rule.sourcePath[j]) || (rule.sourcePath[j].namespace == null && rule.sourcePath[j].name == itc.isA.name)) {
+                      // It's a match!
+                      match = itc.isA;
+                      break;
+                    }
+                  }
+                }
+              } else {
+                // We stopped further down the path, so look for constraints on paths up until where we stopped...
+                // For example "A.B.C.D includes 1..1 DPrime":
+                // - Trying to find A.B.C.DPrime
+                // - In this example, we stopped at DPrime, when j == 3
+                // - In the models, value A has IncludesTypeConstraint with path [B, C, D] and isA DPrime
+                // - But for other possible ways it could have been defined, it might have been:
+                //   - A.B w/ IncludesTypeConstraint having path [C, D] and isA DPrime
+                //   - A.B.C w/ IncludesTypeConstraint having path [D] and isA DPrime
+                //   - A.B.C.D w/ IncludesTypeConstraint having path [] and isA DPrime
+                // So... we need to step through the path so far (up to j-1) trying to find these potential scenarios
+                for (let k = 0; match == null && k <= (j-1); k++) {
+                  const pathValue = this.findMatchValueInDataElement(deArray[k], rule.sourcePath[k]);
+                  const itcCsts = pathValue.constraintsFilter.includesType.constraints;
+                  for (const itc of itcCsts) {
+                    if (itc.path.length === (j-k) && this.equalSourcePaths(itc.path.slice(0,-1), rule.sourcePath.slice(k+1,j))) {
+                      if (itc.isA.equals(rule.sourcePath[j]) || (rule.sourcePath[j].namespace == null && rule.sourcePath[j].name == itc.isA.name)) {
+                        // If we made it here, we know that the last bit of the path is the IncludesType constraint and it all lines up
+                        match = itc.isA;
+                        break;
+                      }
+                    }
+                  }
+                }
+              }
+            }
             if (match) {
               rule.sourcePath[j] = match;
               if (j < (rule.sourcePath.length-1) && !(match instanceof models.TBD)) {
                 currentDE = this._expanded.dataElements.findByIdentifier(match);
+                deArray.push(currentDE);
                 if (typeof de === 'undefined') {
                   logger.error('Cannot resolve data element definition from path: %s. ERROR_CODE:12031', this.highlightPartInPath(rule.sourcePath, j));
                   // Remove the invalid rule from the map and decrement index so we don't skip a rule in the loop
