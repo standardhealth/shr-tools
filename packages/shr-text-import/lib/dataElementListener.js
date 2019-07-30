@@ -372,6 +372,14 @@ class DataElementImporter extends SHRDataElementParserListener {
       } else if (cst.elementStringConstraint()) {
         const str = stripDelimitersFromToken(cst.elementStringConstraint().STRING());
         value.addConstraint(new FixedValueConstraint(str, 'string', path));
+      } else if (cst.elementIntegerConstraint()) {
+        // use substr to cut out the '=' sign
+        const int = parseInt(cst.elementIntegerConstraint().getText().substr(1));
+        value.addConstraint(new FixedValueConstraint(int, 'integer', path));
+      } else if (cst.elementDecimalConstraint()) {
+        // use substr to cut out the '=' sign
+        const decimal = parseFloat(cst.elementDecimalConstraint().getText().substr(1));
+        value.addConstraint(new FixedValueConstraint(decimal, 'decimal', path));
       }
     }
     else if(ctx.count()) {

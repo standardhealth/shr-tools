@@ -1,0 +1,10 @@
+Grammar:   DataElement 6.0
+Namespace: fixedDecimalConstraintOnFieldChild
+
+Entry:          FixedDecimalConstraintOnFieldChild
+Description:    "It is a group entry with a decimal constraint on a field's child"
+Property:       SimpleDecimal 0..1 
+                SimpleDecimal[decimal] = 0.0
+
+Element:        SimpleDecimal
+Value:          decimal

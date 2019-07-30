@@ -470,6 +470,24 @@ SHRDataElementParserListener.prototype.exitElementStringConstraint = function(ct
 };
 
 
+// Enter a parse tree produced by SHRDataElementParser#elementIntegerConstraint.
+SHRDataElementParserListener.prototype.enterElementIntegerConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#elementIntegerConstraint.
+SHRDataElementParserListener.prototype.exitElementIntegerConstraint = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRDataElementParser#elementDecimalConstraint.
+SHRDataElementParserListener.prototype.enterElementDecimalConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#elementDecimalConstraint.
+SHRDataElementParserListener.prototype.exitElementDecimalConstraint = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRDataElementParser#elementTypeConstraint.
 SHRDataElementParserListener.prototype.enterElementTypeConstraint = function(ctx) {
 };

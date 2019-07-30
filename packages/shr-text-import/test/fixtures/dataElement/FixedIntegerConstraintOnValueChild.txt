@@ -1,0 +1,11 @@
+Grammar:   DataElement 6.0
+Namespace: fixedIntegerConstraintOnValueChild
+
+
+Element:     FixedIntegerConstraintOnValueChild
+Description: "It is an entry with an integer constraint on the value's child"
+Value:       SimpleInt
+             Value[SimpleInt] = 12345
+
+Element:     SimpleInt
+Value:       integer

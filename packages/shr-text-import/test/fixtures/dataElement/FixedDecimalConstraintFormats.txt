@@ -1,0 +1,34 @@
+Grammar:   DataElement 6.0
+Namespace: fixedDecimalConstraintFormats
+
+Element:        FixedDecimalPositive
+Description:    "test"
+Value:          decimal = 1.2
+
+Element:        FixedDecimalPositiveWhole
+Description:    "test"
+Value:          decimal = 1.
+
+Element:        FixedDecimalNegative
+Description:    "test"
+Value:          decimal = -1.2
+
+Element:        FixedDecimalNegativeWhole
+Description:    "test"
+Value:          decimal = -1.
+
+Element:        FixedDecimalPositiveScientificPositive
+Description:    "test"
+Value:          decimal = 1.2e12
+
+Element:        FixedDecimalPositiveScientificNegative
+Description:    "test"
+Value:          decimal = 1.2e-12
+
+Element:        FixedDecimalNegativeScientificPositive
+Description:    "test"
+Value:          decimal = -1.2e12
+
+Element:        FixedDecimalNegativeScientificNegative
+Description:    "test"
+Value:          decimal = -1.2e-12

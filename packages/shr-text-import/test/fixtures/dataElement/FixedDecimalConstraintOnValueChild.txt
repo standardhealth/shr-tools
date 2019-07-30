@@ -1,0 +1,11 @@
+Grammar:   DataElement 6.0
+Namespace: fixedDecimalConstraintOnValueChild
+
+
+Element:     FixedDecimalConstraintOnValueChild
+Description: "It is an entry with a decimal constraint on the value's child"
+Value:       SimpleDecimal
+             Value[SimpleDecimal] = 1.234
+
+Element:     SimpleDecimal
+Value:       decimal

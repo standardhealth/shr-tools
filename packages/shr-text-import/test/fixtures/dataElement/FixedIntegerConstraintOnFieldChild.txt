@@ -1,0 +1,10 @@
+Grammar:   DataElement 6.0
+Namespace: fixedIntegerConstraintOnFieldChild
+
+Entry:          FixedIntegerConstraintOnFieldChild
+Description:    "It is a group entry with an integer constraint on a field's child"
+Property:       SimpleInt 0..1 
+                SimpleInt[integer] = 0
+
+Element:        SimpleInt
+Value:          integer

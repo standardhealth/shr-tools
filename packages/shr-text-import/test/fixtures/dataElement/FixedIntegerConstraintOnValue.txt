@@ -1,0 +1,7 @@
+Grammar:   DataElement 6.0
+Namespace: fixedIntegerConstraintOnValue
+
+Element:        FixedIntegerConstraintOnValue
+Description:    "It is an entry with an integer constraint on the value"
+Value:          integer = 2
+

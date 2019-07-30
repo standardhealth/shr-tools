@@ -267,6 +267,16 @@ SHRDataElementParserVisitor.prototype.visitElementStringConstraint = function(ct
 };
 
 
+// Visit a parse tree produced by SHRDataElementParser#elementIntegerConstraint.
+SHRDataElementParserVisitor.prototype.visitElementIntegerConstraint = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRDataElementParser#elementDecimalConstraint.
+SHRDataElementParserVisitor.prototype.visitElementDecimalConstraint = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRDataElementParser#elementTypeConstraint.
 SHRDataElementParserVisitor.prototype.visitElementTypeConstraint = function(ctx) {
 };

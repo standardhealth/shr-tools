@@ -1,0 +1,7 @@
+Grammar:   DataElement 6.0
+Namespace: fixedIntegerConstraintOnValue2
+
+Element:        FixedIntegerConstraintOnValue
+Description:    "It is an entry with a negative integer constraint on the value"
+Value:          integer
+Value[integer] = -2

@@ -3,10 +3,8 @@ const {setLogger} = require('../index');
 const {id, pid, expectAndGetElement, expectAndGetEntry, expectAndGetAbstract, expectAndGetGroup, expectValue, expectPrimitiveValue, expectChoiceValue, expectCardOne, expectChoiceOption, expectField, expectConcept, expectIdentifier, expectPrimitiveIdentifier, expectNoConstraints, importFixture, importFixtureFolder } = require('../test/import-helper');
 const {Version, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, FixedValueConstraint, TypeConstraint, CardConstraint, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
 const err = require('shr-test-helpers/errors');
-const shrexpand = require('shr-expand');
 const errorLogger = err.logger();
 
-shrexpand.setLogger(errorLogger);
 // Set the logger -- this is needed for detecting and checking errors
 setLogger(errorLogger);
 
@@ -960,6 +958,132 @@ does not support multiple options.
     expect(el.constraints[0]).to.be.instanceof(FixedValueConstraint);
     expect(el.constraints[0].path).to.eql([pid('string')]);
     expect(el.constraints[0].value).to.equal('foo bar');
+  });
+
+  it('Import72: should correctly import an entry with a fixed integer constraint on the value, file = fixedIntegerConstraintOnValue', () => {
+    const nspace  = 'fixedIntegerConstraintOnValue' ;
+    const specifications = importFixture(nspace, importDir);
+    const entry = expectAndGetElement(specifications, nspace, 'FixedIntegerConstraintOnValue');
+    expectCardOne(entry.value);
+    expectPrimitiveValue(entry.value, 'integer');
+    expect(entry.value.constraints).to.have.length(1);
+    expect(entry.value.constraints[0]).to.be.instanceof(FixedValueConstraint);
+    expect(entry.value.constraints[0].path).to.be.empty;
+    expect(entry.value.constraints[0].onValue).to.be.undefined;
+    expect(entry.value.constraints[0].value).to.equal(2);
+  });
+
+  it('Import73: should correctly import an entry with a fixed integer constraint on the value (alternate syntax, negative), file = fixedIntegerConstraintOnValue2', () => {
+    const nspace  = 'fixedIntegerConstraintOnValue2' ;
+    const specifications = importFixture(nspace, importDir);
+    const entry = expectAndGetElement(specifications, nspace, 'FixedIntegerConstraintOnValue');
+    expectCardOne(entry.value);
+    expectPrimitiveValue(entry.value, 'integer');
+    expect(entry.value.constraints).to.have.length(1);
+    expect(entry.value.constraints[0]).to.be.instanceof(FixedValueConstraint);
+    expect(entry.value.constraints[0].path).to.be.empty;
+    expect(entry.value.constraints[0].onValue).to.be.undefined;
+    expect(entry.value.constraints[0].value).to.equal(-2);
+  });
+
+  it('Import74: should correctly import an entry with a fixed integer constraint on the value\'s child, file = fixedIntegerConstraintOnValueChild', () => {
+    const nspace  = 'fixedIntegerConstraintOnValueChild' ;
+    const specifications = importFixture(nspace, importDir);
+    const entry = expectAndGetElement(specifications, nspace, 'FixedIntegerConstraintOnValueChild');
+    expectCardOne(entry.value);
+    expectValue(entry.value, nspace, 'SimpleInt');
+    expect(entry.value.constraints).to.have.length(1);
+    expect(entry.value.constraints[0]).to.be.instanceof(FixedValueConstraint);
+    expect(entry.value.constraints[0].path).to.be.empty;
+    expect(entry.value.constraints[0].value).to.equal(12345);
+  });
+
+  it('Import75: should correctly import a group with a fixed integer constraint on a field\'s child, file = fixedIntegerConstraintOnFieldChild', () => {
+    const nspace  = 'fixedIntegerConstraintOnFieldChild' ;
+    const specifications = importFixture(nspace, importDir);
+    const group = expectAndGetEntry(specifications, nspace, 'FixedIntegerConstraintOnFieldChild');
+    expect(group.value).to.be.undefined;
+    expect(group.fields).to.have.length(1);
+    expectField(group, 0, nspace, 'SimpleInt', 0, 1);
+    const el = group.fields[0];
+    expect(el.constraints).to.have.length(1);
+    expect(el.constraints[0]).to.be.instanceof(FixedValueConstraint);
+    expect(el.constraints[0].path).to.eql([pid('integer')]);
+    expect(el.constraints[0].value).to.equal(0);
+  });
+
+  it('Import76: should correctly import an entry with a fixed decimal constraint on the value, file = fixedDecimalConstraintOnValue', () => {
+    const nspace  = 'fixedDecimalConstraintOnValue' ;
+    const specifications = importFixture(nspace, importDir);
+    const entry = expectAndGetElement(specifications, nspace, 'FixedDecimalConstraintOnValue');
+    expectCardOne(entry.value);
+    expectPrimitiveValue(entry.value, 'decimal');
+    expect(entry.value.constraints).to.have.length(1);
+    expect(entry.value.constraints[0]).to.be.instanceof(FixedValueConstraint);
+    expect(entry.value.constraints[0].path).to.be.empty;
+    expect(entry.value.constraints[0].onValue).to.be.undefined;
+    expect(entry.value.constraints[0].value).to.equal(0.123);
+  });
+
+  it('Import77: should correctly import an entry with a fixed decimal constraint on the value (alternate syntax, negative), file = fixedDecimalConstraintOnValue2', () => {
+    const nspace  = 'fixedDecimalConstraintOnValue2' ;
+    const specifications = importFixture(nspace, importDir);
+    const entry = expectAndGetElement(specifications, nspace, 'FixedDecimalConstraintOnValue');
+    expectCardOne(entry.value);
+    expectPrimitiveValue(entry.value, 'decimal');
+    expect(entry.value.constraints).to.have.length(1);
+    expect(entry.value.constraints[0]).to.be.instanceof(FixedValueConstraint);
+    expect(entry.value.constraints[0].path).to.be.empty;
+    expect(entry.value.constraints[0].onValue).to.be.undefined;
+    expect(entry.value.constraints[0].value).to.equal(-1.234);
+  });
+
+  it('Import78: should correctly import an entry with a fixed decimal constraint on the value\'s child, file = fixedDecimalConstraintOnValueChild', () => {
+    const nspace  = 'fixedDecimalConstraintOnValueChild' ;
+    const specifications = importFixture(nspace, importDir);
+    const entry = expectAndGetElement(specifications, nspace, 'FixedDecimalConstraintOnValueChild');
+    expectCardOne(entry.value);
+    expectValue(entry.value, nspace, 'SimpleDecimal');
+    expect(entry.value.constraints).to.have.length(1);
+    expect(entry.value.constraints[0]).to.be.instanceof(FixedValueConstraint);
+    expect(entry.value.constraints[0].path).to.be.empty;
+    expect(entry.value.constraints[0].value).to.equal(1.234);
+  });
+
+  it('Import79: should correctly import a group with a fixed decimal constraint on a field\'s child, file = fixedDecimalConstraintOnFieldChild', () => {
+    const nspace  = 'fixedDecimalConstraintOnFieldChild' ;
+    const specifications = importFixture(nspace, importDir);
+    const group = expectAndGetEntry(specifications, nspace, 'FixedDecimalConstraintOnFieldChild');
+    expect(group.value).to.be.undefined;
+    expect(group.fields).to.have.length(1);
+    expectField(group, 0, nspace, 'SimpleDecimal', 0, 1);
+    const el = group.fields[0];
+    expect(el.constraints).to.have.length(1);
+    expect(el.constraints[0]).to.be.instanceof(FixedValueConstraint);
+    expect(el.constraints[0].path).to.eql([pid('decimal')]);
+    expect(el.constraints[0].value).to.equal(0.0);
+  });
+
+  it('Import 80: should correctly import a decimal in all possible formats (positive, negative, scientific notation), file = fixedDecimalConstraintFormats', () => {
+    const nspace = 'fixedDecimalConstraintFormats' ;
+    const specifications = importFixture(nspace, importDir);
+    let entry = expectAndGetElement(specifications, nspace, 'FixedDecimalPositive');
+    expect(entry.value.constraints[0].value).to.equal(1.2);
+    entry = expectAndGetElement(specifications, nspace, 'FixedDecimalPositiveWhole');
+    expect(entry.value.constraints[0].value).to.equal(1.);
+    entry = expectAndGetElement(specifications, nspace, 'FixedDecimalNegative');
+    expect(entry.value.constraints[0].value).to.equal(-1.2);
+    entry = expectAndGetElement(specifications, nspace, 'FixedDecimalNegativeWhole');
+    expect(entry.value.constraints[0].value).to.equal(-1.);
+    entry = expectAndGetElement(specifications, nspace, 'FixedDecimalPositiveScientificPositive');
+    expect(entry.value.constraints[0].value).to.equal(1.2e12);
+    entry = expectAndGetElement(specifications, nspace, 'FixedDecimalPositiveScientificNegative');
+    expect(entry.value.constraints[0].value).to.equal(1.2e-12);
+    entry = expectAndGetElement(specifications, nspace, 'FixedDecimalNegativeScientificPositive');
+    expect(entry.value.constraints[0].value).to.equal(-1.2e12);
+    entry = expectAndGetElement(specifications, nspace, 'FixedDecimalNegativeScientificNegative');
+    expect(entry.value.constraints[0].value).to.equal(-1.2e-12);
+
   });
 
 });

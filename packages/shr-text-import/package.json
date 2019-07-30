@@ -1,6 +1,6 @@
 {
   "name": "shr-text-import",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "description": "Imports Standard Health Record (SHR) elements from their custom grammar to the SHR models",
   "author": "",
   "license": "Apache-2.0",
@@ -24,13 +24,11 @@
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "mocha": "^3.5.3",
-    "shr-expand": "^6.1.0",
-    "shr-models": "^6.2.0",
+    "shr-models": "^6.3.0",
     "shr-test-helpers": "^6.0.0"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9",
-    "shr-expand": "^6.1.0",
-    "shr-models": "^6.2.0"
+    "shr-models": "^6.3.0"
   }
 }
