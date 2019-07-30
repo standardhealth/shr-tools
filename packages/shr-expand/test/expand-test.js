@@ -3397,6 +3397,46 @@ describe('#expand()', () => {
     expect(eSubA.fields).to.be.empty;
   });
 
+  // Valid Fixed URI Constraints
+
+  it('should allow a fixed string constraint to apply to URI values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('uri')).withMinMax(0, 1)
+      .withConstraint(new models.FixedValueConstraint('http://example.com/ex.html', 'string')));
+    
+    add(a);
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const A = findExpanded('shr.test', 'A');
+    expect(A.identifier).to.eql(id('shr.test', 'A'));
+    expect(A.value).to.eql(
+      new models.IdentifiableValue(pid('uri')).withMinMax(0, 1)
+        .withConstraint(new models.FixedValueConstraint('http://example.com/ex.html', 'uri')
+          .withLastModifiedBy(id('shr.test', 'A')))
+    );
+  });
+
+  // Valid Decimal Constraints
+
+  it('should allow a fixed integer constraint to apply to decimal values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
+      .withValue(new models.IdentifiableValue(pid('decimal')).withMinMax(0, 1)
+      .withConstraint(new models.FixedValueConstraint(123, 'integer')));
+    
+    add(a);
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const A = findExpanded('shr.test', 'A');
+    expect(A.identifier).to.eql(id('shr.test', 'A'));
+    expect(A.value).to.eql(
+      new models.IdentifiableValue(pid('decimal')).withMinMax(0, 1)
+        .withConstraint(new models.FixedValueConstraint(123, 'decimal')
+          .withLastModifiedBy(id('shr.test', 'A')))
+    );
+  });
+
   it('should properly deal with inherited TBD values', () => {
     let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.TBD('Not ready yet!')

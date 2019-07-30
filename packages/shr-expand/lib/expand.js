@@ -15,7 +15,13 @@ function expand(specifications, ...exporters) {
 
 const CONCEPT = new models.PrimitiveIdentifier('concept');
 const BOOLEAN = new models.PrimitiveIdentifier('boolean');
-const STRING = new models.PrimitiveIdentifier('string');
+
+// Used to set which types of constraints can be converted.
+// For example, string constraint can be used on value of type uri.
+const constraintConversions = {
+  'integer': ['decimal'],
+  'string': ['uri']
+}
 
 class Expander {
   constructor(specs, ...exporters) {
@@ -1038,17 +1044,17 @@ class Expander {
     let targetLabel = this.constraintTargetLabel(value, constraint.path);
 
     // Determine if the constraint is on the specific target or its value
-    if (!this.supportsFixedValueConstraint(target.identifier)) {
+    if (!this.supportsFixedValueConstraint(target.identifier, constraint)) {
       // Isn't directly a fixed value, so try its value
       let valID = this.constraintTargetValueIdentifier(value, constraint.path);
       if(!valID && value instanceof models.ChoiceValue) {
-        let valOption = value.options.find(v => this.supportsFixedValueConstraint(v.identifier));
+        let valOption = value.options.find(v => this.supportsFixedValueConstraint(v.identifier, constraint));
         if(valOption) {
           valID = valOption.identifier;
         }
       }
-      if (!this.supportsFixedValueConstraint(valID)) {
-        logger.error('Cannot constrain string value of %s since neither it nor its value is a string. ERROR_CODE:12041', targetLabel);
+      if (!this.supportsFixedValueConstraint(valID, constraint)) {
+        logger.error('Cannot constrain value of %s to %s since neither it nor its value is a %s. ERROR_CODE:12041', targetLabel, constraint.type, constraint.type);
         return previousConstraints;
       }
       // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
@@ -1062,7 +1068,7 @@ class Expander {
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).fixedValue.constraints;
     for (const previous of filtered) {
       if (previous.value != constraint.value) {
-        logger.error('Cannot constrain string value of %s to %s since a previous constraint constrains it to %s. ERROR_CODE:12042', targetLabel, constraint.value, previous.value);
+        logger.error('Cannot constrain %s value of %s to %s since a previous constraint constrains it to %s. ERROR_CODE:12042', constraint.type, targetLabel, constraint.value, previous.value);
         return previousConstraints;
       }
       // Remove the previous type constraint since this one supercedes it
@@ -1182,8 +1188,15 @@ class Expander {
     return BOOLEAN.equals(identifier);
   }
 
-  supportsFixedValueConstraint(identifier) {
-    return STRING.equals(identifier);
+  supportsFixedValueConstraint(identifier, constraint) {
+    if (identifier && constraint && 
+      (identifier.name === constraint.type || 
+      (constraintConversions[constraint.type] && constraintConversions[constraint.type].includes(identifier.name)))) {
+      // reset constraint.type in case they are not equal, but identifier.name is allowed conversion
+      constraint.type = identifier.name;
+      return true;
+    }
+    return false;
   }
 
   checkHasBaseType(identifier, baseIdentifier) {
