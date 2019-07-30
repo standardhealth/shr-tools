@@ -1199,6 +1199,9 @@ class FixedValueConstraint extends Constraint {
 
   get value() { return this._value; }
   get type() { return this._type; }
+  set type(type) {
+    this._type = type;
+  }
 
   clone() {
     const clone = new FixedValueConstraint(this._value, this._type);
