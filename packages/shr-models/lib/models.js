@@ -320,8 +320,8 @@ class ContentProfileSpecifications {
   findRulesByIdentifierAndField(identifier, field) {
     if (identifier && field) {
       const cp = this.findByIdentifier(identifier);
-      if (cp) {
-        return cp.rules.filter(r => r.path[0].equals(field));
+      if (cp && cp.rules && cp.rules.length > 0) {
+        return cp.rules.filter(r => r.path && r.path.length > 0 && r.path[0].equals(field));
       }
     }
     return [];
@@ -717,6 +717,7 @@ class ContentProfileRule {
   constructor(path = []) {
     this._path = path; // Identifier[]
     this._mustSupport = false; // boolean
+    this._noProfile = false; // boolean
   }
   // path is the array of Identifiers (namespace+name) corresponding to the field/path this rule applies to
   get path() { return this._path; }
@@ -732,16 +733,23 @@ class ContentProfileRule {
     return this;
   }
 
+  get noProfile() { return this._noProfile; }
+  set noProfile(noProfile) {
+    this._noProfile = noProfile;
+  }
+
   clone() {
     const clone = new ContentProfileRule(this._path.map(id => id.clone()));
     clone.mustSupport = this._mustSupport;
+    clone.noProfile = this._noProfile;
     return clone;
   }
 
   toJSON() {
     var output = {
       'path':         this.path.map(id => id.name).join('.'),
-      'mustSupport':  this.mustSupport
+      'mustSupport':  this.mustSupport,
+      'noProfile': this.noProfile
     };
 
     clearEmptyFields(output, true);
