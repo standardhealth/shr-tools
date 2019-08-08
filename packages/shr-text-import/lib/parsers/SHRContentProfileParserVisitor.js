@@ -67,6 +67,16 @@ SHRContentProfileParserVisitor.prototype.visitFlag = function(ctx) {
 };
 
 
+// Visit a parse tree produced by SHRContentProfileParser#headerFlags.
+SHRContentProfileParserVisitor.prototype.visitHeaderFlags = function(ctx) {
+};
+
+
+// Visit a parse tree produced by SHRContentProfileParser#headerFlag.
+SHRContentProfileParserVisitor.prototype.visitHeaderFlag = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRContentProfileParser#version.
 SHRContentProfileParserVisitor.prototype.visitVersion = function(ctx) {
 };

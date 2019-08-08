@@ -110,6 +110,24 @@ SHRContentProfileParserListener.prototype.exitFlag = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRContentProfileParser#headerFlags.
+SHRContentProfileParserListener.prototype.enterHeaderFlags = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRContentProfileParser#headerFlags.
+SHRContentProfileParserListener.prototype.exitHeaderFlags = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRContentProfileParser#headerFlag.
+SHRContentProfileParserListener.prototype.enterHeaderFlag = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRContentProfileParser#headerFlag.
+SHRContentProfileParserListener.prototype.exitHeaderFlag = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRContentProfileParser#version.
 SHRContentProfileParserListener.prototype.enterVersion = function(ctx) {
 };

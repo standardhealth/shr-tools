@@ -79,6 +79,25 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
     this._currentNs = ctx.namespace().getText();
   }
 
+  enterContentDef(ctx) {
+    // Check to see if Entry/Group has flags. Currently only NP
+    if (ctx.headerFlags()) {
+      const pathStr = ctx.contentHeader().simpleName().getText();
+      const identifier = new Identifier(this._currentNs, pathStr);
+      this._currentDef = new ContentProfile(identifier);
+      this._currentDef.grammarVersion = this._currentGrammarVersion;
+      // Create new rule, apply it in enterHeaderFlag function
+      this._currentRule = new ContentProfileRule();
+    }
+  }
+
+  enterHeaderFlag(ctx) {
+    if (this._currentRule) {
+      this._currentRule.noProfile = (ctx.KW_NO_PROFILE() != null);
+      this._currentDef.addRule(this._currentRule);
+    }
+  }
+
   enterContentHeader(ctx) {
     // set current content
     const name = ctx.simpleName().getText();
@@ -185,6 +204,9 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
   }
 
   exitContentDef(ctx) {
+    if (ctx.headerFlags()) {
+      this._currentRule = null;
+    }
     this._specs.contentProfiles.add(this._currentDef);
     this._currentDef = null;
   }
