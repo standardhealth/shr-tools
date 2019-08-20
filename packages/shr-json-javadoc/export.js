@@ -110,7 +110,8 @@ class SHR {
     for (const namespace of this.namespaces.list()) {
       const fileName = `${namespace.path}-pkg.html`;
       const filePath = path.join(this.outDirectory, namespace.path, fileName);
-      const ejsPkg = { elements: namespace.elements.sort(), namespace: namespace, metaData: this.metaData };
+      const myElements = namespace.elements.sort().map(de => this.elements.get(namespace.name + '.' + de));
+      const ejsPkg = { elements: myElements, namespace: namespace, metaData: this.metaData };
       renderEjsFile('templates/pkg.ejs', ejsPkg, filePath);
     }
   }
@@ -120,7 +121,7 @@ class SHR {
     for (const namespace of this.namespaces.list()) {
       const fileName = `${namespace.path}-info.html`;
       const filePath = path.join(this.outDirectory, namespace.path, fileName);
-      const ejsPkg = { namespace: namespace, metaData: this.metaData  };
+      const ejsPkg = { namespace: namespace, elements: this.elements, metaData: this.metaData  };
       renderEjsFile('templates/info.ejs', ejsPkg, filePath);
     }
   }
@@ -141,7 +142,7 @@ class SHR {
 
   // Builds list of all the data elements on the main page
   buildAllElementsFrame() {
-    const ejsPkg = { elements: this.elements.list().filter(de=>de.hierarchy.length > 0), metaData: this.metaData  };
+    const ejsPkg = { elements: this.elements.list(), metaData: this.metaData  };
     const filePath = path.join(this.outDirectory, 'allclasses-frame.html');
     renderEjsFile('templates/allclasses-frame.ejs', ejsPkg, filePath);
   }

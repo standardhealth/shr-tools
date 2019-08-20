@@ -11,22 +11,32 @@
   //<![CDATA[
     function loadPackageFrames(pkgContent, pkgInfo)
     {
-      parent.packageFrame.location=pkgContent;
-      parent.classFrame.location=pkgInfo;
+      var contents = {
+        "packageFrame": pkgContent,
+        "classFrame": pkgInfo
+      };
+      var targetOrigin = "";
+      if(this.location.protocol == "file:") {
+      targetOrigin = "*";
+      } else {
+        targetOrigin = this.location.protocol + "//" + this.location.hostname + (this.location.port ? ":" + this.location.port : "");
+      }
+      parent.postMessage(contents, targetOrigin);
     }
   //]]>
   </script>
 </head>
 <body>
 <h1 title="<%= metaData.projectShorthand %> Reference Model Specification" class="bar"><strong><%= metaData.projectShorthand %> Reference Model Specification</strong></h1>
-<div class="indexHeader"><a href="allclasses-frame.html" target="packageFrame">All Classes</a></div>
+<div class="indexHeader"></div>
 <div class="indexContainer">
-  <h2 title="Packages">Packages</h2>
-  <ul title="Packages">
-  <% namespaces.forEach((namespace) => { -%>
-  <li><a name="<%= namespace.name %>" href="#" onclick="loadPackageFrames('<%= namespace.path %>/<%= namespace.path %>-pkg.html','<%= namespace.path %>/<%= namespace.path %>-info.html')"><%= namespace.name %></a></li>
-  <% }) -%>
-</ul>
+  <h2 title="Namespaces">Namespaces</h2>
+  <ul title="Namespaces">
+    <li><label class="namespace-selector"><input type="radio" name="namespace-selector" onchange="loadPackageFrames('allclasses-frame.html', 'overview-summary.html')" value="allNamespaces" checked="checked"/>All Namespaces</label></li>
+    <% namespaces.forEach((namespace) => { -%>
+      <li><label class="namespace-selector"><input type="radio" name="namespace-selector" onchange="loadPackageFrames('<%= namespace.path %>/<%= namespace.path %>-pkg.html','<%= namespace.path %>/<%= namespace.path %>-info.html')" value="<%= namespace.path %>/<%= namespace.name %>"/><%= namespace.name %></label></li>
+    <% }) -%>
+  </ul>
 </div>
 <p>&nbsp;</p>
 </body>

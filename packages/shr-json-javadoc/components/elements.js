@@ -22,6 +22,19 @@ class Elements {
     element.children = [];
     element.overridden = [];
     element.usedBy = new Set();
+    if(element.isGroup) {
+      element.cssClass = 'group';
+      element.displayTitle = 'Group';
+    } else if(element.isAbstract) {
+      element.cssClass = 'abstract';
+      element.displayTitle = 'Abstract';
+    } else if(element.isEntry) {
+      element.cssClass = 'entry';
+      element.displayTitle = 'Entry';
+    } else {
+      element.cssClass = 'element';
+      element.displayTitle = 'Element';
+    }
     this.elements[element.fqn] = element;
   }
 

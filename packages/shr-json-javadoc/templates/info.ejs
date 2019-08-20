@@ -32,6 +32,31 @@ if (location.href.indexOf('is-external=true') == -1) {
 <div class="contentContainer">
 <h2 title="Overview">Overview of <%= namespace.name %></h2>
   <p><%- makeHtml(namespace.description) %></p>
+  <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Elements and Definitions">
+    <thead>
+      <tr>
+        <th class="colFirst" scope="col">Element</th>
+        <th class="colLast" scope="col">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+<% namespace.elements.forEach((elementName, index) => {
+      const element = elements.get(namespace.name + '.' + elementName); -%>
+      <% if (index % 2 == -1) { %>
+        <tr class="rowColor">
+      <% } else { %>
+        <tr class="altColor">
+      <% } %>
+        <td class="colFirst">
+          <a href="<%= element.name %>.html"><%= element.name %></a>
+        </td>
+        <td class="colLast">
+          <div class="block"><%- makeHtml(element.description) %></div>
+        </td>
+      </tr>
+<% }) -%>
+    </tbody>
+  </table>
 </div>
 </body>
 </html>

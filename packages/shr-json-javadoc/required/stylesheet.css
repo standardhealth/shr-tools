@@ -21,13 +21,6 @@ a:active {
     text-decoration:none;
     color:#4c6b87;
 }
-a[name] {
-    color:#353833;
-}
-a[name]:hover {
-    text-decoration:none;
-    color:#353833;
-}
 pre {
     font-size:1.3em;
 }
@@ -259,6 +252,16 @@ Page layout container styles
 }
 .indexContainer ul li {
     list-style:none;
+}
+.indexContainer .filter-container {
+    margin-bottom: 0.5em;
+}
+.indexContainer label.namespace-selector {
+    color: #4c6b87;
+    cursor: pointer;
+}
+.indexContainer label.namespace-selector input {
+    cursor: pointer;
 }
 .contentContainer .description dl dt, .contentContainer .details dl dt, .serializedFormContainer dl dt {
     font-size:1.1em;

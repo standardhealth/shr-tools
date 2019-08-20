@@ -8,16 +8,29 @@
 <meta name="date" content="2016-01-11"/>
 <meta name="keywords" content="<%= namespace.name %> package"/>
 <link rel="stylesheet" type="text/css" href="../stylesheet.css" title="Style"/>
+<script src="../resources/jquery.min.js"></script>
+<script src="../resources/classFilter.js"></script>
 </head>
 <body>
-  <h1 class="bar"><a href="#" target="classFrame"><%= namespace.name %></a></h1>
+  <h1 class="bar"><span id="shown-classes">All Classes</span>&nbsp;in&nbsp;<%= namespace.name %></h1>
   <div class="indexContainer">
-    <h2 title="Classes">Classes</h2>
+    <div class="filter-container">
+      <label><input type="radio" name="class-type-filter" value="all" checked="checked">All Classes</input></label>
+      <label><input type="radio" name="class-type-filter" value="entry">Entries</input></label>
+    </div>
+    <div class="filter-container">
+      <label><input type="radio" name="class-type-filter" value="group">Groups</input></label>
+      <label><input type="radio" name="class-type-filter" value="element">Elements</input></label>
+    </div>
+    <div class="filter-container">
+      <input type="text" id="class-name-filter" autocomplete="off"/>
+    </div>
     <ul title="Classes">
-    <% elements.forEach((element) => { -%>
-    <li><a href="<%= element %>.html" title="class in <%= namespace.name %>.<%= element %>" target="classFrame"><%= element %></a></li>
-    <% }) -%>
-  </ul>
+      <% elements.forEach((element) => { -%>
+      <li class="<%= element.cssClass %>"><a href="<%= element.name %>.html" title="class in <%= namespace.name %>.<%= element.name %>" target="classFrame"><%= element.name %></a></li>
+      <% }) -%>
+    </ul>
+    <p id="no-match" style="display: none;">No matching classes.</p>
   </div>
 </body>
 </html>
