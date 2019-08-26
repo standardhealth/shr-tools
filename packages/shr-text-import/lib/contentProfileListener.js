@@ -79,6 +79,23 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
     this._currentNs = ctx.namespace().getText();
   }
 
+  enterNamespaceFlag(ctx) {
+    const noProfile = (ctx.KW_NO_PROFILE() != null);
+    const primaryProfile = (ctx.KW_ALL_PRIMARY() != null);
+    for (const de of this._specs.dataElements.byNamespace(this._currentNs)) {
+      if (de.isEntry || de.isGroup) {
+        this._currentDef = new ContentProfile(de.identifier);
+        this._currentDef.grammarVersion = this._currentGrammarVersion;
+        // Create new rule, apply it in enterHeaderFlag function
+        this._currentRule = new ContentProfileRule();
+        this._currentRule.noProfile = noProfile;
+        this._currentRule.primaryProfile = primaryProfile;
+        this._currentDef.addRule(this._currentRule);
+        this._specs.contentProfiles.add(this._currentDef);
+      }
+    }
+  }
+
   enterContentDef(ctx) {
     // Check to see if Entry/Group has flags. Currently only NP
     if (ctx.headerFlags()) {
@@ -89,21 +106,23 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
       // Create new rule, apply it in enterHeaderFlag function
       this._currentRule = new ContentProfileRule();
     }
+    else {
+      const pathStr = ctx.contentHeader().simpleName().getText();
+      const identifier = new Identifier(this._currentNs, pathStr);
+      this._currentDef = new ContentProfile(identifier);
+      this._currentDef.grammarVersion = this._currentGrammarVersion;
+      this._currentRule = new ContentProfileRule();
+      this._currentRule.primaryProfile = true;
+      this._currentDef.addRule(this._currentRule);
+    }
   }
 
   enterHeaderFlag(ctx) {
     if (this._currentRule) {
       this._currentRule.noProfile = (ctx.KW_NO_PROFILE() != null);
+      if (this._currentRule.noProfile) this._currentRule.primaryProfile = false;
       this._currentDef.addRule(this._currentRule);
     }
-  }
-
-  enterContentHeader(ctx) {
-    // set current content
-    const name = ctx.simpleName().getText();
-    const identifier = new Identifier(this._currentNs, name);
-    this._currentDef = new ContentProfile(identifier);
-    this._currentDef.grammarVersion = this._currentGrammarVersion;
   }
 
   enterCpRule(ctx) {

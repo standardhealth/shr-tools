@@ -128,6 +128,15 @@ SHRContentProfileParserListener.prototype.exitHeaderFlag = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRContentProfileParser#namespaceFlag.
+SHRContentProfileParserListener.prototype.enterNamespaceFlag = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRContentProfileParser#namespaceFlag.
+SHRContentProfileParserListener.prototype.exitNamespaceFlag = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRContentProfileParser#version.
 SHRContentProfileParserListener.prototype.enterVersion = function(ctx) {
 };

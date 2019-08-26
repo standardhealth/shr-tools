@@ -77,6 +77,11 @@ SHRContentProfileParserVisitor.prototype.visitHeaderFlag = function(ctx) {
 };
 
 
+// Visit a parse tree produced by SHRContentProfileParser#namespaceFlag.
+SHRContentProfileParserVisitor.prototype.visitNamespaceFlag = function(ctx) {
+};
+
+
 // Visit a parse tree produced by SHRContentProfileParser#version.
 SHRContentProfileParserVisitor.prototype.visitVersion = function(ctx) {
 };
