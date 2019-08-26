@@ -718,6 +718,7 @@ class ContentProfileRule {
     this._path = path; // Identifier[]
     this._mustSupport = false; // boolean
     this._noProfile = false; // boolean
+    this._primaryProfile = false;
   }
   // path is the array of Identifiers (namespace+name) corresponding to the field/path this rule applies to
   get path() { return this._path; }
@@ -738,10 +739,16 @@ class ContentProfileRule {
     this._noProfile = noProfile;
   }
 
+  get primaryProfile() { return this._primaryProfile; }
+  set primaryProfile(primaryProfile) {
+    this._primaryProfile = primaryProfile;
+  }
+
   clone() {
     const clone = new ContentProfileRule(this._path.map(id => id.clone()));
     clone.mustSupport = this._mustSupport;
     clone.noProfile = this._noProfile;
+    clone.primaryProfile = this._primaryProfile;
     return clone;
   }
 
@@ -749,7 +756,8 @@ class ContentProfileRule {
     var output = {
       'path':         this.path.map(id => id.name).join('.'),
       'mustSupport':  this.mustSupport,
-      'noProfile': this.noProfile
+      'noProfile': this.noProfile,
+      'primaryProfile': this.primaryProfile
     };
 
     clearEmptyFields(output, true);
