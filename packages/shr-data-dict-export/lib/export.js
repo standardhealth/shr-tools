@@ -350,7 +350,7 @@ function fillElementLines(dataElementLines, profileLines, vsMap, de, specs, conf
     if (!(f && f.identifier)) continue; // no field or no identifier
 
     let includesTypeConstraints = f.constraintsFilter.includesType.constraints;
-
+    let codeConstraints = f.constraintsFilter.code.constraints;
     const cpRules = (specs.contentProfiles.findRulesByIdentifierAndField(de.identifier, f.identifier));
 
     for (const rule of cpRules) {
@@ -362,7 +362,21 @@ function fillElementLines(dataElementLines, profileLines, vsMap, de, specs, conf
           const itcElement = specs.dataElements.findByIdentifier(itc.isA);
           const description = `${itcElement.description}`;
           const cardInfo = getCardinalityInfo(itc.card);
-          dataElementLines.push([profileName, itcName, description, cardInfo.requirement, cardInfo.multiplicity, '', '', '', '']);
+          dataElementLines.push([profileName, itcName, description, cardInfo.requirement, cardInfo.multiplicity, '', '', '', '', '', '', '', '']);
+        }
+      } else if (codeConstraints.length > 0) {
+        for (const cc of codeConstraints) {
+          const effectivePath = rule.path.concat(cc.path.slice(0, -1));
+          const pathName = getHumanReadablePathName(effectivePath);
+          const ccElement = specs.dataElements.findByIdentifier(effectivePath.slice(-1)[0]);
+          const description = ccElement.description;
+          const card = getAggregateEffectiveCardinality(de.identifier, effectivePath, specs);
+          const cardInfo = getCardinalityInfo(card);
+          const dataType = getDataType(de, effectivePath, specs, ccElement);
+          const codeSystem = urlsToNames[cc.code.system] || cc.code.system;
+          const code = cc.code.code;
+          const codeDescription = cc.code.display || '';
+          dataElementLines.push([profileName, pathName, description, cardInfo.requirement, cardInfo.multiplicity, dataType, 'Fixed Code', codeSystem, code, codeDescription, '', '', '']);
         }
       } else {
         const pathName = getHumanReadablePathName(rule.path);
@@ -372,10 +386,11 @@ function fillElementLines(dataElementLines, profileLines, vsMap, de, specs, conf
         const cardInfo = getCardinalityInfo(card);
         const dataType = getDataType(de, rule.path, specs, endOfPathElement);
         const vsInfo = getVsInfo(de, rule.path, specs, config.projectURL);
+        const binding = vsInfo ? 'Value Set' : '';
         const url = vsInfo ? vsInfo.url : '';
         const strength = vsInfo ? vsInfo.strength.toLowerCase() : '';
         const unit = getUnit(de, rule.path, specs, config.projectURL);
-        dataElementLines.push([profileName, pathName, description, cardInfo.requirement, cardInfo.multiplicity, dataType, url, strength, unit]);
+        dataElementLines.push([profileName, pathName, description, cardInfo.requirement, cardInfo.multiplicity, dataType, binding, '', '', '', url, strength, unit]);
         if (vsInfo) {
           vsMap.set(vsInfo.url, vsInfo.vs);
         }
@@ -395,8 +410,9 @@ function fillValueSetLines(vs, valueSetLines, valueSetDetailsLines) {
     valueSetDetailsLines.push([
       vs.identifier.name,
       system,
+      '',
       `${rule.code.code}`,
-      `"${rule.code.display}"`
+      `${rule.code.display}`
     ]);
     codeSystems.add(system);
   }
@@ -405,8 +421,9 @@ function fillValueSetLines(vs, valueSetLines, valueSetDetailsLines) {
     valueSetDetailsLines.push([
       vs.identifier.name,
       system,
-      `includes codes descending from ${rule.code.code}`,
-      `"${rule.code.display}"`
+      `includes codes descending from ${rule.code.code} | ${rule.code.display}`,
+      '',
+      ''
     ]);
     codeSystems.add(system);
   }
@@ -414,8 +431,9 @@ function fillValueSetLines(vs, valueSetLines, valueSetDetailsLines) {
     valueSetDetailsLines.push([
       vs.identifier.name,
       system,
-      `includes codes from code ${rule.code.code}`,
-      `"${rule.code.display}"`
+      `includes codes from code ${rule.code.code} | ${rule.code.display}`,
+      '',
+      ''
     ]);
     codeSystems.add(system);
   }
@@ -425,6 +443,7 @@ function fillValueSetLines(vs, valueSetLines, valueSetDetailsLines) {
       vs.identifier.name,
       system,
       `includes codes from code system ${urlsToNames[rule.system] ? urlsToNames[rule.system] : rule.system}`,
+      '',
       ''
     ]);
     codeSystems.add(system);
@@ -434,8 +453,9 @@ function fillValueSetLines(vs, valueSetLines, valueSetDetailsLines) {
     valueSetDetailsLines.push([
       vs.identifier.name,
       system,
-      `excludes codes descending from ${rule.code.code}`,
-      `"${rule.code.display}"`
+      `excludes codes descending from ${rule.code.code} | ${rule.code.display}`,
+      '',
+      ''
     ]);
     codeSystems.add(system);
   }
@@ -451,10 +471,11 @@ function fillValueSetLines(vs, valueSetLines, valueSetDetailsLines) {
 
 function generateDDtoPath(specs, config, outputPath) {
   const vsMap = new Map();
-  const dataElementLines = [['Profile Name', 'Data Element Name', 'Description', 'Required in Profile?', 'Occurrences Allowed', 'Data Type', 'Value Set', 'Value Set Binding', 'Units']];
+  const dataElementLines = [['Profile Name', 'Data Element Name', 'Description', 'Required in Profile?', 'Occurrences Allowed', 'Data Type',
+  'Terminology Binding', 'Code System', 'Code', 'Code Description', 'Value Set', 'Value Set Binding', 'Units']];
   const profileLines = [['Profile Name', 'Profile Description']];
   const valueSetLines = [['Value Set', 'Description', 'Code Systems']];
-  const valueSetDetailsLines = [['Value Set', 'Code System', 'Code', 'Code Description']];
+  const valueSetDetailsLines = [['Value Set', 'Code System', 'Logical Definition', 'Code', 'Code Description']];
   for (const de of specs.dataElements.all) {
     fillElementLines(dataElementLines, profileLines, vsMap, de, specs, config);
   }
