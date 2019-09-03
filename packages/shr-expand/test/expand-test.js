@@ -837,13 +837,13 @@ describe('#expand()', () => {
           .withConstraint(
             new models.TypeConstraint(id('shr.test', 'SubA'), [], false)
               .withLastModifiedBy(id('shr.test', 'SubX'))
-          )
+          ).withMinMax(0, 1)
         )
         .withOption(new models.IdentifiableValue(id('shr.test', 'A'))
           .withConstraint(
             new models.TypeConstraint(id('shr.test', 'SubA2'), [], false)
               .withLastModifiedBy(id('shr.test', 'SubX'))
-          )
+          ).withMinMax(0, 1)
         )
         .withInheritance(models.OVERRIDDEN)
         .withInheritedFrom(x.identifier)

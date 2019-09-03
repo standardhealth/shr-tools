@@ -525,7 +525,7 @@ class Expander {
       let oldChoiceValue = oldValue.clone();
       if (oldChoiceValue instanceof models.IdentifiableValue) {
         // To simplify the code, we just turn the non-choice to a choice of 1 and proceed
-        oldChoiceValue = new models.ChoiceValue().withCard(oldChoiceValue.card).withOption(oldChoiceValue.withCard(undefined));
+        oldChoiceValue = new models.ChoiceValue().withCard(oldChoiceValue.card).withOption(oldChoiceValue);
       } else if (!(oldValue instanceof models.ChoiceValue)) {
         logger.error('Cannot override %s with %s since overriding a simple value with a choice value is not supported. ERROR_CODE:12008', oldValue.toString(), newValue.toString());
         return mergedValue;
