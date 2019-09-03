@@ -183,6 +183,8 @@ class Constraints {
       value = `${constraint.value.system} (code: ${constraint.value.code})`;
     } else if (constraint.type === 'boolean') {
       value = constraint.value.toString();
+    } else if (constraint.type != null) {
+      value = constraint.value.toString();
     }
 
     const name = 'Fixed Value';
