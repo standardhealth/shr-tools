@@ -166,11 +166,16 @@ class ES6Exporter {
           cw.ln('this.internalRegistry = {')
             .indent();
 
+          // sort namespaces alphabetically
+          namespaces = namespaces.slice().sort(((a, b) => a.namespace.localeCompare(b.namespace)));
           for (const ns of namespaces) {
             cw.ln(`'${ns.namespace}': {`)
               .indent();
 
-            const defs = this._specs.dataElements.byNamespace(ns.namespace);
+            // sort classes in namespace alphabetically
+            let defs = this._specs.dataElements.byNamespace(ns.namespace);
+
+            defs = defs.slice().sort(((a, b) => a.identifier.name.localeCompare(b.identifier.name)));
 
             for (const def of defs) {
               const elName = className(def.identifier.name);
