@@ -895,10 +895,10 @@ shelljs@^0.7.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shr-models@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-6.3.0.tgz#7fee7a76c700c4dc3598c7465529e17048b5bf8f"
-  integrity sha512-SyUHKzOAAmMgLm/N7lnA2SWvLnjqfYQV33+ywryFUQEktB05VohnHxTkfgGfyi8mjUyqAKE51hDr58QU7kDzZA==
+shr-models@^6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-6.5.0.tgz#3fce98c39faf36864b983a56273315385cdd35af"
+  integrity sha512-Z0FvawkdTfjXWb2QpYy6XwVLPZjM9el3/yTXS7zao3IKkiYQ9DPWOGDnoSLr6iyGIjpxag5xt5VFYKy5aKjqVg==
 
 shr-test-helpers@^6.0.0:
   version "6.0.0"
