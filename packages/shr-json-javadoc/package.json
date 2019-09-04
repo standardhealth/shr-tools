@@ -1,6 +1,6 @@
 {
   "name": "shr-json-javadoc",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "Convert the canonical JSON into a java doc style representation",
   "main": "export.js",
   "scripts": {
