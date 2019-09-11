@@ -64,7 +64,8 @@ class Expander {
     const entryDE = this._expanded.dataElements.find('shr.base', 'Entry');
     let entryFields = null;
     if (!entryDE) {
-      logger.warn('Could not find expanded definition of shr.base.Entry. Inheritance calculations will be incomplete. ERROR_CODE:12036');
+      // 12036, 'Could not find expanded definition of ${element}. Inheritance calculations will be incomplete.', 'Double check shr.base.Entry is defined within the specifications.', 'errorNumber'
+      logger.warn({ element: 'shr.base.Entry' }, '12036');
       entryFields = {
         'shr.core': { 'Version': true },
         'shr.base': {}
@@ -79,12 +80,14 @@ class Expander {
         const parents = [];
         for (const basedOn of de.basedOn) {
           if (basedOn instanceof models.TBD) {
-            logger.debug(`Ignoring TBD parent %s for child element %s.`, basedOn, de.identifier);
+            // 02002, 'Ignoring TBD parent ${tbdText} for child element ${child}.', 'Unknown', 'errorNumber'
+            logger.debug({ tbdText: basedOn.toString(), child: de.identifier.toString() }, '02002');
             continue;
           }
           const parent = this._expanded.dataElements.findByIdentifier(basedOn);
           if (!parent) {
-            logger.error(`Could not find based on element %s for child element %s. ERROR_CODE:12037`, basedOn, de.identifier);
+            // 12043, 'Could not find based on element ${element1} for child element ${element2}. ',  'Unknown', 'errorNumber'
+            logger.error({element1 : basedOn.toString(), element2 : de.identifier.toString()}, '12043');
           } else {
             parents.push(parent);
           }
@@ -146,7 +149,8 @@ class Expander {
               continue;
             }
             if (entryFields[field.identifier.namespace] && entryFields[field.identifier.namespace][field.identifier.name]) {
-              logger.error('Could not find expanded definition of shr.base.Entry. Inheritance calculations for %s will be incomplete.', de.identifier);
+              // 12044, 'Could not find expanded definition of shr.base.Entry. Inheritance calculations for ${identifier1} will be incomplete.', 'Unknown', 'errorNumber'
+              logger.error({identifier1 : de.identifier.toString() }, '12044');
               break;
             }
           }
@@ -181,7 +185,8 @@ class Expander {
       }
       // Report invalid mappings (attempts to map a data element that doesn't exist)
       for (const m of this._unexpanded.maps.byTarget(target).filter(um => typeof this._expanded.dataElements.findByIdentifier(um.identifier) === 'undefined')) {
-        logger.error({ shrId: m.identifier.fqn, targetSpec: target}, 'Cannot resolve element definition.');
+        // 12045, 'Cannot resolve element definition.', 'Unknown', 'errorNumber'
+        logger.error({ shrId: m.identifier.fqn, targetSpec: target}, '12045');
       }
     }
     return this._expanded;
@@ -191,7 +196,8 @@ class Expander {
     // Setup a child logger to associate logs with the current element
     const lastLogger = logger;
     logger = rootLogger.child({ shrId: element.identifier.fqn });
-    logger.debug('Start expanding element');
+    // 02003, 'Start expanding element',,
+    logger.debug('02003');
     try {
       const hierarchy = [];
       for (const baseID of element.basedOn) {
@@ -200,7 +206,8 @@ class Expander {
         }
         const base = this.lookup(baseID);
         if (typeof base === 'undefined') {
-          logger.error('Reference to non-existing base: %s. ERROR_CODE:12002', baseID.fqn);
+          //12002 , 'Reference to non-existing base: ${elementName1}' , 'Base doesn't exist. Double check spelling and inheritance.', 'errorNumber'
+          logger.error({elementName1 : baseID.fqn },'12002' );
           continue;
         }
         hierarchy.push(base);
@@ -218,7 +225,8 @@ class Expander {
             // Still need to process the cardinality and constraints to ensure they are valid
             // (test for node == element to ensure we only report out the error on the root element)
             if (typeof mergedValue.effectiveCard === 'undefined' && node == element) {
-              logger.error('No cardinality found for value: %s. ERROR_CODE:12003', mergedValue.toString());
+              //12003 , 'No cardinality found for value: ${value1}' , 'Explicitly define cardinality for that value.', 'errorNumber'
+              logger.error({value1 : mergedValue.toString() },'12003' );
             }
             mergedValue.constraints = this.consolidateConstraints(node, mergedValue);
           }
@@ -234,7 +242,8 @@ class Expander {
             // Still need to process the cardinality and constraints to ensure they are valid
             // (test for node == element to ensure we only report out the error on the root element)
             if (typeof f.effectiveCard === 'undefined' && node == element) {
-              logger.error('No cardinality found for field %s in %s. ERROR_CODE:12004', f.toString(), element.identifier.name);
+              //12004,  'No cardinality found for field ${field1} in ${field2}. ',  'Explicity define cardinality for that field.', 'errorNumber'
+              logger.error({field1 : f.toString(), field2 : element.identifier.name },'12004' );
             }
             f.constraints = this.consolidateConstraints(node, f);
             mergedFields.push(f);
@@ -250,7 +259,8 @@ class Expander {
       this._expanded.dataElements.add(expanded, file);
       return expanded;
     } finally {
-      logger.debug('Done expanding element');
+      // 02004, 'Done expanding element',,
+      logger.debug('02004');
       logger = lastLogger;
     }
   }
@@ -267,7 +277,8 @@ class Expander {
 
       const base = this.lookup(baseID);
       if (typeof base === 'undefined') {
-        logger.error('Reference to non-existing base: %s. ERROR_CODE:12002', baseID.fqn);
+        //12002 , 'Reference to non-existing base: ${elementName1}' , 'Base doesn't exist. Double check spelling and inheritance.', 'errorNumber'
+        logger.error({elementName1 : baseID.fqn },'12002' );
         continue;
       }
 
@@ -354,7 +365,8 @@ class Expander {
 
         const base = this.lookup(baseID);
         if (typeof base === 'undefined') {
-          logger.error('Reference to non-existing base: %s. ERROR_CODE:12002', baseID.fqn);
+          //12002 , 'Reference to non-existing base: ${elementName1}' , 'Base doesn't exist. Double check spelling and inheritance.', 'errorNumber'
+          logger.error({elementName1 : baseID.fqn },'12002' );
           continue;
         }
 
@@ -495,7 +507,8 @@ class Expander {
     const newValueIsIncomplete = newValue instanceof models.IncompleteValue;
     const oneValueIsChoice = oldValue instanceof models.ChoiceValue || newValue instanceof models.ChoiceValue;
     if (!(sameValueType || newValueIsIncomplete || oneValueIsChoice)) {
-      logger.error('Cannot override %s with %s. ERROR_CODE:12005', oldValue.toString(), newValue.toString());
+      //12005 , 'Cannot override ${oldValue1} with ${newValue2}' , 'Double check types match.', 'errorNumber'
+      logger.error({oldValue1 : oldValue.toString(), newValue2: newValue.toString() }, '12005' );
       return mergedValue;
     }
 
@@ -507,7 +520,8 @@ class Expander {
           // The newValue must be one of the choices
           const match = this.findMatchingOption(element, oldValue, newValue);
           if (!match) {
-            logger.error('Cannot override %s with %s since it is not one of the options. ERROR_CODE:12006', oldValue.toString(), newValue.toString());
+            //12006 , 'Cannot override ${oldValue1} with ${newValue2} since it is not one of the options' , 'Verify Identifiers match.', 'errorNumber'
+            logger.error({oldValue1 : oldValue.toString(), newValue2 : newValue.toString() }, '12006');
             return mergedValue;
           }
           mergedValue = match;
@@ -516,7 +530,8 @@ class Expander {
             // This is a case where the new value is a subtype of the old value.  Convert this to a type constraint.
             mergedValue.addConstraint(new models.TypeConstraint(newValue.identifier, [], false));
           } else {
-            logger.error('Cannot override %s with %s. ERROR_CODE:12007', oldValue.toString(), newValue.toString());
+            //12007 , 'Cannot override ${oldValue1} with ${newValue2} Verify Identifiers match.' , 'Unknown' , 'errorNumber'
+            logger.error({oldValue1 : oldValue.toString(), newValue2: newValue.toString() }, '12007' );
             return mergedValue;
           }
         }
@@ -527,13 +542,15 @@ class Expander {
         // To simplify the code, we just turn the non-choice to a choice of 1 and proceed
         oldChoiceValue = new models.ChoiceValue().withCard(oldChoiceValue.card).withOption(oldChoiceValue);
       } else if (!(oldValue instanceof models.ChoiceValue)) {
-        logger.error('Cannot override %s with %s since overriding a simple value with a choice value is not supported. ERROR_CODE:12008', oldValue.toString(), newValue.toString());
+        //12008 , 'Cannot override ${oldValue1} with ${newValue2} since overriding ChoiceValue is not supported' , 'Verify Identifiers match.', 'errorNumber'
+        logger.error({oldValue1 : oldValue.toString(), newValue2 : newValue.toString()},'12008' );
         return mergedValue;
       }
       // The newValue choice must contain options from the oldChoiceValue
       const properSubset = newValue.options.every(v => this.findMatchingOption(element, oldChoiceValue, v));
       if (!properSubset) {
-        logger.error('Cannot override %s with %s since the new options aren\'t compatible types with the original. ERROR_CODE:12036', oldValue.toString(), newValue.toString());
+        // 12046, 'Cannot override ${oldValue1} with ${newValue1} since the new options are not compatible types with the original.', 'Unknown', 'errorNumber'
+        logger.error({oldValue1 : oldValue.toString(), newValue1 : newValue.toString() }, '12046' );
         return mergedValue;
       }
       // A proper merge will require cloning the original object, swapping options w/ merged options, and setting card
@@ -614,7 +631,8 @@ class Expander {
       } else if (constraint instanceof models.FixedValueConstraint) {
         consolidateFn = this.consolidateFixedValueConstraint;
       } else {
-        logger.error('Unsupported constraint type: %s. ERROR_CODE:12009', constraint.constructor.name);
+        //12009 , 'Unsupported constraint type: ${constraint1} Invalid constraint syntax.' , 'Consult documentation to see what constraints are supported', 'errorNumber'
+        logger.error({constraint1 : constraint.constructor.name },'12009' );
         continue;
       }
       consolidated = consolidateFn.call(this, element, value, constraint, consolidated);
@@ -627,20 +645,23 @@ class Expander {
     const targetLabel = this.constraintTargetLabel(value, constraint.path);
 
     if (target == null) {
-      logger.error('Cannot resolve target of card constraint on %s', targetLabel);
+      // 12047, 'Cannot resolve target of card constraint on ${target1} ',  'Unknown', 'errorNumber'
+      logger.error({target1 : targetLabel }, '12047' );
       return previousConstraints;
     }
 
     // TODO: Use effectiveCardinality?  (complex since we must look at all constraints down the path)
     let constraints = previousConstraints;
     if (target.card && !constraint.card.fitsWithinCardinalityOf(target.card)) {
-      logger.error('Cannot constrain cardinality of %s from %s to %s. ERROR_CODE:12010', targetLabel, target.card.toString(), constraint.card.toString());
+      //12010 , 'Cannot constrain cardinality of ${name1} from ${smallCardinality} to ${biggerCardinality'} , 'You can only narrow the cardinality. You cannot constrain it to have a larger range than its parent', 'errorNumber'
+      logger.error({name1 : targetLabel, smallCardinality : target.card.toString(), biggerCardinality : constraint.card.toString()}, '12010' );
       return constraints;
     }
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).card.constraints;
     for (const previous of filtered) {
       if (!constraint.card.fitsWithinCardinalityOf(previous.card)) {
-        logger.error('Cannot further constrain cardinality of %s from %s to %s. ERROR_CODE:12011', targetLabel, previous.card.toString(), constraint.card.toString());
+        //12010 , 'Cannot constrain cardinality of ${name1} from ${smallCardinality} to ${biggerCardinality'} , 'You can only narrow the cardinality. You cannot constrain it to have a larger range than its parent', 'errorNumber'
+        logger.error({name1 : targetLabel, smallCardinality: previous.card.toString(), biggerCardinality : constraint.card.toString() }, '12010' );
         return constraints;
       }
       // Remove the previous card constraint since this one supercedes it
@@ -667,7 +688,8 @@ class Expander {
         }
         if (!isValidOption) {
           const targetLabel = this.constraintTargetLabel(value, constraint.path);
-          logger.error('Cannot constrain type of %s to %s. ERROR_CODE:12012', targetLabel, constraint.isA.toString());
+          //12012 , 'Cannot constrain type of ${name1} to ${type1}' , 'Make sure base types match', 'errorNumber'
+          logger.error({name1 : targetLabel, type1 : constraint.isA.toString()},'12012' );
           return previousConstraints;
         }
         skipCheck = true; // We already checked it
@@ -679,7 +701,8 @@ class Expander {
           constraint.path.push(valID);
         } else {
           const targetLabel = this.constraintTargetLabel(value, constraint.path);
-          logger.error('Cannot resolve target of value type constraint on %s.  ERROR_CODE:12039', targetLabel);
+          //12039,   'Cannot resolve target of value type constraint on ${target1} ' ,  'Unknown', 'errorNumber'
+          logger.error({target1 : targetLabel}, '12039' );
           return previousConstraints;
         }
       }
@@ -692,10 +715,12 @@ class Expander {
     if (skipCheck) {
       // It's a choice, we already checked it
     } else if (!(target instanceof models.IdentifiableValue)) {
-      logger.error('Cannot constrain type of %s since it has no identifier. ERROR_CODE:12013', targetLabel);
+      //12013 , 'Cannot constrain type of ${name1} since it has no identifier Invalid Element' , 'Unknown' , 'errorNumber'
+      logger.error({name1 : targetLabel},'12013' );
       return constraints;
     } else if (!this.checkHasBaseType(constraint.isA, target.identifier)) {
-      logger.error('Cannot constrain type of %s to %s. ERROR_CODE:12014', targetLabel, constraint.isA.toString());
+      //12014 , 'Cannot constrain type of ${name1} to ${type1}' , 'Make sure base types match', 'errorNumber'
+      logger.error({name1 : targetLabel, type1 : constraint.isA.toString() },'12014' );
       return constraints;
     }
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).type.constraints;
@@ -704,7 +729,8 @@ class Expander {
         continue;
       }
       if (!this.checkHasBaseType(constraint.isA, previous.isA)) {
-        logger.error('Cannot further constrain type of %s from %s to %s. ERROR_CODE:12015', target.toString(), previous.isA.toString(), constraint.isA.toString());
+        //12015 , 'Cannot further constrain type of ${name1} from ${type1} to ${type2} The two elements aren't based on the same parent. You cannot constrain an element to one that is completely distinct.' , 'Unknown' , 'errorNumber'
+        logger.error({name1 : target.toString(), type1 : previous.isA.toString(), type2 : constraint.isA.toString() },'12015' );
         return constraints;
       }
       // Remove the previous type constraint since this one supercedes it
@@ -736,7 +762,8 @@ class Expander {
         }
         if (!isValidOption) {
           const targetLabel = this.constraintTargetLabel(value, constraint.path);
-          logger.error('Cannot constrain type of %s to %s. ERROR_CODE:12012', targetLabel, constraint.isA.toString());
+          //12012 , 'Cannot constrain type of ${name1} to ${type1}' , 'Make sure base types match', 'errorNumber'
+          logger.error({name1 : targetLabel, type1 : constraint.isA.toString() }, '12012' );
           return previousConstraints;
         }
         skipCheck = true; // We already checked it
@@ -748,7 +775,8 @@ class Expander {
           constraint.path.push(valID);
         } else {
           const targetLabel = this.constraintTargetLabel(value, constraint.path);
-          logger.error('Cannot resolve target of value includes type constraint on %s.  ERROR_CODE:12040', targetLabel);
+          //12040,  'Cannot resolve target of value includes type constraint on ${target1}.'  ,  'Unknown', 'errorNumber'
+          logger.error({target1 : targetLabel}, '12040' );
           return previousConstraints;
         }
       }
@@ -761,13 +789,16 @@ class Expander {
     if (skipCheck) {
       // It's a choice, we already checked it
     } else if (target == null) {
-      logger.error('Cannot constrain type of %s since it did not resolve to a value. ERROR_CODE:12038', targetLabel);
+      //12038 , 'Cannot constrain type of ${target1} since it did not resolve to a value' ,  'Unknown', 'errorNumber'
+      logger.error({target1 : targetLabel }, '12038' );
       return constraints;
     } else if (!(target instanceof models.IdentifiableValue)) {
-      logger.error('Cannot constrain type of %s since it has no identifier. ERROR_CODE:12017', targetLabel);
+      //12017 , 'Cannot constrain type of ${name1} since it has no identifier ' , 'Unknown' , 'errorNumber'
+      logger.error({name1 : targetLabel }, '12017' );
       return constraints;
     } else if (!this.checkHasBaseType(constraint.isA, target.identifier)) {
-      logger.error('Cannot constrain element %s to %s since it is an invalid sub-type. ERROR_CODE:12018', constraint.isA.name, target.effectiveIdentifier.fqn);
+      //12018 , 'Cannot constrain element ${name1} to ${target1} since it is an invalid sub-type' , 'Element has to be based on or otherwise a child of sub-type.', 'errorNumber'
+      logger.error({name1 : constraint.isA.name , target1 : target.effectiveIdentifier.fqn},'12018' );
       return constraints;
     }
 
@@ -781,10 +812,12 @@ class Expander {
     }
 
     if (typeof targetCard === 'undefined') {
-      logger.error('Cardinality of %s not found. ERROR_CODE:12020', target.identifier.fqn);
+      //12020 , 'Cardinality of ${name1} not found. Please explicitly define the cardinality.' , 'Unknown' , 'errorNumber'
+      logger.error({name1 : target.identifier.fqn },'12020' );
       return constraints;
     } else if (!targetCard.isMaxUnbounded && (constraint.card.min > targetCard.max || constraint.card.isMaxUnbounded || constraint.card.max > targetCard.max)) {
-      logger.error('Cannot include cardinality on %s, "includes type" cardinality %s exceeds upper limit from container cardinality %s. ERROR_CODE:12021', target.identifier.fqn, constraint.card.toString(), targetCard.toString());
+      //12021 , 'Cannot include cardinality on ${name1}  cardinality of ${card1} doesnt fit within ${card2}' , 'The cardinality of included parameters must be as narrow or narrower than the property it contains.', 'errorNumber'
+      logger.error({name1 : target.identifier.fqn, card1 : constraint.card.toString(), card2 : targetCard.toString()}, '12021' );
       return constraints;
     }
 
@@ -823,7 +856,8 @@ class Expander {
       }
     }
     if (!(target instanceof models.IdentifiableValue) && !match) {
-      logger.error('Cannot constrain valueset of %s since it has no identifier. ERROR_CODE:12022', targetLabel);
+      //12022 , 'Cannot constrain valueset of ${name1} since it has no identifier' , 'Unknown' , 'errorNumber'
+      logger.error({name1 : targetLabel}, '12022');
       return constraints;
     } else if (!this.supportsCodeConstraint(target.identifier)) {
       // Isn't directly a concept, so try its value
@@ -840,7 +874,8 @@ class Expander {
       }
 
       if (!this.supportsCodeConstraint(valID)) {
-        logger.error('Cannot constrain valueset of %s since neither it nor its value is a concept. ERROR_CODE:12023', targetLabel);
+        //12023 , 'Cannot constrain valueset of ${name1} since neither it nor its value is a concept' , 'Unknown', 'errorNumber'
+        logger.error({name1 : targetLabel}, '12023' );
         return constraints;
       }
       // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
@@ -850,7 +885,8 @@ class Expander {
     }
 
     if ((new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).code.hasConstraints) {
-      logger.error('Cannot constrain valueset of %s since it is already constrained to a single code. ERROR_CODE:12024', targetLabel);
+      //12024 , 'Cannot constrain valueset of ${name1} since it is already constrained to a single code' , 'Unknown' , 'errorNumber'
+      logger.error({name1 : targetLabel}, '12024' );
       return constraints;
     }
 
@@ -874,7 +910,8 @@ class Expander {
     let targetConstraints = [];
 
     if (!target) {
-      logger.error('Invalid constraint path: %s', targetLabel);
+      // 12048, 'Invalid constraint path: ${target1}',  'Unknown', 'errorNumber'
+      logger.error({target1 : targetLabel }, '12048');
       target = this.constraintTarget(value, constraint.path);
       return previousConstraints;
     }
@@ -890,7 +927,8 @@ class Expander {
         }
       }
       if (!this.supportsCodeConstraint(valID)) {
-        logger.error('Cannot constrain code of %s since neither it nor its value is a concept. ERROR_CODE:12025', targetLabel);
+        //12025 , 'Cannot constrain code of ${name1} since neither it nor its value is a concept' , 'Unknown' , 'errorNumber'
+        logger.error({name1 : targetLabel },'12025' );
         return previousConstraints;
       }
       // Populate the target constraints in case they are needed
@@ -940,7 +978,8 @@ class Expander {
       // Isn't directly a concept, so try its value
       const valID = this.constraintTargetValueIdentifier(value, constraint.path);
       if (!this.supportsCodeConstraint(valID)) {
-        logger.error('Cannot constrain included code of %s since neither it nor its value is a concept. ERROR_CODE:12026', targetLabel);
+        //12026 , 'Cannot constrain included code of ${name1} since neither it nor its value is a concept' , 'Unknown' , 'errorNumber'
+        logger.error({name1 : targetLabel }, '12026' );
         return previousConstraints;
       }
       // Populate the target constraints in case they are needed
@@ -1008,7 +1047,8 @@ class Expander {
         }
       }
       if (!this.supportsBooleanConstraint(valID)) {
-        logger.error('Cannot constrain boolean value of %s since neither it nor its value is a boolean. ERROR_CODE:12027', targetLabel);
+        //12027 , 'Cannot constrain boolean value of ${name1} since neither it nor its value is a boolean'  , 'Unknown' , 'errorNumber'
+        logger.error({name1 : targetLabel },'12027' );
         return previousConstraints;
       }
       // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
@@ -1022,7 +1062,8 @@ class Expander {
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).boolean.constraints;
     for (const previous of filtered) {
       if (previous.value != constraint.value) {
-        logger.error('Cannot constrain boolean value of %s to %s since a previous constraint constrains it to %s. ERROR_CODE:12028', targetLabel, constraint.value, previous.value);
+        //12028 , 'Cannot constrain boolean value of ${name1} to ${value1} since a previous constraint constrains it to ${value2}'  , 'Unknown' , 'errorNumber'
+        logger.error({name1 : targetLabel, value1 : constraint.value, value2 : previous.value}, '12028' );
         return previousConstraints;
       }
       // Remove the previous type constraint since this one supercedes it
@@ -1054,7 +1095,8 @@ class Expander {
         }
       }
       if (!this.supportsFixedValueConstraint(valID, constraint)) {
-        logger.error('Cannot constrain value of %s to %s since neither it nor its value is a %s. ERROR_CODE:12041', targetLabel, constraint.type, constraint.type);
+        // 12041, 'Cannot constrain value of ${target} to ${type} since neither it nor its value is a ${type}', 'Unknown', 'errorNumber'
+        logger.error({target: targetLabel, type: constraint.type}, '12041');
         return previousConstraints;
       }
       // Constraint is on the target's value.  Convert constraint to reference the value explicitly.
@@ -1068,7 +1110,8 @@ class Expander {
     const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).fixedValue.constraints;
     for (const previous of filtered) {
       if (previous.value != constraint.value) {
-        logger.error('Cannot constrain %s value of %s to %s since a previous constraint constrains it to %s. ERROR_CODE:12042', constraint.type, targetLabel, constraint.value, previous.value);
+        // 12042, 'Cannot constrain ${type} value of ${target} to ${value} since a previous constraint constrains it to {previousValue}', 'Unknown', 'errorNumber'
+        logger.error({type: constraint.type, target: targetLabel, value: constraint.value, previousValue: previous.value}, '12042');
         return previousConstraints;
       }
       // Remove the previous type constraint since this one supercedes it
@@ -1219,7 +1262,8 @@ class Expander {
     // We haven't processed it, so look it up
     const element = this._unexpanded.dataElements.findByIdentifier(identifier);
     if (typeof element === 'undefined') {
-      logger.error('Cannot resolve element definition for %s. ERROR_CODE:12029', identifier.fqn);
+      //12029 , 'Cannot resolve element definition for ${name1}' , 'This is due to a incomplete definition for an element. Please refer to the document for proper definition syntax.', 'errorNumber'
+      logger.error({name1 : identifier.fqn }, '12029' );
       return alreadyProcessed;
     }
     // Add it to the already processed list (again, to avoid circular dependencies)
@@ -1256,11 +1300,13 @@ class Expander {
     // Setup a child logger to associate logs with the current mapping
     const lastLogger = logger;
     logger = rootLogger.child({ shrId: identifier.fqn, targetSpec: target });
-    logger.debug('Start expanding mapping');
+    // 02005, 'Start expanding mapping',,
+    logger.debug('02005');
     try {
       const de = this._expanded.dataElements.findByIdentifier(identifier);
       if (typeof de === 'undefined') {
-        logger.error('Cannot resolve element definition for %s. ERROR_CODE:12029', identifier.fqn);
+        //12029 , 'Cannot resolve element definition for ${name1}' , 'This is due to a incomplete definition for an element. Please refer to the document for proper definition syntax.', 'errorNumber'
+        logger.error({name1 : identifier.fqn },'12029' );
         return;
       }
 
@@ -1349,7 +1395,8 @@ class Expander {
                 currentDE = this._expanded.dataElements.findByIdentifier(match);
                 deArray.push(currentDE);
                 if (typeof de === 'undefined') {
-                  logger.error('Cannot resolve data element definition from path: %s. ERROR_CODE:12031', this.highlightPartInPath(rule.sourcePath, j));
+                  //12031 , 'Cannot resolve data element definition from path: ${path1}' , 'Check spelling for field or value.', 'errorNumber'
+                  logger.error({path1 : this.highlightPartInPath(rule.sourcePath, j)},'12031' );
                   // Remove the invalid rule from the map and decrement index so we don't skip a rule in the loop
                   map.rules.splice(i, 1);
                   i = i-1;
@@ -1357,7 +1404,8 @@ class Expander {
                 }
               }
             } else {
-              logger.error('Cannot resolve data element definition from path: %s. ERROR_CODE:12032', this.highlightPartInPath(rule.sourcePath, j));
+              //12032 , 'Cannot resolve data element definition from path: ${path1} ' , 'Check spelling for field or value.', 'errorNumber'
+              logger.error({path1 : this.highlightPartInPath(rule.sourcePath, j)}, '12032' );
               // Remove the invalid rule from the map and decrement index so we don't skip a rule in the loop
               map.rules.splice(i, 1);
               i = i-1;
@@ -1388,7 +1436,8 @@ class Expander {
       this._expanded.maps.add(map);
       return map;
     } finally {
-      logger.debug('Done expanding mapping');
+      // 02006, 'Done expanding mapping',,
+      logger.debug('02006');
       logger = lastLogger;
     }
   }
@@ -1452,8 +1501,13 @@ class Expander {
             map.targetItem = basedOnMap.targetItem;
           } else if (map.targetItem !== basedOnMap.targetItem) {
             if (! this._exporterMap.get(target).isTargetBasedOn(map.targetItem, basedOnMap.targetItem, target)) {
-              logger.debug('Skipping mismatched targets: %s maps to %s, but based on class (%s) maps to %s, and %s is not based on %s in %s. ERROR_CODE:02001',
-                map.identifier.fqn, map.targetItem, basedOnMap.identifier.fqn, basedOnMap.targetItem, map.targetItem, basedOnMap.targetItem, map.targetSpec);
+              // 02001, 'Potentially mismatched targets: ${class} maps to ${item} but based on class (${baseClass}) maps to ${baseItem}  and ${item} is not based on ${baseItem} in ${class}. ', 'You're overwriting an inherited mapping. This is not necessarily an issue  but is definitely something to be cautious of.', 'errorNumber'
+              logger.debug({
+                class: map.identifier.fqn,
+                item: map.targetItem,
+                baseClass: basedOnMap.identifier.fqn,
+                baseItem: basedOnMap.targetItem
+              }, '02001');
               continue;
             }
           }
@@ -1462,7 +1516,8 @@ class Expander {
       }
     }
     if (typeof map !== 'undefined' && typeof map.targetItem === 'undefined') {
-      logger.error('Cannot determine target item of mapping for %s', map.identifier.fqn);
+      // 12049, 'Cannot determine target item of mapping for ${identifier1}',  'Unknown', 'errorNumber'
+      logger.error({identifier1 : map.identifier.fqn },'12049' );
       return [];
     }
     return maps;
@@ -1487,7 +1542,8 @@ class Expander {
       if (value) {
         const match = this.findMatchInValue(value, idToMatch);
         if (match && result) {
-          logger.error('Found multiple matches for field %s. ERROR_CODE:12035', idToMatch.name);
+          //12035 , 'Found multiple matches for field ${field1}' , ' Please use fully qualified identifier.', 'errorNumber'
+          logger.error({field1 : idToMatch.name },'12035' );
         } else if (match) {
           result = value;
         }
@@ -1506,7 +1562,8 @@ class Expander {
       if (de.value instanceof models.IdentifiableValue) {
         return de.value.effectiveIdentifier;
       } else if (typeof de.value === 'undefined') {
-        logger.error('Cannot map _Value since element does not define a value. ERROR_CODE:12033');
+        //12033 , 'Cannot map Value since element does not define a value' , 'Define a value for your element', 'errorNumber'
+        logger.error('12033');
       } else if (de.value instanceof models.ChoiceValue) {
         // Return all the possible choices
         const results = [];
@@ -1517,7 +1574,8 @@ class Expander {
         }
         return results;
       } else {
-        logger.error('Cannot map _Value since it is unsupported type: %s. ERROR_CODE:12034', de.value.constructor.name);
+        //12034 , 'Cannot map Value since it is unsupported type: ${valueType1}' , 'Unknown' , 'errorNumber'
+        logger.error({valueType1 : de.value.constructor.name}, '12034' );
       }
     // Special case logic for other special keywords
     } else if (idToMatch.isSpecialKeyWord) {
@@ -1529,7 +1587,8 @@ class Expander {
         if (value) {
           const match = this.findMatchInValue(value, idToMatch);
           if (match && result) {
-            logger.error('Found multiple matches for field %s. ERROR_CODE:12035', idToMatch.name);
+            //12035 , 'Found multiple matches for field ${field1}' , ' Please use fully qualified identifier.', 'errorNumber'
+            logger.error({field1 : idToMatch.name },'12035' );
           } else if (match) {
             result = match;
           }
@@ -1594,4 +1653,8 @@ class Expander {
   }
 }
 
-module.exports = { expand, setLogger, MODELS_INFO: models.MODELS_INFO };
+function errorFilePath() {
+  return require('path').join(__dirname, '..', 'errorMessages.txt');
+}
+
+module.exports = { expand, setLogger, MODELS_INFO: models.MODELS_INFO, errorFilePath };

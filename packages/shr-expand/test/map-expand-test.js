@@ -305,7 +305,8 @@ describe('#expandMap()', () => {
 
     expect(err.errors()).to.have.length(1);
     expect(err.errors()[0].shrId).to.equal('shr.test.A');
-    expect(err.errors()[0].msg).to.contain('Z');
+    expect(err.errors()[0].msg).to.eql('12032');
+    expect(err.errors()[0].path1).to.contain('Z');
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
@@ -331,7 +332,8 @@ describe('#expandMap()', () => {
 
     expect(err.errors()).to.have.length(1);
     expect(err.errors()[0].shrId).to.equal('shr.test.A');
-    expect(err.errors()[0].msg).to.contain('X');
+    expect(err.errors()[0].msg).to.eql('12032');
+    expect(err.errors()[0].path1).to.contain('X');
     const eMa = findExpanded('TEST', 'shr.test', 'A');
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
