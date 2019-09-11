@@ -76,7 +76,8 @@ class MappingConstructor {
         constructFixedValueMappingRules(rules);
         break;
       default:
-        logger.error('Unable to import mapping, unknown rule type: %s ERROR_CODE:11029', rType);
+        // 11029, 'Unable to import mapping. Unknown rule type: ${ruleType}', 'The type either does not exist  or the import tool needs to be updated.', 'errorNumber'
+        logger.error({name1 :  rType }, '11029' );
         break;
       }
     }

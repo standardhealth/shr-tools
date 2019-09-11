@@ -92,11 +92,13 @@ class CimcoreImporter {
         this.nsConstructor.add(file);
         break;
       default:
-        logger.warn('Unknown Filetype: ', file.fileType);
+        // 01003, 'Unknown Filetype: ${fileType}',,
+        logger.warn({ fileType: file.fileType }, '01003');
         break;
       }
     } else {
-      logger.error('Invalid file: %s', file);
+      //11045, 'Invalid file ${fileName1} ' ,  'Unknown' , 'errorNumber'
+      logger.error({fileName1 : file}, '11045' );
     }
   }
 

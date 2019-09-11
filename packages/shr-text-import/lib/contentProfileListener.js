@@ -34,7 +34,8 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
     // Setup a child logger to associate logs with the current file
     const lastLogger = logger;
     logger = rootLogger.child({ file: file });
-    logger.debug('Start importing content profile file');
+    // 01004, 'Start importing content profile file',,
+    logger.debug('01004');
     try {
       const errListener = new SHRErrorListener(logger);
       const chars = new FileStream(file);
@@ -50,7 +51,8 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
       const walker = new ParseTreeWalker();
       walker.walk(this, tree);
     } finally {
-      logger.debug('Done importing content profile file');
+      // 01005, 'Done importing content profile file',,
+      logger.debug('01005');
       this.logger = lastLogger;
     }
   }
@@ -62,12 +64,14 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
     const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
     this._currentGrammarVersion = new Version(major, minor);
 
-    logger.debug({version: this._currentGrammarVersion.toString()}, 'Entered content profile file');
+    // 01006, 'Entered content profile file',,
+    logger.debug('01006');
   }
 
   exitDoc(ctx) {
     // clear current namespace, current content, current rule, and grammar version
-    logger.debug('Exiting content profile file');
+    // 01007, 'Exiting content profile file',,
+    logger.debug('01007');
     this._currentNs = null;
     this._currentDef = null;
     this._currentRule = null;
@@ -196,10 +200,8 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
         }
       }
     } else {
-      logger.error(
-        'Definition not found for data element in content profile path: %s. ERROR_CODE:11035',
-        this._currentDef.identifier.fqn
-      );
+      // 11037, 'Definition not found for data element in content profile path: ${cpProfilePath}', 'Unknown', 'errorNumber'
+      logger.error({ cpProfilePath: this._currentDef.identifier.fqn }, '11037');
     }
 
     if (path.length === names.length) {
@@ -207,7 +209,8 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
     } else {
       // TODO: We may be able to help the author by suggesting fixes when the problem is that they referred to the old identifier instead of the effectiveIdentifier.
       // This will require some rework of the above code to detect and remember this situation.
-      logger.error('Path not found for %s: %s. ERROR_CODE:11036', this._currentDef.identifier.fqn, pathStr);
+      // 11036, 'Path not found for ${identifier}: ${path}', 'Unknown', 'errorNumber'
+      logger.error({ identifier: this._currentDef.identifier.fqn, path: pathStr }, '11036');
     }
   }
 
@@ -240,7 +243,8 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
     // We haven't processed it, so look it up
     const element = this._specs.dataElements.findByIdentifier(identifier);
     if (typeof element === 'undefined') {
-      logger.error('Cannot resolve element definition for %s. ERROR_CODE:13023', identifier.fqn);
+      // 11048, 'Cannot resolve element definition for ${elementFqn}', 'Unknown', 'errorNumber'
+      logger.error({ elementFqn: identifier.fqn }, '11048');
       return alreadyProcessed;
     }
     // Add it to the already processed list (again, to avoid circular dependencies)

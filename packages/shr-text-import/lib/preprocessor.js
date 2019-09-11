@@ -33,11 +33,13 @@ class Preprocessor extends SHRDataElementParserVisitor {
     if (file != null) {
       try { configFile = JSON.parse(new FileStream(file)); }
       catch (e) {
-        logger.error('Invalid config file. Should be valid JSON dictionary. ERROR_CODE:11006');
+        //11006 , 'Invalid config file. Should be valid JSON dictionary' , 'Make sure your 'config.json' file is using a valid format for JSON.', 'errorNumber'
+        logger.error('11006');
         return defaults;
       }
     } else {
-      logger.warn(`No project configuration file found, currently using default EXAMPLE identifiers. Auto-generating a proper 'config.json' in your specifications folder. ERROR_CODE:01001`);
+      // 01001, 'No project configuration file found - currently using default EXAMPLE identifiers. Auto-generating a proper config.json in your specifications folder', 'Open the config.json file and customize it for your project.', 'errorNumber'
+      logger.warn('01001');
       return defaults;
     }
 
@@ -45,7 +47,8 @@ class Preprocessor extends SHRDataElementParserVisitor {
     // [1] Translate old IG fields to new IG fields
     const checkIgProperty = (oldPropertyName, igPropertyName) => {
       if (configFile[oldPropertyName] != null) {
-        logger.warn(`Configuration file '${oldPropertyName}' field will be deprecated. Use 'implementationGuide.${igPropertyName}' instead.`);
+        // 01019, 'Configuration file '${oldPropertyName}' field will be deprecated. Use 'implementationGuide.${igPropertyName}' instead.', 'Replace old propery path with new property path',
+        logger.warn({ oldPropertyName, igPropertyName }, '01019');
         configFile.implementationGuide = configFile.implementationGuide || {};
         configFile.implementationGuide[igPropertyName] = configFile[oldPropertyName];
         delete configFile[oldPropertyName];
@@ -77,7 +80,8 @@ class Preprocessor extends SHRDataElementParserVisitor {
     // Setup a child logger to associate logs with the current file
     const lastLogger = logger;
     logger = rootLogger.child({ file: file });
-    logger.debug('Start preprocessing data elements file');
+    // 01020, 'Start preprocessing data elements file',,
+    logger.debug('01020');
     try {
       const chars = new FileStream(file);
       const lexer = new SHRDataElementLexer(chars);
@@ -89,7 +93,8 @@ class Preprocessor extends SHRDataElementParserVisitor {
       const tree = parser.doc();
       this.visitDoc(tree);
     } finally {
-      logger.debug('Done preprocessing data elements file');
+      // 01021, 'Done preprocessing data elements file',,
+      logger.debug('01021');
       this.logger = lastLogger;
     }
   }
@@ -103,7 +108,8 @@ class Preprocessor extends SHRDataElementParserVisitor {
     let ns = '';
     if(ctx.docHeader().namespace()) {
       ns = ctx.docHeader().namespace().getText();
-      logger.debug({shrId: ns}, 'Start preprocessing namespace');
+      // 01026, 'Start preprocessing namespace',,
+      logger.debug({shrId: ns}, '01026');
     }
     try {
       if (ctx.pathDefs()) {
@@ -150,7 +156,8 @@ class Preprocessor extends SHRDataElementParserVisitor {
         }
       }
     } finally {
-      logger.debug({shrId: ns}, 'Done preprocessing namespace');
+      // 01027, 'Done preprocessing namespace',,
+      logger.debug({shrId: ns}, '01027');
     }
   }
 
@@ -158,7 +165,8 @@ class Preprocessor extends SHRDataElementParserVisitor {
     const major = parseInt(version.WHOLE_NUMBER()[0], 10);
     const minor = parseInt(version.WHOLE_NUMBER()[2], 10);
     if (GRAMMAR_VERSION.major != major || GRAMMAR_VERSION.minor < minor) {
-      logger.error('Unsupported grammar version: %s.%s. ERROR_CODE:11007', major, minor);
+      //11007 , 'Unsupported grammar version: ${versionMajor}.${versionMinor} ' , 'Grammar Version for file must be 5.0 (or above)', 'errorNumber'
+      logger.error({versionMajor : major, versionMinor: minor}, '11007' );
       return false;
     }
     return true;
@@ -202,7 +210,7 @@ class PreprocessedData {
   resolvePath(name, ...namespace) {
     // First ensure namespaces were passed in
     if (namespace.length == 0) {
-      return { error: `Cannot resolve path without namespaces. ERROR_CODE:11017` };
+      return { error: `Cannot resolve path without namespaces` };
     }
 
     // Special handling for default paths
@@ -231,9 +239,9 @@ class PreprocessedData {
       }
     }
     if (!result.hasOwnProperty('url')) {
-      result['error'] = `Failed to resolve path for ${name}. ERROR_CODE:11018`;
+      result['error'] = `Failed to resolve path for ${name}`;
     } else if (conflict) {
-      result['error'] = `Found conflicting path for ${name} in multiple namespaces: ${foundNamespaces}. ERROR_CODE:11019`;
+      result['error'] = `Found conflicting path for ${name} in multiple namespaces: ${foundNamespaces}`;
     }
     return result;
   }
@@ -253,9 +261,9 @@ class PreprocessedData {
       }
     }
     if (!result.hasOwnProperty('url')) {
-      result['error'] = `Failed to resolve vocabulary for ${name}. ERROR_CODE:11020`;
+      result['error'] = `Failed to resolve vocabulary for ${name}`;
     } else if (conflict) {
-      result['error'] = `Found conflicting vocabularies for ${name} in multiple namespaces: ${foundNamespaces}. ERROR_CODE:11021`;
+      result['error'] = `Found conflicting vocabularies for ${name} in multiple namespaces: ${foundNamespaces}`;
     }
     return result;
   }
@@ -273,9 +281,9 @@ class PreprocessedData {
       }
     }
     if (!result.hasOwnProperty('namespace')) {
-      result['error'] = `Failed to resolve definition for ${name}. ERROR_CODE:11013`;
+      result['error'] = `Failed to resolve definition for ${name}`;
     } else if (foundNamespaces.length > 1) {
-      result['error'] = `Found conflicting definitions for ${name} in multiple namespaces: ${foundNamespaces}. ERROR_CODE:11022`;
+      result['error'] = `Found conflicting definitions for ${name} in multiple namespaces: ${foundNamespaces}`;
     }
     return result;
   }
@@ -289,7 +297,8 @@ function fillInDefaultData(defaultData, configData, parentKeys = []) {
       fillInDefaultData(defaultData[key], configData[key], [...parentKeys, key]);
     } else if (configData[key] == null) {
       configData[key] = defaultData[key];
-      logger.warn('Configuration file missing key: %s, using default value: %s. ERROR_CODE:01002', [...parentKeys, key].join('.'), JSON.stringify(configData[key]));
+      // 01002, 'Config file missing key: ${key}  using default value: ${defaultValue} instead.', ' Open the config.json file and add your project specific details for that key.', 'errorNumber'
+      logger.warn({ key: [...parentKeys, key].join('.'), defaultValue: JSON.stringify(configData[key]) }, '01002');
     }
   }
 }

@@ -32,7 +32,8 @@ class MappingImporter extends SHRMapParserListener {
     // Setup a child logger to associate logs with the current file
     const lastLogger = logger;
     logger = rootLogger.child({ file: file });
-    logger.debug('Start importing mapping file');
+    // 01013, 'Start importing mapping file',,
+    logger.debug('01013');
     try {
       const errListener = new SHRErrorListener(logger);
       const chars = new FileStream(file);
@@ -48,7 +49,8 @@ class MappingImporter extends SHRMapParserListener {
       const walker = new ParseTreeWalker();
       walker.walk(this, tree);
     } finally {
-      logger.debug('Done importing mapping file');
+      // 01014, 'Done importing mapping file',,
+      logger.debug('01014');
       this.logger = lastLogger;
     }
   }
@@ -71,7 +73,8 @@ class MappingImporter extends SHRMapParserListener {
       targetSpec: this._currentTargetSpec,
       version: this._currentGrammarVersion.toString()
     };
-    logger.debug(info, 'Start importing namespace mapping');
+    // 01015, 'Start importing namespace mapping',,
+    logger.debug(info, '01015');
   }
 
   exitDoc(ctx) {
@@ -81,7 +84,8 @@ class MappingImporter extends SHRMapParserListener {
       targetSpec: this._currentTargetSpec,
       version: this._currentGrammarVersion.toString()
     };
-    logger.debug(info, 'Done importing namespace mapping');
+    // 01016, 'Done importing namespace mapping',,
+    logger.debug(info, '01016');
     this._currentNs = '';
     this._currentTargetSpec = '';
     this._currentGrammarVersion = null;
@@ -101,14 +105,16 @@ class MappingImporter extends SHRMapParserListener {
     const lastLogger = logger;
     logger = logger.child({ shrId: source.fqn, target: target });
     logger.parent = lastLogger;
-    logger.debug('Start importing element mapping');
+    // 01017, 'Start importing element mapping',,
+    logger.debug('01017');
   }
 
   exitMappingDef(ctx) {
     try {
       this.pushCurrentDefinition();
     } finally {
-      logger.debug('Done importing element mapping');
+      // 01018, 'Done importing element mapping',,
+      logger.debug('01018');
       logger = logger.parent;
     }
   }
@@ -148,7 +154,8 @@ class MappingImporter extends SHRMapParserListener {
             sourcePath.push(new TBD());
           }
         } else {
-          logger.error('Error parsing source path: %s. ERROR_CODE:11005', c.source().getText());
+          //11005 , 'Error parsing source path: ${path1}' , 'Invalid path to definitions. Double check path.', 'errorNumber'
+          logger.error({path1 : c.source().getText() }, '11005' );
         }
       }
     }
@@ -204,3 +211,4 @@ function stripDelimitersFromToken(tkn) {
 }
 
 module.exports = {MappingImporter, setLogger};
+

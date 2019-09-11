@@ -41,7 +41,8 @@ class DataElementImporter extends SHRDataElementParserListener {
     // Setup a child logger to associate logs with the current file
     const lastLogger = logger;
     logger = rootLogger.child({ file: file });
-    logger.debug('Start importing data elements file');
+    // 01008, 'Start importing data elements file',,
+    logger.debug('01008');
     try {
       const errListener = new SHRErrorListener(logger);
       const chars = new FileStream(file);
@@ -57,7 +58,8 @@ class DataElementImporter extends SHRDataElementParserListener {
       const walker = new ParseTreeWalker();
       walker.walk(this, tree);
     } finally {
-      logger.debug('Done importing data elements file');
+      // 01009, 'Done importing data elements file',,
+      logger.debug('01009');
       this.logger = lastLogger;
     }
   }
@@ -70,7 +72,8 @@ class DataElementImporter extends SHRDataElementParserListener {
       ns = ctx.docHeader().namespace().getText();
     }
     else {
-      logger.error('Namespace declaration not found. ERROR_CODE:11038');
+      // 11049, 'Namespace declaration not found', 'Unknown', 'errorNumber'
+      logger.error('11049');
     }
     this._currentNs = ns;
     let nsDef = this._specs.namespaces.find(ns);
@@ -81,7 +84,7 @@ class DataElementImporter extends SHRDataElementParserListener {
     if (ctx.descriptionProp() && typeof nsDef.description === 'undefined') {
       nsDef.description = trimLines(stripDelimitersFromToken(ctx.descriptionProp().STRING()));
     }
-
+    
     // Process the version
     let docHeader = ctx.docHeader();
     if (docHeader.version()) {
@@ -90,16 +93,19 @@ class DataElementImporter extends SHRDataElementParserListener {
       const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
       this._currentGrammarVersion = new Version(major, minor);
 
-      logger.debug({shrId: ns, version: this._currentGrammarVersion.toString()}, 'Start importing data element namespace');
+      // 01024, 'Start importing data element namespace',,
+      logger.debug({shrId: ns, version: this._currentGrammarVersion.toString()}, '01024');
     }
     else {
-      logger.error('Grammar declaration not found. ERROR_CODE 11039');
+      // 11039, 'Grammar declaration not found', 'Add Grammar declaration at top of file', 'errorNumber'
+      logger.error('11039');
     }
   }
 
   exitDoc(ctx) {
     // clear current namespace, uses namespaces, and grammar version
-    logger.debug({shrId: this._currentNs}, 'Done importing data element namespace');
+    // 01025, 'Done importing data element namespace ${ns}',,
+    logger.debug({shrId: this._currentNs}, '01025');
     this._currentNs = '';
     this._usesNs = [];
     this._currentGrammarVersion = null;
@@ -117,16 +123,21 @@ class DataElementImporter extends SHRDataElementParserListener {
     const lastLogger = logger;
     logger = logger.child({ shrId: id.fqn });
     logger.parent = lastLogger;
-    logger.debug('Start importing data element');
+    // 01010, 'Start importing data element',,
+    logger.debug('01010');
 
-    if (ctx.elementHeader().simpleName().LOWER_WORD()) { logger.error('Element name "%s" should begin with a capital letter. ERROR_CODE:11001', ctx.elementHeader().simpleName().getText()); }
+    if (ctx.elementHeader().simpleName().LOWER_WORD()) {
+      //11001 , 'Element name '${name}' should begin with a capital letter' , 'Rename the specified Element', 'errorNumber'
+      logger.error({name : ctx.elementHeader().simpleName().getText() }, '11001' );
+    }
   }
 
   exitElementDef(ctx) {
     try {
       this.pushCurrentDefinition();
     } finally {
-      logger.debug('Done importing data element');
+      // 01011, 'Done importing data element',,
+      logger.debug('01011');
       logger = logger.parent;
     }
   }
@@ -138,16 +149,21 @@ class DataElementImporter extends SHRDataElementParserListener {
     const lastLogger = logger;
     logger = logger.child({ shrId: id.fqn });
     logger.parent = lastLogger;
-    logger.debug('Start importing data element');
+    // 01010, 'Start importing data element',,
+    logger.debug('01010');
 
-    if (ctx.abstractHeader().simpleName().LOWER_WORD()) { logger.error('Element name "%s" should begin with a capital letter. ERROR_CODE:11001', ctx.elementHeader().simpleName().getText()); }
+    if (ctx.abstractHeader().simpleName().LOWER_WORD()) {
+      // 11001, 'Element name '${name}' should begin with a capital letter', 'Rename the specified Element', 'errorNumber'
+      logger.error({ name: ctx.elementHeader().simpleName().getText() }, '11001');
+    }
   }
 
   exitAbstractDef(ctx) {
     try {
       this.pushCurrentDefinition();
     } finally {
-      logger.debug('Done importing data element');
+      // 01011, 'Done importing data element',,
+      logger.debug('01011');
       logger = logger.parent;
     }
   }
@@ -160,16 +176,21 @@ class DataElementImporter extends SHRDataElementParserListener {
     const lastLogger = logger;
     logger = logger.child({ shrId: id.fqn });
     logger.parent = lastLogger;
-    logger.debug('Start importing data element');
+    // 01010, 'Start importing data element',,
+    logger.debug('01010');
 
-    if (ctx.groupHeader().simpleName().LOWER_WORD()) { logger.error('Element name "%s" should begin with a capital letter. ERROR_CODE:11001', ctx.groupHeader().simpleName().getText()); }
+    if (ctx.groupHeader().simpleName().LOWER_WORD()) {
+      // 11001, 'Element name '${name}' should begin with a capital letter', 'Rename the specified Element', 'errorNumber'
+      logger.error({ name: ctx.groupHeader().simpleName().getText() }, '11001');
+    }
   }
 
   exitGroupDef(ctx) {
     try {
       this.pushCurrentDefinition();
     } finally {
-      logger.debug('Done importing data element');
+      // 01011, 'Done importing data element',,
+      logger.debug('01011');
       logger = logger.parent;
     }
   }
@@ -182,16 +203,21 @@ class DataElementImporter extends SHRDataElementParserListener {
     const lastLogger = logger;
     logger = logger.child({ shrId: id.fqn });
     logger.parent = lastLogger;
-    logger.debug('Start importing data element');
+    // 01010, 'Start importing data element',,
+    logger.debug('01010');
 
-    if (ctx.entryHeader().simpleName().LOWER_WORD()) { logger.error('Entry Element name "%s" should begin with a capital letter. ERROR_CODE:11002', ctx.entryHeader().simpleName().getText()); }
+    if (ctx.entryHeader().simpleName().LOWER_WORD()) {
+      //11002 , 'Entry name '${name}' should begin with a capital letter' , 'Rename the specified Entry', 'errorNumber'
+      logger.error(  {name: ctx.entryHeader().simpleName().getText() }, '11002' );
+    }
   }
 
   exitEntryDef(ctx) {
     try {
       this.pushCurrentDefinition();
     } finally {
-      logger.debug('Done importing data element');
+      // 01011, 'Done importing data element',,
+      logger.debug('01011');
       logger = logger.parent;
     }
   }
@@ -199,28 +225,34 @@ class DataElementImporter extends SHRDataElementParserListener {
   enterParentProp(ctx) {
     const identifier = this.resolveToIdentifierOrTBD(ctx);
     if (identifier.isSpecialKeyWord) {
-      logger.error(`Elements cannot be based on "${identifier.name}" keyword. ERROR_CODE:11023`);
+      //11023 was a duplicate number; reassigned 11035
+      //11035 , 'Elements cannot be based on ${value} keyword' , 'Unknown', 'errorNumber'
+      logger.error({value: identifier.name } , '11035');
     } else {
       const parentInfo = this._preprocessedData.resolveDefinition(identifier.name, identifier.namespace);
       if (this._currentDef.isEntry) {
         // Entries can only inherit from another Entry or an Abstract
         if (parentInfo.type !== 'entry' && parentInfo.type !== 'abstract') {
-          logger.error('Entry %s cannot declare %s as its parent since %s is not an Entry or Abstract.  ERROR_CODE:11050', this._currentDef.identifier.name, identifier.name, identifier.name);
+          // 11050, 'Entry ${entry} cannot declare ${parent} as its parent since ${parent} is not an Entry or Abstract', 'Unknown', 'errorNumber'
+          logger.error({entry: this._currentDef.identifier.name, parent: identifier.name}, '11050');
         }
       } else if (this._currentDef.isAbstract) {
         // Abstracts can only inherit from another Abstract
         if (parentInfo.type !== 'abstract') {
-          logger.error('Abstract %s cannot declare %s as its parent since %s is not an Abstract.  ERROR_CODE:11051', this._currentDef.identifier.name, identifier.name, identifier.name);
+          // 11051, 'Abstract ${abstract} cannot declare ${parent} as its parent since ${parent} is not an Abstract', 'Unknown', 'errorNumber'
+          logger.error({abstract: this._currentDef.identifier.name, parent: identifier.name}, '11051');
         }
       } else if (this._currentDef.isGroup) {
         // Groups can only inherit from another Group
         if (parentInfo.type !== 'group') {
-          logger.error('Group %s cannot declare %s as its parent since %s is not a Group.  ERROR_CODE:11052', this._currentDef.identifier.name, identifier.name, identifier.name);
+          // 11052, 'Group ${group} cannot declare ${parent} as its parent since ${parent} is not a Group', 'Unknown', 'errorNumber'
+          logger.error({group: this._currentDef.identifier.name, parent: identifier.name}, '11052');
         }
       } else /* is an element */ {
         // Elements can only inherit from another Element
         if (parentInfo.type !== 'element') {
-          logger.error('Element %s cannot declare %s as its parent since %s is not an Element.  ERROR_CODE:11053', this._currentDef.identifier.name, identifier.name, identifier.name);
+          // 11053, 'Element ${element} cannot declare ${parent} as its parent since ${parent} is not an Element', 'Unknown', 'errorNumber'
+          logger.error({element: this._currentDef.identifier.name, parent: identifier.name}, '11053');
         }
       }
       this._currentDef.addBasedOn(identifier);
@@ -250,9 +282,11 @@ class DataElementImporter extends SHRDataElementParserListener {
     //    Check for ctx.COLON() because the grammar re-uses this rule for the KW_ONLY constraint too.
     //    NOTE: This check relies on the current grammar requiring parents be declared before values.
     if (this._currentDef.isGroup || this._currentDef.isEntry || this._currentDef.isAbstract) {
-      logger.error('Cannot declare Value on a non-Element.  ERROR_CODE:11054');
+      // 11054, 'Cannot declare Value on a non-Element', 'Unknown', 'errorNumber'
+      logger.error('11054');
     } else if (ctx.COLON() && this._currentDef.basedOn.length > 0) {
-      logger.error('Cannot redeclare Value on Element that has a parent.  Constrain Value instead.  ERROR_CODE:11055');
+      // 11055, 'Cannot redeclare Value on Element that has a parent. Constrain Value instead.', 'Unknown', 'errorNumber'
+      logger.error('11055');
     }
     const value = this.processCountAndTypesForValue(ctx);
     this._currentDef.value = value;
@@ -331,7 +365,8 @@ class DataElementImporter extends SHRDataElementParserListener {
       if (cst.elementTypeConstraint()) {
         const newIdentifier = this.resolveToIdentifierOrTBD(cst.elementTypeConstraint());
         if (newIdentifier.isSpecialKeyWord) {
-          logger.error(`Fields cannot be constrained to type "${newIdentifier.name}". ERROR_CODE:11025`);
+          //11025 , 'Fields cannot be constrained to type ${value} ' , 'Unknown' , 'errorNumber'
+          logger.error( {value: newIdentifier.name }, '11025');
         } else {
           const onValue = cst.elementTypeConstraint().KW_ONLY() ? true : false;
           value.addConstraint(new TypeConstraint(newIdentifier, path, onValue));
@@ -340,7 +375,8 @@ class DataElementImporter extends SHRDataElementParserListener {
         for (const typeConstraint of cst.elementIncludesTypeConstraint().typeConstraint()) {
           const newIdentifier = this.resolveToIdentifierOrTBD(typeConstraint);
           if (newIdentifier.isSpecialKeyWord) {
-            logger.error(`Fields cannot be constrained to type "${newIdentifier.name}". ERROR_CODE:11025`);
+            //11025 , 'Fields cannot be constrained to type ${value} ' , 'Unknown' , 'errorNumber'
+            logger.error( {value: newIdentifier.name }, '11025');
           } else {
             [min, max] = this.getMinMax(typeConstraint.count());
             const isOnValue = (path.length > 0 && path[0].isValueKeyWord);
@@ -395,11 +431,13 @@ class DataElementImporter extends SHRDataElementParserListener {
       // NOTE: This could potentially be enforced in the ANTLR grammar, but for now, we don't want
       // to make any changes in the grammar.  Consider changing in 6.1.
       if (isElement) {
-        logger.error('Cannot declare properties on an Element since Elements do not have properties.  ERROR_CODE:11056');
+        // 11056, 'Cannot declare properties on an Element since Elements do not have properties', 'Unknown', 'errorNumber'
+        logger.error('11056');
       }
       const field = this.processCountAndTypes(ctx.propertyField().count(), [ctx.propertyField().propertyFieldType()]);
       if (this._currentDef.fields.some(f => f.identifier && f.identifier.equals(field.identifier))) {
-        logger.error('Property "%s" already exists. ERROR_CODE:11040', field.identifier.name);
+        // 11040, 'Property "${name}" already exists.', 'Remove or rename redundant property', 'errorNumber'
+        logger.error({ name: field.identifier.name }, 'name');
       }
       else {
         this.addFieldToCurrentDef(field);
@@ -412,7 +450,8 @@ class DataElementImporter extends SHRDataElementParserListener {
         // NOTE: This could potentially be enforced in the ANTLR grammar, but for now, we don't want
         // to make any changes in the grammar.  Consider changing in 6.1.
         if (!isElement) {
-          logger.error('Cannot constrain Value on a non-Element since non-Elements do not have Values.  ERROR_CODE:11057');
+          // 11057, 'Cannot constrain Value on a non-Element since non-Elements do not have Values', 'Unknown', 'errorNumber'
+          logger.error('11057');
         }
         if (this._currentDef.value) {
           if (this._currentDef.value instanceof ChoiceValue) {
@@ -424,7 +463,8 @@ class DataElementImporter extends SHRDataElementParserListener {
               }
             });
             if(!marked) {
-              logger.error('Choice value constrained without specifying the specific choice. ERROR_CODE:11041');
+              // 11041, 'Choice value constrained without specifying the specific choice', 'Specify the choice to constrain using []', 'errorNumber'
+              logger.error('11041');
             }
           }
 
@@ -441,7 +481,8 @@ class DataElementImporter extends SHRDataElementParserListener {
         // NOTE: This could potentially be enforced in the ANTLR grammar, but for now, we don't want
         // to make any changes in the grammar.  Consider changing in 6.1.
         if (isElement) {
-          logger.error('Cannot constrain properties on Elements since Elements only have Values.  ERROR_CODE:11058');
+          // 11058, 'Cannot constrain properties on Elements since Elements only have Values', 'Unknown', 'errorNumber'
+          logger.error('11058');
         }
         const match = this._currentDef.fields.find(f => f.effectiveIdentifier && f.effectiveIdentifier.equals(field.identifier));
         if (match) {
@@ -450,7 +491,8 @@ class DataElementImporter extends SHRDataElementParserListener {
         else {
           const secondMatch = this._currentDef.fields.find(f => f.identifier && f.identifier.equals(field.identifier));
           if (secondMatch) {
-            logger.error('Constraint refers to previous identifier. ERROR_CODE:11042');
+            // 11042, 'Constraint refers to previous identifier', 'Unknown', 'errorNumber'
+            logger.error('11042');
           }
           else {
             this.addFieldToCurrentDef(field);
@@ -533,10 +575,12 @@ class DataElementImporter extends SHRDataElementParserListener {
     }
     let match = typeCtxArr[0].getText().match(/\d+\.\.(\d+|\*)/);
     if (match) {
-      logger.error('Value should not be declaring cardinality. ERROR:11043');
+      // 11043, 'Value should not declare cardinality', 'Remove cardinality from value declaration', 'errorNumber'
+      logger.error('11043');
     }
     else if (typeCtxArr[0].getText().length == 0) {
-      logger.error('Missing a value element. ERROR:11044');
+      // 11044, 'Missing a value element', 'Unknown', 'errorNumber'
+      logger.error('11044');
     }
     else {
       return this.processType(typeCtxArr[0], 1, 1);
@@ -578,7 +622,8 @@ class DataElementImporter extends SHRDataElementParserListener {
       const [path, name] =  vsConstraint.valueset().PATH_URL().getText().split('/', 2);
       const resolution = this._preprocessedData.resolvePath(path, this._currentNs, ...this._usesNs);
       if (resolution.error) {
-        logger.error(resolution.error);
+        //11047, 'Resolution error ${errorText} ' ,  'Unknown' , 'errorNumber'
+        logger.error({errorText : resolution.error }, '11047');
       }
       if (resolution.url) {
         vs = `${resolution.url}/${name}`;
@@ -596,7 +641,8 @@ class DataElementImporter extends SHRDataElementParserListener {
         }
       }
       if (!found) {
-        logger.error('Unable to resolve value set reference: %s. ERROR_CODE:11003', name);
+        //11003 , 'Unable to resolve value set reference: ${valueSet}' , 'Invalid value set reference  double check the name and the path', 'errorNumber'
+        logger.error({valueSet:  name}, '11003' );
         vs = `urn:tbd:${name}`;
       }
     } else if (vsConstraint.valueset().tbd()) {
@@ -622,7 +668,8 @@ class DataElementImporter extends SHRDataElementParserListener {
         return EXTENSIBLE;
       }
       // This error should never occur unless the ANTLR grammar changes
-      logger.error('Unsupported binding strength: %s.  Defaulting to REQUIRED. ERROR_CODE:11004', bindingCtx.getText());
+      //11004 , 'Unsupported binding strength: ${bindingStrength}. Defaulting to REQUIRED' , 'Binding strength has to be one of the following: -mus be' (required) -mus be X if covered' (extensible) should be' (preferred) could be' (optional)', 'errorNumber'
+      logger.error({ bindingStregth:  bindingCtx.getText() }, '11004' );
     }
     return REQUIRED;
   }
@@ -646,7 +693,8 @@ class DataElementImporter extends SHRDataElementParserListener {
       const csAlias = ctx.ALL_CAPS().getText();
       const resolution = this._preprocessedData.resolveVocabulary(csAlias, this._currentNs, ...this._usesNs);
       if (resolution.error) {
-        logger.error(resolution.error);
+        //11047, 'Resolution error ${errorText} ' ,  'Unknown' , 'errorNumber'
+        logger.error({errorText : resolution.error }, '11047');
         cs = resolution.url ? resolution.url : csAlias;
       } else {
         cs = resolution.url;
@@ -699,7 +747,8 @@ class DataElementImporter extends SHRDataElementParserListener {
       const name = ref.substr(lastDot+1);
       const resolution = this.resolveDefinition(name, ns);
       if (resolution.error) {
-        logger.error(resolution.error);
+        //11047, 'Resolution error ${errorText} ' ,  'Unknown' , 'errorNumber'
+        logger.error({errorText : resolution.error }, '11047');
       }
       return new Identifier(ns, name);
     }
@@ -715,7 +764,8 @@ class DataElementImporter extends SHRDataElementParserListener {
     var ns;
     const resolution = this.resolveDefinition(ref, this._currentNs, ...this._usesNs);
     if (resolution.error) {
-      logger.error(resolution.error);
+      //11047, 'Resolution error ${errorText} ' ,  'Unknown' , 'errorNumber'
+      logger.error({errorText : resolution.error }, '11047');
       ns = resolution.namespace ? resolution.namespace: 'unknown';
     } else {
       ns = resolution.namespace;
@@ -755,7 +805,8 @@ class DataElementImporter extends SHRDataElementParserListener {
 
   pushCurrentDefinition() {
     if (this._specs.dataElements.findByIdentifier(this._currentDef.identifier) != null) {
-      logger.error('Name "%s" already exists. ERROR_CODE:11033', this._currentDef.identifier.name);
+      //11033 , 'Name ${elementEntryName} already exists.' , 'The entity or element name already exists within the namespace and the most recently defined element or entry name will be used.', 'errorNumber'
+      logger.error( {elementEntryName : this._currentDef.identifier.name}, '11033');
     }
     this._specs.dataElements.add(this._currentDef, this._currentFile);
   }

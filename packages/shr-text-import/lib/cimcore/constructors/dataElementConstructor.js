@@ -99,7 +99,8 @@ class DataElementConstructor {
       break;
     }
     default:
-      logger.error('Unable to import property %s, unknown value type: %s ERROR_CODE:11027', de.fqn, value.valueType);
+      //11027 , 'Unable to import property ${fqn1}  unknown value type: ${valueType1}' , 'The type either does not exist  or the import tool needs to be updated.', 'errorNumber'
+      logger.error({fqn1 : de.fqn, valueType1 : value.valueType }, '11027');
       return;
     }
 
@@ -201,7 +202,8 @@ class DataElementConstructor {
       this.constructSubpaths(constraint, path, aggregate);
       break;
     default:
-      logger.error('Unable to import unknown constraint type: %s ERROR_CODE:11028', cType);
+      //11028 , 'Unable to import unknown constraint type: ${constraintType1} ' , 'The type either does not exist  or the import tool needs to be updated.', 'errorNumber'
+      logger.error({constraintType1 : cType }, '11028' );
       break;
     }
 
@@ -243,7 +245,8 @@ class DataElementConstructor {
       if (constraint.lastModifiedBy) fixedValueConstraint.lastModifiedBy = idFromFQN(constraint.lastModifiedBy);
       return fixedValueConstraint;
     } else {
-      logger.error('Unable to import FixedValueConstraint, unknown fixed value type: %s ERROR_CODE:11031', constraint.type);
+      //11031 , 'Unable to import FixedValueConstraint unknown fixed value type: ${ruleType1}' , 'The value type either does not exist  or the import tool needs to be updated.', 'errorNumber'
+      logger.error({ruleType1 :  constraint.type }, '11031' );
     }
   }
 

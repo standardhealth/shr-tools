@@ -38,7 +38,8 @@ class ValueSetImporter extends SHRValueSetParserListener {
     // Setup a child logger to associate logs with the current file
     const lastLogger = logger;
     logger = rootLogger.child({ file: file });
-    logger.debug('Start importing value set file');
+    // 01022, 'Start importing value set file',,
+    logger.debug('01022');
     try {
       const errListener = new SHRErrorListener(logger);
       const chars = new FileStream(file);
@@ -54,7 +55,8 @@ class ValueSetImporter extends SHRValueSetParserListener {
       const walker = new ParseTreeWalker();
       walker.walk(this, tree);
     } finally {
-      logger.debug('Done importing value set file');
+      // 01023, 'Done importing value set file',,
+      logger.debug('01023');
       this.logger = lastLogger;
     }
   }
@@ -76,14 +78,16 @@ class ValueSetImporter extends SHRValueSetParserListener {
     const minor = parseInt(version.WHOLE_NUMBER()[1], 10);
     this._currentGrammarVersion = new Version(major, minor);
 
-    logger.debug({shrId: this._currentNs, version: this._currentGrammarVersion.toString()}, 'Start importing value set namespace');
+    // 01028, 'Start importing value set namespace',,
+    logger.debug({shrId: this._currentNs, version: this._currentGrammarVersion.toString()}, '01028');
   }
 
   exitDoc(ctx) {
+    // 01029, 'Done importing value set namespace',,
+    logger.debug({shrId: this._currentNs}, '01029');
     // clear current namespace, target spec, and grammar version
     this._currentNs = '';
     this._currentGrammarVersion = null;
-    logger.debug({shrId: this._currentNs}, 'Done importing value set namespace');
   }
 
   enterVocabularyDef(ctx) {
@@ -102,12 +106,14 @@ class ValueSetImporter extends SHRValueSetParserListener {
   enterValuesetDef(ctx) {
     const h = ctx.valuesetHeader();
     if (h.URL()) {
-      logger.error('Defining value sets by URL has been deprecated in ValueSet files.  ValueSet %s ignored. ERROR_CODE:11008', h.URL().getText());
+      //11008 , 'Defining value sets by URL has been deprecated in ValueSet files. ValueSet ${valueSet1} ignored.' , 'Define the value set with a name using proper syntax.', 'errorNumber'
+      logger.error( {valueSet1 : h.URL().getText() }, '11008');
       // Set a dummy unsupported def so the rest of the parsing can occur -- but it won't be added to the definitions
       this._currentDef = new ValueSet(new Identifier('unsupported', 'Unsupported'), 'urn:unsupported');
       return;
     } else if (h.URN_OID()) {
-      logger.error('Defining value sets by URN has been deprecated in ValueSet files.  ValueSet %s ignored. ERROR_CODE:11009', h.URN_OID().getText());
+      //11009 , 'Defining value sets by URN has been deprecated in ValueSet files. ValueSet ${valueSet1} ignored.' , 'Define the value set with a name using proper syntax.', 'errorNumber'
+      logger.error({valueSet1 : h.URN_OID().getText() }, '11009' );
       // Set a dummy unsupported def so the rest of the parsing can occur -- but it won't be added to the definitions
       this._currentDef = new ValueSet(new Identifier('unsupported', 'Unsupported'), 'urn:unsupported');
       return;
@@ -179,7 +185,8 @@ class ValueSetImporter extends SHRValueSetParserListener {
     const alias = ctx.ALL_CAPS().getText();
     const system = this._csMap.get(alias);
     if (typeof system === 'undefined') {
-      logger.error('Couldn\'t resolve code system for alias: %s. ERROR_CODE:11010', alias);
+      //11010 , 'Could not resolve code system for alias: ${alias1}', 'Invalid Codesystem  double check spelling' , 'errorNumber'
+      logger.error({alias1 : alias}, '11010');
       return;
     }
     this._currentDef.addValueSetIncludesFromCodeSystemRule(system);
@@ -197,11 +204,13 @@ class ValueSetImporter extends SHRValueSetParserListener {
   }
 
   enterUsesStatement(ctx) {
-    logger.error('Uses statements have been deprecated in ValueSet files.  Uses statement ignored. ERROR_CODE:11011');
+    //11011 , 'Uses statements have been deprecated in ValueSet files. Uses statement ignored.' , 'Uses statement is unnecessary. Refer to documentation for proper syntax', 'errorNumber'
+    logger.error('11011');
   }
 
   enterPathDef(ctx) {
-    logger.error('Only default path definitions are allowed in ValueSet files.  Path definition ignored. ERROR_CODE:11012');
+    //11012 , 'Only default path definitions are allowed in ValueSet files. Path definition ignored.' , 'Use one of the preset path definitions defined in the documentation.', 'errorNumber'
+    logger.error('11012');
   }
 
   processFullyQualifiedCode(ctx) {
@@ -209,7 +218,8 @@ class ValueSetImporter extends SHRValueSetParserListener {
       const alias = ctx.ALL_CAPS().getText();
       const system = this._csMap.get(alias);
       if (typeof system === 'undefined') {
-        logger.error('Couldn\'t resolve code system for alias: %s. ERROR_CODE:11010', alias);
+        //11010 , 'Could not resolve code system for alias: ${alias1}', 'Invalid Codesystem  double check spelling' , 'errorNumber'
+        logger.error({alias1 : alias}, '11010');
         return;
       }
       const code = ctx.code().CODE().getText().substr(1); // substr to skip the '#'
@@ -258,7 +268,8 @@ class ValueSetImporter extends SHRValueSetParserListener {
     }
 
     if (this._specs.valueSets.findByIdentifier(this._currentDef.identifier) != null) {
-      logger.error('Name "%s" already exists. ERROR_CODE:11034', this._currentDef.identifier.name);
+      //11034 , 'ValueSet name ${vsName} already exists.' , 'The value set name already exists within the namespace.', 'errorNumber'
+      logger.error({vsName : this._currentDef.identifier.name }, '11034' );
     }
 
     this._specs.valueSets.add(this._currentDef);

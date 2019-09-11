@@ -6,25 +6,16 @@ class SHRErrorListener extends ErrorListener {
     this._logger = bunyanLogger;
   }
 
-  codeMessage(msg) {
-    var code;
-
-    if (msg.match(/^extraneous input .+ expecting/)) {
-      code = 11023;
-    } else if (msg.match(/^mismatched input .+ expecting/)) {
-      code = 11016;
-    } else if (msg.match(/^token recognition error at: '.+'/)) {
-      code = 11015;
-    } else {
-      return msg;
-    }
-    
-    msg = `${msg}. ERROR_CODE:${code}`;
-    return msg;
-  }
-
   syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
-    this._logger.error({line, column}, this.codeMessage(msg));
+    if (msg.match(/^extraneous input .+ expecting/)) {
+      this._logger.error({message: msg}, '11023');
+    } else if (msg.match(/^mismatched input .+ expecting/)) {
+      this._logger.error({message: msg}, '11016');
+    } else if (msg.match(/^token recognition error at: '.+'/)) {
+      this._logger.error({message: msg}, '11015');
+    } else {
+      this._logger.error({message: msg}, '11017');
+    }
   }
 }
 

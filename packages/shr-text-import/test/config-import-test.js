@@ -127,7 +127,7 @@ describe('#importConfig', () => {
 
   it('Config6: should correctly throw error when file is not valid JSON', () => {
     const configuration = importConfiguration('invalidblankconfig', 1);
-    expect(err.errors()[0].msg).to.contain('Invalid config file');
+    expect(err.errors()[0].msg).to.contain('11046');
     expect(configuration).to.be.undefined;
   });
 

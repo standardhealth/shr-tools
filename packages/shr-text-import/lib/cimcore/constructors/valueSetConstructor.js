@@ -118,7 +118,8 @@ class ValueSetConstructor {
         constructExcludesDescendentsRules(rules);
         break;
       default:
-        logger.error('Unable to import VS rule, unknown rule type: %s ERROR_CODE:11030', rType);
+        //11030 , 'Unable to import VS rule  unknown rule type: ${ruleType1}' , 'The type either does not exist  or the import tool needs to be updated.', 'errorNumber'
+        logger.error({ruleType1 : rType }, '11030');
         break;
       }
     }

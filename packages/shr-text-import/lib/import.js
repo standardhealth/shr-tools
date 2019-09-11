@@ -49,7 +49,8 @@ function importFromFilePath(filePath, configuration=[], specifications = new Spe
     }
   }
   if (configuration && configuration.contentProfile && !contentProfileFound) {
-    logger.error('Could not find content profile file: %s. ERROR_CODE:11037', configuration.contentProfile);
+    //11038, 'Could not find content profile file: ${cpFile}', 'Unknown', 'errorNumber'
+    logger.error({cpfile: configuration.contentProfile }, '11038');
   }
   return specifications;
 }
@@ -74,14 +75,16 @@ function importConfigFromFilePath(filePath, configName) {
   const validConfig = filesByType.config.some(f => path.resolve(f) === configFile);
 
   if (validConfig) {
-    logger.info('Using config file %s', configFile);
+    // 01012, 'Using config file ${configFile}',,
+    logger.info({ configFile }, '01012');
     configuration = preprocessor.preprocessConfig(defaultConfigFile, configFile);
   } else if ((configName == null || configName === 'config.json') && fs.statSync(filePath).isDirectory()) {
     const newFile = path.resolve(filePath, 'config.json');
     configuration = preprocessor.preprocessConfig(defaultConfigFile);
     fs.writeFileSync(newFile, defaultConfigFile, 'utf8');
   } else {
-    logger.error('Invalid config file: %s', configFile);
+    //11046, 'Invalid config file: ${configFilename1} ' ,  'Unknown' , 'errorNumber'
+    logger.error({configFilename1 : configFile}, '11046' );
   }
 
   return configuration;
@@ -107,6 +110,10 @@ function processPath(filePath, filesByType = new FilesByType()) {
   }
 
   return filesByType;
+}
+
+function errorFilePath() {
+  return require('path').join(__dirname, '..', 'errorMessages.txt');
 }
 
 class FilesByType {
@@ -174,4 +181,4 @@ class FilesByType {
   }
 }
 
-module.exports = {importFromFilePath, importConfigFromFilePath, importCIMCOREFromFilePath, VERSION, GRAMMAR_VERSION, setLogger, MODELS_INFO};
+module.exports = {importFromFilePath, importConfigFromFilePath, importCIMCOREFromFilePath, errorFilePath, VERSION, GRAMMAR_VERSION, setLogger, MODELS_INFO};
