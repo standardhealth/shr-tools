@@ -33,7 +33,8 @@ function exportToJSONSchema(expSpecifications, baseSchemaURL, baseTypeURL, flat 
     const lastLogger = logger;
     logger = logger.child({ shrId: ns.namespace});
     try {
-      logger.debug('Exporting namespace.');
+      // 08001, 'Exporting namespace.',,
+      logger.debug('08001');
       if (flat) {
         const { schemaId, schema } = flatNamespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL, baseTypeURL);
         namespaceResults[schemaId] = schema;
@@ -41,7 +42,8 @@ function exportToJSONSchema(expSpecifications, baseSchemaURL, baseTypeURL, flat 
         const { schemaId, schema } = namespaceToSchema(ns, expSpecifications.dataElements, baseSchemaURL, baseTypeURL);
         namespaceResults[schemaId] = schema;
       }
-      logger.debug('Finished exporting namespace.');
+      // 08002, 'Finished exporting namespace.',,
+      logger.debug('08002');
     } finally {
       logger = lastLogger;
     }
@@ -81,7 +83,8 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
     const lastLogger = logger;
     logger = logger.child({ shrId: def.identifier.fqn});
     try {
-      logger.debug('Exporting element');
+      // 08003, 'Exporting element',,
+      logger.debug('08003');
       let schemaDef = {
         type: 'object',
         properties: {}
@@ -103,7 +106,8 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
           } else {
             const parent = dataElementsSpecs.findByIdentifier(supertypeId);
             if (!parent) {
-              logger.error('Could not find definition for %s which is a supertype of %s', supertypeId, def);
+              //18008, 'Could not find definition for ${supertype1} which is a supertype of ${def1}' , 'Unknown' , 'errorNumber'
+              logger.error({supertype1 : supertypeId.toString(), def1 : def.identifier.toString() },'18008' );
             } else {
               hasEntryParent = hasEntryParent || parent.isEntry;
             }
@@ -140,7 +144,9 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
               continue;
             } else if (field.inheritance === INHERITED) {
               if (fieldNameMap[field.identifier.name]) {
-                logger.error(`ERROR: clashing property names: %s and %s ERROR_CODE: 12038`, fieldNameMap[field.identifier.name].fqn, field.identifier.fqn);
+                //duplicate number - reassigned
+                //18001, 'Clashing property names: ${name1} and ${name2} ',  'Unknown' , 'errorNumber'
+                logger.error({name1 : fieldNameMap[field.identifier.name].fqn, name2 : field.identifier.fqn}, '18001');
                 clashingNames[field.identifier.name] = true;
               } else {
                 fieldNameMap[field.identifier.name] = field.identifier;
@@ -149,7 +155,9 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
             }
 
             if (fieldNameMap[field.identifier.name]) {
-              logger.error(`ERROR: clashing property names: %s and %s ERROR_CODE: 12038`, fieldNameMap[field.identifier.name].fqn, field.identifier.fqn);
+              //duplicate number - reassigned
+              //18001, 'Clashing property names: ${name1} and ${name2} ',  'Unknown' , 'errorNumber'
+              logger.error({name1 : fieldNameMap[field.identifier.name].fqn, name2 : field.identifier.fqn}, '18001');
               clashingNames[field.identifier.name] = true;
               continue;
             } else {
@@ -349,15 +357,18 @@ function namespaceToURLPathSegment(namespace) {
 
 function isValidField(field) {
   if (field instanceof ChoiceValue) {
-    logger.error('Ignoring field defined as a choice', field.toString());
+    //18002, 'Ignoring field defined as a choice: ${field1}',	  'Unknown' , 'errorNumber'
+    logger.error({field1 : field.toString()}, '18002' );
     return false;
   }
   if (!(field.identifier)) {
-    logger.error('Ignoring name-less field: ', field.toString());
+    //18003, 'Ignoring name-less field: ${field1} ', 'Unknown' , 'errorNumber'
+    logger.error({field1 : field.toString() },'18003' );
     return false;
   }
   if (field.identifier.name === 'Value') {
-    logger.error('Ignoring restricted field name: Value', field.toString());
+    //18004, 'Ignoring restricted field name: Value :  ${field1} ',  'Unknown' , 'errorNumber'
+    logger.error({field1 : field.toString() }, '18004' );
     return false;
   }
   return true;
@@ -399,7 +410,8 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     const normalOptions = [];
     for (const option of valueDef.options) {
       if (option.effectiveCard && (!option.effectiveCard.isExactlyOne)) {
-        logger.error('Choices with options with cardinalities that are not exactly one are illegal "%s". Ignoring option %s.', valueDef.toString(), option.toString());
+        //18005, 'Choices with options with cardinalities that are not exactly one are illegal ${value1}. Ignoring option ${option1}' ,  'Unknown' , 'errorNumber'
+        logger.error({value1 : valueDef.toString(), option1 : option.toString() },'18005' );
       } else if (isRef(option, dataElementsSpecs)) {
         refOptions.push(option);
       } else {
@@ -443,9 +455,11 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
     }
     return {value: ret, required: required, tbd: true};
   } else if (valueDef instanceof IncompleteValue) {
-    logger.error('Unsupported Incomplete');
+    //18006, 'Unsupported Incomplete'	 , 'Unknown' , 'errorNumber'
+    logger.error('18006');
   } else {
-    logger.error('Unknown type for value "%s"', valueDef.constructor.name);
+    //18007, 'Unknown type for value ${value1} ' , 'Unknown' , 'errorNumber'
+    logger.error({value1 : valueDef.constructor.name},'18007');
   }
 
   const constraintStructure = { $self: []};
@@ -559,7 +573,8 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
                 currentAllOf.push(schemaConstraint);
               }
             } else {
-              logger.error('Internal error unexpected constraint target: %s for constraint %s', constraintInfo.constraintTarget.toString(), constraintInfo.constraint.toString());
+              //18009, 'Internal error unexpected constraint target: ${target1} for constraint ${constraint1}'A , 'Unknown' , 'errorNumber'
+              logger.error({target1 : constraintInfo.constraintTarget.toString(), constraint1 : constraintInfo.constraint.toString() },'18009' );
             }
           } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
             if (!includesConstraints) {
@@ -586,7 +601,8 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
             includesCodeConstraints.push(constraintInfo.constraint);
           } else if (constraintInfo.constraint instanceof ValueSetConstraint) {
             if (currentAllOf[0].valueSet) {
-              logger.error(`Multiple valueset constraints found on a single element %s.`, constraintInfo.constraint);
+              //18010, 'Multiple valueset constraints found on a single element ${element1}'  , 'Unknown' , 'errorNumber'
+              logger.error({element1 : constraintInfo.constraint },'18010' );
               continue;
             }
             currentAllOf[0].valueSet = {
@@ -596,7 +612,8 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
           } else if (constraintInfo.constraint instanceof CodeConstraint) {
             // Maybe TODO: For entry elements this can have some level of enforcement by ANDing the exact contents of the EntryType field with an enum for this value/field.
             if (currentAllOf[0].code) {
-              logger.error(`Multiple code constraints found on a single element %s.`, constraintInfo.constraint);
+              //18011, Multiple code constraints found on a single element ${element1} '  ,  'Unknown' , 'errorNumber'
+              logger.error({element1 : constraintInfo.constraint },'18011' );
               continue;
             }
             currentAllOf[0].code = makeCodingEntry(constraintInfo.constraint.code);
@@ -718,7 +735,8 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
       const allOfEntry = currentAllOf[i];
       if (allOfEntry.constraints) {
         for (const constraint of allOfEntry.constraints) {
-          logger.error('Internal error: unhandled constraint %s', constraint.toString());
+          //18012, 'Internal error: unhandled constraint ${constraint1} ' , 'Unknown' , 'errorNumber'
+          logger.error({constraint1 : constraint.toString() },'18012' );
         }
       }
       if (allOfEntry.properties) {
@@ -881,21 +899,25 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
     target = null;
     if (pathId.namespace === PRIMITIVE_NS) {
       if (i !== constraint.path.length - 1) {
-        logger.error('Encountered a constraint path containing a primitive %s at index %d that was not the leaf: %s', pathId, i, constraint.toString());
+        //18013, 'Encountered a constraint path containing a primitive ${pathId1} at index ${index1} that was not the leaf: ${constraint1} ' , 'Unknown' , 'errorNumber'
+        logger.error({pathId1 : pathId , index1 : i, constraint1 : constraint.toString() }, '18013' );
         return {};
       }
       if (!currentDef.value) {
-        logger.error('Encountered a constraint path with a primitive leaf %s on an element that lacked a value: %s', pathId, constraint.toString());
+        //18014, 'Encountered a constraint path with a primitive leaf ${pathId1} on an element that lacked a value: ${constraint1} '  , 'Unknown' , 'errorNumber'
+        logger.error({pathId1 : pathId, constraint1 : constraint.toString() },'18014' );
         return {};
       }
       if (currentDef.value instanceof ChoiceValue) {
         target = findOptionInChoice(currentDef.value, pathId, dataElementSpecs);
         if (!target) {
-          logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, constraint.toString(), valueDef.toString());
+          //18015, 'Encountered a constraint path with a primitive leaf ${pathId1} on an element with a mismatched value: ${constraint1} on valueDef ${valueDef1} ' , 'Unknown' , 'errorNumber'
+          logger.error({pathId1 : pathId, constraint1 : constraint.toString(), valueDef1 : valueDef.toString() },'18015' );
           return {};
         }
       } else if (!pathId.equals(currentDef.value.identifier)) {
-        logger.error('Encountered a constraint path with a primitive leaf %s on an element with a mismatched value: %s on valueDef %s', pathId, constraint.toString(), valueDef.toString());
+        //18016, 'Encountered a constraint path with a primitive leaf ${pathId1} on an element with a mismatched value: ${constraint1} on valueDef ${valueDef1} ' , 'Unknown' , 'errorNumber'
+        logger.error({pathId1 : pathId, constraint1: constraint.toString(), valueDef1: valueDef.toString()}, '18016' );
         return {};
       } else {
         target = currentDef.value;
@@ -904,7 +926,9 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
     } else {
       const newDef = dataElementSpecs.findByIdentifier(pathId);
       if (!newDef) {
-        logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, constraint.toString());
+        // duplicate error number; remapped
+        //18017, 'Cannot resolve element definition for ${pathId1} on constraint ${constraint1}. ' , 'Unknown' , 'errorNumber'
+        logger.error({pathId1 : pathId, constraint1 : constraint.toString() },'18017' );
         return {};
       }
       // See if the current definition has a value of the specified type.
@@ -919,7 +943,8 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
 
       if (!target) {
         if (!currentDef.fields || !currentDef.fields.length) {
-          logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', currentDef.identifier.fqn, pathId, constraint.toString());
+          //18018, 'Element ${element1} lacked any fields or a value that matched ${pathId1} as part of constraint ${constraint1} ' , 'Unknown' , 'errorNumber'
+          logger.error({element1 : currentDef.identifier.fqn, pathId1 : pathId, constraint1 : constraint.toString() }, '18018' );
           return {};
         } else {
           target = currentDef.fields.find((field) => pathId.equals(field.identifier));
@@ -928,9 +953,11 @@ function extractConstraintPath(constraint, valueDef, dataElementSpecs) {
             // In this case, do nothing, because right now there isn't a valid way to represent further constraints
             // on includesType elements in the schema.
             if (valueDef.constraintsFilter.includesType.constraints.some(c => c.isA.equals(pathId))) {
-              logger.warn('Cannot enforce constraint %s on Element %s since %s refers to an type introduced by an "includesType" constraint', constraint.toString(), currentDef.identifier.fqn, pathId);
+              // 08004, 'Cannot enforce constraint ${constraint} on Element ${elementFqn} since ${path} refers to a type introduced by an "includesType" constraint'
+              logger.warn({ constraint: constraint.toString(), elementFqn: currentDef.identifier.fqn, path: pathId.toString() }, '08004');
             } else {
-              logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', currentDef.identifier.fqn, pathId, constraint.toString());
+              //18019, 'Element ${element1} lacked a field or a value that matched ${pathId1} as part of constraint ${constraint1} ' , 'Unknown' , 'errorNumber'
+              logger.error({element1 : currentDef.identifier.fqn, pathId1 : pathId, constraint1 : constraint.toString() },'18019' );
             }
             return {};
           }
@@ -951,12 +978,15 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
   for (let i = 0; i < len; i += 1) {
     const pathId = constraint.path[i];
     if (pathId.namespace === PRIMITIVE_NS) {
-      logger.error('Encountered an unnormalized constraint path containing a primitive %s at index %d: %s', pathId, i, constraint.toString());
+      //18020, 'Encountered an unnormalized constraint path containing a primitive ${pathId1} at index ${index1}: ${constraint1} '  , 'Unknown' , 'errorNumber'
+      logger.error({pathId1 : pathId, index1 : i ,  constraint1 : constraint.toString() },'18020' );
       return {};
     }
     const newDef = dataElementSpecs.findByIdentifier(pathId);
     if (!newDef) {
-      logger.error('Cannot resolve element definition for %s on constraint %s. ERROR_CODE:12029', pathId, constraint.toString());
+      //remapped error numnber
+      //18017, 'Cannot resolve element definition for ${pathId1} on constraint ${constraint1}. ' , 'Unknown' , 'errorNumber'
+      logger.error({pathId1 :  pathId, constraint1 : constraint.toString() },'18017' );
       return {};
     }
     let found = false;
@@ -977,7 +1007,8 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
 
     if (!found) {
       if (!currentDef.fields || !currentDef.fields.length) {
-        logger.error('Element %s lacked any fields or a value that matched %s as part of constraint %s', currentDef.identifier.fqn, pathId, constraint.toString());
+        //18021,  'Element ${element1} lacked any fields or a value that matched ${pathId1} as part of constraint ${constraint1} '  , 'Unknown' , 'errorNumber'
+        logger.error({element1 : currentDef.identifier.fqn,  pathId1 : pathId, constraint1 : constraint.toString()}, '18021' );
         return {};
       } else {
         const found = currentDef.fields.some((field) => pathId.equals(field.identifier));
@@ -988,7 +1019,8 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
           if (valueDef.constraintsFilter.includesType.constraints.some(c => c.isA.equals(pathId))) {
             // TODO: Eventually, somehow, support includesType constraints
           } else {
-            logger.error('Element %s lacked a field or a value that matched %s as part of constraint %s', currentDef.identifier.fqn, pathId, constraint.toString());
+            //18021,  'Element ${element1} lacked any fields or a value that matched ${pathId1} as part of constraint ${constraint1} '  , 'Unknown' , 'errorNumber'
+            logger.error({element1 : currentDef.identifier.fqn,  pathId1 : pathId, constraint1 : constraint.toString()}, '18021' );
           }
           return {};
         }
@@ -999,17 +1031,20 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
   }
 
   if (!currentDef.value) {
-    logger.error('Target of an unnormalized constraint: %s does not have a value. Constraint is: %s', currentDef.identifier.fqn, constraint.toString());
+    //18022, 'Target of an unnormalized constraint: ${target1} does not have a value. Constraint is: ${constraint1} ' , 'Unknown' , 'errorNumber'
+    logger.error({target1 : currentDef.identifier.fqn, constraint1 : constraint.toString() },'18022' );
     return {};
   } else if (!(currentDef.value instanceof ChoiceValue)) {
-    logger.error('Constraint should not be on the value (except for choices): %s in an expanded object model "%s". Ignoring constraint.', currentDef.identifier.fqn, constraint.toString());
+    //18023, 'Constraint should not be on the value (except for choices): ${target1} in an expanded object model ${constraint1}. Ignoring constraint.',  , 'Unknown' , 'errorNumber'
+    logger.error({target1 : currentDef.identifier.fqn, constraint1 : constraint.toString() },'18023' );
     return {};
   }
   let target = currentDef.value;
   if ((constraint instanceof TypeConstraint) || (constraint instanceof IncludesTypeConstraint)) {
     target = findOptionInChoice(currentDef.value, constraint.isA, dataElementSpecs);
     if (!target) {
-      logger.error('Target of an unnormalized constraint: %s was a choice value that did not have a valid option: %s', constraint.toString(), currentDef.identifier.fqn);
+      //18024, 'Target of an unnormalized constraint: ${constraint1} was a choice value that did not have a valid option: ${identifier1} ' , 'Unknown' , 'errorNumber'
+      logger.error({constraint1 : constraint.toString(), identifier1 : currentDef.identifier.fqn },'18024' );
       return {};
     }
   }
@@ -1123,7 +1158,8 @@ function getRecursiveBasedOns(identifier, dataElementSpecs, alreadyProcessed = [
   // We haven't processed it, so look it up
   const element = dataElementSpecs.findByIdentifier(identifier);
   if (typeof element === 'undefined') {
-    logger.error('Cannot resolve element definition for %s. ERROR_CODE:12029', identifier.fqn);
+    //18025 , 'Cannot resolve element definition for ${name1}' , 'This is due to a incomplete definition for an element. Please refer to the document for proper definition syntax.', 'errorNumber'
+    logger.error({name1 : identifier.fqn },'18025');
     return alreadyProcessed;
   }
   // Add it to the already processed list (again, to avoid circular dependencies)
@@ -1137,4 +1173,8 @@ function getRecursiveBasedOns(identifier, dataElementSpecs, alreadyProcessed = [
 }
 // done stealing from shr-expand
 
-module.exports = {exportToJSONSchema, setLogger, MODELS_INFO };
+function errorFilePath() {
+  return require('path').join(__dirname, '..', 'errorMessages.txt');
+}
+
+module.exports = {exportToJSONSchema, setLogger, MODELS_INFO, errorFilePath };
