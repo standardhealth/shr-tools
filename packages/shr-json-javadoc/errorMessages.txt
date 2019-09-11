@@ -1,0 +1,6 @@
+Number, Message, Solution, deduplicationKeys
+07001, 'Unknown constraint type ${constraintType}.', 'Unknown', 'errorNumber'
+07002, 'Compiling Documentation for ${count} namespaces...',,
+07003, 'Building documentation pages for ${count} elements...',,
+17001, 'Error rendering model doc: ${errorText}',  'Unknown', 'errorNumber'
+17002, 'Error copying files for export of model doc: ${errorText}',  'Unknown', 'errorNumber'

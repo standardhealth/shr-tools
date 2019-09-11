@@ -228,7 +228,8 @@ class Constraints {
       this.cardConstraint(constraint, subpath);
       break;
     default:
-      logger.warn('Unknown constraint type %s. ERROR_CODE:TBD', cType);
+      // 07001, 'Unknown constraint type ${constraintType}.', 'Unknown', 'errorNumber'
+      logger.warn({ constraintType: cType }, '07001');
     }
   }
 
