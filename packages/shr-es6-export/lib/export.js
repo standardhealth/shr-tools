@@ -227,4 +227,8 @@ class ES6Exporter {
 
 }
 
-module.exports = {exportToES6, setLogger, MODELS_INFO};
+function errorFilePath() {
+  return require('path').join(__dirname, '..', 'errorMessages.txt');
+}
+
+module.exports = {exportToES6, setLogger, MODELS_INFO, errorFilePath};

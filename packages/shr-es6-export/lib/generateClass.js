@@ -25,7 +25,8 @@ const ENABLE_TO_FHIR = false;
 function generateClass(def, specs, fhir) {
   const lastLogger = logger;
   logger = rootLogger.child({ shrId: def.identifier.fqn });
-  logger.debug('Start generating class');
+  // 06001, 'Start generating class',,
+  logger.debug('06001');
 
   try {
     const cw = new CodeWriter();
@@ -56,7 +57,8 @@ function generateClass(def, specs, fhir) {
     let superClass;
     if (def.basedOn.length) {
       if (def.basedOn.length > 1) {
-        logger.error('Cannot create proper inheritance tree w/ multiple based on elements.  Using first element.');
+        //16005, 'Cannot create proper inheritance tree w/ multiple based on elements.  Using first element.', 'Unknown, 'errorNumber'
+        logger.error('16005');
       }
       if (def.basedOn[0] instanceof TBD) {
         cw.ln(`// Ommitting import and extension of base element: ${def.basedOn[0]}`).ln();
@@ -78,7 +80,8 @@ function generateClass(def, specs, fhir) {
     cw.ln(`export default ${clazzName};`);
     return cw.toString();
   } finally {
-    logger.debug('Done generating class');
+    // 06002, 'Done generating class'
+    logger.debug('06002');
     logger = lastLogger;
   }
 }
@@ -694,7 +697,8 @@ function writeFromFhirProfile(def, specs, fhir, fhirProfile, cw) {
         if (def.value instanceof IdentifiableValue && def.value.identifier.isPrimitive) {
           generateFromFHIRAssignment(def.value, element, fhirElementPath, [], 'value', fhirProfile, null, cw, specs, fhir);
         } else {
-          logger.error('Value referenced in mapping but none exist on this element.');
+          //16004, 'Value referenced in mapping but none exist on this element ${element1}', 'Unknown, 'errorNumber'
+          logger.error({ element1 : JSON.stringify(element) } ,'16004' );
         }
       } else {
         let shrElementPath = 'inst';
@@ -824,7 +828,8 @@ function writeFromFhirExtension(def, specs, fhir, fhirExtension, cw) {
           if (element.type && element.type[0] && element.type[0].profile) {
             profileUrl = element.type[0].profile;
           } else {
-            logger.error(`No profile to match on, for extension ${def.identifier} element: ${element.id || element.path}`);
+            // 16006, 'No profile to match on, for extension ${extensionId} element: ${elementIdOrPath}', 'Unknown', 'errorNumber'
+            logger.error({ extensionId: def.identifier.toString(), elementIdOrPath: element.id || element.path }, '16006');
             return;
           }
         } else {
@@ -834,7 +839,8 @@ function writeFromFhirExtension(def, specs, fhir, fhirExtension, cw) {
           if (element.type && element.type[0] && element.type[0].profile && element.type[0].profile[0]) {
             profileUrl = element.type[0].profile[0];
           } else {
-            logger.error(`No profile to match on, for extension ${def.identifier} element: ${element.id || element.path}`);
+            // 16006, 'No profile to match on, for extension ${extensionId} element: ${elementIdOrPath}', 'Unknown', 'errorNumber'
+            logger.error({ extensionId: def.identifier.toString(), elementIdOrPath: element.id || element.path }, '16006');
             return;
           }
         }
@@ -842,7 +848,8 @@ function writeFromFhirExtension(def, specs, fhir, fhirExtension, cw) {
         matchingExtension = fhir.extensions.find(e => e.url === profileUrl);
 
         if (!matchingExtension) {
-          logger.error(`Unable to find matching extension with url ${profileUrl}`);
+          // 16007, 'Unable to find matching extension with url ${profileUrl}', 'Unknown', 'errorNumber'
+          logger.error({ profileUrl }, '16007');
           return;
         }
 
@@ -1106,7 +1113,8 @@ function preprocessSlicing(fhirProfile) {
           }
 
           if (fixedValue == null) {
-            logger.error('Could not identify fixed value for: %s', JSON.stringify(element));
+            //16001, 'Could not identify fixed value for: ${element1}', 'Unknown, 'errorNumber'
+            logger.error({ element1 : JSON.stringify(element) }, '16001');
           }
 
           sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: element.path, value: fixedValue } );
@@ -1316,8 +1324,8 @@ function getFieldAndMethodChain(mapping, def, specs, element) {
       }
 
       if (!field) {
-        logger.error(`Unable to find field with identifer ${elementIdentifier} on element ${currDef.identifier}\n` +
-                     `Original Element: ${def.identifier} ; full mapping: ${mapping} ; FHIR Path: ${element.path} ID: ${element.id || 'n/a'}`);
+        //16002,  'Unable to find field with identifer ${elementId1} on element ${currDefId1}; Original Element: ${defId1}; full mapping: ${mapping1}; FHR Path: ${elementPath1} ID: ${elementId2}', 'Unknown, 'errorNumber'
+        logger.error( { elementId1 : elementIdentifier.toString(), currDefId1: currDef.identifier.toString(), defId1: def.identifier.toString(), mapping1 : mapping, elementPath1: element.path, elementId2 : element.id },  '16002' );
         break;
       }
 
@@ -1498,7 +1506,8 @@ function writeToFhir(def, specs, fhir, fhirProfile, fhirExtension, cw) {
           if (def.value instanceof IdentifiableValue && def.value.identifier.isPrimitive) {
             generateToFHIRAssignment(def.value.card.isList, baseIsList, 1, element.path, 'value', fhirProfile, cw);
           } else {
-            logger.error('Value referenced in mapping but none exist on this element.');
+            //16003, 'Value referenced in mapping but none exist on this element ${element1}', 'Unknown, 'errorNumber'
+            logger.error({ element1 : JSON.stringify(element) } ,'16003' );
           }
         } else {
           // Mapping to a field within this es6 instance
@@ -1839,7 +1848,8 @@ function checkIsQuantity(identifier, specs, alreadyProcessed = []) {
   // We haven't processed it, so look it up
   const element = specs.dataElements.findByIdentifier(identifier);
   if (typeof element === 'undefined') {
-    logger.error('Cannot resolve element definition for %s.', identifier.fqn);
+    // 16008, 'Cannot resolve element definition for ${elementFqn}', 'Unknown', 'errorNumber'
+    logger.error({ elementFqn: identifier.fqn }, '16008');
     return false;
   }
   // Add it to the already processed list (again, to avoid circular dependencies)
