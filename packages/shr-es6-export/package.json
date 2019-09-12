@@ -29,12 +29,12 @@
     "eslint": "^4.15.0",
     "fs-extra": "^4.0.2",
     "mocha": "^3.2.0",
-    "shr-expand": "^6.0.0",
-    "shr-fhir-export": "^6.2.0",
+    "shr-expand": "^6.4.0",
+    "shr-fhir-export": "^6.5.0",
     "shr-json-schema-export": "^6.1.0",
-    "shr-models": "^6.2.0",
+    "shr-models": "^6.5.0",
     "shr-test-helpers": "^6.0.0",
-    "shr-text-import": "^6.2.0"
+    "shr-text-import": "^6.5.0"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9",

@@ -1091,71 +1091,71 @@ function preprocessSlicing(fhirProfile) {
         // starting a new slice element, only possible if already within a slice group
         sliceStack[sliceIndex].currentSlice = sliceNm;
         sliceStack[sliceIndex].elements[sliceNm] = [];
-      }
 
-      for (const sliceGroup of sliceStack) { // multiple slices can slice on the same discriminator so this needs to loop
-        if (pathMatchesDiscriminator(element.path, sliceGroup.slicing.discriminator)) {
-          // element.path matches a discriminator; we found a value to match on
+        for (const sliceGroup of sliceStack) { // multiple slices can slice on the same discriminator so this needs to loop
+          if (pathMatchesDiscriminator(element.path, sliceGroup.slicing.discriminator)) {
+            // element.path matches a discriminator; we found a value to match on
 
-          // this could be all sorts of things, fixedCode, fixedString, fixedWhatever, so figure out what type it is and look for fixed<Type>
-          let fixedValue;
+            // this could be all sorts of things, fixedCode, fixedString, fixedWhatever, so figure out what type it is and look for fixed<Type>
+            let fixedValue;
 
-          // TODO: this only works for "value" type discriminators; don't forget about the other types
+            // TODO: this only works for "value" type discriminators; don't forget about the other types
 
-          for (const type of element.type) {
-            const typeName = type.code;
-            const fieldName = 'fixed' + upperCaseFirst(typeName); // ex. 'code' => 'fixedCode'
+            for (const type of element.type) {
+              const typeName = type.code;
+              const fieldName = 'fixed' + upperCaseFirst(typeName); // ex. 'code' => 'fixedCode'
 
-            if (element[fieldName] != null) {
-              // don't just check for falsy, consider `fixedBoolean: false`
-              fixedValue = element[fieldName];
+              if (element[fieldName] != null) {
+                // don't just check for falsy, consider `fixedBoolean: false`
+                fixedValue = element[fieldName];
+              }
             }
-          }
 
-          if (fixedValue == null) {
-            //16001, 'Could not identify fixed value for: ${element1}', 'Unknown, 'errorNumber'
-            logger.error({ element1 : JSON.stringify(element) }, '16001');
-          }
-
-          sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: element.path, value: fixedValue } );
-        } else if (element.path.endsWith('.extension') && pathMatchesDiscriminator(`${element.path}.url`, sliceGroup.slicing.discriminator)) {
-          // extensions slice on .url, which doesn't necessarily have its own element definition. use the extension
-
-          const url = getProfile(element, fhirProfile.fhirVersion);
-          if (url) {
-            sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: `${element.path}.url`, value: url } );
-          }
-        } else if (
-          element.type
-          && element.type[0].code === 'CodeableConcept'
-          && (
-            pathMatchesDiscriminator(`${element.path}.coding`, sliceGroup.slicing.discriminator)
-            || pathMatchesDiscriminator(`${element.path}.coding.code`, sliceGroup.slicing.discriminator)
-          )
-        ) {
-          // possibly sliced on code.coding.code, but the sub-coding.code fields weren't included.
-          // check for a value set binding here
-
-          if (element.binding && element.binding.strength === 'required') {
-            const vsURI = getValueSetURI(element);
-            if (vsURI) {
-              sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: `${element.path}.coding.code`, valueSet: vsURI } );
+            if (fixedValue == null) {
+              //16001, 'Could not identify fixed value for: ${element1}', 'Unknown, 'errorNumber'
+              logger.error({ element1 : JSON.stringify(element) }, '16001');
             }
-          }
 
-        } else if (
-          element.type
-          && element.type[0].code === 'Reference'
-          && (
-            pathMatchesDiscriminator(`${element.path}.reference`, sliceGroup.slicing.discriminator)
-            || (isDstu2 && pathMatchesDiscriminator(`${element.path}.reference.@profile`, sliceGroup.slicing.discriminator))
-          )
-        ) {
-          sliceGroup.elements[sliceGroup.currentSlice].unshift( {
-            path: `${element.path}.reference`,
-            profile: getTargetProfile(element, fhirProfile.fhirVersion),
-            resolve: sliceGroup.slicing.discriminator.some(d => d.path.startsWith(`${element.path}.reference.resolve()`))
-          } );
+            sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: element.path, value: fixedValue } );
+          } else if (element.path.endsWith('.extension') && pathMatchesDiscriminator(`${element.path}.url`, sliceGroup.slicing.discriminator)) {
+            // extensions slice on .url, which doesn't necessarily have its own element definition. use the extension
+
+            const url = getProfile(element, fhirProfile.fhirVersion);
+            if (url) {
+              sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: `${element.path}.url`, value: url } );
+            }
+          } else if (
+            element.type
+            && element.type[0].code === 'CodeableConcept'
+            && (
+              pathMatchesDiscriminator(`${element.path}.coding`, sliceGroup.slicing.discriminator)
+              || pathMatchesDiscriminator(`${element.path}.coding.code`, sliceGroup.slicing.discriminator)
+            )
+          ) {
+            // possibly sliced on code.coding.code, but the sub-coding.code fields weren't included.
+            // check for a value set binding here
+
+            if (element.binding && element.binding.strength === 'required') {
+              const vsURI = getValueSetURI(element);
+              if (vsURI) {
+                sliceGroup.elements[sliceGroup.currentSlice].unshift( { path: `${element.path}.coding.code`, valueSet: vsURI } );
+              }
+            }
+
+          } else if (
+            element.type
+            && element.type[0].code === 'Reference'
+            && (
+              pathMatchesDiscriminator(`${element.path}.reference`, sliceGroup.slicing.discriminator)
+              || (isDstu2 && pathMatchesDiscriminator(`${element.path}.reference.@profile`, sliceGroup.slicing.discriminator))
+            )
+          ) {
+            sliceGroup.elements[sliceGroup.currentSlice].unshift( {
+              path: `${element.path}.reference`,
+              profile: getTargetProfile(element, fhirProfile.fhirVersion),
+              resolve: sliceGroup.slicing.discriminator.some(d => d.path.startsWith(`${element.path}.reference.resolve()`))
+            } );
+          }
         }
       }
     }
