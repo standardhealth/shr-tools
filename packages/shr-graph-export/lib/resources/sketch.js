@@ -43,6 +43,24 @@ function fillLayerInfo(node, layer=0) {
     }
 }
 
+function treeToD3(tree) {
+    const d3Trees = tree.map(rootNode => {
+        rootNode = nodeToD3(rootNode);
+        const d3Root = d3.tree(rootNode);
+        return d3Root;
+    });
+}
+
+function nodeToD3Data(node) {
+    if (node.properties.length === 0 && node.values.length === 0) {
+        return {name: node.name}
+    }
+    const properties = node.properties.map(child => nodeToD3Data(child));
+    const values = node.values.map(child => nodeToD3Data(child));
+    const children = properties.concat(values);
+    return {name: node.name, children: children};
+}
+
 // The p5.js function that is run automatically at startup of the application
 function setup() {
     // Define color variables to use in drawing
@@ -57,7 +75,7 @@ function setup() {
     ctx = canvas.getContext('2d');
 
     let index = 0;
-    const options = { ...tree.map(e => e.name) };
+    const options = Object.assign({}, tree.map(e => e.name));
     const sel = createSelect();
     sel.position(10, 10);
 
@@ -71,13 +89,24 @@ function setup() {
         index = Object.keys(options).find(key => {
             return options[key] === humanReadableOptionsMap[sel.value()];
         });
-        render(index);
+        render(index, d3Trees);
     });
 
-    render(index);
+    const d3Data = tree.map(rootNode => {
+        rootNode = nodeToD3Data(rootNode);
+        return rootNode;
+      });
+
+    let d3Tree = d3.tree()
+        .size([800, 800]);
+
+    const d3Trees = d3Data.map(d3Root => d3Tree(d3.hierarchy(d3Root)));
+    console.log(d3Trees);
+
+    render(index, d3Trees);
 }
 
-function render(index) {
+function render(index, d3Trees) {
     // Clear the global data variables, and clear the node list.
     nodeList = [];
     pathList = [];
@@ -86,6 +115,7 @@ function render(index) {
 
     // Process the tree of the given root node and store the nodes and paths of the tree
     let root = tree[index];
+    let d3Tree = d3Trees[index];
     fillNodeAndPathList(root);
 
     // There's a lot of math that needs to be done in order to split the paths
@@ -98,8 +128,10 @@ function render(index) {
     // Find the middle index of the path list and split the path list into
     // right (with the longest paths) and left (with the shortest paths)
     const pathMidIndex = Math.ceil(pathList.length / 2);
-    const rightPathList = pathList.slice(0, pathMidIndex);
-    const leftPathList = pathList.slice(pathMidIndex, pathList.length);
+    //const rightPathList = pathList.slice(0, pathMidIndex);
+    const rightPathList = pathList;
+    //const leftPathList = pathList.slice(pathMidIndex, pathList.length);
+    const leftPathList = [];
 
     // Assign the direction of the nodes in each path to the right as 'right'
     rightPathList.forEach(path => path.forEach(node => node.direction = 'right'));
@@ -130,12 +162,14 @@ function render(index) {
     // Assign the x-position and y-position of each node by performing calculations
     // based on its direction, its depth, and the number of other nodes in its layer
     for (const path of pathList) {
+        const dummyRoot = {children: [d3Tree]}
+        let d3CurrentNode = dummyRoot;
         for (const node of path) {
+            d3CurrentNode = d3CurrentNode.children.filter(n => n.data.name === node.name)[0];
             if (node.posX && node.posY) continue;
 
-            directionSign = (node.direction === 'left') ? -1 : 1;
-            node.posX = columnIncrement * (numCenterColumn + (directionSign * node.depth));
-            node.posY = height * node.count / (layerInfo[`${node.direction}${node.depth}`] + 1);
+            node.posX = 100 + (node.direction === 'right' ? 1 : -1) * d3CurrentNode.y;
+            node.posY = d3CurrentNode.x;
         }
     }
 
