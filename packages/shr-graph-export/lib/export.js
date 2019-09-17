@@ -40,22 +40,22 @@ class GraphExporter {
     return this._graph;
   }
 
-  collectRootInfo(element) {
-    const type = this.getType(element);
+  collectRootInfo(root) {
+    const type = this.getType(root);
 
     let properties = [];
     
-    const contentProfile = this._specs.contentProfiles.findByIdentifier(element.identifier);
+    const contentProfile = this._specs.contentProfiles.findByIdentifier(root.identifier);
 
     contentProfile.rules.forEach(rule => {
       if (rule.mustSupport) {
         const pathElements = rule.path.map(id => this._specs.dataElements.findByIdentifier(id));
-        const constraints = this.getConstraints(element, rule.path, this._specs);
+        const constraints = this.getConstraints(root, rule.path, this._specs);
         this.collectMustSupportInfo(pathElements, constraints, properties);
       }
     });
 
-    this._graph.push({ name: element.identifier.fqn, type, properties, values: [] });
+    this._graph.push({ name: root.identifier.fqn, type, properties, values: [] });
   }
 
   collectMustSupportInfo(elements, constraints, properties) {
@@ -80,7 +80,7 @@ class GraphExporter {
     node.properties = fieldElements.map(fieldElement => {
       let newNode = { name: fieldElement.identifier.fqn, type: this.getType(fieldElement), properties: [], values: [] };
       if (!processed.includes(fieldElement.identifier.fqn) && (!['abstract', 'entry', 'primitive'].includes(newNode.type))) {
-        this.collectOtherInfo(fieldElement, newNode, [], processed);
+        this.collectOtherInfo(fieldElement, newNode, constraints, processed);
       }
       return newNode;
     });
@@ -96,13 +96,15 @@ class GraphExporter {
       }
       node.values.push(newNode);
       if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry', 'primitive'].includes(newNode.type))) {
-        this.collectOtherInfo(valueElement, newNode, processed);
+        this.collectOtherInfo(valueElement, newNode, constraints, processed);
       }
     } else if (value && value.options) { // is ChoiceValue
       const typeConstraints = constraints.filter(c => c instanceof TypeConstraint);
-      let valueElements = value.aggregateOptions.filter(opt => opt.effectiveIdentifier).map(opt => this._specs.dataElements.findByIdentifier(opt.effectiveIdentifier) || opt);
+      const allValueElements = value.aggregateOptions.filter(opt => opt.effectiveIdentifier).map(opt => this._specs.dataElements.findByIdentifier(opt.effectiveIdentifier) || opt);
+      let valueElements = allValueElements;
+
       if (typeConstraints.length > 0) {
-        valueElements = valueElements.filter(v => {
+        valueElements = allValueElements.filter(v => {
           if (!v.effectiveIdentifier) { // is Element
             return typeConstraints.some(tc => tc.isA.equals((v.identifier)));
           } else { // is Value
@@ -110,6 +112,13 @@ class GraphExporter {
           }
         });
       }
+
+      // If we somehow accidentally filtered out all children, then revert
+      // TODO: See if there's a fix for an issue like this with substitute constraints
+      if (valueElements.length === 0) {
+        valueElements = allValueElements;
+      }
+
       node.values = valueElements.map(valueElement => {
         let newNode;
         if (!valueElement.effectiveIdentifier) { // is Element
@@ -118,7 +127,7 @@ class GraphExporter {
           newNode = { name: valueElement.effectiveIdentifier.fqn, type: 'primitive', properties: [], values: [] }
         }
         if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry', 'primitive'].includes(newNode.type))) {
-          this.collectOtherInfo(valueElement, newNode, [], processed);
+          this.collectOtherInfo(valueElement, newNode, constraints, processed);
         }
         return newNode;
       });

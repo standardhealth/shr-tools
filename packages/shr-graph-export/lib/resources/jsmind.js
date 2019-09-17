@@ -2189,6 +2189,7 @@ const white = 'rgb(255, 255, 255)';
             ctx.lineWidth = this.opts.line_width;
             ctx.lineCap = 'round';
 
+            ctx.setLineDash([]);
 
             if (nodeIn != null && nodeIn.data.connection === 'property') {
                 ctx.strokeStyle = darkblue;
