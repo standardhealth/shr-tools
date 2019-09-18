@@ -10,9 +10,9 @@ function cardToString(card) {
   let min = 0;
   let max = '*';
   if (card) {
-    if ('min' in card)
+    if (card.min != null)
       min = card.min;
-    if ('max' in card)
+    if (card.max != null)
       max = card.max;
   }
   return `${min}..${max}`;
@@ -58,7 +58,7 @@ class Constraints {
 
     // If source is an element, add hyperlink
     if (this.inherited) {
-      const element = this.elements[this.field.inheritance.from];
+      const element = this.elements[this.field.inheritedFrom.fqn];
       const sourceHref = `../${element.namespacePath}/${element.name}.html`;
       constraint.source = element.name;
       constraint.sourceHref = sourceHref;
@@ -96,54 +96,35 @@ class Constraints {
 
   // Handles the includes type constraint
   includesType(constraint, subpath) {
-    constraint.forEach((item) => {
-      const element = this.elements[item.fqn];
-      const card = cardToString(item.card);
-      const name = 'Includes Type';
-      const value = element.name;
-      const href = `../${element.namespacePath}/${element.name}.html`;
-      const lastMod = item.lastModifiedBy;
-      const iConstraint = this.newConstraint(name, value, subpath, lastMod, href, '', card);
-      this.constraints.push(iConstraint);
-    });
+    const element = this.elements[constraint.isA.fqn];
+    const card = cardToString(constraint.card);
+    const name = 'Includes Type';
+    const value = element.name;
+    const href = `../${element.namespacePath}/${element.name}.html`;
+    const lastMod = constraint.lastModifiedBy.fqn;
+    const iConstraint = this.newConstraint(name, value, subpath, lastMod, href, '', card);
+    this.constraints.push(iConstraint);
   }
 
   // Handles the includes code constraint
   includesCode(constraint, subpath) {
-    constraint.forEach((item) => {
-      const system = item.system ? item.system : '';
-      const name = 'Includes Code';
-      const value = `${system} (code: ${item.code})`;
-      const lastMod = item.lastModifiedBy;
-      const iConstraint = this.newConstraint(name, value, subpath, lastMod);
-      this.constraints.push(iConstraint);
-    });
+    const system = constraint.code.system || '';
+    const name = 'Includes Code';
+    const value = `${system} (code: ${constraint.code.code})`;
+    const lastMod = constraint.lastModifiedBy.fqn;
+    const iConstraint = this.newConstraint(name, value, subpath, lastMod);
+    this.constraints.push(iConstraint);
   }
 
   // Handles the value set constraint
   valueSet(constraint, subpath) {
     const name = 'Value Set';
     const binding = `(${constraint.bindingStrength})`;
-    const value = constraint.uri + ' ' + binding;
-    const lastMod = constraint.lastModifiedBy;
+    const value = constraint.valueSet + ' ' + binding;
+    const lastMod = constraint.lastModifiedBy.fqn;
     //const href = constraint.uri;
     const vConstraint = this.newConstraint(name, value, subpath, lastMod, undefined, binding);
     this.constraints.push(vConstraint);
-  }
-
-  // Handles subpaths, and creates new constraints for each nested path
-  subpaths(constraint, subpath) {
-    Object.keys(constraint).forEach((element) => {
-      let newPath = subpath;
-      if (element in this.elements) {
-        const eName = this.elements[element].name;
-        newPath = subpath ? `${subpath}.${eName}` : eName;
-      }
-      Object.keys(constraint[element]).forEach((subCType) => {
-        const subConstraint = constraint[element][subCType];
-        this.switchConstraintType(subConstraint, subCType, newPath);
-      });
-    });
   }
 
   // Handles type constraint. Will override datatype if top level
@@ -151,44 +132,55 @@ class Constraints {
   typeConstraint(constraint, subpath) {
     let constraintName, href;
 
-    const element = this.elements[constraint.fqn];
+    const element = this.elements[constraint.isA.fqn];
     if (element) {
       constraintName = element.name;
 
       href = `../${element.namespacePath}/${element.name}.html`;
-    } else if (constraint.fqn.indexOf('.') == -1) { //If primitive FQN
-      constraintName = constraint.fqn;
+    } else if (constraint.isA.fqn.indexOf('.') == -1) { //If primitive FQN
+      constraintName = constraint.isA.fqn;
     } else {
       //Invalid constraint target
       return;
     }
 
+    // allow for override of type constraint inherited from ancestor
+    const oldTypeConstraint = this.constraints.find(typeCon => {
+      return typeCon.name == 'DataType' && typeCon.path == subpath;
+    });
+    if (this.element.fqn === constraint.lastModifiedBy.fqn && oldTypeConstraint) {
+      const name = 'DataType';
+      const value = constraintName;
+      const lastMod = constraint.lastModifiedBy.fqn;
+      const tConstraint = this.newConstraint(name, value, subpath, lastMod, href);
+      const oldIndex = this.constraints.indexOf(oldTypeConstraint);
+      this.constraints[oldIndex] = tConstraint;
+    } else if (subpath === this.field.name && !this.inherited) {
     // Checks if type constraint is top level
-    if (subpath === this.field.name && !this.inherited) {
       this.constraints[0].value = constraintName;
       this.constraints[0].href = href;
     } else {
       const name = 'DataType';
       const value = constraintName;
-      const lastMod = constraint.lastModifiedBy;
+      const lastMod = constraint.lastModifiedBy.fqn;
       const tConstraint = this.newConstraint(name, value, subpath, lastMod, href);
       this.constraints.push(tConstraint);
     }
   }
 
-  // Handles fixed value constraints, checks for code and boolean
+  // Handles fixed value constraints and boolean constraints
   fixedValue(constraint, subpath) {
-    let value = '';
-    if (constraint.type === 'code') {
-      value = `${constraint.value.system} (code: ${constraint.value.code})`;
-    } else if (constraint.type === 'boolean') {
-      value = constraint.value.toString();
-    } else if (constraint.type != null) {
-      value = constraint.value.toString();
-    }
-
+    const value = constraint.value.toString();
     const name = 'Fixed Value';
-    const lastMod = constraint.lastModifiedBy;
+    const lastMod = constraint.lastModifiedBy.fqn;
+    const fConstraint = this.newConstraint(name, value, subpath, lastMod);
+    this.constraints.push(fConstraint);
+  }
+
+  fixedCode(constraint, subpath) {
+    const value = `${constraint.code.system} (code: ${constraint.code.code})`;
+    const name = 'Fixed Value';
+    const lastMod = constraint.lastModifiedBy.fqn;
     const fConstraint = this.newConstraint(name, value, subpath, lastMod);
     this.constraints.push(fConstraint);
   }
@@ -196,40 +188,23 @@ class Constraints {
   // Handles cardinality constraint
   cardConstraint(constraint, subpath) {
     const name = 'Cardinality';
-    const value = cardToString(constraint);
-    const lastMod = constraint.lastModifiedBy;
+    const value = cardToString(constraint.card);
+    const lastMod = constraint.lastModifiedBy.fqn;
     const cConstraint = this.newConstraint(name, value, subpath, lastMod);
     this.constraints.push(cConstraint);
   }
 
-  // Case Statement function to map which constraint is being used
-  // Logs if the constraint doesn't exist
-  switchConstraintType(constraint, cType, subpath) {
-    switch (cType) {
-    case 'includesType':
-      this.includesType(constraint, subpath);
-      break;
-    case 'includesCode':
-      this.includesCode(constraint, subpath);
-      break;
-    case 'valueSet':
-      this.valueSet(constraint, subpath);
-      break;
-    case 'subpaths':
-      this.subpaths(constraint, subpath);
-      break;
-    case 'type':
-      this.typeConstraint(constraint, subpath);
-      break;
-    case 'fixedValue':
-      this.fixedValue(constraint, subpath);
-      break;
-    case 'card':
-      this.cardConstraint(constraint, subpath);
-      break;
-    default:
-      // 07001, 'Unknown constraint type ${constraintType}.', 'Unknown', 'errorNumber'
-      logger.warn({ constraintType: cType }, '07001');
+  buildFullPath(constraint) {
+    if(constraint.path.length > 0) {
+      return constraint.path.reduce((fullPath, pathPiece) => {
+        if(pathPiece.namespace != 'primitive') {
+          return `${fullPath}.${pathPiece.name}`;
+        } else {
+          return fullPath;
+        }
+      }, this.field.name);
+    } else {
+      return this.field.name;
     }
   }
 
@@ -240,18 +215,42 @@ class Constraints {
     // Card constraints aren't put in the constraints field because they're already reflected in the card
     // So first look in the constraintHistory for card constraint on this element
     if (this.field.constraintHistory && this.field.constraintHistory.card) {
-      const modConstraint = this.field.constraintHistory.card.map(c => c.constraint).find(c => {
-        return c.lastModifiedBy === this.element.fqn;
+      const modConstraints = this.field.constraintHistory.card.histories.map(c => c.constraint).filter(c => {
+        return c.lastModifiedBy.fqn === this.element.fqn && c.path.length == 0;
       });
-      if (modConstraint) {
-        this.switchConstraintType(modConstraint, 'card', this.field.name);
-      }
+      modConstraints.forEach(modConstraint => {
+        this.cardConstraint(modConstraint, this.buildFullPath(modConstraint));
+      });
     }
     // Now look at the rest of the constraints
-    if ('constraints' in this.field) {
-      Object.keys(this.field.constraints).forEach((cType) => {
-        const constraint = this.field.constraints[cType];
-        this.switchConstraintType(constraint, cType, this.field.name);
+    if (this.field.constraints && this.field.constraintsFilter) {
+      let constraintsFilter = this.field.constraintsFilter;
+      constraintsFilter.type.constraints.forEach((typeCon) => {
+        this.typeConstraint(typeCon, this.buildFullPath(typeCon));
+      });
+      constraintsFilter.includesCode.constraints.forEach((icCon) => {
+        this.includesCode(icCon, this.buildFullPath(icCon));
+      });
+      constraintsFilter.card.constraints.forEach((cardCon) => {
+        const fullPath = this.buildFullPath(cardCon);
+        if(fullPath != this.field.name) { // only add cardinality for subfields constrained by ancestors
+          this.cardConstraint(cardCon, fullPath);
+        }        
+      });
+      constraintsFilter.includesType.constraints.forEach((itCon) => {
+        this.includesType(itCon, this.buildFullPath(itCon));
+      });
+      constraintsFilter.valueSet.constraints.forEach((vsCon) => {
+        this.valueSet(vsCon, this.buildFullPath(vsCon));
+      });
+      constraintsFilter.fixedValue.constraints.forEach((fvCon) => {
+        this.fixedValue(fvCon, this.buildFullPath(fvCon));
+      });
+      constraintsFilter.boolean.constraints.forEach((boolCon) => {
+        this.fixedValue(boolCon, this.buildFullPath(boolCon));
+      });
+      constraintsFilter.code.constraints.forEach((codeCon) => {
+        this.fixedCode(codeCon, this.buildFullPath(codeCon));
       });
     }
   }

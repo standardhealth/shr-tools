@@ -35,7 +35,22 @@ class Elements {
       element.cssClass = 'element';
       element.displayTitle = 'Element';
     }
-    this.elements[element.fqn] = element;
+    this.elements[element.identifier.fqn] = {
+      children: [],
+      overridden: [],
+      usedBy: new Set(),
+      fqn: element.identifier.fqn,
+      name: element.identifier.name,
+      namespace: element.identifier.namespace,
+      basedOn: element.basedOn,
+      description: element.description,
+      cssClass: element.cssClass,
+      displayTitle: element.displayTitle,
+      namespacePath: element.namespacePath,
+      value: element.value,
+      hierarchy: element.hierarchy,
+      fields: element.fields
+    };
   }
 
   // Returns a list of all the elements sorted by name
@@ -52,8 +67,8 @@ class Elements {
   updateBasedOn(element) {
     if (!('basedOn' in element)) return;
 
-    element.basedOn.forEach((fqn) => {
-      let parent = this.get(fqn);
+    element.basedOn.forEach((basedElement) => {
+      let parent = this.get(basedElement.fqn);
       if (parent === undefined) return;
       parent.children.push({
         name: element.name,
@@ -65,12 +80,12 @@ class Elements {
 
   // Adds information to value object to be parsed for constraints
   valueConstraints(element, value, title) {
-    if (value.fqn in this.elements) {
-      const valueElement = this.get(value.fqn);
+    if (value.identifier.fqn in this.elements) {
+      const valueElement = this.get(value.identifier.fqn);
       value.path = valueElement.namespacePath;
       value.name = valueElement.name;
     } else {
-      value.name = value.fqn;
+      value.name = value.identifier.fqn;
     }
     value.title = title;
     value.description = '';
@@ -98,14 +113,17 @@ class Elements {
     let value = element.value;
     if (value === undefined) {
       return;
-    } else if (value.valueType === 'ChoiceValue') {
+    } else if (value.constructor.name === 'ChoiceValue') {
       value.options.forEach((option, index) => {
-        this.addToUsedBy(option.fqn, element);
-        option = this.valueConstraints(element, option, `Value (Choice ${index+1})`);
-        element.pValue.push(option);
+        const card = option.card;
+        option.card = undefined;
+        this.addToUsedBy(option.identifier.fqn, element);
+        const optionValue = this.valueConstraints(element, option, `Value (Choice ${index+1})`);
+        element.pValue.push(optionValue);
+        option.card = card;
       });
     } else {
-      this.addToUsedBy(value.fqn, element);
+      this.addToUsedBy(value.identifier.fqn, element);
       value = this.valueConstraints(element, element.value, 'Value');
       element.pValue.push(value);
     }
@@ -132,41 +150,59 @@ class Elements {
   // natively defined and overridden attributes
   updateFields(element) {
     if (!('fields' in element)) return;
-
     // Build map of ancestors to track field origins
     let hierarchyFields = {};
-    element.hierarchy.forEach((a) => { hierarchyFields[a.fqn] = []; });
+    element.hierarchy.forEach((a) => {
+      hierarchyFields[a.fqn] = [];
+    });
 
     // Iterate over fields, handle valueType TBD separately
     element.fields.forEach((field) => {
       let inherited = false;
       // We treat the "special" fields inherited because the element is an Entry as normal non-inherited fields
       const isSpecialEntryField =
-        'inheritance' in field
-        && field.inheritance.from === 'shr.base.Entry'
+        field.inheritance
+        && field.inheritedFrom.fqn === 'shr.base.Entry'
         && typeof hierarchyFields['shr.base.Entry'] === 'undefined';
-      if (field.valueType === 'TBD') {
+      if (field.constructor.name === 'TBD') {
         field.title = field.fqn;
         field.path = '';
       } else {
-        const fieldElement = this.get(field.fqn);
+        const fieldElement = this.get(field.identifier.fqn);
         field.name = fieldElement.name;
         field.description = fieldElement.description;
         field.path = fieldElement.namespacePath;
-        if ('inheritance' in field && !isSpecialEntryField) {
+        if (field.inheritance && !isSpecialEntryField) {
           inherited = true;
-          hierarchyFields[field.inheritance.from].push(field);
+          hierarchyFields[field.inheritedFrom.fqn].push(field);
         }
       }
-      this.addToUsedBy(field.fqn, element);
+      this.addToUsedBy(field.identifier.fqn, element);
       const cs = new Constraints(element, field, this.elements, this.config, inherited, this.configureForIG);
-      field.pConstraints = cs.constraints;
-      if ('inheritance' in field && field.inheritance.status === 'overridden' && !isSpecialEntryField)
+      // A constraint on this field will have a path matching that field's name.
+      // A constraint on a subfield of this field will not match.
+      field.pConstraints = cs.constraints.filter(constraint => {
+        return constraint.path == field.name;
+      });
+      if (field.inheritance === 'overridden' && !isSpecialEntryField) {
         element.overridden = element.overridden.concat(cs.constraints);
+      } else {
+        element.overridden = element.overridden.concat(cs.constraints.filter(constraint => {
+          return constraint.path != field.name;
+        }).map(constraint => {
+          if(!constraint.source) {
+            constraint.source = element.name;
+            constraint.sourceHref = `../${element.namespacePath}/${element.name}.html`;
+          }
+          return constraint;
+        }));
+      }
     });
 
     // Add fields to their origin ancestor
-    element.hierarchy.forEach((a) => { a.fields = hierarchyFields[a.fqn]; });
+    element.hierarchy.forEach((a) => {
+      a.fields = hierarchyFields[a.fqn];
+    });
   }
   // Updates elements to include extra data for ejs templates
   // Only called after all elements have been added

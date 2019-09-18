@@ -15,8 +15,10 @@
         <code><strong><%= constraint.path %></strong></code>
         <% if (constraint.sourceHref) { %>
           <div class="block">Defined in <a href="<%= constraint.sourceHref %>"><%= constraint.source %></a></div>
-        <% } else { %>
+        <% } else if (constraint.source) { %>
           <div class="block">Defined in <%= constraint.source %></div>
+        <% } else { %>
+          <div class="block">Defined in <a href="<%= constraint.href %>">??<%= constraint.path %></a></div>
         <% } %>
       </td>
       <td class="colMiddle">
