@@ -468,14 +468,6 @@ class Namespace {
   clone() {
     return new Namespace(this._namespace, this._description);
   }
-
-  toJSON() {
-    return {
-      'name': this.namespace,
-      'description': this.description
-      // 'external_dependencies' : undefined
-    };
-  }
 }
 
 class DataElement {
@@ -631,27 +623,6 @@ class DataElement {
     }
     return clone;
   }
-
-  toJSON() {
-    var output = {
-      'name':         this.identifier.name,
-      'namespace':    this.identifier.namespace,
-      'fqn':          this.identifier.fqn,
-      'isEntry':      this.isEntry,
-      'isAbstract':   this.isAbstract,
-      'isGroup':      this.isGroup,
-      'description':  this.description,
-      'concepts':     this.concepts.map(c => c.toJSON()),
-      'hierarchy':    this._hierarchy, //full hierarchy
-      'basedOn':      this.basedOn.map(b => b.fqn || b.toString()),
-      'value':        this.value != null ? this.value.toJSON() : undefined,
-      'fields':       this._fields.map(f => f.toJSON())
-    };
-
-    clearEmptyFields(output, true);
-
-    return output;
-  }
 }
 
 class ContentProfile {
@@ -698,19 +669,6 @@ class ContentProfile {
     }
     return clone;
   }
-
-  toJSON() {
-    var output = {
-      'name':         this.identifier.name,
-      'namespace':    this.identifier.namespace,
-      'fqn':          this.identifier.fqn,
-      'rules':        this._rules.map(r => r.toJSON()),
-    };
-
-    clearEmptyFields(output, true);
-
-    return output;
-  }
 }
 
 class ContentProfileRule {
@@ -751,19 +709,6 @@ class ContentProfileRule {
     clone.primaryProfile = this._primaryProfile;
     return clone;
   }
-
-  toJSON() {
-    var output = {
-      'path':         this.path.map(id => id.name).join('.'),
-      'mustSupport':  this.mustSupport,
-      'noProfile': this.noProfile,
-      'primaryProfile': this.primaryProfile
-    };
-
-    clearEmptyFields(output, true);
-
-    return output;
-  }
 }
 
 class Concept {
@@ -790,15 +735,6 @@ class Concept {
     return new Concept(this._system, this._code, this._display);
   }
 
-  toJSON() {
-    return {
-      'system': this.system,
-      'code': this.code,
-      'display': this.display
-    };
-  }
-
-
   /**
    * Check concepts for equality. Note that this ignores the display property.
    *
@@ -808,8 +744,6 @@ class Concept {
   equals(other) {
     return (other instanceof Concept) && this._system == other.system && this._code == other.code;
   }
-
-
 }
 
 class Identifier {
@@ -960,24 +894,6 @@ class Cardinality {
   toString() {
     return `${this.min}..${this.isMaxUnbounded ? '*' : this.max}`;
   }
-
-  toJSON() {
-    var out = {
-      'min': this._min,
-      'max': this._max
-    };
-
-    if (this._history && this._history.length > 0) {
-      out['history'] = this._history.map(h => ({
-        'source': (h._source && h._source.fqn) ? h._source.fqn : undefined,
-        'min': h._min,
-        'max': h._max
-      }));
-    }
-
-    return out;
-
-  }
 }
 
 class Constraint {
@@ -1033,13 +949,6 @@ class Constraint {
     return true;
   }
 
-
-  toJSON() {
-    return {
-      'lastModifiedBy': (this.lastModifiedBy) ? this.lastModifiedBy.fqn : undefined,
-    };
-  }
-
   toString() {
     return `${this.constructor.name} (on path:${this.path.map(p => p.name).join('.')})`;
   }
@@ -1081,14 +990,6 @@ class ValueSetConstraint extends Constraint {
         this._pathsAreEqual(other);
   }
 
-  toJSON() {
-    return Object.assign({
-      'uri': this._valueSet,
-      'bindingStrength': this._bindingStrength
-
-    }, super.toJSON());
-  }
-
   toString() {
     return `ValueSetConstraint (${this.valueSet}, binding strength:${this.bindingStrength}, on path:${this.path.map(p => p.name).join('.')})`;
   }
@@ -1114,17 +1015,6 @@ class CodeConstraint extends Constraint {
     return (other instanceof CodeConstraint) &&
         this._code.equals(other.code) &&
         this._pathsAreEqual(other);
-  }
-
-  toJSON() {
-    return Object.assign({
-      'type': 'code',
-      'value': {
-        'system': this._code.system,
-        'code': this._code.code,
-        'display': this._code.display
-      }
-    }, super.toJSON());
   }
 
   toString() {
@@ -1154,14 +1044,6 @@ class IncludesCodeConstraint extends Constraint {
         this._pathsAreEqual(other);
   }
 
-  toJSON() {
-    return Object.assign({
-      'system': this._code.system,
-      'code': this._code.code,
-      'description': this._code.display
-    }, super.toJSON());
-  }
-
   toString() {
     return `IncludesCodeConstraint (${this.code.system}#${this.code.code}, on path:${this.path.map(p => p.name).join('.')})`;
   }
@@ -1187,16 +1069,6 @@ class BooleanConstraint extends Constraint {
     return (other instanceof BooleanConstraint) &&
         this._value == other.value &&
         this._pathsAreEqual(other);
-  }
-
-  toJSON() {
-    var constraint = super.toJSON();
-    delete constraint['path'];
-
-    return Object.assign({
-      'type': 'boolean',
-      'value': this.value,
-    }, constraint);
   }
 
   toString() {
@@ -1230,17 +1102,6 @@ class FixedValueConstraint extends Constraint {
         this._value == other.value &&
         this._type == other.type &&
         this._pathsAreEqual(other);
-  }
-
-  toJSON() {
-    var constraint = super.toJSON();
-    delete constraint['path'];
-
-    return Object.assign({
-      'type': 'fixed-value',
-      'valueType': this.type,
-      'value': this.value,
-    }, constraint);
   }
 
   toString() {
@@ -1282,13 +1143,6 @@ class TypeConstraint extends Constraint {
         this._pathsAreEqual(other);
   }
 
-  toJSON() {
-    return Object.assign({
-      'fqn': this.isA.fqn,
-      'onValue': this.onValue
-    }, super.toJSON());
-  }
-
   toString() {
     return `TypeConstraint (${this.isA.fqn}, on value: ${this.onValue}, on path:${this.path.map(p => p.name).join('.')})`;
   }
@@ -1325,14 +1179,6 @@ class IncludesTypeConstraint extends Constraint {
         this._pathsAreEqual(other);
   }
 
-  toJSON() {
-    return Object.assign({
-      'fqn': this.isA.fqn,
-      'card': this.card.toJSON(),
-      'onValue': this.onValue
-    }, super.toJSON());
-  }
-
   toString() {
     return `IncludesTypeConstraint (${this.card.toString()} ${this.isA.fqn}, on value: ${this.onValue}, on path:${this.path.map(p => p.name).join('.')})`;
   }
@@ -1357,10 +1203,6 @@ class CardConstraint extends Constraint {
     return (other instanceof CardConstraint) &&
         this._card.equals(other.card) &&
         this._pathsAreEqual(other);
-  }
-
-  toJSON() {
-    return Object.assign(this.card.toJSON(), super.toJSON());
   }
 
   toString() {
@@ -1487,16 +1329,6 @@ class ConstraintHistoryItem {
       return false;
     }
   }
-
-  toJSON() {
-    const constraintWithPath = Object.assign(this.constraint.toJSON(), {
-      path: this.constraint.path ? this.constraint.path.map(p=>p.fqn) : undefined
-    });
-    return {
-      constraint: constraintWithPath,
-      source: this.source.fqn,
-    };
-  }
 }
 
 /**
@@ -1564,10 +1396,6 @@ class ConstraintHistoryFilter {
       }
     }
     return true;
-  }
-
-  toJSON() {
-    return this._histories.map(h => h.toJSON());
   }
 }
 
@@ -1652,19 +1480,6 @@ class ConstraintHistory {
       && this.type.equals(other.type)
       && this.includesType.equals(other.includesType)
       && this.card.equals(other.card);
-  }
-
-  toJSON() {
-    const noEmpties = (historyFilter => historyFilter.hasHistories ? historyFilter.toJSON() : undefined);
-    return {
-      valueSet: noEmpties(this.valueSet),
-      code: noEmpties(this.code),
-      includesCode: noEmpties(this.includesCode),
-      boolean: noEmpties(this.boolean),
-      type: noEmpties(this.type),
-      includesType: noEmpties(this.includesType),
-      card: noEmpties(this.card)
-    };
   }
 }
 
@@ -1842,61 +1657,6 @@ class Value {
 
     return true;
   }
-
-  toJSON() {
-    const constraints = this._constraints.reduce((out, constraint, i) => {
-      let key = constraint.constructor.name.replace(/constraint/i, '').replace(/^[a-zA-Z]/, (s) => s.toLowerCase());
-      let constraintJSON = constraint.toJSON();
-
-      const arrConstraints  = ['includesType', 'includesCode'];
-      const dicConstraints  = ['type', 'valueSet', 'card'];
-      const valConstraints  = ['boolean', 'code', 'fixedValue'];
-
-      const addToPath = (outputDict, skipCard=false) => {
-        if (skipCard && key == 'card') return;
-
-        if (arrConstraints.includes(key)) {
-          if (outputDict[key] == null) outputDict[key] = [];
-
-          outputDict[key].push(constraintJSON);
-        } else if (dicConstraints.includes(key)) {
-          outputDict[key] = constraintJSON;
-        } else if (valConstraints.includes(key)) {
-          outputDict['fixedValue'] = constraintJSON;
-        }
-      };
-
-      if (constraint.path.length == 0) addToPath(out, true);
-      else if (constraint.path.length  > 0) {
-        let currentSubField = out;
-        constraint.path.forEach((subP) => {
-          if (currentSubField['subpaths'] == null) currentSubField['subpaths'] = {};
-          if (currentSubField['subpaths'][subP.fqn] == null) currentSubField['subpaths'][subP.fqn] = {};
-          currentSubField = currentSubField['subpaths'][subP.fqn];
-        });
-        addToPath(currentSubField);
-      }
-
-      return out;
-    }, {}
-    );
-
-    let card = this.effectiveCard;
-    if (this.card != null && this.effectiveCard != null && this.card != this.effectiveCard && this.card.history) {
-      card.history = this.card.history;
-    }
-
-    return {
-      valueType: this.constructor.name,
-      card: (card) ? card.toJSON() : 'TBD',
-      constraints: Object.keys(constraints).length > 0 ? constraints : undefined,
-      inheritance: (this._inheritance) ? {
-        status: this._inheritance,
-        from: this._inheritedFrom.fqn,
-      } : undefined,
-      constraintHistory: this.constraintHistory.hasHistories ? this.constraintHistory.toJSON() : undefined
-    };
-  }
 }
 
 class IdentifiableValue extends Value {
@@ -1962,15 +1722,6 @@ class IdentifiableValue extends Value {
 
   toString() {
     return this.identifier.name;
-  }
-
-  toJSON() {
-    return Object.assign(
-      {
-        'fqn': this.identifier.fqn,
-      },
-      super.toJSON()
-    );
   }
 }
 
@@ -2048,16 +1799,6 @@ class ChoiceValue extends Value {
     str += ')';
     return str;
   }
-
-  toJSON() {
-    return Object.assign(super.toJSON(), {
-      'options': this._options.map(v => {
-        let option = v.toJSON();
-        delete option['card'];
-        return option;
-      })
-    });
-  }
 }
 
 // IncompleteValue provides a place to put constraints when the full definition of the thing being constrained is
@@ -2114,15 +1855,6 @@ class TBD extends Value{
 
   toString() {
     return this._text ? `TBD(${this._text})` : 'TBD';
-  }
-
-  toJSON() {
-    return Object.assign(
-      {
-        'fqn' : this.toString()
-      },
-      super.toJSON()
-    );
   }
 }
 
@@ -2253,29 +1985,6 @@ class ValueSet  {
     }
     return clone;
   }
-
-  toJSON() {
-    const rule = (ruleFilter) => ruleFilter._rules.map(r => r.toJSON());
-    var out = {
-      'name':        this._identifier._name,
-      'namespace':   this._identifier.namespace,
-      'fqn':         this._identifier.fqn,
-      'description': this._description,
-      'concepts':    this.concepts.map(c => c.toJSON()),
-      'url':         this._url,
-      'values':      this.rulesFilter.includesCode._rules.map(r => r.toJSON()),
-      'rules': {
-        'includesDescendants':    rule(this.rulesFilter.includesDescendents),
-        'includesFromCode':       rule(this.rulesFilter.includesFromCode),
-        'includesFromCodeSystem': rule(this.rulesFilter.includesFromCodeSystem),
-        'excludesDescendants':    rule(this.rulesFilter.excludesDescendents),
-      }
-    };
-
-    clearEmptyFields(out, true);
-
-    return out;
-  }
 }
 
 // Note -- this should be consider abstract.  Do not instantiate!
@@ -2298,14 +2007,6 @@ class ValueSetIncludesCodeRule extends ValueSetCodeRule {
   clone() {
     return new ValueSetIncludesCodeRule(this._code.clone());
   }
-
-  toJSON() {
-    return {
-      'system': this._code.system,
-      'code': this._code.code,
-      'description': this._code.display
-    };
-  }
 }
 
 // ValueSetIncludesDescendentsRule indicates that the given code and it's descendents (in SNOMED-CT) should be included in the value set
@@ -2318,14 +2019,6 @@ class ValueSetIncludesDescendentsRule extends ValueSetCodeRule {
   clone() {
     return new ValueSetIncludesDescendentsRule(this._code.clone());
   }
-
-  toJSON() {
-    return {
-      'system': this._code.system,
-      'code': this._code.code,
-      'description': this._code.display
-    };
-  }
 }
 
 // ValueSetExcludesDescendentsRule indicates that the given code and it's descendents (in SNOMED-CT) should be excluded from the value set
@@ -2337,14 +2030,6 @@ class ValueSetExcludesDescendentsRule extends ValueSetCodeRule {
 
   clone() {
     return new ValueSetExcludesDescendentsRule(this._code.clone());
-  }
-
-  toJSON() {
-    return {
-      'system': this._code.system,
-      'code': this._code.code,
-      'description': this._code.display
-    };
   }
 }
 
@@ -2360,10 +2045,6 @@ class ValueSetIncludesFromCodeSystemRule {
   clone() {
     return new ValueSetIncludesFromCodeSystemRule(this._system);
   }
-
-  toJSON() {
-    return { 'system': this._system };
-  }
 }
 
 // ValueSetIncludesFromCodeRule indicates that codes referenced by the given code should be included in the value set
@@ -2375,14 +2056,6 @@ class ValueSetIncludesFromCodeRule extends ValueSetCodeRule {
 
   clone() {
     return new ValueSetIncludesFromCodeRule(this._code.clone());
-  }
-
-  toJSON() {
-    return {
-      'system':   this._code.system,
-      'code':     this._code.code,
-      'description':  this._code.display
-    };
   }
 }
 
@@ -2585,45 +2258,6 @@ class ElementMapping {
 
     return clone;
   }
-
-  toJSON() {
-    /* TODO: make field mappings hierarchial
-    let fieldMappings = this.rulesFilter.field._rules.reduce((dict, m) => {
-      var paths = m.sourcePath.map(p => p.fqn).slice();
-      var currDict = dict;
-      while (paths.length > 0) {
-          let key = paths.shift();
-          if (!currDict[key]) {
-              currDict[key] = {};
-          }
-          currDict = currDict[key]
-      }
-      currDict["target"] = m.target;
-      return dict;
-    }, {})
-    */
-
-    let out = {
-      'name': this.identifier.name,
-      'namespace': this.identifier.namespace,
-      'fqn': this.identifier.fqn,
-      'targetSpec': this.targetSpec,
-      'targetItem': this.targetItem,
-      'inheritance': (this._inheritance) ? {
-        'status': this._inheritance,
-        'from': this._inheritedFrom.fqn,
-      } : undefined,
-      'mappings': {
-        'fieldMapping': this.rulesFilter.field._rules.map(m => m.toJSON()), //TODO make hierarchial
-        'cardMapping': this.rulesFilter.cardinality._rules.map(m => m.toJSON()),
-        'fixedValueMapping': this.rulesFilter.fixedValue._rules.map(m => m.toJSON())
-      }
-    };
-
-    clearEmptyFields(out, true);
-
-    return out;
-  }
 }
 
 
@@ -2641,13 +2275,6 @@ class MappingRule {
   withLastModifiedBy(lastModifiedBy) {
     this.lastModifiedBy = lastModifiedBy;
     return this;
-  }
-
-  toJSON() {
-    return {
-      'target': this.target.replace(/[ \t]+$/,''),
-      'lastModifiedBy': (this.lastModifiedBy) ? this.lastModifiedBy.fqn : undefined,
-    };
   }
 }
 
@@ -2676,12 +2303,6 @@ class FieldMappingRule extends MappingRule {
 
     return clone;
   }
-
-  toJSON() {
-    return Object.assign({
-      'sourcePath': this.sourcePath.map(s => (s.fqn) ? s.fqn : (s.text ? `TBD(${s.text})` : 'TBD')),
-    }, super.toJSON());
-  }
 }
 
 class CardinalityMappingRule extends MappingRule {
@@ -2705,12 +2326,6 @@ class CardinalityMappingRule extends MappingRule {
 
     return clone;
   }
-
-  toJSON() {
-    return Object.assign({
-      'cardinality': this.cardinality,
-    }, super.toJSON());
-  }
 }
 
 class FixedValueMappingRule extends MappingRule {
@@ -2732,12 +2347,6 @@ class FixedValueMappingRule extends MappingRule {
     }
 
     return clone;
-  }
-
-  toJSON() {
-    return Object.assign({
-      'fixedValue': this.value,
-    }, super.toJSON());
   }
 }
 
