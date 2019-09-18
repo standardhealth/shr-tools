@@ -51,4 +51,5 @@ Number, Message, Solution, deduplicationKeys
 12047, 'Cannot resolve target of card constraint on ${target1} ',  'Unknown', 'errorNumber'
 12048, 'Invalid constraint path: ${target1}',  'Unknown', 'errorNumber'
 12049, 'Cannot determine target item of mapping for ${identifier1}',  'Unknown', 'errorNumber'
+12050, 'Invalid format for ${type} with value ${value}', 'Unknown', 'errorNumber'
 

@@ -20,7 +20,7 @@ const BOOLEAN = new models.PrimitiveIdentifier('boolean');
 // For example, string constraint can be used on value of type uri.
 const constraintConversions = {
   'integer': ['decimal'],
-  'string': ['uri']
+  'string': ['uri', 'date', 'dateTime', 'instant', 'time']
 }
 
 class Expander {
@@ -1094,7 +1094,7 @@ class Expander {
           valID = valOption.identifier;
         }
       }
-      if (!this.supportsFixedValueConstraint(valID, constraint)) {
+      if (!this.supportsFixedValueConstraint(valID, constraint) && ['date', 'dateTime', 'instant', 'time'].indexOf(constraint.type) < 0) {
         // 12041, 'Cannot constrain value of ${target} to ${type} since neither it nor its value is a ${type}', 'Unknown', 'errorNumber'
         logger.error({target: targetLabel, type: constraint.type}, '12041');
         return previousConstraints;
@@ -1231,12 +1231,38 @@ class Expander {
     return BOOLEAN.equals(identifier);
   }
 
+  checkDateFormat(constraint) {
+    let validFormat;
+    // Regex expressions from https://www.hl7.org/fhir/datatypes.html
+    if (constraint.type === 'date') {
+      // Checks if date is of form YYYY, YYYY-MM, or YYYY-MM-DD
+      validFormat = /^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?$/.test(constraint.value);
+    } else if (constraint.type === 'dateTime') {
+      // Checks if dateTime is of form YYYY, YYYY-MM, YYYY-MM-DD, or YYYY-MM-DDThh:mm:ss+zz:zz
+      validFormat = /^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$/.test(constraint.value);
+    } else if (constraint.type === 'instant') {
+      // Checks if instant is of the form YYYY-MM-DDThh:mm:ss+zz:zz (specified to at least second, must include time zone)
+      validFormat = /^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))$/.test(constraint.value);
+    } else if (constraint.type === 'time') {
+      // Checks if time is of the form hh:mm:ss (specified to second, but seconds can be 0 filled)
+      validFormat = /^([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?$/.test(constraint.value);
+    }
+    if (!validFormat) {
+      // 12050, 'Invalid format for ${type} with value ${value}', 'Unknown', 'errorNumber'
+      logger.error({type: constraint.type, value: constraint.value}, '12050');
+    }
+    return validFormat;
+  }
+
   supportsFixedValueConstraint(identifier, constraint) {
     if (identifier && constraint && 
       (identifier.name === constraint.type || 
       (constraintConversions[constraint.type] && constraintConversions[constraint.type].includes(identifier.name)))) {
       // reset constraint.type in case they are not equal, but identifier.name is allowed conversion
       constraint.type = identifier.name;
+      if (['date', 'dateTime', 'instant', 'time'].indexOf(constraint.type) > -1) {
+        return this.checkDateFormat(constraint);
+      }
       return true;
     }
     return false;
