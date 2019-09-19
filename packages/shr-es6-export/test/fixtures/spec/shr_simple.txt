@@ -2,6 +2,13 @@ Grammar:           DataElement 6.0
 Namespace:         shr.simple
 Uses:              obf.datatype
 
+// EntryParent holds CreationTime/LastUpdated, which *used* to be in shr.base.Entry and injected
+// into Entry classes automatically. With the removal of shr.base.Entry, these should be declared
+// explicitly in each Element's type hierarchy (if they are wanted).
+Abstract:          EntryParent
+Property:          CreationTime 0..1
+Property:          LastUpdated 0..1
+
 Element:           StringValue
 Value:             string
 
@@ -9,18 +16,22 @@ Element:           NestedStringValue
 Value:             StringValue
 
 Entry:             StringValueEntry
+Parent:            EntryParent
 Property:          StringValue 1..1
 
 Element:           ConceptValue
 Value:             concept
 
 Entry:             ConceptValueEntry
+Parent:            EntryParent
 Property:          ConceptValue 1..1
 
 Entry:             MultiConceptValueEntry
+Parent:            EntryParent
 Property:          ConceptValue 1..1  // Note ConceptValue is still 1..1; there are multiple codes in the concept
 
 Entry:             RecursiveEntry
+Parent:            EntryParent
 Property:          IntegerValueElement 0..1
 Property:          RecursiveEntry 0..*
 
@@ -29,6 +40,7 @@ Parent:            RecursiveEntry
                    RecursiveEntry 0..1
 
 Entry:             ReferenceEntry
+Parent:            EntryParent
 Property:          StringValueEntry 1..1
 Property:          ConceptValueEntry 0..*
 
@@ -39,15 +51,18 @@ Element:           DecimalValueElement
 Value:             decimal
 
 Entry:             IntegerValueEntry
+Parent:            EntryParent
 Property:          IntegerValueElement 1..1
 
 Entry:             OptionalChoiceValueEntry
+Parent:            EntryParent
 Property:          OptionalChoiceValue 0..1
 
 Element:           OptionalChoiceValue
 Value:             integer or string
 
 Entry:             OptionalFieldEntry
+Parent:            EntryParent
 Property:          IntegerValueElement 0..1
 
 Entry:             BasedOnIntegerValueElementEntry
@@ -62,6 +77,7 @@ Parent:            BasedOnIntegerValueElementEntry
                    StringValue substitute StringValueChild
 
 Entry:             ChoiceValueEntry
+Parent:            EntryParent
 Property:          ChoiceValue 1..1
 
 Element:           ChoiceValue

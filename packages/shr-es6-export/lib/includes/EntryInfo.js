@@ -1,7 +1,7 @@
 /**
- * A reference to another SHR Entry.
+ * Entry information (shr id, entry id, entry type).
  */
-export default class Reference {
+export default class EntryInfo {
   constructor(shrId, entryId, entryType) {
     this._shrId = shrId;
     this._entryId = entryId;
@@ -22,7 +22,15 @@ export default class Reference {
    */
   set shrId(shrId) {
     this._shrId = shrId;
-    this._reference = undefined; // unset the cached reference if anything changes
+  }
+
+  /**
+   * Set the SHR ID and return 'this' for chaining.
+   * @param {string} shrId - The SHR ID
+   * @returns {EntryInfo} this.
+   */
+  withShrId(shrId) {
+    this.shrId = shrId; return this;
   }
 
   /**
@@ -39,7 +47,15 @@ export default class Reference {
    */
   set entryId(entryId) {
     this._entryId = entryId;
-    this._reference = undefined; // unset the cached reference if anything changes
+  }
+
+  /**
+   * Set the Entry ID and return 'this' for chaining.
+   * @param {string} entryId - The entry ID
+   * @returns {EntryInfo} this.
+   */
+  withEntryId(entryId) {
+    this.entryId = entryId; return this;
   }
 
   /**
@@ -56,32 +72,22 @@ export default class Reference {
    */
   set entryType(entryType) {
     this._entryType = entryType;
-    this._reference = undefined; // unset the cached reference if anything changes
   }
 
   /**
-   * Get the object this Reference is pointing to, if present.
-   * This reference is not assigned automatically and must be manually set for it to be present,
-   * and will automatically be unset if any of the other fields are changed.
-   * @returns {object} The SHR object this Reference is pointing to.
+   * Set the entry type and return 'this' for chaining.
+   * @param {string} entryType - The entry type
+   * @returns {EntryInfo} this.
    */
-  get reference() {
-    return this._reference;
-  }
-
-  /**
-   * Set the object this Reference is pointing to.
-   * @param {object} reference - The SHR object this Reference is pointing to.
-   */
-  set reference(reference) {
-    this._reference = reference;
+  withEntryType(entryType) {
+    this.entryType = entryType; return this;
   }
 
   toJSON() {
     return {
-      '_ShrId': this._shrId,
-      '_EntryId': this._entryId,
-      '_EntryType': this._entryType
+      'shrId': this._shrId,
+      'entryId': this._entryId,
+      'entryType': this._entryType
     };
   }
 

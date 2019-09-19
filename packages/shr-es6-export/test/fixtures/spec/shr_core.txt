@@ -21,3 +21,6 @@ Value:             concept from http://hl7.org/fhir/ValueSet/ucum-units (require
 
 Element:           CreationTime
 Value:             dateTime
+
+Element:           LastUpdated
+Value:             dateTime

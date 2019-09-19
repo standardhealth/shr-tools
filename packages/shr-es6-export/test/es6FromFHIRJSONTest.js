@@ -393,17 +393,14 @@ describe('#FromFHIR_STU3', () => {
   });
 
   describe('#PanelSliceByProfile()', () => {
-    let PanelSliceByProfile, PanelMembers, MemberA, MemberB, Reference, Entry, ShrId, EntryId, EntryType;
+    let PanelSliceByProfile, PanelMembers, MemberA, MemberB, Reference, EntryInfo;
     before(() => {
       PanelSliceByProfile = context.importResult('shr/slicing/PanelSliceByProfile');
       PanelMembers = context.importResult('shr/slicing/PanelMembers');
       MemberA = context.importResult('shr/slicing/MemberA');
       MemberB = context.importResult('shr/slicing/MemberB');
       Reference = context.importResult('Reference');
-      Entry = context.importResult('shr/base/Entry');
-      ShrId = context.importResult('shr/base/ShrId');
-      EntryId = context.importResult('shr/base/EntryId');
-      EntryType = context.importResult('shr/base/EntryType');
+      EntryInfo = context.importResult('EntryInfo');
     });
 
     it('should deserialize a FHIR JSON instance', () => {
@@ -420,30 +417,14 @@ describe('#FromFHIR_STU3', () => {
       const expected = new PanelSliceByProfile()
         .withPanelMembers(new PanelMembers()
           .withObservation([
-            new Reference(
-              new ShrId().withValue('12345'),
-              new EntryId().withValue('4'),
-              new EntryType().withValue('http://standardhealthrecord.org/spec/shr/slicing/MemberA')
-            ),
-            new Reference(
-              new ShrId().withValue('12345'),
-              new EntryId().withValue('5'),
-              new EntryType().withValue('http://standardhealthrecord.org/spec/shr/slicing/MemberB')
-            )
+            new Reference('12345', '4', 'http://standardhealthrecord.org/spec/shr/slicing/MemberA'),
+            new Reference('12345', '5', 'http://standardhealthrecord.org/spec/shr/slicing/MemberB')
           ])
         );
       expected.panelMembers.observation[0].reference = new MemberA()
-        .withEntryInfo(new Entry()
-          .withShrId(new ShrId().withValue('12345'))
-          .withEntryId(new EntryId().withValue('4'))
-          .withEntryType(new EntryType().withValue('http://standardhealthrecord.org/spec/shr/slicing/MemberA'))
-        );
+        .withEntryInfo(new EntryInfo('12345', '4', 'http://standardhealthrecord.org/spec/shr/slicing/MemberA'));
       expected.panelMembers.observation[1].reference = new MemberB()
-        .withEntryInfo(new Entry()
-          .withShrId(new ShrId().withValue('12345'))
-          .withEntryId(new EntryId().withValue('5'))
-          .withEntryType(new EntryType().withValue('http://standardhealthrecord.org/spec/shr/slicing/MemberB'))
-        );
+        .withEntryInfo(new EntryInfo('12345', '5', 'http://standardhealthrecord.org/spec/shr/slicing/MemberB'));
 
       fixExpectedEntryInfo(expected, 'http://standardhealthrecord.org/spec/shr/slicing/PanelSliceByProfile', entry, context);
 
@@ -453,13 +434,10 @@ describe('#FromFHIR_STU3', () => {
 
   describe('#Observation()', () => {
 
-    let Observation, Reference, ShrId, EntryId, EntryType, DataValue;
+    let Observation, Reference, DataValue;
     before(() => {
       Observation = context.importResult('shr/slicing/Observation');
       Reference = context.importResult('Reference');
-      ShrId = context.importResult('shr/base/ShrId');
-      EntryId = context.importResult('shr/base/EntryId');
-      EntryType = context.importResult('shr/base/EntryType');
       DataValue = context.importResult('shr/slicing/DataValue');
     });
 
@@ -469,12 +447,7 @@ describe('#FromFHIR_STU3', () => {
       expect(entry).instanceOf(Observation);
 
       const expected = new Observation()
-        .withPatientEntry(new Reference(
-          new ShrId().withValue('1-1'),
-          new EntryId().withValue('abcd-1234'),
-          new EntryType().withValue('http://standardhealthrecord.org/spec/shr/fhir/PatientEntry')
-        )
-        );
+        .withPatientEntry(new Reference('1-1', 'abcd-1234', 'http://standardhealthrecord.org/spec/shr/fhir/PatientEntry'));
 
       fixExpectedEntryInfo(expected, 'http://standardhealthrecord.org/spec/shr/slicing/Observation', entry, context);
 
@@ -593,13 +566,10 @@ describe('#FromFHIR_DSTU2', () => {
 
   describe('#Observation_DSTU2()', () => {
 
-    let Observation, Reference, ShrId, EntryId, EntryType;
+    let Observation, Reference;
     before(() => {
       Observation = context.importResult('shr/slicing/Observation');
       Reference = context.importResult('Reference');
-      ShrId = context.importResult('shr/base/ShrId');
-      EntryId = context.importResult('shr/base/EntryId');
-      EntryType = context.importResult('shr/base/EntryType');
     });
 
     it('should deserialize a FHIR JSON instance', () => {
@@ -608,12 +578,7 @@ describe('#FromFHIR_DSTU2', () => {
       expect(entry).instanceOf(Observation);
 
       const expected = new Observation()
-        .withPatientEntry(new Reference(
-          new ShrId().withValue('1-1'),
-          new EntryId().withValue('abcd-1234'),
-          new EntryType().withValue('http://standardhealthrecord.org/spec/shr/fhir/PatientEntry')
-        )
-        );
+        .withPatientEntry(new Reference('1-1', 'abcd-1234', 'http://standardhealthrecord.org/spec/shr/fhir/PatientEntry'));
 
       fixExpectedEntryInfo(expected, 'http://standardhealthrecord.org/spec/shr/slicing/Observation', entry, context);
 
@@ -626,34 +591,21 @@ function fixExpectedEntryInfo(expectedObj, expectedType, actualObj, context) {
   // Since shrID and entryID are generated, there's no way to predict what they will be.
   // In order to preserve the ability to do equality checks, set the expected shrId and
   // entryID to the actuals.
-  const Entry = context.importResult('shr/base/Entry');
-  const ShrId = context.importResult('shr/base/ShrId');
-  const EntryId = context.importResult('shr/base/EntryId');
-  const EntryType = context.importResult('shr/base/EntryType');
+  const EntryInfo = context.importResult('EntryInfo');
 
   let shrIdStr = 'not found in actual';
   let entryIdStr = 'not found in actual';
   if (actualObj && actualObj.entryInfo) {
     const info = actualObj.entryInfo;
 
-    if (info.shrId instanceof ShrId && typeof info.shrId.value === 'string') {
-      // Good.  It's the correct usage
-      shrIdStr = info.shrId.value;
-    } else if (typeof info.shrId === 'string') {
-      // Technically the actual format is wrong, but we know what it intends
+    if (typeof info.shrId === 'string') {
       shrIdStr = info.shrId;
     }
 
-    if (info.entryId instanceof EntryId && typeof info.entryId.value === 'string') {
-      // Good.  It's the correct usage
-      entryIdStr = info.entryId.value;
-    } else if (typeof info.entryId === 'string') {
+    if (typeof info.entryId === 'string') {
       // Technically the actual format is wrong, but we know what it intends
       entryIdStr = info.entryId;
     }
   }
-  expectedObj.entryInfo = new Entry()
-    .withShrId(new ShrId().withValue(shrIdStr))
-    .withEntryId(new EntryId().withValue(entryIdStr))
-    .withEntryType(new EntryType().withValue(expectedType));
+  expectedObj.entryInfo = new EntryInfo(shrIdStr, entryIdStr, expectedType);
 }

@@ -1,23 +1,17 @@
 {
-  "EntryId": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId" },
-    "Value": "1-1"
-  },
-  "ShrId": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId" },
-    "Value": "1"
-  },
+  "entryId": "1-1",
+  "shrId": "1",
   "CreationTime": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/obf/datatype/CreationTime"},
+    "entryType": "http://standardhealthrecord.org/spec/obf/datatype/CreationTime",
     "Value": "2017-11-30T12:34:56Z"
   },
   "LastUpdated": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"},
+    "entryType": "http://standardhealthrecord.org/spec/obf/datatype/LastUpdated",
     "Value": "2017-12-05T23:45:01Z"
   },
   "BooleanValue": {
-    "EntryType": { "Value" : "http://standardhealthrecord.org/spec/shr/simple/BooleanValue" },
+    "entryType": "http://standardhealthrecord.org/spec/shr/simple/BooleanValue",
     "Value": true
   },
-  "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/fhir/PatientDirectMapEntry" }
+  "entryType": "http://standardhealthrecord.org/spec/shr/fhir/PatientDirectMapEntry"
 }

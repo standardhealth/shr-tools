@@ -52,6 +52,9 @@ function generateClass(def, specs, fhir) {
 
     cw.ln(`import { ${imports.join(', ')} } from '${relativeImportPath(def.identifier, 'json-helper')}';`).ln();
     cw.ln(`import ClassRegistry from '${relativeImportPath(def.identifier, 'ClassRegistry')}';`).ln();
+    if (def.isEntry) {
+      cw.ln(`import EntryInfo from '${relativeImportPath(def.identifier, 'EntryInfo')}';`).ln();
+    }
 
     const clazzName = className(def.identifier.name);
     let superClass;
@@ -101,7 +104,7 @@ function generateClassBody(def, specs, fhir, fhirProfile, fhirExtension, cw) {
 
   const clazzName = className(def.identifier.name);
   if (def.isEntry) {
-    writeGetterAndSetter(cw, clazzName, 'shr.base.Entry', specs, 'entryInfo', 'entry information', '_entryInfo', 'Entry');
+    writeGetterAndSetter(cw, clazzName, 'EntryInfo', specs, 'entryInfo', 'entry information', '_entryInfo', 'EntryInfo');
   }
 
   // Don't repeat properties that were purely inherited (without overriding).  Although overrides actually don't
@@ -320,11 +323,9 @@ function writeToJson(def, cw) {
   const url = `http://standardhealthrecord.org/spec/${def.identifier.namespace.replace('.', '/')}/${className(def.identifier.name)}`;
   if (def.isEntry) {
     cw.ln(`const inst = this._entryInfo.toJSON();`);
-    cw.ln(`inst['EntryType'] = { 'Value' : '${url}' };`);
-  } else if (def.identifier.name !== 'EntryType') {
-    cw.ln(`const inst = { 'EntryType': { 'Value' : '${url}' } };`);
+    cw.ln(`inst['entryType'] = '${url}';`);
   } else {
-    cw.ln(`const inst = {};`);
+    cw.ln(`const inst = { entryType: '${url}' };`);
   }
 
   if (def.value !== undefined) {
@@ -491,13 +492,10 @@ function writeFromFhir(def, specs, fhir, fhirProfile, fhirExtension, cw) {
   cw.ln(`const inst = new klass();`);
 
   if (def.isEntry) {
-    cw.ln(`inst.entryInfo = FHIRHelper.createInstanceFromFHIR('shr.base.Entry', {}, null);`); // do it this way so we don't have to import Entry
-    cw.ln(`inst.entryInfo.shrId = FHIRHelper.createInstanceFromFHIR('shr.base.ShrId', shrId, 'string');`);
-    cw.ln(`inst.entryInfo.entryId = FHIRHelper.createInstanceFromFHIR('shr.base.EntryId', fhir['id'] || uuid(), 'string');`); // re-use the FHIR id if it exists, otherwise generate a new uuid
-
+    cw.ln(`const entryId = fhir['id'] || uuid();`); // re-use the FHIR id if it exists, otherwise generate a new uuid
     // copied from writeToJson above --- should this URL be configurable?
     const url = `http://standardhealthrecord.org/spec/${def.identifier.namespace.replace('.', '/')}/${className(def.identifier.name)}`;
-    cw.ln(`inst.entryInfo.entryType = FHIRHelper.createInstanceFromFHIR('shr.base.EntryType', '${url}', 'uri');`);
+    cw.ln(`inst.entryInfo = new EntryInfo(shrId, entryId, '${url}');`);
   }
 
   if(fhirProfile){
@@ -1294,7 +1292,7 @@ function getFieldAndMethodChain(mapping, def, specs, element) {
 
       let methodName;
 
-      if (elementIdentifier.isEntryKeyWord || elementIdentifier.isConceptKeyWord) {
+      if (elementIdentifier.isConceptKeyWord) {
         // TODO: figure out how to handle these.
         // note that the only case in the spec right now is mapping _Entry.EntryId and _Entry.EntryType, which are already handled.
 
@@ -1378,10 +1376,10 @@ function matchesEffectiveIdentifierOrIncludesTypes(identifiableValueField, ident
  * Example 2:
  *  mcode.CancerDisorder.onset[x]
  *   - type: [dateTime, Age, Period, Range, string]
- *   - mapping: [shr.base.Onset]
+ *   - mapping: [obf.Onset]
  *
  * result:
- *  { shr.base.Onset => [dateTime, Age, Period, Range, string] }
+ *  { obf.Onset => [dateTime, Age, Period, Range, string] }
  *
  * @param {Array} shrMappings - The list of SHR mappings for the field (i.e., element.mapping)
  * @param {Array} fhirTypes - The list of FHIR types the field can be (i.e., element.type)
@@ -1609,8 +1607,6 @@ function writeToFhir(def, specs, fhir, fhirProfile, fhirExtension, cw) {
 function fhirMappingToIdentifier(mappingString){
   if(mappingString === '<Value>'){
     return null;
-  } else if(mappingString === '<_Entry>'){
-    return new Identifier('', 'Entry');
   }
   const bareMappingString = mappingString.slice(1,-1); // remove <>
   const mappingStringArray = bareMappingString.split('.');

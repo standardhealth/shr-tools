@@ -18,10 +18,10 @@ class TestContext {
   }
 
   validateJSON(name, json) {
-    if (!json['EntryType'] || !json['EntryType'].Value) {
+    if (!json['entryType']) {
       throw new Error(`Couldn't find entry type for ${name}`);
     }
-    const entryType = json['EntryType'].Value;
+    const entryType = json['entryType'];
     const matches = entryType.match(/^http:\/\/standardhealthrecord\.org\/spec\/(.*)\/[^/]+$/);
     if (!matches) {
       throw new Error(`${name}'s entry type does not match expected format: ${entryType}`);

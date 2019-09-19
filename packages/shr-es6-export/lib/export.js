@@ -49,6 +49,7 @@ class ES6Exporter {
     const es6Defs = {};
 
     // Copy over core classes
+    es6Defs['EntryInfo.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'EntryInfo.js'), 'utf8');
     es6Defs['Reference.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Reference.js'), 'utf8');
     es6Defs['Concept.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Concept.js'), 'utf8');
     es6Defs['Coding.js'] = fs.readFileSync(path.join(__dirname, 'includes', 'Coding.js'), 'utf8');
@@ -197,8 +198,8 @@ class ES6Exporter {
               .ln('I.e., the actual class is returned, not an instance of it.')
               .ln('In most cases this will be the original class,')
               .ln('but when a subclass has been defined and registered then it will be returned here.')
-              .ln('@param {string} namespace - The full namespace of the desired class, ex. \'shr.base\'.')
-              .ln('@param {string} name - The name of the class, ex. \'Entry\'')
+              .ln('@param {string} namespace - The full namespace of the desired class, ex. \'obf.datatype\'.')
+              .ln('@param {string} name - The name of the class, ex. \'Procedure\'')
               .ln('@return {Class} the desired class or a subclass of it with fixes/extensions');
           })
           .bl('get(namespace, name)', () => {
@@ -208,8 +209,8 @@ class ES6Exporter {
           .blComment(() => {
             cw.ln('Register a replacement class object for the given namespace and model class name.')
               .ln('Note that this does no validation that the given class is a true drop-in replacement of the original class')
-              .ln('@param {string} namespace - The full namespace of the class, ex. \'shr.base\'.')
-              .ln('@param {string} name - The name of the class, ex. \'Entry\'')
+              .ln('@param {string} namespace - The full namespace of the class, ex. \'obf.datatype\'.')
+              .ln('@param {string} name - The name of the class, ex. \'Procedure\'')
               .ln('@param {Class} klass - The new class object to be returned when ');
           })
           .bl('set(namespace, name, klass)', () => {

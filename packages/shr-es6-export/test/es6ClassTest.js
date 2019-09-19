@@ -27,7 +27,7 @@ describe('#Class', () => {
 
     it('should get/set entryInfo', () => {
       const pv = new StringValue();
-      // NOTE: This is not a REAL Entry class, we're just testing getter/setter for now
+      // NOTE: This is not a REAL EntryInfo class, we're just testing getter/setter for now
       pv.entryInfo = 'the entry info';
       expect(pv.entryInfo).to.equal('the entry info');
     });

@@ -2,6 +2,7 @@ import Reference from './Reference';
 import { ALL_KNOWN_VALUE_SETS } from './valueSets';
 import Concept from './Concept';
 import Coding from './Coding';
+import EntryInfo from './EntryInfo';
 
 // A variable to hold the root ObjectFactory.  This can be set via the exported setObjectFactory function,
 // but should typically be set by importing the module's init file.
@@ -21,19 +22,17 @@ export function setObjectFactory(factory) {
 /**
  * Parses the JSON and/or type to return an object with the namespace and elementName.
  * @param {Object} json - The element data in JSON format (use `{}` and provide `type` for a blank instance)
- * @param {string} [type] - The (optional) type of the element (e.g., 'http://standardhealthrecord.org/spec/shr/base/Patient' or 'shr.base.Patient').  This is only used if the type cannot be extracted from the JSON.
+ * @param {string} [type] - The (optional) type of the element (e.g., 'http://standardhealthrecord.org/spec/obf/Patient' or 'obf.Patient').  This is only used if the type cannot be extracted from the JSON.
  * @returns {{namespace: string, elementName: string}} An object representing the element
  */
 export function getNamespaceAndName(json={}, type) {
   // Get the type from the JSON if we can
-  if (json['EntryType']) {
-    type = json['EntryType'].Value;
+  if (json['entryType']) {
+    type = json['entryType'];
   }
   // Ensure we have a type before proceeding
   if (!type) {
     throw new Error(`Couldn't find type for JSON: ${JSON.stringify(json)}`);
-  } else if (type === 'EntryType') {
-    return { namespace: 'shr.base', elementName: 'EntryType' };
   }
   // Try to match on a URI
   const uriMatch = type.match(URI_REGEX);
@@ -113,9 +112,9 @@ export function setPropertiesFromJSON(inst, json) {
       setterOnEntry.call(inst.entryInfo, createInstance(key, json[key]));
     }
     // If we didn't find a match directly or on entryInfo, spit an error to the console.  The exception is for
-    // shr.base.EntryType, which is used to indicate the field's type in the JSON, but not necessarily always a
+    // entryType, which is used to indicate the field's type in the JSON, but not necessarily always a
     // settable property in the class.
-    if (!setter && !setterOnEntry && key !== 'EntryType') {
+    if (!setter && !setterOnEntry && key !== 'entryType') {
       console.error(`${inst.constructor.name}: No setter for '${property}' property`);
     }
   }
@@ -145,7 +144,7 @@ function findSetterForProperty(inst, property) {
 
 /**
  * Given an instance of a class and a valid entry property name, finds the setter function for that property in the
- * class's `entryInfo` (if the class have `entryInfo` and the property exists within it).
+ * class's `entryInfo` (if the class has `entryInfo` and the property exists within it).
  * @param {object} inst - An instance of a class
  * @param {string} property - The name of a property
  * @returns {function} a function used to set the property on the instance's `entryInfo`
@@ -156,7 +155,7 @@ function findSetterForEntryProperty(inst, property) {
   if (entryInfoSetter) {
     // Now see if there is an existing entryInfo, and if not, set it to a new instance
     if (typeof inst.entryInfo === 'undefined') {
-      const newEntry = createInstance('shr.base.Entry', {});
+      const newEntry = new EntryInfo();
       entryInfoSetter.call(inst, newEntry);
     }
     // Now find the setter for the property on the entry
@@ -181,7 +180,7 @@ function createInstance(key, value) {
     if (value._ShrId && value._EntryId && value._EntryType) {
       // It's a reference, so just return the reference
       return new Reference(value._ShrId, value._EntryId, value._EntryType);
-    } else if (value.EntryType == null && Array.isArray(value.coding)) {
+    } else if (value.entryType == null && Array.isArray(value.coding)) {
       // It's a concept, so return an instance of Concept
       return new Concept(value.coding.map(c => new Coding(c.code, c.system, c.display)));
     }
@@ -242,11 +241,7 @@ export const FHIRHelper = {
    * @returns {Reference} the reference
    */
   createReferenceWithoutObject: function(shrId, entryId, entryType) {
-    return new Reference(
-      createInstance('shr.base.ShrId', { Value: shrId }),
-      createInstance('shr.base.EntryId', { Value: entryId }),
-      createInstance('shr.base.EntryType', { Value: entryType })
-    );
+    return new Reference(shrId, entryId, entryType);
   },
 
   /**

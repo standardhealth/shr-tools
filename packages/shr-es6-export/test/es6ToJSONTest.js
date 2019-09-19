@@ -39,7 +39,7 @@ describe('#ToJSON', () => {
 
       let gen_json = entry.toJSON();
       context.validateJSON('ConceptValueEntry', gen_json);
-      expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry' });
+      expect(gen_json['entryType']).to.equal('http://standardhealthrecord.org/spec/shr/simple/ConceptValueEntry');
       expect(gen_json['ConceptValue']['Value']).to.eql({ coding: [{ code: 'foo', system: 'http://foo.org/bar', display: 'Foo' }] });
     });
   });
@@ -58,7 +58,7 @@ describe('#ToJSON', () => {
 
       let gen_json = entry.toJSON();
       context.validateJSON('MultiConceptValueEntry', gen_json);
-      expect(gen_json['EntryType']).to.eql({ Value: 'http://standardhealthrecord.org/spec/shr/simple/MultiConceptValueEntry' });
+      expect(gen_json['entryType']).to.eql('http://standardhealthrecord.org/spec/shr/simple/MultiConceptValueEntry');
       expect(gen_json['ConceptValue']['Value']).to.eql({
         coding: [
           { code: 'foo', system: 'http://foo.org/bar', display: 'Foo' },

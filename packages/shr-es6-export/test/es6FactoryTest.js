@@ -29,7 +29,7 @@ describe('#Factory()', () => {
     });
 
     it('should throw when you request an element in the wrong namespace', () => {
-      expect(() => ObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/base/StringValue')).to.throw();
+      expect(() => ObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/obf/datatype/StringValue')).to.throw();
     });
 
     it('should throw when you request an unknown element', () => {
@@ -54,7 +54,7 @@ describe('#Factory()', () => {
     });
 
     it('should throw when you request an element from a different namespace', () => {
-      expect(() => ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/shr/base/StringValue')).to.throw();
+      expect(() => ShrSimpleTestObjectFactory.createInstance({}, 'http://standardhealthrecord.org/spec/obf/datatype/StringValue')).to.throw();
     });
 
     it('should throw when you request an unknown element', () => {

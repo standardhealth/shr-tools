@@ -221,17 +221,13 @@ function expectStandardEntryInfoValues(entry, type) {
 
 function expectEntryInfo(entry, expected) {
   const entryInfo = entry.entryInfo;
-  expectInstanceOf(entryInfo, 'shr/base/Entry');
-  expectInstanceOf(entryInfo.shrId, 'shr/base/ShrId');
-  expectIdValue(entryInfo.shrId, expected.shrId);
-  expectInstanceOf(entryInfo.entryId, 'shr/base/EntryId');
-  expectIdValue(entryInfo.entryId, expected.entryId);
-  expectInstanceOf(entryInfo.entryType, 'shr/base/EntryType');
-  expectUriValue(entryInfo.entryType, expected.entryType);
-  expectInstanceOf(entryInfo.creationTime, 'obf/datatype/CreationTime');
-  expectDateTimeValue(entryInfo.creationTime, expected.creationTime);
-  expectInstanceOf(entryInfo.lastUpdated, 'shr/base/LastUpdated');
-  expectInstantValue(entryInfo.lastUpdated, expected.lastUpdated);
+  expectInstanceOf(entryInfo, 'EntryInfo');
+  expect(entryInfo.shrId).to.be.a('string');
+  expect(entryInfo.shrId).to.equal(expected.shrId);
+  expect(entryInfo.entryId).to.be.a('string');
+  expect(entryInfo.entryId).to.equal(expected.entryId);
+  expect(entryInfo.entryType).to.be.a('string');
+  expect(entryInfo.entryType).to.equal(expected.entryType);
 }
 
 function expectStringValue(element, string) {
@@ -239,30 +235,9 @@ function expectStringValue(element, string) {
   expect(element.string).to.equal(string);
 }
 
-function expectIdValue(element, id) {
-  expect(element.value).to.equal(id);
-  expect(element.id).to.equal(id);
-}
-
-function expectUriValue(element, uri) {
-  expect(element.value).to.equal(uri);
-  expect(element.uri).to.equal(uri);
-}
-
 function expectIntegerValue(element, integer) {
   expect(element.value).to.equal(integer);
   expect(element.integer).to.equal(integer);
-}
-
-
-function expectDateTimeValue(element, dateTime) {
-  expect(element.value).to.equal(dateTime);
-  expect(element.dateTime).to.equal(dateTime);
-}
-
-function expectInstantValue(element, instant) {
-  expect(element.value).to.equal(instant);
-  expect(element.instant).to.equal(instant);
 }
 
 function expectCoding(coding, expected) {
@@ -292,11 +267,3 @@ function expectReference(reference, expected) {
   expect(reference.entryId).to.equal(expected.entryId);
   expect(reference.entryType).to.equal(expected.entryType);
 }
-
-function expectReferenceValue(entry, expected, alias) {
-  expectReference(entry.value, expected);
-  if (alias) {
-    expect(entry[alias]).to.equal(entry.value);
-  }
-}
-

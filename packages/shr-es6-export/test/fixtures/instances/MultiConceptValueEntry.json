@@ -1,23 +1,17 @@
 {
-  "ShrId": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId" },
-    "Value": "1"
-  },
-  "EntryId": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId" },
-    "Value": "1-1"
-  },
-  "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/MultiConceptValueEntry" },
+  "shrId": "1",
+  "entryId": "1-1",
+  "entryType": "http://standardhealthrecord.org/spec/shr/simple/MultiConceptValueEntry",
   "CreationTime": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/obf/datatype/CreationTime"},
+    "entryType": "http://standardhealthrecord.org/spec/obf/datatype/CreationTime",
     "Value": "2017-11-30T12:34:56Z"
   },
   "LastUpdated": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"},
+    "entryType": "http://standardhealthrecord.org/spec/obf/datatype/LastUpdated",
     "Value": "2017-12-05T23:45:01Z"
   },
   "ConceptValue": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/simple/ConceptValue"},
+    "entryType": "http://standardhealthrecord.org/spec/shr/simple/ConceptValue",
     "Value": {
       "coding": [
         {

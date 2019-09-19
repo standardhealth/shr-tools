@@ -34,13 +34,8 @@
                         "const": "4"
                       },
                       "entryType": {
-                        "type": "object",
-                        "properties": {
-                          "Value": {
-                            "type": "string",
-                            "const": "http://standardhealthrecord.org/spec/shr/slicing/FooA"
-                          }
-                        }
+                        "type": "string",
+                        "const": "http://standardhealthrecord.org/spec/shr/slicing/FooA"
                       }
                     },
                     "required": ["shrId", "entryId", "entryType"]
@@ -62,13 +57,8 @@
                         "const": "5"
                       },
                       "entryType": {
-                        "type": "object",
-                        "properties": {
-                          "Value": {
-                            "type": "string",
-                            "const": "http://standardhealthrecord.org/spec/shr/slicing/FooB"
-                          }
-                        }
+                        "type": "string",
+                        "const": "http://standardhealthrecord.org/spec/shr/slicing/FooB"
                       }
                     },
                     "required": ["shrId", "entryId", "entryType"]
