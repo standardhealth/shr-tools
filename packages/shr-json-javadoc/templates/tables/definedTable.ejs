@@ -12,7 +12,7 @@
   <% } -%>
   <% if (element.fields) { -%>
     <% element.fields.forEach(function(field) { -%>
-      <% if (!(field.inheritance) || (field.inheritedFrom.fqn === 'shr.base.Entry' && !element.hierarchy.includes('shr.base.Entry'))) { -%>
+      <% if (!(field.inheritance)) { -%>
         <%- include('fieldRow', { field: field, index: index }) -%>
       <% index += 1; } -%>
     <% }) -%>
