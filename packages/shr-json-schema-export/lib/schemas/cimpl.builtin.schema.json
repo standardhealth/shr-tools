@@ -32,6 +32,22 @@
           "type": "string"
         }
       }
+    },
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "shrId": {
+          "type": "string"
+        },
+        "entryId": {
+          "type": "string"
+        },
+        "entryType": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "description": "An entry in a health record."
     }
   }
 }

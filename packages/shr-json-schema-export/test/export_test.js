@@ -17,7 +17,14 @@ function fixFn (name, result, errors) {
     if (result != null) {
       const fixture = path.join(`${__dirname}/fixtures/`, `${name}.schema.json`);
       console.error(`Fixing ${name} expected fixture to actual result.  Check ${fixture}.`);
+      let oldBuiltIn;
+      if (result['https://standardhealthrecord.org/schema/cimpl/builtin'] != null) {
+        // For the fixtures we just put placeholder text where builtin schema goes
+        oldBuiltIn = result['https://standardhealthrecord.org/schema/cimpl/builtin'];
+        result['https://standardhealthrecord.org/schema/cimpl/builtin'] = 'inserted in test setup';
+      }
       fs.writeFileSync(fixture, JSON.stringify(result, null, 2));
+      result['https://standardhealthrecord.org/schema/cimpl/builtin'] = oldBuiltIn;
     }
     if (errors.length) {
       const fixture_err = path.join(`${__dirname}/fixtures/`, `${name}_errors.json`);
@@ -49,6 +56,11 @@ function importFixture(name, ext='.schema.json') {
   let fixture;
   try {
     fixture = JSON.parse(rawSchema);
+    if (fixture['https://standardhealthrecord.org/schema/cimpl/builtin'] != null) {
+      const builtinSchema = fs.readFileSync(`${__dirname}/../lib/schemas/cimpl.builtin.schema.json`, 'utf8');
+      const builtin = JSON.parse(builtinSchema);
+      fixture['https://standardhealthrecord.org/schema/cimpl/builtin'] = builtin;
+    }
   } catch (ex) {
     assert.fail(false, true, `Errors parsing schemata as JSON: ${ex}: raw schemata was: ${rawSchema}`);
     return;
@@ -90,7 +102,6 @@ function importErrorsFixture(name, ext='.schema.json') {
 function createValidator(schemataDict) {
   const schemaValidator = new Ajv();
   schemaValidator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
-  schemaValidator.addSchema(stubSchema);
   const schemata = [];
   // This generally assumes that we'll be testing the shr.test namespace
   const defaultNamespace = 'https://standardhealthrecord.org/test/shr/test';
@@ -111,76 +122,3 @@ function createValidator(schemataDict) {
     assert.fail(false, true, 'Errors validating schemata: ' + ex + ': schemata was: ' + JSON.stringify(schemata, null, 2));
   }
 }
-
-/**
- * A stub implementation of shr.base.Entry.
- */
-const stubSchema = JSON.parse(`{
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "https://standardhealthrecord.org/test/shr/base",
-  "title": "A stub implementation of shr.base.Entry.",
-  "definitions": {
-    "Entry": {
-      "allOf": [
-        { "$ref": "#/definitions/Any" },
-        {
-          "type": "object",
-          "properties": {
-            "ShrId": {
-              "$ref": "#/definitions/RequiredString"
-            },
-            "EntryId": {
-              "$ref": "#/definitions/RequiredString"
-            },
-            "CreationTime": {
-              "type": "object",
-              "properties": {
-                "Value": {
-                  "type": "string",
-                  "format": "date-time"
-                }
-              },
-              "required": [ "Value" ]
-            },
-            "LastUpdated": {
-              "$ref": "#/definitions/RequiredString"
-            }
-          },
-          "required": [
-            "ShrId",
-            "EntryId",
-            "CreationTime",
-            "LastUpdated"
-          ]
-        }
-      ]
-    },
-    "RequiredString": {
-      "allOf": [
-        { "$ref": "#/definitions/Any" },
-        {
-          "type": "object",
-          "properties": {
-            "Value": { "type": "string" }
-          },
-          "required": [ "Value" ]
-        }
-      ]
-    },
-    "EntryType": {
-      "type": "object",
-      "properties": {
-        "Value": { "type": "string", "format": "uri" },
-        "EntryType": { "$ref": "#/definitions/EntryType" }
-      },
-      "required": [ "Value" ]
-    },
-    "Any": {
-      "type": "object",
-      "properties": {
-        "EntryType": { "$ref": "#/definitions/EntryType" }
-      },
-      "required": [ "EntryType" ]
-    }
-  }
-}`);

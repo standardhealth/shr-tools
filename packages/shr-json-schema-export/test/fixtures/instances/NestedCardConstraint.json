@@ -1,13 +1,12 @@
 {
-  "ShrId": { "Value": "patient-id", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId"} },
-  "EntryId": { "Value": "my-id-3", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId"} },
-  "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/NestedCardConstraint"},
-  "CreationTime": { "Value": "2017-11-30T12:34:56Z", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"} },
-  "LastUpdated": { "Value": "2017-11-30T12:34:56Z", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"} },
+  "shrId": "patient-id",
+  "entryId": "my-id-3",
+  "entryType": "http://standardhealthrecord.org/spec/shr/test/NestedCardConstraint",
+  "CreationTime": { "Value": "2017-11-30T12:34:56Z", "entryType": "http://standardhealthrecord.org/spec/shr/core/CreationTime" },
   "OptionalField": {
-    "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/OptionalField"},
+    "entryType": "http://standardhealthrecord.org/spec/shr/test/OptionalField",
     "OptionalValue": {
-      "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/OptionalValue"},
+      "entryType": "http://standardhealthrecord.org/spec/shr/test/OptionalValue",
       "comment": "The value is optional."
     }
   }

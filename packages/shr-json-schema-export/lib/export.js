@@ -17,7 +17,7 @@ function setLogger(bunyanLogger) {
  * Converts a group of specifications into JSON Schema.
  * @param {Specifications} expSpecifications - a fully expanded Specifications object.
  * @param {string} baseSchemaURL - the root URL for the schema identifier.
- * @param {string} baseTypeURL - the root URL for the EntryType field.
+ * @param {string} baseTypeURL - the root URL for the entryType field.
  * @param {boolean=} flat - if true then the generated schema will not be hierarchical. Defaults to false.
  * @return {Object.<string, Object>} A mapping of schema ids to JSON Schema definitions.
  */
@@ -57,7 +57,7 @@ function exportToJSONSchema(expSpecifications, baseSchemaURL, baseTypeURL, flat 
  * @param {Namespace} ns - the namespace of the schema.
  * @param {DataElementSpecifications} dataElementsSpecs - the elements in the namespace.
  * @param {string} baseSchemaURL - the root URL for the schema identifier.
- * @param {string} baseTypeURL - the root URL for the EntryType field.
+ * @param {string} baseTypeURL - the root URL for the entryType field.
  * @return {{schemaId: string, schema: Object}} The schema id and the JSON Schema definition.
  */
 function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
@@ -69,12 +69,13 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
     title: 'TODO: Figure out what the title should be.',
     definitions: {}
   };
-  const entryRef = makeRef(new Identifier('shr.base', 'Entry'), ns, baseSchemaURL);
+  const entryRef = 'https://standardhealthrecord.org/schema/cimpl/builtin#/definitions/Entry';
   if (ns.description) {
     schema.description = ns.description;
   }
   const nonEntryEntryTypeField = {
-    $ref: makeRef(new Identifier('shr.base', 'EntryType'), ns, baseSchemaURL)
+    type: 'string',
+    format: 'uri'
   };
 
   const defs = dataElements.sort(function(l,r) {return l.identifier.name.localeCompare(r.identifier.name);});
@@ -174,10 +175,6 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
             continue;
           }
 
-          if (field.identifier.fqn === 'shr.base.EntryType') {
-            needsEntryType = false;
-          }
-
           schemaDef.properties[field.identifier.name] = value;
           if (required) {
             requiredProperties.push(field.identifier.name);
@@ -211,10 +208,8 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
         wholeDef.description = descriptionList.join('\n');
       }
       if (needsEntryType) {
-        schemaDef.properties['EntryType'] = nonEntryEntryTypeField;
-        if (def.identifier.fqn !== 'shr.base.EntryType') {
-          requiredProperties.push('EntryType');
-        }
+        schemaDef.properties['entryType'] = nonEntryEntryTypeField;
+        requiredProperties.push('entryType');
       }
 
       if (requiredProperties.length) {
@@ -242,7 +237,7 @@ function namespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
  * @param {Namespace} ns - the namespace of the schema.
  * @param {DataElementSpecifications} dataElementsSpecs - the elements in the namespace.
  * @param {string} baseSchemaURL - the root URL for the schema identifier.
- * @param {string} baseTypeURL - the root URL for the EntryType field.
+ * @param {string} baseTypeURL - the root URL for the entryType field.
  * @return {{schemaId: string, schema: Object}} The schema id and the JSON Schema definition.
  */
 function flatNamespaceToSchema(ns, dataElementsSpecs, baseSchemaURL, baseTypeURL) {
@@ -434,7 +429,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
       }
     }
   } else if (isRef(valueDef, dataElementsSpecs)) {
-    // TODO: What should the value of EntryType be? The schema URL may not be portable across data types.
+    // TODO: What should the value of entryType be? The schema URL may not be portable across data types.
     makeShrRefObject([valueDef], baseTypeURL, value);
   } else if (valueDef instanceof IdentifiableValue) {
     const id = valueDef.effectiveIdentifier;
@@ -610,7 +605,7 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               strength: constraintInfo.constraint.bindingStrength
             };
           } else if (constraintInfo.constraint instanceof CodeConstraint) {
-            // Maybe TODO: For entry elements this can have some level of enforcement by ANDing the exact contents of the EntryType field with an enum for this value/field.
+            // Maybe TODO: For entry elements this can have some level of enforcement by ANDing the exact contents of the entryType field with an enum for this value/field.
             if (currentAllOf[0].code) {
               //18011, Multiple code constraints found on a single element ${element1} '  ,  'Unknown' , 'errorNumber'
               logger.error({element1 : constraintInfo.constraint },'18011' );
@@ -1055,18 +1050,15 @@ function extractUnnormalizedConstraintPath(constraint, valueDef, dataElementSpec
 }
 
 function makeExpandedEntryDefinitions(enclosingNamespace, baseSchemaURL) {
-  const properties = {};
-  for (const name of ['ShrId', 'EntryId', 'EntryType', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative', 'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
-    properties[name] = { $ref: makeRef(new Identifier('shr.base', name), enclosingNamespace, baseSchemaURL) };
-  }
-  properties.Version = { $ref: makeRef(new Identifier('shr.core', 'Version'), enclosingNamespace, baseSchemaURL) };
+  const properties = {
+    shrId: { type: 'string' },
+    entryId: { type: 'string' },
+    entryType: { type: 'string', format: 'uri' }
+  };
   return { properties, required: [
-    'shr.base.ShrId',
-    'shr.base.EntryId',
-    'shr.base.EntryType',
-    'shr.base.FocalSubject',
-    'shr.base.OriginalCreationDate',
-    'shr.base.LastUpdateDate'
+    'shrId',
+    'entryId',
+    'entryType'
   ]};
 }
 

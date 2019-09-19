@@ -1,41 +1,5 @@
 {
-  "https://standardhealthrecord.org/schema/cimpl/builtin": {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "https://standardhealthrecord.org/schema/cimpl/builtin",
-    "title": "CIMPL Builtin Schema",
-    "definitions": {
-      "Concept": {
-        "type": "object",
-        "properties": {
-          "coding": {
-            "type": "array",
-            "minItems": 0,
-            "items": {
-              "$ref": "#/definitions/Coding"
-            }
-          }
-        },
-        "required": [
-          "coding"
-        ]
-      },
-      "Coding": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "system": {
-            "type": "string",
-            "format": "uri"
-          },
-          "display": {
-            "type": "string"
-          }
-        }
-      }
-    }
-  },
+  "https://standardhealthrecord.org/schema/cimpl/builtin": "inserted in test setup",
   "https://standardhealthrecord.org/test/shr/test": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://standardhealthrecord.org/test/shr/test",
@@ -61,14 +25,15 @@
               }
             ]
           },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          "entryType": {
+            "type": "string",
+            "format": "uri"
           }
         },
         "description": "It is an element with a choice",
         "required": [
           "Value",
-          "EntryType"
+          "entryType"
         ]
       },
       "ChoiceValue": {
@@ -77,14 +42,15 @@
           "Value": {
             "$ref": "#/definitions/Choice"
           },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          "entryType": {
+            "type": "string",
+            "format": "uri"
           }
         },
         "description": "It is an element with a choice value.",
         "required": [
           "Value",
-          "EntryType"
+          "entryType"
         ]
       },
       "Coded": {
@@ -97,14 +63,15 @@
               "strength": "REQUIRED"
             }
           },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          "entryType": {
+            "type": "string",
+            "format": "uri"
           }
         },
         "description": "It is a coded element",
         "required": [
           "Value",
-          "EntryType"
+          "entryType"
         ]
       },
       "TwoDeepChoiceField": {
@@ -113,13 +80,14 @@
           "ChoiceValue": {
             "$ref": "#/definitions/ChoiceValue"
           },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          "entryType": {
+            "type": "string",
+            "format": "uri"
           }
         },
         "description": "It is an element with a a field with a choice.",
         "required": [
-          "EntryType"
+          "entryType"
         ]
       },
       "TypeConstrainedChoice": {
@@ -139,20 +107,21 @@
               }
             ]
           },
-          "EntryType": {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/EntryType"
+          "entryType": {
+            "type": "string",
+            "format": "uri"
           }
         },
         "description": "It is an element with a choice with a constraint.",
         "required": [
           "Choice",
-          "EntryType"
+          "entryType"
         ]
       },
       "TypeConstrainedChoiceWithPath": {
         "allOf": [
           {
-            "$ref": "https://standardhealthrecord.org/test/shr/base#/definitions/Entry"
+            "$ref": "https://standardhealthrecord.org/schema/cimpl/builtin#/definitions/Entry"
           },
           {
             "type": "object",

@@ -1,8 +1,7 @@
 {
-  "ShrId": { "Value": "patient-id", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/ShrId"} },
-  "EntryId": { "Value": "my-id", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/EntryId"} },
-  "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/test/ChoiceOfChoice"},
-  "CreationTime": { "Value": "2017-11-30T12:34:56Z", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/core/CreationTime"} },
-  "LastUpdated": { "Value": "2017-11-30T12:34:56Z", "EntryType": { "Value": "http://standardhealthrecord.org/spec/shr/base/LastUpdated"} },
+  "shrId": "patient-id",
+  "entryId": "my-id",
+  "entryType": "http://standardhealthrecord.org/spec/shr/test/ChoiceOfChoice",
+  "CreationTime": { "Value": "2017-11-30T12:34:56Z", "entryType": "http://standardhealthrecord.org/spec/shr/core/CreationTime" },
   "Value": 35
 }
