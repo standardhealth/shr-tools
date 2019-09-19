@@ -145,12 +145,10 @@ class DataElementSpecifications {
   }
 
   find(namespace, name) {
-    // Special case logic for the _Entry and _Concept keywords
+    // Special case logic for the _Concept keyword
     if (namespace === '') {
       const id = new Identifier(namespace, name);
-      if (id.isEntryKeyWord) {
-        [namespace, name] = ['shr.base', 'Entry'];
-      } else if (id.isConceptKeyWord) {
+      if (id.isConceptKeyWord) {
         [namespace, name] = ['primitive', 'concept'];
       }
     }
@@ -765,19 +763,14 @@ class Identifier {
     return this._namespace === '' && this._name === '_Concept';
   }
 
-  get isEntryKeyWord() {
-    // TODO: Remove backwards compatibility w/ 'Entry' in next major rev
-    return this._namespace === '' && (this._name === '_Entry' || this._name === 'Entry');
-  }
-
   get isValueKeyWord() {
     // TODO: Remove backwards compatibility w/ 'Value' in next major rev
     return this._namespace === '' && (this._name === '_Value' || this._name === 'Value');
   }
 
   get isSpecialKeyWord() {
-    // TODO: Remove backwards compatibility w/ 'Entry' and 'Value' in next major rev
-    return this._namespace === '' && (this._name.startsWith('_') || this._name === 'Entry' || this._name === 'Value');
+    // TODO: Remove backwards compatibility w/ 'Value' in next major rev
+    return this._namespace === '' && (this._name.startsWith('_') || this._name === 'Value');
   }
 
   get isQuantity() {
