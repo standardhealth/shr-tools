@@ -181,9 +181,13 @@ class MappingImporter extends SHRMapParserListener {
     }
 
     // No specified namespace -- if it's a special word (e.g. _Value), or primitive, make it so.
-    if (ref.startsWith('_')) {
+    if (ref === 'Entry' || ref === '_Entry' ) {
+      // 11059, 'The Entry/_Entry keywords should no longer be used in field definitions or mappings', 'Remove Entry/_Entry from definitions and/or mappings and use appropriate elements from type hierarchy instead.', 'errorNumber'
+      logger.error('11059');
+      // Don't return; allow an identifier to be made anyway -- as invokers don't expect to get null back
+    } else if (ref.startsWith('_')) {
       return new Identifier('', ref);
-    } else if (ref === 'Entry' || ref === 'Value') {
+    }  else if (ref === 'Value') {
       // "Fix" the legacy keyword to the new _-based keyword
       return new Identifier('', `_${ref}`);
     } else if (PRIMITIVES.includes(ref)) {

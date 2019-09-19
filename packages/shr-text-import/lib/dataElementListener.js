@@ -84,7 +84,7 @@ class DataElementImporter extends SHRDataElementParserListener {
     if (ctx.descriptionProp() && typeof nsDef.description === 'undefined') {
       nsDef.description = trimLines(stripDelimitersFromToken(ctx.descriptionProp().STRING()));
     }
-    
+
     // Process the version
     let docHeader = ctx.docHeader();
     if (docHeader.version()) {
@@ -519,13 +519,10 @@ class DataElementImporter extends SHRDataElementParserListener {
           return;
         }
       }
-      // If we got here, we didn't find anything -- but if it's an Entry field, resolve it to a 1..1 IdentifiableValue
-      if (field.identifier.isEntryKeyWord) {
-        const entryField = new IdentifiableValue(field.identifier).withMinMax(1, 1);
-        for (const cst of field.constraints) {
-          entryField.addConstraint(cst);
-        }
-        this._currentDef.addField(entryField);
+      // If we got here, it might be the old Entry keyword, in which case we should log an error
+      if (field.identifier.namespace === '' && (field.identifier.name === '_Entry' || field.identifier.name === 'Entry')) {
+        // 11059, 'The Entry/_Entry keywords should no longer be used in field definitions or mappings', 'Remove Entry/_Entry from definitions and/or mappings and use appropriate elements from type hierarchy instead.', 'errorNumber'
+        logger.error('11059');
         return;
       }
     }
@@ -755,7 +752,7 @@ class DataElementImporter extends SHRDataElementParserListener {
     // No specified namespace -- is either special word (e.g. _Value), primitive, or something we need to resolve
     if (ref.startsWith('_')) {
       return new Identifier('', ref);
-    } else if (ref === 'Entry' || ref === 'Value') {
+    } else if (ref === 'Value') {
       // "Fix" the legacy keyword to the new _-based keyword
       return new Identifier('', `_${ref}`);
     } else if (PRIMITIVES.includes(ref)) {

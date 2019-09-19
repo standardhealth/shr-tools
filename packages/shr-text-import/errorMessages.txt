@@ -78,3 +78,4 @@ Number, Message, Solution, deduplicationKeys
 11056, 'Cannot declare properties on an Element since Elements do not have properties', 'Unknown', 'errorNumber'
 11057, 'Cannot constrain Value on a non-Element since non-Elements do not have Values', 'Unknown', 'errorNumber'
 11058, 'Cannot constrain properties on Elements since Elements only have Values', 'Unknown', 'errorNumber'
+11059, 'The Entry/_Entry keywords should no longer be used in field definitions or mappings', 'Remove Entry/_Entry from definitions and/or mappings and use appropriate elements from type hierarchy instead.', 'errorNumber'
