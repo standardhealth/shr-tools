@@ -3295,7 +3295,7 @@ describe('#expand()', () => {
 
    // Valid Fixed String Constraints
 
-   it('should keep valid fixed string constraints on values', () => {
+  it('should keep valid fixed string constraints on values', () => {
     let a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(0, 1));
     let subA = new models.DataElement(id('shr.test', 'SubA'), true)
@@ -3550,43 +3550,43 @@ describe('#expand()', () => {
 
     // Valid instant Constraints
 
-    it('should allow a fixed instant constraint to apply to instant values', () => {
-      let a = new models.DataElement(id('shr.test', 'A'), true)
+  it('should allow a fixed instant constraint to apply to instant values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
         .withValue(new models.IdentifiableValue(pid('instant')).withMinMax(0, 1)
         .withConstraint(new models.FixedValueConstraint('2019-09-03T12:34:56Z', 'instant')));
       
-      add(a);
-      doExpand();
+    add(a);
+    doExpand();
   
-      expect(err.hasErrors()).to.be.false;
-      const A = findExpanded('shr.test', 'A');
-      expect(A.identifier).to.eql(id('shr.test', 'A'));
-      expect(A.value).to.eql(
+    expect(err.hasErrors()).to.be.false;
+    const A = findExpanded('shr.test', 'A');
+    expect(A.identifier).to.eql(id('shr.test', 'A'));
+    expect(A.value).to.eql(
         new models.IdentifiableValue(pid('instant')).withMinMax(0, 1)
           .withConstraint(new models.FixedValueConstraint('2019-09-03T12:34:56Z', 'instant')
             .withLastModifiedBy(id('shr.test', 'A')))
       );
-    });
+  });
 
     // Valid time Constraints
 
-    it('should allow a fixed time constraint to apply to time values', () => {
-      let a = new models.DataElement(id('shr.test', 'A'), true)
+  it('should allow a fixed time constraint to apply to time values', () => {
+    let a = new models.DataElement(id('shr.test', 'A'), true)
         .withValue(new models.IdentifiableValue(pid('time')).withMinMax(0, 1)
         .withConstraint(new models.FixedValueConstraint('12:34:56', 'time')));
       
-      add(a);
-      doExpand();
+    add(a);
+    doExpand();
   
-      expect(err.hasErrors()).to.be.false;
-      const A = findExpanded('shr.test', 'A');
-      expect(A.identifier).to.eql(id('shr.test', 'A'));
-      expect(A.value).to.eql(
+    expect(err.hasErrors()).to.be.false;
+    const A = findExpanded('shr.test', 'A');
+    expect(A.identifier).to.eql(id('shr.test', 'A'));
+    expect(A.value).to.eql(
         new models.IdentifiableValue(pid('time')).withMinMax(0, 1)
           .withConstraint(new models.FixedValueConstraint('12:34:56', 'time')
             .withLastModifiedBy(id('shr.test', 'A')))
       );
-    });
+  });
 
 
   it('should properly deal with inherited TBD values', () => {

@@ -21,7 +21,7 @@ const BOOLEAN = new models.PrimitiveIdentifier('boolean');
 const constraintConversions = {
   'integer': ['decimal'],
   'string': ['uri', 'date', 'dateTime', 'instant', 'time']
-}
+};
 
 class Expander {
   constructor(specs, ...exporters) {
@@ -61,20 +61,6 @@ class Expander {
       }
     }
 
-    const entryDE = this._expanded.dataElements.find('shr.base', 'Entry');
-    let entryFields = null;
-    if (!entryDE) {
-      // 12036, 'Could not find expanded definition of ${element}. Inheritance calculations will be incomplete.', 'Double check shr.base.Entry is defined within the specifications.', 'errorNumber'
-      logger.warn({ element: 'shr.base.Entry' }, '12036');
-      entryFields = {
-        'shr.core': { 'Version': true },
-        'shr.base': {}
-      };
-      for (const name of ['ShrId', 'EntryId', 'EntryType', 'FocalSubject', 'SubjectIsThirdPartyFlag', 'Narrative',
-        'Informant', 'Author', 'AssociatedEncounter', 'OriginalCreationDate', 'LastUpdateDate', 'Language']) {
-        entryFields['shr.base'][name] = true;
-      }
-    }
     for (const de of this._expanded.dataElements.all) {
       if (de.basedOn && de.basedOn.length) {
         const parents = [];
@@ -138,38 +124,6 @@ class Expander {
           }
           if (inheritance) {
             field.inheritance = inheritance;
-          }
-        }
-      }
-      if (de.isEntry) {
-        if (!entryDE) {
-          for (const field of de.fields) {
-            if (field instanceof models.TBD) {
-              // You can't track inheritance for a TBD field because there is no name associated with it.
-              continue;
-            }
-            if (entryFields[field.identifier.namespace] && entryFields[field.identifier.namespace][field.identifier.name]) {
-              // 12044, 'Could not find expanded definition of shr.base.Entry. Inheritance calculations for ${identifier1} will be incomplete.', 'Unknown', 'errorNumber'
-              logger.error({identifier1 : de.identifier.toString() }, '12044');
-              break;
-            }
-          }
-        } else {
-          for (const field of entryDE.fields) {
-            const i = de.fields.findIndex(item => {
-              return item instanceof models.IdentifiableValue && (item.identifier.equals(field.identifier) || item.effectiveIdentifier.equals(field.identifier));
-            });
-            if (i >= 0) {
-              if (!de.fields[i].inheritance) {
-                if (!field.equals(de.fields[i])) {
-                  de.fields[i].inheritance = models.OVERRIDDEN;
-                  de.fields[i].inheritedFrom = entryDE.identifier.clone();
-                } else {
-                  de.fields[i].inheritance = models.INHERITED;
-                  de.fields[i].inheritedFrom = entryDE.identifier.clone();
-                }
-              }
-            }
           }
         }
       }
@@ -933,7 +887,7 @@ class Expander {
       }
       // Populate the target constraints in case they are needed
       // TODO handle this in a more effective manner.
-      if(!value instanceof models.ChoiceValue) {
+      if(!(value instanceof models.ChoiceValue)) {
         targetConstraints = this.constraintTargetValue(value, constraint.path).constraints.map(c => {
           const clone = c.clone();
           clone.path.splice(0, 0, valID);
@@ -1255,8 +1209,8 @@ class Expander {
   }
 
   supportsFixedValueConstraint(identifier, constraint) {
-    if (identifier && constraint && 
-      (identifier.name === constraint.type || 
+    if (identifier && constraint &&
+      (identifier.name === constraint.type ||
       (constraintConversions[constraint.type] && constraintConversions[constraint.type].includes(identifier.name)))) {
       // reset constraint.type in case they are not equal, but identifier.name is allowed conversion
       constraint.type = identifier.name;

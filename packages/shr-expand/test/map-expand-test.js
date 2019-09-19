@@ -19,10 +19,6 @@ describe('#expandMap()', () => {
     // A core namespace and Coding data element needed by some tests
     _specs.namespaces.add(new models.Namespace('shr.core'));
     _specs.dataElements.add(new models.DataElement(id('shr.core', 'Coding'), false));
-    // A degenerate shr.base.Entry is needed to avoid warnings, which are considered illegal in this test.
-    _specs.namespaces.add(new models.Namespace('shr.base'));
-    _specs.dataElements.add(new models.DataElement(id('shr.base', 'Entry'), false)
-      .withField(new models.IdentifiableValue(id('shr.base', 'EntryId')).withMinMax(1,1)));
   });
 
   afterEach(function() {
@@ -111,12 +107,11 @@ describe('#expandMap()', () => {
     );
   });
 
-  it('should support mapping _Concept, _Entry, and _Value', () => {
+  it('should support mapping _Concept and _Value', () => {
     const a = new models.DataElement(id('shr.test', 'A'), true)
       .withValue(new models.IdentifiableValue(pid('string')).withMinMax(1, 1));
     const ma = new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
       .withFieldMappingRule([id('', '_Concept')], 'c')
-      .withFieldMappingRule([id('', '_Entry'), id('shr.base', 'EntryId')], 'e')
       .withFieldMappingRule([id('', '_Value')], 'v');
     add(a, ma);
 
@@ -127,7 +122,6 @@ describe('#expandMap()', () => {
     expect(eMa).to.eql(
       new models.ElementMapping(id('shr.test', 'A'), 'TEST', 'a')
         .withRule(new models.FieldMappingRule([id('', '_Concept')], 'c').withLastModifiedBy(id('shr.test', 'A')))
-        .withRule(new models.FieldMappingRule([id('', '_Entry'), id('shr.base', 'EntryId')], 'e').withLastModifiedBy(id('shr.test', 'A')))
         .withRule(new models.FieldMappingRule([pid('string')], 'v').withLastModifiedBy(id('shr.test', 'A')))
     );
   });
