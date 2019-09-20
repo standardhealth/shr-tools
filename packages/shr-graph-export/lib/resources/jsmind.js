@@ -6,12 +6,6 @@
  *   https://github.com/hizzgdev/jsmind/
  */
 
-const darkblue = 'rgb(86, 126, 188)';
-const lightblue = 'rgb(86, 126, 188)';
-const darkgray = 'rgb(120, 120, 120)';
-const lightgray = 'rgb(240, 240, 240)';
-const white = 'rgb(255, 255, 255)';
-
 ; (function ($w) {
     'use strict';
     // set 'jsMind' as the library name.
@@ -2183,23 +2177,11 @@ const white = 'rgb(255, 255, 255)';
             this.canvas_ctx.clearRect(0, 0, this.size.w, this.size.h);
         },
 
-        draw_line: function (pout, pin, offset, nodeIn=null) {
+        draw_line: function (pout, pin, offset) {
             var ctx = this.canvas_ctx;
             ctx.strokeStyle = this.opts.line_color;
             ctx.lineWidth = this.opts.line_width;
             ctx.lineCap = 'round';
-
-            ctx.setLineDash([]);
-
-            if (nodeIn != null && nodeIn.data.connection === 'property') {
-                ctx.strokeStyle = darkblue;
-                if (nodeIn.data.type === 'entry') {
-                    ctx.setLineDash([3, 5]);
-                }
-            } else if (nodeIn != null && nodeIn.data.connection === 'value') {
-                ctx.strokeStyle = darkblue;
-                ctx.setLineDash([15, 5, 5, 5]);
-            }
 
             this._bezier_to(ctx,
                 pin.x + offset.x,
@@ -2706,20 +2688,6 @@ const white = 'rgb(255, 255, 255)';
                 node_element.style.top = (_offset.y + p.y) + 'px';
                 node_element.style.display = '';
                 node_element.style.visibility = 'visible';
-                
-                // Styling for specific types of nodes
-                if (node.data.type === 'entry' || node.data.type === 'abstract') {
-                    node_element.style.backgroundColor = darkblue;
-                } else if (node.data.type === 'element' || node.data.type === 'group') {
-                    node_element.style.backgroundColor = lightgray;
-                    node_element.style.color = lightblue;
-                    node_element.style.border = `1px solid ${lightblue}`;
-                } else if (node.data.type === 'primitive') {
-                    node_element.style.backgroundColor = white;
-                    node_element.style.color = 'black';
-                }
-                node_element.style.boxShadow = '0px 0px';
-
                 if (!node.isroot && node.children.length > 0) {
                     expander_text = node.expanded ? '-' : '+';
                     p_expander = this.layout.get_expander_point(node);
@@ -2816,7 +2784,7 @@ const white = 'rgb(255, 255, 255)';
                 if (('visible' in node._data.layout) && !node._data.layout.visible) { continue; }
                 pin = this.layout.get_node_point_in(node);
                 pout = this.layout.get_node_point_out(node.parent);
-                this.graph.draw_line(pout, pin, _offset, node);
+                this.graph.draw_line(pout, pin, _offset);
             }
         },
     };

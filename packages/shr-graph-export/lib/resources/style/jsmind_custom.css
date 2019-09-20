@@ -1,0 +1,9 @@
+jmnode {
+    box-shadow: 0px 0px;
+}
+
+jmnode:hover {
+    box-shadow: 0px 0px;
+    background-color: blue !important;
+    color: white !important;
+}
