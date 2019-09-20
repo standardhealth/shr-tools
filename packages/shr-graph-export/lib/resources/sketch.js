@@ -110,6 +110,66 @@ function selectColors(type) {
     }
 }
 
+function showLines() {
+    this.clear_lines();
+    var nodes = this.jm.mind.nodes;
+    var node = null;
+    var pin = null;
+    var pout = null;
+    var _offset = this.get_view_offset();
+    for (var nodeid in nodes) {
+        node = nodes[nodeid];
+        if (!!node.isroot) { continue; }
+        if (('visible' in node._data.layout) && !node._data.layout.visible) { continue; }
+        pin = this.layout.get_node_point_in(node);
+        pout = this.layout.get_node_point_out(node.parent);
+        this.graph.draw_line(pout, pin, _offset, node);
+    }
+}
+
+function drawLine(pout, pin, offset, nodeIn) {
+    let ctx = this.canvas_ctx;
+    ctx.strokeStyle = this.opts.line_color;
+    ctx.lineWidth = this.opts.line_width;
+    ctx.lineCap = 'round';
+
+    // Set our desired line dashes here
+    if (nodeIn.data.connection === 'property') {
+        ctx.strokeStyle = darkblue;
+        if (nodeIn.data.type === 'entry') {
+            ctx.setLineDash([3, 5]);
+        }
+    } else if (nodeIn.data.connection === 'value') {
+        ctx.strokeStyle = darkblue;
+        ctx.setLineDash([15, 5, 5, 5]);
+    }
+
+    this._bezier_to(ctx,
+        pin.x + offset.x,
+        pin.y + offset.y,
+        pout.x + offset.x,
+        pout.y + offset.y);
+
+}
+
+function clickHandler(e) {
+    const element = e.target || e.srcElement;
+    const isExpander = jm.view.is_expander(element);
+    const nodeid = jm.view.get_binded_nodeid(element);
+    if (nodeid != null) {
+        if (isExpander) {
+            jm.toggle_node(nodeid);
+        } else {
+            const node = jm.get_node(nodeid);
+            if (node.isroot) {
+                const urlName = node.data.name.replace(/\./g, '-');
+                const url = `../StructureDefinition-${urlName}.html`;
+                window.parent.location.href = url;
+            }
+        }
+    }
+}
+
 // Utility functions to get a human readable name for a node.
 // This will get the string after the last '.' and insert a space in between:
 // - not a capital letter -- a capital letter
@@ -146,6 +206,10 @@ function setup() {
     // Overriding default handlers with our own
     jm.view.add_event(this, 'click', clickHandler);
 
+    // Override the line drawing function with our own
+    jm.view.graph.__proto__.draw_line = drawLine;
+    jm.view.__proto__.show_lines = showLines;
+
     let index = 0;
     const options = Object.assign({}, tree.map(e => e.name));
     const sel = createSelect();
@@ -171,22 +235,4 @@ function setup() {
 function render(index, jm, mindTree) {
     clear();
     jm.show(mindTree[index]);
-}
-
-function clickHandler(e) {
-    const element = e.target || e.srcElement;
-    const isExpander = jm.view.is_expander(element);
-    const nodeid = jm.view.get_binded_nodeid(element);
-    if (nodeid != null) {
-        if (isExpander) {
-            jm.toggle_node(nodeid);
-        } else {
-            const node = jm.get_node(nodeid);
-            if (node.isroot) {
-                const urlName = node.data.name.replace(/\./g, '-');
-                const url = `../StructureDefinition-${urlName}.html`;
-                window.parent.location.href = url;
-            }
-        }
-    }
 }
