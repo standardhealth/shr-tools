@@ -2,7 +2,7 @@ let nodeList = []; // Global array to contain all nodes in the tree (nodes will 
 let pathList = []; // Global array to contain all paths in the tree from the root node to a single terminal node
 
 const darkblue = 'rgb(86, 126, 188)';
-const lightblue = 'rgba(86, 126, 188)';
+const lightblue = 'rgb(86, 126, 188)';
 const darkgray = 'rgb(120, 120, 120)';
 const lightgray = 'rgb(240, 240, 240)';
 const white = 'rgb(255, 255, 255)';
@@ -36,6 +36,7 @@ function nodeToMind(node) {
             type: node.type,
             connection: node.connection,
             name: node.name,
+            description: node.description,
             'background-color': selectColors(node.type).backgroundColor,
             'foreground-color': selectColors(node.type).color
         };  
@@ -51,6 +52,7 @@ function nodeToMind(node) {
         type: node.type,
         connection: node.connection, 
         name: node.name,
+        description: node.description,
         'background-color': selectColors(node.type).backgroundColor,
         'foreground-color': selectColors(node.type).color
     };
@@ -93,6 +95,33 @@ function treeToMind(tree) {
         return mind;
     });
     return mindTree;
+}
+
+function addHoverText(jm) {
+    const jsmindInner = window.document.getElementsByClassName('jsmind-inner')[0];
+    const nodes = jsmindInner.getElementsByTagName('jmnodes')[0];
+
+    for (const nodeElement of nodes.childNodes) {
+        if (nodeElement.tagName === 'JMNODE') {
+            const nodeTitle = nodeElement.innerHTML;
+            const node = jm.get_node(nodeElement.getAttribute('nodeid'));
+            nodeElement.innerHTML = 
+            `
+                <div class="node-title">${nodeTitle}</div>
+            `
+            if (node.data.description) {
+                nodeElement.innerHTML += 
+                    `
+                    <div class="node-tooltip">
+                        <div class="node-description">
+                            <h5>Description</h5>
+                            <p>${node.data.description}</p>
+                        </div>
+                    </div>
+                    `
+            }
+        }
+    }
 }
 
 function selectColors(type) {
@@ -214,6 +243,7 @@ const fillTable = (tree, jm, mindTree) => {
 
 function render(index, jm, mindTree) {
     jm.show(mindTree[index]);
+    addHoverText(jm);
 }
 
 // --------------------------------------

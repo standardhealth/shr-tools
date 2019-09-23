@@ -57,7 +57,7 @@ class GraphExporter {
       }
     });
 
-    this._graph.push({ name: root.identifier.fqn, type, properties, values: [] });
+    this._graph.push({ name: root.identifier.fqn, type,  description: root.description, properties, values: [] });
   }
 
   collectMustSupportInfo(elements, constraints, properties) {
@@ -65,7 +65,7 @@ class GraphExporter {
     let node;
 
     for (const element of elements) {
-      node = { name: element.identifier.fqn, type: this.getType(element), properties: [], values: [] };
+      node = { name: element.identifier.fqn, type: this.getType(element), description: element.description, properties: [], values: [] };
       currentProperties.push(node);
       currentProperties = node.properties;
     }
@@ -80,7 +80,7 @@ class GraphExporter {
 
     const fieldElements = element.fields.map(f => this._specs.dataElements.findByIdentifier(f.identifier));
     node.properties = fieldElements.map(fieldElement => {
-      let newNode = { name: fieldElement.identifier.fqn, type: this.getType(fieldElement), properties: [], values: [] };
+      let newNode = { name: fieldElement.identifier.fqn, type: this.getType(fieldElement), description: fieldElement.description, properties: [], values: [] };
       if (!processed.includes(fieldElement.identifier.fqn) && (!['abstract', 'entry', 'primitive'].includes(newNode.type))) {
         this.collectOtherInfo(fieldElement, newNode, constraints, processed);
       }
@@ -92,7 +92,7 @@ class GraphExporter {
       const valueElement = this._specs.dataElements.findByIdentifier(value.effectiveIdentifier) || value;
       let newNode;
       if (!valueElement.effectiveIdentifier) { // is Element
-        newNode = { name: valueElement.identifier.fqn, type: this.getType(valueElement), properties: [], values: [] };
+        newNode = { name: valueElement.identifier.fqn, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
       } else { // is Value
         newNode = { name: valueElement.effectiveIdentifier.fqn, type: 'primitive', properties: [], values: [] }
       }
@@ -124,7 +124,7 @@ class GraphExporter {
       node.values = valueElements.map(valueElement => {
         let newNode;
         if (!valueElement.effectiveIdentifier) { // is Element
-          newNode = { name: valueElement.identifier.fqn, type: this.getType(valueElement), properties: [], values: [] };
+          newNode = { name: valueElement.identifier.fqn, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
         } else { // is Value
           newNode = { name: valueElement.effectiveIdentifier.fqn, type: 'primitive', properties: [], values: [] }
         }
