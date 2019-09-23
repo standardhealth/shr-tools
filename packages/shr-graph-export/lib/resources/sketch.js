@@ -158,9 +158,7 @@ function clickHandler(e) {
     const isExpander = jm.view.is_expander(element);
     const nodeid = jm.view.get_binded_nodeid(element);
     if (nodeid != null) {
-        if (isExpander) {
-            jm.toggle_node(nodeid);
-        } else {
+        if (!isExpander) {
             const node = jm.get_node(nodeid);
             if (node.isroot) {
                 const urlName = node.data.name.replace(/\./g, '-');
