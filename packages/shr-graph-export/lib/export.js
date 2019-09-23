@@ -37,6 +37,8 @@ class GraphExporter {
       this.collectRootInfo(element);
     }
 
+    this._graph.sort((a, b) => getHumanReadableName(a.name) > getHumanReadableName(b.name) ? 1 : -1);
+
     return this._graph;
   }
 
@@ -343,6 +345,24 @@ class GraphExporter {
     }
     mergedChild.constraints = constraints;
     return mergedChild;
+  }
+}
+
+// Utility functions to get a human readable name for a node.
+// This will get the string after the last '.' and insert a space in between:
+// - not a capital letter -- a capital letter
+// - a capital letter -- a capital letter follow by not a capital letter
+// - not a number -- a number
+const getHumanReadableName = (name) => {
+  return `${name.substr(name.lastIndexOf(".") + 1).replace(/(([^A-Z])([A-Z]))|(([A-Z])([A-Z][^A-Z]))|(([^0-9])([0-9]))/g, humanReadableReplacer).trim()}`;
+}
+const humanReadableReplacer = (match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset, string) => {
+  if (p1) {
+  return [p2, p3].join(' ');
+  } else if (p4) {
+  return [p5, p6].join(' ');
+  } else if (p7) {
+  return [p8, p9].join(' ');
   }
 }
 

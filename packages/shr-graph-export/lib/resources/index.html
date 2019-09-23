@@ -5,10 +5,17 @@
     <script src="jsmind.js"></script>
     <link type="text/css" rel="stylesheet" href="style/jsmind.css" />
     <link type="text/css" rel="stylesheet" href="style/jsmind_custom.css" />
+    <link type="text/css" rel="stylesheet" href="style/layout.css" />
     <script src="data/tree.js"></script>
-    <script src="sketch.js"></script>
   </head>
   <body>
-      <div id="jsmind_container"></div>
+    <div class="container">
+      <div id="entry_list" class="fixed"></div>
+      <div id="key" class="overlapped">
+        <img src="graph-viewer-key.png" alt="Graph Viewer Key" width="50%"/>
+      </div>
+      <div id="jsmind_container" class="flex-item"></div>
+    </div>
+    <script src="sketch.js"></script>
   </body>
 </html>

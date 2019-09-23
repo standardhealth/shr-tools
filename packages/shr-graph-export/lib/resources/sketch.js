@@ -1,6 +1,5 @@
 let nodeList = []; // Global array to contain all nodes in the tree (nodes will be mutated by reference throughout the code)
 let pathList = []; // Global array to contain all paths in the tree from the root node to a single terminal node
-let jm;
 
 const darkblue = 'rgb(86, 126, 188)';
 const lightblue = 'rgba(86, 126, 188)';
@@ -106,7 +105,7 @@ function selectColors(type) {
             return {backgroundColor: lightgray, color: lightblue};
         case 'primitive':
         default:
-            return {backgroundColor: white, color: black};
+            return {backgroundColor: white, color: darkgray};
     }
 }
 
@@ -132,6 +131,8 @@ function drawLine(pout, pin, offset, nodeIn) {
     ctx.strokeStyle = this.opts.line_color;
     ctx.lineWidth = this.opts.line_width;
     ctx.lineCap = 'round';
+
+    ctx.setLineDash([]);
 
     // Set our desired line dashes here
     if (nodeIn.data.connection === 'property') {
@@ -188,51 +189,58 @@ const humanReadableReplacer = (match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset
     }
 }
 
-function setup() {
+const fillTable = (tree, jm, mindTree) => {
+    let tableDiv = document.getElementById("entry_list");
+    let table = document.createElement('table');
+    let tableBody = document.createElement('tbody');
 
-    const mindTree = treeToMind(tree);
-    const jmOptions = {
-        container: 'jsmind_container',
-        editable: false,
-        theme: 'default',
-        default_event_handle: {
-            enable_mousedown_handle: false,
-            enable_click_handle: false,
-            enable_dblclick_handle: false
-        }
-    }
-    jm = new jsMind(jmOptions);
+    table.appendChild(tableBody);
 
-    // Overriding default handlers with our own
-    jm.view.add_event(this, 'click', clickHandler);
-
-    // Override the line drawing function with our own
-    jm.view.graph.__proto__.draw_line = drawLine;
-    jm.view.__proto__.show_lines = showLines;
-
-    let index = 0;
-    const options = Object.assign({}, tree.map(e => e.name));
-    const sel = createSelect();
-    sel.style('z-index', '999');
-    sel.position(10, 10);
-
-    let humanReadableOptionsMap = {};
-    for (const key of Object.values(options)) {
-        sel.option(getHumanReadableName(key));
-        humanReadableOptionsMap[getHumanReadableName(key)] = key;
-    }
-
-    sel.changed(() => {
-        index = Object.keys(options).find(key => {
-            return options[key] === humanReadableOptionsMap[sel.value()];
-        });
-        render(index, jm, mindTree);
+    const entryList = tree.map((e, index) => {
+        return { name: getHumanReadableName(e.name), index };
     });
 
-    render(index, jm, mindTree);
+    // let tr = document.createElement('tr');
+    // let td = document.createElement('td');
+    // let img = document.createElement('img');
+    // img.src = "graph-viewer-key.png";
+    // img.alt = "Graph Viewer Key";
+    // td.appendChild(img);
+    // tr.appendChild(td);
+    // tableBody.appendChild(tr);
+
+    for (const entry of entryList) {
+        let tr = document.createElement('tr');
+        let td = document.createElement('td');
+        td.appendChild(document.createTextNode(entry.name));
+        td.onclick = () => render(entry.index, jm, mindTree);
+        td.width = "200";
+        td.className = "select_button";
+        tr.appendChild(td);
+        tableBody.appendChild(tr);
+    }
+
+    tableDiv.appendChild(table);
 }
 
 function render(index, jm, mindTree) {
-    clear();
     jm.show(mindTree[index]);
 }
+
+// --------------------------------------
+
+const mindTree = treeToMind(tree);
+const jmOptions = {
+    container: 'jsmind_container',
+    editable: false,
+    theme: 'orange' 
+}
+const jm = new jsMind(jmOptions);
+// Overriding default handlers with our own
+jm.view.add_event(this, 'click', clickHandler);
+// Override the line drawing function with our own
+jm.view.graph.__proto__.draw_line = drawLine;
+jm.view.__proto__.show_lines = showLines;
+
+fillTable(tree, jm, mindTree); 
+render(0, jm, mindTree);
