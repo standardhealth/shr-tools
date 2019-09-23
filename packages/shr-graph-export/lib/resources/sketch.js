@@ -198,15 +198,6 @@ const fillTable = (tree, jm, mindTree) => {
         return { name: getHumanReadableName(e.name), index };
     });
 
-    // let tr = document.createElement('tr');
-    // let td = document.createElement('td');
-    // let img = document.createElement('img');
-    // img.src = "graph-viewer-key.png";
-    // img.alt = "Graph Viewer Key";
-    // td.appendChild(img);
-    // tr.appendChild(td);
-    // tableBody.appendChild(tr);
-
     for (const entry of entryList) {
         let tr = document.createElement('tr');
         let td = document.createElement('td');
