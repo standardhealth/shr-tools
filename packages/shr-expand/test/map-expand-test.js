@@ -434,7 +434,7 @@ function add(...things) {
 
 // Expands the current specs and stores results in _result
 function doExpand(...exporters) {
-  _result = expand(_specs, ...exporters);
+  _result = expand(_specs, {}, ...exporters);
 }
 
 function findExpanded(targetSpec, namespace, name) {

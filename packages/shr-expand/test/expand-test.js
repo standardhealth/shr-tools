@@ -3679,7 +3679,7 @@ function add(...dataElements) {
 
 // Expands the current specs and stores results in _result
 function doExpand(...exporters) {
-  _result = expand(_specs, ...exporters);
+  _result = expand(_specs, {}, ...exporters);
 
   /*********************************************************************************************************************
    * HORRIBLE, HORRIBLE, AWFUL, NO-GOOD, YOU-SHOULD-BE-ASHAMED-OF-YOURSELF HACK!
@@ -3702,7 +3702,7 @@ function doExpand(...exporters) {
 }
 
 function doExpandWithConstraintHistory(...exporters) {
-  _result = expand(_specs, ...exporters);
+  _result = expand(_specs, {}, ...exporters);
 }
 
 function findExpanded(namespace, name) {

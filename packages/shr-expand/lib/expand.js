@@ -8,8 +8,8 @@ function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
 
-function expand(specifications, ...exporters) {
-  const expander = new Expander(specifications, ...exporters);
+function expand(specifications, configuration, ...exporters) {
+  const expander = new Expander(specifications, configuration, ...exporters);
   return expander.expand();
 }
 
@@ -24,8 +24,9 @@ const constraintConversions = {
 };
 
 class Expander {
-  constructor(specs, ...exporters) {
+  constructor(specs, configuration, ...exporters) {
     this._unexpanded = specs;
+    this._configuration = configuration;
     this._expanded = new models.Specifications();
     this._exporterMap = new Map();
     for (const exp of exporters) {
@@ -1480,7 +1481,7 @@ class Expander {
           } else if (typeof map.targetItem === 'undefined') {
             map.targetItem = basedOnMap.targetItem;
           } else if (map.targetItem !== basedOnMap.targetItem) {
-            if (! this._exporterMap.get(target).isTargetBasedOn(map.targetItem, basedOnMap.targetItem, target)) {
+            if (! this._exporterMap.get(target).isTargetBasedOn(map.targetItem, basedOnMap.targetItem, target, this._configuration)) {
               // 02001, 'Potentially mismatched targets: ${class} maps to ${item} but based on class (${baseClass}) maps to ${baseItem}  and ${item} is not based on ${baseItem} in ${class}. ', 'You're overwriting an inherited mapping. This is not necessarily an issue  but is definitely something to be cautious of.', 'errorNumber'
               logger.debug({
                 class: map.identifier.fqn,
