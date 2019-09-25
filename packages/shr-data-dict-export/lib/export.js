@@ -24,7 +24,7 @@ const urlsToNames = {
   'http://www.nationsonline.org/oneworld/country_code_list': 'CC',
   'https://www.ncbi.nlm.nih.gov/refseq': 'NCBI Reference Sequence Database',
   'http://ncimeta.nci.nih.gov': 'NCI Metathesaurus',
-  'http://uts.nlm.nih.gov/metathesaurus': 'NCI Metatheasurus',
+  'http://uts.nlm.nih.gov/metathesaurus': 'NCI Metathesaurus',
   'https://ncit.nci.nih.gov': 'NCI Thesaurus',
   'https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus': 'NCI Thesaurus',
   'http://www.nlm.nih.gov/research/umls/rxnorm': 'RxNorm',
@@ -125,7 +125,7 @@ function getUnit(de, path, specs, projectURL) {
   let constraint;
   const constraints = value.constraintsFilter.constraints;
   if (constraints && constraints.length > 0) {
-    constraint = constraints.find(c => !c.onValue && c.path.some(e => e.equals(new Identifier('shr.core', 'Units'))));
+    constraint = constraints.find(c => !c.onValue && c.path.some(e => e.equals(new Identifier('obf.datatype', 'Units'))));
   }
   if (!constraint) {
     // It may be on the value...
@@ -160,7 +160,7 @@ function getConstraintOnValue(value, dataElements, useCase) {
           return newVsConstraints.find(c => !c.onValue && c.path.length === 0);
         case 'unit':
           const newConstraints = newValue.constraintsFilter.constraints;
-          return newConstraints.find(c => !c.onValue && c.path.some(e => e.equals('shr.core', 'Units')));
+          return newConstraints.find(c => !c.onValue && c.path.some(e => e.equals('obf.datatype', 'Units')));
         default:
           break;
       }
