@@ -53,7 +53,8 @@ class Constraints {
       targetTop: targetTop,
       back: back,
       front: front,
-      path: path
+      path: path,
+      lastMod: lastMod
     };
 
     // If source is an element, add hyperlink
@@ -148,7 +149,7 @@ class Constraints {
     const oldTypeConstraint = this.constraints.find(typeCon => {
       return typeCon.name == 'DataType' && typeCon.path == subpath;
     });
-    if (this.element.fqn === constraint.lastModifiedBy.fqn && oldTypeConstraint) {
+    if (oldTypeConstraint && this.isConstraintNewer(constraint, oldTypeConstraint)) {
       const name = 'DataType';
       const value = constraintName;
       const lastMod = constraint.lastModifiedBy.fqn;
@@ -166,6 +167,12 @@ class Constraints {
       const tConstraint = this.newConstraint(name, value, subpath, lastMod, href);
       this.constraints.push(tConstraint);
     }
+  }
+
+  isConstraintNewer(newConstraint, oldConstraint) {
+    const hierarchyFqns = this.element.hierarchy.map(element => element.fqn);
+    return (this.element.fqn === newConstraint.lastModifiedBy.fqn) ||
+            hierarchyFqns.indexOf(newConstraint.lastModifiedBy.fqn) > hierarchyFqns.indexOf(oldConstraint.lastMod);
   }
 
   // Handles fixed value constraints and boolean constraints
@@ -216,9 +223,10 @@ class Constraints {
     // So first look in the constraintHistory for card constraint on this element
     if (this.field.constraintHistory && this.field.constraintHistory.card) {
       const modConstraints = this.field.constraintHistory.card.histories.map(c => c.constraint).filter(c => {
-        return c.lastModifiedBy.fqn === this.element.fqn && c.path.length == 0;
+        return c.path.length == 0;
       });
-      modConstraints.forEach(modConstraint => {
+      // the most recent card constraint on the field applies
+      modConstraints.slice(-1).forEach(modConstraint => {
         this.cardConstraint(modConstraint, this.buildFullPath(modConstraint));
       });
     }

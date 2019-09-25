@@ -186,7 +186,7 @@ class Elements {
       field.pConstraints = cs.constraints.filter(constraint => {
         return constraint.path == field.name;
       });
-      if (field.inheritance === 'overridden') {
+      if (inherited) {
         element.overridden = element.overridden.concat(cs.constraints);
       } else {
         element.overridden = element.overridden.concat(cs.constraints.filter(constraint => {
