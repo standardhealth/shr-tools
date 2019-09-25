@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const bunyan = require('bunyan');
 
-const { IdentifiableValue, ChoiceValue, TypeConstraint, CardConstraint, IncludesTypeConstraint, ConstraintsFilter } = require('shr-models');
+const { IdentifiableValue, ChoiceValue, TypeConstraint, CardConstraint, IncludesTypeConstraint, ValueSetConstraint, CodeConstraint, ConstraintsFilter } = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-graph-export'});
 var logger = rootLogger;
@@ -51,18 +51,18 @@ class GraphExporter {
 
     contentProfile.rules.forEach(rule => {
       if (rule.mustSupport) {
-        const pathElements = rule.path.map(id => this._specs.dataElements.findByIdentifier(id));
-        const constraints = this.getConstraints(root, rule.path, this._specs);
-        this.collectMustSupportInfo(pathElements, constraints, properties);
+        this.collectMustSupportInfo(root, rule.path, properties);
       }
     });
 
-    this._graph.push({ name: root.identifier.fqn, type,  description: root.description, properties, values: [] });
+    this._graph.push({ name: root.identifier.fqn, type, description: root.description, properties, values: [] });
   }
 
-  collectMustSupportInfo(elements, constraints, properties) {
+  collectMustSupportInfo(root, path, properties) {
     let currentProperties = properties;
     let node;
+
+    const elements = path.map(id => this._specs.dataElements.findByIdentifier(id));
 
     for (const element of elements) {
       node = { name: element.identifier.fqn, type: this.getType(element), description: element.description, properties: [], values: [] };
@@ -70,19 +70,38 @@ class GraphExporter {
       currentProperties = node.properties;
     }
 
-    if (!['abstract', 'entry', 'primitive'].includes(node.type)) {
-      this.collectOtherInfo(elements[elements.length-1], node, constraints);
+    if (!['abstract', 'entry'].includes(node.type)) {
+      if (node.type === 'primitive') {
+        this.collectPrimitiveInfo(node, valueSetConstraints, codeConstraints);
+      } else {
+        this.collectOtherInfo(root, path, elements[elements.length-1], node);
+      }
     }
   }
 
-  collectOtherInfo(element, node, constraints, processed = []) {
+  collectOtherInfo(root, path, element, node, processed = []) {
+    const constraints = this.getConstraints(root, path);
+    const typeConstraints = constraints.filter(c => c instanceof TypeConstraint);
+    const valueSetConstraints = constraints.filter(c => c instanceof ValueSetConstraint);
+    const codeConstraints = constraints.filter(c => c instanceof CodeConstraint);
+        
     processed.push(element.identifier.fqn);
 
-    const fieldElements = element.fields.map(f => this._specs.dataElements.findByIdentifier(f.identifier));
+    let fieldElements = element.fields.map(f => this._specs.dataElements.findByIdentifier(f.identifier));
+    fieldElements = fieldElements.filter(fieldElement => {
+      const newConstraints = this.getConstraints(root, path.concat(fieldElement.identifier));
+      const newCardConstraints = newConstraints.filter(c => c instanceof CardConstraint);
+      return !newCardConstraints.some(c => c.card.max === 0);
+    });
+
     node.properties = fieldElements.map(fieldElement => {
       let newNode = { name: fieldElement.identifier.fqn, type: this.getType(fieldElement), description: fieldElement.description, properties: [], values: [] };
-      if (!processed.includes(fieldElement.identifier.fqn) && (!['abstract', 'entry', 'primitive'].includes(newNode.type))) {
-        this.collectOtherInfo(fieldElement, newNode, constraints, processed);
+      if (!processed.includes(fieldElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
+        if (newNode.type === 'primitive') {
+          this.collectPrimitiveInfo(newNode, valueSetConstraints, codeConstraints);
+        } else {
+          this.collectOtherInfo(root, path.concat(fieldElement.identifier), fieldElement, newNode, processed);
+        }
       }
       return newNode;
     });
@@ -97,11 +116,14 @@ class GraphExporter {
         newNode = { name: valueElement.effectiveIdentifier.fqn, type: 'primitive', properties: [], values: [] }
       }
       node.values.push(newNode);
-      if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry', 'primitive'].includes(newNode.type))) {
-        this.collectOtherInfo(valueElement, newNode, constraints, processed);
+      if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
+        if (newNode.type === 'primitive') {
+          this.collectPrimitiveInfo(newNode, valueSetConstraints, codeConstraints);
+        } else {
+          this.collectOtherInfo(root, path.concat(valueElement.identifier), valueElement, newNode, processed);
+        }
       }
     } else if (value && value.options) { // is ChoiceValue
-      const typeConstraints = constraints.filter(c => c instanceof TypeConstraint);
       const allValueElements = value.aggregateOptions.filter(opt => opt.effectiveIdentifier).map(opt => this._specs.dataElements.findByIdentifier(opt.effectiveIdentifier) || opt);
       let valueElements = allValueElements;
 
@@ -116,7 +138,6 @@ class GraphExporter {
       }
 
       // If we somehow accidentally filtered out all children, then revert
-      // TODO: See if there's a fix for an issue like this with substitute constraints
       if (valueElements.length === 0) {
         valueElements = allValueElements;
       }
@@ -128,14 +149,28 @@ class GraphExporter {
         } else { // is Value
           newNode = { name: valueElement.effectiveIdentifier.fqn, type: 'primitive', properties: [], values: [] }
         }
-        if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry', 'primitive'].includes(newNode.type))) {
-          this.collectOtherInfo(valueElement, newNode, constraints, processed);
+        if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
+          if (newNode.type === 'primitive') {
+            this.collectPrimitiveInfo(newNode, valueSetConstraints, codeConstraints);
+          } else {
+            this.collectOtherInfo(root, path.concat(valueElement.identifier), valueElement, newNode, processed);
+          }
         }
         return newNode;
       });
     }
 
     processed.pop();
+  }
+
+  collectPrimitiveInfo(node, valueSetConstraints, codeConstraints) {
+    let description = [];
+    if (valueSetConstraints.length > 0) description.push(`${valueSetConstraints[0].valueSet} (${valueSetConstraints[0].bindingStrength})`);
+    if (codeConstraints.length > 0) description.push(codeConstraints[0].code.display);
+
+    if (description.length > 0) {
+      node.description = description.join(' or ');
+    }
   }
   
   getType(element) {
@@ -167,23 +202,40 @@ class GraphExporter {
       } else {
         logger.error('Hybrid strategy requires config.implementationGuide.primarySelectionStrategy.primary to be an array');
       }
+    } else if (this._specs.contentProfiles.all.length > 0) {
+      const primary = [];
+      for (const cp of this._specs.contentProfiles.all) {
+        for (const cpr of cp.rules) {
+          // Process element as primaryProfile if it is in ContentProfile
+          if (cpr.primaryProfile) {
+            primary.push(cp.identifier.fqn);
+          }
+        }
+      }
+      if (primary.length > 0) {
+        return element && element.isEntry && (primary.indexOf(element.identifier.fqn) != -1);
+      }
     // If strategy is "entry" or default, set every entry as primary
     } else {
       return element.isEntry;
     }
-  
+ 
     return;
   }
 
-  getConstraints(de, path, specs) {
-    const value = this.findValueByPath(specs, path, de);
+  getConstraints(de, path) {
+    const value = this.findValueByPath(path, de);
     let constraints = value.constraintsFilter.constraints;
-    if (constraints && constraints.length === 0) {
-      // It may be on the value...
-      constraints = this.getConstraintOnValue(value, specs.dataElements);
+    const constraintsOnValue = this.getConstraintOnValue(value, this._specs.dataElements);
+
+    if (constraints) {
+      if (constraintsOnValue) constraints = constraints.concat(constraintsOnValue);
+      return constraints;
+    } else if (constraintsOnValue) {
+      return constraintsOnValue;
     }
 
-    return constraints || [];
+    return [];
   }
   
   getConstraintOnValue(value, dataElements) {
@@ -195,8 +247,7 @@ class GraphExporter {
       const valueDE = dataElements.findByIdentifier(valueId);
       if (valueDE.value) {
         const newValue = this.mergeConstraintsToChild(value.constraints, valueDE.value, true);
-        const newConstraints = newValue.constraintsFilter.constraints;
-        return newConstraints.find(c => !c.onValue && c.path.some(e => e.equals('shr.core', 'Units')));
+        return newValue.constraintsFilter.constraints;
       }
     }
     return;
@@ -214,7 +265,7 @@ class GraphExporter {
   
   // Given a path (identifier array) and a SHR data element definition, it will return the matching value at the tail
   // of the path with all constraints aggregrated onto it
-  findValueByPath(specs, path, def, valueOnly=false, parentConstraints=[]) {
+  findValueByPath(path, def, valueOnly=false, parentConstraints=[]) {
     if (path.length == 0) {
       return;
     }
@@ -253,21 +304,21 @@ class GraphExporter {
     }
   
     // We're not at the end of the path, so we must dig deeper
-    def = specs.dataElements.findByIdentifier(this.choiceFriendlyEffectiveIdentifier(value));
+    def = this._specs.dataElements.findByIdentifier(this.choiceFriendlyEffectiveIdentifier(value));
     if (def === undefined) {
       return; // invalid path
     }
   
     // First see if we can continue the path by traversing the value
     if (def.value !== undefined) {
-      const subValue = this.findValueByPath(specs, path.slice(1), def, true, value.constraints);
+      const subValue = this.findValueByPath(path.slice(1), def, true, value.constraints);
       if (subValue !== undefined) {
         return this.mergeConstraintsToChild(value.constraints, subValue, true);
       }
     }
   
     // Still haven't found it, so traverse the rest
-    const subValue = this.findValueByPath(specs, path.slice(1), def, false, value.constraints);
+    const subValue = this.findValueByPath(path.slice(1), def, false, value.constraints);
     if (subValue !== undefined) {
       return subValue;
     }
