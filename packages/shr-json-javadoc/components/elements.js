@@ -114,13 +114,20 @@ class Elements {
     if (value === undefined) {
       return;
     } else if (value.constructor.name === 'ChoiceValue') {
+      let forcedMin = 0;
+      if(value.options.length == 1) {
+        // exactly one option isn't much of a choice
+        forcedMin = 1;
+      }
       value.options.forEach((option, index) => {
-        const card = option.card;
-        option.card = undefined;
+        if(!option.card) {
+          option.card = {};
+        }
+        option.card.min = forcedMin;
+        option.card.max = 1;
         this.addToUsedBy(option.identifier.fqn, element);
         const optionValue = this.valueConstraints(element, option, `Value (Choice ${index+1})`);
         element.pValue.push(optionValue);
-        option.card = card;
       });
     } else {
       this.addToUsedBy(value.identifier.fqn, element);
