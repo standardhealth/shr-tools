@@ -1141,6 +1141,47 @@ class TypeConstraint extends Constraint {
   }
 }
 
+class SubsetConstraint extends Constraint {
+  constructor(subsetList, path, onValue=false) {
+    super(path);
+    this._subsetList = subsetList;
+    this._onValue = onValue;
+  }
+
+  get onValue() { return this._onValue; }
+  set onValue(onValue) {
+    this._onValue = onValue;
+  }
+
+  // withOnValue is a convenience function for chaining
+  withOnValue(onValue) {
+    this.onValue = onValue;
+    return this;
+  }
+
+  get subsetList() { return this._subsetList; }
+
+  clone() {
+    const newList = this._subsetList.map(c => c.clone());
+    const clone = new SubsetConstraint(newList);
+    clone.onValue = this.onValue;
+    this._clonePropertiesTo(clone);
+    return clone;
+  }
+
+  equals(other) {
+    return (other instanceof SubsetConstraint) &&
+        this._onValue === other.onValue &&
+        this._pathsAreEqual(other) &&
+        this._subsetList.length === other.subsetList.length &&
+        this._subsetList.every((s, i) => s.equals(other.subsetList[i]));
+  }
+
+  toString() {
+    return `SubsetConstraint (${this.subsetList}, on value: ${this.onValue}, on path:${this.path.map(p => p.name).join('.')})`;
+  }
+}
+
 class IncludesTypeConstraint extends Constraint {
 
   constructor(isA, card, path, onValue=false) {
@@ -1251,6 +1292,10 @@ class ConstraintsFilter {
 
   get type() {
     return new ConstraintsFilter(this._constraints.filter(c => c instanceof TypeConstraint));
+  }
+
+  get subset() {
+    return new ConstraintsFilter(this._constraints.filter(c => c instanceof SubsetConstraint));
   }
 
   get includesType() {
@@ -1405,6 +1450,7 @@ class ConstraintHistory {
     this._boolean = new ConstraintHistoryFilter();
     this._fixedValue = new ConstraintHistoryFilter();
     this._type = new ConstraintHistoryFilter();
+    this._subset = new ConstraintHistoryFilter();
     this._includesType = new ConstraintHistoryFilter();
     this._card = new ConstraintHistoryFilter();
   }
@@ -1415,6 +1461,7 @@ class ConstraintHistory {
   get boolean() { return this._boolean; }
   get fixedValue() { return this._fixedValue; }
   get type() { return this._type; }
+  get subset() { return this._subset; }
   get includesType() { return this._includesType; }
   get card() { return this._card; }
 
@@ -1436,6 +1483,8 @@ class ConstraintHistory {
       this._fixedValue.add(constraint, source, unique);
     } else if (constraint instanceof TypeConstraint) {
       this._type.add(constraint, source, unique);
+    } else if (constraint instanceof SubsetConstraint) {
+      this._subset.add(constraint, source, unique);
     } else if (constraint instanceof IncludesTypeConstraint) {
       this._includesType.add(constraint, source, unique);
     } else if (constraint instanceof CardConstraint) {
@@ -1449,6 +1498,7 @@ class ConstraintHistory {
     otherConstraintHistory.includesCode.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
     otherConstraintHistory.boolean.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
     otherConstraintHistory.type.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
+    otherConstraintHistory.subset.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
     otherConstraintHistory.includesType.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
     otherConstraintHistory.card.histories.forEach(c => this.add(c.constraint.clone(), c.source.clone(), unique));
   }
@@ -1460,6 +1510,7 @@ class ConstraintHistory {
     clone._includesCode = this._includesCode.clone();
     clone._boolean = this._boolean.clone();
     clone._type = this._type.clone();
+    clone._subset = this._subset.clone();
     clone._includesType = this._includesType.clone();
     clone._card = this._card.clone();
     return clone;
@@ -1471,6 +1522,7 @@ class ConstraintHistory {
       && this.includesCode.equals(other.includesCode)
       && this.boolean.equals(other.boolean)
       && this.type.equals(other.type)
+      && this.subset.equals(other.subset)
       && this.includesType.equals(other.includesType)
       && this.card.equals(other.card);
   }
@@ -1681,6 +1733,13 @@ class IdentifiableValue extends Value {
     for (const tch of typeConstraintsHistories) {
       idMap.set(tch.constraint.isA.fqn, tch.constraint.isA);
     }
+    // // Include subset constraints
+    const subsetConstraints = this.constraintsFilter.subset.constraints;
+    for (const subsetConstraint of subsetConstraints) {
+      for (const type of subsetConstraint.subsetList) {
+        idMap.set(type.fqn, type);
+      }
+    }
     // Then add any include type constraints if requested
     if (withIncludesTypeIdentifiers) {
       const includesTypeConstraints = this.constraintsFilter.own.includesType.constraints;
@@ -1728,6 +1787,9 @@ class ChoiceValue extends Value {
 
   // Each option in the choice must be a subclass of Value
   get options() { return this._options; }
+  set options(options) {
+    this._options = options;
+  } 
   get aggregateOptions() {
     const options = [];
     for (const opt of this._options) {
@@ -2428,4 +2490,4 @@ const PRIMITIVES = ['boolean', 'integer', 'decimal', 'unsignedInt', 'positiveInt
 const INHERITED = 'inherited';
 const OVERRIDDEN = 'overridden';
 
-module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, ContentProfileSpecifications, Namespace, DataElement, ContentProfile, ContentProfileRule, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, ConstraintHistory, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, FixedValueConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
+module.exports = {Specifications, NamespaceSpecifications, DataElementSpecifications, ContentProfileSpecifications, Namespace, DataElement, ContentProfile, ContentProfileRule, Concept, Identifier, PrimitiveIdentifier, Value, IdentifiableValue, ChoiceValue, IncompleteValue, TBD, ConstraintsFilter, ConstraintHistory, Cardinality, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, FixedValueConstraint, TypeConstraint, SubsetConstraint, IncludesTypeConstraint, CardConstraint, ValueSet, ValueSetIncludesCodeRule, ValueSetIncludesDescendentsRule, ValueSetExcludesDescendentsRule, ValueSetIncludesFromCodeSystemRule, ValueSetIncludesFromCodeRule, CodeSystem, ElementMapping, FieldMappingRule, CardinalityMappingRule, FixedValueMappingRule, Version, PRIMITIVE_NS, PRIMITIVES, VERSION, GRAMMAR_VERSION, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE, INHERITED, OVERRIDDEN, MODELS_INFO, sanityCheckModules};
