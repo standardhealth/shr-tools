@@ -573,6 +573,8 @@ class Expander {
         consolidateFn = this.consolidateCardConstraint;
       } else if (constraint instanceof models.TypeConstraint) {
         consolidateFn = this.consolidateTypeConstraint;
+      } else if (constraint instanceof models.SubsetConstraint) {
+        consolidateFn = this.consolidateSubsetConstraint;
       } else if (constraint instanceof models.IncludesTypeConstraint) {
         consolidateFn = this.consolidateIncludesTypeConstraint;
       } else if (constraint instanceof models.ValueSetConstraint) {
@@ -689,6 +691,52 @@ class Expander {
         return constraints;
       }
       // Remove the previous type constraint since this one supercedes it
+      constraints = constraints.filter(cst => cst !== previous);
+    }
+    constraints.push(constraint);
+    return constraints;
+  }
+
+  consolidateSubsetConstraint(element, value, constraint, previousConstraints) {
+    constraint = constraint.clone();
+    if (constraint.onValue) {
+      const targetVal = this.constraintTargetValue(value, constraint.path);
+      // If it's a choice, check if the constraint is the choice or a subtype of the choice
+      if (targetVal instanceof models.ChoiceValue) {
+        const optionIdentifiers = targetVal.aggregateOptions.map(opt => opt.identifier);
+        // Every type in subset must equal or be child of the original choices
+        const areValidOptions = constraint.subsetList.every(elem => {
+          return optionIdentifiers.some(optId => this.checkHasBaseType(elem, optId));
+        });
+        if (!areValidOptions) {
+          const targetLabel = this.constraintTargetLabel(value, constraint.path);
+          const types = constraint.subsetList.map(sub => sub.name);
+          //12012 , 'Cannot constrain type of ${name1} to ${type1}' , 'Make sure base types match', 'errorNumber'
+          logger.error({name1 : targetLabel, type1 : types}, '12012');
+          return previousConstraints;
+        }
+      }
+    }
+
+    const target = this.constraintTarget(value, constraint.path);
+
+    let constraints = previousConstraints;
+    const filtered = (new models.ConstraintsFilter(previousConstraints)).withPath(constraint.path).subset.constraints;
+    for (const previous of filtered) {
+      if (constraint.onValue != previous.onValue) {
+        continue;
+      }
+      // Check if the each element of the new subset has some base type in the previous subset
+      // Does allow elements in previous subset to serve as base type for multiple elements in new subset
+      const subsetContained = constraint.subsetList.every(tCurrent => {
+        return previous.subsetList.some(tPrevious => this.checkHasBaseType(tCurrent, tPrevious));   
+      });
+      if (!subsetContained) {
+        const types1 = previous.subsetList.map(sub => sub.name);
+        const types2 = constraint.subsetList.map(sub => sub.name);
+        //12015 , 'Cannot further constrain type of ${name1} from ${type1} to ${type2} The two elements aren't based on the same parent. You cannot constrain an element to one that is completely distinct.' , 'Unknown' , 'errorNumber'
+        logger.error({name1 : target.toString(), type1 : types1, type2 : types2},'12015' );
+      }
       constraints = constraints.filter(cst => cst !== previous);
     }
     constraints.push(constraint);

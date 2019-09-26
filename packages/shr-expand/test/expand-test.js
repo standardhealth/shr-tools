@@ -1486,6 +1486,119 @@ describe('#expand()', () => {
     expect(eSubX.fields).to.be.empty;
   });
 
+  // Valid Subset Constraints
+
+  it ('should allow subset constraints to narrow a choice to multiple options', function () {
+    let a = new models.DataElement(id('shr.test', 'A'), true);
+    let b = new models.DataElement(id('shr.test', 'B'), true);
+    let c = new models.DataElement(id('shr.test', 'C'), true);
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.ChoiceValue().withMinMax(0, 1)
+          .withOption(new models.IdentifiableValue(id('shr.test', 'A')))
+          .withOption(new models.IdentifiableValue(id('shr.test', 'B')))
+          .withOption(new models.IdentifiableValue(id('shr.test', 'C')))
+      );
+    let y = new models.DataElement(id('shr.test', 'Y'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+          .withConstraint(new models.SubsetConstraint([id('shr.test', 'B'), id('shr.test', 'C')]).withOnValue(true))
+      );
+    add(a, b, c, x, y);
+    
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const eY = findExpanded('shr.test', 'Y');
+    expect(eY.identifier).to.eql(id('shr.test', 'Y'));
+    expect(eY.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+        .withConstraint(new models.SubsetConstraint([id('shr.test', 'B'), id('shr.test', 'C')]).withOnValue(true).withLastModifiedBy(id('shr.test', 'Y')))
+    );
+    expect(eY.fields).to.be.empty;
+  });
+
+  it ('should allow subset constraints to narrow a choice on a field to multiple options', function() {
+    let a = new models.DataElement(id('shr.test', 'A'), true);
+    let b = new models.DataElement(id('shr.test', 'B'), true);
+    let c = new models.DataElement(id('shr.test', 'C'), true);
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.ChoiceValue().withMinMax(0, 1)
+          .withOption(new models.IdentifiableValue(id('shr.test', 'A')))
+          .withOption(new models.IdentifiableValue(id('shr.test', 'B')))
+          .withOption(new models.IdentifiableValue(id('shr.test', 'C')))
+      );
+    let y = new models.DataElement(id('shr.test', 'Y'), true)
+      .withField(
+        new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+          .withConstraint(new models.SubsetConstraint([id('shr.test', 'B'), id('shr.test', 'C')]).withOnValue(true))
+      );
+    add(a, b, c, x, y);
+    
+    doExpand();
+
+    expect(err.hasErrors()).to.be.false;
+    const eY = findExpanded('shr.test', 'Y');
+    expect(eY.identifier).to.eql(id('shr.test', 'Y'));
+    expect(eY.fields).to.eql([
+      new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+        .withConstraint(new models.SubsetConstraint([id('shr.test', 'B'), id('shr.test', 'C')]).withOnValue(true).withLastModifiedBy(id('shr.test', 'Y')))
+    ]);
+  });
+
+  it('should allow subset constraints to narrow a choice to primitive types to multiple options', function() {
+    let a = new models.DataElement(id('shr.test', 'A'), true);
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.ChoiceValue().withMinMax(0, 1)
+          .withOption(new models.IdentifiableValue(id('shr.test', 'A')))
+          .withOption(new models.IdentifiableValue(pid('string')))
+          .withOption(new models.IdentifiableValue(pid('integer')))
+      );
+    let y = new models.DataElement(id('shr.test', 'Y'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+          .withConstraint(new models.SubsetConstraint([pid('string'), pid('integer')]).withOnValue(true))
+      );
+    add(a, x, y);
+
+    doExpand();
+
+    expect(err.errors()).to.deep.equal([]);
+    const eY = findExpanded('shr.test', 'Y');
+    expect(eY.identifier).to.eql(id('shr.test', 'Y'));
+    expect(eY.value).to.eql(
+      new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+        .withConstraint(new models.SubsetConstraint([pid('string'), pid('integer')]).withOnValue(true).withLastModifiedBy(id('shr.test', 'Y')))
+    );
+    expect(eY.fields).to.be.empty;
+  });
+
+  // Invalid Subset Constraints
+  it('should report an error when constraining subset is not contained in original choices', function() {
+    let a = new models.DataElement(id('shr.test', 'A'), true);
+    let x = new models.DataElement(id('shr.test', 'X'), true)
+      .withValue(
+        new models.ChoiceValue().withMinMax(0, 1)
+          .withOption(new models.IdentifiableValue(id('shr.test', 'A')))
+          .withOption(new models.IdentifiableValue(pid('string')))
+          .withOption(new models.IdentifiableValue(pid('integer')))
+      );
+    let y = new models.DataElement(id('shr.test', 'Y'), true)
+      .withValue(
+        new models.IdentifiableValue(id('shr.test', 'X')).withMinMax(0, 1)
+          .withConstraint(new models.SubsetConstraint([pid('decimal'), pid('integer')]).withOnValue(true))
+      );
+    add(a, x, y);
+
+    doExpand();
+
+    expect(err.errors()).to.have.length(1);
+    expect(err.errors()[0].msg).to.eql('12012');
+    expect(err.errors()[0].name1).to.eql('X');
+  });
+
   // Valid Includes Type Constraints
 
   it('should keep valid includes type constraints on values', () => {
