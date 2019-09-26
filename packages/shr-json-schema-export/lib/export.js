@@ -3,7 +3,7 @@
 // Derived from export SHR specification content as a hierarchy in JSON format by Greg Quinn
 
 const bunyan = require('bunyan');
-const {Identifier, IdentifiableValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, INHERITED, OVERRIDDEN, BooleanConstraint, FixedValueConstraint, MODELS_INFO, PRIMITIVE_NS} = require('shr-models');
+const {Identifier, IdentifiableValue, ChoiceValue, TBD, IncompleteValue, ValueSetConstraint, IncludesCodeConstraint, IncludesTypeConstraint, CodeConstraint, CardConstraint, TypeConstraint, SubsetConstraint, INHERITED, OVERRIDDEN, BooleanConstraint, FixedValueConstraint, MODELS_INFO, PRIMITIVE_NS} = require('shr-models');
 const builtinSchema = require('./schemas/cimpl.builtin.schema.json');
 
 var rootLogger = bunyan.createLogger({name: 'shr-json-schema-export'});
@@ -571,7 +571,20 @@ function convertDefinition(valueDef, dataElementsSpecs, enclosingNamespace, base
               //18009, 'Internal error unexpected constraint target: ${target1} for constraint ${constraint1}'A , 'Unknown' , 'errorNumber'
               logger.error({target1 : constraintInfo.constraintTarget.toString(), constraint1 : constraintInfo.constraint.toString() },'18009' );
             }
-          } else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
+          } else if (constraintInfo.constraint instanceof SubsetConstraint) {
+            const anyOf = [];
+            for (const option of constraintInfo.constraint.subsetList) {
+              let schemaConstraint = null;
+              if (option.isPrimitive) {
+                schemaConstraint = makePrimitiveObject(option);
+              } else {
+                schemaConstraint = {$ref: makeRef(option, enclosingNamespace, baseSchemaURL)}
+              }
+              anyOf.push(schemaConstraint);
+            }
+            currentAllOf.push({ anyOf: anyOf });
+          }
+           else if (constraintInfo.constraint instanceof IncludesTypeConstraint) {
             if (!includesConstraints) {
               includesConstraints = {refs: [], types: [], min: 0, max: 0};
             }
