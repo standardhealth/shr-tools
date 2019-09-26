@@ -7,176 +7,184 @@ var SHRDataElementParserVisitor = require('./SHRDataElementParserVisitor').SHRDa
 var grammarFileName = "SHRDataElementParser.g4";
 
 var serializedATN = ["\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd",
-    "\3O\u01d3\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4",
+    "\3O\u01e5\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4",
     "\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t",
     "\20\4\21\t\21\4\22\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27",
     "\t\27\4\30\t\30\4\31\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4",
     "\36\t\36\4\37\t\37\4 \t \4!\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t",
     "\'\4(\t(\4)\t)\4*\t*\4+\t+\4,\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t",
     "\61\4\62\t\62\4\63\t\63\4\64\t\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t",
-    "8\49\t9\4:\t:\4;\t;\4<\t<\4=\t=\4>\t>\3\2\3\2\5\2\177\n\2\3\2\5\2\u0082",
-    "\n\2\3\2\5\2\u0085\n\2\3\2\5\2\u0088\n\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3",
-    "\3\3\3\4\3\4\3\4\3\4\7\4\u0096\n\4\f\4\16\4\u0099\13\4\3\5\6\5\u009c",
-    "\n\5\r\5\16\5\u009d\3\6\3\6\3\6\3\6\3\6\3\7\6\7\u00a6\n\7\r\7\16\7\u00a7",
-    "\3\b\3\b\3\b\3\b\3\b\3\t\7\t\u00b0\n\t\f\t\16\t\u00b3\13\t\3\n\3\n\3",
-    "\n\3\n\5\n\u00b9\n\n\3\13\3\13\5\13\u00bd\n\13\3\13\7\13\u00c0\n\13",
-    "\f\13\16\13\u00c3\13\13\3\f\3\f\3\f\3\r\3\r\5\r\u00ca\n\r\3\r\3\r\3",
-    "\16\3\16\3\16\3\17\3\17\5\17\u00d3\n\17\3\17\3\17\3\20\3\20\3\20\3\21",
-    "\3\21\5\21\u00dc\n\21\3\21\3\21\3\22\3\22\3\22\3\23\6\23\u00e4\n\23",
-    "\r\23\16\23\u00e5\3\24\3\24\3\24\5\24\u00eb\n\24\3\25\5\25\u00ee\n\25",
-    "\3\25\7\25\u00f1\n\25\f\25\16\25\u00f4\13\25\3\26\3\26\3\26\3\26\3\26",
-    "\7\26\u00fb\n\26\f\26\16\26\u00fe\13\26\3\27\3\27\3\27\3\27\5\27\u0104",
-    "\n\27\3\30\3\30\5\30\u0108\n\30\3\31\3\31\3\31\3\31\3\32\3\32\3\32\5",
-    "\32\u0111\n\32\3\33\3\33\3\33\5\33\u0116\n\33\3\34\3\34\3\34\5\34\u011b",
-    "\n\34\3\35\3\35\3\35\7\35\u0120\n\35\f\35\16\35\u0123\13\35\3\36\3\36",
-    "\3\36\3\37\3\37\3\37\3\37\3 \3 \3!\3!\3\"\3\"\3#\3#\3$\3$\5$\u0136\n",
-    "$\3%\3%\5%\u013a\n%\3&\3&\3&\5&\u013f\n&\3\'\3\'\5\'\u0143\n\'\3(\3",
-    "(\3)\3)\3)\5)\u014a\n)\3)\3)\3*\3*\3*\3*\5*\u0152\n*\3*\3*\5*\u0156",
-    "\n*\3+\3+\5+\u015a\n+\3,\3,\3,\5,\u015f\n,\3,\3,\3-\3-\3-\7-\u0166\n",
-    "-\f-\16-\u0169\13-\3.\3.\7.\u016d\n.\f.\16.\u0170\13.\3.\7.\u0173\n",
-    ".\f.\16.\u0176\13.\3/\3/\3/\3/\3/\3/\3/\3/\3/\3/\5/\u0182\n/\3\60\3",
-    "\60\3\60\3\60\3\60\3\60\5\60\u018a\n\60\3\61\3\61\3\61\3\62\3\62\3\62",
-    "\6\62\u0192\n\62\r\62\16\62\u0193\3\63\3\63\3\63\3\64\3\64\3\64\3\65",
-    "\3\65\5\65\u019e\n\65\3\65\3\65\3\66\3\66\5\66\u01a4\n\66\3\66\3\66",
-    "\3\66\5\66\u01a9\n\66\3\66\5\66\u01ac\n\66\3\67\3\67\3\67\3\67\5\67",
-    "\u01b2\n\67\38\38\38\39\39\69\u01b9\n9\r9\169\u01ba\3:\3:\3:\3:\3:\3",
-    ":\5:\u01c3\n:\3;\3;\3<\3<\3<\3<\3=\3=\5=\u01cd\n=\3>\3>\5>\u01d1\n>",
-    "\3>\2\2?\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\66",
-    "8:<>@BDFHJLNPRTVXZ\\^`bdfhjlnprtvxz\2\f\4\2..\60\61\4\2\37\37**\3\2",
-    "HI\4\2\r\r!!\3\2FH\3\2\23\26\3\2\33\34\4\2\31\31\37\37\3\2\64D\4\2%",
-    "%EE\u01dd\2|\3\2\2\2\4\u008b\3\2\2\2\6\u0091\3\2\2\2\b\u009b\3\2\2\2",
-    "\n\u009f\3\2\2\2\f\u00a5\3\2\2\2\16\u00a9\3\2\2\2\20\u00b1\3\2\2\2\22",
-    "\u00b8\3\2\2\2\24\u00ba\3\2\2\2\26\u00c4\3\2\2\2\30\u00c7\3\2\2\2\32",
-    "\u00cd\3\2\2\2\34\u00d0\3\2\2\2\36\u00d6\3\2\2\2 \u00d9\3\2\2\2\"\u00df",
-    "\3\2\2\2$\u00e3\3\2\2\2&\u00ea\3\2\2\2(\u00ed\3\2\2\2*\u00f5\3\2\2\2",
-    ",\u0103\3\2\2\2.\u0107\3\2\2\2\60\u0109\3\2\2\2\62\u0110\3\2\2\2\64",
-    "\u0112\3\2\2\2\66\u0117\3\2\2\28\u011c\3\2\2\2:\u0124\3\2\2\2<\u0127",
-    "\3\2\2\2>\u012b\3\2\2\2@\u012d\3\2\2\2B\u012f\3\2\2\2D\u0131\3\2\2\2",
-    "F\u0135\3\2\2\2H\u0137\3\2\2\2J\u013e\3\2\2\2L\u0142\3\2\2\2N\u0144",
-    "\3\2\2\2P\u0149\3\2\2\2R\u0151\3\2\2\2T\u0159\3\2\2\2V\u015b\3\2\2\2",
-    "X\u0162\3\2\2\2Z\u016a\3\2\2\2\\\u0181\3\2\2\2^\u0183\3\2\2\2`\u018b",
-    "\3\2\2\2b\u0191\3\2\2\2d\u0195\3\2\2\2f\u0198\3\2\2\2h\u019b\3\2\2\2",
-    "j\u01a1\3\2\2\2l\u01ad\3\2\2\2n\u01b3\3\2\2\2p\u01b8\3\2\2\2r\u01c2",
-    "\3\2\2\2t\u01c4\3\2\2\2v\u01c6\3\2\2\2x\u01ca\3\2\2\2z\u01ce\3\2\2\2",
-    "|~\5\4\3\2}\177\5:\36\2~}\3\2\2\2~\177\3\2\2\2\177\u0081\3\2\2\2\u0080",
-    "\u0082\5\6\4\2\u0081\u0080\3\2\2\2\u0081\u0082\3\2\2\2\u0082\u0084\3",
-    "\2\2\2\u0083\u0085\5\b\5\2\u0084\u0083\3\2\2\2\u0084\u0085\3\2\2\2\u0085",
-    "\u0087\3\2\2\2\u0086\u0088\5\f\7\2\u0087\u0086\3\2\2\2\u0087\u0088\3",
-    "\2\2\2\u0088\u0089\3\2\2\2\u0089\u008a\5\20\t\2\u008a\3\3\2\2\2\u008b",
-    "\u008c\7\3\2\2\u008c\u008d\7\4\2\2\u008d\u008e\5<\37\2\u008e\u008f\7",
-    "\5\2\2\u008f\u0090\5> \2\u0090\5\3\2\2\2\u0091\u0092\7\6\2\2\u0092\u0097",
-    "\5> \2\u0093\u0094\7$\2\2\u0094\u0096\5> \2\u0095\u0093\3\2\2\2\u0096",
-    "\u0099\3\2\2\2\u0097\u0095\3\2\2\2\u0097\u0098\3\2\2\2\u0098\7\3\2\2",
-    "\2\u0099\u0097\3\2\2\2\u009a\u009c\5\n\6\2\u009b\u009a\3\2\2\2\u009c",
-    "\u009d\3\2\2\2\u009d\u009b\3\2\2\2\u009d\u009e\3\2\2\2\u009e\t\3\2\2",
-    "\2\u009f\u00a0\7\7\2\2\u00a0\u00a1\7F\2\2\u00a1\u00a2\7#\2\2\u00a2\u00a3",
-    "\7.\2\2\u00a3\13\3\2\2\2\u00a4\u00a6\5\16\b\2\u00a5\u00a4\3\2\2\2\u00a6",
-    "\u00a7\3\2\2\2\u00a7\u00a5\3\2\2\2\u00a7\u00a8\3\2\2\2\u00a8\r\3\2\2",
-    "\2\u00a9\u00aa\7\b\2\2\u00aa\u00ab\7F\2\2\u00ab\u00ac\7#\2\2\u00ac\u00ad",
-    "\t\2\2\2\u00ad\17\3\2\2\2\u00ae\u00b0\5\22\n\2\u00af\u00ae\3\2\2\2\u00b0",
-    "\u00b3\3\2\2\2\u00b1\u00af\3\2\2\2\u00b1\u00b2\3\2\2\2\u00b2\21\3\2",
-    "\2\2\u00b3\u00b1\3\2\2\2\u00b4\u00b9\5\30\r\2\u00b5\u00b9\5\34\17\2",
-    "\u00b6\u00b9\5 \21\2\u00b7\u00b9\5\24\13\2\u00b8\u00b4\3\2\2\2\u00b8",
-    "\u00b5\3\2\2\2\u00b8\u00b6\3\2\2\2\u00b8\u00b7\3\2\2\2\u00b9\23\3\2",
-    "\2\2\u00ba\u00bc\5\26\f\2\u00bb\u00bd\5$\23\2\u00bc\u00bb\3\2\2\2\u00bc",
-    "\u00bd\3\2\2\2\u00bd\u00c1\3\2\2\2\u00be\u00c0\5.\30\2\u00bf\u00be\3",
-    "\2\2\2\u00c0\u00c3\3\2\2\2\u00c1\u00bf\3\2\2\2\u00c1\u00c2\3\2\2\2\u00c2",
-    "\25\3\2\2\2\u00c3\u00c1\3\2\2\2\u00c4\u00c5\7 \2\2\u00c5\u00c6\5B\"",
-    "\2\u00c6\27\3\2\2\2\u00c7\u00c9\5\32\16\2\u00c8\u00ca\5$\23\2\u00c9",
-    "\u00c8\3\2\2\2\u00c9\u00ca\3\2\2\2\u00ca\u00cb\3\2\2\2\u00cb\u00cc\5",
-    "(\25\2\u00cc\31\3\2\2\2\u00cd\u00ce\7\n\2\2\u00ce\u00cf\5B\"\2\u00cf",
-    "\33\3\2\2\2\u00d0\u00d2\5\36\20\2\u00d1\u00d3\5$\23\2\u00d2\u00d1\3",
-    "\2\2\2\u00d2\u00d3\3\2\2\2\u00d3\u00d4\3\2\2\2\u00d4\u00d5\5(\25\2\u00d5",
-    "\35\3\2\2\2\u00d6\u00d7\7\13\2\2\u00d7\u00d8\5B\"\2\u00d8\37\3\2\2\2",
-    "\u00d9\u00db\5\"\22\2\u00da\u00dc\5$\23\2\u00db\u00da\3\2\2\2\u00db",
-    "\u00dc\3\2\2\2\u00dc\u00dd\3\2\2\2\u00dd\u00de\5(\25\2\u00de!\3\2\2",
-    "\2\u00df\u00e0\7\t\2\2\u00e0\u00e1\5B\"\2\u00e1#\3\2\2\2\u00e2\u00e4",
-    "\5&\24\2\u00e3\u00e2\3\2\2\2\u00e4\u00e5\3\2\2\2\u00e5\u00e3\3\2\2\2",
-    "\u00e5\u00e6\3\2\2\2\u00e6%\3\2\2\2\u00e7\u00eb\5\64\33\2\u00e8\u00eb",
-    "\5\66\34\2\u00e9\u00eb\5:\36\2\u00ea\u00e7\3\2\2\2\u00ea\u00e8\3\2\2",
-    "\2\u00ea\u00e9\3\2\2\2\u00eb\'\3\2\2\2\u00ec\u00ee\5*\26\2\u00ed\u00ec",
-    "\3\2\2\2\u00ed\u00ee\3\2\2\2\u00ee\u00f2\3\2\2\2\u00ef\u00f1\5.\30\2",
-    "\u00f0\u00ef\3\2\2\2\u00f1\u00f4\3\2\2\2\u00f2\u00f0\3\2\2\2\u00f2\u00f3",
-    "\3\2\2\2\u00f3)\3\2\2\2\u00f4\u00f2\3\2\2\2\u00f5\u00f6\7\r\2\2\u00f6",
-    "\u00f7\t\3\2\2\u00f7\u00fc\5,\27\2\u00f8\u00f9\7\21\2\2\u00f9\u00fb",
-    "\5,\27\2\u00fa\u00f8\3\2\2\2\u00fb\u00fe\3\2\2\2\u00fc\u00fa\3\2\2\2",
-    "\u00fc\u00fd\3\2\2\2\u00fd+\3\2\2\2\u00fe\u00fc\3\2\2\2\u00ff\u0104",
-    "\5F$\2\u0100\u0104\5t;\2\u0101\u0104\5R*\2\u0102\u0104\5x=\2\u0103\u00ff",
-    "\3\2\2\2\u0103\u0100\3\2\2\2\u0103\u0101\3\2\2\2\u0103\u0102\3\2\2\2",
-    "\u0104-\3\2\2\2\u0105\u0108\5\60\31\2\u0106\u0108\5R*\2\u0107\u0105",
-    "\3\2\2\2\u0107\u0106\3\2\2\2\u0108/\3\2\2\2\u0109\u010a\7\20\2\2\u010a",
-    "\u010b\5\62\32\2\u010b\u010c\5v<\2\u010c\61\3\2\2\2\u010d\u0111\5@!",
-    "\2\u010e\u0111\5F$\2\u010f\u0111\5x=\2\u0110\u010d\3\2\2\2\u0110\u010e",
-    "\3\2\2\2\u0110\u010f\3\2\2\2\u0111\63\3\2\2\2\u0112\u0115\7\f\2\2\u0113",
-    "\u0116\5F$\2\u0114\u0116\5x=\2\u0115\u0113\3\2\2\2\u0115\u0114\3\2\2",
-    "\2\u0116\65\3\2\2\2\u0117\u011a\7\16\2\2\u0118\u011b\58\35\2\u0119\u011b",
-    "\5x=\2\u011a\u0118\3\2\2\2\u011a\u0119\3\2\2\2\u011b\67\3\2\2\2\u011c",
-    "\u0121\5J&\2\u011d\u011e\7$\2\2\u011e\u0120\5J&\2\u011f\u011d\3\2\2",
-    "\2\u0120\u0123\3\2\2\2\u0121\u011f\3\2\2\2\u0121\u0122\3\2\2\2\u0122",
-    "9\3\2\2\2\u0123\u0121\3\2\2\2\u0124\u0125\7\17\2\2\u0125\u0126\7K\2",
-    "\2\u0126;\3\2\2\2\u0127\u0128\7E\2\2\u0128\u0129\7\"\2\2\u0129\u012a",
-    "\7E\2\2\u012a=\3\2\2\2\u012b\u012c\t\4\2\2\u012c?\3\2\2\2\u012d\u012e",
-    "\t\5\2\2\u012eA\3\2\2\2\u012f\u0130\t\6\2\2\u0130C\3\2\2\2\u0131\u0132",
-    "\7J\2\2\u0132E\3\2\2\2\u0133\u0136\5B\"\2\u0134\u0136\5D#\2\u0135\u0133",
-    "\3\2\2\2\u0135\u0134\3\2\2\2\u0136G\3\2\2\2\u0137\u0139\7\62\2\2\u0138",
-    "\u013a\7K\2\2\u0139\u0138\3\2\2\2\u0139\u013a\3\2\2\2\u013aI\3\2\2\2",
-    "\u013b\u013c\7F\2\2\u013c\u013f\5H%\2\u013d\u013f\5z>\2\u013e\u013b",
-    "\3\2\2\2\u013e\u013d\3\2\2\2\u013fK\3\2\2\2\u0140\u0143\5J&\2\u0141",
-    "\u0143\5H%\2\u0142\u0140\3\2\2\2\u0142\u0141\3\2\2\2\u0143M\3\2\2\2",
-    "\u0144\u0145\t\7\2\2\u0145O\3\2\2\2\u0146\u014a\5F$\2\u0147\u014a\5",
-    "t;\2\u0148\u014a\5x=\2\u0149\u0146\3\2\2\2\u0149\u0147\3\2\2\2\u0149",
-    "\u0148\3\2\2\2\u014a\u014b\3\2\2\2\u014b\u014c\5v<\2\u014cQ\3\2\2\2",
-    "\u014d\u0152\5@!\2\u014e\u0152\5F$\2\u014f\u0152\5Z.\2\u0150\u0152\5",
-    "t;\2\u0151\u014d\3\2\2\2\u0151\u014e\3\2\2\2\u0151\u014f\3\2\2\2\u0151",
-    "\u0150\3\2\2\2\u0152\u0155\3\2\2\2\u0153\u0156\5v<\2\u0154\u0156\5\\",
-    "/\2\u0155\u0153\3\2\2\2\u0155\u0154\3\2\2\2\u0155\u0156\3\2\2\2\u0156",
-    "S\3\2\2\2\u0157\u015a\5@!\2\u0158\u015a\5F$\2\u0159\u0157\3\2\2\2\u0159",
-    "\u0158\3\2\2\2\u015aU\3\2\2\2\u015b\u015e\7+\2\2\u015c\u015f\5B\"\2",
-    "\u015d\u015f\5t;\2\u015e\u015c\3\2\2\2\u015e\u015d\3\2\2\2\u015f\u0160",
-    "\3\2\2\2\u0160\u0161\7,\2\2\u0161W\3\2\2\2\u0162\u0163\7\"\2\2\u0163",
-    "\u0167\5B\"\2\u0164\u0166\5V,\2\u0165\u0164\3\2\2\2\u0166\u0169\3\2",
-    "\2\2\u0167\u0165\3\2\2\2\u0167\u0168\3\2\2\2\u0168Y\3\2\2\2\u0169\u0167",
-    "\3\2\2\2\u016a\u016e\5T+\2\u016b\u016d\5V,\2\u016c\u016b\3\2\2\2\u016d",
-    "\u0170\3\2\2\2\u016e\u016c\3\2\2\2\u016e\u016f\3\2\2\2\u016f\u0174\3",
-    "\2\2\2\u0170\u016e\3\2\2\2\u0171\u0173\5X-\2\u0172\u0171\3\2\2\2\u0173",
-    "\u0176\3\2\2\2\u0174\u0172\3\2\2\2\u0174\u0175\3\2\2\2\u0175[\3\2\2",
-    "\2\u0176\u0174\3\2\2\2\u0177\u0182\5^\60\2\u0178\u0182\5`\61\2\u0179",
-    "\u0182\5b\62\2\u017a\u0182\5d\63\2\u017b\u0182\5f\64\2\u017c\u0182\5",
-    "h\65\2\u017d\u0182\5j\66\2\u017e\u0182\5l\67\2\u017f\u0182\5p9\2\u0180",
-    "\u0182\5n8\2\u0181\u0177\3\2\2\2\u0181\u0178\3\2\2\2\u0181\u0179\3\2",
-    "\2\2\u0181\u017a\3\2\2\2\u0181\u017b\3\2\2\2\u0181\u017c\3\2\2\2\u0181",
-    "\u017d\3\2\2\2\u0181\u017e\3\2\2\2\u0181\u017f\3\2\2\2\u0181\u0180\3",
-    "\2\2\2\u0182]\3\2\2\2\u0183\u0184\7\27\2\2\u0184\u0189\5r:\2\u0185\u0186",
-    "\7&\2\2\u0186\u0187\5N(\2\u0187\u0188\7\'\2\2\u0188\u018a\3\2\2\2\u0189",
-    "\u0185\3\2\2\2\u0189\u018a\3\2\2\2\u018a_\3\2\2\2\u018b\u018c\7#\2\2",
-    "\u018c\u018d\5J&\2\u018da\3\2\2\2\u018e\u018f\7)\2\2\u018f\u0190\7#",
-    "\2\2\u0190\u0192\5J&\2\u0191\u018e\3\2\2\2\u0192\u0193\3\2\2\2\u0193",
-    "\u0191\3\2\2\2\u0193\u0194\3\2\2\2\u0194c\3\2\2\2\u0195\u0196\7#\2\2",
-    "\u0196\u0197\t\b\2\2\u0197e\3\2\2\2\u0198\u0199\7#\2\2\u0199\u019a\7",
-    "K\2\2\u019ag\3\2\2\2\u019b\u019d\7#\2\2\u019c\u019e\7-\2\2\u019d\u019c",
-    "\3\2\2\2\u019d\u019e\3\2\2\2\u019e\u019f\3\2\2\2\u019f\u01a0\7E\2\2",
-    "\u01a0i\3\2\2\2\u01a1\u01a3\7#\2\2\u01a2\u01a4\7-\2\2\u01a3\u01a2\3",
-    "\2\2\2\u01a3\u01a4\3\2\2\2\u01a4\u01a5\3\2\2\2\u01a5\u01a6\7E\2\2\u01a6",
-    "\u01a8\7\"\2\2\u01a7\u01a9\7E\2\2\u01a8\u01a7\3\2\2\2\u01a8\u01a9\3",
-    "\2\2\2\u01a9\u01ab\3\2\2\2\u01aa\u01ac\7\63\2\2\u01ab\u01aa\3\2\2\2",
-    "\u01ab\u01ac\3\2\2\2\u01ack\3\2\2\2\u01ad\u01b1\t\t\2\2\u01ae\u01b2",
-    "\5F$\2\u01af\u01b2\5t;\2\u01b0\u01b2\5x=\2\u01b1\u01ae\3\2\2\2\u01b1",
-    "\u01af\3\2\2\2\u01b1\u01b0\3\2\2\2\u01b2m\3\2\2\2\u01b3\u01b4\7#\2\2",
-    "\u01b4\u01b5\7.\2\2\u01b5o\3\2\2\2\u01b6\u01b7\7\32\2\2\u01b7\u01b9",
-    "\5P)\2\u01b8\u01b6\3\2\2\2\u01b9\u01ba\3\2\2\2\u01ba\u01b8\3\2\2\2\u01ba",
-    "\u01bb\3\2\2\2\u01bbq\3\2\2\2\u01bc\u01c3\7.\2\2\u01bd\u01c3\7/\2\2",
-    "\u01be\u01c3\7\60\2\2\u01bf\u01c3\7\61\2\2\u01c0\u01c3\5B\"\2\u01c1",
-    "\u01c3\5x=\2\u01c2\u01bc\3\2\2\2\u01c2\u01bd\3\2\2\2\u01c2\u01be\3\2",
-    "\2\2\u01c2\u01bf\3\2\2\2\u01c2\u01c0\3\2\2\2\u01c2\u01c1\3\2\2\2\u01c3",
-    "s\3\2\2\2\u01c4\u01c5\t\n\2\2\u01c5u\3\2\2\2\u01c6\u01c7\7E\2\2\u01c7",
-    "\u01c8\7(\2\2\u01c8\u01c9\t\13\2\2\u01c9w\3\2\2\2\u01ca\u01cc\7\35\2",
-    "\2\u01cb\u01cd\7K\2\2\u01cc\u01cb\3\2\2\2\u01cc\u01cd\3\2\2\2\u01cd",
-    "y\3\2\2\2\u01ce\u01d0\7\36\2\2\u01cf\u01d1\7K\2\2\u01d0\u01cf\3\2\2",
-    "\2\u01d0\u01d1\3\2\2\2\u01d1{\3\2\2\2\63~\u0081\u0084\u0087\u0097\u009d",
-    "\u00a7\u00b1\u00b8\u00bc\u00c1\u00c9\u00d2\u00db\u00e5\u00ea\u00ed\u00f2",
-    "\u00fc\u0103\u0107\u0110\u0115\u011a\u0121\u0135\u0139\u013e\u0142\u0149",
-    "\u0151\u0155\u0159\u015e\u0167\u016e\u0174\u0181\u0189\u0193\u019d\u01a3",
-    "\u01a8\u01ab\u01b1\u01ba\u01c2\u01cc\u01d0"].join("");
+    "8\49\t9\4:\t:\4;\t;\4<\t<\4=\t=\4>\t>\4?\t?\4@\t@\3\2\3\2\5\2\u0083",
+    "\n\2\3\2\5\2\u0086\n\2\3\2\5\2\u0089\n\2\3\2\5\2\u008c\n\2\3\2\3\2\3",
+    "\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\7\4\u009a\n\4\f\4\16\4\u009d",
+    "\13\4\3\5\6\5\u00a0\n\5\r\5\16\5\u00a1\3\6\3\6\3\6\3\6\3\6\3\7\6\7\u00aa",
+    "\n\7\r\7\16\7\u00ab\3\b\3\b\3\b\3\b\3\b\3\t\7\t\u00b4\n\t\f\t\16\t\u00b7",
+    "\13\t\3\n\3\n\3\n\3\n\5\n\u00bd\n\n\3\13\3\13\5\13\u00c1\n\13\3\13\7",
+    "\13\u00c4\n\13\f\13\16\13\u00c7\13\13\3\f\3\f\3\f\3\r\3\r\5\r\u00ce",
+    "\n\r\3\r\3\r\3\16\3\16\3\16\3\17\3\17\5\17\u00d7\n\17\3\17\3\17\3\20",
+    "\3\20\3\20\3\21\3\21\5\21\u00e0\n\21\3\21\3\21\3\22\3\22\3\22\3\23\6",
+    "\23\u00e8\n\23\r\23\16\23\u00e9\3\24\3\24\3\24\5\24\u00ef\n\24\3\25",
+    "\5\25\u00f2\n\25\3\25\7\25\u00f5\n\25\f\25\16\25\u00f8\13\25\3\26\3",
+    "\26\3\26\3\26\3\26\7\26\u00ff\n\26\f\26\16\26\u0102\13\26\3\27\3\27",
+    "\3\27\3\27\5\27\u0108\n\27\3\30\3\30\5\30\u010c\n\30\3\31\3\31\3\31",
+    "\3\31\3\32\3\32\3\32\5\32\u0115\n\32\3\33\3\33\3\33\5\33\u011a\n\33",
+    "\3\34\3\34\3\34\5\34\u011f\n\34\3\35\3\35\3\35\7\35\u0124\n\35\f\35",
+    "\16\35\u0127\13\35\3\36\3\36\3\36\3\37\3\37\3\37\3\37\3 \3 \3!\3!\3",
+    "\"\3\"\3#\3#\3$\3$\5$\u013a\n$\3%\3%\5%\u013e\n%\3&\3&\3&\5&\u0143\n",
+    "&\3\'\3\'\5\'\u0147\n\'\3(\3(\3)\3)\3)\5)\u014e\n)\3)\3)\3*\3*\3*\5",
+    "*\u0155\n*\3+\3+\3+\3+\5+\u015b\n+\3+\3+\5+\u015f\n+\3,\3,\5,\u0163",
+    "\n,\3-\3-\3-\5-\u0168\n-\3-\3-\3.\3.\3.\7.\u016f\n.\f.\16.\u0172\13",
+    ".\3/\3/\7/\u0176\n/\f/\16/\u0179\13/\3/\7/\u017c\n/\f/\16/\u017f\13",
+    "/\3\60\3\60\3\60\3\60\3\60\3\60\3\60\3\60\3\60\3\60\3\60\5\60\u018c",
+    "\n\60\3\61\3\61\3\61\3\61\3\61\3\61\5\61\u0194\n\61\3\62\3\62\3\62\3",
+    "\63\3\63\3\63\6\63\u019c\n\63\r\63\16\63\u019d\3\64\3\64\3\64\3\65\3",
+    "\65\3\65\3\66\3\66\5\66\u01a8\n\66\3\66\3\66\3\67\3\67\5\67\u01ae\n",
+    "\67\3\67\3\67\3\67\5\67\u01b3\n\67\3\67\5\67\u01b6\n\67\38\38\38\38",
+    "\58\u01bc\n8\39\39\39\39\69\u01c2\n9\r9\169\u01c3\3:\3:\3:\3;\3;\6;",
+    "\u01cb\n;\r;\16;\u01cc\3<\3<\3<\3<\3<\3<\5<\u01d5\n<\3=\3=\3>\3>\3>",
+    "\3>\3?\3?\5?\u01df\n?\3@\3@\5@\u01e3\n@\3@\2\2A\2\4\6\b\n\f\16\20\22",
+    "\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhjl",
+    "nprtvxz|~\2\f\4\2..\60\61\4\2\37\37**\3\2HI\4\2\r\r!!\3\2FH\3\2\23\26",
+    "\3\2\33\34\4\2\31\31\37\37\3\2\64D\4\2%%EE\u01f1\2\u0080\3\2\2\2\4\u008f",
+    "\3\2\2\2\6\u0095\3\2\2\2\b\u009f\3\2\2\2\n\u00a3\3\2\2\2\f\u00a9\3\2",
+    "\2\2\16\u00ad\3\2\2\2\20\u00b5\3\2\2\2\22\u00bc\3\2\2\2\24\u00be\3\2",
+    "\2\2\26\u00c8\3\2\2\2\30\u00cb\3\2\2\2\32\u00d1\3\2\2\2\34\u00d4\3\2",
+    "\2\2\36\u00da\3\2\2\2 \u00dd\3\2\2\2\"\u00e3\3\2\2\2$\u00e7\3\2\2\2",
+    "&\u00ee\3\2\2\2(\u00f1\3\2\2\2*\u00f9\3\2\2\2,\u0107\3\2\2\2.\u010b",
+    "\3\2\2\2\60\u010d\3\2\2\2\62\u0114\3\2\2\2\64\u0116\3\2\2\2\66\u011b",
+    "\3\2\2\28\u0120\3\2\2\2:\u0128\3\2\2\2<\u012b\3\2\2\2>\u012f\3\2\2\2",
+    "@\u0131\3\2\2\2B\u0133\3\2\2\2D\u0135\3\2\2\2F\u0139\3\2\2\2H\u013b",
+    "\3\2\2\2J\u0142\3\2\2\2L\u0146\3\2\2\2N\u0148\3\2\2\2P\u014d\3\2\2\2",
+    "R\u0154\3\2\2\2T\u015a\3\2\2\2V\u0162\3\2\2\2X\u0164\3\2\2\2Z\u016b",
+    "\3\2\2\2\\\u0173\3\2\2\2^\u018b\3\2\2\2`\u018d\3\2\2\2b\u0195\3\2\2",
+    "\2d\u019b\3\2\2\2f\u019f\3\2\2\2h\u01a2\3\2\2\2j\u01a5\3\2\2\2l\u01ab",
+    "\3\2\2\2n\u01b7\3\2\2\2p\u01bd\3\2\2\2r\u01c5\3\2\2\2t\u01ca\3\2\2\2",
+    "v\u01d4\3\2\2\2x\u01d6\3\2\2\2z\u01d8\3\2\2\2|\u01dc\3\2\2\2~\u01e0",
+    "\3\2\2\2\u0080\u0082\5\4\3\2\u0081\u0083\5:\36\2\u0082\u0081\3\2\2\2",
+    "\u0082\u0083\3\2\2\2\u0083\u0085\3\2\2\2\u0084\u0086\5\6\4\2\u0085\u0084",
+    "\3\2\2\2\u0085\u0086\3\2\2\2\u0086\u0088\3\2\2\2\u0087\u0089\5\b\5\2",
+    "\u0088\u0087\3\2\2\2\u0088\u0089\3\2\2\2\u0089\u008b\3\2\2\2\u008a\u008c",
+    "\5\f\7\2\u008b\u008a\3\2\2\2\u008b\u008c\3\2\2\2\u008c\u008d\3\2\2\2",
+    "\u008d\u008e\5\20\t\2\u008e\3\3\2\2\2\u008f\u0090\7\3\2\2\u0090\u0091",
+    "\7\4\2\2\u0091\u0092\5<\37\2\u0092\u0093\7\5\2\2\u0093\u0094\5> \2\u0094",
+    "\5\3\2\2\2\u0095\u0096\7\6\2\2\u0096\u009b\5> \2\u0097\u0098\7$\2\2",
+    "\u0098\u009a\5> \2\u0099\u0097\3\2\2\2\u009a\u009d\3\2\2\2\u009b\u0099",
+    "\3\2\2\2\u009b\u009c\3\2\2\2\u009c\7\3\2\2\2\u009d\u009b\3\2\2\2\u009e",
+    "\u00a0\5\n\6\2\u009f\u009e\3\2\2\2\u00a0\u00a1\3\2\2\2\u00a1\u009f\3",
+    "\2\2\2\u00a1\u00a2\3\2\2\2\u00a2\t\3\2\2\2\u00a3\u00a4\7\7\2\2\u00a4",
+    "\u00a5\7F\2\2\u00a5\u00a6\7#\2\2\u00a6\u00a7\7.\2\2\u00a7\13\3\2\2\2",
+    "\u00a8\u00aa\5\16\b\2\u00a9\u00a8\3\2\2\2\u00aa\u00ab\3\2\2\2\u00ab",
+    "\u00a9\3\2\2\2\u00ab\u00ac\3\2\2\2\u00ac\r\3\2\2\2\u00ad\u00ae\7\b\2",
+    "\2\u00ae\u00af\7F\2\2\u00af\u00b0\7#\2\2\u00b0\u00b1\t\2\2\2\u00b1\17",
+    "\3\2\2\2\u00b2\u00b4\5\22\n\2\u00b3\u00b2\3\2\2\2\u00b4\u00b7\3\2\2",
+    "\2\u00b5\u00b3\3\2\2\2\u00b5\u00b6\3\2\2\2\u00b6\21\3\2\2\2\u00b7\u00b5",
+    "\3\2\2\2\u00b8\u00bd\5\30\r\2\u00b9\u00bd\5\34\17\2\u00ba\u00bd\5 \21",
+    "\2\u00bb\u00bd\5\24\13\2\u00bc\u00b8\3\2\2\2\u00bc\u00b9\3\2\2\2\u00bc",
+    "\u00ba\3\2\2\2\u00bc\u00bb\3\2\2\2\u00bd\23\3\2\2\2\u00be\u00c0\5\26",
+    "\f\2\u00bf\u00c1\5$\23\2\u00c0\u00bf\3\2\2\2\u00c0\u00c1\3\2\2\2\u00c1",
+    "\u00c5\3\2\2\2\u00c2\u00c4\5.\30\2\u00c3\u00c2\3\2\2\2\u00c4\u00c7\3",
+    "\2\2\2\u00c5\u00c3\3\2\2\2\u00c5\u00c6\3\2\2\2\u00c6\25\3\2\2\2\u00c7",
+    "\u00c5\3\2\2\2\u00c8\u00c9\7 \2\2\u00c9\u00ca\5B\"\2\u00ca\27\3\2\2",
+    "\2\u00cb\u00cd\5\32\16\2\u00cc\u00ce\5$\23\2\u00cd\u00cc\3\2\2\2\u00cd",
+    "\u00ce\3\2\2\2\u00ce\u00cf\3\2\2\2\u00cf\u00d0\5(\25\2\u00d0\31\3\2",
+    "\2\2\u00d1\u00d2\7\n\2\2\u00d2\u00d3\5B\"\2\u00d3\33\3\2\2\2\u00d4\u00d6",
+    "\5\36\20\2\u00d5\u00d7\5$\23\2\u00d6\u00d5\3\2\2\2\u00d6\u00d7\3\2\2",
+    "\2\u00d7\u00d8\3\2\2\2\u00d8\u00d9\5(\25\2\u00d9\35\3\2\2\2\u00da\u00db",
+    "\7\13\2\2\u00db\u00dc\5B\"\2\u00dc\37\3\2\2\2\u00dd\u00df\5\"\22\2\u00de",
+    "\u00e0\5$\23\2\u00df\u00de\3\2\2\2\u00df\u00e0\3\2\2\2\u00e0\u00e1\3",
+    "\2\2\2\u00e1\u00e2\5(\25\2\u00e2!\3\2\2\2\u00e3\u00e4\7\t\2\2\u00e4",
+    "\u00e5\5B\"\2\u00e5#\3\2\2\2\u00e6\u00e8\5&\24\2\u00e7\u00e6\3\2\2\2",
+    "\u00e8\u00e9\3\2\2\2\u00e9\u00e7\3\2\2\2\u00e9\u00ea\3\2\2\2\u00ea%",
+    "\3\2\2\2\u00eb\u00ef\5\64\33\2\u00ec\u00ef\5\66\34\2\u00ed\u00ef\5:",
+    "\36\2\u00ee\u00eb\3\2\2\2\u00ee\u00ec\3\2\2\2\u00ee\u00ed\3\2\2\2\u00ef",
+    "\'\3\2\2\2\u00f0\u00f2\5*\26\2\u00f1\u00f0\3\2\2\2\u00f1\u00f2\3\2\2",
+    "\2\u00f2\u00f6\3\2\2\2\u00f3\u00f5\5.\30\2\u00f4\u00f3\3\2\2\2\u00f5",
+    "\u00f8\3\2\2\2\u00f6\u00f4\3\2\2\2\u00f6\u00f7\3\2\2\2\u00f7)\3\2\2",
+    "\2\u00f8\u00f6\3\2\2\2\u00f9\u00fa\7\r\2\2\u00fa\u00fb\t\3\2\2\u00fb",
+    "\u0100\5,\27\2\u00fc\u00fd\7\21\2\2\u00fd\u00ff\5,\27\2\u00fe\u00fc",
+    "\3\2\2\2\u00ff\u0102\3\2\2\2\u0100\u00fe\3\2\2\2\u0100\u0101\3\2\2\2",
+    "\u0101+\3\2\2\2\u0102\u0100\3\2\2\2\u0103\u0108\5F$\2\u0104\u0108\5",
+    "x=\2\u0105\u0108\5T+\2\u0106\u0108\5|?\2\u0107\u0103\3\2\2\2\u0107\u0104",
+    "\3\2\2\2\u0107\u0105\3\2\2\2\u0107\u0106\3\2\2\2\u0108-\3\2\2\2\u0109",
+    "\u010c\5\60\31\2\u010a\u010c\5T+\2\u010b\u0109\3\2\2\2\u010b\u010a\3",
+    "\2\2\2\u010c/\3\2\2\2\u010d\u010e\7\20\2\2\u010e\u010f\5\62\32\2\u010f",
+    "\u0110\5z>\2\u0110\61\3\2\2\2\u0111\u0115\5@!\2\u0112\u0115\5F$\2\u0113",
+    "\u0115\5|?\2\u0114\u0111\3\2\2\2\u0114\u0112\3\2\2\2\u0114\u0113\3\2",
+    "\2\2\u0115\63\3\2\2\2\u0116\u0119\7\f\2\2\u0117\u011a\5F$\2\u0118\u011a",
+    "\5|?\2\u0119\u0117\3\2\2\2\u0119\u0118\3\2\2\2\u011a\65\3\2\2\2\u011b",
+    "\u011e\7\16\2\2\u011c\u011f\58\35\2\u011d\u011f\5|?\2\u011e\u011c\3",
+    "\2\2\2\u011e\u011d\3\2\2\2\u011f\67\3\2\2\2\u0120\u0125\5J&\2\u0121",
+    "\u0122\7$\2\2\u0122\u0124\5J&\2\u0123\u0121\3\2\2\2\u0124\u0127\3\2",
+    "\2\2\u0125\u0123\3\2\2\2\u0125\u0126\3\2\2\2\u01269\3\2\2\2\u0127\u0125",
+    "\3\2\2\2\u0128\u0129\7\17\2\2\u0129\u012a\7K\2\2\u012a;\3\2\2\2\u012b",
+    "\u012c\7E\2\2\u012c\u012d\7\"\2\2\u012d\u012e\7E\2\2\u012e=\3\2\2\2",
+    "\u012f\u0130\t\4\2\2\u0130?\3\2\2\2\u0131\u0132\t\5\2\2\u0132A\3\2\2",
+    "\2\u0133\u0134\t\6\2\2\u0134C\3\2\2\2\u0135\u0136\7J\2\2\u0136E\3\2",
+    "\2\2\u0137\u013a\5B\"\2\u0138\u013a\5D#\2\u0139\u0137\3\2\2\2\u0139",
+    "\u0138\3\2\2\2\u013aG\3\2\2\2\u013b\u013d\7\62\2\2\u013c\u013e\7K\2",
+    "\2\u013d\u013c\3\2\2\2\u013d\u013e\3\2\2\2\u013eI\3\2\2\2\u013f\u0140",
+    "\7F\2\2\u0140\u0143\5H%\2\u0141\u0143\5~@\2\u0142\u013f\3\2\2\2\u0142",
+    "\u0141\3\2\2\2\u0143K\3\2\2\2\u0144\u0147\5J&\2\u0145\u0147\5H%\2\u0146",
+    "\u0144\3\2\2\2\u0146\u0145\3\2\2\2\u0147M\3\2\2\2\u0148\u0149\t\7\2",
+    "\2\u0149O\3\2\2\2\u014a\u014e\5F$\2\u014b\u014e\5x=\2\u014c\u014e\5",
+    "|?\2\u014d\u014a\3\2\2\2\u014d\u014b\3\2\2\2\u014d\u014c\3\2\2\2\u014e",
+    "\u014f\3\2\2\2\u014f\u0150\5z>\2\u0150Q\3\2\2\2\u0151\u0155\5F$\2\u0152",
+    "\u0155\5x=\2\u0153\u0155\5|?\2\u0154\u0151\3\2\2\2\u0154\u0152\3\2\2",
+    "\2\u0154\u0153\3\2\2\2\u0155S\3\2\2\2\u0156\u015b\5@!\2\u0157\u015b",
+    "\5F$\2\u0158\u015b\5\\/\2\u0159\u015b\5x=\2\u015a\u0156\3\2\2\2\u015a",
+    "\u0157\3\2\2\2\u015a\u0158\3\2\2\2\u015a\u0159\3\2\2\2\u015b\u015e\3",
+    "\2\2\2\u015c\u015f\5z>\2\u015d\u015f\5^\60\2\u015e\u015c\3\2\2\2\u015e",
+    "\u015d\3\2\2\2\u015e\u015f\3\2\2\2\u015fU\3\2\2\2\u0160\u0163\5@!\2",
+    "\u0161\u0163\5F$\2\u0162\u0160\3\2\2\2\u0162\u0161\3\2\2\2\u0163W\3",
+    "\2\2\2\u0164\u0167\7+\2\2\u0165\u0168\5B\"\2\u0166\u0168\5x=\2\u0167",
+    "\u0165\3\2\2\2\u0167\u0166\3\2\2\2\u0168\u0169\3\2\2\2\u0169\u016a\7",
+    ",\2\2\u016aY\3\2\2\2\u016b\u016c\7\"\2\2\u016c\u0170\5B\"\2\u016d\u016f",
+    "\5X-\2\u016e\u016d\3\2\2\2\u016f\u0172\3\2\2\2\u0170\u016e\3\2\2\2\u0170",
+    "\u0171\3\2\2\2\u0171[\3\2\2\2\u0172\u0170\3\2\2\2\u0173\u0177\5V,\2",
+    "\u0174\u0176\5X-\2\u0175\u0174\3\2\2\2\u0176\u0179\3\2\2\2\u0177\u0175",
+    "\3\2\2\2\u0177\u0178\3\2\2\2\u0178\u017d\3\2\2\2\u0179\u0177\3\2\2\2",
+    "\u017a\u017c\5Z.\2\u017b\u017a\3\2\2\2\u017c\u017f\3\2\2\2\u017d\u017b",
+    "\3\2\2\2\u017d\u017e\3\2\2\2\u017e]\3\2\2\2\u017f\u017d\3\2\2\2\u0180",
+    "\u018c\5`\61\2\u0181\u018c\5b\62\2\u0182\u018c\5d\63\2\u0183\u018c\5",
+    "f\64\2\u0184\u018c\5h\65\2\u0185\u018c\5j\66\2\u0186\u018c\5l\67\2\u0187",
+    "\u018c\5n8\2\u0188\u018c\5p9\2\u0189\u018c\5t;\2\u018a\u018c\5r:\2\u018b",
+    "\u0180\3\2\2\2\u018b\u0181\3\2\2\2\u018b\u0182\3\2\2\2\u018b\u0183\3",
+    "\2\2\2\u018b\u0184\3\2\2\2\u018b\u0185\3\2\2\2\u018b\u0186\3\2\2\2\u018b",
+    "\u0187\3\2\2\2\u018b\u0188\3\2\2\2\u018b\u0189\3\2\2\2\u018b\u018a\3",
+    "\2\2\2\u018c_\3\2\2\2\u018d\u018e\7\27\2\2\u018e\u0193\5v<\2\u018f\u0190",
+    "\7&\2\2\u0190\u0191\5N(\2\u0191\u0192\7\'\2\2\u0192\u0194\3\2\2\2\u0193",
+    "\u018f\3\2\2\2\u0193\u0194\3\2\2\2\u0194a\3\2\2\2\u0195\u0196\7#\2\2",
+    "\u0196\u0197\5J&\2\u0197c\3\2\2\2\u0198\u0199\7)\2\2\u0199\u019a\7#",
+    "\2\2\u019a\u019c\5J&\2\u019b\u0198\3\2\2\2\u019c\u019d\3\2\2\2\u019d",
+    "\u019b\3\2\2\2\u019d\u019e\3\2\2\2\u019ee\3\2\2\2\u019f\u01a0\7#\2\2",
+    "\u01a0\u01a1\t\b\2\2\u01a1g\3\2\2\2\u01a2\u01a3\7#\2\2\u01a3\u01a4\7",
+    "K\2\2\u01a4i\3\2\2\2\u01a5\u01a7\7#\2\2\u01a6\u01a8\7-\2\2\u01a7\u01a6",
+    "\3\2\2\2\u01a7\u01a8\3\2\2\2\u01a8\u01a9\3\2\2\2\u01a9\u01aa\7E\2\2",
+    "\u01aak\3\2\2\2\u01ab\u01ad\7#\2\2\u01ac\u01ae\7-\2\2\u01ad\u01ac\3",
+    "\2\2\2\u01ad\u01ae\3\2\2\2\u01ae\u01af\3\2\2\2\u01af\u01b0\7E\2\2\u01b0",
+    "\u01b2\7\"\2\2\u01b1\u01b3\7E\2\2\u01b2\u01b1\3\2\2\2\u01b2\u01b3\3",
+    "\2\2\2\u01b3\u01b5\3\2\2\2\u01b4\u01b6\7\63\2\2\u01b5\u01b4\3\2\2\2",
+    "\u01b5\u01b6\3\2\2\2\u01b6m\3\2\2\2\u01b7\u01bb\t\t\2\2\u01b8\u01bc",
+    "\5F$\2\u01b9\u01bc\5x=\2\u01ba\u01bc\5|?\2\u01bb\u01b8\3\2\2\2\u01bb",
+    "\u01b9\3\2\2\2\u01bb\u01ba\3\2\2\2\u01bco\3\2\2\2\u01bd\u01be\7\37\2",
+    "\2\u01be\u01c1\5R*\2\u01bf\u01c0\7\21\2\2\u01c0\u01c2\5R*\2\u01c1\u01bf",
+    "\3\2\2\2\u01c2\u01c3\3\2\2\2\u01c3\u01c1\3\2\2\2\u01c3\u01c4\3\2\2\2",
+    "\u01c4q\3\2\2\2\u01c5\u01c6\7#\2\2\u01c6\u01c7\7.\2\2\u01c7s\3\2\2\2",
+    "\u01c8\u01c9\7\32\2\2\u01c9\u01cb\5P)\2\u01ca\u01c8\3\2\2\2\u01cb\u01cc",
+    "\3\2\2\2\u01cc\u01ca\3\2\2\2\u01cc\u01cd\3\2\2\2\u01cdu\3\2\2\2\u01ce",
+    "\u01d5\7.\2\2\u01cf\u01d5\7/\2\2\u01d0\u01d5\7\60\2\2\u01d1\u01d5\7",
+    "\61\2\2\u01d2\u01d5\5B\"\2\u01d3\u01d5\5|?\2\u01d4\u01ce\3\2\2\2\u01d4",
+    "\u01cf\3\2\2\2\u01d4\u01d0\3\2\2\2\u01d4\u01d1\3\2\2\2\u01d4\u01d2\3",
+    "\2\2\2\u01d4\u01d3\3\2\2\2\u01d5w\3\2\2\2\u01d6\u01d7\t\n\2\2\u01d7",
+    "y\3\2\2\2\u01d8\u01d9\7E\2\2\u01d9\u01da\7(\2\2\u01da\u01db\t\13\2\2",
+    "\u01db{\3\2\2\2\u01dc\u01de\7\35\2\2\u01dd\u01df\7K\2\2\u01de\u01dd",
+    "\3\2\2\2\u01de\u01df\3\2\2\2\u01df}\3\2\2\2\u01e0\u01e2\7\36\2\2\u01e1",
+    "\u01e3\7K\2\2\u01e2\u01e1\3\2\2\2\u01e2\u01e3\3\2\2\2\u01e3\177\3\2",
+    "\2\2\65\u0082\u0085\u0088\u008b\u009b\u00a1\u00ab\u00b5\u00bc\u00c0",
+    "\u00c5\u00cd\u00d6\u00df\u00e9\u00ee\u00f1\u00f6\u0100\u0107\u010b\u0114",
+    "\u0119\u011e\u0125\u0139\u013d\u0142\u0146\u014d\u0154\u015a\u015e\u0162",
+    "\u0167\u0170\u0177\u017d\u018b\u0193\u019d\u01a7\u01ad\u01b2\u01b5\u01bb",
+    "\u01c3\u01cc\u01d4\u01de\u01e2"].join("");
 
 
 var atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
@@ -229,15 +237,16 @@ var ruleNames =  [ "doc", "docHeader", "usesStatement", "pathDefs", "pathDef",
                    "conceptProp", "concepts", "descriptionProp", "version", 
                    "namespace", "specialWord", "simpleName", "fullyQualifiedName", 
                    "simpleOrFQName", "code", "fullyQualifiedCode", "codeOrFQCode", 
-                   "bindingStrength", "typeConstraint", "elementWithConstraint", 
-                   "elementBracketPathFirstPart", "elementBracketPathSecondPart", 
-                   "elementBracketPathThirdPart", "elementBracketPath", 
-                   "elementConstraint", "elementCodeVSConstraint", "elementCodeValueConstraint", 
-                   "elementIncludesCodeValueConstraint", "elementBooleanConstraint", 
-                   "elementStringConstraint", "elementIntegerConstraint", 
-                   "elementDecimalConstraint", "elementTypeConstraint", 
-                   "elementUrlConstraint", "elementIncludesTypeConstraint", 
-                   "valueset", "primitive", "count", "tbd", "tbdCode" ];
+                   "bindingStrength", "typeConstraint", "subsetConstraint", 
+                   "elementWithConstraint", "elementBracketPathFirstPart", 
+                   "elementBracketPathSecondPart", "elementBracketPathThirdPart", 
+                   "elementBracketPath", "elementConstraint", "elementCodeVSConstraint", 
+                   "elementCodeValueConstraint", "elementIncludesCodeValueConstraint", 
+                   "elementBooleanConstraint", "elementStringConstraint", 
+                   "elementIntegerConstraint", "elementDecimalConstraint", 
+                   "elementTypeConstraint", "elementSubsetConstraint", "elementUrlConstraint", 
+                   "elementIncludesTypeConstraint", "valueset", "primitive", 
+                   "count", "tbd", "tbdCode" ];
 
 function SHRDataElementParser (input) {
 	antlr4.Parser.call(this, input);
@@ -376,27 +385,29 @@ SHRDataElementParser.RULE_fullyQualifiedCode = 36;
 SHRDataElementParser.RULE_codeOrFQCode = 37;
 SHRDataElementParser.RULE_bindingStrength = 38;
 SHRDataElementParser.RULE_typeConstraint = 39;
-SHRDataElementParser.RULE_elementWithConstraint = 40;
-SHRDataElementParser.RULE_elementBracketPathFirstPart = 41;
-SHRDataElementParser.RULE_elementBracketPathSecondPart = 42;
-SHRDataElementParser.RULE_elementBracketPathThirdPart = 43;
-SHRDataElementParser.RULE_elementBracketPath = 44;
-SHRDataElementParser.RULE_elementConstraint = 45;
-SHRDataElementParser.RULE_elementCodeVSConstraint = 46;
-SHRDataElementParser.RULE_elementCodeValueConstraint = 47;
-SHRDataElementParser.RULE_elementIncludesCodeValueConstraint = 48;
-SHRDataElementParser.RULE_elementBooleanConstraint = 49;
-SHRDataElementParser.RULE_elementStringConstraint = 50;
-SHRDataElementParser.RULE_elementIntegerConstraint = 51;
-SHRDataElementParser.RULE_elementDecimalConstraint = 52;
-SHRDataElementParser.RULE_elementTypeConstraint = 53;
-SHRDataElementParser.RULE_elementUrlConstraint = 54;
-SHRDataElementParser.RULE_elementIncludesTypeConstraint = 55;
-SHRDataElementParser.RULE_valueset = 56;
-SHRDataElementParser.RULE_primitive = 57;
-SHRDataElementParser.RULE_count = 58;
-SHRDataElementParser.RULE_tbd = 59;
-SHRDataElementParser.RULE_tbdCode = 60;
+SHRDataElementParser.RULE_subsetConstraint = 40;
+SHRDataElementParser.RULE_elementWithConstraint = 41;
+SHRDataElementParser.RULE_elementBracketPathFirstPart = 42;
+SHRDataElementParser.RULE_elementBracketPathSecondPart = 43;
+SHRDataElementParser.RULE_elementBracketPathThirdPart = 44;
+SHRDataElementParser.RULE_elementBracketPath = 45;
+SHRDataElementParser.RULE_elementConstraint = 46;
+SHRDataElementParser.RULE_elementCodeVSConstraint = 47;
+SHRDataElementParser.RULE_elementCodeValueConstraint = 48;
+SHRDataElementParser.RULE_elementIncludesCodeValueConstraint = 49;
+SHRDataElementParser.RULE_elementBooleanConstraint = 50;
+SHRDataElementParser.RULE_elementStringConstraint = 51;
+SHRDataElementParser.RULE_elementIntegerConstraint = 52;
+SHRDataElementParser.RULE_elementDecimalConstraint = 53;
+SHRDataElementParser.RULE_elementTypeConstraint = 54;
+SHRDataElementParser.RULE_elementSubsetConstraint = 55;
+SHRDataElementParser.RULE_elementUrlConstraint = 56;
+SHRDataElementParser.RULE_elementIncludesTypeConstraint = 57;
+SHRDataElementParser.RULE_valueset = 58;
+SHRDataElementParser.RULE_primitive = 59;
+SHRDataElementParser.RULE_count = 60;
+SHRDataElementParser.RULE_tbd = 61;
+SHRDataElementParser.RULE_tbdCode = 62;
 
 function DocContext(parser, parent, invokingState) {
 	if(parent===undefined) {
@@ -470,37 +481,37 @@ SHRDataElementParser.prototype.doc = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 122;
+        this.state = 126;
         this.docHeader();
-        this.state = 124;
+        this.state = 128;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.KW_DESCRIPTION) {
-            this.state = 123;
+            this.state = 127;
             this.descriptionProp();
         }
 
-        this.state = 127;
+        this.state = 131;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.KW_USES) {
-            this.state = 126;
+            this.state = 130;
             this.usesStatement();
         }
 
-        this.state = 130;
+        this.state = 134;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.KW_PATH) {
-            this.state = 129;
+            this.state = 133;
             this.pathDefs();
         }
 
-        this.state = 133;
+        this.state = 137;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.KW_VOCABULARY) {
-            this.state = 132;
+            this.state = 136;
             this.vocabularyDefs();
         }
 
-        this.state = 135;
+        this.state = 139;
         this.dataDefs();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -583,15 +594,15 @@ SHRDataElementParser.prototype.docHeader = function() {
     this.enterRule(localctx, 2, SHRDataElementParser.RULE_docHeader);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 137;
-        this.match(SHRDataElementParser.KW_GRAMMAR);
-        this.state = 138;
-        this.match(SHRDataElementParser.KW_G_DATA_ELEMENT);
-        this.state = 139;
-        this.version();
-        this.state = 140;
-        this.match(SHRDataElementParser.KW_NAMESPACE);
         this.state = 141;
+        this.match(SHRDataElementParser.KW_GRAMMAR);
+        this.state = 142;
+        this.match(SHRDataElementParser.KW_G_DATA_ELEMENT);
+        this.state = 143;
+        this.version();
+        this.state = 144;
+        this.match(SHRDataElementParser.KW_NAMESPACE);
+        this.state = 145;
         this.namespace();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -682,19 +693,19 @@ SHRDataElementParser.prototype.usesStatement = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 143;
+        this.state = 147;
         this.match(SHRDataElementParser.KW_USES);
-        this.state = 144;
+        this.state = 148;
         this.namespace();
-        this.state = 149;
+        this.state = 153;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===SHRDataElementParser.COMMA) {
-            this.state = 145;
+            this.state = 149;
             this.match(SHRDataElementParser.COMMA);
-            this.state = 146;
+            this.state = 150;
             this.namespace();
-            this.state = 151;
+            this.state = 155;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -771,13 +782,13 @@ SHRDataElementParser.prototype.pathDefs = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 153; 
+        this.state = 157; 
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         do {
-            this.state = 152;
+            this.state = 156;
             this.pathDef();
-            this.state = 155; 
+            this.state = 159; 
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         } while(_la===SHRDataElementParser.KW_PATH);
@@ -858,13 +869,13 @@ SHRDataElementParser.prototype.pathDef = function() {
     this.enterRule(localctx, 8, SHRDataElementParser.RULE_pathDef);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 157;
+        this.state = 161;
         this.match(SHRDataElementParser.KW_PATH);
-        this.state = 158;
+        this.state = 162;
         this.match(SHRDataElementParser.ALL_CAPS);
-        this.state = 159;
+        this.state = 163;
         this.match(SHRDataElementParser.EQUAL);
-        this.state = 160;
+        this.state = 164;
         this.match(SHRDataElementParser.URL);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -939,13 +950,13 @@ SHRDataElementParser.prototype.vocabularyDefs = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 163; 
+        this.state = 167; 
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         do {
-            this.state = 162;
+            this.state = 166;
             this.vocabularyDef();
-            this.state = 165; 
+            this.state = 169; 
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         } while(_la===SHRDataElementParser.KW_VOCABULARY);
@@ -1035,13 +1046,13 @@ SHRDataElementParser.prototype.vocabularyDef = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 167;
+        this.state = 171;
         this.match(SHRDataElementParser.KW_VOCABULARY);
-        this.state = 168;
+        this.state = 172;
         this.match(SHRDataElementParser.ALL_CAPS);
-        this.state = 169;
+        this.state = 173;
         this.match(SHRDataElementParser.EQUAL);
-        this.state = 170;
+        this.state = 174;
         _la = this._input.LA(1);
         if(!(((((_la - 44)) & ~0x1f) == 0 && ((1 << (_la - 44)) & ((1 << (SHRDataElementParser.URL - 44)) | (1 << (SHRDataElementParser.URN_OID - 44)) | (1 << (SHRDataElementParser.URN - 44)))) !== 0))) {
         this._errHandler.recoverInline(this);
@@ -1122,13 +1133,13 @@ SHRDataElementParser.prototype.dataDefs = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 175;
+        this.state = 179;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRDataElementParser.KW_ABSTRACT) | (1 << SHRDataElementParser.KW_ELEMENT) | (1 << SHRDataElementParser.KW_ENTRY) | (1 << SHRDataElementParser.KW_GROUP))) !== 0)) {
-            this.state = 172;
+            this.state = 176;
             this.dataDef();
-            this.state = 177;
+            this.state = 181;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -1208,26 +1219,26 @@ SHRDataElementParser.prototype.dataDef = function() {
     var localctx = new DataDefContext(this, this._ctx, this.state);
     this.enterRule(localctx, 16, SHRDataElementParser.RULE_dataDef);
     try {
-        this.state = 182;
+        this.state = 186;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.KW_ELEMENT:
             this.enterOuterAlt(localctx, 1);
-            this.state = 178;
+            this.state = 182;
             this.elementDef();
             break;
         case SHRDataElementParser.KW_ENTRY:
             this.enterOuterAlt(localctx, 2);
-            this.state = 179;
+            this.state = 183;
             this.entryDef();
             break;
         case SHRDataElementParser.KW_ABSTRACT:
             this.enterOuterAlt(localctx, 3);
-            this.state = 180;
+            this.state = 184;
             this.abstractDef();
             break;
         case SHRDataElementParser.KW_GROUP:
             this.enterOuterAlt(localctx, 4);
-            this.state = 181;
+            this.state = 185;
             this.groupDef();
             break;
         default:
@@ -1314,22 +1325,22 @@ SHRDataElementParser.prototype.groupDef = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 184;
+        this.state = 188;
         this.groupHeader();
-        this.state = 186;
+        this.state = 190;
         _la = this._input.LA(1);
         if((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRDataElementParser.KW_PARENT) | (1 << SHRDataElementParser.KW_CONCEPT) | (1 << SHRDataElementParser.KW_DESCRIPTION))) !== 0)) {
-            this.state = 185;
+            this.state = 189;
             this.elementProps();
         }
 
-        this.state = 191;
+        this.state = 195;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRDataElementParser.KW_VALUE) | (1 << SHRDataElementParser.KW_PROPERTY) | (1 << SHRDataElementParser.KW_BAR_ENTRY))) !== 0) || ((((_la - 50)) & ~0x1f) == 0 && ((1 << (_la - 50)) & ((1 << (SHRDataElementParser.KW_BOOLEAN - 50)) | (1 << (SHRDataElementParser.KW_INTEGER - 50)) | (1 << (SHRDataElementParser.KW_STRING - 50)) | (1 << (SHRDataElementParser.KW_DECIMAL - 50)) | (1 << (SHRDataElementParser.KW_URI - 50)) | (1 << (SHRDataElementParser.KW_BASE64_BINARY - 50)) | (1 << (SHRDataElementParser.KW_INSTANT - 50)) | (1 << (SHRDataElementParser.KW_DATE - 50)) | (1 << (SHRDataElementParser.KW_DATE_TIME - 50)) | (1 << (SHRDataElementParser.KW_TIME - 50)) | (1 << (SHRDataElementParser.KW_CONCEPT_CODE - 50)) | (1 << (SHRDataElementParser.KW_OID - 50)) | (1 << (SHRDataElementParser.KW_ID - 50)) | (1 << (SHRDataElementParser.KW_MARKDOWN - 50)) | (1 << (SHRDataElementParser.KW_UNSIGNED_INT - 50)) | (1 << (SHRDataElementParser.KW_POSITIVE_INT - 50)) | (1 << (SHRDataElementParser.KW_XHTML - 50)) | (1 << (SHRDataElementParser.ALL_CAPS - 50)) | (1 << (SHRDataElementParser.UPPER_WORD - 50)) | (1 << (SHRDataElementParser.LOWER_WORD - 50)) | (1 << (SHRDataElementParser.DOT_SEPARATED_UW - 50)))) !== 0)) {
-            this.state = 188;
+            this.state = 192;
             this.field();
-            this.state = 193;
+            this.state = 197;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -1402,9 +1413,9 @@ SHRDataElementParser.prototype.groupHeader = function() {
     this.enterRule(localctx, 20, SHRDataElementParser.RULE_groupHeader);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 194;
+        this.state = 198;
         this.match(SHRDataElementParser.KW_GROUP);
-        this.state = 195;
+        this.state = 199;
         this.simpleName();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1480,16 +1491,16 @@ SHRDataElementParser.prototype.elementDef = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 197;
+        this.state = 201;
         this.elementHeader();
-        this.state = 199;
+        this.state = 203;
         _la = this._input.LA(1);
         if((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRDataElementParser.KW_PARENT) | (1 << SHRDataElementParser.KW_CONCEPT) | (1 << SHRDataElementParser.KW_DESCRIPTION))) !== 0)) {
-            this.state = 198;
+            this.state = 202;
             this.elementProps();
         }
 
-        this.state = 201;
+        this.state = 205;
         this.values();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1560,9 +1571,9 @@ SHRDataElementParser.prototype.elementHeader = function() {
     this.enterRule(localctx, 24, SHRDataElementParser.RULE_elementHeader);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 203;
+        this.state = 207;
         this.match(SHRDataElementParser.KW_ELEMENT);
-        this.state = 204;
+        this.state = 208;
         this.simpleName();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1638,16 +1649,16 @@ SHRDataElementParser.prototype.entryDef = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 206;
+        this.state = 210;
         this.entryHeader();
-        this.state = 208;
+        this.state = 212;
         _la = this._input.LA(1);
         if((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRDataElementParser.KW_PARENT) | (1 << SHRDataElementParser.KW_CONCEPT) | (1 << SHRDataElementParser.KW_DESCRIPTION))) !== 0)) {
-            this.state = 207;
+            this.state = 211;
             this.elementProps();
         }
 
-        this.state = 210;
+        this.state = 214;
         this.values();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1718,9 +1729,9 @@ SHRDataElementParser.prototype.entryHeader = function() {
     this.enterRule(localctx, 28, SHRDataElementParser.RULE_entryHeader);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 212;
+        this.state = 216;
         this.match(SHRDataElementParser.KW_ENTRY);
-        this.state = 213;
+        this.state = 217;
         this.simpleName();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1796,16 +1807,16 @@ SHRDataElementParser.prototype.abstractDef = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 215;
+        this.state = 219;
         this.abstractHeader();
-        this.state = 217;
+        this.state = 221;
         _la = this._input.LA(1);
         if((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRDataElementParser.KW_PARENT) | (1 << SHRDataElementParser.KW_CONCEPT) | (1 << SHRDataElementParser.KW_DESCRIPTION))) !== 0)) {
-            this.state = 216;
+            this.state = 220;
             this.elementProps();
         }
 
-        this.state = 219;
+        this.state = 223;
         this.values();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1876,9 +1887,9 @@ SHRDataElementParser.prototype.abstractHeader = function() {
     this.enterRule(localctx, 32, SHRDataElementParser.RULE_abstractHeader);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 221;
+        this.state = 225;
         this.match(SHRDataElementParser.KW_ABSTRACT);
-        this.state = 222;
+        this.state = 226;
         this.simpleName();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -1953,13 +1964,13 @@ SHRDataElementParser.prototype.elementProps = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 225; 
+        this.state = 229; 
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         do {
-            this.state = 224;
+            this.state = 228;
             this.elementProp();
-            this.state = 227; 
+            this.state = 231; 
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         } while((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRDataElementParser.KW_PARENT) | (1 << SHRDataElementParser.KW_CONCEPT) | (1 << SHRDataElementParser.KW_DESCRIPTION))) !== 0));
@@ -2035,21 +2046,21 @@ SHRDataElementParser.prototype.elementProp = function() {
     var localctx = new ElementPropContext(this, this._ctx, this.state);
     this.enterRule(localctx, 36, SHRDataElementParser.RULE_elementProp);
     try {
-        this.state = 232;
+        this.state = 236;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.KW_PARENT:
             this.enterOuterAlt(localctx, 1);
-            this.state = 229;
+            this.state = 233;
             this.parentProp();
             break;
         case SHRDataElementParser.KW_CONCEPT:
             this.enterOuterAlt(localctx, 2);
-            this.state = 230;
+            this.state = 234;
             this.conceptProp();
             break;
         case SHRDataElementParser.KW_DESCRIPTION:
             this.enterOuterAlt(localctx, 3);
-            this.state = 231;
+            this.state = 235;
             this.descriptionProp();
             break;
         default:
@@ -2132,20 +2143,20 @@ SHRDataElementParser.prototype.values = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 235;
+        this.state = 239;
         var la_ = this._interp.adaptivePredict(this._input,16,this._ctx);
         if(la_===1) {
-            this.state = 234;
+            this.state = 238;
             this.value();
 
         }
-        this.state = 240;
+        this.state = 244;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRDataElementParser.KW_VALUE) | (1 << SHRDataElementParser.KW_PROPERTY) | (1 << SHRDataElementParser.KW_BAR_ENTRY))) !== 0) || ((((_la - 50)) & ~0x1f) == 0 && ((1 << (_la - 50)) & ((1 << (SHRDataElementParser.KW_BOOLEAN - 50)) | (1 << (SHRDataElementParser.KW_INTEGER - 50)) | (1 << (SHRDataElementParser.KW_STRING - 50)) | (1 << (SHRDataElementParser.KW_DECIMAL - 50)) | (1 << (SHRDataElementParser.KW_URI - 50)) | (1 << (SHRDataElementParser.KW_BASE64_BINARY - 50)) | (1 << (SHRDataElementParser.KW_INSTANT - 50)) | (1 << (SHRDataElementParser.KW_DATE - 50)) | (1 << (SHRDataElementParser.KW_DATE_TIME - 50)) | (1 << (SHRDataElementParser.KW_TIME - 50)) | (1 << (SHRDataElementParser.KW_CONCEPT_CODE - 50)) | (1 << (SHRDataElementParser.KW_OID - 50)) | (1 << (SHRDataElementParser.KW_ID - 50)) | (1 << (SHRDataElementParser.KW_MARKDOWN - 50)) | (1 << (SHRDataElementParser.KW_UNSIGNED_INT - 50)) | (1 << (SHRDataElementParser.KW_POSITIVE_INT - 50)) | (1 << (SHRDataElementParser.KW_XHTML - 50)) | (1 << (SHRDataElementParser.ALL_CAPS - 50)) | (1 << (SHRDataElementParser.UPPER_WORD - 50)) | (1 << (SHRDataElementParser.LOWER_WORD - 50)) | (1 << (SHRDataElementParser.DOT_SEPARATED_UW - 50)))) !== 0)) {
-            this.state = 237;
+            this.state = 241;
             this.field();
-            this.state = 242;
+            this.state = 246;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -2246,9 +2257,9 @@ SHRDataElementParser.prototype.value = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 243;
+        this.state = 247;
         this.match(SHRDataElementParser.KW_VALUE);
-        this.state = 244;
+        this.state = 248;
         _la = this._input.LA(1);
         if(!(_la===SHRDataElementParser.KW_ONLY || _la===SHRDataElementParser.COLON)) {
         this._errHandler.recoverInline(this);
@@ -2256,17 +2267,17 @@ SHRDataElementParser.prototype.value = function() {
         else {
             this.consume();
         }
-        this.state = 245;
+        this.state = 249;
         this.valueType();
-        this.state = 250;
+        this.state = 254;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===SHRDataElementParser.KW_OR) {
-            this.state = 246;
+            this.state = 250;
             this.match(SHRDataElementParser.KW_OR);
-            this.state = 247;
+            this.state = 251;
             this.valueType();
-            this.state = 252;
+            this.state = 256;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -2346,30 +2357,30 @@ SHRDataElementParser.prototype.valueType = function() {
     var localctx = new ValueTypeContext(this, this._ctx, this.state);
     this.enterRule(localctx, 42, SHRDataElementParser.RULE_valueType);
     try {
-        this.state = 257;
+        this.state = 261;
         var la_ = this._interp.adaptivePredict(this._input,19,this._ctx);
         switch(la_) {
         case 1:
             this.enterOuterAlt(localctx, 1);
-            this.state = 253;
+            this.state = 257;
             this.simpleOrFQName();
             break;
 
         case 2:
             this.enterOuterAlt(localctx, 2);
-            this.state = 254;
+            this.state = 258;
             this.primitive();
             break;
 
         case 3:
             this.enterOuterAlt(localctx, 3);
-            this.state = 255;
+            this.state = 259;
             this.elementWithConstraint();
             break;
 
         case 4:
             this.enterOuterAlt(localctx, 4);
-            this.state = 256;
+            this.state = 260;
             this.tbd();
             break;
 
@@ -2442,11 +2453,11 @@ SHRDataElementParser.prototype.field = function() {
     var localctx = new FieldContext(this, this._ctx, this.state);
     this.enterRule(localctx, 44, SHRDataElementParser.RULE_field);
     try {
-        this.state = 261;
+        this.state = 265;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.KW_PROPERTY:
             this.enterOuterAlt(localctx, 1);
-            this.state = 259;
+            this.state = 263;
             this.propertyField();
             break;
         case SHRDataElementParser.KW_VALUE:
@@ -2473,7 +2484,7 @@ SHRDataElementParser.prototype.field = function() {
         case SHRDataElementParser.LOWER_WORD:
         case SHRDataElementParser.DOT_SEPARATED_UW:
             this.enterOuterAlt(localctx, 2);
-            this.state = 260;
+            this.state = 264;
             this.elementWithConstraint();
             break;
         default:
@@ -2552,11 +2563,11 @@ SHRDataElementParser.prototype.propertyField = function() {
     this.enterRule(localctx, 46, SHRDataElementParser.RULE_propertyField);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 263;
+        this.state = 267;
         this.match(SHRDataElementParser.KW_PROPERTY);
-        this.state = 264;
+        this.state = 268;
         this.propertyFieldType();
-        this.state = 265;
+        this.state = 269;
         this.count();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -2630,12 +2641,12 @@ SHRDataElementParser.prototype.propertyFieldType = function() {
     var localctx = new PropertyFieldTypeContext(this, this._ctx, this.state);
     this.enterRule(localctx, 48, SHRDataElementParser.RULE_propertyFieldType);
     try {
-        this.state = 270;
+        this.state = 274;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.KW_VALUE:
         case SHRDataElementParser.KW_BAR_ENTRY:
             this.enterOuterAlt(localctx, 1);
-            this.state = 267;
+            this.state = 271;
             this.specialWord();
             break;
         case SHRDataElementParser.ALL_CAPS:
@@ -2643,12 +2654,12 @@ SHRDataElementParser.prototype.propertyFieldType = function() {
         case SHRDataElementParser.LOWER_WORD:
         case SHRDataElementParser.DOT_SEPARATED_UW:
             this.enterOuterAlt(localctx, 2);
-            this.state = 268;
+            this.state = 272;
             this.simpleOrFQName();
             break;
         case SHRDataElementParser.KW_TBD:
             this.enterOuterAlt(localctx, 3);
-            this.state = 269;
+            this.state = 273;
             this.tbd();
             break;
         default:
@@ -2727,19 +2738,19 @@ SHRDataElementParser.prototype.parentProp = function() {
     this.enterRule(localctx, 50, SHRDataElementParser.RULE_parentProp);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 272;
+        this.state = 276;
         this.match(SHRDataElementParser.KW_PARENT);
-        this.state = 275;
+        this.state = 279;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.ALL_CAPS:
         case SHRDataElementParser.UPPER_WORD:
         case SHRDataElementParser.LOWER_WORD:
         case SHRDataElementParser.DOT_SEPARATED_UW:
-            this.state = 273;
+            this.state = 277;
             this.simpleOrFQName();
             break;
         case SHRDataElementParser.KW_TBD:
-            this.state = 274;
+            this.state = 278;
             this.tbd();
             break;
         default:
@@ -2818,17 +2829,17 @@ SHRDataElementParser.prototype.conceptProp = function() {
     this.enterRule(localctx, 52, SHRDataElementParser.RULE_conceptProp);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 277;
+        this.state = 281;
         this.match(SHRDataElementParser.KW_CONCEPT);
-        this.state = 280;
+        this.state = 284;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.KW_TBD_CODE:
         case SHRDataElementParser.ALL_CAPS:
-            this.state = 278;
+            this.state = 282;
             this.concepts();
             break;
         case SHRDataElementParser.KW_TBD:
-            this.state = 279;
+            this.state = 283;
             this.tbd();
             break;
         default:
@@ -2919,17 +2930,17 @@ SHRDataElementParser.prototype.concepts = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 282;
+        this.state = 286;
         this.fullyQualifiedCode();
-        this.state = 287;
+        this.state = 291;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===SHRDataElementParser.COMMA) {
-            this.state = 283;
+            this.state = 287;
             this.match(SHRDataElementParser.COMMA);
-            this.state = 284;
+            this.state = 288;
             this.fullyQualifiedCode();
-            this.state = 289;
+            this.state = 293;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -3002,9 +3013,9 @@ SHRDataElementParser.prototype.descriptionProp = function() {
     this.enterRule(localctx, 56, SHRDataElementParser.RULE_descriptionProp);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 290;
+        this.state = 294;
         this.match(SHRDataElementParser.KW_DESCRIPTION);
-        this.state = 291;
+        this.state = 295;
         this.match(SHRDataElementParser.STRING);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -3083,11 +3094,11 @@ SHRDataElementParser.prototype.version = function() {
     this.enterRule(localctx, 58, SHRDataElementParser.RULE_version);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 293;
+        this.state = 297;
         this.match(SHRDataElementParser.WHOLE_NUMBER);
-        this.state = 294;
+        this.state = 298;
         this.match(SHRDataElementParser.DOT);
-        this.state = 295;
+        this.state = 299;
         this.match(SHRDataElementParser.WHOLE_NUMBER);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -3159,7 +3170,7 @@ SHRDataElementParser.prototype.namespace = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 297;
+        this.state = 301;
         _la = this._input.LA(1);
         if(!(_la===SHRDataElementParser.LOWER_WORD || _la===SHRDataElementParser.DOT_SEPARATED_LW)) {
         this._errHandler.recoverInline(this);
@@ -3237,7 +3248,7 @@ SHRDataElementParser.prototype.specialWord = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 299;
+        this.state = 303;
         _la = this._input.LA(1);
         if(!(_la===SHRDataElementParser.KW_VALUE || _la===SHRDataElementParser.KW_BAR_ENTRY)) {
         this._errHandler.recoverInline(this);
@@ -3319,7 +3330,7 @@ SHRDataElementParser.prototype.simpleName = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 301;
+        this.state = 305;
         _la = this._input.LA(1);
         if(!(((((_la - 68)) & ~0x1f) == 0 && ((1 << (_la - 68)) & ((1 << (SHRDataElementParser.ALL_CAPS - 68)) | (1 << (SHRDataElementParser.UPPER_WORD - 68)) | (1 << (SHRDataElementParser.LOWER_WORD - 68)))) !== 0))) {
         this._errHandler.recoverInline(this);
@@ -3392,7 +3403,7 @@ SHRDataElementParser.prototype.fullyQualifiedName = function() {
     this.enterRule(localctx, 66, SHRDataElementParser.RULE_fullyQualifiedName);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 303;
+        this.state = 307;
         this.match(SHRDataElementParser.DOT_SEPARATED_UW);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -3462,18 +3473,18 @@ SHRDataElementParser.prototype.simpleOrFQName = function() {
     var localctx = new SimpleOrFQNameContext(this, this._ctx, this.state);
     this.enterRule(localctx, 68, SHRDataElementParser.RULE_simpleOrFQName);
     try {
-        this.state = 307;
+        this.state = 311;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.ALL_CAPS:
         case SHRDataElementParser.UPPER_WORD:
         case SHRDataElementParser.LOWER_WORD:
             this.enterOuterAlt(localctx, 1);
-            this.state = 305;
+            this.state = 309;
             this.simpleName();
             break;
         case SHRDataElementParser.DOT_SEPARATED_UW:
             this.enterOuterAlt(localctx, 2);
-            this.state = 306;
+            this.state = 310;
             this.fullyQualifiedName();
             break;
         default:
@@ -3549,12 +3560,12 @@ SHRDataElementParser.prototype.code = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 309;
+        this.state = 313;
         this.match(SHRDataElementParser.CODE);
-        this.state = 311;
+        this.state = 315;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.STRING) {
-            this.state = 310;
+            this.state = 314;
             this.match(SHRDataElementParser.STRING);
         }
 
@@ -3630,18 +3641,18 @@ SHRDataElementParser.prototype.fullyQualifiedCode = function() {
     var localctx = new FullyQualifiedCodeContext(this, this._ctx, this.state);
     this.enterRule(localctx, 72, SHRDataElementParser.RULE_fullyQualifiedCode);
     try {
-        this.state = 316;
+        this.state = 320;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.ALL_CAPS:
             this.enterOuterAlt(localctx, 1);
-            this.state = 313;
+            this.state = 317;
             this.match(SHRDataElementParser.ALL_CAPS);
-            this.state = 314;
+            this.state = 318;
             this.code();
             break;
         case SHRDataElementParser.KW_TBD_CODE:
             this.enterOuterAlt(localctx, 2);
-            this.state = 315;
+            this.state = 319;
             this.tbdCode();
             break;
         default:
@@ -3715,17 +3726,17 @@ SHRDataElementParser.prototype.codeOrFQCode = function() {
     var localctx = new CodeOrFQCodeContext(this, this._ctx, this.state);
     this.enterRule(localctx, 74, SHRDataElementParser.RULE_codeOrFQCode);
     try {
-        this.state = 320;
+        this.state = 324;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.KW_TBD_CODE:
         case SHRDataElementParser.ALL_CAPS:
             this.enterOuterAlt(localctx, 1);
-            this.state = 318;
+            this.state = 322;
             this.fullyQualifiedCode();
             break;
         case SHRDataElementParser.CODE:
             this.enterOuterAlt(localctx, 2);
-            this.state = 319;
+            this.state = 323;
             this.code();
             break;
         default:
@@ -3809,7 +3820,7 @@ SHRDataElementParser.prototype.bindingStrength = function() {
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 322;
+        this.state = 326;
         _la = this._input.LA(1);
         if(!((((_la) & ~0x1f) == 0 && ((1 << _la) & ((1 << SHRDataElementParser.KW_REQUIRED) | (1 << SHRDataElementParser.KW_PREFERRED) | (1 << SHRDataElementParser.KW_EXAMPLE) | (1 << SHRDataElementParser.KW_EXTENSIBLE))) !== 0))) {
         this._errHandler.recoverInline(this);
@@ -3894,13 +3905,13 @@ SHRDataElementParser.prototype.typeConstraint = function() {
     this.enterRule(localctx, 78, SHRDataElementParser.RULE_typeConstraint);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 327;
+        this.state = 331;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.ALL_CAPS:
         case SHRDataElementParser.UPPER_WORD:
         case SHRDataElementParser.LOWER_WORD:
         case SHRDataElementParser.DOT_SEPARATED_UW:
-            this.state = 324;
+            this.state = 328;
             this.simpleOrFQName();
             break;
         case SHRDataElementParser.KW_BOOLEAN:
@@ -3920,18 +3931,127 @@ SHRDataElementParser.prototype.typeConstraint = function() {
         case SHRDataElementParser.KW_UNSIGNED_INT:
         case SHRDataElementParser.KW_POSITIVE_INT:
         case SHRDataElementParser.KW_XHTML:
-            this.state = 325;
+            this.state = 329;
             this.primitive();
             break;
         case SHRDataElementParser.KW_TBD:
-            this.state = 326;
+            this.state = 330;
             this.tbd();
             break;
         default:
             throw new antlr4.error.NoViableAltException(this);
         }
-        this.state = 329;
+        this.state = 333;
         this.count();
+    } catch (re) {
+    	if(re instanceof antlr4.error.RecognitionException) {
+	        localctx.exception = re;
+	        this._errHandler.reportError(this, re);
+	        this._errHandler.recover(this, re);
+	    } else {
+	    	throw re;
+	    }
+    } finally {
+        this.exitRule();
+    }
+    return localctx;
+};
+
+function SubsetConstraintContext(parser, parent, invokingState) {
+	if(parent===undefined) {
+	    parent = null;
+	}
+	if(invokingState===undefined || invokingState===null) {
+		invokingState = -1;
+	}
+	antlr4.ParserRuleContext.call(this, parent, invokingState);
+    this.parser = parser;
+    this.ruleIndex = SHRDataElementParser.RULE_subsetConstraint;
+    return this;
+}
+
+SubsetConstraintContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
+SubsetConstraintContext.prototype.constructor = SubsetConstraintContext;
+
+SubsetConstraintContext.prototype.simpleOrFQName = function() {
+    return this.getTypedRuleContext(SimpleOrFQNameContext,0);
+};
+
+SubsetConstraintContext.prototype.primitive = function() {
+    return this.getTypedRuleContext(PrimitiveContext,0);
+};
+
+SubsetConstraintContext.prototype.tbd = function() {
+    return this.getTypedRuleContext(TbdContext,0);
+};
+
+SubsetConstraintContext.prototype.enterRule = function(listener) {
+    if(listener instanceof SHRDataElementParserListener ) {
+        listener.enterSubsetConstraint(this);
+	}
+};
+
+SubsetConstraintContext.prototype.exitRule = function(listener) {
+    if(listener instanceof SHRDataElementParserListener ) {
+        listener.exitSubsetConstraint(this);
+	}
+};
+
+SubsetConstraintContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof SHRDataElementParserVisitor ) {
+        return visitor.visitSubsetConstraint(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
+
+
+
+SHRDataElementParser.SubsetConstraintContext = SubsetConstraintContext;
+
+SHRDataElementParser.prototype.subsetConstraint = function() {
+
+    var localctx = new SubsetConstraintContext(this, this._ctx, this.state);
+    this.enterRule(localctx, 80, SHRDataElementParser.RULE_subsetConstraint);
+    try {
+        this.enterOuterAlt(localctx, 1);
+        this.state = 338;
+        switch(this._input.LA(1)) {
+        case SHRDataElementParser.ALL_CAPS:
+        case SHRDataElementParser.UPPER_WORD:
+        case SHRDataElementParser.LOWER_WORD:
+        case SHRDataElementParser.DOT_SEPARATED_UW:
+            this.state = 335;
+            this.simpleOrFQName();
+            break;
+        case SHRDataElementParser.KW_BOOLEAN:
+        case SHRDataElementParser.KW_INTEGER:
+        case SHRDataElementParser.KW_STRING:
+        case SHRDataElementParser.KW_DECIMAL:
+        case SHRDataElementParser.KW_URI:
+        case SHRDataElementParser.KW_BASE64_BINARY:
+        case SHRDataElementParser.KW_INSTANT:
+        case SHRDataElementParser.KW_DATE:
+        case SHRDataElementParser.KW_DATE_TIME:
+        case SHRDataElementParser.KW_TIME:
+        case SHRDataElementParser.KW_CONCEPT_CODE:
+        case SHRDataElementParser.KW_OID:
+        case SHRDataElementParser.KW_ID:
+        case SHRDataElementParser.KW_MARKDOWN:
+        case SHRDataElementParser.KW_UNSIGNED_INT:
+        case SHRDataElementParser.KW_POSITIVE_INT:
+        case SHRDataElementParser.KW_XHTML:
+            this.state = 336;
+            this.primitive();
+            break;
+        case SHRDataElementParser.KW_TBD:
+            this.state = 337;
+            this.tbd();
+            break;
+        default:
+            throw new antlr4.error.NoViableAltException(this);
+        }
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
 	        localctx.exception = re;
@@ -4014,37 +4134,37 @@ SHRDataElementParser.ElementWithConstraintContext = ElementWithConstraintContext
 SHRDataElementParser.prototype.elementWithConstraint = function() {
 
     var localctx = new ElementWithConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 80, SHRDataElementParser.RULE_elementWithConstraint);
+    this.enterRule(localctx, 82, SHRDataElementParser.RULE_elementWithConstraint);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 335;
-        var la_ = this._interp.adaptivePredict(this._input,30,this._ctx);
+        this.state = 344;
+        var la_ = this._interp.adaptivePredict(this._input,31,this._ctx);
         switch(la_) {
         case 1:
-            this.state = 331;
+            this.state = 340;
             this.specialWord();
             break;
 
         case 2:
-            this.state = 332;
+            this.state = 341;
             this.simpleOrFQName();
             break;
 
         case 3:
-            this.state = 333;
+            this.state = 342;
             this.elementBracketPath();
             break;
 
         case 4:
-            this.state = 334;
+            this.state = 343;
             this.primitive();
             break;
 
         }
-        this.state = 339;
+        this.state = 348;
         switch (this._input.LA(1)) {
         case SHRDataElementParser.WHOLE_NUMBER:
-        	this.state = 337;
+        	this.state = 346;
         	this.count();
         	break;
         case SHRDataElementParser.KW_FROM:
@@ -4053,7 +4173,7 @@ SHRDataElementParser.prototype.elementWithConstraint = function() {
         case SHRDataElementParser.KW_ONLY:
         case SHRDataElementParser.EQUAL:
         case SHRDataElementParser.PLUS:
-        	this.state = 338;
+        	this.state = 347;
         	this.elementConstraint();
         	break;
         case SHRDataElementParser.EOF:
@@ -4156,14 +4276,14 @@ SHRDataElementParser.ElementBracketPathFirstPartContext = ElementBracketPathFirs
 SHRDataElementParser.prototype.elementBracketPathFirstPart = function() {
 
     var localctx = new ElementBracketPathFirstPartContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 82, SHRDataElementParser.RULE_elementBracketPathFirstPart);
+    this.enterRule(localctx, 84, SHRDataElementParser.RULE_elementBracketPathFirstPart);
     try {
-        this.state = 343;
+        this.state = 352;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.KW_VALUE:
         case SHRDataElementParser.KW_BAR_ENTRY:
             this.enterOuterAlt(localctx, 1);
-            this.state = 341;
+            this.state = 350;
             this.specialWord();
             break;
         case SHRDataElementParser.ALL_CAPS:
@@ -4171,7 +4291,7 @@ SHRDataElementParser.prototype.elementBracketPathFirstPart = function() {
         case SHRDataElementParser.LOWER_WORD:
         case SHRDataElementParser.DOT_SEPARATED_UW:
             this.enterOuterAlt(localctx, 2);
-            this.state = 342;
+            this.state = 351;
             this.simpleOrFQName();
             break;
         default:
@@ -4251,17 +4371,17 @@ SHRDataElementParser.ElementBracketPathSecondPartContext = ElementBracketPathSec
 SHRDataElementParser.prototype.elementBracketPathSecondPart = function() {
 
     var localctx = new ElementBracketPathSecondPartContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 84, SHRDataElementParser.RULE_elementBracketPathSecondPart);
+    this.enterRule(localctx, 86, SHRDataElementParser.RULE_elementBracketPathSecondPart);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 345;
+        this.state = 354;
         this.match(SHRDataElementParser.OPEN_BRACKET);
-        this.state = 348;
+        this.state = 357;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.ALL_CAPS:
         case SHRDataElementParser.UPPER_WORD:
         case SHRDataElementParser.LOWER_WORD:
-            this.state = 346;
+            this.state = 355;
             this.simpleName();
             break;
         case SHRDataElementParser.KW_BOOLEAN:
@@ -4281,13 +4401,13 @@ SHRDataElementParser.prototype.elementBracketPathSecondPart = function() {
         case SHRDataElementParser.KW_UNSIGNED_INT:
         case SHRDataElementParser.KW_POSITIVE_INT:
         case SHRDataElementParser.KW_XHTML:
-            this.state = 347;
+            this.state = 356;
             this.primitive();
             break;
         default:
             throw new antlr4.error.NoViableAltException(this);
         }
-        this.state = 350;
+        this.state = 359;
         this.match(SHRDataElementParser.CLOSE_BRACKET);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -4366,21 +4486,21 @@ SHRDataElementParser.ElementBracketPathThirdPartContext = ElementBracketPathThir
 SHRDataElementParser.prototype.elementBracketPathThirdPart = function() {
 
     var localctx = new ElementBracketPathThirdPartContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 86, SHRDataElementParser.RULE_elementBracketPathThirdPart);
+    this.enterRule(localctx, 88, SHRDataElementParser.RULE_elementBracketPathThirdPart);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 352;
+        this.state = 361;
         this.match(SHRDataElementParser.DOT);
-        this.state = 353;
+        this.state = 362;
         this.simpleName();
-        this.state = 357;
+        this.state = 366;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===SHRDataElementParser.OPEN_BRACKET) {
-            this.state = 354;
+            this.state = 363;
             this.elementBracketPathSecondPart();
-            this.state = 359;
+            this.state = 368;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -4468,29 +4588,29 @@ SHRDataElementParser.ElementBracketPathContext = ElementBracketPathContext;
 SHRDataElementParser.prototype.elementBracketPath = function() {
 
     var localctx = new ElementBracketPathContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 88, SHRDataElementParser.RULE_elementBracketPath);
+    this.enterRule(localctx, 90, SHRDataElementParser.RULE_elementBracketPath);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 360;
+        this.state = 369;
         this.elementBracketPathFirstPart();
-        this.state = 364;
+        this.state = 373;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===SHRDataElementParser.OPEN_BRACKET) {
-            this.state = 361;
+            this.state = 370;
             this.elementBracketPathSecondPart();
-            this.state = 366;
+            this.state = 375;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
-        this.state = 370;
+        this.state = 379;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         while(_la===SHRDataElementParser.DOT) {
-            this.state = 367;
+            this.state = 376;
             this.elementBracketPathThirdPart();
-            this.state = 372;
+            this.state = 381;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         }
@@ -4556,6 +4676,10 @@ ElementConstraintContext.prototype.elementTypeConstraint = function() {
     return this.getTypedRuleContext(ElementTypeConstraintContext,0);
 };
 
+ElementConstraintContext.prototype.elementSubsetConstraint = function() {
+    return this.getTypedRuleContext(ElementSubsetConstraintContext,0);
+};
+
 ElementConstraintContext.prototype.elementIncludesTypeConstraint = function() {
     return this.getTypedRuleContext(ElementIncludesTypeConstraintContext,0);
 };
@@ -4592,68 +4716,74 @@ SHRDataElementParser.ElementConstraintContext = ElementConstraintContext;
 SHRDataElementParser.prototype.elementConstraint = function() {
 
     var localctx = new ElementConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 90, SHRDataElementParser.RULE_elementConstraint);
+    this.enterRule(localctx, 92, SHRDataElementParser.RULE_elementConstraint);
     try {
-        this.state = 383;
-        var la_ = this._interp.adaptivePredict(this._input,37,this._ctx);
+        this.state = 393;
+        var la_ = this._interp.adaptivePredict(this._input,38,this._ctx);
         switch(la_) {
         case 1:
             this.enterOuterAlt(localctx, 1);
-            this.state = 373;
+            this.state = 382;
             this.elementCodeVSConstraint();
             break;
 
         case 2:
             this.enterOuterAlt(localctx, 2);
-            this.state = 374;
+            this.state = 383;
             this.elementCodeValueConstraint();
             break;
 
         case 3:
             this.enterOuterAlt(localctx, 3);
-            this.state = 375;
+            this.state = 384;
             this.elementIncludesCodeValueConstraint();
             break;
 
         case 4:
             this.enterOuterAlt(localctx, 4);
-            this.state = 376;
+            this.state = 385;
             this.elementBooleanConstraint();
             break;
 
         case 5:
             this.enterOuterAlt(localctx, 5);
-            this.state = 377;
+            this.state = 386;
             this.elementStringConstraint();
             break;
 
         case 6:
             this.enterOuterAlt(localctx, 6);
-            this.state = 378;
+            this.state = 387;
             this.elementIntegerConstraint();
             break;
 
         case 7:
             this.enterOuterAlt(localctx, 7);
-            this.state = 379;
+            this.state = 388;
             this.elementDecimalConstraint();
             break;
 
         case 8:
             this.enterOuterAlt(localctx, 8);
-            this.state = 380;
+            this.state = 389;
             this.elementTypeConstraint();
             break;
 
         case 9:
             this.enterOuterAlt(localctx, 9);
-            this.state = 381;
-            this.elementIncludesTypeConstraint();
+            this.state = 390;
+            this.elementSubsetConstraint();
             break;
 
         case 10:
             this.enterOuterAlt(localctx, 10);
-            this.state = 382;
+            this.state = 391;
+            this.elementIncludesTypeConstraint();
+            break;
+
+        case 11:
+            this.enterOuterAlt(localctx, 11);
+            this.state = 392;
             this.elementUrlConstraint();
             break;
 
@@ -4736,22 +4866,22 @@ SHRDataElementParser.ElementCodeVSConstraintContext = ElementCodeVSConstraintCon
 SHRDataElementParser.prototype.elementCodeVSConstraint = function() {
 
     var localctx = new ElementCodeVSConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 92, SHRDataElementParser.RULE_elementCodeVSConstraint);
+    this.enterRule(localctx, 94, SHRDataElementParser.RULE_elementCodeVSConstraint);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 385;
+        this.state = 395;
         this.match(SHRDataElementParser.KW_FROM);
-        this.state = 386;
+        this.state = 396;
         this.valueset();
-        this.state = 391;
+        this.state = 401;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.OPEN_PAREN) {
-            this.state = 387;
+            this.state = 397;
             this.match(SHRDataElementParser.OPEN_PAREN);
-            this.state = 388;
+            this.state = 398;
             this.bindingStrength();
-            this.state = 389;
+            this.state = 399;
             this.match(SHRDataElementParser.CLOSE_PAREN);
         }
 
@@ -4821,12 +4951,12 @@ SHRDataElementParser.ElementCodeValueConstraintContext = ElementCodeValueConstra
 SHRDataElementParser.prototype.elementCodeValueConstraint = function() {
 
     var localctx = new ElementCodeValueConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 94, SHRDataElementParser.RULE_elementCodeValueConstraint);
+    this.enterRule(localctx, 96, SHRDataElementParser.RULE_elementCodeValueConstraint);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 393;
+        this.state = 403;
         this.match(SHRDataElementParser.EQUAL);
-        this.state = 394;
+        this.state = 404;
         this.fullyQualifiedCode();
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -4921,21 +5051,21 @@ SHRDataElementParser.ElementIncludesCodeValueConstraintContext = ElementIncludes
 SHRDataElementParser.prototype.elementIncludesCodeValueConstraint = function() {
 
     var localctx = new ElementIncludesCodeValueConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 96, SHRDataElementParser.RULE_elementIncludesCodeValueConstraint);
+    this.enterRule(localctx, 98, SHRDataElementParser.RULE_elementIncludesCodeValueConstraint);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 399; 
+        this.state = 409; 
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         do {
-            this.state = 396;
+            this.state = 406;
             this.match(SHRDataElementParser.PLUS);
-            this.state = 397;
+            this.state = 407;
             this.match(SHRDataElementParser.EQUAL);
-            this.state = 398;
+            this.state = 408;
             this.fullyQualifiedCode();
-            this.state = 401; 
+            this.state = 411; 
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         } while(_la===SHRDataElementParser.PLUS);
@@ -5009,13 +5139,13 @@ SHRDataElementParser.ElementBooleanConstraintContext = ElementBooleanConstraintC
 SHRDataElementParser.prototype.elementBooleanConstraint = function() {
 
     var localctx = new ElementBooleanConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 98, SHRDataElementParser.RULE_elementBooleanConstraint);
+    this.enterRule(localctx, 100, SHRDataElementParser.RULE_elementBooleanConstraint);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 403;
+        this.state = 413;
         this.match(SHRDataElementParser.EQUAL);
-        this.state = 404;
+        this.state = 414;
         _la = this._input.LA(1);
         if(!(_la===SHRDataElementParser.KW_TRUE || _la===SHRDataElementParser.KW_FALSE)) {
         this._errHandler.recoverInline(this);
@@ -5089,12 +5219,12 @@ SHRDataElementParser.ElementStringConstraintContext = ElementStringConstraintCon
 SHRDataElementParser.prototype.elementStringConstraint = function() {
 
     var localctx = new ElementStringConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 100, SHRDataElementParser.RULE_elementStringConstraint);
+    this.enterRule(localctx, 102, SHRDataElementParser.RULE_elementStringConstraint);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 406;
+        this.state = 416;
         this.match(SHRDataElementParser.EQUAL);
-        this.state = 407;
+        this.state = 417;
         this.match(SHRDataElementParser.STRING);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -5166,20 +5296,20 @@ SHRDataElementParser.ElementIntegerConstraintContext = ElementIntegerConstraintC
 SHRDataElementParser.prototype.elementIntegerConstraint = function() {
 
     var localctx = new ElementIntegerConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 102, SHRDataElementParser.RULE_elementIntegerConstraint);
+    this.enterRule(localctx, 104, SHRDataElementParser.RULE_elementIntegerConstraint);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 409;
+        this.state = 419;
         this.match(SHRDataElementParser.EQUAL);
-        this.state = 411;
+        this.state = 421;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.MINUS) {
-            this.state = 410;
+            this.state = 420;
             this.match(SHRDataElementParser.MINUS);
         }
 
-        this.state = 413;
+        this.state = 423;
         this.match(SHRDataElementParser.WHOLE_NUMBER);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -5267,34 +5397,34 @@ SHRDataElementParser.ElementDecimalConstraintContext = ElementDecimalConstraintC
 SHRDataElementParser.prototype.elementDecimalConstraint = function() {
 
     var localctx = new ElementDecimalConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 104, SHRDataElementParser.RULE_elementDecimalConstraint);
+    this.enterRule(localctx, 106, SHRDataElementParser.RULE_elementDecimalConstraint);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 415;
+        this.state = 425;
         this.match(SHRDataElementParser.EQUAL);
-        this.state = 417;
+        this.state = 427;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.MINUS) {
-            this.state = 416;
+            this.state = 426;
             this.match(SHRDataElementParser.MINUS);
         }
 
-        this.state = 419;
+        this.state = 429;
         this.match(SHRDataElementParser.WHOLE_NUMBER);
-        this.state = 420;
+        this.state = 430;
         this.match(SHRDataElementParser.DOT);
-        this.state = 422;
+        this.state = 432;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.WHOLE_NUMBER) {
-            this.state = 421;
+            this.state = 431;
             this.match(SHRDataElementParser.WHOLE_NUMBER);
         }
 
-        this.state = 425;
+        this.state = 435;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.EXP) {
-            this.state = 424;
+            this.state = 434;
             this.match(SHRDataElementParser.EXP);
         }
 
@@ -5376,11 +5506,11 @@ SHRDataElementParser.ElementTypeConstraintContext = ElementTypeConstraintContext
 SHRDataElementParser.prototype.elementTypeConstraint = function() {
 
     var localctx = new ElementTypeConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 106, SHRDataElementParser.RULE_elementTypeConstraint);
+    this.enterRule(localctx, 108, SHRDataElementParser.RULE_elementTypeConstraint);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 427;
+        this.state = 437;
         _la = this._input.LA(1);
         if(!(_la===SHRDataElementParser.KW_SUBSTITUTE || _la===SHRDataElementParser.KW_ONLY)) {
         this._errHandler.recoverInline(this);
@@ -5388,13 +5518,13 @@ SHRDataElementParser.prototype.elementTypeConstraint = function() {
         else {
             this.consume();
         }
-        this.state = 431;
+        this.state = 441;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.ALL_CAPS:
         case SHRDataElementParser.UPPER_WORD:
         case SHRDataElementParser.LOWER_WORD:
         case SHRDataElementParser.DOT_SEPARATED_UW:
-            this.state = 428;
+            this.state = 438;
             this.simpleOrFQName();
             break;
         case SHRDataElementParser.KW_BOOLEAN:
@@ -5414,16 +5544,128 @@ SHRDataElementParser.prototype.elementTypeConstraint = function() {
         case SHRDataElementParser.KW_UNSIGNED_INT:
         case SHRDataElementParser.KW_POSITIVE_INT:
         case SHRDataElementParser.KW_XHTML:
-            this.state = 429;
+            this.state = 439;
             this.primitive();
             break;
         case SHRDataElementParser.KW_TBD:
-            this.state = 430;
+            this.state = 440;
             this.tbd();
             break;
         default:
             throw new antlr4.error.NoViableAltException(this);
         }
+    } catch (re) {
+    	if(re instanceof antlr4.error.RecognitionException) {
+	        localctx.exception = re;
+	        this._errHandler.reportError(this, re);
+	        this._errHandler.recover(this, re);
+	    } else {
+	    	throw re;
+	    }
+    } finally {
+        this.exitRule();
+    }
+    return localctx;
+};
+
+function ElementSubsetConstraintContext(parser, parent, invokingState) {
+	if(parent===undefined) {
+	    parent = null;
+	}
+	if(invokingState===undefined || invokingState===null) {
+		invokingState = -1;
+	}
+	antlr4.ParserRuleContext.call(this, parent, invokingState);
+    this.parser = parser;
+    this.ruleIndex = SHRDataElementParser.RULE_elementSubsetConstraint;
+    return this;
+}
+
+ElementSubsetConstraintContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
+ElementSubsetConstraintContext.prototype.constructor = ElementSubsetConstraintContext;
+
+ElementSubsetConstraintContext.prototype.KW_ONLY = function() {
+    return this.getToken(SHRDataElementParser.KW_ONLY, 0);
+};
+
+ElementSubsetConstraintContext.prototype.subsetConstraint = function(i) {
+    if(i===undefined) {
+        i = null;
+    }
+    if(i===null) {
+        return this.getTypedRuleContexts(SubsetConstraintContext);
+    } else {
+        return this.getTypedRuleContext(SubsetConstraintContext,i);
+    }
+};
+
+ElementSubsetConstraintContext.prototype.KW_OR = function(i) {
+	if(i===undefined) {
+		i = null;
+	}
+    if(i===null) {
+        return this.getTokens(SHRDataElementParser.KW_OR);
+    } else {
+        return this.getToken(SHRDataElementParser.KW_OR, i);
+    }
+};
+
+
+ElementSubsetConstraintContext.prototype.enterRule = function(listener) {
+    if(listener instanceof SHRDataElementParserListener ) {
+        listener.enterElementSubsetConstraint(this);
+	}
+};
+
+ElementSubsetConstraintContext.prototype.exitRule = function(listener) {
+    if(listener instanceof SHRDataElementParserListener ) {
+        listener.exitElementSubsetConstraint(this);
+	}
+};
+
+ElementSubsetConstraintContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof SHRDataElementParserVisitor ) {
+        return visitor.visitElementSubsetConstraint(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
+
+
+
+SHRDataElementParser.ElementSubsetConstraintContext = ElementSubsetConstraintContext;
+
+SHRDataElementParser.prototype.elementSubsetConstraint = function() {
+
+    var localctx = new ElementSubsetConstraintContext(this, this._ctx, this.state);
+    this.enterRule(localctx, 110, SHRDataElementParser.RULE_elementSubsetConstraint);
+    try {
+        this.enterOuterAlt(localctx, 1);
+        this.state = 443;
+        this.match(SHRDataElementParser.KW_ONLY);
+
+        this.state = 444;
+        this.subsetConstraint();
+        this.state = 447; 
+        this._errHandler.sync(this);
+        var _alt = 1;
+        do {
+        	switch (_alt) {
+        	case 1:
+        		this.state = 445;
+        		this.match(SHRDataElementParser.KW_OR);
+
+        		this.state = 446;
+        		this.subsetConstraint();
+        		break;
+        	default:
+        		throw new antlr4.error.NoViableAltException(this);
+        	}
+        	this.state = 449; 
+        	this._errHandler.sync(this);
+        	_alt = this._interp.adaptivePredict(this._input,46, this._ctx);
+        } while ( _alt!=2 && _alt!=antlr4.atn.ATN.INVALID_ALT_NUMBER );
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
 	        localctx.exception = re;
@@ -5490,12 +5732,12 @@ SHRDataElementParser.ElementUrlConstraintContext = ElementUrlConstraintContext;
 SHRDataElementParser.prototype.elementUrlConstraint = function() {
 
     var localctx = new ElementUrlConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 108, SHRDataElementParser.RULE_elementUrlConstraint);
+    this.enterRule(localctx, 112, SHRDataElementParser.RULE_elementUrlConstraint);
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 433;
+        this.state = 451;
         this.match(SHRDataElementParser.EQUAL);
-        this.state = 434;
+        this.state = 452;
         this.match(SHRDataElementParser.URL);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
@@ -5578,19 +5820,19 @@ SHRDataElementParser.ElementIncludesTypeConstraintContext = ElementIncludesTypeC
 SHRDataElementParser.prototype.elementIncludesTypeConstraint = function() {
 
     var localctx = new ElementIncludesTypeConstraintContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 110, SHRDataElementParser.RULE_elementIncludesTypeConstraint);
+    this.enterRule(localctx, 114, SHRDataElementParser.RULE_elementIncludesTypeConstraint);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 438; 
+        this.state = 456; 
         this._errHandler.sync(this);
         _la = this._input.LA(1);
         do {
-            this.state = 436;
+            this.state = 454;
             this.match(SHRDataElementParser.KW_INCLUDES);
-            this.state = 437;
+            this.state = 455;
             this.typeConstraint();
-            this.state = 440; 
+            this.state = 458; 
             this._errHandler.sync(this);
             _la = this._input.LA(1);
         } while(_la===SHRDataElementParser.KW_INCLUDES);
@@ -5676,40 +5918,40 @@ SHRDataElementParser.ValuesetContext = ValuesetContext;
 SHRDataElementParser.prototype.valueset = function() {
 
     var localctx = new ValuesetContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 112, SHRDataElementParser.RULE_valueset);
+    this.enterRule(localctx, 116, SHRDataElementParser.RULE_valueset);
     try {
-        this.state = 448;
+        this.state = 466;
         switch(this._input.LA(1)) {
         case SHRDataElementParser.URL:
             this.enterOuterAlt(localctx, 1);
-            this.state = 442;
+            this.state = 460;
             this.match(SHRDataElementParser.URL);
             break;
         case SHRDataElementParser.PATH_URL:
             this.enterOuterAlt(localctx, 2);
-            this.state = 443;
+            this.state = 461;
             this.match(SHRDataElementParser.PATH_URL);
             break;
         case SHRDataElementParser.URN_OID:
             this.enterOuterAlt(localctx, 3);
-            this.state = 444;
+            this.state = 462;
             this.match(SHRDataElementParser.URN_OID);
             break;
         case SHRDataElementParser.URN:
             this.enterOuterAlt(localctx, 4);
-            this.state = 445;
+            this.state = 463;
             this.match(SHRDataElementParser.URN);
             break;
         case SHRDataElementParser.ALL_CAPS:
         case SHRDataElementParser.UPPER_WORD:
         case SHRDataElementParser.LOWER_WORD:
             this.enterOuterAlt(localctx, 5);
-            this.state = 446;
+            this.state = 464;
             this.simpleName();
             break;
         case SHRDataElementParser.KW_TBD:
             this.enterOuterAlt(localctx, 6);
-            this.state = 447;
+            this.state = 465;
             this.tbd();
             break;
         default:
@@ -5841,11 +6083,11 @@ SHRDataElementParser.PrimitiveContext = PrimitiveContext;
 SHRDataElementParser.prototype.primitive = function() {
 
     var localctx = new PrimitiveContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 114, SHRDataElementParser.RULE_primitive);
+    this.enterRule(localctx, 118, SHRDataElementParser.RULE_primitive);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 450;
+        this.state = 468;
         _la = this._input.LA(1);
         if(!(((((_la - 50)) & ~0x1f) == 0 && ((1 << (_la - 50)) & ((1 << (SHRDataElementParser.KW_BOOLEAN - 50)) | (1 << (SHRDataElementParser.KW_INTEGER - 50)) | (1 << (SHRDataElementParser.KW_STRING - 50)) | (1 << (SHRDataElementParser.KW_DECIMAL - 50)) | (1 << (SHRDataElementParser.KW_URI - 50)) | (1 << (SHRDataElementParser.KW_BASE64_BINARY - 50)) | (1 << (SHRDataElementParser.KW_INSTANT - 50)) | (1 << (SHRDataElementParser.KW_DATE - 50)) | (1 << (SHRDataElementParser.KW_DATE_TIME - 50)) | (1 << (SHRDataElementParser.KW_TIME - 50)) | (1 << (SHRDataElementParser.KW_CONCEPT_CODE - 50)) | (1 << (SHRDataElementParser.KW_OID - 50)) | (1 << (SHRDataElementParser.KW_ID - 50)) | (1 << (SHRDataElementParser.KW_MARKDOWN - 50)) | (1 << (SHRDataElementParser.KW_UNSIGNED_INT - 50)) | (1 << (SHRDataElementParser.KW_POSITIVE_INT - 50)) | (1 << (SHRDataElementParser.KW_XHTML - 50)))) !== 0))) {
         this._errHandler.recoverInline(this);
@@ -5931,15 +6173,15 @@ SHRDataElementParser.CountContext = CountContext;
 SHRDataElementParser.prototype.count = function() {
 
     var localctx = new CountContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 116, SHRDataElementParser.RULE_count);
+    this.enterRule(localctx, 120, SHRDataElementParser.RULE_count);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 452;
+        this.state = 470;
         this.match(SHRDataElementParser.WHOLE_NUMBER);
-        this.state = 453;
+        this.state = 471;
         this.match(SHRDataElementParser.RANGE);
-        this.state = 454;
+        this.state = 472;
         _la = this._input.LA(1);
         if(!(_la===SHRDataElementParser.STAR || _la===SHRDataElementParser.WHOLE_NUMBER)) {
         this._errHandler.recoverInline(this);
@@ -6013,16 +6255,16 @@ SHRDataElementParser.TbdContext = TbdContext;
 SHRDataElementParser.prototype.tbd = function() {
 
     var localctx = new TbdContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 118, SHRDataElementParser.RULE_tbd);
+    this.enterRule(localctx, 122, SHRDataElementParser.RULE_tbd);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 456;
+        this.state = 474;
         this.match(SHRDataElementParser.KW_TBD);
-        this.state = 458;
+        this.state = 476;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.STRING) {
-            this.state = 457;
+            this.state = 475;
             this.match(SHRDataElementParser.STRING);
         }
 
@@ -6092,16 +6334,16 @@ SHRDataElementParser.TbdCodeContext = TbdCodeContext;
 SHRDataElementParser.prototype.tbdCode = function() {
 
     var localctx = new TbdCodeContext(this, this._ctx, this.state);
-    this.enterRule(localctx, 120, SHRDataElementParser.RULE_tbdCode);
+    this.enterRule(localctx, 124, SHRDataElementParser.RULE_tbdCode);
     var _la = 0; // Token type
     try {
         this.enterOuterAlt(localctx, 1);
-        this.state = 460;
+        this.state = 478;
         this.match(SHRDataElementParser.KW_TBD_CODE);
-        this.state = 462;
+        this.state = 480;
         _la = this._input.LA(1);
         if(_la===SHRDataElementParser.STRING) {
-            this.state = 461;
+            this.state = 479;
             this.match(SHRDataElementParser.STRING);
         }
 

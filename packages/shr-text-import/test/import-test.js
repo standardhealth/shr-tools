@@ -1,7 +1,7 @@
 const {expect} = require('chai');
 const {setLogger} = require('../index');
 const {id, pid, expectAndGetElement, expectAndGetEntry, expectAndGetAbstract, expectAndGetGroup, expectValue, expectPrimitiveValue, expectChoiceValue, expectCardOne, expectChoiceOption, expectField, expectConcept, expectIdentifier, expectPrimitiveIdentifier, expectNoConstraints, importFixture, importFixtureFolder } = require('../test/import-helper');
-const {Version, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, FixedValueConstraint, TypeConstraint, CardConstraint, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
+const {Version, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, FixedValueConstraint, TypeConstraint, SubsetConstraint, CardConstraint, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
 const err = require('shr-test-helpers/errors');
 const errorLogger = err.logger();
 
@@ -605,10 +605,7 @@ describe('#importDataElement', () => {
     expectIdentifier(entry.fields[0].constraints[0].isA, nspace, 'DateTimeString');
   });
 
-/* Test is being skipped because currently the case of having an "only" constraint
-does not support multiple options.
-*/
-  it.skip('Import43: should correctly import an entry with a value choice constraint (to a reduced choice) on a choice field, file = choiceTypeConstraintToReducedChoice', () => {
+  it('Import43: should correctly import an entry with a value choice constraint (to a reduced choice) on a choice field, file = choiceTypeConstraintToReducedChoice', () => {
     const nspace  = 'choiceTypeConstraintToReducedChoice' ;
     const specifications = importFixture(nspace, importDir);
     const entry = expectAndGetEntry(specifications, nspace, 'ThingWithChoiceField');  // error here because 'or' is not being accepted in an 'only' statement
@@ -618,12 +615,12 @@ does not support multiple options.
     expect(entry.fields[0].constraints).to.have.length(1);
     const choice = entry.fields[0];
     expect(choice.constraints).to.have.length(1);
-    expect(choice.constraints[0]).to.be.instanceof(TypeConstraint);
+    expect(choice.constraints[0]).to.be.instanceof(SubsetConstraint);
     expect(choice.constraints[0].path).to.be.empty;
     expect(choice.constraints[0].onValue).to.be.true;
-    expectChoiceValue(choice.value, 2);
-    expectChoiceOption(choice.value, 0, 'primitive', 'dateTime');
-    expectChoiceOption(choice.value, 1, nspace, 'DateTimeString');
+    expect(choice.constraints[0].subsetList).to.have.length(2);
+    expectPrimitiveIdentifier(choice.constraints[0].subsetList[0], 'dateTime');
+    expectIdentifier(choice.constraints[0].subsetList[1], nspace, 'DateTimeString');
   });
 
   it('Import45: should correctly import an entry with a card constraint on the value\'s child, file = cardConstraintOnValueChild', () => {

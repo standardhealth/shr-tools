@@ -5,7 +5,7 @@ const {SHRDataElementLexer} = require('./parsers/SHRDataElementLexer');
 const {SHRDataElementParser} = require('./parsers/SHRDataElementParser');
 const {SHRDataElementParserListener} = require('./parsers/SHRDataElementParserListener');
 const {SHRErrorListener} = require('./errorListener.js');
-const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, FixedValueConstraint, TypeConstraint, IncludesTypeConstraint, CardConstraint, TBD, PRIMITIVES, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
+const {Specifications, Version, Namespace, DataElement, Concept, Cardinality, Identifier, IdentifiableValue, PrimitiveIdentifier, ChoiceValue, IncompleteValue, ValueSetConstraint, CodeConstraint, IncludesCodeConstraint, BooleanConstraint, FixedValueConstraint, TypeConstraint, SubsetConstraint, IncludesTypeConstraint, CardConstraint, TBD, PRIMITIVES, REQUIRED, EXTENSIBLE, PREFERRED, EXAMPLE} = require('shr-models');
 
 var rootLogger = bunyan.createLogger({name: 'shr-text-import'});
 var logger = rootLogger;
@@ -371,7 +371,20 @@ class DataElementImporter extends SHRDataElementParserListener {
           const onValue = cst.elementTypeConstraint().KW_ONLY() ? true : false;
           value.addConstraint(new TypeConstraint(newIdentifier, path, onValue));
         }
-      } else if (cst.elementIncludesTypeConstraint()) {
+      } else if (cst.elementSubsetConstraint()) {
+        let subsetList = [];
+        for (const subsetConstraint of cst.elementSubsetConstraint().subsetConstraint()) {
+          const newIdentifier = this.resolveToIdentifierOrTBD(subsetConstraint);
+          if (newIdentifier.isSpecialKeyWord) {
+            //11025 , 'Fields cannot be constrained to type ${value} ' , 'Unknown' , 'errorNumber'
+            logger.error( {value: newIdentifier.name }, '11025');
+          } else {
+            subsetList.push(newIdentifier);
+          }
+        }
+        value.addConstraint(new SubsetConstraint(subsetList, path, true))
+      }
+      else if (cst.elementIncludesTypeConstraint()) {
         for (const typeConstraint of cst.elementIncludesTypeConstraint().typeConstraint()) {
           const newIdentifier = this.resolveToIdentifierOrTBD(typeConstraint);
           if (newIdentifier.isSpecialKeyWord) {

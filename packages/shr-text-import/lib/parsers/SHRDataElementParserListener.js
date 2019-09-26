@@ -371,6 +371,15 @@ SHRDataElementParserListener.prototype.exitTypeConstraint = function(ctx) {
 };
 
 
+// Enter a parse tree produced by SHRDataElementParser#subsetConstraint.
+SHRDataElementParserListener.prototype.enterSubsetConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#subsetConstraint.
+SHRDataElementParserListener.prototype.exitSubsetConstraint = function(ctx) {
+};
+
+
 // Enter a parse tree produced by SHRDataElementParser#elementWithConstraint.
 SHRDataElementParserListener.prototype.enterElementWithConstraint = function(ctx) {
 };
@@ -494,6 +503,15 @@ SHRDataElementParserListener.prototype.enterElementTypeConstraint = function(ctx
 
 // Exit a parse tree produced by SHRDataElementParser#elementTypeConstraint.
 SHRDataElementParserListener.prototype.exitElementTypeConstraint = function(ctx) {
+};
+
+
+// Enter a parse tree produced by SHRDataElementParser#elementSubsetConstraint.
+SHRDataElementParserListener.prototype.enterElementSubsetConstraint = function(ctx) {
+};
+
+// Exit a parse tree produced by SHRDataElementParser#elementSubsetConstraint.
+SHRDataElementParserListener.prototype.exitElementSubsetConstraint = function(ctx) {
 };
 
 
