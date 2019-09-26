@@ -39,13 +39,26 @@ class Constraints {
   // Builds a new constraint row based on passed in parameter
   newConstraint(name, value, path, lastMod, href, back, front) {
     let targetTop = false;
-    if (href !== undefined) {
-      targetTop = href.includes('http');
-      //Special case for FHIR IG model doc instance
-      if (this.configureForIG && href.startsWith(`${this.config.fhirURL}/ValueSet/`)) {
-        href = href.replace(`${this.config.fhirURL}/ValueSet/`, '../../ValueSet-').concat('.html');
+    if(Array.isArray(href)) {
+      targetTop = href.some(subHref => subHref.includes('http'));
+      if(this.configureForIG) {
+        href = href.map(subHref => {
+          if(subHref.startsWith(`${this.config.fhirURL}/ValueSet/`)) {
+            subHref = subHref.replace(`${this.config.fhirURL}/ValueSet/`, '../../ValueSet-').concat('.html');
+          }
+          return subHref;
+        });
+      }
+    } else {
+      if (href !== undefined) {
+        targetTop = href.includes('http');
+        //Special case for FHIR IG model doc instance
+        if (this.configureForIG && href.startsWith(`${this.config.fhirURL}/ValueSet/`)) {
+          href = href.replace(`${this.config.fhirURL}/ValueSet/`, '../../ValueSet-').concat('.html');
+        }
       }
     }
+    
     let constraint = {
       name: name,
       value: value,
@@ -192,6 +205,22 @@ class Constraints {
     this.constraints.push(fConstraint);
   }
 
+  subsetConstraint(constraint, subpath) {
+    const name = 'Subset';
+    const value = constraint.subsetList.map(option => option.name);
+    const href = constraint.subsetList.map(option => {
+      const element = this.elements[option.fqn];
+      if(element) {
+        return `../${element.namespacePath}/${element.name}.html`;
+      } else {
+        return '';
+      }
+    });
+    const lastMod = constraint.lastModifiedBy.fqn;
+    const sConstraint = this.newConstraint(name, value, subpath, lastMod, href);
+    this.constraints.push(sConstraint);
+  }
+
   // Handles cardinality constraint
   cardConstraint(constraint, subpath) {
     const name = 'Cardinality';
@@ -259,6 +288,9 @@ class Constraints {
       });
       constraintsFilter.code.constraints.forEach((codeCon) => {
         this.fixedCode(codeCon, this.buildFullPath(codeCon));
+      });
+      constraintsFilter.subset.constraints.forEach((subCon) => {
+        this.subsetConstraint(subCon, this.buildFullPath(subCon));
       });
     }
   }

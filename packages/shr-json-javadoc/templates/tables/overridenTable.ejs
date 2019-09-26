@@ -30,7 +30,9 @@
         <% } %>
       </td>
       <td class="colLast">
-        <% if (constraint.href) { -%>
+        <% if (Array.isArray(constraint.href)) { -%>
+          <%- include('valueList', { constraint: constraint }) -%>
+        <% } else if (constraint.href) { -%>
           <div class="block">
             <%= constraint.front %>
             <% if (constraint.targetTop) { -%>

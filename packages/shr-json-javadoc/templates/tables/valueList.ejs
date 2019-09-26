@@ -1,0 +1,17 @@
+<div class="block">
+  <%= constraint.front %>
+  <% constraint.href.forEach(function(subHref, subIndex, allHref) { -%>
+    <%_ if (subHref) { -%>
+      <%_ if (constraint.targetTop) { -%>
+        <a href="<%= subHref %>" target="_top"><%= constraint.value[subIndex] %></a>
+      <%_ } else { -%>
+        <a href="<%= subHref %>"><%= constraint.value[subIndex] %></a>
+      <%_ } -%>
+    <%_ } else { -%>
+      <%= constraint.value[subIndex] -%>
+    <%_ } _%>
+    <%_ if (allHref.length > 2 && subIndex < allHref.length - 1) { -%>, <% } -%>
+    <%_ if (subIndex == allHref.length - 2) { -%> or <% } -%>
+  <%_ }) -%>
+  <%= constraint.back %>
+</div>
