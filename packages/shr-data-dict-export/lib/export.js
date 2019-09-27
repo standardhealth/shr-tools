@@ -114,8 +114,8 @@ function getVsInfo(de, path, specs, projectURL) {
     constraint = getConstraintOnValue(value, specs.dataElements, 'vsInfo');
   }
   if (constraint) {
-    const url = constraint.valueSet.startsWith(projectURL) ? constraint.valueSet.slice(constraint.valueSet.lastIndexOf('/')+1) : constraint.valueSet;
     const vs = specs.valueSets.findByURL(constraint.valueSet);
+    const url = (constraint.valueSet.startsWith(projectURL) && vs) ? vs.identifier.name : constraint.valueSet;
     return { url, strength: constraint.bindingStrength, vs };
   }
 }
