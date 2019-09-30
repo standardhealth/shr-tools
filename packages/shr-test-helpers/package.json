@@ -16,7 +16,8 @@
   "devDependencies": {
     "bunyan": "^1.8.9",
     "chai": "^3.5.0",
-    "eslint": "^3.6.1"
+    "eslint": "^3.6.1",
+    "shr-models": "6.6.0"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9",
