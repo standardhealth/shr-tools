@@ -1270,6 +1270,11 @@ class FHIRExporter {
     if (identifier instanceof mdls.Identifier) {
       if (snapshotEl.type.length == 1 && snapshotEl.type[0].code == 'Extension') {
         // Lookup the extension
+        // Extensions that are inlined do not have an extURL
+        if (MVH.typeProfile(snapshotEl.type[0]) == null) {
+          // Inlined extensions have already been "unrolled", so return
+          return;
+        }
         const extURL = MVH.typeProfile(snapshotEl.type[0])[0];
         // If it's an extension defined by this IG, look it up in the extension exporter
         if (extURL === common.fhirURL(identifier, this._config.fhirURL, 'extension')) {

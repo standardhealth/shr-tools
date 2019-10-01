@@ -30,10 +30,12 @@ class ExtensionExporter {
     return Array.from(this._extensionsMap.values());
   }
 
-  lookupExtension(identifier, createIfNeeded=true, warnIfExtensionIsProcessing=false) {
+  lookupExtension(identifier, createIfNeeded=true, warnIfExtensionIsProcessing=false, temporaryExtension=false) {
     let ext = this._extensionsMap.get(identifier.fqn);
     if (ext === undefined && createIfNeeded) {
       ext = this.createExtension(identifier);
+      // Temporary extensions are created to inline subextensions
+      if (temporaryExtension) ext.temporary = true;
     } else if (warnIfExtensionIsProcessing && this._processTracker.isActive(identifier)) {
       // 13055, 'Using extension that is currently in the middle of processing: ${extensionId}.', 'Unknown', 'errorNumber'
       logger.warn({ extensionId: common.fhirID(identifier, 'extension') }, '13055');
@@ -457,7 +459,7 @@ class ExtensionExporter {
       return;
     }
 
-    const subExt = this.lookupExtension(field.effectiveIdentifier);
+    const subExt = this.lookupExtension(field.effectiveIdentifier, true, false, true);
 
     const fieldBaseId = `${baseId}.extension:${common.shortID(field.effectiveIdentifier)}`;
     // By convention (for now) modifiers have the word "Modifier" in their name
@@ -477,7 +479,7 @@ class ExtensionExporter {
     ssExt.definition = definition;
     ssExt.min = field.effectiveCard.min;
     ssExt.max = field.effectiveCard.max === undefined ? '*' : field.effectiveCard.max.toString();
-    ssExt.type = [MVH.convertType(extension, { code: 'Extension', profile: [subExt.url] })];
+    ssExt.type = [{code: 'Extension'}];
     ssExt.isModifier = isModifier || ssExt.isModifier != null ? isModifier : undefined;
     ssExt.isModifierReason = isModifier ? definition : undefined;
     if (definition == null || definition == '') {
@@ -499,6 +501,13 @@ class ExtensionExporter {
     for ( ; i < extension.snapshot.element.length && extension.snapshot.element[i].path.startsWith(baseExt.path); i++);
     extension.snapshot.element.splice(i, 0, ssExt);
     extension.differential.element.push(dfExt);
+    // Add the subextension as inlined
+    this.inlineSubextension(subExt, extension, field, baseId, baseExt);
+    // Temporary extensions are those that only ever exist as a subextension.
+    // They are never directly referenced by a profile, so we delete them so no StructureDefinition is made
+    if (subExt.temporary) {
+      this._extensionsMap.delete(field.effectiveIdentifier.fqn);
+    }
     this._profileExporter.applyConstraints(field, extension, ssExt, dfExt, true);
 
     const cp = this._specs.contentProfiles.findByIdentifier(def.identifier);
@@ -535,6 +544,46 @@ class ExtensionExporter {
           }
         }
       });
+    }
+  }
+
+  inlineSubextension(subExt, extension, field, baseId, baseExt) {
+    for (const ext of subExt.snapshot.element) {
+      const snapExt = common.cloneJSON(ext);
+      // Slice off the extraneous "Extension" that will start the id
+      const splitPoint = snapExt.id.indexOf('.');
+      const endId = snapExt.id.slice(splitPoint + 1);
+      // Construct a newId and path for the inlined version of the extension
+      const newId = `${baseId}.extension:${common.shortID(field.effectiveIdentifier)}.${endId}`;
+      const pathEnd = endId.slice(endId.lastIndexOf('.') + 1);
+      // This avoids inlining the uneccessary top level "Extension" element
+      if (splitPoint < 0) {
+        continue;
+      } else {
+        // Set the inlined version of the snapshot element with the path and id
+        snapExt.id = newId;
+        snapExt.path = this.getExtensionPathFromExtensionID(snapExt.id);
+        if (pathEnd === 'url') {
+          // Fix the "url" field to the name of the inlined extension, following example of USCore
+          snapExt.fixedUri = newId.slice(newId.lastIndexOf(':') + 1, newId.lastIndexOf('.'));
+        }
+      }
+      // Find the correct spot for the snapshot element and splice it in 
+      let i = extension.snapshot.element.findIndex(e => e == baseExt) + 1;
+      for ( ; i < extension.snapshot.element.length && extension.snapshot.element[i].path.startsWith(baseExt.path); i++);
+      extension.snapshot.element.splice(i, 0, snapExt);
+      // Check if there is a differential element corresponding to this snapshot element
+      let difExt = subExt.differential.element.find(dEl => dEl.id === ext.id);
+      if (difExt) {
+        // If the differential element exists, add it with the correct fields
+        difExt = common.cloneJSON(difExt);
+        difExt.id = snapExt.id;
+        difExt.path = snapExt.path;
+        if (pathEnd === 'url') {
+          difExt.fixedUri = snapExt.fixedUri;
+        }
+        extension.differential.element.push(difExt);
+      }
     }
   }
 
