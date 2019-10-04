@@ -1,6 +1,6 @@
 {
   "name": "shr-json-schema-export",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "description": "Exports SHR data elements from SHR models to JSON Schema",
   "author": "",
   "license": "Apache-2.0",
@@ -17,16 +17,15 @@
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint . --fix"
   },
-  "dependencies": {},
   "devDependencies": {
     "ajv": "^5.2.0",
     "bunyan": "^1.8.9",
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "mocha": "^3.2.0",
-    "shr-expand": "^6.5.0",
-    "shr-models": "6.6.0",
-    "shr-test-helpers": "^6.0.0"
+    "shr-expand": "^6.6.0",
+    "shr-models": "^6.7.0",
+    "shr-test-helpers": "^6.0.1"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9",

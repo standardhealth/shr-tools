@@ -1,6 +1,6 @@
 {
   "name": "shr-graph-export",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Exports SHR data elements from SHR models to graphical models",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,6 @@
     "fs": "^0.0.1-security",
     "fs-extra": "^8.1.0",
     "path": "^0.12.7",
-    "shr-models": "^6.5.0"
+    "shr-models": "^6.7.0"
   }
 }
