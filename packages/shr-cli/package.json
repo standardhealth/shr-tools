@@ -9,6 +9,9 @@
     "url": "git@github.com:standardhealth/shr-cli.git"
   },
   "main": "app.js",
+  "bin": {
+    "cimpl": "app.js"
+  },
   "scripts": {
     "ig:publish": "java -Xms4g -Xmx8g -jar ./out/fhir/guide/org.hl7.fhir.publisher.jar -ig ./out/fhir/guide/ig.json",
     "ig:open": "opener ./out/fhir/guide/output/index.html",
