@@ -754,6 +754,40 @@ class Identifier {
   get namespace() { return this._namespace; }
   get name() { return this._name; }
   get fqn() { return (this.isPrimitive || this.isSpecialKeyWord) ? this._name : `${this._namespace}.${this._name}`; }
+  get title() {
+    // word boundary conditions:
+    // lowercase letter followed by not (lowercase letter)
+    // uppercase letter followed by non-letter
+    // non-letter followed by uppercase letter
+    // uppercase letter followed by uppercase letter, followed by lowercase letter
+    const boundaries = Array.from(this._name).reduce((boundaries, letter, index, name) => {
+      if(index < name.length - 1) {
+        const nextLetter = name[index + 1];
+        if ((letter != letter.toLocaleUpperCase() && nextLetter == nextLetter.toLocaleUpperCase()) ||
+            (letter != letter.toLocaleLowerCase() && nextLetter.toLocaleLowerCase() == nextLetter.toLocaleUpperCase()) ||
+            (letter.toLocaleLowerCase() == letter.toLocaleUpperCase() && nextLetter != nextLetter.toLocaleLowerCase())) {
+              boundaries.push(index + 1);
+        } else if(index < name.length - 2) {
+          const overNextLetter = name[index + 2];
+          if (letter != letter.toLocaleLowerCase() &&
+              nextLetter != nextLetter.toLocaleLowerCase() &&
+              overNextLetter != overNextLetter.toLocaleUpperCase()) {
+            boundaries.push(index + 1);
+          }
+        }
+      }
+      return boundaries;
+    }, [0]);
+    const title = boundaries.reduce((titleParts, boundary, index, boundaries) => {
+      if(index < boundaries.length - 1) {
+        titleParts.push(this._name.slice(boundary, boundaries[index + 1]))
+      } else {
+        titleParts.push(this._name.slice(boundary));
+      }
+      return titleParts;
+    }, []).join(' ');
+    return title;
+  }
 
   get isPrimitive() {
     return this._namespace === PRIMITIVE_NS;
