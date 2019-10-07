@@ -1,24 +1,15 @@
-.container {
-    display: flex;
-}
-.fixed {
-    width: 200px;
-    min-height: 800px;
+.graph {
     border:solid 1px #CCC;
 }
-.flex-item {
-    flex-grow: 1;
-    border:solid 1px #CCC;
-}
-.overlapped {
+.key {
     position: absolute;
-    margin-left: 200px;
     z-index: 3;
 }
 .select_button {
     color: #567EBC;
     font-size: 12px;
     font-family: Verdana,Arial,Helvetica,sans-serif;
+    white-space: nowrap;
 }
 .select_button:hover {
     text-decoration: underline;

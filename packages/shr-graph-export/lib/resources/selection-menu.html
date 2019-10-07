@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <script src="data/tree.js"></script>
+    <link type="text/css" rel="stylesheet" href="style/layout.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="entry_list"></div>
+    </div>
+    <script type="text/javascript">
+      // Utility functions to get a human readable name for a node.
+      // This will get the string after the last '.' and insert a space in between:
+      // - not a capital letter -- a capital letter
+      // - a capital letter -- a capital letter follow by not a capital letter
+      // - not a number -- a number
+      const getHumanReadableName = (name) => {
+        return `${name.substr(name.lastIndexOf(".") + 1).replace(/(([^A-Z])([A-Z]))|(([A-Z])([A-Z][^A-Z]))|(([^0-9])([0-9]))/g, humanReadableReplacer).trim()}`;
+      }
+      const humanReadableReplacer = (match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset, string) => {
+        if (p1) {
+          return [p2, p3].join(' ');
+        } else if (p4) {
+          return [p5, p6].join(' ');
+        } else if (p7) {
+          return [p8, p9].join(' ');
+        }
+      }
+      
+      const fillTable = (tree, frameWindow, targetOrigin) => {
+        let tableDiv = document.getElementById("entry_list");
+        let table = document.createElement('table');
+        let tableBody = document.createElement('tbody');
+        table.appendChild(tableBody);
+        const entryList = tree.map((e, index) => {
+          return { name: getHumanReadableName(e.name), index };
+        });
+        for (const entry of entryList) {
+          let tr = document.createElement('tr');
+          let td = document.createElement('td');
+          td.appendChild(document.createTextNode(entry.name));
+          td.onclick = () => frameWindow.postMessage(entry.index, targetOrigin);
+          td.className = "select_button";
+          tr.appendChild(td);
+          tableBody.appendChild(tr);
+        }
+        tableDiv.appendChild(table);
+      }
+      window.onload = function () {
+        const frame = parent.document.getElementById('graphFrame');
+        const frameWindow = frame.contentWindow;
+        let targetOrigin = "";
+        if (this.location.protocol == "file:") {
+          targetOrigin = "*";
+        } else {
+          targetOrigin = this.location.protocol + "//" + this.location.hostname + (this.location.port ? ":" + this.location.port : "");
+        }
+        fillTable(tree, frameWindow, targetOrigin);
+      }
+    </script>
+  </body>
+</html> 

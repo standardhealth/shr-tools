@@ -216,50 +216,7 @@ const humanReadableReplacer = (match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset
     }
 }
 
-const fillTable = (tree, jm, mindTree) => {
-    let tableDiv = document.getElementById("entry_list");
-    let table = document.createElement('table');
-    let tableBody = document.createElement('tbody');
-
-    table.appendChild(tableBody);
-
-    const entryList = tree.map((e, index) => {
-        return { name: getHumanReadableName(e.name), index };
-    });
-
-    for (const entry of entryList) {
-        let tr = document.createElement('tr');
-        let td = document.createElement('td');
-        td.appendChild(document.createTextNode(entry.name));
-        td.onclick = () => render(entry.index, jm, mindTree);
-        td.width = "200";
-        td.className = "select_button";
-        tr.appendChild(td);
-        tableBody.appendChild(tr);
-    }
-
-    tableDiv.appendChild(table);
-}
-
 function render(index, jm, mindTree) {
     jm.show(mindTree[index]);
     addHoverText(jm);
 }
-
-// --------------------------------------
-
-const mindTree = treeToMind(tree);
-const jmOptions = {
-    container: 'jsmind_container',
-    editable: false,
-    theme: 'orange' 
-}
-const jm = new jsMind(jmOptions);
-// Overriding default handlers with our own
-jm.view.add_event(this, 'click', clickHandler);
-// Override the line drawing function with our own
-jm.view.graph.__proto__.draw_line = drawLine;
-jm.view.__proto__.show_lines = showLines;
-
-fillTable(tree, jm, mindTree); 
-render(0, jm, mindTree);

@@ -12,6 +12,7 @@ const shrEx = require('shr-expand');
 const shrFE = require('shr-fhir-export');
 const shrJDE = require('shr-json-javadoc');
 const shrDD = require('shr-data-dict-export');
+const shrGr = require('shr-graph-export');
 const LogCounter = require('./logcounter');
 const SpecificationsFilter = require('./filter');
 
@@ -31,7 +32,7 @@ let input;
 program
   .usage('<path-to-shr-defs> [options]')
   .option('-l, --log-level <level>', 'the console log level <fatal,error,warn,info,debug,trace>', /^(fatal|error|warn|info|debug|trace)$/i, 'info')
-  .option('-s, --skip <feature>', 'skip an export feature <fhir,model-doc,data-dict,all>', collect, [])
+  .option('-s, --skip <feature>', 'skip an export feature <fhir,model-doc,data-dict,graph,all>', collect, [])
   .option('-m, --log-mode <mode>', 'the console log mode <normal,json,off>', /^(normal|json|off)$/i, 'normal')
   .option('-o, --out <out>', `the path to the output folder`, path.join('.', 'out'))
   .option('-c, --config <config>', 'the name of the config file', 'config.json')
@@ -53,6 +54,7 @@ if (typeof input === 'undefined') {
 const doFHIR = program.skip.every(a => a.toLowerCase() != 'fhir' && a.toLowerCase() != 'all');
 const doModelDoc = program.skip.every(a => a.toLowerCase() != 'model-doc' && a.toLowerCase() != 'all');
 const doDD = program.skip.every(a => a.toLowerCase() != 'data-dict' && a.toLowerCase() != 'all');
+const doGraph = program.skip.every(a => a.toLowerCase() != 'graph' && a.toLowerCase() != 'all');
 
 // Process the de-duplicate error flag
 
@@ -122,6 +124,9 @@ if (doModelDoc) {
 }
 if (doDD) {
   shrDD.setLogger(logger.child({ module: 'shr-data-dict-export'}));
+}
+if (doGraph) {
+  shrGr.setLogger(logger.child({module: 'shr-graph-export'}));
 }
 
 // Go!
@@ -243,6 +248,26 @@ if (doModelDoc) {
   // 05008, 'Skipping Model Docs export',,
   logger.info('05008');
 }
+
+if (doGraph) {
+  try {
+    const graphOutputPath = path.join(program.out, 'fhir', 'guide', 'pages', 'graph');
+    mkdirp.sync(graphOutputPath);
+    shrGr.exportResources(graphOutputPath);
+
+    const graphTree = shrGr.exportToGraph(expSpecifications, configSpecifications);
+    mkdirp.sync(path.join(graphOutputPath, 'data'));
+    fs.writeFileSync(path.join(graphOutputPath, 'data', 'tree.js'), 'const tree = ' + JSON.stringify(graphTree,  null, '  '));
+  } catch (error) {
+    // 15012, 'Failure in Graph export. Aborting with error message: ${errorText}',  'Unknown, 'errorNumber'
+    logger.fatal({ errorText: error.stack }, '15012');
+    failedExports.push('shr-graph-export');
+  }
+} else {
+  // 05011, 'Skipping Graph export',,
+  logger.info('05011');
+}
+
 // 05002, 'Finished CLI Import/Export',,
 logger.info('05002');
 
