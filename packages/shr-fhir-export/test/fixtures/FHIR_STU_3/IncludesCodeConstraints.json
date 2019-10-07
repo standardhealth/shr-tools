@@ -8,7 +8,7 @@
     },
     "url": "http://foobar.com/fhir/StructureDefinition/shr-test-IncludesCodesList-model",
     "name": "IncludesCodesList",
-    "title": "shr-test-IncludesCodesList",
+    "title": "Includes Codes List",
     "status": "draft",
     "date": "2018-02-26",
     "publisher": "The Foo Bar Corporation",

@@ -8,7 +8,7 @@
     },
     "url": "http://foobar.com/fhir/StructureDefinition/shr-other-test-Simple-model",
     "name": "Simple",
-    "title": "shr-other-test-Simple",
+    "title": "Simple",
     "status": "draft",
     "date": "2018-02-26",
     "publisher": "The Foo Bar Corporation",

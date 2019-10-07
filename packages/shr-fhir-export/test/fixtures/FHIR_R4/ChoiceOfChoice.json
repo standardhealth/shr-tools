@@ -8,7 +8,7 @@
     },
     "url": "http://foobar.com/fhir/StructureDefinition/shr-test-ChoiceOfChoice-model",
     "name": "ChoiceOfChoice",
-    "title": "shr-test-ChoiceOfChoice",
+    "title": "Choice Of Choice",
     "status": "draft",
     "date": "2018-02-26",
     "publisher": "The Foo Bar Corporation",
