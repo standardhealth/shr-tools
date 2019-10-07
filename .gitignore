@@ -1,2 +1,7 @@
 /lerna-debug.log
 /out*
+/.vscode
+/.project
+/archive*
+/.settings
+txCache
