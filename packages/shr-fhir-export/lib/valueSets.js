@@ -36,7 +36,7 @@ class ValueSetExporter {
     MVH.setVsIdentifier(fhirVS, [{ system: this._config.projectURL, value: valueSet.identifier.fqn}], this._target);
     fhirVS.name = common.tokenize(valueSet.identifier.name);
     // NOTE: Setting title will re-set the 'name' for DSTU2, which is actually what we want in this case
-    MVH.setVsTitle(fhirVS, valueSet.identifier.name, this._target);
+    MVH.setVsTitle(fhirVS, valueSet.identifier.title, this._target);
     fhirVS.date = this._config.publishDate || common.todayString();
     fhirVS.publisher = this._config.publisher;
     // Since fhirVS doesn't have a fhirVersion attribute, create a dummy one needed for the MVH call

@@ -43,24 +43,8 @@ function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
 
-// These will insert a space in between:
-// - not a capital letter -- a capital letter
-// - a capital letter -- a capital letter follow by not a capital letter
-// - not a number -- a number
-function getHumanReadableProfileName(name) {
-  return `${name.replace(/(([^A-Z])([A-Z]))|(([A-Z])([A-Z][^A-Z]))|(([^0-9])([0-9]))/g, humanReadableReplacer).trim()}`;
-}
 function getHumanReadablePathName(path) {
-  return `${path.map(id => id.name).join('').replace(/(([^A-Z])([A-Z]))|(([A-Z])([A-Z][^A-Z]))|(([^0-9])([0-9]))/g, humanReadableReplacer).trim()}`;
-}
-function humanReadableReplacer(match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset, string) {
-  if (p1) {
-    return [p2, p3].join(' ');
-  } else if (p4) {
-    return [p5, p6].join(' ');
-  } else if (p7) {
-    return [p8, p9].join(' ');
-  }
+  return path.map(id => id.title).join(' ').trim();
 }
 
 function getCardinalityInfo(card) {
@@ -345,7 +329,7 @@ function aggregateCardinality(...card) {
 function fillElementLines(dataElementLines, profileLines, vsMap, de, specs, config) {
   let isInProfileList = false;
   const valueAndFields = [de.value, ...de.fields];
-  const profileName = getHumanReadableProfileName(de.identifier.name);
+  const profileName = de.identifier.title;
   for (const f of valueAndFields) {
     if (!(f && f.identifier)) continue; // no field or no identifier
 
@@ -358,7 +342,7 @@ function fillElementLines(dataElementLines, profileLines, vsMap, de, specs, conf
       isInProfileList = true; // some rule of element is must-support, so include in profile list
       if (includesTypeConstraints.length > 0) {
         for (const itc of includesTypeConstraints) {
-          const itcName = getHumanReadableProfileName(itc.isA.name);
+          const itcName = itc.isA.title;
           const itcElement = specs.dataElements.findByIdentifier(itc.isA);
           const description = `${itcElement.description}`;
           const cardInfo = getCardinalityInfo(itc.card);
