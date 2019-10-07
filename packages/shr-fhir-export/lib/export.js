@@ -2020,6 +2020,10 @@ class FHIRExporter {
         if (typeof mappedProfiles !== 'undefined' && !typesHaveSameCodesProfilesAndTargetProfiles(originalTargetTypes, snapshotEl.type)) {
           differentialEl.type = snapshotEl.type;
         }
+        // Since types are added one by one, we need this check in case we have recreated the original targetProfiles
+        if (differentialEl.type && targetProfilesSameAsOriginal(differentialEl.type)) {
+          delete(differentialEl.type);
+        }
         this.applyConstraints(sourceValue, profile, snapshotEl, differentialEl, false, sourcePath);
         matchedPaths.push(clonedPath);
       }
@@ -4616,6 +4620,25 @@ function isTargetBasedOn(target, baseTarget, targetSpec, configuration) {
   }
 
   return false;
+}
+
+function targetProfilesSameAsOriginal(ssType) {
+  const originalTargets = ssType[0]._originalTargetProfiles;
+  const targets = ssType[0].targetProfile;
+  // _originalTargetProfiles and targetProfile doesn't always exist, so when one
+  // or the other is null, we return false. If both are null, still false
+  if (originalTargets == null || targets == null) {
+    return false;
+  }
+  // If different lengths, then they are not the same
+  if (originalTargets.length !== targets.length) {
+    return false;
+  }
+  // Alphabetically sort to make comparison easy
+  const sortedOriginalTargets = [...ssType[0]._originalTargetProfiles].sort();
+  const sortedCurrentTargets = [...ssType[0].targetProfile].sort();
+  // See if the arrays are the same
+  return sortedOriginalTargets.every((el, i) => el === sortedCurrentTargets[i]);
 }
 
 function typesHaveSameCodesProfilesAndTargetProfiles(t1, t2) {
