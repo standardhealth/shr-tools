@@ -26,7 +26,7 @@
         }
       }
       
-      const fillTable = (tree, frameWindow, targetOrigin) => {
+      const fillTable = (tree, targetOrigin) => {
         let tableDiv = document.getElementById("entry_list");
         let table = document.createElement('table');
         let tableBody = document.createElement('tbody');
@@ -38,7 +38,7 @@
           let tr = document.createElement('tr');
           let td = document.createElement('td');
           td.appendChild(document.createTextNode(entry.name));
-          td.onclick = () => frameWindow.postMessage(entry.index, targetOrigin);
+          td.onclick = () => parent.postMessage(entry.index, targetOrigin);
           td.className = "select_button";
           tr.appendChild(td);
           tableBody.appendChild(tr);
@@ -46,15 +46,13 @@
         tableDiv.appendChild(table);
       }
       window.onload = function () {
-        const frame = parent.document.getElementById('graphFrame');
-        const frameWindow = frame.contentWindow;
         let targetOrigin = "";
         if (this.location.protocol == "file:") {
           targetOrigin = "*";
         } else {
           targetOrigin = this.location.protocol + "//" + this.location.hostname + (this.location.port ? ":" + this.location.port : "");
         }
-        fillTable(tree, frameWindow, targetOrigin);
+        fillTable(tree, targetOrigin);
       }
     </script>
   </body>
