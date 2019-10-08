@@ -3536,7 +3536,7 @@ class FHIRExporter {
     // Iterate the rules one at a time
     for (const cpr of cp.rules) {
 
-      if (cpr.primaryProfile || cpr.noProfiles) {
+      if (cpr.primaryProfile || cpr.noProfile) {
         continue;
       }
 
