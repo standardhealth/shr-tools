@@ -1,3 +1,4 @@
+const ejs = require('ejs');
 const fs = require('fs-extra');
 const path = require('path');
 const bunyan = require('bunyan');
@@ -10,9 +11,14 @@ function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
 
-function exportToGraph(specifications, configuration) {
-  const exporter = new GraphExporter(specifications, configuration);
-  return exporter.export();
+// Global instance of the graph exporter, to be used across functions
+let exporter;
+
+function exportToGraph(specifications, configuration, outputPath) {
+  exporter = new GraphExporter(specifications, configuration);
+  const graphExport = exporter.export();
+  exportResources(outputPath);
+  return graphExport;
 }
 
 function exportResources(outputPath) {
@@ -21,6 +27,35 @@ function exportResources(outputPath) {
   if (fs.existsSync(resourcePath)) {
     fs.copySync(resourcePath, outputPath);
   }
+
+  const templatePath = path.join(__dirname, 'templates');
+  if (fs.existsSync(templatePath)) {
+    buildDataElements(outputPath);
+  }
+}
+
+// Builds pages for each data element
+function buildDataElements(outputPath) {
+  // 08001, 'Building graph pages for ${count} elements...',,
+  logger.info({ count: exporter.graph.length }, '08001');
+  exporter.graph.forEach((node, index) => {
+    const ejsPkg = { index };
+    const fileName = `${node.name}.html`;
+    const filePath = path.join(outputPath, fileName);
+    renderEjsFile('templates/graph-viewer.ejs', ejsPkg, filePath);
+  });
+
+}
+
+// Function to generate and write html from an ejs template
+function renderEjsFile(template, pkg, destination) {
+  ejs.renderFile(path.join(__dirname, template), pkg, (error, htmlText) => {
+    if (error) {
+      // 18001, 'Error rendering graph: ${errorText}',  'Unknown' , 'errorNumber'
+      logger.error({errorText: error.stack }, '18001');
+    }
+    else fs.writeFileSync(destination, htmlText);
+  });
 }
 
 class GraphExporter {
@@ -28,6 +63,10 @@ class GraphExporter {
     this._specs = specifications;
     this._config = configuration;
     this._graph = [];
+  }
+
+  get graph() {
+    return this._graph;
   }
 
   export() {
@@ -417,4 +456,8 @@ const humanReadableReplacer = (match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset
   }
 }
 
-module.exports = {exportToGraph, exportResources, setLogger};
+function errorFilePath() {
+  return path.join(__dirname, '..', 'errorMessages.txt');
+}
+
+module.exports = {exportToGraph, setLogger, errorFilePath};

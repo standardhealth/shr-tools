@@ -54,7 +54,7 @@ if (typeof input === 'undefined') {
 const doFHIR = program.skip.every(a => a.toLowerCase() != 'fhir' && a.toLowerCase() != 'all');
 const doModelDoc = program.skip.every(a => a.toLowerCase() != 'model-doc' && a.toLowerCase() != 'all');
 const doDD = program.skip.every(a => a.toLowerCase() != 'data-dict' && a.toLowerCase() != 'all');
-const doGraph = program.skip.every(a => a.toLowerCase() != 'graph' && a.toLowerCase() != 'all');
+const doGraph = program.skip.every(a => a.toLowerCase() != 'graph');
 
 // Process the de-duplicate error flag
 
@@ -90,7 +90,7 @@ if (clean && fs.existsSync(program.out)) {
 mkdirp.sync(program.out);
 
 const errorFiles = [shrTI.errorFilePath(), shrEx.errorFilePath(), shrFE.errorFilePath(), shrJDE.errorFilePath(),
-  path.join(__dirname, "errorMessages.txt")]
+  shrGr.errorFilePath(), path.join(__dirname, 'errorMessages.txt')];
 
 const PrettyPrintDuplexStreamJson = require('./PrettyPrintDuplexStreamJson');
 const mdpStream = new PrettyPrintDuplexStreamJson(null, errorFiles, showDuplicateErrors, path.join(program.out, 'out.log'));
@@ -253,9 +253,7 @@ if (doGraph) {
   try {
     const graphOutputPath = path.join(program.out, 'fhir', 'guide', 'pages', 'graph');
     mkdirp.sync(graphOutputPath);
-    shrGr.exportResources(graphOutputPath);
-
-    const graphTree = shrGr.exportToGraph(expSpecifications, configSpecifications);
+    const graphTree = shrGr.exportToGraph(expSpecifications, configSpecifications, graphOutputPath);
     mkdirp.sync(path.join(graphOutputPath, 'data'));
     fs.writeFileSync(path.join(graphOutputPath, 'data', 'tree.js'), 'const tree = ' + JSON.stringify(graphTree,  null, '  '));
   } catch (error) {

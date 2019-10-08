@@ -32,13 +32,13 @@
         let tableBody = document.createElement('tbody');
         table.appendChild(tableBody);
         const entryList = tree.map((e, index) => {
-          return { name: getHumanReadableName(e.name), index };
+          return { name: e.name, title: getHumanReadableName(e.name), index };
         });
         for (const entry of entryList) {
           let tr = document.createElement('tr');
           let td = document.createElement('td');
-          td.appendChild(document.createTextNode(entry.name));
-          td.onclick = () => parent.postMessage(entry.index, targetOrigin);
+          td.appendChild(document.createTextNode(entry.title));
+          td.onclick = () => parent.postMessage(entry.name, targetOrigin);
           td.className = "select_button";
           tr.appendChild(td);
           tableBody.appendChild(tr);

@@ -58,43 +58,39 @@ function nodeToMind(node) {
     };
 }
 
-function treeToMind(tree) {
-    const mindTree = tree.map(rootNode => {
+function treeToMind(rootNode) {
+    fillNodeAndPathList(rootNode);
 
-        // Process the tree of the given root node and store the nodes and paths of the tree
-        fillNodeAndPathList(rootNode);
+    // Evenly split the nodes adjacent to the root
+    const adjacentNodes = rootNode.properties.concat(rootNode.values);
+    const nodeMidIndex = Math.ceil(adjacentNodes.length / 2);
+    const rightNodes = adjacentNodes.slice(0, nodeMidIndex);
+    const leftNodes = adjacentNodes.slice(nodeMidIndex);
 
-        // Evenly split the nodes adjacent to the root
-        const adjacentNodes = rootNode.properties.concat(rootNode.values);
-        const nodeMidIndex = Math.ceil(adjacentNodes.length / 2);
-        const rightNodes = adjacentNodes.slice(0, nodeMidIndex);
-        const leftNodes = adjacentNodes.slice(nodeMidIndex);
+    rootNode.direction = 'root';
 
-        rootNode.direction = 'root';
+    rightNodes.map(n => n.direction = 'right');
+    leftNodes.map(n => n.direction = 'left');
 
-        rightNodes.map(n => n.direction = 'right');
-        leftNodes.map(n => n.direction = 'left');
-
-        // Label all nodes that are not adjacent to the root as right or left
-        pathList.forEach(path => {
-            path.slice(1).forEach(node => {
-                if (node.direction == null) node.direction = path[1].direction;
-            });
+    // Label all nodes that are not adjacent to the root as right or left
+    pathList.forEach(path => {
+        path.slice(1).forEach(node => {
+            if (node.direction == null) node.direction = path[1].direction;
         });
-
-        const mindData = nodeToMind(rootNode);
-        const mind = {
-            meta: {
-                name: '',
-                author: '',
-                version: ''
-            },
-            format: 'node_tree',
-            data: mindData
-        }
-        return mind;
     });
-    return mindTree;
+
+    const mindData = nodeToMind(rootNode);
+    const mind = {
+        meta: {
+            name: '',
+            author: '',
+            version: ''
+        },
+        format: 'node_tree',
+        data: mindData
+    }
+
+    return mind;
 }
 
 function addHoverText(jm) {
@@ -216,7 +212,7 @@ const humanReadableReplacer = (match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset
     }
 }
 
-function render(index, jm, mindTree) {
-    jm.show(mindTree[index]);
+function render(jm, mind) {
+    jm.show(mind);
     addHoverText(jm);
 }

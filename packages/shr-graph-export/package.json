@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bunyan": "^1.8.12",
+    "ejs": "^2.7.1",
     "fs": "^0.0.1-security",
     "fs-extra": "^8.1.0",
     "path": "^0.12.7",

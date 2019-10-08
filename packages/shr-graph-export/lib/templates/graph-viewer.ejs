@@ -16,7 +16,7 @@
 
     <script src="sketch.js"></script>
     <script type="text/javascript">
-      const mindTree = treeToMind(tree);
+      const mind = treeToMind(tree[<%= index %>]);
       const jmOptions = {
         container: 'jsmind_container',
         editable: false,
@@ -28,9 +28,9 @@
       // Override the line drawing function with our own
       jm.view.graph.__proto__.draw_line = drawLine;
       jm.view.__proto__.show_lines = showLines;
-      render(0, jm, mindTree);
+      render(jm, mind);
       window.addEventListener("message", (event) => {
-        render(event.data, jm, mindTree);
+        render(jm, mind);
       });
     </script>
   </body>

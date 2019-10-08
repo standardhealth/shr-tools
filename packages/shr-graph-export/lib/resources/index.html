@@ -4,20 +4,13 @@
     <script type='text/javascript'>
       window.addEventListener("message", (event) => {
         const frame = document.getElementById('graphFrame');
-        const frameWindow = frame.contentWindow;
-        let targetOrigin = "";
-        if (this.location.protocol == "file:") {
-          targetOrigin = "*";
-        } else {
-          targetOrigin = this.location.protocol + "//" + this.location.hostname + (this.location.port ? ":" + this.location.port : "");
-        }
-        frameWindow.postMessage(event.data, targetOrigin);
+        frame.src = `${event.data}.html`;
       });
     </script>
   </head>
   <frameset cols="20%,80%" title="Graph frame">
     <frame src="selection-menu.html" id="menuFrame" name="menuFrame" title="Selection menu" scrolling="yes" />
-    <frame src="graph-viewer.html" id="graphFrame" name="graphFrame" title="Graph viewer" scrolling="yes" />
+    <frame id="graphFrame" name="graphFrame" title="Graph viewer" scrolling="yes" />
     <noframes>
       <body>
         <noscript>
