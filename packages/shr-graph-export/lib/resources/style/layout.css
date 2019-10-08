@@ -1,9 +1,13 @@
 .graph {
     border:solid 1px #CCC;
 }
-.key {
+.overlay {
     position: absolute;
     z-index: 3;
+}
+.key {
+    margin-left: 10px;
+    width: 250px;
 }
 .select_button {
     color: #567EBC;
@@ -12,5 +16,15 @@
     white-space: nowrap;
 }
 .select_button:hover {
+    text-decoration: underline;
+} 
+.zoom_button {
+    color: #567EBC;
+    font-size: 12px;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    margin-left: 10px;
+    width: 120px;
+}
+.zoom_button:hover {
     text-decoration: underline;
 } 
