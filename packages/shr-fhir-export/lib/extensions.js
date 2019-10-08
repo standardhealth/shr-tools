@@ -91,7 +91,7 @@ class ExtensionExporter {
     ext.text.div = this.getTextDiv(def.identifier);
     ext.url = common.fhirURL(def.identifier, this._config.fhirURL, 'extension');
     ext.name = common.tokenize(def.identifier.name);
-    MVH.setSdTitle(ext, common.fhirID(def.identifier));
+    MVH.setSdTitle(ext, def.identifier.title);
     if (this._config.publisher) {
       ext.publisher = this._config.publisher;
     } else {

@@ -80,7 +80,7 @@ class ModelsExporter {
       model.text = this.getText(def);
       model.url = common.fhirURL(def.identifier, this._config.fhirURL, 'model');
       model.name = def.identifier.name;
-      model.title = common.fhirID(def.identifier);
+      model.title = def.identifier.title;
       model.status = 'draft';
       model.date = this._config.publishDate || common.todayString();
       model.publisher = this._config.publisher;

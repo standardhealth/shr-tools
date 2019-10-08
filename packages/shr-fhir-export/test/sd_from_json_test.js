@@ -18,7 +18,7 @@ describe('#StructureDefinition.fromJSON()', () => {
       });
       expect(sd.url).to.equal('http://foobar.com/fhir/StructureDefinition/shr-test-Simple-model');
       expect(sd.name).to.equal('Simple');
-      expect(sd.title).to.equal('shr-test-Simple');
+      expect(sd.title).to.equal('Simple');
       expect(sd.status).to.equal('draft');
       expect(sd.date).to.equal('2018-02-26');
       expect(sd.publisher).to.equal('The Foo Bar Corporation');
@@ -144,7 +144,7 @@ describe('#StructureDefinition.fromJSON()', () => {
       });
       expect(sd.url).to.equal('http://foobar.com/fhir/StructureDefinition/shr-test-Simple-model');
       expect(sd.name).to.equal('Simple');
-      expect(sd.title).to.equal('shr-test-Simple');
+      expect(sd.title).to.equal('Simple');
       expect(sd.status).to.equal('draft');
       expect(sd.date).to.equal('2018-02-26');
       expect(sd.publisher).to.equal('The Foo Bar Corporation');

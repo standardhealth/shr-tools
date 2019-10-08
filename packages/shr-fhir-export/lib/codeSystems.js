@@ -35,7 +35,7 @@ class CodeSystemExporter {
     fhirCS.url = codeSystem.url;
     MVH.setCsIdentifier(fhirCS, [{ system: this._config.projectURL, value: codeSystem.identifier.fqn}], this._target);
     fhirCS.name = common.tokenize(codeSystem.identifier.name);
-    fhirCS.title = codeSystem.identifier.name;
+    fhirCS.title = codeSystem.identifier.title;
     fhirCS.date = this._config.publishDate || common.todayString();
     fhirCS.publisher = this._config.publisher;
     fhirCS.contact = this._config.contact;
