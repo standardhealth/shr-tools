@@ -372,7 +372,7 @@ function exportIG(specifications, fhirResults, outDir, configuration = {}, specP
     };
     pushXmlResource(`StructureDefinition/${profile.id}`, MVH.sdTitle(profile), 'profile');
 
-    const name = profile.name;
+    const name = MVH.sdTitle(profile) || profile.name;
     const sdType = MVH.sdType(profile);
     let fhirHREF;
     const fhirJSON = fhir.find(sdType);
@@ -517,7 +517,7 @@ ${match[1]}
       'template-base': 'sd-extension.html',
     };
     pushXmlResource(`StructureDefinition/${extension.id}`, MVH.sdTitle(extension), 'extension');
-    const name = extension.name;
+    const name = MVH.sdTitle(extension) || extension.name;
     if (!hideSupporting || primaryExtensionUrls.has(extension.url)) {
       htmlExtensions.push(
         `<tr>
@@ -541,7 +541,7 @@ ${match[1]}
             if (ssEl.type && ssEl.type.some(t => t.code === 'Extension' && MVH.typeHasProfile(t, extension.url))) {
               usagePaths.add(ssEl.path);
               usages.push({
-                name: profile.name,
+                name: MVH.sdTitle(profile) || profile.name,
                 id: profile.id,
                 path: ssEl.path
               });
@@ -708,7 +708,7 @@ ${match[1]}
       };
       pushXmlResource(`StructureDefinition/${model.id}`, model.name, 'logical');
 
-      const name = model.name;
+      const name = MVH.sdTitle(model) || model.name;
       const htmlSnippet =
       `<tr>
         <td><a href="StructureDefinition-${model.id}.html">${name}</a></td>
