@@ -76,7 +76,7 @@ class GraphExporter {
       this.collectRootInfo(element);
     }
 
-    this._graph.sort((a, b) => getHumanReadableName(a.name) > getHumanReadableName(b.name) ? 1 : -1);
+    this._graph.sort((a, b) => a.title > b.title ? 1 : -1);
 
     return this._graph;
   }
@@ -94,7 +94,7 @@ class GraphExporter {
       }
     });
 
-    this._graph.push({ name: root.identifier.fqn, type, description: root.description, properties, values: [] });
+    this._graph.push({ name: root.identifier.fqn, title: root.identifier.title, type, description: root.description, properties, values: [] });
   }
 
   collectMustSupportInfo(root, path, properties) {
@@ -104,7 +104,7 @@ class GraphExporter {
     const elements = path.map(id => this._specs.dataElements.findByIdentifier(id));
 
     for (const element of elements) {
-      node = { name: element.identifier.fqn, type: this.getType(element), description: element.description, properties: [], values: [] };
+      node = { name: element.identifier.fqn, title: element.identifier.title, type: this.getType(element), description: element.description, properties: [], values: [] };
       currentProperties.push(node);
       currentProperties = node.properties;
     }
@@ -134,7 +134,7 @@ class GraphExporter {
     });
 
     node.properties = fieldElements.map(fieldElement => {
-      let newNode = { name: fieldElement.identifier.fqn, type: this.getType(fieldElement), description: fieldElement.description, properties: [], values: [] };
+      let newNode = { name: fieldElement.identifier.fqn, title: fieldElement.identifier.title, type: this.getType(fieldElement), description: fieldElement.description, properties: [], values: [] };
       if (!processed.includes(fieldElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
         if (newNode.type === 'primitive') {
           this.collectPrimitiveInfo(newNode, valueSetConstraints, codeConstraints);
@@ -150,9 +150,9 @@ class GraphExporter {
       const valueElement = this._specs.dataElements.findByIdentifier(value.effectiveIdentifier) || value;
       let newNode;
       if (!valueElement.effectiveIdentifier) { // is Element
-        newNode = { name: valueElement.identifier.fqn, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
+        newNode = { name: valueElement.identifier.fqn, title: valueElement.identifier.title, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
       } else { // is Value
-        newNode = { name: valueElement.effectiveIdentifier.fqn, type: 'primitive', properties: [], values: [] }
+        newNode = { name: valueElement.effectiveIdentifier.fqn, title: valueElement.effectiveIdentifier.title, type: 'primitive', properties: [], values: [] }
       }
       node.values.push(newNode);
       if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
@@ -184,9 +184,9 @@ class GraphExporter {
       node.values = valueElements.map(valueElement => {
         let newNode;
         if (!valueElement.effectiveIdentifier) { // is Element
-          newNode = { name: valueElement.identifier.fqn, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
+          newNode = { name: valueElement.identifier.fqn, title: valueElement.identifier.title, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
         } else { // is Value
-          newNode = { name: valueElement.effectiveIdentifier.fqn, type: 'primitive', properties: [], values: [] }
+          newNode = { name: valueElement.effectiveIdentifier.fqn, title: valueElement.effectiveIdentifier.title, type: 'primitive', properties: [], values: [] }
         }
         if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
           if (newNode.type === 'primitive') {
@@ -435,24 +435,6 @@ class GraphExporter {
     }
     mergedChild.constraints = constraints;
     return mergedChild;
-  }
-}
-
-// Utility functions to get a human readable name for a node.
-// This will get the string after the last '.' and insert a space in between:
-// - not a capital letter -- a capital letter
-// - a capital letter -- a capital letter follow by not a capital letter
-// - not a number -- a number
-const getHumanReadableName = (name) => {
-  return `${name.substr(name.lastIndexOf(".") + 1).replace(/(([^A-Z])([A-Z]))|(([A-Z])([A-Z][^A-Z]))|(([^0-9])([0-9]))/g, humanReadableReplacer).trim()}`;
-}
-const humanReadableReplacer = (match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset, string) => {
-  if (p1) {
-  return [p2, p3].join(' ');
-  } else if (p4) {
-  return [p5, p6].join(' ');
-  } else if (p7) {
-  return [p8, p9].join(' ');
   }
 }
 

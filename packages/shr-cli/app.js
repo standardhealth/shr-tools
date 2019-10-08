@@ -54,7 +54,7 @@ if (typeof input === 'undefined') {
 const doFHIR = program.skip.every(a => a.toLowerCase() != 'fhir' && a.toLowerCase() != 'all');
 const doModelDoc = program.skip.every(a => a.toLowerCase() != 'model-doc' && a.toLowerCase() != 'all');
 const doDD = program.skip.every(a => a.toLowerCase() != 'data-dict' && a.toLowerCase() != 'all');
-const doGraph = program.skip.every(a => a.toLowerCase() != 'graph');
+const doGraph = program.skip.every(a => a.toLowerCase() != 'graph' && a.toLowerCase() != 'all');
 
 // Process the de-duplicate error flag
 
