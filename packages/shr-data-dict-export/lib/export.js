@@ -335,7 +335,7 @@ function fillElementLines(dataElementLines, profileLines, vsMap, de, specs, conf
 
     let includesTypeConstraints = f.constraintsFilter.includesType.constraints;
     let codeConstraints = f.constraintsFilter.code.constraints;
-    const cpRules = (specs.contentProfiles.findRulesByIdentifierAndField(de.identifier, f.identifier));
+    const cpRules = (specs.contentProfiles.findRulesByIdentifierAndField(de.identifier, f.effectiveIdentifier));
 
     for (const rule of cpRules) {
       if (!rule.mustSupport) continue; // not a must-support rule
