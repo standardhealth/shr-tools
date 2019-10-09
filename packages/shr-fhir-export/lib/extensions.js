@@ -479,7 +479,7 @@ class ExtensionExporter {
     ssExt.definition = definition;
     ssExt.min = field.effectiveCard.min;
     ssExt.max = field.effectiveCard.max === undefined ? '*' : field.effectiveCard.max.toString();
-    ssExt.type = [{code: 'Extension'}];
+    ssExt.type = [MVH.convertType(extension, { code: 'Extension', profile: [subExt.url] })];
     ssExt.isModifier = isModifier || ssExt.isModifier != null ? isModifier : undefined;
     ssExt.isModifierReason = isModifier ? definition : undefined;
     if (definition == null || definition == '') {
@@ -501,6 +501,8 @@ class ExtensionExporter {
     for ( ; i < extension.snapshot.element.length && extension.snapshot.element[i].path.startsWith(baseExt.path); i++);
     extension.snapshot.element.splice(i, 0, ssExt);
     extension.differential.element.push(dfExt);
+    this._profileExporter.applyConstraints(field, extension, ssExt, dfExt, true);
+
     // Add the subextension as inlined
     this.inlineSubextension(subExt, extension, field, baseId, baseExt);
     // Temporary extensions are those that only ever exist as a subextension.
@@ -508,7 +510,8 @@ class ExtensionExporter {
     if (subExt.temporary) {
       this._extensionsMap.delete(field.effectiveIdentifier.fqn);
     }
-    this._profileExporter.applyConstraints(field, extension, ssExt, dfExt, true);
+    ssExt.fixType = true;
+    dfExt.fixType = true;
 
     const cp = this._specs.contentProfiles.findByIdentifier(def.identifier);
     if (cp != null) {
@@ -556,8 +559,13 @@ class ExtensionExporter {
       // Construct a newId and path for the inlined version of the extension
       const newId = `${baseId}.extension:${common.shortID(field.effectiveIdentifier)}.${endId}`;
       const pathEnd = endId.slice(endId.lastIndexOf('.') + 1);
-      // This avoids inlining the uneccessary top level "Extension" element
-      if (splitPoint < 0) {
+      const existingElement = extension.snapshot.element.find(el => el.id === newId);
+      // Applying constraints can add elements that we don't actually want, just keep values
+      if (!pathEnd.startsWith('value')) {
+        extension.snapshot.element = extension.snapshot.element.filter(el => el.id !== newId);
+      }
+      // This avoids inlining the uneccessary top level "Extension" element or readding value that was constrained
+      if (splitPoint < 0 || (existingElement != null && pathEnd.startsWith('value'))) {
         continue;
       } else {
         // Set the inlined version of the snapshot element with the path and id

@@ -214,6 +214,21 @@ class FHIRExporter {
       });
     }
 
+    // Clean up the types for inlined extensions
+    extensions.forEach(sd => {
+      sd.snapshot.element.forEach(ssEl => {
+        if (ssEl.fixType) {
+          delete(ssEl.fixType);
+          ssEl.type = [{code: "Extension"}];
+          const dfEl = common.getDifferentialElementById(sd, ssEl.id);
+          if (dfEl != null && dfEl.fixType) {
+            delete(dfEl.fixType);
+            dfEl.type = [{code: "Extension" }];
+          }
+        }
+      });
+    });
+
     return {
       profiles,
       extensions,
@@ -1270,11 +1285,6 @@ class FHIRExporter {
     if (identifier instanceof mdls.Identifier) {
       if (snapshotEl.type.length == 1 && snapshotEl.type[0].code == 'Extension') {
         // Lookup the extension
-        // Extensions that are inlined do not have an extURL
-        if (MVH.typeProfile(snapshotEl.type[0]) == null) {
-          // Inlined extensions have already been "unrolled", so return
-          return;
-        }
         const extURL = MVH.typeProfile(snapshotEl.type[0])[0];
         // If it's an extension defined by this IG, look it up in the extension exporter
         if (extURL === common.fhirURL(identifier, this._config.fhirURL, 'extension')) {
@@ -2333,7 +2343,7 @@ class FHIRExporter {
           const element = this.getElementInExtension([common.choiceFriendlyEffectiveIdentifier(sourceValue), ...path], profile, snapshotEl);
           if (typeof element === 'undefined') {
             //13024 , 'Failed to resolve element path from ${element1} to ${path1}' , 'Unknown', 'errorNumber'
-            logger.error({element1 : snapshotEl.id, element2 : path }, '13024' );
+            logger.error({element1 : snapshotEl.id, path1 : path.map(p => p.name) }, '13024' );
             continue;
           }
           let childSourceValue;
@@ -2669,7 +2679,7 @@ class FHIRExporter {
     }
     if (el == null) {
       //13026 , 'Failed to resolve path from ${element1} to ${path1} ' , 'Unknown' , 'errorNumber'
-      logger.error({element1:snapshotEl.id, path1: shrPath }, '13026');
+      logger.error({element1:snapshotEl.id, path1: shrPath.map(p => p.name) }, '13026');
       return;
     }
     if (el.type.length == 1 && el.type[0].code == 'Extension') {
