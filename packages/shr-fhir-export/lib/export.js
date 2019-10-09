@@ -3189,9 +3189,19 @@ class FHIRExporter {
       if (typeof code.system !== 'undefined' && code.system !== null) {
         const systemDf = common.getDifferentialElementById(profile, systemEl.id, true);
         systemEl.fixedUri = systemDf.fixedUri = code.system;
+        if(systemEl.min != 1) {
+          systemDf.min = 1;
+          systemDf.max = systemEl.max;
+        }
+        systemEl.min = 1;
       }
       const codeDf = common.getDifferentialElementById(profile, codeEl.id, true);
       codeEl.fixedCode = codeDf.fixedCode = code.code;
+      if(codeEl.min != 1) {
+        codeDf.min = 1;
+        codeDf.max = codeEl.max;
+      }
+      codeEl.min = 1;
 
     } return;
     }
