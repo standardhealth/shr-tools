@@ -86,6 +86,7 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
   enterNamespaceFlag(ctx) {
     const noProfile = (ctx.KW_NO_PROFILE() != null);
     const primaryProfile = (ctx.KW_ALL_PRIMARY() != null);
+    let warnAbstractOrElement = false;
     for (const de of this._specs.dataElements.byNamespace(this._currentNs)) {
       if (de.isEntry || de.isGroup) {
         this._currentDef = new ContentProfile(de.identifier);
@@ -96,7 +97,13 @@ class ContentProfileImporter extends SHRContentProfileParserListener {
         this._currentRule.primaryProfile = primaryProfile;
         this._currentDef.addRule(this._currentRule);
         this._specs.contentProfiles.add(this._currentDef);
+      } else {
+        warnAbstractOrElement = true;
       }
+    }
+    if (warnAbstractOrElement) {
+      // 01030, 'Namespace level content profile flag(s) for namespace ${namespace} only apply to Entries or Groups.',,
+      logger.warn({ namespace: this._currentNs } ,'01030');
     }
   }
 

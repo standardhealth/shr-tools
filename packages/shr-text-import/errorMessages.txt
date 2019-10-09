@@ -28,6 +28,7 @@ Number, Message, Solution, deduplicationKeys
 01027, 'Done preprocessing namespace',,
 01028, 'Start importing value set namespace',,
 01029, 'Done importing value set namespace',,
+01030, 'Namespace level content profile flag(s) for namespace ${namespace} only apply to Entries or Groups.',,
 11001, 'Element name "${name}" should begin with a capital letter', 'Rename the specified Element', 'errorNumber'
 11002, 'Entry name '${name}' should begin with a capital letter' , 'Rename the specified Entry', 'errorNumber'
 11003, 'Unable to resolve value set reference: ${valueSet}', 'Invalid value set reference double check the name and the path', 'errorNumber'
