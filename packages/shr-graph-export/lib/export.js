@@ -88,13 +88,15 @@ class GraphExporter {
     
     const contentProfile = this._specs.contentProfiles.findByIdentifier(root.identifier);
 
-    contentProfile.rules.forEach(rule => {
-      if (rule.mustSupport) {
-        this.collectMustSupportInfo(root, rule.path, properties);
-      }
-    });
+    if (contentProfile) {
+      contentProfile.rules.forEach(rule => {
+        if (rule.mustSupport) {
+          this.collectMustSupportInfo(root, rule.path, properties);
+        }
+      });
 
-    this._graph.push({ name: root.identifier.fqn, title: root.identifier.title, type, description: root.description, properties, values: [] });
+      this._graph.push({ name: root.identifier.fqn, title: root.identifier.title, type, description: root.description, properties, values: [] });
+    }
   }
 
   collectMustSupportInfo(root, path, properties) {
