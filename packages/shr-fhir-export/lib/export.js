@@ -2021,7 +2021,7 @@ class FHIRExporter {
           differentialEl.type = snapshotEl.type;
         }
         // Since types are added one by one, we need this check in case we have recreated the original targetProfiles
-        if (differentialEl.type && targetProfilesSameAsOriginal(differentialEl.type)) {
+        if (differentialEl.type && typesSameAsOriginal(differentialEl.type)) {
           delete(differentialEl.type);
         }
         this.applyConstraints(sourceValue, profile, snapshotEl, differentialEl, false, sourcePath);
@@ -4622,23 +4622,39 @@ function isTargetBasedOn(target, baseTarget, targetSpec, configuration) {
   return false;
 }
 
-function targetProfilesSameAsOriginal(ssType) {
-  const originalTargets = ssType[0]._originalTargetProfiles;
-  const targets = ssType[0].targetProfile;
-  // _originalTargetProfiles and targetProfile doesn't always exist, so when one
-  // or the other is null, we return false. If both are null, still false
-  if (originalTargets == null || targets == null) {
-    return false;
+function typesSameAsOriginal(type) {
+  // For every type, check if the type is the same as the original
+  let allTypesMatch = true;
+  for (const t of type) {
+    const originalTargets = t._originalTargetProfiles;
+    const targets = MVH.typeTargetProfile(t);
+    const originalProfiles = t._originalProfiles;
+    const profiles = MVH.typeProfile(t);
+    let targetsMatch = false;
+    let profilesMatch = false;
+    if (originalTargets != null && targets != null) {
+      // Alphabetically sort to make comparison easy
+      const sortedOriginalTargets = [...originalTargets].sort();
+      const sortedCurrentTargets = [...targets].sort();
+      // See if the arrays are the same
+      targetsMatch = sortedOriginalTargets.every((el, i) => el === sortedCurrentTargets[i]);
+    } else if (originalTargets == null && targets == null) {
+      targetsMatch = true;
+    }
+
+    if (originalProfiles != null && profiles != null) {
+      // Alphabetically sort to make comparison easy
+      const sortedOriginalProfiles = [...originalProfiles].sort();
+      const sortedCurrentProfiles = [...profiles].sort();
+      // See if the arrays are the same
+      targetsMatch = sortedOriginalProfiles.every((el, i) => el === sortedCurrentProfiles[i]);
+    } else if (originalProfiles == null && profiles == null) {
+      profilesMatch = true;
+    }
+    // If allTypesMatch is ever set to false, we want it to stay false
+    allTypesMatch = allTypesMatch && profilesMatch && targetsMatch;
   }
-  // If different lengths, then they are not the same
-  if (originalTargets.length !== targets.length) {
-    return false;
-  }
-  // Alphabetically sort to make comparison easy
-  const sortedOriginalTargets = [...ssType[0]._originalTargetProfiles].sort();
-  const sortedCurrentTargets = [...ssType[0].targetProfile].sort();
-  // See if the arrays are the same
-  return sortedOriginalTargets.every((el, i) => el === sortedCurrentTargets[i]);
+  return allTypesMatch;
 }
 
 function typesHaveSameCodesProfilesAndTargetProfiles(t1, t2) {
