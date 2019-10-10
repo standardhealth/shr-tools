@@ -312,7 +312,15 @@ class Expander {
 
     if (element.basedOn.length == 0) {
       if (element.value) setCurrentElementAsOriginalModifier(element.value);
-      if (element.fields) element.fields.forEach(f => setCurrentElementAsOriginalModifier(f));
+      if (element.fields) {
+        element.fields.forEach(f => {
+          if (f.mustInherit) {
+            // 12051, 'New property ${propertyName} added on ${elementName} without Property keyword', 'Please use Property keyword when introducing new properties.', 'errorNumber'
+            logger.error({propertyName: f.identifier.name, elementName: element.identifier.name}, '12051');
+          }
+          setCurrentElementAsOriginalModifier(f);
+        });
+      }
 
     } else {
       for (const baseID of element.basedOn) {
@@ -436,6 +444,10 @@ class Expander {
             manageValueInheritance(baseField, ef);
             manageCardHistory(baseField, ef);
           } else {
+            if (ef.mustInherit) {
+              // 12051, 'New property ${propertyName} added on ${elementName} without Property keyword', 'Please use Property keyword when introducing new properties.', 'errorNumber'
+              logger.error({propertyName: ef.identifier.name, elementName: element.identifier.name}, '12051');
+            }
             setCurrentElementAsOriginalModifier(ef);
           }
         }

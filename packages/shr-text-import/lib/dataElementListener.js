@@ -450,7 +450,7 @@ class DataElementImporter extends SHRDataElementParserListener {
       const field = this.processCountAndTypes(ctx.propertyField().count(), [ctx.propertyField().propertyFieldType()]);
       if (this._currentDef.fields.some(f => f.identifier && f.identifier.equals(field.identifier))) {
         // 11040, 'Property "${name}" already exists.', 'Remove or rename redundant property', 'errorNumber'
-        logger.error({ name: field.identifier.name }, 'name');
+        logger.error({ name: field.identifier.name }, 'name', '11040');
       }
       else {
         this.addFieldToCurrentDef(field);
@@ -508,6 +508,7 @@ class DataElementImporter extends SHRDataElementParserListener {
             logger.error('11042');
           }
           else {
+            field.mustInherit = true;
             this.addFieldToCurrentDef(field);
           }
         }
