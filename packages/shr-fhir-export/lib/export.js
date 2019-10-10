@@ -215,15 +215,15 @@ class FHIRExporter {
     }
 
     // Clean up the types for inlined extensions
-    extensions.forEach(sd => {
+    [...profiles, ...extensions].forEach(sd => {
       sd.snapshot.element.forEach(ssEl => {
         if (ssEl.fixType) {
           delete(ssEl.fixType);
-          ssEl.type = [{code: "Extension"}];
+          ssEl.type = [{code: 'Extension'}];
           const dfEl = common.getDifferentialElementById(sd, ssEl.id);
           if (dfEl != null && dfEl.fixType) {
             delete(dfEl.fixType);
-            dfEl.type = [{code: "Extension" }];
+            dfEl.type = [{code: 'Extension'}];
           }
         }
       });

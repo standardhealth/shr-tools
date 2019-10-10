@@ -510,6 +510,8 @@ class ExtensionExporter {
     if (subExt.temporary) {
       this._extensionsMap.delete(field.effectiveIdentifier.fqn);
     }
+    // We leave the type for now, and mark it to be fixed later
+    // We want type = [{code: "Extension"}], but need "profile" set for applyingConstraints
     ssExt.fixType = true;
     dfExt.fixType = true;
 
