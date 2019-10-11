@@ -5,11 +5,10 @@ const err = require('shr-test-helpers/errors');
 const shrTI = require('shr-text-import');
 const shrEx = require('shr-expand');
 const shrFE = require('shr-fhir-export');
-const shrJSE = require('shr-json-schema-export');
 const { exportToES6 } = require('../lib/export');
 const { TestContext } = require('./test_utils');
 
-sanityCheckModules({shrTI, shrEx, shrJSE, shrFE});
+sanityCheckModules({shrTI, shrEx, shrFE});
 
 function setup(inDir='./test/fixtures/spec', configFile='config_stu3.json', outDir='./build/test', clean=false) {
   const context = new TestContext();
@@ -19,14 +18,9 @@ function setup(inDir='./test/fixtures/spec', configFile='config_stu3.json', outD
   shrTI.setLogger(errLogger);
   shrEx.setLogger(errLogger);
   shrFE.setLogger(errLogger);
-  shrJSE.setLogger(errLogger);
 
   const configSpecs = shrTI.importConfigFromFilePath(inDir, configFile);
   const specs = shrEx.expand(shrTI.importFromFilePath(inDir, configSpecs), {}, shrFE);
-
-  // Generate the JSON schemas
-  const baseSchemaNamespace = 'https://standardhealthrecord.org/schema';
-  const jsonSchemaResults = shrJSE.exportToJSONSchema(specs, baseSchemaNamespace, configSpecs.entryTypeURL);
 
   // Generate FHIR structure definitions
   const fhirResults = shrFE.exportToFHIR(specs, configSpecs);
@@ -51,14 +45,6 @@ function setup(inDir='./test/fixtures/spec', configFile='config_stu3.json', outD
     }
   };
   handleNS(results, es6Path);
-
-  // Write the JSON schemas out to disk
-  const jsonSchemaPath = `${outDir}/schema/`;
-  fs.mkdirpSync(jsonSchemaPath);
-  for (const schemaId in jsonSchemaResults) {
-    const filename = `${schemaId.substring(baseSchemaNamespace.length+1).replace(/\//g, '.')}.schema.json`;
-    fs.writeFileSync(path.join(jsonSchemaPath, filename), JSON.stringify(jsonSchemaResults[schemaId], null, 2));
-  }
 
   // Write the FHIR Profiles
   const baseFHIRPath = `${outDir}/fhir/`;

@@ -31,7 +31,6 @@
     "mocha": "^3.2.0",
     "shr-expand": "^6.6.0",
     "shr-fhir-export": "^6.7.0",
-    "shr-json-schema-export": "^6.3.0",
     "shr-models": "^6.7.0",
     "shr-test-helpers": "^6.0.1",
     "shr-text-import": "^6.7.0"
