@@ -9,7 +9,6 @@ const chalk = require('chalk');
 const { sanityCheckModules } = require('shr-models');
 const shrTI = require('shr-text-import');
 const shrEx = require('shr-expand');
-const shrJSE = require('shr-json-schema-export');
 const shrEE = require('shr-es6-export');
 const shrFE = require('shr-fhir-export');
 const shrJDE = require('shr-json-javadoc');
@@ -19,7 +18,7 @@ const SpecificationsFilter = require('./filter');
 
 /* eslint-disable no-console */
 
-sanityCheckModules({shrTI, shrEx, shrJSE, shrEE, shrFE });
+sanityCheckModules({shrTI, shrEx, shrEE, shrFE });
 
 // Record the time so we can print elapsed time
 const hrstart = process.hrtime();
@@ -33,7 +32,7 @@ let input;
 program
   .usage('<path-to-shr-defs> [options]')
   .option('-l, --log-level <level>', 'the console log level <fatal,error,warn,info,debug,trace>', /^(fatal|error|warn|info|debug|trace)$/i, 'info')
-  .option('-s, --skip <feature>', 'skip an export feature <fhir,json-schema,model-doc,data-dict,all>', collect, [])
+  .option('-s, --skip <feature>', 'skip an export feature <fhir,model-doc,data-dict,all>', collect, [])
   .option('-m, --log-mode <mode>', 'the console log mode <normal,json,off>', /^(normal|json|off)$/i, 'normal')
   .option('-o, --out <out>', `the path to the output folder`, path.join('.', 'out'))
   .option('-c, --config <config>', 'the name of the config file', 'config.json')
@@ -54,7 +53,6 @@ if (typeof input === 'undefined') {
 }
 // Process the skip flags
 const doFHIR = program.skip.every(a => a.toLowerCase() != 'fhir' && a.toLowerCase() != 'all');
-const doJSONSchema = program.skip.every(a => a.toLowerCase() != 'json-schema' && a.toLowerCase() != 'all');
 const doModelDoc = program.skip.every(a => a.toLowerCase() != 'model-doc' && a.toLowerCase() != 'all');
 const doDD = program.skip.every(a => a.toLowerCase() != 'data-dict' && a.toLowerCase() != 'all');
 
@@ -93,7 +91,7 @@ if (clean && fs.existsSync(program.out)) {
 mkdirp.sync(program.out);
 
 const errorFiles = [shrTI.errorFilePath(), shrEx.errorFilePath(), shrFE.errorFilePath(), shrJDE.errorFilePath(),
-  shrEE.errorFilePath(), shrJSE.errorFilePath(), path.join(__dirname, "errorMessages.txt")]
+  shrEE.errorFilePath(), path.join(__dirname, "errorMessages.txt")]
 
 const PrettyPrintDuplexStreamJson = require('./PrettyPrintDuplexStreamJson');
 const mdpStream = new PrettyPrintDuplexStreamJson(null, errorFiles, showDuplicateErrors, path.join(program.out, 'out.log'));
@@ -121,9 +119,6 @@ shrTI.setLogger(logger.child({module: 'shr-text-input'}));
 shrEx.setLogger(logger.child({module: 'shr-expand'}));
 if (doFHIR) {
   shrFE.setLogger(logger.child({module: 'shr-fhir-export'}));
-}
-if (doJSONSchema) {
-  shrJSE.setLogger(logger.child({module: 'shr-json-schema-export'}));
 }
 if (doModelDoc) {
   shrJDE.setLogger(logger.child({ module: 'shr-json-javadoc' }));
@@ -260,43 +255,6 @@ if (doFHIR) {
   logger.info('05006');
 }
 
-if (doJSONSchema) {
-  try {
-    let typeURL = configSpecifications.entryTypeURL;
-    if (!typeURL) {
-      typeURL = 'http://nowhere.invalid/';
-    }
-    const baseSchemaNamespace = 'https://standardhealthrecord.org/schema';
-    const baseSchemaNamespaceWithSlash = baseSchemaNamespace + '/';
-    const jsonSchemaResults = shrJSE.exportToJSONSchema(expSpecifications, baseSchemaNamespace, typeURL);
-    const jsonSchemaPath = path.join(program.out, 'json-schema');
-    mkdirp.sync(jsonSchemaPath);
-    for (const schemaId in jsonSchemaResults) {
-      const filename = `${schemaId.substring(baseSchemaNamespaceWithSlash.length).replace(/\//g, '.')}.schema.json`;
-      fs.writeFileSync(path.join(jsonSchemaPath, filename), JSON.stringify(jsonSchemaResults[schemaId], null, '  '));
-    }
-
-  // Uncomment the following to get expanded schemas
-  //   shrJSE.setLogger(logger.child({module: 'shr-json-schema-export-expanded'}));
-  //   const baseSchemaExpandedNamespace = 'https://standardhealthrecord.org/schema-expanded';
-  //   const baseSchemaExpandedNamespaceWithSlash = baseSchemaExpandedNamespace + '/';
-  //   const jsonSchemaExpandedResults = shrJSE.exportToJSONSchema(expSpecifications, baseSchemaExpandedNamespace, typeURL, true);
-  //   const jsonSchemaExpandedPath = path.join(program.out, 'json-schema-expanded');
-  //   mkdirp.sync(jsonSchemaExpandedPath);
-  //   for (const schemaId in jsonSchemaExpandedResults) {
-  //     const filename = `${schemaId.substring(baseSchemaExpandedNamespaceWithSlash.length).replace(/\//g, '.')}.schema.json`;
-  //     fs.writeFileSync(path.join(jsonSchemaExpandedPath, filename), JSON.stringify(jsonSchemaExpandedResults[schemaId], null, '  '));
-  //   }
-
-  } catch (error) {
-    // 15009, 'Failure in JSON Schema export. Aborting with error message: ${errorText}',  'Unknown, 'errorNumber'
-    logger.fatal({ errorText: error.stack }, '15009');
-    failedExports.push('shr-json-schema-export');
-  }
-} else {
-  // 05007, 'Skipping JSON Schema export',,
-  logger.info('05007');
-}
 
 if (doModelDoc) {
   try {
