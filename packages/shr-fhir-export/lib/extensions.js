@@ -567,9 +567,7 @@ class ExtensionExporter {
         extension.snapshot.element = extension.snapshot.element.filter(el => el.id !== newId);
       }
       // This avoids inlining the uneccessary top level "Extension" element or readding value that was constrained
-      if (splitPoint < 0 || (existingElement != null && pathEnd.startsWith('value'))) {
-        continue;
-      } else {
+      if (splitPoint > -1 && (existingElement == null || !pathEnd.startsWith('value'))) {
         // Set the inlined version of the snapshot element with the path and id
         snapExt.id = newId;
         snapExt.path = this.getExtensionPathFromExtensionID(snapExt.id);
@@ -577,22 +575,27 @@ class ExtensionExporter {
           // Fix the "url" field to the name of the inlined extension, following example of USCore
           snapExt.fixedUri = newId.slice(newId.lastIndexOf(':') + 1, newId.lastIndexOf('.'));
         }
-      }
-      // Find the correct spot for the snapshot element and splice it in 
-      let i = extension.snapshot.element.findIndex(e => e == baseExt) + 1;
-      for ( ; i < extension.snapshot.element.length && extension.snapshot.element[i].path.startsWith(baseExt.path); i++);
-      extension.snapshot.element.splice(i, 0, snapExt);
-      // Check if there is a differential element corresponding to this snapshot element
-      let difExt = subExt.differential.element.find(dEl => dEl.id === ext.id);
-      if (difExt) {
-        // If the differential element exists, add it with the correct fields
-        difExt = common.cloneJSON(difExt);
-        difExt.id = snapExt.id;
-        difExt.path = snapExt.path;
-        if (pathEnd === 'url') {
-          difExt.fixedUri = snapExt.fixedUri;
+         // Find first position after baseExt whose path doesn't start with baseExt.path
+        const spliceStartPosition = extension.snapshot.element.findIndex(ssEl => ssEl == baseExt) + 1;
+        const spliceOffset = extension.snapshot.element.slice(spliceStartPosition).findIndex(ssEl => !ssEl.path.startsWith(baseExt.path));
+        // Splice in correct position if found, else push to end of array
+        if (spliceOffset > -1) {
+          extension.snapshot.element.splice(spliceStartPosition + spliceOffset, 0, snapExt);
+        } else {
+          extension.snapshot.element.push(snapExt);
         }
-        extension.differential.element.push(difExt);
+        // Check if there is a differential element corresponding to this snapshot element
+        let difExt = subExt.differential.element.find(dEl => dEl.id === ext.id);
+        if (difExt) {
+          // If the differential element exists, add it with the correct fields
+          difExt = common.cloneJSON(difExt);
+          difExt.id = snapExt.id;
+          difExt.path = snapExt.path;
+          if (pathEnd === 'url') {
+            difExt.fixedUri = snapExt.fixedUri;
+          }
+          extension.differential.element.push(difExt);
+        }
       }
     }
   }
