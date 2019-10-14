@@ -474,7 +474,7 @@ class ExtensionExporter {
     delete(ssExt.alias);
     ssExt.id = `${fieldBaseId}`;
     ssExt.path = this.getExtensionPathFromExtensionID(fieldBaseId);
-    ssExt[MVH.nameOfEdSliceName(extension)] = common.shortID(field.effectiveIdentifier);
+    ssExt[MVH.nameOfEdSliceName(extension)] = common.shortID(field.effectiveIdentifier, true);
     ssExt.short = subExt.short;
     ssExt.definition = definition;
     ssExt.min = field.effectiveCard.min;
@@ -571,9 +571,9 @@ class ExtensionExporter {
         // Set the inlined version of the snapshot element with the path and id
         snapExt.id = newId;
         snapExt.path = this.getExtensionPathFromExtensionID(snapExt.id);
-        if (pathEnd === 'url') {
+        if (pathEnd === 'url' && common.shortID(field.effectiveIdentifier) === newId.slice(newId.lastIndexOf(':') + 1, newId.lastIndexOf('.'))) {
           // Fix the "url" field to the name of the inlined extension, following example of USCore
-          snapExt.fixedUri = newId.slice(newId.lastIndexOf(':') + 1, newId.lastIndexOf('.'));
+          snapExt.fixedUri = common.shortID(field.effectiveIdentifier, true);
         }
          // Find first position after baseExt whose path doesn't start with baseExt.path
         const spliceStartPosition = extension.snapshot.element.findIndex(ssEl => ssEl == baseExt) + 1;
