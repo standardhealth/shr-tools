@@ -1004,28 +1004,28 @@ ${match[1]}
 
   // Rewrite the updated CodeSystems HTML file
   const codeSystemsHtmlPath = path.join(outDir, 'pages', 'codesystems.html');
-  const codeSystemsHtml = fs.readFileSync(codeSystemsHtmlPath, 'utf8');
-  const codeSystemsDisclaimer = `<p>The code systems listed below include:</p>
-  <ol>
-    <li>code systems used in the definition of value sets in this IG; and</li>
-    <li>code systems for individual codes used directly in the logical models and profiles.</li>
-  </ol>
-  <p>This list is not inclusive of code systems associated with external value sets used in the IG.</p>`;
-  let updatedCodeSystemsHtml = codeSystemsHtml.replace('<code-systems-go-here/>', htmlCodeSystems.join(''))
-    .replace('<code-systems-disclaimer/>', codeSystemsDisclaimer);
-  if (hideSupporting) {
-    updatedCodeSystemsHtml = updatedCodeSystemsHtml
-      .replace('<code-systems-header/>', '<h2>Primary code systems used in this Implementation Guide</h2>');
-  } else {
-    updatedCodeSystemsHtml = updatedCodeSystemsHtml
-      .replace('<code-systems-header/>', '<h2>Code systems used in this Implementation Guide</h2>');
-  }
-  if (htmlCodeSystems.length === 0) {
-    updatedCodeSystemsHtml = updatedCodeSystemsHtml
-      .replace('<table class="codes">', 'None\n<table class="codes" style="display: none">');
-  }
+  if (htmlCodeSystems.length > 0) {
+    const codeSystemsHtml = fs.readFileSync(codeSystemsHtmlPath, 'utf8');
+    const codeSystemsDisclaimer = `<p>The code systems listed below are defined by this IG and:</p>
+    <ol>
+      <li>are used by ${hideSupporting ? 'primary ' : ''}local value sets defined in this IG; or</li>
+      <li>contain individual codes used directly in the ${hideSupporting ? 'primary ' : ''}logical models and profiles in this IG.</li>
+    </ol>
+    <p>This list is not inclusive of code systems associated with external value sets used in the IG.</p>`;
+    let updatedCodeSystemsHtml = codeSystemsHtml.replace('<code-systems-go-here/>', htmlCodeSystems.join(''))
+      .replace('<code-systems-disclaimer/>', codeSystemsDisclaimer);
+    if (hideSupporting) {
+      updatedCodeSystemsHtml = updatedCodeSystemsHtml
+        .replace('<code-systems-header/>', '<h2>Primary code systems used in this Implementation Guide</h2>');
+    } else {
+      updatedCodeSystemsHtml = updatedCodeSystemsHtml
+        .replace('<code-systems-header/>', '<h2>Code systems used in this Implementation Guide</h2>');
+    }
 
-  fs.writeFileSync(codeSystemsHtmlPath, updatedCodeSystemsHtml, 'utf8');
+    fs.writeFileSync(codeSystemsHtmlPath, updatedCodeSystemsHtml, 'utf8');
+  } else {
+    fs.unlinkSync(codeSystemsHtmlPath);
+  }
 
   // Rewrite the updated Models HTML file
   const modelsHtmlPath = path.join(outDir, 'pages', 'logical.html');
@@ -1083,9 +1083,9 @@ ${match[1]}
     const graphItem = '<li><a href="graph.html">Graph Viewer</a></li>';
     navbarHtml = navbarHtml.replace(graphItem, '<!-- no graph viewer -->');
   }
-  if (target === 'FHIR_DSTU_2') {
+  if (target === 'FHIR_DSTU_2' || htmlCodeSystems.length === 0) {
     const modelsItem = '<li><a href="codesystems.html">Code Systems</a></li>';
-    navbarHtml = navbarHtml.replace(modelsItem, '<!-- no code systems (DSTU2) -->');
+    navbarHtml = navbarHtml.replace(modelsItem, '<!-- no code systems -->');
   }
   if (htmlSearchParameters.length === 0) {
     const searchParametersItem = '<li><a href="searchparameters.html">Search Parameters</a></li>';
