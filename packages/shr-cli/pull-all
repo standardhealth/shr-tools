@@ -24,10 +24,6 @@ cd ../shr-json-javadoc
 echo "============== shr-json-javadoc =============="
 git pull
 
-cd ../shr-es6-export
-echo "================== shr-es6-export =================="
-git pull
-
 cd ../shr-fhir-export
 echo "================= shr-fhir-export =================="
 git pull

@@ -25,11 +25,6 @@ echo "============== shr-json-javadoc ===================="
 rm -rf node_modules
 yarn
 
-cd ../shr-es6-export
-echo "================== shr-es6-export =================="
-rm -rf node_modules
-yarn
-
 cd ../shr-fhir-export
 echo "================= shr-fhir-export =================="
 rm -rf node_modules

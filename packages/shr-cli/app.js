@@ -9,7 +9,6 @@ const chalk = require('chalk');
 const { sanityCheckModules } = require('shr-models');
 const shrTI = require('shr-text-import');
 const shrEx = require('shr-expand');
-const shrEE = require('shr-es6-export');
 const shrFE = require('shr-fhir-export');
 const shrJDE = require('shr-json-javadoc');
 const shrDD = require('shr-data-dict-export');
@@ -18,7 +17,7 @@ const SpecificationsFilter = require('./filter');
 
 /* eslint-disable no-console */
 
-sanityCheckModules({shrTI, shrEx, shrEE, shrFE });
+sanityCheckModules({shrTI, shrEx, shrFE });
 
 // Record the time so we can print elapsed time
 const hrstart = process.hrtime();
@@ -37,7 +36,6 @@ program
   .option('-o, --out <out>', `the path to the output folder`, path.join('.', 'out'))
   .option('-c, --config <config>', 'the name of the config file', 'config.json')
   .option('-d, --deduplicate', 'do not show duplicate error messages (default: false)')
-  .option('-j, --export-es6', 'export ES6 JavaScript classes (experimental, default: false)')
   .option('-i, --import-cimcore', 'import CIMCORE files instead of CIMPL (default: false)')
   .option('-n, --clean', 'Save archive of old output directory and perform clean build (default: false)')
   .arguments('<path-to-shr-defs>')
@@ -60,7 +58,6 @@ const doDD = program.skip.every(a => a.toLowerCase() != 'data-dict' && a.toLower
 
 const showDuplicateErrors = !program.deduplicate;
 const importCimcore = program.importCimcore;
-const doES6 = program.exportEs6;
 const clean = program.clean;
 
 // Archive old output directory if it exists
@@ -91,7 +88,7 @@ if (clean && fs.existsSync(program.out)) {
 mkdirp.sync(program.out);
 
 const errorFiles = [shrTI.errorFilePath(), shrEx.errorFilePath(), shrFE.errorFilePath(), shrJDE.errorFilePath(),
-  shrEE.errorFilePath(), path.join(__dirname, "errorMessages.txt")]
+  path.join(__dirname, "errorMessages.txt")]
 
 const PrettyPrintDuplexStreamJson = require('./PrettyPrintDuplexStreamJson');
 const mdpStream = new PrettyPrintDuplexStreamJson(null, errorFiles, showDuplicateErrors, path.join(program.out, 'out.log'));
@@ -122,9 +119,6 @@ if (doFHIR) {
 }
 if (doModelDoc) {
   shrJDE.setLogger(logger.child({ module: 'shr-json-javadoc' }));
-}
-if (doES6) {
-  shrEE.setLogger(logger.child({ module: 'shr-es6-export'}));
 }
 if (doDD) {
   shrDD.setLogger(logger.child({ module: 'shr-data-dict-export'}));
@@ -185,33 +179,8 @@ if (doDD) {
 }
 
 let fhirResults = null;
-if (doES6 || doFHIR){
+if (doFHIR){
   fhirResults = shrFE.exportToFHIR(expSpecifications, configSpecifications);
-}
-
-if (doES6) {
-  try {
-    const es6Results = shrEE.exportToES6(expSpecifications, fhirResults);
-    const es6Path = path.join(program.out, 'es6');
-    const handleNS = (obj, fpath) => {
-      mkdirp.sync(fpath);
-      for (const key of Object.keys(obj)) {
-        if (key.endsWith('.js')) {
-          fs.writeFileSync(path.join(fpath, key), obj[key]);
-        } else {
-          handleNS(obj[key], path.join(fpath, key));
-        }
-      }
-    };
-    handleNS(es6Results, es6Path);
-  } catch (error) {
-    // 15007, 'Failure in ES6 export. Aborting with error message: ${errorText}',  'Unknown, 'errorNumber'
-    logger.fatal({ errorText: error.stack }, '15007');
-    failedExports.push('shr-es6-export');
-  }
-} else {
-  // 05005, 'Skipping ES6 export',,
-  logger.info('05005');
 }
 
 
