@@ -10,7 +10,7 @@
   },
   "main": "app.js",
   "bin": {
-    "cimpl": "app.js"
+    "shr-cli": "app.js"
   },
   "scripts": {
     "ig:publish": "java -Xms4g -Xmx8g -jar ./out/fhir/guide/org.hl7.fhir.publisher.jar -ig ./out/fhir/guide/ig.json",
