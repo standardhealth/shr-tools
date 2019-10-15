@@ -461,7 +461,7 @@ class ExtensionExporter {
 
     const subExt = this.lookupExtension(field.effectiveIdentifier, true, false, true);
 
-    const fieldBaseId = `${baseId}.extension:${common.shortID(field.effectiveIdentifier)}`;
+    const fieldBaseId = `${baseId}.extension:${common.shortID(field.effectiveIdentifier, true)}`;
     // By convention (for now) modifiers have the word "Modifier" in their name
     const isModifier = (/modifier/i).test(field.effectiveIdentifier.name);
 
@@ -559,7 +559,7 @@ class ExtensionExporter {
       const splitPoint = snapExt.id.indexOf('.');
       const endId = snapExt.id.slice(splitPoint + 1);
       // Construct a newId and path for the inlined version of the extension
-      const newId = `${baseId}.extension:${common.shortID(field.effectiveIdentifier)}.${endId}`;
+      const newId = `${baseId}.extension:${common.shortID(field.effectiveIdentifier, true)}.${endId}`;
       const pathEnd = endId.slice(endId.lastIndexOf('.') + 1);
       const existingElement = extension.snapshot.element.find(el => el.id === newId);
       // Applying constraints can add elements that we don't actually want, just keep values
@@ -571,7 +571,7 @@ class ExtensionExporter {
         // Set the inlined version of the snapshot element with the path and id
         snapExt.id = newId;
         snapExt.path = this.getExtensionPathFromExtensionID(snapExt.id);
-        if (pathEnd === 'url' && common.shortID(field.effectiveIdentifier) === newId.slice(newId.lastIndexOf(':') + 1, newId.lastIndexOf('.'))) {
+        if (pathEnd === 'url' && common.shortID(field.effectiveIdentifier, true) === newId.slice(newId.lastIndexOf(':') + 1, newId.lastIndexOf('.'))) {
           // Fix the "url" field to the name of the inlined extension, following example of USCore
           snapExt.fixedUri = common.shortID(field.effectiveIdentifier, true);
         }
