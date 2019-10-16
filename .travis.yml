@@ -14,6 +14,5 @@ env:
   - TESTSCRIPT=test-scripts/shr-text-import.sh
   - TESTSCRIPT=test-scripts/shr-expand.sh
   - TESTSCRIPT=test-scripts/shr-fhir-export.sh
-  - TESTSCRIPT=test-scripts/shr-es6-export.sh
 before_script: git fetch origin master:master
 script: "bash $TESTSCRIPT" 

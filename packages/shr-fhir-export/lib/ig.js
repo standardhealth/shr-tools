@@ -357,15 +357,7 @@ function exportIG(specifications, fhirResults, outDir, configuration = {}, specP
   case 'FHIR_R4':     fhirSpecURLBase = 'http://hl7.org/fhir/R4/'; break;
   default:            fhirSpecURLBase = 'http://hl7.org/fhir/R4/'; break;
   }
-  for (let profile of fhirResults.profiles) {
-    // Identifiers and mappings are needed for ES6 class generation, but we don't want them in the
-    // IG profiles because:
-    // (a) the IG publisher reports errors when we use the canonical URL as the identifier system
-    // (b) the mappings create tons of diffs where nothing meaningful has actually changed
-    const baseSD = fhir.find(MVH.sdBaseDefinition(profile));
-    profile = removeSHRMappings(profile, baseSD);
-    delete profile.identifier;
-
+  for (const profile of fhirResults.profiles) {
     fs.writeFileSync(path.join(sdPath, `structuredefinition-${profile.id}.json`), JSON.stringify(profile, null, 2), 'utf8');
     igControl.resources[`StructureDefinition/${profile.id}`] = {
       'base': `StructureDefinition-${profile.id}.html`
@@ -469,15 +461,7 @@ ${match[1]}
   const usingNamespaceStrategy = config.implementationGuide.primarySelectionStrategy
   && (config.implementationGuide.primarySelectionStrategy.strategy === 'namespace');
 
-  for (let extension of fhirResults.extensions.sort(byName)) {
-    // Identifiers and mappings are needed for ES6 class generation, but we don't want them in the
-    // IG profiles because:
-    // (a) the IG publisher reports errors when we use the canonical URL as the identifier system
-    // (b) the mappings create tons of diffs where nothing meaningful has actually changed
-    const baseSD = fhir.find(MVH.sdBaseDefinition(extension));
-    extension = removeSHRMappings(extension, baseSD);
-    delete extension.identifier;
-
+  for (const extension of fhirResults.extensions.sort(byName)) {
     // We added extensions by their use in primary profiles, but now check if
     // it is eligible due to its namespace or fully qualifier name (based on strategy)
     if (isPrimaryFn(extension.id)) {
@@ -606,7 +590,7 @@ ${match[1]}
       }
     }
 
-    // Identifiers are needed for filtering (above) and ES6 class generation, but we don't want
+    // Identifiers are needed for filtering (above), but we don't want
     // them in the IG profiles because the IG publisher reports errors when we use the canonical
     // URL as the identifier system
     valueSet = common.cloneJSON(valueSet);
@@ -667,7 +651,7 @@ ${match[1]}
         }
       }
 
-      // Identifiers are needed for filtering (above) and ES6 class generation, but we don't want
+      // Identifiers are needed for filtering (above), but we don't want
       // them in the IG profiles because the IG publisher reports errors when we use the canonical
       // URL as the identifier system
       codeSystem = common.cloneJSON(codeSystem);
@@ -1165,33 +1149,6 @@ function byName(a, b) {
     return 1;
   }
   return 0;
-}
-
-function removeSHRMappings(sd, baseSD) {
-  sd = common.cloneJSON(sd);
-  // First go through and remove all the SHR mappings from the snapshot
-  sd.snapshot.element.forEach(el => {
-    if (el.mapping && el.mapping.length > 0) {
-      el.mapping = el.mapping.filter(m => m.identity != 'shr');
-      if (el.mapping.length === 0) {
-        delete el.mapping;
-      }
-    }
-  });
-  // Then remove all SHR mappings from the differential
-  sd.differential.element.forEach(el => {
-    if (el.mapping && el.mapping.length > 0) {
-      el.mapping = el.mapping.filter(m => m.identity != 'shr');
-      if (el.mapping.length === 0) {
-        delete el.mapping;
-      }
-    }
-  });
-  // Now compact the structure definition since the removal of mappings may eliminate the need for
-  // several of the differential elements and/or previously "unrolled" snapshot elements
-  common.compactStructureDefinition(sd, baseSD);
-  // Finally return the new sd
-  return sd;
 }
 
 module.exports = {exportIG, setLogger};
