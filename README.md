@@ -1,6 +1,6 @@
 # SHR Tools
 
-This GitHub repository contains Node.js packages for parsing CIMPL (Clinical Information Modeling and Profiling Language) definitions and exporting them as a FHIR Implementation Guide, Data Dictionary, JSON serialized files, JSON schema, and/or ES6 classes. Each individual package contains more information on its use.
+This GitHub repository contains Node.js packages for parsing CIMPL (Clinical Information Modeling and Profiling Language) definitions and exporting them as a FHIR Implementation Guide, Data Dictionary, and/or Javadoc Style Model Documentation. Each individual package contains more information on its use.
 
 The CIMPL base class definitions, FHIR mappings, and clinical model definitions can be found in the [shr-spec](https://github.com/standardhealth/shr-spec) repo. Documentation on the CIMPL language can be found [here](http://standardhealthrecord.org/cimpl-doc/#cimpl6LanguageReference/).
 

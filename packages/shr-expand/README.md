@@ -15,7 +15,7 @@ $ npm install
 
 # Running the Tests
 
-This project contains unit tests for testing the SHR text importer, JSON schema exporter, and FHIR StructureDefinition exporter.  To run the tests, execute the following command:
+This project contains unit tests for testing the SHR text importer and FHIR StructureDefinition exporter.  To run the tests, execute the following command:
 ```
 $ npm test
 ```
