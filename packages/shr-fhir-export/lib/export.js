@@ -301,6 +301,7 @@ class FHIRExporter {
       profile.id = profileID;
       profile.text = this.getText(originalMap);
       profile.url = profileURL;
+      profile.identifier = [{ system: this._config.projectURL, value: map.identifier.fqn }];
       profile.name = common.tokenize(map.identifier.name);
       MVH.setSdTitle(profile, map.identifier.title);
       profile.description = this.getDescription(map.identifier);

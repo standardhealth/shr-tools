@@ -98,6 +98,7 @@ class ExtensionExporter {
       delete(ext.publisher);
     }
     ext.contact = MVH.convertContactDetails(ext, this._config.contact);
+    ext.identifier = [{ system: this._config.projectURL, value: def.identifier.fqn }];
     ext.date = this._config.publishDate || common.todayString();
     if (def.description) {
       ext.description = def.description.trim();

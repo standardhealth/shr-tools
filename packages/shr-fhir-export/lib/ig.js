@@ -358,6 +358,12 @@ function exportIG(specifications, fhirResults, outDir, configuration = {}, specP
   default:            fhirSpecURLBase = 'http://hl7.org/fhir/R4/'; break;
   }
   for (const profile of fhirResults.profiles) {
+    // Identifiers are needed elsewhere in the fhir export, but we don't want them in the
+    // IG profiles because:
+    // (a) the IG publisher reports errors when we use the canonical URL as the identifier system
+    // (b) the mappings create tons of diffs where nothing meaningful has actually changed
+    delete profile.identifier;
+
     fs.writeFileSync(path.join(sdPath, `structuredefinition-${profile.id}.json`), JSON.stringify(profile, null, 2), 'utf8');
     igControl.resources[`StructureDefinition/${profile.id}`] = {
       'base': `StructureDefinition-${profile.id}.html`
@@ -462,6 +468,12 @@ ${match[1]}
   && (config.implementationGuide.primarySelectionStrategy.strategy === 'namespace');
 
   for (const extension of fhirResults.extensions.sort(byName)) {
+    // Identifiers are needed elsewhere in the fhir export, but we don't want them in the
+    // IG profiles because:
+    // (a) the IG publisher reports errors when we use the canonical URL as the identifier system
+    // (b) the mappings create tons of diffs where nothing meaningful has actually changed
+    delete extension.identifier;
+
     // We added extensions by their use in primary profiles, but now check if
     // it is eligible due to its namespace or fully qualifier name (based on strategy)
     if (isPrimaryFn(extension.id)) {
