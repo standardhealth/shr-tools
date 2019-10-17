@@ -1655,6 +1655,11 @@ class Value {
     this._inheritedFrom = inheritedFrom;
   }
 
+  get mustInherit() { return this._mustInherit; }
+  set mustInherit(mustInherit) {
+    this._mustInherit = mustInherit;
+  }
+
   withInheritedFrom(inheritedFrom) {
     this.inheritedFrom = inheritedFrom;
     return this;
@@ -1678,6 +1683,9 @@ class Value {
     }
     if (this._inheritedFrom) {
       clone._inheritedFrom = this._inheritedFrom;
+    }
+    if (this._mustInherit) {
+      clone._mustInherit = this._mustInherit;
     }
     if (this._constraintHistory) {
       clone._constraintHistory = this._constraintHistory.clone();

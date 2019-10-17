@@ -50,4 +50,5 @@ Number, Message, Solution, deduplicationKeys
 12048, 'Invalid constraint path: ${target1}',  'Unknown', 'errorNumber'
 12049, 'Cannot determine target item of mapping for ${identifier1}',  'Unknown', 'errorNumber'
 12050, 'Invalid format for ${type} with value ${value}', 'Unknown', 'errorNumber'
+12051, 'New property ${propertyName} added on ${elementName} without Property keyword', 'Please use Property keyword when introducing new properties.', 'errorNumber'
 
