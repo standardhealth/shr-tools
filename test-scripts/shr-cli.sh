@@ -7,6 +7,7 @@ if [ ! -z "$SHR_CLI" ]; then
     git clone https://github.com/standardhealth/shr-spec.git
     git -C ./shr-spec checkout dev6
     node . shr-spec/spec > run.log
+    cat run.log
     ERRORS=$(grep "errors" run.log | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g')
     if [[ "$ERRORS" != "0 errors" ]]; then 
         ( echo There were errors in running shr-cli)
