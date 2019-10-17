@@ -188,7 +188,7 @@ function clickHandler(e) {
             if (node.isroot) {
                 const urlName = node.data.name.replace(/\./g, '-');
                 const url = `../StructureDefinition-${urlName}.html`;
-                window.parent.location.href = url;
+                window.top.location.href = url;
             }
         }
     }
