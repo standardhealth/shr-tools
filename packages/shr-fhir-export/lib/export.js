@@ -139,14 +139,8 @@ class FHIRExporter {
 
     // Delete intermediate variables
     const profiles = Array.from(this._profilesMap.values()).filter(p => common.isCustomProfile(p));
-    // For use in shr-es6-export, create a noDiffProfiles array as well, so profiles that only
-    // Contain mapping differences can be exported
-    const noDiffProfiles = Array.from(this._profilesMap.values()).filter(p => !common.isCustomProfile(p));
     for (const p of profiles) {
       delete(p._shr);
-    }
-    for (const p of noDiffProfiles) {
-      delete (p._shr);
     }
 
     const extensions = this._extensionExporter.extensions;
@@ -223,7 +217,6 @@ class FHIRExporter {
     return {
       profiles,
       extensions,
-      _noDiffProfiles: noDiffProfiles,
       valueSets: this._valueSetExporter.valueSets,
       codeSystems: this._codeSystemExporter.codeSystems,
       models: this._modelsExporter.models,
@@ -546,6 +539,25 @@ class FHIRExporter {
       lastIdParts = idParts;
     }
     profile.differential.element = fixedDifferentials;
+
+    // First go through and remove all the SHR mappings from the snapshot
+    profile.snapshot.element.forEach(el => {
+      if (el.mapping && el.mapping.length > 0) {
+        el.mapping = el.mapping.filter(m => m.identity != 'shr');
+        if (el.mapping.length === 0) {
+          delete el.mapping;
+        }
+      }
+    });
+    // Then remove all SHR mappings from the differential
+    profile.differential.element.forEach(el => {
+      if (el.mapping && el.mapping.length > 0) {
+        el.mapping = el.mapping.filter(m => m.identity != 'shr');
+        if (el.mapping.length === 0) {
+          delete el.mapping;
+        }
+      }
+    });
 
     // Remove any unnecessary (insignificant) diff elements or child elements that don't need to be "unrolled"
     const baseSD = this._fhir.find(MVH.sdBaseDefinition(profile));

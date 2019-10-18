@@ -1,7 +1,0 @@
-Grammar:   Map 5.1
-Namespace: shr.simple
-Target:    FHIR_STU_3
-
-
-OverrideBasedOnIntegerValueElementEntry maps to Basic:
-  StringValue maps to code.text

@@ -5,3 +5,4 @@
 /archive*
 /.settings
 txCache
+.DS_Store

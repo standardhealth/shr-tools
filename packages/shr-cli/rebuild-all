@@ -20,18 +20,8 @@ echo "================= shr-text-import =================="
 rm -rf node_modules
 yarn
 
-cd ../shr-json-schema-export
-echo "============== shr-json-schema-export =============="
-rm -rf node_modules
-yarn
-
 cd ../shr-json-javadoc
 echo "============== shr-json-javadoc ===================="
-rm -rf node_modules
-yarn
-
-cd ../shr-es6-export
-echo "================== shr-es6-export =================="
 rm -rf node_modules
 yarn
 
