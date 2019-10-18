@@ -178,14 +178,9 @@ if (doDD) {
   logger.info('05004');
 }
 
-let fhirResults = null;
-if (doFHIR){
-  fhirResults = shrFE.exportToFHIR(expSpecifications, configSpecifications);
-}
-
-
 if (doFHIR) {
   try {
+    const fhirResults = shrFE.exportToFHIR(expSpecifications, configSpecifications);
     const baseFHIRPath = path.join(program.out, 'fhir');
     const baseFHIRProfilesPath = path.join(baseFHIRPath, 'profiles');
     mkdirp.sync(baseFHIRProfilesPath);
