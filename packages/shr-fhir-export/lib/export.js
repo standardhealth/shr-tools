@@ -214,6 +214,21 @@ class FHIRExporter {
       });
     }
 
+    // Clean up the types for inlined extensions
+    [...profiles, ...extensions].forEach(sd => {
+      sd.snapshot.element.forEach(ssEl => {
+        if (ssEl.fixType) {
+          delete(ssEl.fixType);
+          ssEl.type = [{code: 'Extension'}];
+          const dfEl = common.getDifferentialElementById(sd, ssEl.id);
+          if (dfEl != null && dfEl.fixType) {
+            delete(dfEl.fixType);
+            dfEl.type = [{code: 'Extension'}];
+          }
+        }
+      });
+    });
+
     return {
       profiles,
       extensions,
@@ -2328,7 +2343,7 @@ class FHIRExporter {
           const element = this.getElementInExtension([common.choiceFriendlyEffectiveIdentifier(sourceValue), ...path], profile, snapshotEl);
           if (typeof element === 'undefined') {
             //13024 , 'Failed to resolve element path from ${element1} to ${path1}' , 'Unknown', 'errorNumber'
-            logger.error({element1 : snapshotEl.id, element2 : path }, '13024' );
+            logger.error({element1 : snapshotEl.id, path1 : path.map(p => p.name) }, '13024' );
             continue;
           }
           let childSourceValue;
@@ -2664,7 +2679,7 @@ class FHIRExporter {
     }
     if (el == null) {
       //13026 , 'Failed to resolve path from ${element1} to ${path1} ' , 'Unknown' , 'errorNumber'
-      logger.error({element1:snapshotEl.id, path1: shrPath }, '13026');
+      logger.error({element1:snapshotEl.id, path1: shrPath.map(p => p.name) }, '13026');
       return;
     }
     if (el.type.length == 1 && el.type[0].code == 'Extension') {
