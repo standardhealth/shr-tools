@@ -26,3 +26,7 @@ jmnode:hover .node-tooltip {
     color: gray;
     font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
 }
+
+.node-link:hover {
+    text-decoration: underline;
+}

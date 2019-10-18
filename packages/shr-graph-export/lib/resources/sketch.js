@@ -103,7 +103,7 @@ function addHoverText(jm) {
             const node = jm.get_node(nodeElement.getAttribute('nodeid'));
             nodeElement.innerHTML = 
             `
-                <div class="node-title">${nodeTitle}</div>
+                <div class="node-title ${node.isroot ? 'node-link' : ''}">${nodeTitle}</div>
             `
             if (node.data.description) {
                 nodeElement.innerHTML += 
