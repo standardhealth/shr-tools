@@ -4624,7 +4624,6 @@ function isTargetBasedOn(target, baseTarget, targetSpec, configuration) {
 
 function typesSameAsOriginal(type) {
   // For every type, check if the type is the same as the original
-  let allTypesMatch = true;
   for (const t of type) {
     const originalTargets = t._originalTargetProfiles;
     const targets = MVH.typeTargetProfile(t);
@@ -4651,10 +4650,14 @@ function typesSameAsOriginal(type) {
     } else if (originalProfiles == null && profiles == null) {
       profilesMatch = true;
     }
-    // If allTypesMatch is ever set to false, we want it to stay false
-    allTypesMatch = allTypesMatch && profilesMatch && targetsMatch;
+
+    // If we ever don't get a match, return false
+    if (!targetsMatch || !profilesMatch) {
+      return false;
+    }
   }
-  return allTypesMatch;
+  // Everything matched
+  return true;
 }
 
 function typesHaveSameCodesProfilesAndTargetProfiles(t1, t2) {
