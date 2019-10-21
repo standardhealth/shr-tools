@@ -579,11 +579,6 @@ setimmediate@~1.0.4:
   resolved "https://registry.yarnpkg.com/setimmediate/-/setimmediate-1.0.5.tgz#290cbb232e306942d7d7ea9b83732ab7856f8285"
   integrity sha1-KQy7Iy4waULX1+qbg3Mqt4VvgoU=
 
-shr-models@^6.7.0:
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-6.7.0.tgz#b3ee24dc4de7f834e591dfad3c6f6f572ccb020b"
-  integrity sha512-/sZyBuxWN34Q83UP2oN4pzJCGq4RWF5CffvUvBIiTV8UyrO82kKmYKOQMKtsN4YjuuRfLswUyoaCnYKY6yDqJg==
-
 string-extended@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/string-extended/-/string-extended-0.0.8.tgz#741957dff487b0272a79eec5a44f239ee6f17ccd"
