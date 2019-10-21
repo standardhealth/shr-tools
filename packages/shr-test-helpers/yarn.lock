@@ -781,11 +781,6 @@ shelljs@^0.7.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shr-models@6.6.0:
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/shr-models/-/shr-models-6.6.0.tgz#5d58d01d58f1adf500c8129b1510f69cccce1dbc"
-  integrity sha512-OMnpOdJN61Gr9abzveIZrfxQQoi2CLHbeFOfzgcahiX1ERZ+tQOqxLFvc0vrB3js9yQewmCZVH9w11pHSp6PTQ==
-
 slice-ansi@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
