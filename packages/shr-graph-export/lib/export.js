@@ -18,7 +18,7 @@ function exportToGraph(specifications, configuration, outputPath) {
   exporter = new GraphExporter(specifications, configuration);
   const graphExport = exporter.export();
   exportResources(outputPath);
-  return graphExport;
+  fs.writeFileSync(path.join(outputPath, 'data', 'tree.js'), 'const tree = ' + JSON.stringify(graphExport,  null, '  '));
 }
 
 function exportResources(outputPath) {

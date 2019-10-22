@@ -251,11 +251,16 @@ if (doModelDoc) {
 
 if (doGraph) {
   try {
-    const graphOutputPath = path.join(program.out, 'fhir', 'guide', 'pages', 'graph');
+    const graphOutputPath = path.join(program.out, 'graph');
     mkdirp.sync(graphOutputPath);
-    const graphTree = shrGr.exportToGraph(expSpecifications, configSpecifications, graphOutputPath);
     mkdirp.sync(path.join(graphOutputPath, 'data'));
-    fs.writeFileSync(path.join(graphOutputPath, 'data', 'tree.js'), 'const tree = ' + JSON.stringify(graphTree,  null, '  '));
+    shrGr.exportToGraph(expSpecifications, configSpecifications, graphOutputPath);
+    if (doFHIR && configSpecifications.implementationGuide.includeGraph == true) {
+      const igGraphOutputPath = path.join(program.out, 'fhir', 'guide', 'pages', 'graph');
+      mkdirp.sync(igGraphOutputPath);
+      mkdirp.sync(path.join(igGraphOutputPath, 'data'));
+      shrGr.exportToGraph(expSpecifications, configSpecifications, igGraphOutputPath);
+    }
   } catch (error) {
     // 15012, 'Failure in Graph export. Aborting with error message: ${errorText}',  'Unknown, 'errorNumber'
     logger.fatal({ errorText: error.stack }, '15012');
