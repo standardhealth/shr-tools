@@ -2,6 +2,11 @@
 <html>
   <head>
     <script type='text/javascript'>
+      // Test of browser functionality to determine if IE
+      if (/*@cc_on!@*/false || !!document.documentMode) {
+        window.location = 'error.html';
+      }
+
       window.addEventListener("message", (event) => {
         const frame = document.getElementById('graphFrame');
         frame.src = `${event.data}.html`;
