@@ -112,7 +112,15 @@ class DataElementImporter extends SHRDataElementParserListener {
   }
 
   enterUsesStatement(ctx) {
-    this._usesNs = ctx.namespace().map(ns => { return ns.getText(); });
+    const knownNamespaces = Object.keys(this._preprocessedData._definitions);
+    this._usesNs = ctx.namespace().map(ns => {
+      const nsText = ns.getText();
+      if (knownNamespaces.indexOf(nsText) < 0) {
+        // 11060, 'Namespace ${usesNs} in "Uses" statement for namespace ${currentNs} not found', 'Make sure the namespace is defined', 'errorNumber'
+        logger.error({usesNs: nsText, currentNs: this._currentNs}, '11060');
+      }
+      return nsText;
+    });
   }
 
   enterElementDef(ctx) {
