@@ -2020,6 +2020,10 @@ class FHIRExporter {
         if (typeof mappedProfiles !== 'undefined' && !typesHaveSameCodesProfilesAndTargetProfiles(originalTargetTypes, snapshotEl.type)) {
           differentialEl.type = snapshotEl.type;
         }
+        // Since types are added one by one, we need this check in case we have recreated the original targetProfiles
+        if (differentialEl.type && typesSameAsOriginal(differentialEl.type)) {
+          delete(differentialEl.type);
+        }
         this.applyConstraints(sourceValue, profile, snapshotEl, differentialEl, false, sourcePath);
         matchedPaths.push(clonedPath);
       }
@@ -4616,6 +4620,44 @@ function isTargetBasedOn(target, baseTarget, targetSpec, configuration) {
   }
 
   return false;
+}
+
+function typesSameAsOriginal(type) {
+  // For every type, check if the type is the same as the original
+  for (const t of type) {
+    const originalTargets = t._originalTargetProfiles;
+    const targets = MVH.typeTargetProfile(t);
+    const originalProfiles = t._originalProfiles;
+    const profiles = MVH.typeProfile(t);
+    let targetsMatch = false;
+    let profilesMatch = false;
+    if (originalTargets != null && targets != null) {
+      // Alphabetically sort to make comparison easy
+      const sortedOriginalTargets = [...originalTargets].sort();
+      const sortedCurrentTargets = [...targets].sort();
+      // See if the arrays are the same
+      targetsMatch = sortedOriginalTargets.every((el, i) => el === sortedCurrentTargets[i]);
+    } else if (originalTargets == null && targets == null) {
+      targetsMatch = true;
+    }
+
+    if (originalProfiles != null && profiles != null) {
+      // Alphabetically sort to make comparison easy
+      const sortedOriginalProfiles = [...originalProfiles].sort();
+      const sortedCurrentProfiles = [...profiles].sort();
+      // See if the arrays are the same
+      targetsMatch = sortedOriginalProfiles.every((el, i) => el === sortedCurrentProfiles[i]);
+    } else if (originalProfiles == null && profiles == null) {
+      profilesMatch = true;
+    }
+
+    // If we ever don't get a match, return false
+    if (!targetsMatch || !profilesMatch) {
+      return false;
+    }
+  }
+  // Everything matched
+  return true;
 }
 
 function typesHaveSameCodesProfilesAndTargetProfiles(t1, t2) {
