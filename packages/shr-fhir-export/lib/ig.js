@@ -1006,21 +1006,24 @@ ${match[1]}
   const codeSystemsHtmlPath = path.join(outDir, 'pages', 'codesystems.html');
   if (htmlCodeSystems.length > 0) {
     const codeSystemsHtml = fs.readFileSync(codeSystemsHtmlPath, 'utf8');
-    const codeSystemsDisclaimer = `<p>The code systems listed below are defined by this IG and:</p>
+    const codeSystemsDisclaimer = `<p>The code systems listed below are defined by this IG and are used by the
+    local value sets, logical models, and profiles shown on their respective pages in this IG.</p>
     <ol>
-      <li>are used by ${hideSupporting ? 'primary ' : ''}local value sets defined in this IG; or</li>
-      <li>contain individual codes used directly in the ${hideSupporting ? 'primary ' : ''}logical models and profiles in this IG.</li>
+      <li>are used by local value sets defined in this IG; or</li>
+      <li>contain individual codes used directly in the logical models and profiles in this IG.</li>
     </ol>
     <p>This list is not inclusive of code systems associated with external value sets used in the IG.</p>`;
     let updatedCodeSystemsHtml = codeSystemsHtml.replace('<code-systems-go-here/>', htmlCodeSystems.join(''))
       .replace('<code-systems-disclaimer/>', codeSystemsDisclaimer);
-    if (hideSupporting) {
-      updatedCodeSystemsHtml = updatedCodeSystemsHtml
-        .replace('<code-systems-header/>', '<h2>Primary code systems used in this Implementation Guide</h2>');
-    } else {
-      updatedCodeSystemsHtml = updatedCodeSystemsHtml
-        .replace('<code-systems-header/>', '<h2>Code systems used in this Implementation Guide</h2>');
-    }
+    updatedCodeSystemsHtml = updatedCodeSystemsHtml
+      .replace('<code-systems-header/>', '<h2>Code systems defined by and used in this Implementation Guide</h2>');
+    // if (hideSupporting) {
+    //   updatedCodeSystemsHtml = updatedCodeSystemsHtml
+    //     .replace('<code-systems-header/>', '<h2>Primary code systems defined by and used in this Implementation Guide</h2>');
+    // } else {
+    //   updatedCodeSystemsHtml = updatedCodeSystemsHtml
+    //     .replace('<code-systems-header/>', '<h2>Code systems defined by and used in this Implementation Guide</h2>');
+    // }
 
     fs.writeFileSync(codeSystemsHtmlPath, updatedCodeSystemsHtml, 'utf8');
   } else {
