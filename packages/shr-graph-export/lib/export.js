@@ -1,3 +1,4 @@
+const ejs = require('ejs');
 const fs = require('fs-extra');
 const path = require('path');
 const bunyan = require('bunyan');
@@ -10,9 +11,14 @@ function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
 }
 
-function exportToGraph(specifications, configuration) {
-  const exporter = new GraphExporter(specifications, configuration);
-  return exporter.export();
+// Global instance of the graph exporter, to be used across functions
+let exporter;
+
+function exportToGraph(specifications, configuration, outputPath) {
+  exporter = new GraphExporter(specifications, configuration);
+  const graphExport = exporter.export();
+  exportResources(outputPath);
+  fs.writeFileSync(path.join(outputPath, 'data', 'tree.js'), 'const tree = ' + JSON.stringify(graphExport,  null, '  '));
 }
 
 function exportResources(outputPath) {
@@ -21,6 +27,35 @@ function exportResources(outputPath) {
   if (fs.existsSync(resourcePath)) {
     fs.copySync(resourcePath, outputPath);
   }
+
+  const templatePath = path.join(__dirname, 'templates');
+  if (fs.existsSync(templatePath)) {
+    buildDataElements(outputPath);
+  }
+}
+
+// Builds pages for each data element
+function buildDataElements(outputPath) {
+  // 08001, 'Building graph pages for ${count} elements...',,
+  logger.info({ count: exporter.graph.length }, '08001');
+  exporter.graph.forEach((node, index) => {
+    const ejsPkg = { index };
+    const fileName = `${node.name}.html`;
+    const filePath = path.join(outputPath, fileName);
+    renderEjsFile('templates/graph-viewer.ejs', ejsPkg, filePath);
+  });
+
+}
+
+// Function to generate and write html from an ejs template
+function renderEjsFile(template, pkg, destination) {
+  ejs.renderFile(path.join(__dirname, template), pkg, (error, htmlText) => {
+    if (error) {
+      // 18001, 'Error rendering graph: ${errorText}',  'Unknown' , 'errorNumber'
+      logger.error({errorText: error.stack }, '18001');
+    }
+    else fs.writeFileSync(destination, htmlText);
+  });
 }
 
 class GraphExporter {
@@ -30,6 +65,10 @@ class GraphExporter {
     this._graph = [];
   }
 
+  get graph() {
+    return this._graph;
+  }
+
   export() {
     let roots = this._specs.dataElements.all.filter(r => this.isPrimary(r));
 
@@ -37,7 +76,7 @@ class GraphExporter {
       this.collectRootInfo(element);
     }
 
-    this._graph.sort((a, b) => getHumanReadableName(a.name) > getHumanReadableName(b.name) ? 1 : -1);
+    this._graph.sort((a, b) => a.title > b.title ? 1 : -1);
 
     return this._graph;
   }
@@ -49,13 +88,15 @@ class GraphExporter {
     
     const contentProfile = this._specs.contentProfiles.findByIdentifier(root.identifier);
 
-    contentProfile.rules.forEach(rule => {
-      if (rule.mustSupport) {
-        this.collectMustSupportInfo(root, rule.path, properties);
-      }
-    });
+    if (contentProfile) {
+      contentProfile.rules.forEach(rule => {
+        if (rule.mustSupport) {
+          this.collectMustSupportInfo(root, rule.path, properties);
+        }
+      });
 
-    this._graph.push({ name: root.identifier.fqn, type, description: root.description, properties, values: [] });
+      this._graph.push({ name: root.identifier.fqn, title: root.identifier.title, type, description: root.description, properties, values: [] });
+    }
   }
 
   collectMustSupportInfo(root, path, properties) {
@@ -65,7 +106,7 @@ class GraphExporter {
     const elements = path.map(id => this._specs.dataElements.findByIdentifier(id));
 
     for (const element of elements) {
-      node = { name: element.identifier.fqn, type: this.getType(element), description: element.description, properties: [], values: [] };
+      node = { name: element.identifier.fqn, title: element.identifier.title, type: this.getType(element), description: element.description, properties: [], values: [] };
       currentProperties.push(node);
       currentProperties = node.properties;
     }
@@ -95,7 +136,7 @@ class GraphExporter {
     });
 
     node.properties = fieldElements.map(fieldElement => {
-      let newNode = { name: fieldElement.identifier.fqn, type: this.getType(fieldElement), description: fieldElement.description, properties: [], values: [] };
+      let newNode = { name: fieldElement.identifier.fqn, title: fieldElement.identifier.title, type: this.getType(fieldElement), description: fieldElement.description, properties: [], values: [] };
       if (!processed.includes(fieldElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
         if (newNode.type === 'primitive') {
           this.collectPrimitiveInfo(newNode, valueSetConstraints, codeConstraints);
@@ -111,9 +152,9 @@ class GraphExporter {
       const valueElement = this._specs.dataElements.findByIdentifier(value.effectiveIdentifier) || value;
       let newNode;
       if (!valueElement.effectiveIdentifier) { // is Element
-        newNode = { name: valueElement.identifier.fqn, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
+        newNode = { name: valueElement.identifier.fqn, title: valueElement.identifier.title, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
       } else { // is Value
-        newNode = { name: valueElement.effectiveIdentifier.fqn, type: 'primitive', properties: [], values: [] }
+        newNode = { name: valueElement.effectiveIdentifier.fqn, title: valueElement.effectiveIdentifier.title, type: 'primitive', properties: [], values: [] }
       }
       node.values.push(newNode);
       if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
@@ -145,9 +186,9 @@ class GraphExporter {
       node.values = valueElements.map(valueElement => {
         let newNode;
         if (!valueElement.effectiveIdentifier) { // is Element
-          newNode = { name: valueElement.identifier.fqn, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
+          newNode = { name: valueElement.identifier.fqn, title: valueElement.identifier.title, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
         } else { // is Value
-          newNode = { name: valueElement.effectiveIdentifier.fqn, type: 'primitive', properties: [], values: [] }
+          newNode = { name: valueElement.effectiveIdentifier.fqn, title: valueElement.effectiveIdentifier.title, type: 'primitive', properties: [], values: [] }
         }
         if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
           if (newNode.type === 'primitive') {
@@ -399,22 +440,8 @@ class GraphExporter {
   }
 }
 
-// Utility functions to get a human readable name for a node.
-// This will get the string after the last '.' and insert a space in between:
-// - not a capital letter -- a capital letter
-// - a capital letter -- a capital letter follow by not a capital letter
-// - not a number -- a number
-const getHumanReadableName = (name) => {
-  return `${name.substr(name.lastIndexOf(".") + 1).replace(/(([^A-Z])([A-Z]))|(([A-Z])([A-Z][^A-Z]))|(([^0-9])([0-9]))/g, humanReadableReplacer).trim()}`;
-}
-const humanReadableReplacer = (match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset, string) => {
-  if (p1) {
-  return [p2, p3].join(' ');
-  } else if (p4) {
-  return [p5, p6].join(' ');
-  } else if (p7) {
-  return [p8, p9].join(' ');
-  }
+function errorFilePath() {
+  return path.join(__dirname, '..', 'errorMessages.txt');
 }
 
-module.exports = {exportToGraph, exportResources, setLogger};
+module.exports = {exportToGraph, setLogger, errorFilePath};

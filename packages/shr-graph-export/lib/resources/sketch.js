@@ -27,7 +27,7 @@ function fillNodeAndPathList(node, layer=0, path=[]) {
 }
 
 function nodeToMind(node) {
-    const humanReadableName = node.type === 'primitive' ? node.name : getHumanReadableName(node.name);
+    const humanReadableName = node.type === 'primitive' ? node.name : node.title;
     if (node.properties.length === 0 && node.values.length === 0) {
         return {
             id: Math.random().toString(),
@@ -58,43 +58,39 @@ function nodeToMind(node) {
     };
 }
 
-function treeToMind(tree) {
-    const mindTree = tree.map(rootNode => {
+function treeToMind(rootNode) {
+    fillNodeAndPathList(rootNode);
 
-        // Process the tree of the given root node and store the nodes and paths of the tree
-        fillNodeAndPathList(rootNode);
+    // Evenly split the nodes adjacent to the root
+    const adjacentNodes = rootNode.properties.concat(rootNode.values);
+    const nodeMidIndex = Math.ceil(adjacentNodes.length / 2);
+    const rightNodes = adjacentNodes.slice(0, nodeMidIndex);
+    const leftNodes = adjacentNodes.slice(nodeMidIndex);
 
-        // Evenly split the nodes adjacent to the root
-        const adjacentNodes = rootNode.properties.concat(rootNode.values);
-        const nodeMidIndex = Math.ceil(adjacentNodes.length / 2);
-        const rightNodes = adjacentNodes.slice(0, nodeMidIndex);
-        const leftNodes = adjacentNodes.slice(nodeMidIndex);
+    rootNode.direction = 'root';
 
-        rootNode.direction = 'root';
+    rightNodes.map(n => n.direction = 'right');
+    leftNodes.map(n => n.direction = 'left');
 
-        rightNodes.map(n => n.direction = 'right');
-        leftNodes.map(n => n.direction = 'left');
-
-        // Label all nodes that are not adjacent to the root as right or left
-        pathList.forEach(path => {
-            path.slice(1).forEach(node => {
-                if (node.direction == null) node.direction = path[1].direction;
-            });
+    // Label all nodes that are not adjacent to the root as right or left
+    pathList.forEach(path => {
+        path.slice(1).forEach(node => {
+            if (node.direction == null) node.direction = path[1].direction;
         });
-
-        const mindData = nodeToMind(rootNode);
-        const mind = {
-            meta: {
-                name: '',
-                author: '',
-                version: ''
-            },
-            format: 'node_tree',
-            data: mindData
-        }
-        return mind;
     });
-    return mindTree;
+
+    const mindData = nodeToMind(rootNode);
+    const mind = {
+        meta: {
+            name: '',
+            author: '',
+            version: ''
+        },
+        format: 'node_tree',
+        data: mindData
+    }
+
+    return mind;
 }
 
 function addHoverText(jm) {
@@ -107,7 +103,7 @@ function addHoverText(jm) {
             const node = jm.get_node(nodeElement.getAttribute('nodeid'));
             nodeElement.innerHTML = 
             `
-                <div class="node-title">${nodeTitle}</div>
+                <div class="node-title ${node.isroot ? 'node-link' : ''}">${nodeTitle}</div>
             `
             if (node.data.description) {
                 nodeElement.innerHTML += 
@@ -192,74 +188,14 @@ function clickHandler(e) {
             if (node.isroot) {
                 const urlName = node.data.name.replace(/\./g, '-');
                 const url = `../StructureDefinition-${urlName}.html`;
-                window.parent.location.href = url;
+                window.top.location.href = url;
             }
         }
     }
 }
 
-// Utility functions to get a human readable name for a node.
-// This will get the string after the last '.' and insert a space in between:
-// - not a capital letter -- a capital letter
-// - a capital letter -- a capital letter follow by not a capital letter
-// - not a number -- a number
-const getHumanReadableName = (name) => {
-    return `${name.substr(name.lastIndexOf(".") + 1).replace(/(([^A-Z])([A-Z]))|(([A-Z])([A-Z][^A-Z]))|(([^0-9])([0-9]))/g, humanReadableReplacer).trim()}`;
-}
-const humanReadableReplacer = (match, p1, p2, p3, p4, p5, p6, p7, p8, p9, offset, string) => {
-    if (p1) {
-    return [p2, p3].join(' ');
-    } else if (p4) {
-    return [p5, p6].join(' ');
-    } else if (p7) {
-    return [p8, p9].join(' ');
-    }
-}
-
-const fillTable = (tree, jm, mindTree) => {
-    let tableDiv = document.getElementById("entry_list");
-    let table = document.createElement('table');
-    let tableBody = document.createElement('tbody');
-
-    table.appendChild(tableBody);
-
-    const entryList = tree.map((e, index) => {
-        return { name: getHumanReadableName(e.name), index };
-    });
-
-    for (const entry of entryList) {
-        let tr = document.createElement('tr');
-        let td = document.createElement('td');
-        td.appendChild(document.createTextNode(entry.name));
-        td.onclick = () => render(entry.index, jm, mindTree);
-        td.width = "200";
-        td.className = "select_button";
-        tr.appendChild(td);
-        tableBody.appendChild(tr);
-    }
-
-    tableDiv.appendChild(table);
-}
-
-function render(index, jm, mindTree) {
-    jm.show(mindTree[index]);
+function render(jm, mind, zoom) {
+    jm.show(mind);
+    jm.view.setZoom(zoom);
     addHoverText(jm);
 }
-
-// --------------------------------------
-
-const mindTree = treeToMind(tree);
-const jmOptions = {
-    container: 'jsmind_container',
-    editable: false,
-    theme: 'orange' 
-}
-const jm = new jsMind(jmOptions);
-// Overriding default handlers with our own
-jm.view.add_event(this, 'click', clickHandler);
-// Override the line drawing function with our own
-jm.view.graph.__proto__.draw_line = drawLine;
-jm.view.__proto__.show_lines = showLines;
-
-fillTable(tree, jm, mindTree); 
-render(0, jm, mindTree);

@@ -27,6 +27,7 @@
     "shr-data-dict-export": "^6.2.1",
     "shr-expand": "^6.6.0",
     "shr-fhir-export": "^6.7.0",
+    "shr-graph-export": "^1.0.1",
     "shr-json-javadoc": "^6.4.0",
     "shr-models": "^6.7.0",
     "shr-text-import": "^6.7.0",

@@ -1,0 +1,2 @@
+08001, 'Building graph pages for ${count} elements...',,
+18001, 'Error rendering graph: ${errorText}',  'Unknown', 'errorNumber'

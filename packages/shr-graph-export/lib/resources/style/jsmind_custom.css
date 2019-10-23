@@ -12,15 +12,21 @@ jmnode:hover {
 
 jmnode:hover .node-tooltip {
     display: inline-block;
+    max-width: 400px;
 }
 
 .node-tooltip {
     display: none;
-    width: 400px;
+    width: 100%;
+    word-break: break-word;
     white-space: normal;
 }
 
 .node-description {
     color: gray;
     font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
+}
+
+.node-link:hover {
+    text-decoration: underline;
 }
