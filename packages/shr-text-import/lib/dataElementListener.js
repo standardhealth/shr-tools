@@ -112,7 +112,13 @@ class DataElementImporter extends SHRDataElementParserListener {
   }
 
   enterUsesStatement(ctx) {
-    const knownNamespaces = Object.keys(this._preprocessedData._definitions);
+    // Get all namespaces that have either been preprocessed, or already loaded into the spec
+    const knownNamespaces = 
+      [ ...Object.keys(this._preprocessedData._definitions),
+        ...Object.keys(this._preprocessedData._vocabularies),
+        ...Object.keys(this._preprocessedData._paths),
+        ...this.specifications.valueSets.namespaces,
+        ...this.specifications.dataElements.namespaces];
     this._usesNs = ctx.namespace().map(ns => {
       const nsText = ns.getText();
       if (knownNamespaces.indexOf(nsText) < 0) {
@@ -390,7 +396,7 @@ class DataElementImporter extends SHRDataElementParserListener {
             subsetList.push(newIdentifier);
           }
         }
-        value.addConstraint(new SubsetConstraint(subsetList, path, true))
+        value.addConstraint(new SubsetConstraint(subsetList, path, true));
       }
       else if (cst.elementIncludesTypeConstraint()) {
         for (const typeConstraint of cst.elementIncludesTypeConstraint().typeConstraint()) {
