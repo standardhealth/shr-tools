@@ -27,5 +27,9 @@
   "peerDependencies": {
     "bunyan": "^1.8.9",
     "shr-models": "^6.6.0"
+  },
+  "resolutions": {
+    "mocha/debug": "^2.6.9",
+    "mocha/growl": "^1.10.2"
   }
 }
