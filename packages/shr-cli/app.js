@@ -162,7 +162,7 @@ if (expSpecifications.contentProfiles.all.length > 0) {
   filter = true;
 }
 
-let filterReasons = new Set();
+let filterReasons;
 if (filter) {
   const specificationsFilter = new SpecificationsFilter(specifications, expSpecifications, configSpecifications);
   [specifications, expSpecifications, filterReasons] = specificationsFilter.filter();

@@ -93,7 +93,7 @@ class FHIRExporter {
     // Iterate through the elements and do the mappings
     for (const element of this._specs.dataElements.all) {
       // If the only reason this element hasn't been filtered is that it is a parent, we don't want a profile
-      const reason = this._filterReasons.get(element.identifier).reason;
+      const reason = this._filterReasons ? this._filterReasons.get(element.identifier).reason : null;
       if (reason && reason.size === 1 && reason.has('parent')) {
         continue;
       }
