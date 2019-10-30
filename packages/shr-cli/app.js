@@ -162,9 +162,10 @@ if (expSpecifications.contentProfiles.all.length > 0) {
   filter = true;
 }
 
+let filterReasons = new Set();
 if (filter) {
   const specificationsFilter = new SpecificationsFilter(specifications, expSpecifications, configSpecifications);
-  [specifications, expSpecifications] = specificationsFilter.filter();
+  [specifications, expSpecifications, filterReasons] = specificationsFilter.filter();
 }
 
 const failedExports = [];
@@ -185,7 +186,7 @@ if (doDD) {
 
 if (doFHIR) {
   try {
-    const fhirResults = shrFE.exportToFHIR(expSpecifications, configSpecifications);
+    const fhirResults = shrFE.exportToFHIR(expSpecifications, filterReasons, configSpecifications);
     const baseFHIRPath = path.join(program.out, 'fhir');
     const baseFHIRProfilesPath = path.join(baseFHIRPath, 'profiles');
     mkdirp.sync(baseFHIRProfilesPath);

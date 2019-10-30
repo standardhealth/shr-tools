@@ -39,14 +39,15 @@ const allowedConversions = {
   'concept': ['CodeableConcept', 'Coding', 'code']
 };
 
-function exportToFHIR(specifications, configuration) {
-  const exporter = new FHIRExporter(specifications, configuration);
+function exportToFHIR(specifications, deDependencies, configuration) {
+  const exporter = new FHIRExporter(specifications, deDependencies, configuration);
   return exporter.export();
 }
 
 class FHIRExporter {
-  constructor(specifications, configuration = {}) {
+  constructor(specifications, filterReasons, configuration = {}) {
     this._specs = specifications;
+    this._filterReasons = filterReasons;
     this._target = common.getTarget(configuration, this._specs);
     this._fhir = load(this._target, configuration);
     this._codeSystemExporter = new CodeSystemExporter(this._specs, this._fhir, configuration);
@@ -91,6 +92,12 @@ class FHIRExporter {
     }
     // Iterate through the elements and do the mappings
     for (const element of this._specs.dataElements.all) {
+      // If the only reason this element hasn't been filtered is that it is a parent, we don't want a profile
+      const reason = this._filterReasons.get(element.identifier).reason;
+      if (reason && reason.size === 1 && reason.has('parent')) {
+        continue;
+      }
+
       const map = this._specs.maps.findByTargetAndIdentifier(this._target, element.identifier);
       if (typeof map === 'undefined') {
         continue;
@@ -143,7 +150,7 @@ class FHIRExporter {
       delete(p._shr);
     }
 
-    const extensions = this._extensionExporter.extensions;
+    let extensions = this._extensionExporter.extensions;
 
     // DSTU2 has a narrow definition of 'id', allowing only this regex: [A-Za-z0-9\-\.]{1,64}.
     // This means the normal approach toward identifying slices in ids (using :) and choices
@@ -228,6 +235,20 @@ class FHIRExporter {
         }
       });
     });
+
+    let extensionURLs = new Set();
+    // Clean up extensions that aren't used in profiles
+    profiles.forEach(sd => {
+      sd.snapshot.element.forEach(ssEl => {
+        if (ssEl.type && ssEl.type.some(t => t.code === 'Extension')) {
+          const urlArray = ssEl.type.find(t => t.code ===  'Extension').profile;
+          if (urlArray && urlArray.length > 0) {
+            urlArray.forEach(u => extensionURLs.add(u));
+          }
+        }
+      });
+    });
+    extensions = extensions.filter(extension => extensionURLs.has(extension.url));
 
     return {
       profiles,
