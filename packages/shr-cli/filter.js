@@ -6,7 +6,7 @@ class SpecificationsFilter {
     this._specs = specifications;
     this._expSpecs = expSpecifications;
     this._config = configSpecifications;
-    this._deDependencies = new IdentifierSet();
+    this._deDependencies = new DependencySet();
     this._processedDataElements = [];
     this._vsDependencies = new Set();
     this._csDependencies = new Set();
@@ -142,7 +142,7 @@ class SpecificationsFilter {
       }
     }
 
-    return [this._filteredSpecs, this._filteredExpSpecs];
+    return [this._filteredSpecs, this._filteredExpSpecs, this._deDependencies];
   }
 
   meetsFilterCriteria(strategy, target, element) {
@@ -172,7 +172,7 @@ class SpecificationsFilter {
 
     const element = this._expSpecs.dataElements.findByIdentifier(identifier);
 
-    element.basedOn.forEach(b => this._deDependencies.add(b));
+    element.basedOn.forEach(b => this._deDependencies.add(b, 'parent'));
 
     element.concepts.forEach(concept => this._csDependencies.add(concept.system));
 
@@ -182,19 +182,19 @@ class SpecificationsFilter {
       }
 
       if (field.effectiveIdentifier) { // is IdentifiableValue
-        this._deDependencies.add(field.effectiveIdentifier);
+        this._deDependencies.add(field.effectiveIdentifier, 'fieldOrValue');
       } else if (field.options) { // is ChoiceValue
         field.aggregateOptions.filter(opt => opt.effectiveIdentifier).forEach(option => {
-          this._deDependencies.add(option.effectiveIdentifier);
+          this._deDependencies.add(option.effectiveIdentifier, 'fieldOrValue');
         });
       }
 
       field.constraintsFilter.type.constraints.forEach(constraint => {
-        this._deDependencies.add(constraint.isA);
+        this._deDependencies.add(constraint.isA, 'typeConstraint');
       });
 
       field.constraintsFilter.includesType.constraints.forEach(constraint => {
-        this._deDependencies.add(constraint.isA);
+        this._deDependencies.add(constraint.isA, 'includesTypeConstraint');
       });
 
       field.constraintsFilter.valueSet.constraints.forEach(constraint => {
@@ -220,17 +220,29 @@ class SpecificationsFilter {
 }
 
 /**
- * IdentifierSet contains a set of Identifiers with the guarantee that there are no duplicates.
- * This class mimics a few of the useful functions found on JavaScript's Set class.
+ * DependencySet contains a set of modified Identifiers with the guarantee that there are no duplicates.
+ * This class mimics a few of the useful functions found on JavaScript's Set class, with expanded functionality.
  */
-class IdentifierSet {
+class DependencySet {
   constructor() {
     this._map = new Map();
   }
 
-  add(identifier) {
+  add(identifier, reason=null) {
     this._map.set(identifier.fqn, identifier);
+    if (reason) this.addReason(identifier, reason);
     return this;
+  }
+
+  addReason(identifier, reason) {
+    let updatedIdentifier = this._map.get(identifier.fqn);
+    if (!updatedIdentifier.reason) updatedIdentifier.reason = new Set();
+    updatedIdentifier.reason.add(reason);
+    this._map.set(identifier.fqn, updatedIdentifier);
+  }
+
+  get(identifier) {
+    return this._map.get(identifier.fqn);
   }
 
   has(identifier) {
