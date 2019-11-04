@@ -84,7 +84,7 @@ function exportIG(specifications, fhirResults, outDir, configuration = {}, specP
     igControl.dependencyList = [{
       name: 'uscore',
       location: 'http://hl7.org/fhir/us/core',
-      version: '1.0.1'
+      version: '2.0.0'
     }];
   } else if (target === 'FHIR_R4') {
     // Use the US Core 4.0.0 "current" version already specified in ig.json
