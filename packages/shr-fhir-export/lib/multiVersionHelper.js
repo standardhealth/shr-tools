@@ -879,7 +879,7 @@ function sdIsDSTU2(structDef) {
  * @returns {boolean} true if the structure definition is DSTU2, false otherwise
  */
 function sdIsSTU3(structDef) {
-  return structDef && (structDef.fhirVersion === '3.0.0' || structDef.fhirVersion === '3.0.1');
+  return structDef && (structDef.fhirVersion === '3.0.0' || structDef.fhirVersion === '3.0.1' || structDef.fhirVersion === '3.0.2');
 }
 
 module.exports = { convertContactDetail, convertContactDetails, convertDiscriminator, convertType, edComment, setEdComment, deleteEdComment, edContentReference, setEdContentReference, deleteEdContentReference, edBindingValueSet, setEdBindingStrenghtAndValueSet, edSliceName, setEdSliceName, deleteEdSliceName, nameOfEdSliceName, edSlicingDiscriminator, setEdSlicingDiscriminator, sdBaseDefinition, setSdBaseDefinition, sdKeyword, setSdKeyword, sdTitle, setSdTitle, sdType, setSdType, typeProfile, typeHasProfile, setTypeProfile, addTypeProfile, typeTargetProfile, typeHasTargetProfile, setTypeTargetProfile, addTypeTargetProfile, vsIdentifier, setVsIdentifier, vsTitle, setVsTitle, csIdentifier, setCsIdentifier };

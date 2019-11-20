@@ -79,7 +79,7 @@ function exportIG(specifications, fhirResults, outDir, configuration = {}, specP
     //   version: '1.0.0'
     // }];
   } else if (target === 'FHIR_STU_3') {
-    igControl.version = '3.0.1';
+    igControl.version = '3.0.2';
     igControl.paths.specification = 'http://hl7.org/fhir/STU3';
     igControl.dependencyList = [{
       name: 'uscore',

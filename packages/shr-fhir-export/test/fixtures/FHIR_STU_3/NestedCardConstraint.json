@@ -23,7 +23,7 @@
       }
     ],
     "description": "An element with an optional value.",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-OptionalValue-model",
@@ -134,7 +134,7 @@
       }
     ],
     "description": "An element with an optional field.",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-OptionalField-model",
@@ -245,7 +245,7 @@
       }
     ],
     "description": "It has a field with a nested card constraint.",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-NestedCardConstraint-model",

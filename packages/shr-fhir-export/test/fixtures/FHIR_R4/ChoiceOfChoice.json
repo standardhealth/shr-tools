@@ -23,7 +23,7 @@
       }
     ],
     "description": "It is an element with a choice containing a choice",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ChoiceOfChoice-model",

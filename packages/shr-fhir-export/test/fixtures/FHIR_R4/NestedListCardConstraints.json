@@ -23,7 +23,7 @@
       }
     ],
     "description": "An element with an optional list.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-OptionalList-model",
@@ -134,7 +134,7 @@
       }
     ],
     "description": "An element with a list field.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ListField-model",
@@ -245,7 +245,7 @@
       }
     ],
     "description": "It has a field with a nested card constraint on a list.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-NestedListCardConstraints-model",

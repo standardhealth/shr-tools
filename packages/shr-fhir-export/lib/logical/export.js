@@ -97,9 +97,9 @@ class ModelsExporter {
         model.keyword = keywords;
       }
       if (this._target === 'FHIR_STU_3') {
-        model.fhirVersion = '3.0.1';
+        model.fhirVersion = '3.0.2';
       } else {
-        model.fhirVersion = '4.0.0';
+        model.fhirVersion = '4.0.1';
       }
       model.kind = 'logical';
       model.abstract = false;
@@ -979,7 +979,7 @@ class ModelsExporter {
       }
       if (element.isModifier) {
         child.isModifier = true;
-        if (model.fhirVersion === '4.0.0') {
+        if (model.fhirVersion === '4.0.1') {
           child.isModifierReason = element.isModifierReason ? element.isModifierReason : 'Unspecified';
         }
       }

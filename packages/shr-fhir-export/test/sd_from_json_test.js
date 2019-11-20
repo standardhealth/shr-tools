@@ -26,7 +26,7 @@ describe('#StructureDefinition.fromJSON()', () => {
         telecom: [{ system: 'url', value: 'http://foobar.com' }]
       }]);
       expect(sd.description).to.equal('It is a simple element');
-      expect(sd.fhirVersion).to.equal('3.0.1');
+      expect(sd.fhirVersion).to.equal('3.0.2');
       expect(sd.kind).to.equal('logical');
       expect(sd.abstract).to.be.false;
       expect(sd.type).to.eql('shr-test-Simple-model');
@@ -152,7 +152,7 @@ describe('#StructureDefinition.fromJSON()', () => {
         telecom: [{ system: 'url', value: 'http://foobar.com' }]
       }]);
       expect(sd.description).to.equal('It is a simple element');
-      expect(sd.fhirVersion).to.equal('4.0.0');
+      expect(sd.fhirVersion).to.equal('4.0.1');
       expect(sd.kind).to.equal('logical');
       expect(sd.abstract).to.be.false;
       expect(sd.type).to.eql('shr-test-Simple-model');

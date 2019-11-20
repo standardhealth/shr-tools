@@ -241,7 +241,14 @@ class FHIRExporter {
     profiles.forEach(sd => {
       sd.snapshot.element.forEach(ssEl => {
         if (ssEl.type && ssEl.type.some(t => t.code === 'Extension')) {
-          const urlArray = ssEl.type.find(t => t.code ===  'Extension').profile;
+          let urlArray;
+          if (sd.fhirVersion === '3.0.0' || sd.fhirVersion === '3.0.1' || sd.fhirVersion === '3.0.2') {
+            // Each type has a single profile (non-array)
+            urlArray = ssEl.type.filter(t => t.code ===  'Extension').map(te => te.profile);
+          } else {
+            // Only one Extension type, which may have more than one profile (array)
+            urlArray = ssEl.type.find(t => t.code ===  'Extension').profile;
+          }
           if (urlArray && urlArray.length > 0) {
             urlArray.forEach(u => extensionURLs.add(u));
           }

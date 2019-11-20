@@ -23,7 +23,7 @@
       }
     ],
     "description": "An entry with a includes codes constraint.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-IncludesCodesList-model",

@@ -23,7 +23,7 @@
       }
     ],
     "description": "A boolean element.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Bool-model",
@@ -134,7 +134,7 @@
       }
     ],
     "description": "It is a coded element",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Coded-model",
@@ -253,7 +253,7 @@
       }
     ],
     "description": "It has boolean and code constraints.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-BooleanAndCodeConstraints-model",
@@ -336,7 +336,13 @@
           },
           "type": [
             {
-              "code": "string"
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                  "valueUrl": "string"
+                }
+              ],
+              "code": "http://hl7.org/fhirpath/System.String"
             }
           ],
           "isModifier": false,
@@ -376,6 +382,24 @@
               "code": "Extension"
             }
           ],
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
+            },
+            {
+              "key": "ext-1",
+              "severity": "error",
+              "human": "Must have either extensions or value[x], not both",
+              "expression": "extension.exists() != value.exists()",
+              "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+              "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+            }
+          ],
           "isModifier": false,
           "isSummary": false,
           "mapping": [
@@ -405,6 +429,16 @@
             }
           ],
           "fixedUri": "http://foo.org",
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
+            }
+          ],
           "isModifier": false,
           "isSummary": true,
           "mapping": [
@@ -438,6 +472,16 @@
           "type": [
             {
               "code": "string"
+            }
+          ],
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
             }
           ],
           "isModifier": false,
@@ -476,6 +520,16 @@
             }
           ],
           "fixedCode": "bar",
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
+            }
+          ],
           "isModifier": false,
           "isSummary": true,
           "mapping": [
@@ -517,6 +571,16 @@
               "code": "string"
             }
           ],
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
+            }
+          ],
           "isModifier": false,
           "isSummary": true,
           "mapping": [
@@ -551,6 +615,16 @@
           "type": [
             {
               "code": "boolean"
+            }
+          ],
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
             }
           ],
           "isModifier": false,
@@ -670,7 +744,13 @@
           },
           "type": [
             {
-              "code": "string"
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type",
+                  "valueUrl": "string"
+                }
+              ],
+              "code": "http://hl7.org/fhirpath/System.String"
             }
           ],
           "isModifier": false,
@@ -710,6 +790,24 @@
               "code": "Extension"
             }
           ],
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
+            },
+            {
+              "key": "ext-1",
+              "severity": "error",
+              "human": "Must have either extensions or value[x], not both",
+              "expression": "extension.exists() != value.exists()",
+              "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])",
+              "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+            }
+          ],
           "isModifier": false,
           "isSummary": false,
           "mapping": [
@@ -739,6 +837,16 @@
             }
           ],
           "fixedUri": "http://foo.org",
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
+            }
+          ],
           "isModifier": false,
           "isSummary": true,
           "mapping": [
@@ -772,6 +880,16 @@
           "type": [
             {
               "code": "string"
+            }
+          ],
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
             }
           ],
           "isModifier": false,
@@ -810,6 +928,16 @@
             }
           ],
           "fixedCode": "bar",
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
+            }
+          ],
           "isModifier": false,
           "isSummary": true,
           "mapping": [
@@ -851,6 +979,16 @@
               "code": "string"
             }
           ],
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
+            }
+          ],
           "isModifier": false,
           "isSummary": true,
           "mapping": [
@@ -885,6 +1023,16 @@
           "type": [
             {
               "code": "boolean"
+            }
+          ],
+          "constraint": [
+            {
+              "key": "ele-1",
+              "severity": "error",
+              "human": "All FHIR elements must have a @value or children",
+              "expression": "hasValue() or (children().count() > id.count())",
+              "xpath": "@value|f:*|h:div",
+              "source": "http://hl7.org/fhir/StructureDefinition/Element"
             }
           ],
           "isModifier": false,
@@ -964,7 +1112,7 @@
         "display": "Boofar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Group-model",
@@ -1202,7 +1350,7 @@
         "display": "Foobar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Simple-model",
@@ -1313,7 +1461,7 @@
       }
     ],
     "description": "It is an element with a foreign element value",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ForeignElementValue-model",
@@ -1438,7 +1586,7 @@
       }
     ],
     "description": "It is an element with an element value",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ElementValue-model",
@@ -1570,7 +1718,7 @@
         "display": "Foobar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-other-test-Simple-model",

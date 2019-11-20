@@ -2,7 +2,7 @@
   "resourceType": "Bundle",
   "id": "profiles-others",
   "meta": {
-    "lastUpdated": "2017-04-19T07:44:43.294+10:00"
+    "lastUpdated": "2019-10-24T11:53:00+11:00"
   },
   "type": "collection",
   "entry": [
@@ -31,7 +31,7 @@
           }
         ],
         "description": "Consent Directive",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "v2",
@@ -4056,7 +4056,7 @@
           }
         ],
         "description": "Adds additional information to a family member history supporting both the capture of mother/father relationships as well as additional observations necessary to enable genetics-based risk analysis for patients",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "v2",
@@ -5612,10 +5612,10 @@
         "name": "Shareable ValueSet",
         "status": "draft",
         "experimental": false,
-        "date": "2017-04-19T07:44:43+10:00",
+        "date": "2019-10-24T11:53:00+11:00",
         "publisher": "HL7",
         "description": "Enforces the minimum information set for the value set metadata required by HL7 and other organisations that share and publish value sets",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "rim",
@@ -8259,7 +8259,7 @@
           }
         ],
         "description": "Describes how the ProcedureRequest resource is used to for genetics",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -9080,7 +9080,7 @@
                   }
                 ],
                 "strength": "example",
-                "description": "Codes for tests/services that can be performed by procedure or diagnostic services.  For laboratory, LOINC is  (preferred)[http://build.fhir.org/terminologies.html#preferred] and a valueset using LOINC Order codes is available [here](valueset-diagnostic-requests.html).",
+                "description": "Codes for tests/services that can be performed by procedure or diagnostic services.  For laboratory, LOINC is  (preferred)[http://hl7.org/fhir/STU3/terminologies.html#preferred] and a valueset using LOINC Order codes is available [here](valueset-diagnostic-requests.html).",
                 "valueSetReference": {
                   "reference": "http://hl7.org/fhir/ValueSet/procedure-code"
                 }
@@ -10010,10 +10010,10 @@
         "name": "Shareable CodeSystem",
         "status": "draft",
         "experimental": false,
-        "date": "2017-04-19T07:44:43+10:00",
+        "date": "2019-10-24T11:53:00+11:00",
         "publisher": "HL7",
         "description": "Enforces the minimum information set for the value set metadata required by HL7 and other organisations that share and publish value sets",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "rim",
@@ -12109,7 +12109,7 @@
           }
         ],
         "description": "This profile describes the direct or derived, qualitative or quantitative physiological measurement, setting, or calculation data produced by a medical device or a device component.",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -14556,7 +14556,7 @@
           }
         ],
         "description": "Describes how the observation resource is used to report structured genetic test results",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -17591,7 +17591,7 @@
         "extension": [
           {
             "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-summary",
-            "valueMarkdown": "### Complete Summary of the Mandatory Requirements\n\n1.  One status in `Observation.status`which has a [required](http://build.fhir.org/terminologies.html#extensible) binding to:\n    -    [ObservationStatus] value set.\n1.  A category in `Observation.category` which must have:\n    -   a fixed `Observation.category.coding.system`=\"http://hl7.org/fhir/observation-category\"\n    -   a fixed `Observation.category.coding.code`= \"vital-signs\"\n\n1.  A code in `Observation.code`\n    -   a fixed `Observation.code.coding.system`= \"http://loinc.org\"\n    -   a LOINC code in `Observation.code.coding.code` which has an [extensible](http://build.fhir.org/terminologies.html#extensible) binding to:\n         -   [Vital Signs] value set.\n                \n1.  One patient in `Observation.subject`\n1.  A date and time in `effectiveDateTime` or `effectivePeriod`\n1.  Either one `Observation.valueQuantity` or, if there is no value, one code in `Observation.DataAbsentReason`\n    -   Each Observation.valueQuantity must have:\n        -   One numeric value in `Observation.valueQuantity.value`\n        -   a fixed `Observation.valueQuantity.system`=\"http://unitsofmeasure\"\n        -   a UCUM unit code in `Observation.valueQuantity.code` which has an [required] binding to:\n             -   [Vital Signs Units] value set.\n    -   Observation.DataAbsentReason is bound to [Observation Value\n        Absent Reason] value set.\n\n1.  When using a panel code to group component observations (Note: See\n    the comments regarding blood pressure in the table above), one or\n    more `Observation.component.code` each of which must have:\n    -   a fixed\n        `Observation.component.code.coding.system` =\"<http://loinc.org>\"\n         -   a LOINC code in `Observation.code.coding.code` which has an [extensible] binding to:\n             -   [Vital Signs Units] value set.\n\n1.  Either one `Observation.component.valueQuantity` or, if there is\n    no value, one code in `Observation.component.DataAbsentReason`\n    -   Each Observation.component.valueQuantity must have:\n        -   One numeric value in\n            `Observation.component.valueQuantity.value`\n        -   a fixed `Observation.component.valueQuantity.system`= \"<http://unitsofmeasure.org>\"\n        -   a UCUM unit code in\n            `Observation.component.valueQuantity.code` which has an [required] binding to:\n             -   [Vital Signs Units] value set.\n    -   Observation.component.DataAbsentReason is bound to [Observation\n        Value Absent Reason] value set.\n\n1.  When using a panel code to group observations, one or more reference\n    to Vitals Signs Observations in `Observation.related.target`\n    -   a fixed `Observation.related.type`= \"has-member\"\n\n [Vital Signs]: valueset-observation-vitalsignresult.html\n  [Vital Signs Units]: valueset-ucum-vitals-common.html\n  [extensible]: terminologies.html#extensible\n  [ObservationStatus]: valueset-observation-status.html\n [Observation Value Absent Reason]: valueset-observation-valueabsentreason.html\n[required]: terminologies.html#required"
+            "valueMarkdown": "### Complete Summary of the Mandatory Requirements\n\n1.  One status in `Observation.status`which has a [required](http://hl7.org/fhir/STU3/terminologies.html#extensible) binding to:\n    -    [ObservationStatus] value set.\n1.  A category in `Observation.category` which must have:\n    -   a fixed `Observation.category.coding.system`=\"http://hl7.org/fhir/observation-category\"\n    -   a fixed `Observation.category.coding.code`= \"vital-signs\"\n\n1.  A code in `Observation.code`\n    -   a fixed `Observation.code.coding.system`= \"http://loinc.org\"\n    -   a LOINC code in `Observation.code.coding.code` which has an [extensible](http://hl7.org/fhir/STU3/terminologies.html#extensible) binding to:\n         -   [Vital Signs] value set.\n                \n1.  One patient in `Observation.subject`\n1.  A date and time in `effectiveDateTime` or `effectivePeriod`\n1.  Either one `Observation.valueQuantity` or, if there is no value, one code in `Observation.DataAbsentReason`\n    -   Each Observation.valueQuantity must have:\n        -   One numeric value in `Observation.valueQuantity.value`\n        -   a fixed `Observation.valueQuantity.system`=\"http://unitsofmeasure\"\n        -   a UCUM unit code in `Observation.valueQuantity.code` which has an [required] binding to:\n             -   [Vital Signs Units] value set.\n    -   Observation.DataAbsentReason is bound to [Observation Value\n        Absent Reason] value set.\n\n1.  When using a panel code to group component observations (Note: See\n    the comments regarding blood pressure in the table above), one or\n    more `Observation.component.code` each of which must have:\n    -   a fixed\n        `Observation.component.code.coding.system` =\"<http://loinc.org>\"\n         -   a LOINC code in `Observation.code.coding.code` which has an [extensible] binding to:\n             -   [Vital Signs Units] value set.\n\n1.  Either one `Observation.component.valueQuantity` or, if there is\n    no value, one code in `Observation.component.DataAbsentReason`\n    -   Each Observation.component.valueQuantity must have:\n        -   One numeric value in\n            `Observation.component.valueQuantity.value`\n        -   a fixed `Observation.component.valueQuantity.system`= \"<http://unitsofmeasure.org>\"\n        -   a UCUM unit code in\n            `Observation.component.valueQuantity.code` which has an [required] binding to:\n             -   [Vital Signs Units] value set.\n    -   Observation.component.DataAbsentReason is bound to [Observation\n        Value Absent Reason] value set.\n\n1.  When using a panel code to group observations, one or more reference\n    to Vitals Signs Observations in `Observation.related.target`\n    -   a fixed `Observation.related.type`= \"has-member\"\n\n [Vital Signs]: valueset-observation-vitalsignresult.html\n  [Vital Signs Units]: valueset-ucum-vitals-common.html\n  [extensible]: terminologies.html#extensible\n  [ObservationStatus]: valueset-observation-status.html\n [Observation Value Absent Reason]: valueset-observation-valueabsentreason.html\n[required]: terminologies.html#required"
           }
         ],
         "url": "http://hl7.org/fhir/StructureDefinition/vitalsigns",
@@ -17612,7 +17612,7 @@
           }
         ],
         "description": "FHIR Vital Signs Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -17724,7 +17724,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)"
                 }
               ],
@@ -20288,7 +20288,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)"
                 }
               ]
@@ -20740,7 +20740,7 @@
           }
         ],
         "description": "FHIR Body Weight Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -20852,7 +20852,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -23965,7 +23965,7 @@
           }
         ],
         "description": "FHIR Respiratory Rate Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -24077,7 +24077,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -27171,7 +27171,7 @@
           }
         ],
         "description": "FHIR Heart Rate Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -27283,7 +27283,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -30377,7 +30377,7 @@
           }
         ],
         "description": "FHIR Body Temperature Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -30489,7 +30489,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -33602,7 +33602,7 @@
           }
         ],
         "description": "FHIR Body Height Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -33714,7 +33714,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -36827,7 +36827,7 @@
           }
         ],
         "description": "FHIR Body Length Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -36939,7 +36939,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -40052,7 +40052,7 @@
           }
         ],
         "description": "FHIR Head Circumference Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -40164,7 +40164,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -43277,7 +43277,7 @@
           }
         ],
         "description": "FHIR Oxygen Saturation Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -43389,7 +43389,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -46483,7 +46483,7 @@
           }
         ],
         "description": "FHIR Body Mass Index (BMI) Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -46595,7 +46595,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -49689,7 +49689,7 @@
           }
         ],
         "description": "FHIR Blood Pressure Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -49801,7 +49801,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -54600,7 +54600,7 @@
           }
         ],
         "description": "FHIR Vital Signs Panel Profile",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -54712,7 +54712,7 @@
                   "key": "vs-2",
                   "severity": "error",
                   "human": "If there is no component or related element then either a value[x] or a data absent reason must be present",
-                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason or value)",
+                  "expression": "(component.empty() and related.empty()) implies (dataAbsentReason.exists() or value.exists())",
                   "xpath": "exists(f:component) or exists(f:related) or exists(f:*[starts-with(local-name(.), 'value')]) or exists(f:dataAbsentReason)",
                   "source": "Observation"
                 }
@@ -57810,7 +57810,7 @@
           }
         ],
         "description": "Lipid Lab Report",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -59589,7 +59589,7 @@
           }
         ],
         "description": "Describes how the lab report is used for a standard Lipid Profile - Cholesterol, Triglyceride and Cholesterol fractions. Uses LOINC codes",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -62272,7 +62272,7 @@
           }
         ],
         "description": "Triglyceride Result",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -64599,7 +64599,7 @@
           }
         ],
         "description": "HDL Cholesterol Result",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -66970,7 +66970,7 @@
           }
         ],
         "description": "LDL Cholesterol Result",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -69325,7 +69325,7 @@
           }
         ],
         "description": "Describes how the DiagnosticReport resource is used to report structured genetic test results",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -70944,7 +70944,7 @@
           }
         ],
         "description": "Describes how the HLA genotyping results",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "workflow",
@@ -72608,7 +72608,7 @@
           }
         ],
         "description": "The base Composition is a general resource for compositions or documents about any kind of subject that might be encountered in healthcare including such things as guidelines, medicines, etc. A clinical document is focused on documents related to the provision of care process, where the subject is a patient, a group of patients, or a closely related concept. A clinical document has additional reqiurements around confidentiality that do not apply in the same way to other kinds of documents",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "rim",
@@ -74586,7 +74586,7 @@
           }
         ],
         "description": "Identifies how the ElementDefinition data type is used when it appears within a data element",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "dex",
@@ -77924,13 +77924,6 @@
                   "source": "Element"
                 },
                 {
-                  "key": "eld-10",
-                  "severity": "error",
-                  "human": "provide either a reference or a description (or both)",
-                  "expression": "valueSet.exists() or description.exists()",
-                  "xpath": "(exists(f:valueSetUri) or exists(f:valueSetReference)) or exists(f:description)"
-                },
-                {
                   "key": "eld-12",
                   "severity": "error",
                   "human": "ValueSet as a URI SHALL start with http:// or https:// or urn:",
@@ -78102,9 +78095,6 @@
                   "code": "string"
                 }
               ],
-              "condition": [
-                "eld-10"
-              ],
               "isSummary": true,
               "mapping": [
                 {
@@ -78140,7 +78130,6 @@
                 }
               ],
               "condition": [
-                "eld-10",
                 "eld-12"
               ],
               "isSummary": true,
@@ -78541,7 +78530,7 @@
           }
         ],
         "description": "Defines the elements to be supported within the AuditEvent resource in order to conform with the Electronic Health Record System Functional Model Record Lifecycle Event standard",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "rim",
@@ -81167,7 +81156,7 @@
           }
         ],
         "description": "Defines the elements to be supported within the Provenance resource in order to conform with the Electronic Health Record System Functional Model Record Lifecycle Event standard",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "rim",
@@ -82453,7 +82442,7 @@
           }
         ],
         "description": "A questionnaire with the ability to specify behavior associated with questions or groups of questions",
-        "fhirVersion": "3.0.1",
+        "fhirVersion": "3.0.2",
         "mapping": [
           {
             "identity": "rim",

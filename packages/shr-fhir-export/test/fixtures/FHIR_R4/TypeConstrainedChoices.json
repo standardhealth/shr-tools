@@ -23,7 +23,7 @@
       }
     ],
     "description": "It is an element with a choice",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Choice-model",
@@ -218,7 +218,7 @@
       }
     ],
     "description": "It is an element with a choice with a constraint.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-TypeConstrainedChoice-model",
@@ -329,7 +329,7 @@
       }
     ],
     "description": "It is an element with a choice value.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ChoiceValue-model",
@@ -524,7 +524,7 @@
       }
     ],
     "description": "It is an element with a a field with a choice.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-TwoDeepChoiceField-model",
@@ -719,7 +719,7 @@
       }
     ],
     "description": "It is an element with a choice on a field with a constraint.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-TypeConstrainedChoiceWithPath-model",
@@ -880,7 +880,7 @@
       }
     ],
     "description": "It is a coded element",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Coded-model",

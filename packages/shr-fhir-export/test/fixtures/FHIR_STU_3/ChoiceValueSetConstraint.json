@@ -23,7 +23,7 @@
       }
     ],
     "description": "An element with a choice of code fields.",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-CodedChoice-model",
@@ -140,7 +140,7 @@
       }
     ],
     "description": "It has valueset constraints on a choice field.",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ChoiceValueSetConstraint-model",
@@ -333,7 +333,7 @@
       }
     ],
     "description": "It is a coded element",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Coded-model",

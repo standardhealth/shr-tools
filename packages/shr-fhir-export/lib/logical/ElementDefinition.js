@@ -1016,7 +1016,7 @@ class ElementDefinition {
     // Do adjustments as necessary based on FHIR version
     // NOTE: We are only addressing those properties we use in logical models export.  This is not complete coverage
     //       for all of ElementDefinition!
-    if (this.structDef && this.structDef.fhirVersion === '3.0.1') {
+    if (this.structDef && this.structDef.fhirVersion === '3.0.2') {
       // STU3 changes (see diff tab at: http://hl7.org/fhir/R4/elementdefinition.html#definition)
 
       // type.profile[] / type.targetProfile[] --> type.profile / type.targetProfile

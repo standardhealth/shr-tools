@@ -23,7 +23,7 @@
       }
     ],
     "description": "It is an element a constraint on a reference.",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-TypeConstrainedReference-model",
@@ -143,7 +143,7 @@
         "display": "Foobar"
       }
     ],
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Simple-model",
@@ -254,7 +254,7 @@
       }
     ],
     "description": "A derivative of the simple type.",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-SimpleChild-model",
@@ -365,7 +365,7 @@
       }
     ],
     "description": "It is a reference to a simple element",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-SimpleReference-model",
