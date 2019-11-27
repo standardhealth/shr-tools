@@ -23,7 +23,7 @@
       }
     ],
     "description": "It is a reference to one of a few types",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ReferenceChoice-model",
@@ -142,7 +142,7 @@
       }
     ],
     "description": "It is a coded element",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Coded-model",
@@ -268,7 +268,7 @@
         "display": "Foobar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-other-test-Simple-model",

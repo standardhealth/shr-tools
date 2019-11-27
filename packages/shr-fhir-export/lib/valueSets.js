@@ -43,9 +43,9 @@ class ValueSetExporter {
     const dummyRootDef = {};
     switch (this._target) {
     case 'FHIR_DSTU_2': dummyRootDef['fhirVersion'] = '1.0.2'; break;
-    case 'FHIR_STU_3':  dummyRootDef['fhirVersion'] = '3.0.1'; break;
-    case 'FHIR_R4':     dummyRootDef['fhirVersion'] = '4.0.0'; break;
-    default:            dummyRootDef['fhirVersion'] = '4.0.0'; break;
+    case 'FHIR_STU_3':  dummyRootDef['fhirVersion'] = '3.0.2'; break;
+    case 'FHIR_R4':     dummyRootDef['fhirVersion'] = '4.0.1'; break;
+    default:            dummyRootDef['fhirVersion'] = '4.0.1'; break;
     }
     fhirVS.contact = MVH.convertContactDetails(dummyRootDef, this._config.contact);
     if (valueSet.description) {
@@ -176,9 +176,9 @@ class ValueSetExporter {
       const dummyRootDef = {};
       switch (common.getTarget(this._config, this._specs)) {
       case 'FHIR_DSTU_2': dummyRootDef['fhirVersion'] = '1.0.2'; break;
-      case 'FHIR_STU_3':  dummyRootDef['fhirVersion'] = '3.0.1'; break;
-      case 'FHIR_R4':     dummyRootDef['fhirVersion'] = '4.0.0'; break;
-      default:            dummyRootDef['fhirVersion'] = '4.0.0'; break;
+      case 'FHIR_STU_3':  dummyRootDef['fhirVersion'] = '3.0.2'; break;
+      case 'FHIR_R4':     dummyRootDef['fhirVersion'] = '4.0.1'; break;
+      default:            dummyRootDef['fhirVersion'] = '4.0.1'; break;
       }
       fhirVS.contact = MVH.convertContactDetails(dummyRootDef, this._config.contact);
       fhirVS.description = 'Codes representing profiles on the Basic resource.';

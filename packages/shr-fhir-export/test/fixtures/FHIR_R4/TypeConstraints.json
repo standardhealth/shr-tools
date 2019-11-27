@@ -23,7 +23,7 @@
       }
     ],
     "description": "A derivative of the simple type.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-SimpleChild-model",
@@ -134,7 +134,7 @@
       }
     ],
     "description": "It is an element with an element value",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ElementValue-model",
@@ -259,7 +259,7 @@
       }
     ],
     "description": "It is a derivative of a group of elements with type constraints.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-GroupDerivative-model",
@@ -424,7 +424,7 @@
         "display": "Boofar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Group-model",
@@ -662,7 +662,7 @@
         "display": "Foobar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Simple-model",
@@ -773,7 +773,7 @@
       }
     ],
     "description": "It is a coded element",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Coded-model",
@@ -892,7 +892,7 @@
       }
     ],
     "description": "It is an element with a foreign element value",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ForeignElementValue-model",
@@ -1024,7 +1024,7 @@
         "display": "Foobar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-other-test-Simple-model",

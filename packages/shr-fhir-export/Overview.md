@@ -2,7 +2,7 @@
 
 The following document provides a high-level (but likely incomplete) overview of how the SHR FHIR export processes work.  Please note that previous processes convert CAMEO definitions and mappings into in-memory models.  Those processes are not discussed here.
 
-To export FHIR 3.0.1 profiles and extensions, the exporter must have the core FHIR 3.0.1 definitions.  To support this, the FHIR exporter maintains a copy of the [JSON FHIR definitions](http://hl7.org/fhir/definitions.json.zip) in a local folder.  These definitions form the basis from which all profiles are derived.
+To export FHIR profiles and extensions, the exporter must have the core FHIR definitions.  To support this, the FHIR exporter maintains a copy of the [JSON FHIR definitions](http://hl7.org/fhir/definitions.json.zip) in a local folder.  These definitions form the basis from which all profiles are derived.
 
 The FHIR exporter code is actually a set of four different, but related, exporters:
 * FHIR Profile Exporter

@@ -23,7 +23,7 @@
       }
     ],
     "description": "It is a coded element",
-    "fhirVersion": "3.0.1",
+    "fhirVersion": "3.0.2",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Coded-model",

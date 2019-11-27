@@ -23,7 +23,7 @@
       }
     ],
     "description": "It is an element with a field that is a list of elements",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ElementFieldList-model",
@@ -148,7 +148,7 @@
       }
     ],
     "description": "It is an element with a field that contains an element with a field that is a list of elements",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ElementFieldListContainer-model",
@@ -259,7 +259,7 @@
       }
     ],
     "description": "A derivative of the simple type.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-SimpleChild2-model",
@@ -370,7 +370,7 @@
       }
     ],
     "description": "An entry with includes types constraints that are on a nested field.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-NestedIncludesTypeConstraints-model",
@@ -660,7 +660,7 @@
         "display": "Foobar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Simple-model",
@@ -771,7 +771,7 @@
       }
     ],
     "description": "A derivative of the simple type.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-SimpleChild-model",

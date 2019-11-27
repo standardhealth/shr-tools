@@ -23,7 +23,7 @@
       }
     ],
     "description": "It is an element with a choice",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Choice-model",
@@ -218,7 +218,7 @@
       }
     ],
     "description": "It is a coded element",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Coded-model",

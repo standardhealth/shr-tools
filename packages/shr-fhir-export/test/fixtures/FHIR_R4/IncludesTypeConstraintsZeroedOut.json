@@ -23,7 +23,7 @@
       }
     ],
     "description": "A derivative of the simple type.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-SimpleChild2-model",
@@ -134,7 +134,7 @@
       }
     ],
     "description": "An entry with a includes types constraints.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-IncludesTypesListWithZeroedOutType-model",
@@ -298,7 +298,7 @@
         "display": "Foobar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Simple-model",
@@ -409,7 +409,7 @@
       }
     ],
     "description": "A derivative of the simple type.",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-SimpleChild-model",

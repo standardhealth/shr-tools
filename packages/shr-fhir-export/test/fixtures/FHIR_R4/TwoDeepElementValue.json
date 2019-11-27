@@ -23,7 +23,7 @@
       }
     ],
     "description": "It is an element with a two-deep element value",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-TwoDeepElementValue-model",
@@ -148,7 +148,7 @@
       }
     ],
     "description": "It is an element with an element value",
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-ElementValue-model",
@@ -280,7 +280,7 @@
         "display": "Foobar"
       }
     ],
-    "fhirVersion": "4.0.0",
+    "fhirVersion": "4.0.1",
     "kind": "logical",
     "abstract": false,
     "type": "shr-test-Simple-model",
