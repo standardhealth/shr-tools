@@ -1,7 +1,6 @@
 /* eslint no-console: off */
 const Transform = require('stream').Transform;
 const fs = require('fs');
-const path = require('path');
 const chalk = require('chalk');   //library for colorizing Strings
 const stripAnsi = require('strip-ansi');
 const { nameFromLevel } = require('bunyan');
@@ -173,7 +172,7 @@ class PrettyPrintDuplexStreamJson extends Transform {
       detailMsg = this.processTemplate(jsonKeys, myTemplate, myJson  ) ;
     }
     else {
-      console.log( errorCodeColor('Message is missing errorCode; no template found: ' + myinline));
+      console.log('Message is missing errorCode; no template found: ' + myinline);
       return '';
     }
 
@@ -184,21 +183,21 @@ class PrettyPrintDuplexStreamJson extends Transform {
     const targetSpecPart = this.getAttributeOrEmptyString( myJson.targetSpec );  //grab targetSpec
 
     switch (level) {
-      case 'FATAL':
-      case 'ERROR':
-        codeColor = chalk.bold.redBright;
-        break;
-      case 'WARN':
-        codeColor = chalk.bold.yellowBright;
-        break;
-      case 'INFO':
-        codeColor = chalk.bold.whiteBright;
-        break;
-      case 'DEBUG':
-        codeColor = chalk.bold.greenBright;
-        break;
-      default:
-        codeColor = chalk.bold.whiteBright;
+    case 'FATAL':
+    case 'ERROR':
+      codeColor = chalk.bold.redBright;
+      break;
+    case 'WARN':
+      codeColor = chalk.bold.yellowBright;
+      break;
+    case 'INFO':
+      codeColor = chalk.bold.whiteBright;
+      break;
+    case 'DEBUG':
+      codeColor = chalk.bold.greenBright;
+      break;
+    default:
+      codeColor = chalk.bold.whiteBright;
     }
 
     // now we have pieces; assemble the pieces into a formatted, colorized, multi-line message

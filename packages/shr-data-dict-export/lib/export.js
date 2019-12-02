@@ -38,6 +38,7 @@ const urlsToNames = {
 };
 
 var rootLogger = bunyan.createLogger({name: 'shr-data-dict-export'});
+// eslint-disable-next-line no-unused-vars
 var logger = rootLogger;
 function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;
@@ -53,15 +54,15 @@ function getCardinalityInfo(card) {
   if (card) {
     requirement = (card.min && card.min > 0) ? 'required' : 'required if known';
     switch (card.max) {
-      case 0:
-        multiplicity = 'none';
-        break;
-      case 1:
-        multiplicity = 'single';
-        break;
-      default:
-        multiplicity = 'multiple';
-        break;
+    case 0:
+      multiplicity = 'none';
+      break;
+    case 1:
+      multiplicity = 'single';
+      break;
+    default:
+      multiplicity = 'multiple';
+      break;
     }
   }
   return { requirement, multiplicity };
@@ -136,17 +137,17 @@ function getConstraintOnValue(value, dataElements, useCase) {
     if (valueDE.value) {
       const newValue = mergeConstraintsToChild(value.constraints, valueDE.value, true);
       switch (useCase) {
-        case 'dataType':
-          const newTypeConstraints = newValue.constraintsFilter.type.constraints;
-          return newTypeConstraints.filter(c => !c.onValue);
-        case 'vsInfo':
-          const newVsConstraints = newValue.constraintsFilter.valueSet.constraints;
-          return newVsConstraints.find(c => !c.onValue && c.path.length === 0);
-        case 'unit':
-          const newConstraints = newValue.constraintsFilter.constraints;
-          return newConstraints.find(c => !c.onValue && c.path.some(e => e.equals('obf.datatype', 'Units')));
-        default:
-          break;
+      case 'dataType':
+        const newTypeConstraints = newValue.constraintsFilter.type.constraints;
+        return newTypeConstraints.filter(c => !c.onValue);
+      case 'vsInfo':
+        const newVsConstraints = newValue.constraintsFilter.valueSet.constraints;
+        return newVsConstraints.find(c => !c.onValue && c.path.length === 0);
+      case 'unit':
+        const newConstraints = newValue.constraintsFilter.constraints;
+        return newConstraints.find(c => !c.onValue && c.path.some(e => e.equals('obf.datatype', 'Units')));
+      default:
+        break;
       }
     }
   }
@@ -412,6 +413,7 @@ function fillValueSetLines(vs, valueSetLines, valueSetDetailsLines) {
     codeSystems.add(system);
   }
   for (const rule of vs.rulesFilter.includesFromCode.rules) {
+    const system = urlsToNames[rule.code.system] ? urlsToNames[rule.code.system] : rule.code.system;
     valueSetDetailsLines.push([
       vs.identifier.name,
       system,
@@ -456,7 +458,7 @@ function fillValueSetLines(vs, valueSetLines, valueSetDetailsLines) {
 function generateDDtoPath(specs, config, outputPath) {
   const vsMap = new Map();
   const dataElementLines = [['Profile Name', 'Data Element Name', 'Description', 'Required in Profile?', 'Occurrences Allowed', 'Data Type',
-  'Terminology Binding', 'Code System', 'Code', 'Code Description', 'Value Set', 'Value Set Binding', 'Units']];
+    'Terminology Binding', 'Code System', 'Code', 'Code Description', 'Value Set', 'Value Set Binding', 'Units']];
   const profileLines = [['Profile Name', 'Profile Description']];
   const valueSetLines = [['Value Set', 'Description', 'Code Systems']];
   const valueSetDetailsLines = [['Value Set', 'Code System', 'Logical Definition', 'Code', 'Code Description']];
@@ -492,7 +494,7 @@ function generateDDtoPath(specs, config, outputPath) {
   const workbookPath = path.join(outputPath, 'DataDictionary.xlsx');
   mkdirp.sync(path.dirname(workbookPath));
   workbook.xlsx.writeFile(workbookPath);
-};
+}
 
 
 

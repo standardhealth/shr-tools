@@ -152,7 +152,7 @@ let filter = false;
 if (configSpecifications.filterStrategy != null) {
   filter = configSpecifications.filterStrategy.filter;
   // 05009, 'Using filterStrategy in the configuration file is deprecated and should be done in content profile instead',,
-  logger.warn('05009')
+  logger.warn('05009');
 }
 if (configSpecifications.implementationGuide && configSpecifications.implementationGuide.primarySelectionStrategy) {
   // 05010, 'Using primarySelectionStrategy in the configuration file is deprecated and should be done in content profile instead',,

@@ -8,8 +8,13 @@
     "exceljs": "1.9.0",
     "mkdirp": "^0.5.1"
   },
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint .",
+    "lint:fix": "./node_modules/.bin/eslint . --fix"
+  },
   "devDependencies": {
     "bunyan": "^1.8.9",
+    "eslint": "^6.7.2",
     "shr-models": "^6.7.0"
   },
   "peerDependencies": {

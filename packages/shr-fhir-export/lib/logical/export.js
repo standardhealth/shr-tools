@@ -476,7 +476,7 @@ class ModelsExporter {
     }
   }
 
-    /**
+  /**
    * Applies a subset constraint to the given element or to a child of the element when the constraint specifies
    * a sub-path.  Note that when this is a nested path, it will result in parent elements being converted to a
    * "section header" (no type) or "BackboneElement".  We can't constrain nested elements to subtypes the normal way
@@ -521,7 +521,7 @@ class ModelsExporter {
     const tcValues = newTypes.map(type => new mdls.IdentifiableValue(type));
     const subsetTypes = [];
     for (const tcValue of tcValues) {
-      const typeArray = this.toTypeArray(tcValue)
+      const typeArray = this.toTypeArray(tcValue);
       for (const type of typeArray) {
         subsetTypes.push(type);
       }

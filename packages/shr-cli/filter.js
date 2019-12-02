@@ -147,14 +147,14 @@ class SpecificationsFilter {
 
   meetsFilterCriteria(strategy, target, element) {
     switch(strategy) {
-      case 'element':
-        return target.includes(element.identifier.name) || target.includes(element.identifier.fqn);
-      case 'namespace':
-        return target.includes(element.identifier.namespace);
-      case 'hybrid':
-        return target.includes(element.identifier.name) || target.includes(element.identifier.namespace) || target.includes(element.identifier.fqn);
-      default:
-        return false;
+    case 'element':
+      return target.includes(element.identifier.name) || target.includes(element.identifier.fqn);
+    case 'namespace':
+      return target.includes(element.identifier.namespace);
+    case 'hybrid':
+      return target.includes(element.identifier.name) || target.includes(element.identifier.namespace) || target.includes(element.identifier.fqn);
+    default:
+      return false;
     }
   }
 

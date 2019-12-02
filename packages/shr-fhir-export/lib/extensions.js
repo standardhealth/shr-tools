@@ -575,7 +575,7 @@ class ExtensionExporter {
           // Fix the "url" field to the name of the inlined extension, following example of USCore
           snapExt.fixedUri = common.shortID(field.effectiveIdentifier, true);
         }
-         // Find first position after baseExt whose path doesn't start with baseExt.path
+        // Find first position after baseExt whose path doesn't start with baseExt.path
         const spliceStartPosition = extension.snapshot.element.findIndex(ssEl => ssEl == baseExt) + 1;
         const spliceOffset = extension.snapshot.element.slice(spliceStartPosition).findIndex(ssEl => !ssEl.path.startsWith(baseExt.path));
         // Splice in correct position if found, else push to end of array

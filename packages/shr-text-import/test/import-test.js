@@ -116,7 +116,7 @@ describe('#importDataElement', () => {
     expectNoConstraints(group.fields);
   });
 
-// Constraints
+  // Constraints
 
   it('Import12: should correctly import an entry with a valueset constraint on the value, file = vSConstraintOnValue', () => {
     const nspace  = 'vSConstraintOnValue';
@@ -142,7 +142,7 @@ describe('#importDataElement', () => {
     expect(entry.fields).to.be.empty;
     expectValue(entry.value, nspace, 'Complex');
     expect(entry.value.constraints).to.have.length(2);  // failing here
-  // constraint[0]: Complex.CodedFromValueSet 1..2
+    // constraint[0]: Complex.CodedFromValueSet 1..2
     expect(entry.value.constraints[0]).to.be.instanceof(CardConstraint);
     expect(entry.value.constraints[0].card.min).to.equal(1);
     expect(entry.value.constraints[0].card.max).to.equal(2);
@@ -242,7 +242,7 @@ describe('#importDataElement', () => {
     const specifications = importFixture(nspace, importDir);
     const entry = expectAndGetElement(specifications, nspace, 'ChildElement');
     expect(entry.fields).to.be.empty;
-//  console.log("Test 18: entry.value = "+JSON.stringify(entry.value));
+    //  console.log("Test 18: entry.value = "+JSON.stringify(entry.value));
     expect(entry.value).to.be.instanceof(IncompleteValue);
     expectCardOne(entry.value);
     expect(entry.value.identifier.isValueKeyWord).to.be.false;
@@ -327,7 +327,7 @@ describe('#importDataElement', () => {
     const el = group.fields[1];
     expect(el.constraints).to.have.length(1);
     expect(el.constraints[0]).to.be.instanceof(CodeConstraint);
-//  expect(el.constraints[0].path).to.eql([id(nspace,'CodedFromVS2')]);
+    //  expect(el.constraints[0].path).to.eql([id(nspace,'CodedFromVS2')]);
     expect(el.constraints[0].path).to.eql([id(nspace,'CodedFromVS2'), pid('concept')]);
     expectConcept(el.constraints[0].code, 'http://foo.org', 'bar', 'FooBar');
   });
@@ -341,7 +341,7 @@ describe('#importDataElement', () => {
     expectValue(entry.value, 'obf.datatype', 'Quantity');
     expect(entry.value.constraints).to.have.length(1); // fails here
     expect(entry.value.constraints[0]).to.be.instanceof(CodeConstraint);
-//   expect(entry.value.constraints[0].path).to.eql([id('obf.datatype','Units'), id('obf.datatype','concept')]);
+    //   expect(entry.value.constraints[0].path).to.eql([id('obf.datatype','Units'), id('obf.datatype','concept')]);
     expect(entry.value.constraints[0].path).to.have.length(2);
     expect(entry.value.constraints[0].path).to.eql([id('obf.datatype','Units'), id('primitive', 'concept')]);
     expectConcept(entry.value.constraints[0].code, 'http://unitsofmeasure.org', 'dl', 'DeciLiter');
@@ -356,7 +356,7 @@ describe('#importDataElement', () => {
     expectValue(entry.value, nspace, 'Volume');
     expect(entry.value.constraints).to.have.length(1);  // fails here
     expect(entry.value.constraints[0]).to.be.instanceof(CodeConstraint);
-  // expect(entry.value.constraints[0].path).to.eql([id('obf.datatype', 'Quantity'), id('obf.datatype', 'Units'), id('obf.datatype', 'concept')]);
+    // expect(entry.value.constraints[0].path).to.eql([id('obf.datatype', 'Quantity'), id('obf.datatype', 'Units'), id('obf.datatype', 'concept')]);
     expect(entry.value.constraints[0].path).to.have.length(3);
     expect(entry.value.constraints[0].path).to.eql([id('obf.datatype', 'Quantity'), id('obf.datatype', 'Units'), id('primitive', 'concept')]);
     expectConcept(entry.value.constraints[0].code, 'http://unitsofmeasure.org', 'dl', 'DeciLiter');
@@ -375,7 +375,7 @@ describe('#importDataElement', () => {
     const el = group.fields[0];
     expect(el.constraints).to.have.length(1);
     expect(el.constraints[0]).to.be.instanceof(CodeConstraint);
-//    expect(el.constraints[0].path).to.eql([id('obf.datatype','Units'), id('obf.datatype','concept')]);
+    //    expect(el.constraints[0].path).to.eql([id('obf.datatype','Units'), id('obf.datatype','concept')]);
     expect(el.constraints[0].path).to.eql([id('obf.datatype','Units'), pid('concept')]);
     expectConcept(el.constraints[0].code, 'http://unitsofmeasure.org', 'dl', 'DeciLiter');
   });
@@ -392,7 +392,7 @@ describe('#importDataElement', () => {
     const el = group.fields[0];
     expect(el.constraints).to.have.length(1);
     expect(el.constraints[0]).to.be.instanceof(CodeConstraint);
-//    expect(el.constraints[0].path).to.eql([id('obf.datatype', 'Quantity'), id('obf.datatype', 'Units'), id('obf.datatype', 'concept')]);
+    //    expect(el.constraints[0].path).to.eql([id('obf.datatype', 'Quantity'), id('obf.datatype', 'Units'), id('obf.datatype', 'concept')]);
     expect(el.constraints[0].path).to.eql([id('obf.datatype', 'Quantity'), id('obf.datatype', 'Units'), pid('concept')]);
     expectConcept(el.constraints[0].code, 'http://unitsofmeasure.org', 'dl', 'DeciLiter');
   });
@@ -558,7 +558,7 @@ describe('#importDataElement', () => {
     expectIdentifier(group.fields[0].constraints[0].isA, nspace, 'Simple2');
   });
 
-// Choices
+  // Choices
 
   it('Import40: should correctly import a choice entry, file = choiceType', () => {
     const nspace  = 'choiceType' ;
@@ -569,7 +569,7 @@ describe('#importDataElement', () => {
     expectChoiceOption(choice.value, 0, 'primitive', 'date');
     expectChoiceOption(choice.value, 1, 'primitive', 'dateTime');
     expectChoiceOption(choice.value, 2, nspace, 'DateTimeString');
-  // MK: not sure what the following two statements are asserting
+    // MK: not sure what the following two statements are asserting
     expectNoConstraints(choice.value);
     expectNoConstraints(choice.value.options);
   });
@@ -586,7 +586,7 @@ describe('#importDataElement', () => {
     expect(entry.fields[0].constraints[0]).to.be.instanceof(TypeConstraint);
     expect(entry.fields[0].constraints[0].path).to.be.empty;
     expect(entry.fields[0].constraints[0].onValue).to.be.true;
-  // MK:onValue is true because it is a constraint on the value of ChoiceElement.
+    // MK:onValue is true because it is a constraint on the value of ChoiceElement.
     expectPrimitiveIdentifier(entry.fields[0].constraints[0].isA, 'dateTime');
   });
 
@@ -755,8 +755,8 @@ describe('#importDataElement', () => {
     expect(choice.value.constraints[0].value).to.be.true;
     expect(choice.value.constraints[1]).to.be.instanceof(CodeConstraint);
     expect(choice.value.constraints[1].path).to.be.empty;
-  // TODO confirm this test case is correct.
-  //expect(choice.value.constraints[1].path).to.eql([pid('concept')]);
+    // TODO confirm this test case is correct.
+    //expect(choice.value.constraints[1].path).to.eql([pid('concept')]);
     expectConcept(choice.value.constraints[1].code, 'http://foo.org', 'baz');
   });
 
