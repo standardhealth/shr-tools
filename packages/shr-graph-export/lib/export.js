@@ -113,7 +113,7 @@ class GraphExporter {
 
     if (!['abstract', 'entry'].includes(node.type)) {
       if (node.type === 'primitive') {
-        this.collectPrimitiveInfo(node, valueSetConstraints, codeConstraints);
+        this.collectPrimitiveInfo(node);
       } else {
         this.collectOtherInfo(root, path, elements[elements.length-1], node);
       }
@@ -154,7 +154,7 @@ class GraphExporter {
       if (!valueElement.effectiveIdentifier) { // is Element
         newNode = { name: valueElement.identifier.fqn, title: valueElement.identifier.title, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
       } else { // is Value
-        newNode = { name: valueElement.effectiveIdentifier.fqn, title: valueElement.effectiveIdentifier.title, type: 'primitive', properties: [], values: [] }
+        newNode = { name: valueElement.effectiveIdentifier.fqn, title: valueElement.effectiveIdentifier.title, type: 'primitive', properties: [], values: [] };
       }
       node.values.push(newNode);
       if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
@@ -188,7 +188,7 @@ class GraphExporter {
         if (!valueElement.effectiveIdentifier) { // is Element
           newNode = { name: valueElement.identifier.fqn, title: valueElement.identifier.title, type: this.getType(valueElement), description: valueElement.description, properties: [], values: [] };
         } else { // is Value
-          newNode = { name: valueElement.effectiveIdentifier.fqn, title: valueElement.effectiveIdentifier.title, type: 'primitive', properties: [], values: [] }
+          newNode = { name: valueElement.effectiveIdentifier.fqn, title: valueElement.effectiveIdentifier.title, type: 'primitive', properties: [], values: [] };
         }
         if (!processed.includes(valueElement.identifier.fqn) && (!['abstract', 'entry'].includes(newNode.type))) {
           if (newNode.type === 'primitive') {
@@ -204,7 +204,7 @@ class GraphExporter {
     processed.pop();
   }
 
-  collectPrimitiveInfo(node, valueSetConstraints, codeConstraints) {
+  collectPrimitiveInfo(node, valueSetConstraints = [], codeConstraints = []) {
     let description = [];
     if (valueSetConstraints.length > 0) description.push(`${valueSetConstraints[0].valueSet} (${valueSetConstraints[0].bindingStrength})`);
     if (codeConstraints.length > 0) description.push(codeConstraints[0].code.display);

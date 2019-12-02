@@ -184,7 +184,7 @@ describe('#IdentifiableValue', () => {
 
   it('should ignore inheritance during equality when asked', () => {
     const val = new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo'))
-        .withMinMax(1,1);
+      .withMinMax(1,1);
     const val2 = val.clone();
     val2.inheritance = mdl.INHERITED;
     expect(val2.equals(val)).to.be.false;
@@ -216,9 +216,9 @@ describe('#ChoiceValue', () => {
 
   function cloneValues() {
     const val = new mdl.ChoiceValue()
-        .withMinMax(1,1)
-        .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
-        .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
+      .withMinMax(1,1)
+      .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo')).withMinMax(1,1))
+      .withOption(new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Bar')).withMinMax(0,1));
     const val2 = val.clone();
     return {val, val2};
   }
@@ -304,16 +304,16 @@ describe('#IncompleteValue', () => {
 
   it('should not equal a similar IndentifiableValue', () => {
     const val = new mdl.IncompleteValue(new mdl.Identifier('shr.test', 'Foo'))
-        .withMinMax(1,1);
+      .withMinMax(1,1);
     const ival = new mdl.IdentifiableValue(new mdl.Identifier('shr.test', 'Foo'))
-        .withMinMax(1,1);
+      .withMinMax(1,1);
     expect(val.equals(ival)).to.be.false;
     expect(ival.equals(val)).to.be.false;
   });
 
   it('should ignore inheritance during equality when asked', () => {
     const val = new mdl.IncompleteValue(new mdl.Identifier('shr.test', 'Foo'))
-        .withMinMax(1,1);
+      .withMinMax(1,1);
     const val2 = val.clone();
     val2.inheritance = mdl.INHERITED;
     expect(val2.equals(val)).to.be.false;

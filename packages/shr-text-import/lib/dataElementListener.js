@@ -472,7 +472,7 @@ class DataElementImporter extends SHRDataElementParserListener {
     }
     else if (ctx.elementWithConstraint()) {
       const field = this.processElementWithConstraint(ctx.elementWithConstraint());
-      if (/^Value([.\[\s].*)?$/.test(ctx.elementWithConstraint().getText())) {
+      if (/^Value([.[\s].*)?$/.test(ctx.elementWithConstraint().getText())) {
         // If it's not an element, you cannot constrain Value.
         // NOTE: This could potentially be enforced in the ANTLR grammar, but for now, we don't want
         // to make any changes in the grammar.  Consider changing in 6.1.
@@ -804,7 +804,7 @@ class DataElementImporter extends SHRDataElementParserListener {
     const foundNamespaces = [];
     for (const ns of namespace) {
       if (this._specs._dataElements.find(ns, name)) {
-        if (!result.hasOwnProperty('namespace')) {
+        if (!Object.prototype.hasOwnProperty.call(result, 'namespace')) {
           result['namespace'] = ns;
         }
         foundNamespaces.push(ns);

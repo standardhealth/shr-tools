@@ -4,10 +4,12 @@
   "description": "Exports SHR data elements from SHR models to graphical models",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "./node_modules/.bin/eslint .",
+    "lint:fix": "./node_modules/.bin/eslint . --fix"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "bunyan": "^1.8.12",
     "ejs": "^2.7.1",
@@ -15,5 +17,12 @@
     "fs-extra": "^8.1.0",
     "path": "^0.12.7",
     "shr-models": "^6.7.0"
+  },
+  "peerDependencies": {
+    "bunyan": "^1.8.12",
+    "shr-models": "^6.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.2"
   }
 }

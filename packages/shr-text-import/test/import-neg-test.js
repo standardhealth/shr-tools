@@ -135,7 +135,7 @@ describe('#importDataElementNegatives', () => {
   it('Neg28: should produce an error message (not a traceback) when there is a reference to an attribute which has been substituted.', () => {
     importFixture('InvalidReferenceToSubstitutedName', dir, true);
   });
-// needs expander
+  // needs expander
   it.skip('Neg29: should produce an error message (not a traceback) when a value-only constraint attempts to constrain the value to a type not offered by the parent.', () => {
     importFixture('InvalidValueOnlyConstraintSingleChoice', dir, true);
   });

@@ -60,7 +60,8 @@ function exportIG(specifications, fhirResults, outDir, configuration = {}, specP
   if (config.implementationGuide.dependencies != null) {
     for (const dep of config.implementationGuide.dependencies) {
       // File location does not need to go into ig.json
-      const {fileLocation, ...igJSONDep} = dep;
+      const igJSONDep = common.cloneJSON(dep);
+      delete igJSONDep.fileLocation;
       igControl.dependencyList.push(igJSONDep);
     }
   }
@@ -1103,7 +1104,7 @@ ${match[1]}
   }
   if (htmlExamples.length === 0) {
     const examplesItem = '<li><a href="examples.html">Examples</a></li>';
-    navbarHtml = navbarHtml.replace(examplesItem, '<!-- no examples -->')
+    navbarHtml = navbarHtml.replace(examplesItem, '<!-- no examples -->');
   }
   fs.writeFileSync(navbarPath, navbarHtml);
 }

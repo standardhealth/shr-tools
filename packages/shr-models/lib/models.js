@@ -36,17 +36,6 @@ function sanityCheckModules(modelInfoMap) {
   }
 }
 
-function clearEmptyFields(object, iteratively = false) {
-  Object.keys(object).forEach((key) => {
-    if (object[key] == null) delete object[key]; else
-      if (Array.isArray(object[key]) && object[key].length == 0) delete object[key]; else
-      if (object[key] instanceof Object) {
-        if (Object.keys(object[key]).length && iteratively) clearEmptyFields(object[key], true);
-        if (!Object.keys(object[key]).length) delete object[key];
-      }
-  });
-}
-
 class Specifications {
 
   constructor() {
@@ -766,7 +755,7 @@ class Identifier {
         if ((letter != letter.toLocaleUpperCase() && nextLetter == nextLetter.toLocaleUpperCase()) ||
             (letter != letter.toLocaleLowerCase() && nextLetter.toLocaleLowerCase() == nextLetter.toLocaleUpperCase()) ||
             (letter.toLocaleLowerCase() == letter.toLocaleUpperCase() && nextLetter != nextLetter.toLocaleLowerCase())) {
-              boundaries.push(index + 1);
+          boundaries.push(index + 1);
         } else if(index < name.length - 2) {
           const overNextLetter = name[index + 2];
           if (letter != letter.toLocaleLowerCase() &&
@@ -780,7 +769,7 @@ class Identifier {
     }, [0]);
     const title = boundaries.reduce((titleParts, boundary, index, boundaries) => {
       if(index < boundaries.length - 1) {
-        titleParts.push(this._name.slice(boundary, boundaries[index + 1]))
+        titleParts.push(this._name.slice(boundary, boundaries[index + 1]));
       } else {
         titleParts.push(this._name.slice(boundary));
       }
@@ -1294,6 +1283,7 @@ class ConstraintsFilter {
       console.warn(`WARNING: Expecting single constraint but got ${this._constraints.length}. Using last constraint.`);
       return this._constraints[this._constraints.length-1];
     }
+    return undefined;
   }
 
   get own() {
@@ -1591,7 +1581,7 @@ class Value {
 
   get effectiveCard() {
     if (this.card == null) {
-      return;
+      return undefined;
     }
 
     let eCard = this.card.clone();

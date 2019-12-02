@@ -230,7 +230,7 @@ class PreprocessedData {
     let conflict = false;
     for (const ns of namespace) {
       if (this._paths[ns] && this._paths[ns][name]) {
-        if (!result.hasOwnProperty('url')) {
+        if (!Object.prototype.hasOwnProperty.call(result, 'url')) {
           result['url'] = this._paths[ns][name];
         } else if (result.url != this._paths[ns][name]) {
           conflict = true;
@@ -238,7 +238,7 @@ class PreprocessedData {
         foundNamespaces.push(ns);
       }
     }
-    if (!result.hasOwnProperty('url')) {
+    if (!Object.prototype.hasOwnProperty.call(result, 'url')) {
       result['error'] = `Failed to resolve path for ${name}`;
     } else if (conflict) {
       result['error'] = `Found conflicting path for ${name} in multiple namespaces: ${foundNamespaces}`;
@@ -252,7 +252,7 @@ class PreprocessedData {
     let conflict = false;
     for (const ns of namespace) {
       if (this._vocabularies[ns] && this._vocabularies[ns][name]) {
-        if (!result.hasOwnProperty('url')) {
+        if (!Object.prototype.hasOwnProperty.call(result, 'url')) {
           result['url'] = this._vocabularies[ns][name];
         } else if (result.url != this._vocabularies[ns][name]) {
           conflict = true;
@@ -260,7 +260,7 @@ class PreprocessedData {
         foundNamespaces.push(ns);
       }
     }
-    if (!result.hasOwnProperty('url')) {
+    if (!Object.prototype.hasOwnProperty.call(result, 'url')) {
       result['error'] = `Failed to resolve vocabulary for ${name}`;
     } else if (conflict) {
       result['error'] = `Found conflicting vocabularies for ${name} in multiple namespaces: ${foundNamespaces}`;
@@ -273,14 +273,14 @@ class PreprocessedData {
     const foundNamespaces = [];
     for (const ns of namespace) {
       if (this._definitions[ns] && this._definitions[ns][name]) {
-        if (!result.hasOwnProperty('namespace')) {
+        if (!Object.prototype.hasOwnProperty.call(result, 'namespace')) {
           result['namespace'] = ns;
           result['type'] = this._definitions[ns][name];
         }
         foundNamespaces.push(ns);
       }
     }
-    if (!result.hasOwnProperty('namespace')) {
+    if (!Object.prototype.hasOwnProperty.call(result, 'namespace')) {
       result['error'] = `Failed to resolve definition for ${name}`;
     } else if (foundNamespaces.length > 1) {
       result['error'] = `Found conflicting definitions for ${name} in multiple namespaces: ${foundNamespaces}`;

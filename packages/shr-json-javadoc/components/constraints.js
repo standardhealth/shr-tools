@@ -1,5 +1,6 @@
 const bunyan = require('bunyan');
 var rootLogger = bunyan.createLogger({ name: 'shr-json-javadoc' });
+// eslint-disable-next-line no-unused-vars
 var logger = rootLogger;
 function setLogger(bunyanLogger) {
   rootLogger = logger = bunyanLogger;

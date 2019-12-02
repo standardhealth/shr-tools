@@ -2495,7 +2495,7 @@ class FHIRExporter {
           }
           continue;
         }
-         // It's a non-primitive source type.  First check if the field is mapped to a BackboneElement.
+        // It's a non-primitive source type.  First check if the field is mapped to a BackboneElement.
         if (targetTypes.length == 1 && targetTypes[0].code == 'BackboneElement') {
           // TODO: Determine what to do with backbone elements.
           continue;
