@@ -1,6 +1,6 @@
 {
   "name": "shr-data-dict-export",
-  "version": "6.2.1",
+  "version": "6.2.2",
   "description": "SHR Data Dictionary Exporter",
   "main": "index.js",
   "license": "Apache-2.0",
@@ -15,7 +15,7 @@
   "devDependencies": {
     "bunyan": "^1.8.9",
     "eslint": "^6.7.2",
-    "shr-models": "^6.7.0"
+    "shr-models": "^6.8.0"
   },
   "peerDependencies": {
     "bunyan": "^1.8.9",
