@@ -1,6 +1,6 @@
 {
   "name": "shr-cli",
-  "version": "6.10.2",
+  "version": "6.10.3",
   "description": "Command-line interface for SHR tools",
   "author": "",
   "license": "Apache-2.0",
@@ -27,7 +27,7 @@
     "mkdirp": "^0.5.1",
     "shr-data-dict-export": "^6.2.2",
     "shr-expand": "^6.6.1",
-    "shr-fhir-export": "^6.8.0",
+    "shr-fhir-export": "^6.8.1",
     "shr-graph-export": "^1.1.0",
     "shr-json-javadoc": "^6.4.1",
     "shr-models": "^6.8.0",
