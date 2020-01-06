@@ -1005,20 +1005,14 @@ ${match[1]}
 
   // Rewrite the updated CodeSystems HTML file
   const codeSystemsHtmlPath = path.join(outDir, 'pages', 'codesystems.html');
-  if (htmlCodeSystems.length > 0) {
-    const codeSystemsHtml = fs.readFileSync(codeSystemsHtmlPath, 'utf8');
-    const codeSystemsDisclaimer = `<p>The code systems listed below are used by the
-    local value sets, logical models, and profiles shown on their respective pages in this IG.</p>
-    <p>This list is not inclusive of code systems associated with external value sets used in the IG.</p>`;
-    let updatedCodeSystemsHtml = codeSystemsHtml.replace('<code-systems-go-here/>', htmlCodeSystems.join(''))
-      .replace('<code-systems-disclaimer/>', codeSystemsDisclaimer);
+  const codeSystemsHtml = fs.readFileSync(codeSystemsHtmlPath, 'utf8');
+  let updatedCodeSystemsHtml = codeSystemsHtml.replace('<code-systems-go-here/>', htmlCodeSystems.join(''));
+  if (htmlCodeSystems.length === 0) {
     updatedCodeSystemsHtml = updatedCodeSystemsHtml
-      .replace('<code-systems-header/>', '<h2>Code systems used in this Implementation Guide</h2>');
-
-    fs.writeFileSync(codeSystemsHtmlPath, updatedCodeSystemsHtml, 'utf8');
-  } else {
-    fs.unlinkSync(codeSystemsHtmlPath);
+      .replace('<table class="codes">', 'None\n<table class="codes" style="display: none">');
   }
+
+  fs.writeFileSync(codeSystemsHtmlPath, updatedCodeSystemsHtml, 'utf8');
 
   // Rewrite the updated Models HTML file
   const modelsHtmlPath = path.join(outDir, 'pages', 'logical.html');
