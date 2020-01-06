@@ -28,15 +28,29 @@ function setLogger(bunyanLogger) {
   require('./ig.js').setLogger(logger);
 }
 
+// NOTE: Conversions that map to fhirpath URLs were based on FHIRPath documentation:
+// https://hl7.org/fhir/fhirpath.html#types
+// This is needed for new "compiler magic" introduced in FHIR 3.0.2/4.0.1
 const allowedConversions = {
-  'boolean': ['code'],
-  'dateTime': ['date', 'instant'],
-  'positiveInt': ['unsignedInt', 'integer', 'decimal', 'Quantity'],
-  'unsignedInt': ['integer', 'decimal', 'Quantity'],
-  'integer': ['Quantity', 'decimal'],
-  'markdown': ['string'],
-  'uri': ['canonical', 'url'], // should we support uri --> canonical?
-  'concept': ['CodeableConcept', 'Coding', 'code']
+  'boolean': ['code', 'http://hl7.org/fhirpath/System.Boolean'],
+  'dateTime': ['date', 'instant', 'http://hl7.org/fhirpath/System.DateTime'],
+  'positiveInt': ['unsignedInt', 'integer', 'decimal', 'Quantity', 'http://hl7.org/fhirpath/System.Integer'],
+  'unsignedInt': ['integer', 'decimal', 'Quantity', 'http://hl7.org/fhirpath/System.Integer'],
+  'integer': ['Quantity', 'decimal', 'http://hl7.org/fhirpath/System.Integer'],
+  'markdown': ['string', 'http://hl7.org/fhirpath/System.String'],
+  'uri': ['canonical', 'url', 'http://hl7.org/fhirpath/System.String'], // should we support uri --> canonical?
+  'concept': ['CodeableConcept', 'Coding', 'code', 'http://hl7.org/fhirpath/System.String'],
+  'base64Binary': ['http://hl7.org/fhirpath/System.String'],
+  'date': ['http://hl7.org/fhirpath/System.DateTime'],
+  'decimal': ['http://hl7.org/fhirpath/System.Decimal'],
+  'id': ['http://hl7.org/fhirpath/System.String'],
+  'instant': ['http://hl7.org/fhirpath/System.DateTime'],
+  'oid': ['http://hl7.org/fhirpath/System.String'],
+  'quantity': ['http://hl7.org/fhirpath/System.Quantity'],
+  'sid': ['http://hl7.org/fhirpath/System.String'],
+  'string': ['http://hl7.org/fhirpath/System.String'],
+  'time': ['http://hl7.org/fhirpath/System.Time'],
+  'uuid': ['http://hl7.org/fhirpath/System.String']
 };
 
 function exportToFHIR(specifications, deDependencies, configuration) {
