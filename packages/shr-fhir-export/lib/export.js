@@ -2692,11 +2692,12 @@ class FHIRExporter {
     }
   }
 
-  getElementInExtension(shrPath, profile, snapshotEl) {
+  getElementInExtension(shrPath, profile, snapshotEl, forCP = false) {
     // If the path length is only 1, we can return the snapshotEl since it's always the match for the first element in the path
     if (shrPath.length <= 1) {
       // Because SHR sometimes uses implicit values (and sometimes not), we don't yet know if we can stop here.
-      if (shrPath.length == 0 || snapshotEl.id.substr(snapshotEl.id.lastIndexOf('.')+1).startsWith('value')) {
+      // If it's for CP, however, we do want to stop here.  If an extension is marked MS, we want the extension not its value[x]
+      if (forCP || shrPath.length == 0 || snapshotEl.id.substr(snapshotEl.id.lastIndexOf('.')+1).startsWith('value')) {
         return snapshotEl;
       }
     }
@@ -2729,7 +2730,7 @@ class FHIRExporter {
       return;
     }
     if (el.type.length == 1 && el.type[0].code == 'Extension') {
-      return this.getElementInExtension(shrPath.slice(1), profile, el);
+      return this.getElementInExtension(shrPath.slice(1), profile, el, forCP);
     } else {
       // We hit a non-extension element, so do the standard element search from the parent extension down the rest of the path
       const targetRootPath = el.path.substring(el.path.lastIndexOf('.')+1);
@@ -3671,6 +3672,11 @@ class FHIRExporter {
                 logger.error({ path1: targetPath, path2: cpr.path.map(p => p.name).join('.') }, '13063');
               }
             });
+          } else if (closestMatch.elements[0].type.length == 1 && closestMatch.elements[0].type[0].code == 'Extension') {
+            const newMatch = this.getElementInExtension([rootIdentifier, ...remainingPath], profile, closestMatch.elements[0], true);
+            if (newMatch != null) {
+              matchedElements.push(newMatch);
+            }
           } else {
             // Identifying the FHIR subpath failed.  This may happen when the rest of the path is "Value" or "_Value".
             const remainingPath = cpr.path.slice(matchedPath.length);
