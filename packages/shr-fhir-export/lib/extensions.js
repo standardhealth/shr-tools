@@ -38,7 +38,7 @@ class ExtensionExporter {
       if (temporaryExtension) ext.temporary = true;
     } else if (warnIfExtensionIsProcessing && this._processTracker.isActive(identifier)) {
       // 13055, 'Using extension that is currently in the middle of processing: ${extensionId}.', 'Unknown', 'errorNumber'
-      logger.warn({ extensionId: common.fhirID(identifier, 'extension') }, '13055');
+      logger.debug({ extensionId: common.fhirID(identifier, 'extension') }, '13055');
     }
     return ext;
   }

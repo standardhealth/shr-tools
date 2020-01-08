@@ -3789,13 +3789,13 @@ class FHIRExporter {
     return p;
   }
 
-  lookupStructureDefinition(id, warnIfStructureDefinitionIsProcessing=false) {
+  lookupStructureDefinition(idOrUrl, warnIfStructureDefinitionIsProcessing=false) {
     // First check profiles
-    const profile = this._profilesMap.get(id);
+    const profile = Array.from(this._profilesMap.values()).find(p => p.id === idOrUrl || p.url === idOrUrl);
     if (typeof profile !== 'undefined') {
-      if (warnIfStructureDefinitionIsProcessing && this._processTracker.isActive(id)) {
+      if (warnIfStructureDefinitionIsProcessing && this._processTracker.isActive(profile.id)) {
         // 13054, 'Using profile that is currently in the middle of processing: ${profileId}.', 'Unknown', 'errorNumber'
-        logger.debug({ profileId: common.fhirID(id) }, '13054');
+        logger.debug({ profileId: profile.id }, '13054');
       }
       // If this is really a no-diff profile, then return the base structuredef instead!
       if (!common.isCustomProfile(profile)) {
@@ -3803,15 +3803,15 @@ class FHIRExporter {
       }
       return profile;
     }
-    const ext = this._extensionExporter.extensions.find(e => e.id == id);
+    const ext = this._extensionExporter.extensions.find(e => e.id === idOrUrl || e.url === idOrUrl);
     if (typeof ext !== 'undefined') {
-      if (warnIfStructureDefinitionIsProcessing && this._extensionExporter.processTracker.isActive(id)) {
+      if (warnIfStructureDefinitionIsProcessing && this._extensionExporter.processTracker.isActive(ext.id)) {
         // 13055, 'Using extension that is currently in the middle of processing: ${extensionId}.', 'Unknown', 'errorNumber'
-        logger.warn({ extensionId: common.fhirID(id) }, '13055');
+        logger.debug({ extensionId: ext.id }, '13055');
       }
       return ext;
     }
-    return this._fhir.find(id);
+    return this._fhir.find(idOrUrl);
   }
 
   getSnapshotElementForFieldTarget(profile, fieldTarget, sourceValue, sliceCard) {
