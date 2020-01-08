@@ -1,6 +1,6 @@
 {
   "name": "shr-test-helpers",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "Re-usable classes and functions for testing SHR tools",
   "author": "",
   "license": "Apache-2.0",
