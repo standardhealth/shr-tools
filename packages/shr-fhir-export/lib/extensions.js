@@ -38,7 +38,7 @@ class ExtensionExporter {
       if (temporaryExtension) ext.temporary = true;
     } else if (warnIfExtensionIsProcessing && this._processTracker.isActive(identifier)) {
       // 13055, 'Using extension that is currently in the middle of processing: ${extensionId}.', 'Unknown', 'errorNumber'
-      logger.warn({ extensionId: common.fhirID(identifier, 'extension') }, '13055');
+      logger.debug({ extensionId: common.fhirID(identifier, 'extension') }, '13055');
     }
     return ext;
   }
@@ -120,6 +120,7 @@ class ExtensionExporter {
 
     // If 'type' is not defined, that means we can't represent this as a simple extension
     if (type === undefined) {
+      this.zeroOutValueXElement(extension);
       for (const field of [def.value, ...def.fields]) {
         if (field === undefined) {
           continue;
@@ -172,7 +173,6 @@ class ExtensionExporter {
         }
       }
       this.setURLElement(extension, def);
-      this.zeroOutValueXElement(extension);
     } else {
       this.zeroOutExtensionElement(extension);
       this.setURLElement(extension, def);

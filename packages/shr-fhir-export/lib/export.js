@@ -28,15 +28,29 @@ function setLogger(bunyanLogger) {
   require('./ig.js').setLogger(logger);
 }
 
+// NOTE: Conversions that map to fhirpath URLs were based on FHIRPath documentation:
+// https://hl7.org/fhir/fhirpath.html#types
+// This is needed for new "compiler magic" introduced in FHIR 3.0.2/4.0.1
 const allowedConversions = {
-  'boolean': ['code'],
-  'dateTime': ['date', 'instant'],
-  'positiveInt': ['unsignedInt', 'integer', 'decimal', 'Quantity'],
-  'unsignedInt': ['integer', 'decimal', 'Quantity'],
-  'integer': ['Quantity', 'decimal'],
-  'markdown': ['string'],
-  'uri': ['canonical', 'url'], // should we support uri --> canonical?
-  'concept': ['CodeableConcept', 'Coding', 'code']
+  'boolean': ['code', 'http://hl7.org/fhirpath/System.Boolean'],
+  'dateTime': ['date', 'instant', 'http://hl7.org/fhirpath/System.DateTime'],
+  'positiveInt': ['unsignedInt', 'integer', 'decimal', 'Quantity', 'http://hl7.org/fhirpath/System.Integer'],
+  'unsignedInt': ['integer', 'decimal', 'Quantity', 'http://hl7.org/fhirpath/System.Integer'],
+  'integer': ['Quantity', 'decimal', 'http://hl7.org/fhirpath/System.Integer'],
+  'markdown': ['string', 'http://hl7.org/fhirpath/System.String'],
+  'uri': ['canonical', 'url', 'http://hl7.org/fhirpath/System.String'], // should we support uri --> canonical?
+  'concept': ['CodeableConcept', 'Coding', 'code', 'http://hl7.org/fhirpath/System.String'],
+  'base64Binary': ['http://hl7.org/fhirpath/System.String'],
+  'date': ['http://hl7.org/fhirpath/System.DateTime'],
+  'decimal': ['http://hl7.org/fhirpath/System.Decimal'],
+  'id': ['http://hl7.org/fhirpath/System.String'],
+  'instant': ['http://hl7.org/fhirpath/System.DateTime'],
+  'oid': ['http://hl7.org/fhirpath/System.String'],
+  'quantity': ['http://hl7.org/fhirpath/System.Quantity'],
+  'sid': ['http://hl7.org/fhirpath/System.String'],
+  'string': ['http://hl7.org/fhirpath/System.String'],
+  'time': ['http://hl7.org/fhirpath/System.Time'],
+  'uuid': ['http://hl7.org/fhirpath/System.String']
 };
 
 function exportToFHIR(specifications, deDependencies, configuration) {
@@ -2678,11 +2692,12 @@ class FHIRExporter {
     }
   }
 
-  getElementInExtension(shrPath, profile, snapshotEl) {
+  getElementInExtension(shrPath, profile, snapshotEl, forCP = false) {
     // If the path length is only 1, we can return the snapshotEl since it's always the match for the first element in the path
     if (shrPath.length <= 1) {
       // Because SHR sometimes uses implicit values (and sometimes not), we don't yet know if we can stop here.
-      if (shrPath.length == 0 || snapshotEl.id.substr(snapshotEl.id.lastIndexOf('.')+1).startsWith('value')) {
+      // If it's for CP, however, we do want to stop here.  If an extension is marked MS, we want the extension not its value[x]
+      if (forCP || shrPath.length == 0 || snapshotEl.id.substr(snapshotEl.id.lastIndexOf('.')+1).startsWith('value')) {
         return snapshotEl;
       }
     }
@@ -2715,7 +2730,7 @@ class FHIRExporter {
       return;
     }
     if (el.type.length == 1 && el.type[0].code == 'Extension') {
-      return this.getElementInExtension(shrPath.slice(1), profile, el);
+      return this.getElementInExtension(shrPath.slice(1), profile, el, forCP);
     } else {
       // We hit a non-extension element, so do the standard element search from the parent extension down the rest of the path
       const targetRootPath = el.path.substring(el.path.lastIndexOf('.')+1);
@@ -3657,6 +3672,11 @@ class FHIRExporter {
                 logger.error({ path1: targetPath, path2: cpr.path.map(p => p.name).join('.') }, '13063');
               }
             });
+          } else if (closestMatch.elements[0].type.length == 1 && closestMatch.elements[0].type[0].code == 'Extension') {
+            const newMatch = this.getElementInExtension([rootIdentifier, ...remainingPath], profile, closestMatch.elements[0], true);
+            if (newMatch != null) {
+              matchedElements.push(newMatch);
+            }
           } else {
             // Identifying the FHIR subpath failed.  This may happen when the rest of the path is "Value" or "_Value".
             const remainingPath = cpr.path.slice(matchedPath.length);
@@ -3775,13 +3795,13 @@ class FHIRExporter {
     return p;
   }
 
-  lookupStructureDefinition(id, warnIfStructureDefinitionIsProcessing=false) {
+  lookupStructureDefinition(idOrUrl, warnIfStructureDefinitionIsProcessing=false) {
     // First check profiles
-    const profile = this._profilesMap.get(id);
+    const profile = Array.from(this._profilesMap.values()).find(p => p.id === idOrUrl || p.url === idOrUrl);
     if (typeof profile !== 'undefined') {
-      if (warnIfStructureDefinitionIsProcessing && this._processTracker.isActive(id)) {
+      if (warnIfStructureDefinitionIsProcessing && this._processTracker.isActive(profile.id)) {
         // 13054, 'Using profile that is currently in the middle of processing: ${profileId}.', 'Unknown', 'errorNumber'
-        logger.debug({ profileId: common.fhirID(id) }, '13054');
+        logger.debug({ profileId: profile.id }, '13054');
       }
       // If this is really a no-diff profile, then return the base structuredef instead!
       if (!common.isCustomProfile(profile)) {
@@ -3789,15 +3809,15 @@ class FHIRExporter {
       }
       return profile;
     }
-    const ext = this._extensionExporter.extensions.find(e => e.id == id);
+    const ext = this._extensionExporter.extensions.find(e => e.id === idOrUrl || e.url === idOrUrl);
     if (typeof ext !== 'undefined') {
-      if (warnIfStructureDefinitionIsProcessing && this._extensionExporter.processTracker.isActive(id)) {
+      if (warnIfStructureDefinitionIsProcessing && this._extensionExporter.processTracker.isActive(ext.id)) {
         // 13055, 'Using extension that is currently in the middle of processing: ${extensionId}.', 'Unknown', 'errorNumber'
-        logger.warn({ extensionId: common.fhirID(id) }, '13055');
+        logger.debug({ extensionId: ext.id }, '13055');
       }
       return ext;
     }
-    return this._fhir.find(id);
+    return this._fhir.find(idOrUrl);
   }
 
   getSnapshotElementForFieldTarget(profile, fieldTarget, sourceValue, sliceCard) {
